@@ -56,9 +56,7 @@ public class RssServiceImpl implements RssService {
 	public void rssCrawling() {
 		ExecutorService executorService = Executors.newFixedThreadPool(5);
 		for (var blog : rssAdaptor.getAllRssBlog()) {
-			executorService.submit(() -> {
-				getAndSaveNewRssData(blog);
-			});
+			executorService.submit(() -> getAndSaveNewRssData(blog));
 		}
 		executorService.shutdown();
 	}
