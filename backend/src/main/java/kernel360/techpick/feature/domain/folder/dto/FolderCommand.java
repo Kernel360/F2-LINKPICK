@@ -1,5 +1,7 @@
 package kernel360.techpick.feature.domain.folder.dto;
 
+import java.util.List;
+
 public class FolderCommand {
 
 	public record Create(
@@ -22,15 +24,15 @@ public class FolderCommand {
 
 	public record Move(
 		Long userId,
-		Long folderId,
-		Long parentFolderId,
+		List<Long> folderIdList,
+		Long destinationFolderId,
 		int orderIdx
 	) {
 	}
 
 	public record Delete(
 		Long userId,
-		Long folderId
+		List<Long> folderIdList
 	) {
 	}
 }
