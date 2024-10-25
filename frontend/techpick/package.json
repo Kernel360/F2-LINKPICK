@@ -10,7 +10,7 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "jest",
+    "test": "yarn jest",
     "test:e2e": "yarn playwright test",
     "test:ui": "yarn playwright test --ui",
     "postinstall": "cd .. && husky"

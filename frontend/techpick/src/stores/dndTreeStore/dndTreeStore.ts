@@ -3,17 +3,19 @@ import { immer } from 'zustand/middleware/immer';
 import type { Active, Over } from '@dnd-kit/core';
 import type { FolderType } from '@/types';
 
-type SelectedFolderList = number[];
+export type SelectedFolderListType = number[];
 
 type MoveFolderPayload = {
   from: Active;
   to: Over;
-  selectedFolderList: SelectedFolderList;
+  selectedFolderList: SelectedFolderListType;
 };
 
 type TreeState = {
   treeDataList: FolderType[];
-  selectedItems: SelectedFolderList;
+  selectedFolderList: SelectedFolderListType;
+  from: Active | null;
+  to: Over | null;
 };
 
 type TreeAction = {
@@ -24,12 +26,19 @@ type TreeAction = {
   moveFolder: ({ from, to, selectedFolderList }: MoveFolderPayload) => void;
   focusFolder: () => void;
   movePick: () => void;
-  replaceTreeData: (newTreeDate: FolderType[]) => void;
+  setTreeData: (newTreeDate: FolderType[]) => void;
+  setSelectedFolderList: (
+    newSelectedFolderData: SelectedFolderListType
+  ) => void;
+  setFrom: (newFrom: Active) => void;
+  setTo: (newTo: Over) => void;
 };
 
 const initialState: TreeState = {
   treeDataList: [],
-  selectedItems: [],
+  selectedFolderList: [],
+  from: null,
+  to: null,
 };
 
 export const useTreeStore = create<TreeState & TreeAction>()(
@@ -73,9 +82,24 @@ export const useTreeStore = create<TreeState & TreeAction>()(
     },
     focusFolder: () => {},
     movePick: () => {},
-    replaceTreeData: (newTreeDate) => {
+    setTreeData: (newTreeDate) => {
       set((state) => {
         state.treeDataList = newTreeDate;
+      });
+    },
+    setSelectedFolderList: (newSelectedFolderData) => {
+      set((state) => {
+        state.selectedFolderList = newSelectedFolderData;
+      });
+    },
+    setFrom: (newFrom) => {
+      set((state) => {
+        state.from = newFrom;
+      });
+    },
+    setTo: (newTo) => {
+      set((state) => {
+        state.to = newTo;
       });
     },
   }))

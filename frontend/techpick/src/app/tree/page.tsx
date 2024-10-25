@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { mockFolders } from '@/constants/treeMockDate';
-import { useTreeStore } from '@/stores/dndTreeStore';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { mockFolders } from '@/stores/dndTreeStore/treeMockDate';
 import {
   dragContainer,
   draggableItem,
@@ -15,7 +15,7 @@ import {
 import type { DragEndEvent } from '@dnd-kit/core';
 
 function SortableItem({ id, name }: { id: number; name: string }) {
-  const { selectedItems } = useTreeStore();
+  const { selectedFolderList } = useTreeStore();
   const {
     attributes,
     listeners,
@@ -23,9 +23,14 @@ function SortableItem({ id, name }: { id: number; name: string }) {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id });
+  } = useSortable({
+    id,
+    data: {
+      id: `test ${id}`,
+    },
+  });
 
-  const isSelected = selectedItems.includes(id);
+  const isSelected = selectedFolderList.includes(id);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -47,11 +52,11 @@ function SortableItem({ id, name }: { id: number; name: string }) {
 }
 
 export default function TreePage() {
-  const { treeDataList, replaceTreeData } = useTreeStore();
+  const { treeDataList, setTreeData } = useTreeStore();
 
   useEffect(() => {
-    replaceTreeData(mockFolders);
-  }, [replaceTreeData]);
+    setTreeData(mockFolders);
+  }, [setTreeData]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -66,7 +71,7 @@ export default function TreePage() {
 
     if (oldIndex !== -1 && newIndex !== -1) {
       const newOrder = arrayMove(treeDataList, oldIndex, newIndex);
-      replaceTreeData(newOrder); // 새로운 순서로 트리 데이터 업데이트
+      setTreeData(newOrder); // 새로운 순서로 트리 데이터 업데이트
     }
   };
 
