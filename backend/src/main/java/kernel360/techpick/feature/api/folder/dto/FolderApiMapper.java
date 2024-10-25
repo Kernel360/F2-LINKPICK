@@ -13,17 +13,13 @@ import kernel360.techpick.feature.domain.folder.dto.FolderResult;
 	unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface FolderApiMapper {
-	FolderCommand.Create toCreateCommand(FolderApiRequest.Create request, Long userId);
+	FolderCommand.Create toCreateCommand(Long userId, FolderApiRequest.Create request);
 
-	FolderCommand.Read toReadCommand(FolderApiRequest.Read request, Long userId);
+	FolderCommand.Read toReadCommand(Long userId, FolderApiRequest.Read request);
 
-	FolderCommand.Update toUpdateCommand(FolderApiRequest.Update request, Long userId);
+	FolderCommand.Update toUpdateCommand(Long userId, FolderApiRequest.Update request);
 
-	FolderCommand.Move toMoveCommand(FolderApiRequest.Move request, Long userId);
+	FolderCommand.Move toMoveCommand(Long userId, FolderApiRequest.Move request);
 
-	FolderCommand.Delete toDeleteCommand(FolderApiRequest.Delete request, Long userId);
-
-	FolderApiResponse.Create toCreateResponse(FolderResult request, Long userId);
-
-	FolderApiResponse.Read toReadResponse(FolderResult request, Long userId);
+	FolderCommand.Delete toDeleteCommand(Long userId, FolderApiRequest.Delete request);
 }

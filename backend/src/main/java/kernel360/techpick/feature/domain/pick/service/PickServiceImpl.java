@@ -18,7 +18,6 @@ import kernel360.techpick.feature.domain.tag.exception.ApiTagException;
 import kernel360.techpick.feature.infrastructure.folder.FolderAdaptor;
 import kernel360.techpick.feature.infrastructure.pick.PickAdaptor;
 import kernel360.techpick.feature.infrastructure.tag.TagAdaptor;
-import kernel360.techpick.feature.infrastructure.user.UserAdaptor;
 import lombok.RequiredArgsConstructor;
 
 @Service
