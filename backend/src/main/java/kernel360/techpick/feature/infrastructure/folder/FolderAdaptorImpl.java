@@ -1,5 +1,7 @@
 package kernel360.techpick.feature.infrastructure.folder;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -32,7 +34,15 @@ public class FolderAdaptorImpl implements FolderAdaptor {
 	@Override
 	@Transactional(readOnly = true)
 	public List<Folder> getFolderList(List<Long> idList) {
-		return folderRepository.findAllByIdListOrdered(idList);
+		return folderRepository.findAllById(idList);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Folder> getFolderListPreservingOrder(List<Long> idList) {
+		var folderList = folderRepository.findAllById(idList);
+		folderList.sort(Comparator.comparing(folder -> idList.indexOf(folder.getId())));
+		return folderList;
 	}
 
 	@Override
@@ -76,11 +86,11 @@ public class FolderAdaptorImpl implements FolderAdaptor {
 	@Override
 	@Transactional
 	public List<Long> moveFolderWithinParent(FolderCommand.Move command) {
-		Folder parentFolder = folderRepository.findById(command.parentFolderId())
+		Folder parentFolder = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
-		parentFolder.getChildFolderOrderList().remove(command.folderId());
-		parentFolder.getChildFolderOrderList().add(command.orderIdx(), command.folderId());
+		parentFolder.getChildFolderOrderList().removeAll(command.folderIdList());
+		parentFolder.getChildFolderOrderList().addAll(command.orderIdx(), command.folderIdList());
 
 		return parentFolder.getChildFolderOrderList();
 	}
@@ -88,15 +98,15 @@ public class FolderAdaptorImpl implements FolderAdaptor {
 	@Override
 	@Transactional
 	public List<Long> moveFolderToDifferentParent(FolderCommand.Move command) {
-		Folder folder = folderRepository.findById(command.folderId())
+		Folder folder = folderRepository.findById(command.folderIdList().get(0))
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 		Folder oldParent = folder.getParentFolder();
-		oldParent.getChildFolderOrderList().remove(command.folderId());
+		oldParent.getChildFolderOrderList().removeAll(command.folderIdList());
 
-		Folder newParent = folderRepository.findById(command.parentFolderId())
+		Folder newParent = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
-		newParent.getChildFolderOrderList().add(command.orderIdx(), command.folderId());
+		newParent.getChildFolderOrderList().addAll(command.orderIdx(), command.folderIdList());
 
 		folder.updateParentFolder(newParent);
 
@@ -105,13 +115,20 @@ public class FolderAdaptorImpl implements FolderAdaptor {
 
 	@Override
 	@Transactional
-	public void deleteFolder(FolderCommand.Delete command) {
-		Folder folder = folderRepository.findById(command.folderId())
-			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+	public void deleteFolderList(FolderCommand.Delete command) {
 
-		Folder parentFolder = folder.getParentFolder();
-		parentFolder.getChildFolderOrderList().remove(folder.getId());
+		List<Folder> deleteList = new ArrayList<>();
 
-		folderRepository.delete(folder);
+		for (Long id : command.folderIdList()) {
+			Folder folder = folderRepository.findById(id)
+				.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+
+			Folder parentFolder = folder.getParentFolder();
+			parentFolder.getChildFolderOrderList().remove(folder.getId());
+
+			deleteList.add(folder);
+		}
+
+		folderRepository.deleteAllInBatch(deleteList);
 	}
 }

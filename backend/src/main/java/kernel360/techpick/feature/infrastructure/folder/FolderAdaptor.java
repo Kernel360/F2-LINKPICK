@@ -9,7 +9,11 @@ public interface FolderAdaptor {
 
 	Folder getFolder(Long folderId);
 
+	// idList에 포함된 모든 ID에 해당하는 폴더 리스트 조회, 순서를 보장하지 않음
 	List<Folder> getFolderList(List<Long> idList);
+
+	// idList에 포함된 모든 ID에 해당하는 폴더 리스트 조회, 순서는 idList의 순서를 따름
+	List<Folder> getFolderListPreservingOrder(List<Long> idList);
 
 	Folder getRootFolder(Long userId);
 
@@ -25,5 +29,5 @@ public interface FolderAdaptor {
 
 	List<Long> moveFolderToDifferentParent(FolderCommand.Move command);
 
-	void deleteFolder(FolderCommand.Delete command);
+	void deleteFolderList(FolderCommand.Delete command);
 }
