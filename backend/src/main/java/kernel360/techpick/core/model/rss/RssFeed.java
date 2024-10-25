@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kernel360.techpick.core.model.common.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RssRawData extends BaseEntity {
+public class RssFeed extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,12 +52,13 @@ public class RssRawData extends BaseEntity {
 	@Column(name = "joined_category") // nullable
 	private String joinedCategory;
 
-	@Column(name = "rssSupportingBlogId")
-	private Long rssSupportingBlogId;
+	@Column(name = "rssBlogId")
+	private Long rssBlogId;
 
 	// TODO: 엔티티 사용자가 정적 팩토리 메소드로 필요한 함수를 구현 하세요
 
-	private RssRawData(
+	@Builder
+	private RssFeed(
 		String title,
 		String url,
 		String guid,
@@ -64,7 +66,7 @@ public class RssRawData extends BaseEntity {
 		String description,
 		String creator,
 		String joinedCategory,
-		Long rssSupportingBlogId
+		Long rssBlogId
 	) {
 		this.title = title;
 		this.url = url;
@@ -73,12 +75,6 @@ public class RssRawData extends BaseEntity {
 		this.description = description;
 		this.creator = creator;
 		this.joinedCategory = joinedCategory;
-		this.rssSupportingBlogId = rssSupportingBlogId;
-	}
-
-	public static RssRawData create(String title, String url, String guid, String publishedAt, String description,
-		String creator,
-		String joinedCategory, Long rssSupportingBlogId) {
-		return new RssRawData(title, url, guid, publishedAt, description, creator, joinedCategory, rssSupportingBlogId);
+		this.rssBlogId = rssBlogId;
 	}
 }
