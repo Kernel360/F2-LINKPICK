@@ -24,8 +24,8 @@ public enum ApiFolderErrorCode implements ApiErrorCode {
 		("F0-005", HttpStatus.NOT_IMPLEMENTED, "미구현 폴더 타입에 대한 서비스 요청", ErrorLevel.MUST_NEVER_HAPPEN()),
 	BASIC_FOLDER_ALREADY_EXISTS
 		("F0-006", HttpStatus.NOT_ACCEPTABLE, "기본 폴더는 1개만 존재할 수 있음.", ErrorLevel.MUST_NEVER_HAPPEN()),
-	INVALID_MOVE_OPERATION
-		("F0-007", HttpStatus.NOT_ACCEPTABLE, "잘못된 이동 행위", ErrorLevel.SHOULD_NOT_HAPPEN()),
+	INVALID_MOVE_TARGET
+		("F0-007", HttpStatus.NOT_ACCEPTABLE, "이동하려는 폴더들의 범위가 올바르지 않음", ErrorLevel.SHOULD_NOT_HAPPEN()),
 	;
 
 	private final String code;
