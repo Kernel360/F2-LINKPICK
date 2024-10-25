@@ -68,7 +68,7 @@ public class RssServiceImpl implements RssService {
 				.stream()
 				.map(item -> rssMapper.toRssFeed(blog, item))
 				.toList();
-			// rssRawData가 ImmutableList기 때문에 ArrayList에 새로 넣어줌..
+			// feedList가 ImmutableList기 때문에 ArrayList에 새로 넣어줌..
 			rssAdaptor.saveAllDistinctRssFeed(blog, new ArrayList<>(feedList));
 		}
 	}
