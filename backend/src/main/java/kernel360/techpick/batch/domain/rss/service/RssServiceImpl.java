@@ -52,7 +52,7 @@ public class RssServiceImpl implements RssService {
 	}
 
 	// 매일 새벽 3시에 수집
-	@Scheduled(cron = "0 0/1 * * * *")
+	@Scheduled(cron = "0 0 3 * * *")
 	public void rssCrawling() {
 		ExecutorService executorService = Executors.newFixedThreadPool(5);
 		for (var blog : rssAdaptor.getAllRssBlog()) {
