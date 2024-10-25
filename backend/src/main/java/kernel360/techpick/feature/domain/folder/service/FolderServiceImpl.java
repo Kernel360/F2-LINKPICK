@@ -41,7 +41,7 @@ public class FolderServiceImpl implements FolderService {
 			throw ApiFolderException.FOLDER_ACCESS_DENIED();
 		}
 
-		return folderAdaptor.getFolderList(folder.getChildFolderOrderList())
+		return folderAdaptor.getFolderListPreservingOrder(folder.getChildFolderOrderList())
 			.stream()
 			.map(folderMapper::toResult)
 			.toList();
@@ -88,13 +88,23 @@ public class FolderServiceImpl implements FolderService {
 	@Transactional
 	public void moveFolder(FolderCommand.Move command) {
 
-		Folder folder = folderAdaptor.getFolder(command.folderId());
+		List<Folder> folderList = folderAdaptor.getFolderList(command.folderIdList());
 
-		if (!command.userId().equals(folder.getUser().getId())) {
-			throw ApiFolderException.FOLDER_ACCESS_DENIED();
+		for (Folder folder : folderList) {
+			if (!command.userId().equals(folder.getUser().getId())) {
+				throw ApiFolderException.FOLDER_ACCESS_DENIED();
+			}
 		}
 
-		if (isParentFolderNotChanged(command, folder.getParentFolder())) {
+		// 부모가 다른 폴더들을 동시에 이동할 수 없음.
+		Long parentFolderId = folderList.get(0).getParentFolder().getId();
+		for (int i = 1; i < folderList.size(); i++) {
+			if (parentFolderId.equals(folderList.get(i).getParentFolder().getId())) {
+				throw ApiFolderException.INVALID_MOVE_TARGET();
+			}
+		}
+
+		if (isParentFolderNotChanged(command, parentFolderId)) {
 			folderAdaptor.moveFolderWithinParent(command);
 		} else {
 			folderAdaptor.moveFolderToDifferentParent(command);
@@ -105,16 +115,18 @@ public class FolderServiceImpl implements FolderService {
 	@Transactional
 	public void deleteFolder(FolderCommand.Delete command) {
 
-		Folder folder = folderAdaptor.getFolder(command.folderId());
+		List<Folder> folderList = folderAdaptor.getFolderList(command.folderIdList());
 
-		if (!command.userId().equals(folder.getUser().getId())) {
-			throw ApiFolderException.FOLDER_ACCESS_DENIED();
+		for (Folder folder : folderList) {
+			if (!command.userId().equals(folder.getUser().getId())) {
+				throw ApiFolderException.FOLDER_ACCESS_DENIED();
+			}
 		}
 
-		folderAdaptor.deleteFolder(command);
+		folderAdaptor.deleteFolderList(command);
 	}
 
-	private boolean isParentFolderNotChanged(FolderCommand.Move command, Folder originalFolder) {
-		return (command.parentFolderId() == null || originalFolder.getId().equals(command.parentFolderId()));
+	private boolean isParentFolderNotChanged(FolderCommand.Move command, Long parentFolderId) {
+		return (command.destinationFolderId() == null || parentFolderId.equals(command.destinationFolderId()));
 	}
 }
