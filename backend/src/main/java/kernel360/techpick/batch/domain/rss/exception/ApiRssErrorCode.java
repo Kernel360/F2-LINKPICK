@@ -1,4 +1,4 @@
-package kernel360.techpick.feature.domain.rss.exception;
+package kernel360.techpick.batch.domain.rss.exception;
 
 import org.springframework.http.HttpStatus;
 
