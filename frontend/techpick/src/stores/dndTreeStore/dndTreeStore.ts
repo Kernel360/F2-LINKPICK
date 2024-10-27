@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { hasIndex } from '@/utils';
 import type { Active, Over } from '@dnd-kit/core';
 import type { FolderType } from '@/types';
 
@@ -65,7 +66,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
             ? Math.min(targetIndex + 1, state.treeDataList.length)
             : targetIndex;
 
-        if (curIndex === -1 || nextIndex === -1) return;
+        if (!hasIndex(curIndex) || !hasIndex(nextIndex)) return;
 
         // 이동할 폴더 리스트를 생성합니다.
         const folderListToMove = state.treeDataList.filter((treeData) => {
