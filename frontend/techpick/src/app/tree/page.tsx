@@ -1,91 +1,108 @@
 'use client';
 
 import { useEffect } from 'react';
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import { SortableContext, useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import {
+  DndContext,
+  MouseSensor,
+  TouchSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+  DragOverlay,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { mockFolders } from '@/stores/dndTreeStore/treeMockDate';
-import {
-  dragContainer,
-  draggableItem,
-  draggingItem,
-  treePageWrapper,
-} from './page.css';
-import type { DragEndEvent } from '@dnd-kit/core';
-
-function SortableItem({ id, name }: { id: number; name: string }) {
-  const { selectedFolderList } = useTreeStore();
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id,
-    data: {
-      id: `test ${id}`,
-    },
-  });
-
-  const isSelected = selectedFolderList.includes(id);
-
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    backgroundColor: isSelected ? '#cce4ff' : '#fff',
-  };
-
-  return (
-    <li
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
-      className={`${draggableItem} ${isDragging ? draggingItem : ''}`}
-      style={style}
-    >
-      {name}
-    </li>
-  );
-}
+import { dragContainer, draggableItem, treePageWrapper } from './page.css';
+import { SortableItem } from './SortableItem';
+import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 
 export default function TreePage() {
-  const { treeDataList, setTreeData, moveFolder } = useTreeStore();
+  const {
+    treeDataList,
+    setTreeData,
+    moveFolder,
+    selectedFolderList,
+    setSelectedFolderList,
+    setIsDragging,
+  } = useTreeStore();
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: {
+      distance: 10, // MouseSensor: 10px 이동해야 드래그 시작
+    },
+  });
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: {
+      delay: 250,
+      tolerance: 5,
+    },
+  });
+  const sensors = useSensors(mouseSensor, touchSensor);
 
-  useEffect(() => {
-    setTreeData(mockFolders);
-  }, [setTreeData]);
+  const onDragStart = (event: DragStartEvent) => {
+    setIsDragging(true);
+
+    if (selectedFolderList.length === 0) {
+      setSelectedFolderList([Number(event.active.id)]);
+    }
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!over) return; // 드래그 중 놓은 위치가 없을 때 종료
 
+    console.log('active', active);
+    console.log('over', over);
+
     moveFolder({
       from: active,
       to: over,
-      selectedFolderList: [Number(active.id)],
+      selectedFolderList,
     });
+    setIsDragging(false);
   };
 
+  useEffect(
+    function onTreePageLoad() {
+      setTreeData(mockFolders);
+    },
+    [setTreeData]
+  );
+
   return (
-    <div className={treePageWrapper}>
+    <div>
       <h1>hi, this is tree page</h1>
-      <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={treeDataList.map((item) => item.id)}>
-          <ul className={dragContainer}>
-            {treeDataList.map((treeData) => (
-              <SortableItem
-                key={treeData.id}
-                id={treeData.id}
-                name={treeData.name}
-              />
-            ))}
-          </ul>
-        </SortableContext>
-      </DndContext>
+      <div className={treePageWrapper}>
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          onDragStart={onDragStart}
+        >
+          <SortableContext
+            items={treeDataList.map((item) => item.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <ul className={dragContainer}>
+              {treeDataList.map((treeData) => (
+                <SortableItem
+                  key={treeData.id}
+                  id={treeData.id}
+                  name={treeData.name}
+                />
+              ))}
+            </ul>
+          </SortableContext>
+          <DragOverlay>
+            {/** 추후에 data를 정확한 타입을 넣을 수 있을 때 추가할 예정. */}
+            <div className={`${draggableItem}`}>Drag 한 폴더의 이름</div>
+          </DragOverlay>
+        </DndContext>
+      </div>
     </div>
   );
 }
