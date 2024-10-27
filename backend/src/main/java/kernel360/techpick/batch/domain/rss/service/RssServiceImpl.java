@@ -22,6 +22,7 @@ import kernel360.techpick.batch.domain.rss.dto.RssMapper;
 import kernel360.techpick.batch.domain.rss.dto.RssRawFeed;
 import kernel360.techpick.batch.domain.rss.exception.ApiRssException;
 import kernel360.techpick.batch.infrastructure.rss.RssAdaptor;
+import kernel360.techpick.core.annotation.MeasureTime;
 import kernel360.techpick.core.model.rss.RssBlog;
 import kernel360.techpick.core.model.rss.RssFeed;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,7 @@ public class RssServiceImpl implements RssService {
 
 	// 매일 새벽 3시에 수집
 	@Scheduled(cron = "0 0 3 * * *")
+	@MeasureTime
 	public void rssCrawling() {
 		ExecutorService executorService = Executors.newFixedThreadPool(5);
 		for (var blog : rssAdaptor.getAllRssBlog()) {
