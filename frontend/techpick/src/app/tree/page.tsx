@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { DndContext, closestCenter } from '@dnd-kit/core';
-import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable';
+import { SortableContext, useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { mockFolders } from '@/stores/dndTreeStore/treeMockDate';
@@ -52,7 +52,7 @@ function SortableItem({ id, name }: { id: number; name: string }) {
 }
 
 export default function TreePage() {
-  const { treeDataList, setTreeData } = useTreeStore();
+  const { treeDataList, setTreeData, moveFolder } = useTreeStore();
 
   useEffect(() => {
     setTreeData(mockFolders);
@@ -63,16 +63,11 @@ export default function TreePage() {
 
     if (!over) return; // 드래그 중 놓은 위치가 없을 때 종료
 
-    console.log('active', active);
-    console.log('over', over);
-
-    const oldIndex = treeDataList.findIndex((item) => item.id === active.id);
-    const newIndex = treeDataList.findIndex((item) => item.id === over.id);
-
-    if (oldIndex !== -1 && newIndex !== -1) {
-      const newOrder = arrayMove(treeDataList, oldIndex, newIndex);
-      setTreeData(newOrder); // 새로운 순서로 트리 데이터 업데이트
-    }
+    moveFolder({
+      from: active,
+      to: over,
+      selectedFolderList: [Number(active.id)],
+    });
   };
 
   return (

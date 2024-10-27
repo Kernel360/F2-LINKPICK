@@ -53,33 +53,41 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         const curIndex = state.treeDataList.findIndex(
           (item) => item.id === from.id
         );
-        const nextIndex = state.treeDataList.findIndex(
+        const targetIndex = state.treeDataList.findIndex(
           (item) => item.id === to.id
         );
+        // 이동할 폴더가 (즉 목적지 to)가 뒤에 있다면 위치를 조정해야한다.
+        const nextIndex =
+          curIndex < targetIndex ? targetIndex + 1 : targetIndex;
 
         if (curIndex === -1 || nextIndex === -1) return;
 
         // 이동할 폴더 리스트를 생성합니다.
-        const foldersToMove = state.treeDataList.filter((treeData) => {
+        const folderListToMove = state.treeDataList.filter((treeData) => {
           return selectedFolderList.includes(treeData.id);
         });
 
-        // 기존 리스트에서 폴더를 제거합니다.
-        const updatedTreeDataList = state.treeDataList.filter(
-          (item) => !selectedFolderList.includes(item.id)
-        );
-
-        // 이동할 폴더들을 다음 위치에 삽입합니다.
-        const newIndex = nextIndex > curIndex ? nextIndex + 1 : nextIndex; // 삽입 위치 조정
+        // nextIndex 이전의 리스트, selected list, nextIndex after index
+        const beforeNextIndexList = state.treeDataList
+          .slice(0, nextIndex)
+          .filter((treeData) => {
+            return !selectedFolderList.includes(treeData.id);
+          });
+        const afterNextIndexList = state.treeDataList
+          .slice(nextIndex)
+          .filter((treeData) => {
+            return !selectedFolderList.includes(treeData.id);
+          });
 
         // 새 리스트를 만들어 상태를 업데이트합니다.
         state.treeDataList = [
-          ...updatedTreeDataList.slice(0, newIndex),
-          ...foldersToMove,
-          ...updatedTreeDataList.slice(newIndex),
+          ...beforeNextIndexList,
+          ...folderListToMove,
+          ...afterNextIndexList,
         ];
       });
     },
+
     focusFolder: () => {},
     movePick: () => {},
     setTreeData: (newTreeDate) => {
