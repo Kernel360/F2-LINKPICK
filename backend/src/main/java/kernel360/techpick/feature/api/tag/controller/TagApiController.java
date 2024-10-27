@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/tags")
 @Tag(name = "Tag API", description = "태그 API")
-public class TagApiController implements TagApiSpecification {
+public class TagApiController {
 
 	private final TagService tagService;
 	private final TagApiMapper tagApiMapper;
