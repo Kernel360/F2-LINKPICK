@@ -16,6 +16,7 @@ type TreeState = {
   selectedFolderList: SelectedFolderListType;
   from: Active | null;
   to: Over | null;
+  isDragging: boolean;
 };
 
 type TreeAction = {
@@ -32,6 +33,7 @@ type TreeAction = {
   ) => void;
   setFrom: (newFrom: Active) => void;
   setTo: (newTo: Over) => void;
+  setIsDragging: (isDragging: boolean) => void;
 };
 
 const initialState: TreeState = {
@@ -39,6 +41,7 @@ const initialState: TreeState = {
   selectedFolderList: [],
   from: null,
   to: null,
+  isDragging: false,
 };
 
 export const useTreeStore = create<TreeState & TreeAction>()(
@@ -58,7 +61,9 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         );
         // 이동할 폴더가 (즉 목적지 to)가 뒤에 있다면 위치를 조정해야한다.
         const nextIndex =
-          curIndex < targetIndex ? targetIndex + 1 : targetIndex;
+          curIndex < targetIndex
+            ? Math.min(targetIndex + 1, state.treeDataList.length)
+            : targetIndex;
 
         if (curIndex === -1 || nextIndex === -1) return;
 
@@ -108,6 +113,11 @@ export const useTreeStore = create<TreeState & TreeAction>()(
     setTo: (newTo) => {
       set((state) => {
         state.to = newTo;
+      });
+    },
+    setIsDragging: (isDragging) => {
+      set((state) => {
+        state.isDragging = isDragging; // 드래그 상태 설정
       });
     },
   }))
