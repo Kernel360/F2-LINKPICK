@@ -1,5 +1,6 @@
 package kernel360.techpick.feature.api.tag.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -7,21 +8,28 @@ import jakarta.validation.constraints.NotNull;
 public class TagApiRequest {
 
 	public record Create(
-		@NotBlank String name,
-		@NotNull Integer colorNumber) {
+		@Schema(example = "SpringBoot") @NotBlank String name,
+		@Schema(example = "12") @NotNull Integer colorNumber) {
 	}
 
 	public record Read(
-		@NotNull Long tagId) {
+		@Schema(example = "2") @NotNull Long tagId) {
 	}
 
 	public record Update(
-		@NotNull Long tagId,
-		@NotEmpty String name,
-		@NotNull Integer colorNumber) {
+		@Schema(example = "2") @NotNull Long tagId,
+		@Schema(example = "new tag name") @NotEmpty String name,
+		@Schema(example = "7") @NotNull Integer colorNumber) {
+	}
+
+	public record Move(
+		@Schema(example = "3") @NotNull Long tagId,
+		@Schema(example = "1") @NotNull int orderIdx
+	) {
 	}
 
 	public record Delete(
-		@NotNull Long tagId) {
+		@Schema(example = "4") @NotNull Long tagId
+	) {
 	}
 }

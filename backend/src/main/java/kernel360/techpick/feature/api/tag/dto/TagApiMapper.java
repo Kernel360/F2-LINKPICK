@@ -14,13 +14,15 @@ import kernel360.techpick.feature.domain.tag.dto.TagResult;
 )
 public interface TagApiMapper {
 
-	TagCommand.Read toReadCommand(TagApiRequest.Read request, Long userId);
+	TagCommand.Read toReadCommand(Long userId, TagApiRequest.Read request);
 
-	TagCommand.Create toCreateCommand(TagApiRequest.Create request, Long userId);
+	TagCommand.Create toCreateCommand(Long userId, TagApiRequest.Create request);
 
-	TagCommand.Update toUpdateCommand(TagApiRequest.Update request, Long userId);
+	TagCommand.Update toUpdateCommand(Long userId, TagApiRequest.Update request);
 
-	TagCommand.Delete toDeleteCommand(TagApiRequest.Delete request, Long userId);
+	TagCommand.Move toMoveCommand(Long userId, TagApiRequest.Move request);
+
+	TagCommand.Delete toDeleteCommand(Long userId, TagApiRequest.Delete request);
 
 	TagApiResponse.Read toReadResponse(TagResult result);
 
