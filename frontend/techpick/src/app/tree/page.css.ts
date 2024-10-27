@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { colorThemeContract } from 'techpick-shared';
 
 // 드래그 가능 아이템 스타일
 export const draggableItem = style({
@@ -11,7 +12,7 @@ export const draggableItem = style({
   transition: 'background-color 0.2s',
   selectors: {
     '&:hover': {
-      backgroundColor: '#f0f0f0',
+      backgroundColor: colorThemeContract.primaryFaded,
     },
     '&:active': {
       cursor: 'grabbing',
@@ -35,4 +36,8 @@ export const treePageWrapper = style({
   width: '400px',
   margin: 'auto',
   marginTop: '250px',
+});
+
+export const selectedDragItemStyle = style({
+  backgroundColor: colorThemeContract.primary,
 });
