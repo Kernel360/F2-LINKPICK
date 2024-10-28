@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import kernel360.techpick.core.model.common.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,23 +16,28 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RssSupportingBlog extends BaseEntity {
+public class RssBlog extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 
+	@Column(name = "blog_name", nullable = false, unique = true)
+	private String blogName;
+
 	// Rss 피드 주소
-	@Column(name = "rss_feed_url", nullable = false, unique = true)
-	private String rssFeedUrl;
+	@Column(name = "url", nullable = false, unique = true)
+	private String url;
 
 	// TODO: 엔티티 사용자가 정적 팩토리 메소드로 필요한 함수를 구현 하세요
-	private RssSupportingBlog(String rssFeedUrl) {
-		this.rssFeedUrl = rssFeedUrl;
+	@Builder
+	private RssBlog(String blogName, String url) {
+		this.blogName = blogName;
+		this.url = url;
 	}
 
-	public static RssSupportingBlog create(String rssFeedUrl) {
-		return new RssSupportingBlog(rssFeedUrl);
+	public static RssBlog create(String blogName, String url) {
+		return new RssBlog(blogName, url);
 	}
 }

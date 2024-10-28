@@ -1,9 +1,11 @@
 package kernel360.techpick.feature.api.folder.dto;
 
-public class FolderApiResponse {
+import kernel360.techpick.core.model.folder.FolderType;
 
-    public record Create() {}
-    public record Read() {}
-    public record Update() {}
-    public record Delete() {}
+public record FolderApiResponse(
+	Long folderId,
+	String name,
+	FolderType folderType,
+	Long parentFolderId
+) {
 }

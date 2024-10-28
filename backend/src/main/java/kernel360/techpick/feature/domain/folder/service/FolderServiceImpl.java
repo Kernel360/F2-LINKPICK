@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kernel360.techpick.core.model.folder.Folder;
+import kernel360.techpick.core.model.folder.FolderType;
 import kernel360.techpick.feature.domain.folder.dto.FolderCommand;
 import kernel360.techpick.feature.domain.folder.dto.FolderMapper;
 import kernel360.techpick.feature.domain.folder.dto.FolderResult;
@@ -25,9 +26,7 @@ public class FolderServiceImpl implements FolderService {
 	public FolderResult getFolder(FolderCommand.Read command) {
 		Folder folder = folderAdaptor.getFolder(command.folderId());
 
-		if (!command.userId().equals(folder.getUser().getId())) {
-			throw ApiFolderException.FOLDER_ACCESS_DENIED();
-		}
+		validateFolderAccess(command.userId(), folder);
 
 		return folderMapper.toResult(folder);
 	}
@@ -37,9 +36,7 @@ public class FolderServiceImpl implements FolderService {
 	public List<FolderResult> getChildFolderList(FolderCommand.Read command) {
 		Folder folder = folderAdaptor.getFolder(command.folderId());
 
-		if (!command.userId().equals(folder.getUser().getId())) {
-			throw ApiFolderException.FOLDER_ACCESS_DENIED();
-		}
+		validateFolderAccess(command.userId(), folder);
 
 		return folderAdaptor.getFolderListPreservingOrder(folder.getChildFolderOrderList())
 			.stream()
@@ -77,9 +74,8 @@ public class FolderServiceImpl implements FolderService {
 
 		Folder folder = folderAdaptor.getFolder(command.folderId());
 
-		if (!command.userId().equals(folder.getUser().getId())) {
-			throw ApiFolderException.FOLDER_ACCESS_DENIED();
-		}
+		validateFolderAccess(command.userId(), folder);
+		validateBasicFolderChange(folder);
 
 		return folderMapper.toResult(folderAdaptor.updateFolder(command));
 	}
@@ -91,9 +87,8 @@ public class FolderServiceImpl implements FolderService {
 		List<Folder> folderList = folderAdaptor.getFolderList(command.folderIdList());
 
 		for (Folder folder : folderList) {
-			if (!command.userId().equals(folder.getUser().getId())) {
-				throw ApiFolderException.FOLDER_ACCESS_DENIED();
-			}
+			validateFolderAccess(command.userId(), folder);
+			validateBasicFolderChange(folder);
 		}
 
 		// 부모가 다른 폴더들을 동시에 이동할 수 없음.
@@ -118,9 +113,8 @@ public class FolderServiceImpl implements FolderService {
 		List<Folder> folderList = folderAdaptor.getFolderList(command.folderIdList());
 
 		for (Folder folder : folderList) {
-			if (!command.userId().equals(folder.getUser().getId())) {
-				throw ApiFolderException.FOLDER_ACCESS_DENIED();
-			}
+			validateFolderAccess(command.userId(), folder);
+			validateBasicFolderChange(folder);
 		}
 
 		folderAdaptor.deleteFolderList(command);
@@ -128,5 +122,17 @@ public class FolderServiceImpl implements FolderService {
 
 	private boolean isParentFolderNotChanged(FolderCommand.Move command, Long parentFolderId) {
 		return (command.destinationFolderId() == null || parentFolderId.equals(command.destinationFolderId()));
+	}
+
+	private void validateFolderAccess(Long userId, Folder folder) {
+		if (!folder.getUser().getId().equals(userId)) {
+			throw ApiFolderException.FOLDER_ACCESS_DENIED();
+		}
+	}
+
+	private void validateBasicFolderChange(Folder folder) {
+		if (FolderType.GENERAL != folder.getFolderType()) {
+			throw ApiFolderException.BASIC_FOLDER_CANNOT_CHANGED();
+		}
 	}
 }

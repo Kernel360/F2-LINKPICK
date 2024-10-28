@@ -2,35 +2,34 @@ package kernel360.techpick.feature.api.folder.dto;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class FolderApiRequest {
 
 	public record Create(
-		Long folderId,
-		String name,
-		Long parentFolderId
-	) {
-	}
-
-	public record Read(
-		Long folderId
+		@Schema(example = "1") @NotNull Long folderId,
+		@Schema(example = "backend") @NotBlank String name,
+		@Schema(example = "3") @NotNull Long parentFolderId
 	) {
 	}
 
 	public record Update(
-		Long folderId,
-		String name
+		@Schema(example = "3") @NotNull Long folderId,
+		@Schema(example = "SpringBoot") @NotBlank String name
 	) {
 	}
 
 	public record Move(
-		List<Long> folderIdList,
-		Long destinationFolderId,
-		int orderIdx
+		@Schema(example = "[12, 11, 4, 5, 1, 6]") @NotNull List<Long> folderIdList,
+		@Schema(example = "3") @NotNull Long destinationFolderId,
+		@Schema(example = "2") int orderIdx
 	) {
 	}
 
 	public record Delete(
-		List<Long> folderIdList
+		@Schema(example = "[12, 11, 4, 5, 1, 6]") @NotNull List<Long> folderIdList
 	) {
 	}
 }
