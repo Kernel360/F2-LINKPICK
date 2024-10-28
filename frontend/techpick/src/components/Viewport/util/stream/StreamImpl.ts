@@ -1,4 +1,5 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep } from 'es-toolkit/object';
+import type { CompareFn, PredicateFn, Stream } from './Stream.type';
 
 /**
  * @author 김민규
@@ -6,24 +7,22 @@ import { cloneDeep } from 'lodash';
  */
 export class StreamImpl<T> implements Stream<T> {
   private buffer: T[]; // 원본 데이터 배열
-  private filterList: PredicateFn<T>[] = []; // 필터링 조건들
-  private sortList: CompareFn<T>[] = []; // 정렬 조건들
 
   constructor(source: T[]) {
     this.buffer = cloneDeep(source);
   }
 
   public filter(filters?: PredicateFn<T>[]): Stream<T> {
-    this.addFilter(filters);
-    for (const condition of this.filterList) {
+    if (!filters) return this;
+    for (const condition of filters) {
       this.buffer = this.buffer.filter(condition);
     }
     return this;
   }
 
   public sort(sorts?: CompareFn<T>[]): Stream<T> {
-    this.addSort(sorts);
-    for (const condition of this.sortList) {
+    if (!sorts) return this;
+    for (const condition of sorts) {
       this.buffer = this.buffer.sort(condition);
     }
     return this;
@@ -31,15 +30,5 @@ export class StreamImpl<T> implements Stream<T> {
 
   public toList(): T[] {
     return this.buffer;
-  }
-
-  // helper methods ----------------------------------
-
-  private addFilter(filters?: PredicateFn<T>[]): void {
-    filters && this.filterList.concat(filters);
-  }
-
-  private addSort(sorts?: CompareFn<T>[]): void {
-    sorts && this.sortList.concat(sorts);
   }
 }

@@ -1,29 +1,40 @@
+import type {
+  Prefix,
+  TokenizerFactory,
+  Token,
+  TokenizeResult,
+  TokenKey,
+  TokenPrefixPattern,
+  Tokenizer,
+} from './PrefixTokenizer.type';
+
 /**
- *
+ * @author 김민규
+ * @description Prefix 기준으로 문자열을 Split하는 토크나이저 구현체입니다.
  */
-export class PrefixTokenizerFactoryImpl implements PrefixTokenizerFactory {
+export class PrefixTokenizerFactoryImpl implements TokenizerFactory {
   // TODO: 중복된 설정 값이 들어온다면 ?
   private readonly patterns: Map<TokenKey, Prefix> = new Map();
 
-  addPattern(pattern: TokenPrefixPattern): PrefixTokenizerFactory {
-    Object.entries(pattern).forEach((p) => {
-      if (this.patterns.has(p[0])) {
+  addPattern(pattern: TokenPrefixPattern): TokenizerFactory {
+    for (const [key, value] of Object.entries(pattern)) {
+      if (this.patterns.has(key)) {
         throw new Error('패턴 Key는 중복될 수 없습니다.');
       }
-      this.patterns.set(p[0], p[1]);
-    });
+      this.patterns.set(key, value);
+    }
     return this;
   }
-  removePattern(pattern: TokenPrefixPattern): PrefixTokenizerFactory {
-    Object.entries(pattern).forEach((p) => this.patterns.delete(p[0]));
+  removePattern(pattern: TokenPrefixPattern): TokenizerFactory {
+    Object.entries(pattern).forEach(([key, _]) => this.patterns.delete(key));
     return this;
   }
-  build(): PrefixTokenizer {
+  build(): Tokenizer {
     return new PrefixTokenizerImpl(this.patterns);
   }
 }
 
-class PrefixTokenizerImpl implements PrefixTokenizer {
+class PrefixTokenizerImpl implements Tokenizer {
   private readonly keys: TokenKey[];
   private readonly regex: RegExp;
 
@@ -46,10 +57,11 @@ class PrefixTokenizerImpl implements PrefixTokenizer {
         group[key] != undefined && map.get(key)?.push(group[key]);
       });
     });
-    return new TokenizeResultImpl(map);
+    return new PrefixTokenizeResultImpl(map);
   }
 
   /**
+   * @description 주어진 패턴에 맞춰 정규표현식을 생성합니다.
    * - BaseGroup     : _prefix_(?<_key_>\S+)
    * - Full Pattern  : BaseGroup | BaseGroup | ...
    * @see {@link <a href="./example.png"> Example </a>}
@@ -71,7 +83,7 @@ class PrefixTokenizerImpl implements PrefixTokenizer {
   }
 }
 
-class TokenizeResultImpl implements TokenizeResult {
+class PrefixTokenizeResultImpl implements TokenizeResult {
   private readonly resultMap: Map<TokenKey, Array<Token>>;
   constructor(map: Map<TokenKey, Array<Token>>) {
     this.resultMap = map;

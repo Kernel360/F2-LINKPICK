@@ -6,8 +6,9 @@ import {
   submitButtonLayout,
   widgetLayout,
 } from './SearchWidget.css';
-import { useViewScope } from '../model/useViewScopeImpl';
+import { useViewScope } from '../model/useViewScope';
 import { StringTokenizer } from '../util';
+import { TokenPrefixPattern } from '../util/tokenizer/PrefixTokenizer.type';
 
 /**
  * TODO:
@@ -16,11 +17,11 @@ import { StringTokenizer } from '../util';
  *      - 헬퍼 버튼 클릭시, 최근 검색했던 문자를 보여준다.
  */
 const searchPattern: TokenPrefixPattern = {
-  pickContent: '',
-  // folderName: 'folder:',
-  // tagName: '#',
-  // link: 'link:',
-  // author: '@',
+  folderName: 'folder:',
+  tagName: '#',
+  link: 'link:',
+  author: '@',
+  pickContent: '', // WARN: 빈 prefix는 반드시 설정의 마지막에 존재해야 합니다.
 } as const;
 
 /**
