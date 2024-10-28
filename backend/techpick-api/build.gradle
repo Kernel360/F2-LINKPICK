@@ -1,0 +1,29 @@
+plugins {
+    id 'java'
+}
+
+group = 'kernel360'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(":techpick-core")
+
+    // springdoc swagger dependency
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
+}

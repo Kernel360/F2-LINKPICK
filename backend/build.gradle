@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.3'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'java-library'
 }
 
 group = 'kernel360'
@@ -18,60 +19,74 @@ configurations {
         extendsFrom annotationProcessor
     }
 }
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java-library'
 
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+
+        // spring boot
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.2'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+        runtimeOnly 'com.mysql:mysql-connector-j'
+
+        // lombok annotation
+        compileOnly 'org.projectlombok:lombok'
+        annotationProcessor 'org.projectlombok:lombok'
+        testCompileOnly 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
+
+        // Sql logging formatter
+        // reference: https://www.baeldung.com/java-p6spy-intercept-sql-logging
+        implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.2' //이쁘게
+
+        // logback logger
+        implementation 'ch.qos.logback:logback-classic:1.4.12'
+        implementation 'org.slf4j:slf4j-api:2.0.3'
+
+        // test environment
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+        testRuntimeOnly 'com.mysql:mysql-connector-j'
+
+        // spring security and oauth client
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+        testImplementation 'org.springframework.security:spring-security-test'
+
+        // jwt
+        implementation 'io.jsonwebtoken:jjwt:0.9.1'
+        implementation 'javax.xml.bind:jaxb-api:2.3.1' //xml 문서와 자바 객체 간 매핑을 자동화
+
+        // map struct
+        implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+        annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
 }
 
-dependencies {
-    // spring boot
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.2'
-    implementation 'org.springframework.retry:spring-retry'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-
-    runtimeOnly 'com.mysql:mysql-connector-j'
-
-    // lombok annotation
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
-
-    // Sql logging formatter
-    // reference: https://www.baeldung.com/java-p6spy-intercept-sql-logging
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.2' //이쁘게
-
-    // logback logger
-    implementation 'ch.qos.logback:logback-classic:1.4.12'
-    implementation 'org.slf4j:slf4j-api:2.0.3'
-
-    // test environment
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testRuntimeOnly 'com.mysql:mysql-connector-j'
-
-    // springdoc swagger dependency
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
-
-    // spring security and oauth client
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    testImplementation 'org.springframework.security:spring-security-test'
-
-    // jwt
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
-    implementation 'javax.xml.bind:jaxb-api:2.3.1' //xml 문서와 자바 객체 간 매핑을 자동화
-
-    // Thymeleaf 테스트 혹은 관리자에서 추후에 사용하기 위해서 추가
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-
-    // map struct
-    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+bootJar {
+    enabled = false
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+jar {
+    enabled = false
 }
