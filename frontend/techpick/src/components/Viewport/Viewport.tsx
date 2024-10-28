@@ -1,6 +1,6 @@
 import { ReactElement } from 'react';
-import { useViewData } from './api/useViewData';
-import { useViewScope } from './model/useViewScopeImpl';
+import { useViewDataQuery } from './api/useViewData';
+import { useViewScope } from './model/useViewScope';
 import { SearchWidget } from './SearchWidget/SearchWidget';
 import {
   footerLayout,
@@ -9,6 +9,10 @@ import {
   mainLayout,
 } from './Viewport.css';
 
+/**
+ * TODO: Viewport 라는 이름이 좀 너무 넓습니다...
+ *       나중에 더 좁혀서 네이밍 해야 합니다!!!
+ */
 export function Viewport(): ReactElement {
   return (
     <div className={globalLayout}>
@@ -39,7 +43,7 @@ function ViewportHeader(): ReactElement {
  */
 function ViewportMain(): ReactElement {
   const viewScope = useViewScope();
-  const { data, ...queryInfo } = useViewData(viewScope);
+  const { data, ...queryInfo } = useViewDataQuery(viewScope);
   // 필터 및 뷰 State 선언을 여기서 수행
   return (
     <div className={mainLayout}>
