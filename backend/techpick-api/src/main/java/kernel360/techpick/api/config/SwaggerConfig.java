@@ -1,4 +1,4 @@
-package kernel360.techpick.core.config;
+package kernel360.techpick.api.config;
 
 import java.util.List;
 
