@@ -40,6 +40,11 @@ public class TagAdaptorImpl implements TagAdaptor {
 	}
 
 	@Override
+	public List<Tag> getTagList(List<Long> tagOrderList) {
+		return tagRepository.findAllById(tagOrderList);
+	}
+
+	@Override
 	@Transactional
 	public Tag saveTag(Long userId, TagCommand.Create command) {
 		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -76,7 +81,7 @@ public class TagAdaptorImpl implements TagAdaptor {
 		pickTagRepository.findAllByTagId(tagId).stream()
 			.map(pickTag -> pickRepository.findById(pickTag.getPick().getId())
 				.orElseThrow(ApiTagException::TAG_NOT_FOUND))
-			.forEach(pick -> pick.getTagOrder().remove(pick.getId()));
+			.forEach(pick -> pick.getTagOrderList().remove(pick.getId()));
 		pickTagRepository.deleteById(tagId);
 		tagRepository.deleteById(tagId);
 	}

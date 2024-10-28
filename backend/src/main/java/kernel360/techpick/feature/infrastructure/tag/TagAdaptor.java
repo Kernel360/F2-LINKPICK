@@ -11,6 +11,8 @@ public interface TagAdaptor {
 
 	List<Tag> getTagList(Long userId);
 
+	List<Tag> getTagList(List<Long> tagOrderList);
+
 	Tag saveTag(Long userId, TagCommand.Create command);
 
 	Tag updateTag(TagCommand.Update command);
