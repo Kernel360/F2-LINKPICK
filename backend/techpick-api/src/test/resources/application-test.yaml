@@ -2,7 +2,7 @@ spring:
   config:
     activate:
       on-profile: test
-    import: file:.env[.properties]
+    import: file:../.env[.properties]
 
   datasource:
     url: ${DOCKER_MYSQL_URL}
