@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { useViewDataQuery } from './api/useViewData';
+import { useViewDataQuery } from './api/useViewDataQuery';
 import { useViewScope } from './model/useViewScope';
 import { SearchWidget } from './SearchWidget/SearchWidget';
 import {
