@@ -16,7 +16,7 @@ import kernel360.techpick.core.model.user.User;
 public interface FolderMapper {
 
 	@Mapping(source = "id", target = "folderId")
-	@Mapping(source = "parentFolder.id", target = "destinationFolderId")
+	@Mapping(source = "parentFolder.id", target = "parentFolderId")
 	@Mapping(source = "user.id", target = "userId")
 	FolderResult toResult(Folder folder);
 

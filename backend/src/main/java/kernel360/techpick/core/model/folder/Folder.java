@@ -1,5 +1,6 @@
 package kernel360.techpick.core.model.folder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -66,13 +67,13 @@ public class Folder extends BaseEntity {
 	// ex) [6,3,2,23,1] -> "6 3 2 23 1"
 	@Convert(converter = OrderConverter.class)
 	@Column(name = "child_folder_order", columnDefinition = "longblob", nullable = false)
-	private List<Long> childFolderOrderList;
+	private List<Long> childFolderOrderList = new ArrayList<>();
 
 	// 폴더에 속한 pick id들을 공백으로 분리된 String으로 변환하여 db에 저장
 	// ex) [6,3,2,23,1] -> "6 3 2 23 1"
 	@Convert(converter = OrderConverter.class)
 	@Column(name = "pick_order", columnDefinition = "longblob", nullable = false)
-	private List<Long> childPickOrderList;
+	private List<Long> childPickOrderList = new ArrayList<>();
 
 	public static Folder createEmptyRootFolder(User user) {
 		return Folder.builder()
@@ -141,6 +142,11 @@ public class Folder extends BaseEntity {
 		childPickOrderList.add(destination, pickId);
 	}
 
+	public void updateChildPickOrderList(List<Long> pickIdList, int destination) {
+		childPickOrderList.removeAll(pickIdList);
+		childPickOrderList.addAll(destination, pickIdList);
+	}
+
 	public void removeChildFolderOrder(Long folderId) {
 		this.childFolderOrderList.remove(folderId);
 	}
@@ -162,7 +168,7 @@ public class Folder extends BaseEntity {
 		this.folderType = folderType;
 		this.parentFolder = parentFolder;
 		this.user = user;
-		this.childFolderOrderList = childFolderOrderList;
-		this.childPickOrderList = childPickOrderList;
+		this.childFolderOrderList = childFolderOrderList != null ? childFolderOrderList : new ArrayList<>();
+		this.childPickOrderList = childPickOrderList != null ? childPickOrderList : new ArrayList<>();
 	}
 }
