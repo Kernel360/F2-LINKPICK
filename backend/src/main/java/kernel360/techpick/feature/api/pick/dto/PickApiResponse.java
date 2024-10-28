@@ -1,9 +1,18 @@
 package kernel360.techpick.feature.api.pick.dto;
 
-public class PickApiResponse {
+import java.time.LocalDateTime;
+import java.util.List;
 
-    public record Create() {}
-    public record Read() {}
-    public record Update() {}
-    public record Delete() {}
+import kernel360.techpick.feature.domain.link.dto.LinkInfo;
+
+public record PickApiResponse(
+	Long id,
+	String title,
+	String memo,
+	LinkInfo linkInfo,
+	List<Long> tagOrderList,
+	LocalDateTime createdAt,
+	LocalDateTime updatedAt
+) {
+
 }
