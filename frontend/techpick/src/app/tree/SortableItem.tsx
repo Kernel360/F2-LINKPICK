@@ -38,6 +38,7 @@ export function SortableItem({ id, name }: { id: number; name: string }) {
         treeDataMap[id].parentFolderId !==
         treeDataMap[selectedFolderList[0]].parentFolderId
       ) {
+        setSelectedFolderList([id]);
         return;
       }
 
