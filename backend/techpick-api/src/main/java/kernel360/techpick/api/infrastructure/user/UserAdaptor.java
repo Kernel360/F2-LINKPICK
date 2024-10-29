@@ -1,4 +1,4 @@
-package kernel360.techpick.feature.infrastructure.user;
+package kernel360.techpick.api.infrastructure.user;
 
 import kernel360.techpick.core.model.user.User;
 

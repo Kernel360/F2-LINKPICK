@@ -1,25 +1,24 @@
 package kernel360.techpick.api.domain.pick.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import kernel360.techpick.api.domain.folder.exception.ApiFolderException;
+import kernel360.techpick.api.domain.pick.dto.PickCommand;
+import kernel360.techpick.api.domain.pick.dto.PickMapper;
+import kernel360.techpick.api.domain.pick.dto.PickResult;
+import kernel360.techpick.api.domain.pick.exception.ApiPickException;
+import kernel360.techpick.api.domain.tag.exception.ApiTagException;
+import kernel360.techpick.api.infrastructure.folder.FolderAdaptor;
+import kernel360.techpick.api.infrastructure.pick.PickAdaptor;
+import kernel360.techpick.api.infrastructure.tag.TagAdaptor;
 import kernel360.techpick.core.model.folder.Folder;
 import kernel360.techpick.core.model.folder.FolderType;
 import kernel360.techpick.core.model.pick.Pick;
 import kernel360.techpick.core.model.tag.Tag;
-import kernel360.techpick.feature.domain.folder.exception.ApiFolderException;
-import kernel360.techpick.feature.domain.pick.dto.PickCommand;
-import kernel360.techpick.feature.domain.pick.dto.PickMapper;
-import kernel360.techpick.feature.domain.pick.dto.PickResult;
-import kernel360.techpick.feature.domain.pick.exception.ApiPickException;
-import kernel360.techpick.feature.domain.tag.exception.ApiTagException;
-import kernel360.techpick.feature.infrastructure.folder.FolderAdaptor;
-import kernel360.techpick.feature.infrastructure.pick.PickAdaptor;
-import kernel360.techpick.feature.infrastructure.tag.TagAdaptor;
 import lombok.RequiredArgsConstructor;
 
 @Service

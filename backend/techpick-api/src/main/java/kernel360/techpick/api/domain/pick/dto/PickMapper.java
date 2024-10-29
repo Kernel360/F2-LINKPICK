@@ -18,17 +18,12 @@ import kernel360.techpick.core.model.user.User;
 public interface PickMapper {
 
 	@Mapping(source = "pick.link", target = "linkInfo")
-	PickResult toCreateResult(Pick pick);
-
-	@Mapping(source = "pick.link", target = "linkInfo")
-	PickResult toReadResult(Pick pick);
-
-	@Mapping(source = "pick.link", target = "linkInfo")
-	PickResult toUpdateResult(Pick pick);
-
-	@Mapping(source = "pick.link", target = "linkInfo")
-	PickResult toMoveResult(Pick pick);
+	@Mapping(source = "pick.parentFolder.id", target = "parentFolderId")
+	PickResult toPickResult(Pick pick);
 
 	@Mapping(source = "command.title", target = "title")
+	@Mapping(source = "parentFolder", target = "parentFolder")
+	@Mapping(source = "user", target = "user")
+	@Mapping(source = "command.tagOrderList", target = "tagOrderList")
 	Pick toEntity(PickCommand.Create command, User user, Folder parentFolder, Link link);
 }

@@ -1,4 +1,4 @@
-package kernel360.techpick.feature.domain.pick.service;
+package kernel360.techpick.api.domain.pick.service;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -9,22 +9,25 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.hibernate.Hibernate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.persistence.EntityManager;
-import kernel360.techpick.TechpickApplication;
-import kernel360.techpick.core.exception.base.ApiException;
+import kernel360.TechPickApiApplication;
+import kernel360.techpick.api.domain.link.dto.LinkInfo;
+import kernel360.techpick.api.domain.pick.dto.PickCommand;
+import kernel360.techpick.api.domain.pick.dto.PickResult;
+import kernel360.techpick.api.domain.pick.exception.ApiPickException;
+import kernel360.techpick.api.domain.tag.dto.TagCommand;
+import kernel360.techpick.api.domain.tag.service.TagService;
+import kernel360.techpick.api.infrastructure.pick.PickAdaptor;
 import kernel360.techpick.core.model.folder.Folder;
 import kernel360.techpick.core.model.folder.FolderRepository;
 import kernel360.techpick.core.model.link.LinkRepository;
@@ -37,20 +40,10 @@ import kernel360.techpick.core.model.user.Role;
 import kernel360.techpick.core.model.user.SocialType;
 import kernel360.techpick.core.model.user.User;
 import kernel360.techpick.core.model.user.UserRepository;
-import kernel360.techpick.feature.domain.link.dto.LinkInfo;
-import kernel360.techpick.feature.domain.link.dto.LinkMapper;
-import kernel360.techpick.feature.domain.pick.dto.PickCommand;
-import kernel360.techpick.feature.domain.pick.dto.PickResult;
-import kernel360.techpick.feature.domain.pick.exception.ApiPickException;
-import kernel360.techpick.feature.domain.tag.dto.TagCommand;
-import kernel360.techpick.feature.domain.tag.dto.TagResult;
-import kernel360.techpick.feature.domain.tag.service.TagService;
-import kernel360.techpick.feature.infrastructure.link.LinkAdaptor;
-import kernel360.techpick.feature.infrastructure.pick.PickAdaptor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@SpringBootTest(classes = TechpickApplication.class)
+@SpringBootTest(classes = TechPickApiApplication.class)
 @ActiveProfiles("test")
 class PickServiceTest {
 

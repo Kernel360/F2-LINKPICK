@@ -1,12 +1,11 @@
-package kernel360.techpick.feature.infrastructure.user;
+package kernel360.techpick.api.infrastructure.user;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import kernel360.techpick.api.domain.user.exception.ApiUserException;
 import kernel360.techpick.core.model.user.User;
 import kernel360.techpick.core.model.user.UserRepository;
-import kernel360.techpick.feature.domain.user.exception.ApiUserException;
 import lombok.RequiredArgsConstructor;
 
 @Component
