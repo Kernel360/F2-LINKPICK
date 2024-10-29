@@ -38,8 +38,8 @@ services:
       - .env
     environment:
       - DOCKER_MYSQL_URL=jdbc:mysql://techpick-mysql/TECHPICK_DB?createDatabaseIfNotExist=true
-      - DOCKER_MYSQL_USERNAME=root
-      - DOCKER_MYSQL_PASSWORD=1234
+      - DOCKER_MYSQL_USERNAME=${DOCKER_MYSQL_USERNAME}
+      - DOCKER_MYSQL_PASSWORD=${DOCKER_MYSQL_PASSWORD}
       - TZ=Asia/Seoul
     networks:
       - techpick-network
@@ -55,8 +55,8 @@ services:
       - .env
     environment:
       - DOCKER_MYSQL_URL=jdbc:mysql://techpick-mysql/TECHPICK_DB?createDatabaseIfNotExist=true
-      - DOCKER_MYSQL_USERNAME=root
-      - DOCKER_MYSQL_PASSWORD=1234
+      - DOCKER_MYSQL_USERNAME=${DOCKER_MYSQL_USERNAME}
+      - DOCKER_MYSQL_PASSWORD=${DOCKER_MYSQL_PASSWORD}
       - TZ=Asia/Seoul
     networks:
       - techpick-network
