@@ -118,6 +118,7 @@ class PickServiceTest {
 
 	@Nested
 	@DisplayName("픽 조회")
+	@Transactional
 	class getPick {
 		@Test
 		@DisplayName("""
@@ -144,8 +145,8 @@ class PickServiceTest {
 	}
 
 	@Nested
+	@DisplayName("픽 생성")
 	class savePick {
-
 		@Test
 		@DisplayName("이미 픽한 링크에 대해 중복으로 픽한 경우, 실패해야 한다.")
 		void create_duplicate_pick_test() {
@@ -193,7 +194,7 @@ class PickServiceTest {
 						pickService.saveNewPick(command);
 						successCount.incrementAndGet(); // 성공 카운트
 					} catch (Exception e) {
-						log.info(e.getMessage());
+						log.info("PickService Exception : {}", e.getMessage());
 						failCount.incrementAndGet(); // 실패 카운트
 					} finally {
 						countDownLatch.countDown();
@@ -248,6 +249,8 @@ class PickServiceTest {
 	}
 
 	@Nested
+	@DisplayName("픽 이동")
+	@Transactional
 	class movePick {
 		@Test
 		@DisplayName("""
@@ -295,7 +298,6 @@ class PickServiceTest {
 			    그 이동된 부모 폴더의 자식 리스트 획득을 할 수 있어야 한다.
 			    그리고 그 자식 리스트는 순서 정보가 올바르게 설정되어야 한다.
 			""")
-		@Transactional
 		void move_pick_to_other_folder_test() {
 			// given
 			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
@@ -332,7 +334,6 @@ class PickServiceTest {
 			    1. 순서 설정값이 음수가 들어오면 예외를 발생시킨다.
 			    2. 순서 설정값이 전체 길이보다 큰 값이 들어오면 예외를 발생시킨다.
 			""")
-		@Transactional
 		void move_pick_invalid_order_value_test() {
 			// given
 			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
@@ -352,12 +353,13 @@ class PickServiceTest {
 	}
 
 	@Nested
+	@DisplayName("픽 삭제")
+	@Transactional
 	class deletePick {
 		@Test
 		@DisplayName("""
 			    픽 삭제한 후 조회하여 삭제가 되었음을 확인한다.
 			""")
-		@Transactional
 		void remove_and_read_pick_test() {
 			// given
 			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
@@ -381,7 +383,6 @@ class PickServiceTest {
 		@DisplayName("""
 			    존재하지 않은 픽을 삭제할 순 없으며, 시도시 예외가 발생한다.
 			""")
-		@Transactional
 		void remove_not_existing_pick_exception_test() {
 			// given
 			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
@@ -404,7 +405,6 @@ class PickServiceTest {
 		@DisplayName("""
 			    휴지통에 있지 않은 픽은 삭제할 수 없으며, 시도시 예외가 발생한다.
 			""")
-		@Transactional
 		void remove_not_in_recycle_bin_folder_exception_test() {
 			// given
 			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
@@ -425,7 +425,6 @@ class PickServiceTest {
 		@DisplayName("""
 			    태그 삭제시, 픽에 설정된 태그 정보와 tagList도 변경되어야 한다.
 			""")
-			// @Transactional
 		void update_tag_list_in_pick_when_tag_is_removed_test() {
 			// given
 			TagCommand.Delete delete = new TagCommand.Delete(user.getId(), tag1.getId());
