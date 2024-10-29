@@ -33,7 +33,7 @@ export const dragContainer = style({
 });
 
 export const treePageWrapper = style({
-  width: '400px',
+  width: 'fit-content',
   margin: 'auto',
   marginTop: '250px',
 });
