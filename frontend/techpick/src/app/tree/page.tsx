@@ -50,8 +50,11 @@ export default function TreePage() {
   const onDragStart = (event: DragStartEvent) => {
     setIsDragging(true);
 
-    if (selectedFolderList.length === 0) {
+    const { active } = event;
+
+    if (!selectedFolderList.includes(Number(active.id))) {
       setSelectedFolderList([Number(event.active.id)]);
+      return;
     }
   };
 
@@ -59,10 +62,6 @@ export default function TreePage() {
     const { active, over } = event;
 
     if (!over) return;
-
-    console.log('onDragOver');
-    // console.log('active', active);
-    // console.log('over', over);
 
     const activeData = active.data.current;
     const overData = over.data.current;
@@ -76,21 +75,17 @@ export default function TreePage() {
       return;
     }
 
-    console.log('서로 다름!');
-
-    // 1. active의 containerId와 event의 containerId가 다르다면 특별한 action 동작.
-    // 2. 각 containerId와 active의 현재 index 찾기.
-    // 3. active에서 값을 제거.
-    // 4. over에 값을 추가.
+    moveFolder({
+      from: active,
+      to: over,
+      selectedFolderList,
+    });
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!over) return; // 드래그 중 놓은 위치가 없을 때 종료
-
-    // console.log('active', active);
-    // console.log('over', over);
 
     moveFolder({
       from: active,
@@ -121,38 +116,42 @@ export default function TreePage() {
           onDragStart={onDragStart}
           onDragOver={onDragOver}
         >
-          <div style={{ display: 'flex', gap: '30px' }}>
-            <SortableContext
-              id="-1"
-              items={rootFolderChildList.map((item) => item.id)}
-              strategy={verticalListSortingStrategy}
-            >
-              <ul className={dragContainer}>
-                {rootFolderChildList.map((treeData) => (
-                  <SortableItem
-                    key={treeData.id}
-                    id={treeData.id}
-                    name={treeData.name}
-                  />
-                ))}
-              </ul>
-            </SortableContext>
+          <div style={{ display: 'flex', gap: '140px' }}>
+            <div>
+              <SortableContext
+                id="-1"
+                items={rootFolderChildList.map((item) => item.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <ul className={dragContainer}>
+                  {rootFolderChildList.map((treeData) => (
+                    <SortableItem
+                      key={treeData.id}
+                      id={treeData.id}
+                      name={treeData.name}
+                    />
+                  ))}
+                </ul>
+              </SortableContext>
+            </div>
 
-            <SortableContext
-              id="1"
-              items={depth1ChildList.map((item) => item.id)}
-              strategy={verticalListSortingStrategy}
-            >
-              <ul className={dragContainer}>
-                {depth1ChildList.map((treeData) => (
-                  <SortableItem
-                    key={treeData.id}
-                    id={treeData.id}
-                    name={treeData.name}
-                  />
-                ))}
-              </ul>
-            </SortableContext>
+            <div>
+              <SortableContext
+                id="1"
+                items={depth1ChildList.map((item) => item.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <ul className={dragContainer}>
+                  {depth1ChildList.map((treeData) => (
+                    <SortableItem
+                      key={treeData.id}
+                      id={treeData.id}
+                      name={treeData.name}
+                    />
+                  ))}
+                </ul>
+              </SortableContext>
+            </div>
           </div>
 
           <DragOverlay>

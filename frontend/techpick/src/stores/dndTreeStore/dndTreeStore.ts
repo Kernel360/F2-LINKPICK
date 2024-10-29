@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { changeParentFolderId } from './utils/changeParentFolderId';
 import { isDnDCurrentData } from './utils/isDnDCurrentData';
+import { moveFolderToDifferentParent } from './utils/moveFolderToDifferentParent';
 import { reorderFoldersInSameParent } from './utils/reorderFoldersInSameParent';
 import type { Active, Over, UniqueIdentifier } from '@dnd-kit/core';
 import type { FolderType, FolderMapType } from '@/types';
@@ -79,7 +81,34 @@ export const useTreeStore = create<TreeState & TreeAction>()(
               selectedFolderList,
             });
         });
+
+        return;
       }
+
+      const sourceParentId = fromData.sortable.containerId;
+      const targetParentId = toData.sortable.containerId;
+      const targetId = to.id;
+
+      set((state) => {
+        const newTreeDataMap = moveFolderToDifferentParent({
+          treeDataMap: state.treeDataMap,
+          selectedFolderList: state.selectedFolderList,
+          sourceParentId,
+          targetParentId,
+          targetId,
+        });
+
+        if (!newTreeDataMap) {
+          return;
+        }
+
+        state.treeDataMap = newTreeDataMap;
+        state.treeDataMap = changeParentFolderId({
+          treeDataMap: state.treeDataMap,
+          childFolderList: state.selectedFolderList,
+          parentId: targetParentId,
+        });
+      });
     },
 
     focusFolder: () => {},

@@ -1,5 +1,7 @@
 import type { UniqueIdentifier } from '@dnd-kit/core';
 
+export type SelectedFolderListType = number[];
+
 export type ChildFolderListType = number[];
 
 export type FolderType = {
