@@ -17,3 +17,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: create # 테스트용 db는 매 실행마다 초기화 되어야함
+
+logging: # Transaction Logging
+  level:
+    org.springframework.orm.jpa: DEBUG

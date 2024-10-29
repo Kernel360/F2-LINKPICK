@@ -60,42 +60,46 @@ public class Pick extends BaseEntity {
 	// 픽에 속한 tag id들을 공백으로 분리된 String으로 변환하여 db에 저장. Ex) [6,3,2,23,1] -> "6 3 2 23 1"
 	@Convert(converter = OrderConverter.class)
 	@Column(name = "tag_order", columnDefinition = "longblob", nullable = false)
-	private List<Long> tagOrder = new ArrayList<>();
+	private List<Long> tagOrderList = new ArrayList<>();
 
 	// 사용자가 링크에 대해 남기는 메모 (update시 null과 ""를 구분하기 위함)
 	@Column(name = "memo", nullable = false)
 	private String memo = "";
 
 	@Builder
-	private Pick(User user, Link link, Folder parentFolder, String title, List<Long> tagOrder, String memo) {
+	private Pick(User user, Link link, Folder parentFolder, String title, List<Long> tagOrderList, String memo) {
 		this.user = user;
 		this.link = link;
 		this.parentFolder = parentFolder;
 		this.title = title;
-		this.tagOrder = tagOrder;
+		this.tagOrderList = tagOrderList;
 		this.memo = memo;
 	}
 
-	public Pick updateTagOrderList(List<Long> tagOrder) {
-		if (tagOrder == null) return this;
-		this.tagOrder = tagOrder;
+	public Pick updateTagOrderList(List<Long> tagOrderList) {
+		if (tagOrderList == null)
+			return this;
+		this.tagOrderList = tagOrderList;
 		return this;
 	}
 
 	public Pick updateParentFolder(Folder parentFolder) {
-		if (parentFolder == null) return this;
+		if (parentFolder == null)
+			return this;
 		this.parentFolder = parentFolder;
 		return this;
 	}
 
 	public Pick updateTitle(String title) {
-		if (title == null) return this;
+		if (title == null)
+			return this;
 		this.title = title;
 		return this;
 	}
 
 	public Pick updateMemo(String memo) {
-		if (memo == null) return this;
+		if (memo == null)
+			return this;
 		this.memo = memo;
 		return this;
 	}

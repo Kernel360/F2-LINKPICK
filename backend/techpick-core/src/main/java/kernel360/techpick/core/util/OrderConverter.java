@@ -12,6 +12,7 @@ public class OrderConverter implements AttributeConverter<List<Long>, String> {
 
 	@Override
 	public String convertToDatabaseColumn(List<Long> idList) {
+		if (idList == null) { return ""; }
 		StringBuilder sb = new StringBuilder();
 		for (Long id : idList) {
 			sb.append(id).append(" ");

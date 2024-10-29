@@ -16,7 +16,8 @@ public enum ApiPickErrorCode implements ApiErrorCode {
 		("PK-001", HttpStatus.BAD_REQUEST, "이미 존재하는 Pick", ErrorLevel.CAN_HAPPEN()),
 	PICK_UNAUTHORIZED_ACCESS
 		("PK-002", HttpStatus.UNAUTHORIZED, "잘못된 Pick 접근, 다른 사용자의 Pick에 접근", ErrorLevel.SHOULD_NOT_HAPPEN()),
-
+	PICK_DELETE_NOT_ALLOWED
+		("PK-003", HttpStatus.NOT_ACCEPTABLE, "휴지통이 아닌 폴더에서 픽 삭제는 허용되지 않음.", ErrorLevel.SHOULD_NOT_HAPPEN()),
 	;
 
 	private final String code;

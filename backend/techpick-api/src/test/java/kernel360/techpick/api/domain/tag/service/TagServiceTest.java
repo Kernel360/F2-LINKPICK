@@ -1,4 +1,4 @@
-package kernel360.techpick.api.domain.tag.service;
+package kernel360.techpick.feature.domain.tag.service;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -17,15 +17,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import kernel360.TechPickApiApplication;
-import kernel360.techpick.api.domain.tag.dto.TagCommand;
-import kernel360.techpick.api.domain.tag.dto.TagResult;
-import kernel360.techpick.api.domain.tag.exception.ApiTagException;
-import kernel360.techpick.api.infrastructure.user.reader.UserReader;
+import kernel360.techpick.TechpickApplication;
 import kernel360.techpick.core.model.user.Role;
 import kernel360.techpick.core.model.user.SocialType;
 import kernel360.techpick.core.model.user.User;
 import kernel360.techpick.core.model.user.UserRepository;
+import kernel360.techpick.feature.domain.tag.dto.TagCommand;
+import kernel360.techpick.feature.domain.tag.dto.TagResult;
+import kernel360.techpick.feature.domain.tag.exception.ApiTagException;
+import kernel360.techpick.feature.infrastructure.user.UserAdaptor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -37,7 +37,7 @@ class TagServiceTest {
 	TagService tagService;
 
 	@Autowired
-	UserReader userReader;
+	UserAdaptor userAdaptor;
 
 	@BeforeAll
 	static void setUp(@Autowired UserRepository userRepository) {
@@ -130,7 +130,7 @@ class TagServiceTest {
 			expectedOrderList.add(tagResult.id());
 		}
 
-		User user = userReader.readUser(1L);
+		User user = userAdaptor.getUser(1L);
 		user.updateTagOrderList(tagIdList);
 
 		Long targetId = expectedOrderList.get(0);

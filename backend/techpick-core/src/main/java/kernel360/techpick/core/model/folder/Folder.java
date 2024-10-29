@@ -19,6 +19,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import kernel360.techpick.core.model.common.BaseEntity;
 import kernel360.techpick.core.model.user.User;
 import kernel360.techpick.core.util.OrderConverter;
@@ -27,7 +28,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "folder")
+@Table(
+	name = "folder",
+	uniqueConstraints = {
+		@UniqueConstraint(
+			name = "UC_FOLDER_NAME_PER_USER",
+			columnNames = {"user_id, parent_folder_id, name"}
+		)
+	}
+)
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -66,6 +75,39 @@ public class Folder extends BaseEntity {
 	@Column(name = "pick_order", columnDefinition = "longblob", nullable = false)
 	private List<Long> childPickOrderList = new ArrayList<>();
 
+	public static Folder createEmptyRootFolder(User user) {
+		return Folder.builder()
+			.folderType(FolderType.ROOT)
+			.user(user)
+			.name(FolderType.ROOT.getLabel())
+			.build();
+	}
+
+	public static Folder createEmptyRecycleBinFolder(User user) {
+		return Folder.builder()
+			.folderType(FolderType.RECYCLE_BIN)
+			.user(user)
+			.name(FolderType.RECYCLE_BIN.getLabel())
+			.build();
+	}
+
+	public static Folder createEmptyUnclassifiedFolder(User user) {
+		return Folder.builder()
+			.folderType(FolderType.UNCLASSIFIED)
+			.user(user)
+			.name(FolderType.UNCLASSIFIED.getLabel())
+			.build();
+	}
+
+	public static Folder createEmptyGeneralFolder(User user, Folder parentFolder, String name) {
+		return Folder.builder()
+			.folderType(FolderType.GENERAL)
+			.parentFolder(parentFolder)
+			.user(user)
+			.name(name)
+			.build();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) {
@@ -100,6 +142,11 @@ public class Folder extends BaseEntity {
 		childPickOrderList.add(destination, pickId);
 	}
 
+	public void updateChildPickOrderList(List<Long> pickIdList, int destination) {
+		childPickOrderList.removeAll(pickIdList);
+		childPickOrderList.addAll(destination, pickIdList);
+	}
+
 	public void removeChildFolderOrder(Long folderId) {
 		this.childFolderOrderList.remove(folderId);
 	}
@@ -121,7 +168,7 @@ public class Folder extends BaseEntity {
 		this.folderType = folderType;
 		this.parentFolder = parentFolder;
 		this.user = user;
-		this.childFolderOrderList = childFolderOrderList;
-		this.childPickOrderList = childPickOrderList;
+		this.childFolderOrderList = childFolderOrderList != null ? childFolderOrderList : new ArrayList<>();
+		this.childPickOrderList = childPickOrderList != null ? childPickOrderList : new ArrayList<>();
 	}
 }
