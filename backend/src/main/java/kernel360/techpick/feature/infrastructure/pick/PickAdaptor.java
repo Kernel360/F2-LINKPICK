@@ -12,6 +12,8 @@ public interface PickAdaptor {
 
 	Pick getPick(Long pickId);
 
+	Pick getPickUrl(Long userId, String url);
+
 	List<Pick> getPickList(List<Long> idList);
 
 	List<PickTag> getPickTagList(Long pickId);

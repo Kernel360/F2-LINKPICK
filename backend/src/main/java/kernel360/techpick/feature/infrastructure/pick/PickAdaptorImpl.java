@@ -46,6 +46,13 @@ public class PickAdaptorImpl implements PickAdaptor {
 
 	@Override
 	@Transactional(readOnly = true)
+	public Pick getPickUrl(Long userId, String url) {
+		return pickRepository.findByUserIdAndLinkUrl(userId, url)
+			.orElseThrow(ApiPickException::PICK_NOT_FOUND);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public List<Pick> getPickList(List<Long> idList) {
 		return pickRepository.findAllById(idList);
 	}
