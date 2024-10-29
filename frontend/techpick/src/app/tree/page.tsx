@@ -22,12 +22,12 @@ import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 
 export default function TreePage() {
   const {
-    treeDataList,
-    setTreeData,
+    setTreeMap,
     moveFolder,
     selectedFolderList,
     setSelectedFolderList,
     setIsDragging,
+    filterByParentId,
   } = useTreeStore();
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -68,10 +68,12 @@ export default function TreePage() {
 
   useEffect(
     function onTreePageLoad() {
-      setTreeData(mockFolders);
+      setTreeMap(mockFolders);
     },
-    [setTreeData]
+    [setTreeMap]
   );
+
+  const rootFolderChildList = filterByParentId(-1);
 
   return (
     <div>
@@ -83,20 +85,24 @@ export default function TreePage() {
           onDragEnd={handleDragEnd}
           onDragStart={onDragStart}
         >
-          <SortableContext
-            items={treeDataList.map((item) => item.id)}
-            strategy={verticalListSortingStrategy}
-          >
-            <ul className={dragContainer}>
-              {treeDataList.map((treeData) => (
-                <SortableItem
-                  key={treeData.id}
-                  id={treeData.id}
-                  name={treeData.name}
-                />
-              ))}
-            </ul>
-          </SortableContext>
+          <div style={{ display: 'flex', gap: '30px' }}>
+            <SortableContext
+              id="-1"
+              items={rootFolderChildList.map((item) => item.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <ul className={dragContainer}>
+                {rootFolderChildList.map((treeData) => (
+                  <SortableItem
+                    key={treeData.id}
+                    id={treeData.id}
+                    name={treeData.name}
+                  />
+                ))}
+              </ul>
+            </SortableContext>
+          </div>
+
           <DragOverlay>
             {/** 추후에 data를 정확한 타입을 넣을 수 있을 때 추가할 예정. */}
             <div className={`${draggableItem}`}>Drag 한 폴더의 이름</div>
