@@ -40,6 +40,16 @@ public class PickServiceImpl implements PickService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public PickResult getPickUrl(Long userId, String url) {
+		Pick pick = pickAdaptor.getPickUrl(userId, url);
+		if (ObjectUtils.notEqual(userId, pick.getUser().getId())) {
+			throw ApiPickException.PICK_UNAUTHORIZED_ACCESS();
+		}
+		return pickMapper.toPickResult(pick);
+	}
+
+	@Override
 	@Transactional
 	public PickResult saveNewPick(PickCommand.Create command) {
 		checkFolderUserAuthorization(command.userId(), command.parentFolderId());

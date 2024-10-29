@@ -9,6 +9,8 @@ public interface PickService {
 
 	PickResult getPick(PickCommand.Read command);
 
+	PickResult getPickUrl(Long userId, String url);
+
 	PickResult saveNewPick(PickCommand.Create command);
 
 	PickResult updatePick(PickCommand.Update command);
