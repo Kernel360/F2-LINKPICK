@@ -1,10 +1,12 @@
 import type { UniqueIdentifier } from '@dnd-kit/core';
 
+export type ChildFolderListType = number[];
+
 export type FolderType = {
   id: number;
   name: string;
   parentFolderId: number;
-  childFolderList: number[];
+  childFolderList: ChildFolderListType;
 };
 
 export type FolderMapType = Record<string, FolderType>;

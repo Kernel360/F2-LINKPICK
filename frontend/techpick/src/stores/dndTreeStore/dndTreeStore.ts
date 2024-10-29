@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { hasIndex } from '@/utils';
-import { isDnDCurrentData } from './dndTreeStore.util';
+import { isDnDCurrentData } from './utils/isDnDCurrentData';
+import { reorderFoldersInSameParent } from './utils/reorderFoldersInSameParent';
 import type { Active, Over, UniqueIdentifier } from '@dnd-kit/core';
 import type { FolderType, FolderMapType } from '@/types';
 
@@ -58,50 +58,28 @@ export const useTreeStore = create<TreeState & TreeAction>()(
       const fromData = from.data.current;
       const toData = to.data.current;
 
-      if (!isDnDCurrentData(fromData) || !isDnDCurrentData(toData)) {
-        return;
-      }
-
+      if (!isDnDCurrentData(fromData) || !isDnDCurrentData(toData)) return;
       // SortableContext에 id가 없으면 종료
-      if (!fromData.sortable.containerId || !toData.sortable.containerId) {
+      if (!fromData.sortable.containerId || !toData.sortable.containerId)
         return;
+
+      // 부모 containerId가 같으면
+      if (fromData.sortable.containerId === toData.sortable.containerId) {
+        const parentId = fromData.sortable.containerId;
+        const fromId = from.id;
+        const toId = to.id;
+
+        set((state) => {
+          const childFolderList = state.treeDataMap[parentId].childFolderList;
+          state.treeDataMap[parentId].childFolderList =
+            reorderFoldersInSameParent({
+              childFolderList,
+              fromId,
+              toId,
+              selectedFolderList,
+            });
+        });
       }
-
-      // 일단 containerId가 다르면 동작 X containerId는 parentId
-      if (fromData.sortable.containerId !== toData.sortable.containerId) {
-        return;
-      }
-
-      const parentId = fromData.sortable.containerId;
-
-      set((state) => {
-        const treeData = state.treeDataMap[parentId];
-        const { childFolderList } = treeData;
-        const curIndex = childFolderList.findIndex((item) => item === from.id);
-        const targetIndex = childFolderList.findIndex((item) => item === to.id);
-
-        // 이동할 폴더가 (즉 목적지 to)가 뒤에 있다면 위치를 조정해야한다.
-        const nextIndex =
-          curIndex < targetIndex
-            ? Math.min(targetIndex + 1, childFolderList.length)
-            : targetIndex;
-        if (!hasIndex(curIndex) || !hasIndex(nextIndex)) return;
-
-        // nextIndex 이전의 리스트, selected list, nextIndex after index
-        const beforeNextIndexList = childFolderList
-          .slice(0, nextIndex)
-          .filter((index) => !selectedFolderList.includes(index));
-        const afterNextIndexList = childFolderList
-          .slice(nextIndex)
-          .filter((index) => !selectedFolderList.includes(index));
-
-        // 새 리스트를 만들어 상태를 업데이트합니다.
-        state.treeDataMap[parentId].childFolderList = [
-          ...beforeNextIndexList,
-          ...selectedFolderList,
-          ...afterNextIndexList,
-        ];
-      });
     },
 
     focusFolder: () => {},
