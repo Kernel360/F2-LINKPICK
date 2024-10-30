@@ -42,6 +42,8 @@ export interface ApiPickData {
   userId: number;
   tagList: ApiTagData[];
   linkUrlResponse: ApiLinkUrlData;
+  updatedAt: Date;
+  createdAt: Date;
 }
 
 export interface ApiPickLinkRequestData {
