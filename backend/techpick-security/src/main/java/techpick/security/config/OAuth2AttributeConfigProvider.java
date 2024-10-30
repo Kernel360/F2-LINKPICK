@@ -1,4 +1,4 @@
-package kernel360.techpick.core.config;
+package techpick.security.config;
 
 import java.util.HashMap;
 import java.util.Map;

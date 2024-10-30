@@ -1,4 +1,4 @@
-package kernel360.techpick.core.util;
+package techpick.security.util;
 
 import java.util.Base64;
 
@@ -18,7 +18,7 @@ public class CookieUtil {
 			.path("/")
 			.httpOnly(true)
 			.secure(true)
-			.domain("minlife.me")
+			// .domain("minlife.me")
 			// .sameSite("None")
 			.build();
 		response.addHeader("Set-Cookie", responseCookie.toString());
@@ -27,8 +27,8 @@ public class CookieUtil {
 		ResponseCookie techPickLoginCookie = ResponseCookie.from("techPickLogin", "true")
 			.maxAge(maxAge)
 			.path("/")
-			.secure(true)
-			.domain("minlife.me")
+			// .secure(true)
+			// .domain("minlife.me")
 			// .sameSite("None")
 			.build();
 		response.addHeader("Set-Cookie", techPickLoginCookie.toString());

@@ -1,4 +1,9 @@
 spring:
+  jwt:
+    secret:
+      ${JWT_SECRET}
+    issuer:
+      ${JWT_ISSUER}
   security:
     oauth2:
       client:

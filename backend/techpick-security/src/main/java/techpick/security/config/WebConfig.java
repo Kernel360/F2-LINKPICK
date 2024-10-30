@@ -1,4 +1,4 @@
-package kernel360.techpick.core.config;
+package techpick.security.config;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import kernel360.techpick.core.util.LoginUserArgumentResolver;
+import techpick.security.util.LoginUserArgumentResolver;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {

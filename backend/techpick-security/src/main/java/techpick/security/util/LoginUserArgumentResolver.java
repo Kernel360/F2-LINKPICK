@@ -1,4 +1,4 @@
-package kernel360.techpick.core.util;
+package techpick.security.util;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -7,7 +7,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import kernel360.techpick.core.annotation.LoginUserId;
+import techpick.security.annotation.LoginUserId;
 
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
