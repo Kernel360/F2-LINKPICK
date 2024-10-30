@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 	uniqueConstraints = {
 		@UniqueConstraint(
 			name = "UC_TAG_NAME_PER_USER",
-			columnNames = {"user_id, name"}
+			columnNames = {"user_id", "name"}
 		)
 	}
 )

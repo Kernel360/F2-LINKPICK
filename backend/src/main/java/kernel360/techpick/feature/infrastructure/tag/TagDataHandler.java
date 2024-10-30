@@ -16,10 +16,12 @@ import kernel360.techpick.feature.domain.tag.dto.TagMapper;
 import kernel360.techpick.feature.domain.tag.exception.ApiTagException;
 import kernel360.techpick.feature.domain.user.exception.ApiUserException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-public class TagAdaptorImpl implements TagAdaptor {
+public class TagDataHandler {
 
 	private final TagRepository tagRepository;
 	private final PickRepository pickRepository;
@@ -27,24 +29,20 @@ public class TagAdaptorImpl implements TagAdaptor {
 	private final UserRepository userRepository;
 	private final TagMapper tagMapper;
 
-	@Override
 	@Transactional(readOnly = true)
 	public Tag getTag(Long tagId) {
 		return tagRepository.findById(tagId).orElseThrow(ApiTagException::TAG_NOT_FOUND);
 	}
 
-	@Override
 	@Transactional(readOnly = true)
 	public List<Tag> getTagList(Long userId) {
 		return tagRepository.findAllByUserId(userId);
 	}
 
-	@Override
 	public List<Tag> getTagList(List<Long> tagOrderList) {
 		return tagRepository.findAllById(tagOrderList);
 	}
 
-	@Override
 	@Transactional
 	public Tag saveTag(Long userId, TagCommand.Create command) {
 		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -53,7 +51,6 @@ public class TagAdaptorImpl implements TagAdaptor {
 		return tag;
 	}
 
-	@Override
 	@Transactional
 	public Tag updateTag(TagCommand.Update command) {
 		Tag tag = tagRepository.findById(command.tagId()).orElseThrow(ApiTagException::TAG_NOT_FOUND);
@@ -62,7 +59,6 @@ public class TagAdaptorImpl implements TagAdaptor {
 		return tag;
 	}
 
-	@Override
 	@Transactional
 	public List<Long> moveTag(Long userId, TagCommand.Move command) {
 		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -72,7 +68,6 @@ public class TagAdaptorImpl implements TagAdaptor {
 		return userTagOrder;
 	}
 
-	@Override
 	@Transactional
 	public void deleteTag(Long userId, TagCommand.Delete command) {
 		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -81,12 +76,13 @@ public class TagAdaptorImpl implements TagAdaptor {
 		pickTagRepository.findAllByTagId(tagId).stream()
 			.map(pickTag -> pickRepository.findById(pickTag.getPick().getId())
 				.orElseThrow(ApiTagException::TAG_NOT_FOUND))
-			.forEach(pick -> pick.getTagOrderList().remove(pick.getId()));
+			.forEach(pick -> {
+				pick.getTagOrderList().remove(tagId);
+			});
 		pickTagRepository.deleteById(tagId);
 		tagRepository.deleteById(tagId);
 	}
 
-	@Override
 	@Transactional(readOnly = true)
 	public boolean checkDuplicateTagName(Long userId, String name) {
 		return tagRepository.existsByUserIdAndName(userId, name);
