@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="60 seconds">
+
+    <!-- ``````````````````````` CONVERSION RULE SETTING ```````````````````````````` -->
+
+    <!-- 콘솔 출력 색상 적용 (참고: https://oingdaddy.tistory.com/257)   -->
+    <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+    <conversionRule conversionWord="wex"
+                    converterClass="org.springframework.boot.logging.logback.WhitespaceThrowableProxyConverter"/>
+    <conversionRule conversionWord="wEx"
+                    converterClass="org.springframework.boot.logging.logback.ExtendedWhitespaceThrowableProxyConverter"/>
+
+    <!-- ``````````````````````` PROPERTY VARIABLE SETTING ```````````````````````````` -->
+
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){green} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
+    <property name="CONSOLE_LOG_CHARSET" value="${CONSOLE_LOG_CHARSET:-default}"/>
+
+    <!-- 로그 경로 (Logback 은 환경 번수 적용 불가) -->
+    <property name="LOG_PATH" value="logs"/>
+    <property name="DATE_DIR" value="%d{yyyy-MM-dd}"/>
+
+    <!-- ``````````````````````` APPENDER SETTING ```````````````````````````` -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+            <charset>${CONSOLE_LOG_CHARSET}</charset>
+        </encoder>
+    </appender>
+
+    <appender name="APP-LOG-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 로그 파일을 일자, 크기 별로 생성 설정 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- each archived file, size max 10MB -->
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <fileNamePattern>${LOG_PATH}/${DATE_DIR}/application.%i.log</fileNamePattern>
+            <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
+            <totalSizeCap>20GB</totalSizeCap>
+            <!-- 60 days to keep -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <!-- 로그를 남길 패턴 설정 -->
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35}[%line] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="SQL-LOG-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 로그 파일을 일자, 크기 별로 생성 설정 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- each archived file, size max 10MB -->
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <fileNamePattern>${LOG_PATH}/${DATE_DIR}/sql.%i.log</fileNamePattern>
+            <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
+            <totalSizeCap>20GB</totalSizeCap>
+            <!-- 60 days to keep -->
+            <maxHistory>60</maxHistory>
+        </rollingPolicy>
+        <!-- 로그를 남길 패턴 설정 -->
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35}[%line] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ``````````````````````` LOGGER SETTING ```````````````````````````` -->
+    <!-- "additivity=false"를 하면 해당 <logger>에서만 로깅 되고, 다른 곳으로 전달 되지 않는다.
+        (ref: https://mkyong.com/logging/logback-duplicate-log-messages/) -->
+
+    <!-- (1) 프로젝트 전체 로그 설정  -->
+    <logger name="techpick.api" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="APP-LOG-FILE"/>
+    </logger>
+
+    <!-- (2) SQL문 출력은 p6spy를 통해 콘솔 로만 출력 합니다. (파일 저장 X)  -->
+    <logger name="p6spy" level="info" additivity="false">
+        <appender-ref ref="SQL-LOG-FILE"/>
+    </logger>
+
+    <!-- (3) root info 레벨은 파일과 콘솔에 모두 출력 합니다. -->
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="APP-LOG-FILE"/>
+    </root>
+
+</configuration>

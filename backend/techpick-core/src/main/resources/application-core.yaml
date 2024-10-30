@@ -1,0 +1,35 @@
+# 참고 설정
+# https://github.com/Kernel360/E2E2-TALKKA/blob/develop/server/src/main/resources/application.yaml
+# https://github.com/kimminkyeu/E2E2-LOOK-US/blob/develop/backend/src/main/resources/application.yml
+
+spring:
+  application:
+    name: techpick-server
+  output:
+    ansi:
+      enabled: always
+  sql:
+    init:
+      mode: never # schema.sql 실행시 always 키고 실행하시면 됩니다. option: never, always
+
+  jpa:
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update # 이 부분 설정 주의 필요
+    open-in-view: false
+  datasource:
+    url: ${DOCKER_MYSQL_URL}
+    username: ${DOCKER_MYSQL_USERNAME}
+    password: ${DOCKER_MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+api:
+  base-url: ${TECHPICK_BASE_URL}
+
+#logging: # /* Transaction Logging */
+#  level:
+#    org.springframework.orm.jpa: DEBUG
