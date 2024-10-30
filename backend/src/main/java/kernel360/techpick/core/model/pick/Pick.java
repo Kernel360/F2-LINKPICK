@@ -16,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import kernel360.techpick.core.model.common.BaseEntity;
 import kernel360.techpick.core.model.folder.Folder;
 import kernel360.techpick.core.model.link.Link;
@@ -26,7 +27,15 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Table(name = "pick")
+@Table(
+	name = "pick",
+	uniqueConstraints = {
+		@UniqueConstraint(
+			name = "UC_PICK_NAME_PER_USER",
+			columnNames = {"user_id", "link_id", "title"}
+		)
+	}
+)
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
