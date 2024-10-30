@@ -8,12 +8,13 @@ import org.springframework.util.SerializationUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import techpick.security.config.SecurityConfig;
 
 public class CookieUtil {
 
 	//요청값(이름,값,만료기간)을 바탕으로 쿠키추가
-	public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
-		ResponseCookie responseCookie = ResponseCookie.from(name, value)
+	public static void addAccessToken(HttpServletResponse response, String value, int maxAge) {
+		ResponseCookie responseCookie = ResponseCookie.from(SecurityConfig.ACCESS_TOKEN_KEY, value)
 			.maxAge(maxAge)
 			.path("/")
 			.httpOnly(true)
@@ -24,7 +25,7 @@ public class CookieUtil {
 		response.addHeader("Set-Cookie", responseCookie.toString());
 
 		// 로그인 확인용 쿠키 (techPickLogin = true) 추가
-		ResponseCookie techPickLoginCookie = ResponseCookie.from("techPickLogin", "true")
+		ResponseCookie techPickLoginCookie = ResponseCookie.from(SecurityConfig.LOGIN_FLAG_FOR_FRONTEND, "true")
 			.maxAge(maxAge)
 			.path("/")
 			// .secure(true)
@@ -37,8 +38,11 @@ public class CookieUtil {
 
 	//쿠키의 이름을 입력받아 쿠키 삭제
 	public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-		Cookie[] cookies = request.getCookies();
+		if (request == null || response == null) {
+			return;
+		}
 
+		Cookie[] cookies = request.getCookies();
 		if (cookies == null) {
 			return;
 		}

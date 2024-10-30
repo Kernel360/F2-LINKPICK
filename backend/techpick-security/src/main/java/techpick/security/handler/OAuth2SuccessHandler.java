@@ -11,12 +11,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import techpick.core.model.user.User;
+import techpick.core.model.user.UserRepository;
 import techpick.security.config.SecurityConfig;
 import techpick.security.model.OAuth2UserInfo;
 import techpick.security.util.CookieUtil;
 import techpick.security.util.JwtUtil;
-import techpick.core.model.user.User;
-import techpick.core.model.user.UserRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -41,7 +41,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		// response.sendRedirect("https://local.minlife.me:3000/login");
 
 		// Frontend Test Server
-		// response.sendRedirect("https://app.minlife.me/login");
+		response.sendRedirect("https://app.minlife.me/login");
 
 		super.clearAuthenticationAttributes(request);
 		super.onAuthenticationSuccess(request, response, authentication);
@@ -49,11 +49,11 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 	}
 
 	private void addAccessTokenToCookie(HttpServletRequest request, HttpServletResponse response,
-		String refreshToken) {
+		String token) {
 
 		int cookieMaxAge = (int)ACCESS_TOKEN_DURATION.toSeconds();
 
 		CookieUtil.deleteCookie(request, response, SecurityConfig.ACCESS_TOKEN_KEY);
-		CookieUtil.addCookie(response, SecurityConfig.ACCESS_TOKEN_KEY, refreshToken, cookieMaxAge);
+		CookieUtil.addAccessToken(response, token, cookieMaxAge);
 	}
 }
