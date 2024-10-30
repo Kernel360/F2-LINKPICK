@@ -5,9 +5,11 @@ import { isDnDCurrentData } from './utils/isDnDCurrentData';
 import { moveFolderToDifferentParent } from './utils/moveFolderToDifferentParent';
 import { reorderFolderInSameParent } from './utils/reorderFoldersInSameParent';
 import type { Active, Over, UniqueIdentifier } from '@dnd-kit/core';
-import type { FolderType, FolderMapType } from '@/types';
-
-export type SelectedFolderListType = number[];
+import type {
+  FolderType,
+  FolderMapType,
+  SelectedFolderListType,
+} from '@/types';
 
 type MoveFolderPayload = {
   from: Active;

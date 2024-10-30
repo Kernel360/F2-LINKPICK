@@ -1,7 +1,7 @@
 // utils/reorderFolder.ts
 import { hasIndex } from '@/utils';
 import type { UniqueIdentifier } from '@dnd-kit/core';
-import type { ChildFolderListType } from '@/types';
+import type { ChildFolderListType, SelectedFolderListType } from '@/types';
 
 export function reorderFolderInSameParent({
   childFolderList,
@@ -40,5 +40,5 @@ interface ReorderFolderPayload {
   childFolderList: ChildFolderListType;
   fromId: UniqueIdentifier;
   toId: UniqueIdentifier;
-  selectedFolderList: number[];
+  selectedFolderList: SelectedFolderListType;
 }
