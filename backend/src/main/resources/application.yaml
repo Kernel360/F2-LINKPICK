@@ -19,6 +19,7 @@ spring:
         show_sql: false
     hibernate:
       ddl-auto: update # 이 부분 설정 주의 필요
+    open-in-view: false
   datasource:
     url: ${DOCKER_MYSQL_URL}
     username: ${DOCKER_MYSQL_USERNAME}
