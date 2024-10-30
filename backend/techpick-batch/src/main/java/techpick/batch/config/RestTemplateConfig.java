@@ -1,4 +1,4 @@
-package kernel360.techpick.batch.config;
+package techpick.batch.config;
 
 import java.time.Duration;
 

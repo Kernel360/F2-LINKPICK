@@ -1,9 +1,9 @@
-package kernel360.techpick.batch.domain.rss.exception;
+package techpick.batch.domain.rss.exception;
 
 import org.springframework.http.HttpStatus;
 
-import kernel360.techpick.core.exception.base.ApiErrorCode;
-import kernel360.techpick.core.exception.level.ErrorLevel;
+import techpick.core.exception.base.ApiErrorCode;
+import techpick.core.exception.level.ErrorLevel;
 
 public enum ApiRssErrorCode implements ApiErrorCode {
 

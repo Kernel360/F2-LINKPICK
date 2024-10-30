@@ -1,4 +1,4 @@
-package kernel360.techpick.batch.domain.rss.dto;
+package techpick.batch.domain.rss.dto;
 
 import java.util.List;
 
@@ -8,8 +8,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
-import kernel360.techpick.core.model.rss.RssBlog;
-import kernel360.techpick.core.model.rss.RssFeed;
+import techpick.core.model.rss.RssBlog;
+import techpick.core.model.rss.RssFeed;
 
 @Mapper(
 	componentModel = "spring",

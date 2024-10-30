@@ -37,15 +37,26 @@
                 <maxFileSize>100MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <fileNamePattern>${LOG_PATH}/${DATE_DIR}/application.%i.log</fileNamePattern>
-            <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
-            <totalSizeCap>20GB</totalSizeCap>
-            <!-- 60 days to keep -->
-            <maxHistory>60</maxHistory>
+            <fileNamePattern>${LOG_PATH}/${DATE_DIR}/application.%i.log</fileNamePattern>
+            <!--            &lt;!&ndash; total size of all archive files, if total size > 20GB, it will delete old archived file &ndash;&gt;-->
+            <!--            <totalSizeCap>20GB</totalSizeCap>-->
+            <!--            &lt;!&ndash; 60 days to keep &ndash;&gt;-->
+            <!--            <maxHistory>60</maxHistory>-->
         </rollingPolicy>
         <!-- 로그를 남길 패턴 설정 -->
         <encoder>
             <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35}[%line] - %msg%n</pattern>
         </encoder>
+    </appender>
+
+    <appender name="local-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/batch/badminton-batch.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <layout>
+            <pattern>[%thread] [%date] [%level] [%logger{10}] [%file:%line] - %msg%n</pattern>
+        </layout>
     </appender>
 
     <appender name="SQL-LOG-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -71,21 +82,28 @@
     <!-- "additivity=false"를 하면 해당 <logger>에서만 로깅 되고, 다른 곳으로 전달 되지 않는다.
         (ref: https://mkyong.com/logging/logback-duplicate-log-messages/) -->
 
-    <!-- (1) 프로젝트 전체 로그 설정  -->
-    <logger name="kernel360.techpick" level="debug" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="APP-LOG-FILE"/>
-    </logger>
+    <!--    &lt;!&ndash; (1) 프로젝트 전체 로그 설정  &ndash;&gt;-->
+    <!--    <logger name="techpick.api.batch" level="debug" additivity="false">-->
+    <!--        <appender-ref ref="CONSOLE"/>-->
+    <!--        <appender-ref ref="APP-LOG-FILE"/>-->
+    <!--    </logger>-->
 
-    <!-- (2) SQL문 출력은 p6spy를 통해 콘솔 로만 출력 합니다. (파일 저장 X)  -->
-    <logger name="p6spy" level="info" additivity="false">
-        <appender-ref ref="SQL-LOG-FILE"/>
-    </logger>
+    <!--    <logger name="k.techpick.core" level="debug" additivity="false">-->
+    <!--        <appender-ref ref="CONSOLE"/>-->
+    <!--        <appender-ref ref="APP-LOG-FILE"/>-->
+    <!--    </logger>-->
+
+    <!--    &lt;!&ndash; (2) SQL문 출력은 p6spy를 통해 콘솔 로만 출력 합니다. (파일 저장 X)  &ndash;&gt;-->
+    <!--    <logger name="p6spy" level="debug" additivity="false">-->
+    <!--        <appender-ref ref="SQL-LOG-FILE"/>-->
+    <!--    </logger>-->
 
     <!-- (3) root info 레벨은 파일과 콘솔에 모두 출력 합니다. -->
     <root level="info">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
+        <appender-ref ref="SQL-LOG-FILE"/>
     </root>
+
 
 </configuration>

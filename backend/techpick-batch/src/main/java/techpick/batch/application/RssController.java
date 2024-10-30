@@ -1,4 +1,4 @@
-package kernel360.techpick.batch.application;
+package techpick.batch.application;
 
 import java.util.List;
 import java.util.Set;
@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.annotation.PostConstruct;
-import kernel360.techpick.batch.domain.rss.dto.RssBlogCommand;
-import kernel360.techpick.batch.domain.rss.dto.RssBlogResult;
-import kernel360.techpick.batch.domain.rss.service.RssService;
+import techpick.batch.domain.rss.dto.RssBlogCommand;
+import techpick.batch.domain.rss.dto.RssBlogResult;
+import techpick.batch.domain.rss.service.RssService;
 import lombok.RequiredArgsConstructor;
 
 @RestController

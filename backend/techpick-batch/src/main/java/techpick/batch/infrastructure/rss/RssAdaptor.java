@@ -1,11 +1,11 @@
-package kernel360.techpick.batch.infrastructure.rss;
+package techpick.batch.infrastructure.rss;
 
 import java.time.LocalDate;
 import java.util.List;
 
-import kernel360.techpick.batch.domain.rss.dto.RssBlogCommand;
-import kernel360.techpick.core.model.rss.RssBlog;
-import kernel360.techpick.core.model.rss.RssFeed;
+import techpick.batch.domain.rss.dto.RssBlogCommand;
+import techpick.core.model.rss.RssBlog;
+import techpick.core.model.rss.RssFeed;
 
 public interface RssAdaptor {
 

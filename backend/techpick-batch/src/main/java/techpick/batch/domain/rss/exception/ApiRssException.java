@@ -1,7 +1,7 @@
-package kernel360.techpick.batch.domain.rss.exception;
+package techpick.batch.domain.rss.exception;
 
-import kernel360.techpick.core.exception.base.ApiErrorCode;
-import kernel360.techpick.core.exception.base.ApiException;
+import techpick.core.exception.base.ApiErrorCode;
+import techpick.core.exception.base.ApiException;
 
 public class ApiRssException extends ApiException {
 

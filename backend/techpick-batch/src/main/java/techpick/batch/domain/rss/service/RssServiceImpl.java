@@ -1,4 +1,4 @@
-package kernel360.techpick.batch.domain.rss.service;
+package techpick.batch.domain.rss.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,29 +9,27 @@ import java.util.concurrent.Executors;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import kernel360.techpick.batch.domain.rss.dto.RssBlogCommand;
-import kernel360.techpick.batch.domain.rss.dto.RssBlogResult;
-import kernel360.techpick.batch.domain.rss.dto.RssMapper;
-import kernel360.techpick.batch.domain.rss.dto.RssRawFeed;
-import kernel360.techpick.batch.domain.rss.exception.ApiRssException;
-import kernel360.techpick.batch.infrastructure.rss.RssAdaptor;
-import kernel360.techpick.core.annotation.MeasureTime;
-import kernel360.techpick.core.model.rss.RssBlog;
-import kernel360.techpick.core.model.rss.RssFeed;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import techpick.batch.domain.rss.dto.RssBlogCommand;
+import techpick.batch.domain.rss.dto.RssBlogResult;
+import techpick.batch.domain.rss.dto.RssMapper;
+import techpick.batch.domain.rss.dto.RssRawFeed;
+import techpick.batch.domain.rss.exception.ApiRssException;
+import techpick.batch.infrastructure.rss.RssAdaptor;
+import techpick.core.annotation.MeasureTime;
+import techpick.core.model.rss.RssBlog;
+import techpick.core.model.rss.RssFeed;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@EnableScheduling
 public class RssServiceImpl implements RssService {
 
 	private final RestTemplate restTemplate;

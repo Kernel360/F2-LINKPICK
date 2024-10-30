@@ -1,4 +1,4 @@
-package kernel360.techpick.batch.domain.rss.dto;
+package techpick.batch.domain.rss.dto;
 
 import java.util.List;
 

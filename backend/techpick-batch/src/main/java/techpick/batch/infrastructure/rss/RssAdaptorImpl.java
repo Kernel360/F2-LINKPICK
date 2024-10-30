@@ -1,4 +1,4 @@
-package kernel360.techpick.batch.infrastructure.rss;
+package techpick.batch.infrastructure.rss;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,13 +9,13 @@ import java.util.Set;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import kernel360.techpick.batch.domain.rss.dto.RssBlogCommand;
-import kernel360.techpick.batch.domain.rss.dto.RssMapper;
-import kernel360.techpick.core.model.rss.RssBlog;
-import kernel360.techpick.core.model.rss.RssBlogRepository;
-import kernel360.techpick.core.model.rss.RssFeed;
-import kernel360.techpick.core.model.rss.RssFeedRepository;
 import lombok.RequiredArgsConstructor;
+import techpick.batch.domain.rss.dto.RssBlogCommand;
+import techpick.batch.domain.rss.dto.RssMapper;
+import techpick.core.model.rss.RssBlog;
+import techpick.core.model.rss.RssBlogRepository;
+import techpick.core.model.rss.RssFeed;
+import techpick.core.model.rss.RssFeedRepository;
 
 @Component
 @RequiredArgsConstructor
