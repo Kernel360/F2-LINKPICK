@@ -1,4 +1,10 @@
 package kernel360.techpick.feature.domain.link.service;
 
-public interface LinkService {
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class LinkService {
 }
