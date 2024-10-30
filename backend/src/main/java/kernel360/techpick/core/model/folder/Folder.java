@@ -33,7 +33,7 @@ import lombok.NoArgsConstructor;
 	uniqueConstraints = {
 		@UniqueConstraint(
 			name = "UC_FOLDER_NAME_PER_USER",
-			columnNames = {"user_id, parent_folder_id, name"}
+			columnNames = {"user_id", "parent_folder_id", "name"}
 		)
 	}
 )
