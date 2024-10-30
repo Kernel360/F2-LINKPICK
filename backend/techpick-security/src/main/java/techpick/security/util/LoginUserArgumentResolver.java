@@ -7,9 +7,16 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import techpick.security.annotation.LoginUserId;
+import techpick.security.config.SecurityConfig;
+import techpick.security.exception.ApiOAuth2Exception;
 
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
+
+	private final String ACCESS_TOKEN = "access_token";
+	private final String TECHPICK_Login = "techPickLogin";
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
@@ -28,6 +35,12 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 		if (authentication != null && authentication.getPrincipal() instanceof Long) {
 			return authentication.getPrincipal();
 		}
-		throw new IllegalArgumentException("잘못된 인증정보");
+
+		HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+		HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
+		CookieUtil.deleteCookie(request, response, SecurityConfig.ACCESS_TOKEN_KEY);
+		CookieUtil.deleteCookie(request, response, SecurityConfig.LOGIN_FLAG_FOR_FRONTEND);
+
+		throw ApiOAuth2Exception.INVALID_AUTHENTICATION();
 	}
 }

@@ -12,7 +12,7 @@ public enum ApiOAuth2ErrorCode implements ApiErrorCode {
 	 * */
 	SOCIAL_TYPE_INVALID
 		("OA-000", HttpStatus.BAD_REQUEST, "올바르지 않은 소셜 타입", ErrorLevel.MUST_NEVER_HAPPEN()),
-
+	INVALID_AUTHENTICATION("OA-001", HttpStatus.FORBIDDEN, "잘못된 인증정보", ErrorLevel.SHOULD_NOT_HAPPEN()),
 	;
 
 	// ------------------------------------------------------------
