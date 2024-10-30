@@ -1,4 +1,3 @@
-import { ViewerStateReader } from '../model/useViewerState.type';
 import { Link, Pick, Tag } from '../types/common.type';
 
 const generateDummyPick = (title: string, idx: number): Pick => {
@@ -8,7 +7,7 @@ const generateDummyPick = (title: string, idx: number): Pick => {
     memo: 'memo',
     folderId: 1,
     userId: 1,
-    tagList: [idx % 2 ? generateDummyTag(idx) : generateDummyTag(idx + 1)],
+    tagList: [generateDummyTag(idx)],
     linkUrlResponse: generateDummyLink(),
     updatedAt: new Date(),
     createdAt: new Date(),
@@ -33,13 +32,10 @@ const generateDummyLink = (): Link => {
   };
 };
 
-export const generateDummyServerData = (reader: ViewerStateReader): Pick[] => {
+export const generateDummyServerData = (): Pick[] => {
   const dummy = [];
-  let title = 'dummy title';
-  if (1 <= reader.readPickContents().length) {
-    title = reader.readPickContents()[0];
-  }
-  for (let i = 0; i < 5; ++i) {
+  for (let i = 0; i < 10; ++i) {
+    const title = `Dymmy Title${i}`;
     dummy.push(generateDummyPick(title, i));
   }
   return dummy;

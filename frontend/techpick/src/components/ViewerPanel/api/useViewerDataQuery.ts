@@ -9,6 +9,6 @@ import { ViewerStateReader } from '../model/useViewerState.type';
 export const useViewerDataQuery = (reader: ViewerStateReader) => {
   return useQuery({
     queryKey: ['viewScope', reader.readFolderIds(), reader.readPickContents()],
-    queryFn: () => generateDummyServerData(reader),
+    queryFn: () => generateDummyServerData(),
   });
 };
