@@ -1,37 +1,22 @@
-import type { CSSProperties, MouseEvent } from 'react';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import type { MouseEvent } from 'react';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
-import { draggableItem, draggingItem, selectedDragItemStyle } from './page.css';
+import {
+  draggableItem,
+  draggingItem,
+  selectedDragItemStyle,
+} from './folderInfoItem.css';
 import {
   getSelectedFolderRange,
   isSameParentFolder,
   isSelectionActive,
-} from './sortableItem.util';
+} from './folderInfoItem.util';
 import type { FolderMapType } from '@/types';
 
-export function SortableItem({ id, name }: { id: number; name: string }) {
+export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
   const { treeDataMap, selectedFolderList, setSelectedFolderList, isDragging } =
     useTreeStore();
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging: isActiveDragging,
-  } = useSortable({
-    id,
-    data: {
-      id: `test ${id}`,
-    },
-  });
+
   const isSelected = selectedFolderList.includes(id);
-  const style: CSSProperties = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: 1,
-  };
 
   const selectSingleFolder = (id: number) => {
     setSelectedFolderList([id]);
@@ -63,20 +48,17 @@ export function SortableItem({ id, name }: { id: number; name: string }) {
     }
   };
 
-  if (isSelected && isDragging && !isActiveDragging) {
-    return null;
-  }
-
   return (
-    <li
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
+    <div
       className={`${draggableItem} ${isDragging ? draggingItem : ''} ${isSelected ? selectedDragItemStyle : ''}`}
-      style={style}
       onClick={(event) => handleClick(id, event)}
     >
       {name}
-    </li>
+    </div>
   );
+};
+
+interface FolderInfoItemProps {
+  id: number;
+  name: string;
 }

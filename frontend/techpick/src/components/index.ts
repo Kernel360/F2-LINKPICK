@@ -19,3 +19,4 @@ export { DirectoryTreeSection } from './DirectoryTreeSection/DirectoryTreeSectio
 export { FeaturedSection } from './FeaturedSection/FeaturedSection';
 export { LinkEditorSection } from './LinkEditorSection/index';
 export { TagPicker } from './TagPicker';
+export { FolderTree } from './FolderTree';
