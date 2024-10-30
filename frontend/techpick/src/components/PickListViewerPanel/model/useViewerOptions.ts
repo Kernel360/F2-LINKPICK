@@ -5,8 +5,10 @@ import {
   FilterTemplateType,
   InputType,
 } from '../template/filter/FilterTemplate';
-import { VIEW_TEMPLATES } from '../template/view/ViewTemplate';
-import { ViewTemplateType } from '../template/view/ViewTemplate.type';
+import {
+  VIEW_TEMPLATES,
+  ViewTemplateType,
+} from '../template/view/ViewTemplate';
 
 /**
  * @description

@@ -44,7 +44,7 @@ export interface UiLabel {
 
 export interface UiListComponent<T> {
   listLayoutStyle: string;
-  listElement: <Props extends UiProps<T>>(props: Props) => ReactElement;
+  renderComponent: <Props extends UiProps<T>>(props: Props) => ReactElement;
 }
 
 export interface UiProps<T> {

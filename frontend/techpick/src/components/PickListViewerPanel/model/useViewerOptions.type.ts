@@ -3,10 +3,7 @@ import {
   FilterTemplateType,
   InputType,
 } from '../template/filter/FilterTemplate';
-import {
-  ViewTemplate,
-  ViewTemplateType,
-} from '../template/view/ViewTemplate.type';
+import { ViewTemplate, ViewTemplateType } from '../template/view/ViewTemplate';
 
 export interface Options {
   activeFilters: Filter[];

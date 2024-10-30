@@ -1,9 +1,12 @@
 import { ReactElement } from 'react';
-import { Pick, UiProps } from '@/components/ViewerPanel/types/common.type';
+import {
+  Pick,
+  UiProps,
+} from '@/components/PickListViewerPanel/types/common.type';
 import {
   ChipItem,
   ChipItemList,
-} from '@/components/ViewerPanel/ui/SelectedTagItem';
+} from '@/components/PickListViewerPanel/ui/SelectedTagItem';
 import { cardLayout } from './SimpleCard.css';
 
 interface CardProps extends UiProps<Pick> {}

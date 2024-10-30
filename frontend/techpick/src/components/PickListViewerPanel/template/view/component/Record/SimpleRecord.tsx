@@ -1,9 +1,12 @@
 import { ReactElement } from 'react';
-import { Pick, UiProps } from '@/components/ViewerPanel/types/common.type';
+import {
+  Pick,
+  UiProps,
+} from '@/components/PickListViewerPanel/types/common.type';
 import {
   ChipItem,
   ChipItemList,
-} from '@/components/ViewerPanel/ui/SelectedTagItem';
+} from '@/components/PickListViewerPanel/ui/SelectedTagItem';
 import { recordLayout } from './SimpleRecord.css';
 
 export interface SimpleRecordProps extends UiProps<Pick> {}

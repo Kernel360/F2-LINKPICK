@@ -2,11 +2,11 @@ import { ReactElement } from 'react';
 import { Button } from '@/components/Button';
 import { buttonLayout, viewWidgetLayout } from './OptionWidget.css';
 import { ViewHandler } from '../model/useViewerOptions.type';
-import { VIEW_TEMPLATES } from '../template/view/ViewTemplate';
 import {
+  VIEW_TEMPLATES,
   ViewTemplate,
   ViewTemplateType,
-} from '../template/view/ViewTemplate.type';
+} from '../template/view/ViewTemplate';
 import { ChipItem } from '../ui/SelectedTagItem';
 
 interface ViewOptionWidgetProps {

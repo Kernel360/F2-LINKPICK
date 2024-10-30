@@ -3,7 +3,16 @@ import { SimpleCard } from './component/Card/SimpleCard';
 import { SimpleRecord } from './component/Record/SimpleRecord';
 import { gridLayout } from './layout/GridLayout.css';
 import { listLayout } from './layout/ListLayout.css';
-import { ViewTemplate, ViewTemplateType } from './ViewTemplate.type';
+import {
+  Pick,
+  UiIcon,
+  UiLabel,
+  UiListComponent,
+} from '../../types/common.type';
+
+export type ViewTemplate = UiIcon & UiLabel & UiListComponent<Pick>;
+
+export type ViewTemplateType = 'GRID' | 'LIST';
 
 /**
  * @description
@@ -15,13 +24,13 @@ export const VIEW_TEMPLATES: Record<ViewTemplateType, ViewTemplate> = {
     description: '픽 내용을 상세하게 볼 수 있습니다.',
     icon: ViewGridIcon,
     listLayoutStyle: gridLayout,
-    listElement: SimpleCard,
+    renderComponent: SimpleCard,
   },
   LIST: {
     label: '리스트',
     description: '간략한 요약으로 픽들을 모아볼 수 있습니다.',
     icon: ListBulletIcon,
     listLayoutStyle: listLayout,
-    listElement: SimpleRecord,
+    renderComponent: SimpleRecord,
   },
 } as const;

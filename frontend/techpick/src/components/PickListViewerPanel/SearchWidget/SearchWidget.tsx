@@ -6,7 +6,7 @@ import {
   submitButtonLayout,
   widgetLayout,
 } from './SearchWidget.css';
-import { useViewStateWriter } from '../model/useViewerState';
+import { useSearchParamWriter } from '../model/useViewerState';
 import { getStringTokenizer } from '../util';
 import { PrefixPatternBuilder } from '../util/tokenizer/PrefixPatternBuilder';
 
@@ -24,13 +24,13 @@ const pattern = new PrefixPatternBuilder()
   .build();
 
 export function SearchWidget(): ReactElement {
-  const viewStateWriter = useViewStateWriter();
+  const viewStateWriter = useSearchParamWriter();
   const inputTokenizer = useMemo(() => getStringTokenizer(pattern), []);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit = () => {
-    const input = inputTokenizer.tokenize(inputRef.current?.value ?? '');
-    viewStateWriter.writePickContents(input.getTokens('pickContent'));
+    const result = inputTokenizer.tokenize(inputRef.current?.value ?? '');
+    viewStateWriter.writeSearchParamList(result.getTokens('pickContent'));
   };
 
   return (
