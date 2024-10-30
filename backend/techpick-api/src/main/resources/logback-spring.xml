@@ -71,21 +71,22 @@
     <!-- "additivity=false"를 하면 해당 <logger>에서만 로깅 되고, 다른 곳으로 전달 되지 않는다.
         (ref: https://mkyong.com/logging/logback-duplicate-log-messages/) -->
 
-    <!-- (1) 프로젝트 전체 로그 설정  -->
-    <logger name="kernel360.techpick" level="debug" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="APP-LOG-FILE"/>
-    </logger>
+    <!--    &lt;!&ndash; (1) 프로젝트 전체 로그 설정  &ndash;&gt;-->
+    <!--    <logger name="techpick.api" level="debug" additivity="false">-->
+    <!--        <appender-ref ref="CONSOLE"/>-->
+    <!--        <appender-ref ref="APP-LOG-FILE"/>-->
+    <!--    </logger>-->
 
-    <!-- (2) SQL문 출력은 p6spy를 통해 콘솔 로만 출력 합니다. (파일 저장 X)  -->
-    <logger name="p6spy" level="info" additivity="false">
-        <appender-ref ref="SQL-LOG-FILE"/>
-    </logger>
+    <!--    &lt;!&ndash; (2) SQL문 출력은 p6spy를 통해 콘솔 로만 출력 합니다. (파일 저장 X)  &ndash;&gt;-->
+    <!--    <logger name="p6spy" level="info" additivity="false">-->
+    <!--        <appender-ref ref="SQL-LOG-FILE"/>-->
+    <!--    </logger>-->
 
     <!-- (3) root info 레벨은 파일과 콘솔에 모두 출력 합니다. -->
     <root level="info">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
+        <appender-ref ref="SQL-LOG-FILE"/>
     </root>
 
 </configuration>
