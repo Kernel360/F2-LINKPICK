@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import techpick.security.config.OAuth2AttributeConfigProvider;
-import techpick.security.model.OAuth2UserInfo;
+import techpick.core.model.folder.Folder;
+import techpick.core.model.folder.FolderRepository;
 import techpick.core.model.user.User;
 import techpick.core.model.user.UserRepository;
+import techpick.security.config.OAuth2AttributeConfigProvider;
+import techpick.security.model.OAuth2UserInfo;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ import techpick.core.model.user.UserRepository;
 public class CustomOAuth2Service extends DefaultOAuth2UserService {
 
 	private final UserRepository userRepository;
+	private final FolderRepository folderRepository;
 	private final OAuth2AttributeConfigProvider configProvider;
 
 	@Override
@@ -39,7 +42,7 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
 				oAuth2UserInfo.getName(),
 				oAuth2UserInfo.getEmail()
 			);
-			userRepository.save(user);
+			createBasicFolder(userRepository.save(user));
 		}
 		return oAuth2UserInfo;
 	}
@@ -72,5 +75,11 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
 		}
 		// TODO: ApiUserException 으로 리팩토링 예정
 		throw new IllegalArgumentException("Attribute of " + targetKey + " is not found");
+	}
+
+	private void createBasicFolder(User user) {
+		folderRepository.save(Folder.createEmptyRootFolder(user));
+		folderRepository.save(Folder.createEmptyRecycleBinFolder(user));
+		folderRepository.save(Folder.createEmptyUnclassifiedFolder(user));
 	}
 }
