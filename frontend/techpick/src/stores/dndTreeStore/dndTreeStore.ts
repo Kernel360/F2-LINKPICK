@@ -3,7 +3,7 @@ import { immer } from 'zustand/middleware/immer';
 import { changeParentFolderId } from './utils/changeParentFolderId';
 import { isDnDCurrentData } from './utils/isDnDCurrentData';
 import { moveFolderToDifferentParent } from './utils/moveFolderToDifferentParent';
-import { reorderFoldersInSameParent } from './utils/reorderFoldersInSameParent';
+import { reorderFolderInSameParent } from './utils/reorderFoldersInSameParent';
 import type { Active, Over, UniqueIdentifier } from '@dnd-kit/core';
 import type { FolderType, FolderMapType } from '@/types';
 
@@ -74,7 +74,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         set((state) => {
           const childFolderList = state.treeDataMap[parentId].childFolderList;
           state.treeDataMap[parentId].childFolderList =
-            reorderFoldersInSameParent({
+            reorderFolderInSameParent({
               childFolderList,
               fromId,
               toId,

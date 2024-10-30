@@ -3,7 +3,7 @@ import { hasIndex } from '@/utils';
 import type { UniqueIdentifier } from '@dnd-kit/core';
 import type { ChildFolderListType } from '@/types';
 
-export function reorderFoldersInSameParent({
+export function reorderFolderInSameParent({
   childFolderList,
   fromId,
   toId,
