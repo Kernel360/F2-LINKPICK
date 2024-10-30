@@ -42,6 +42,7 @@
     "react-hot-toast": "^2.4.1",
     "react-spinners": "^0.14.1",
     "techpick-shared": "workspace:*",
+    "use-immer": "^0.10.0",
     "zustand": "^4.5.5"
   },
   "devDependencies": {
