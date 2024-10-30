@@ -1,4 +1,4 @@
-package kernel360.techpick.core.model.rss;
+package techpick.core.model.rss;
 
 import java.time.LocalDateTime;
 import java.util.List;

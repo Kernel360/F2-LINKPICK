@@ -1,4 +1,4 @@
-package kernel360.techpick.core.exception.base;
+package techpick.core.exception.base;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
