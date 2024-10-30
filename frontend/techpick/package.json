@@ -10,12 +10,15 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "jest",
+    "test": "yarn jest",
     "test:e2e": "yarn playwright test",
     "test:ui": "yarn playwright test --ui",
     "postinstall": "cd .. && husky"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/sortable": "^8.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@floating-ui/react": "^0.26.24",
     "@radix-ui/react-context-menu": "2.2.2",
     "@radix-ui/react-dialog": "^1.1.2",
