@@ -62,20 +62,13 @@ public class PickService {
 
 	// 폴더 리스트가 넘어오면, 각 폴더 내부에 있는 픽 리스트 조회
 	@Transactional(readOnly = true)
-	public List<PickResult.PickList> getFolderListChildPickList(PickCommand.Fetch command) {
+	public List<PickResult.PickList> getFolderListChildPickList(PickCommand.Search command) {
 		// TODO: 검색 조건에 따라 바뀌는 부분은 동적 쿼리 발생 예정, QueryDSL 도입 필요
 		List<String> searchTokenList = command.searchTokenList();
 
 		return command.folderIdList().stream()
 			.peek(folderId -> validateFolderAccess(command.userId(), folderId))  // 폴더 접근 유효성 검사
-			.map(folderId -> {
-				Folder folder = folderDataHandler.getFolder(folderId);
-				List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickOrderList());
-				List<PickResult.Pick> pickResultList = pickList.stream()
-					.map(pickMapper::toPickResult)
-					.toList();
-				return pickMapper.toPickResultList(folderId, pickResultList);
-			})
+			.map(this::getFolderChildPickResultList)
 			.toList();
 	}
 
@@ -135,6 +128,15 @@ public class PickService {
 	/**
 	 * Internal Helper Functions
 	 **/
+	private PickResult.PickList getFolderChildPickResultList(Long folderId) {
+		Folder folder = folderDataHandler.getFolder(folderId);
+		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickOrderList());
+		List<PickResult.Pick> pickResultList = pickList.stream()
+			.map(pickMapper::toPickResult)
+			.toList();
+		return pickMapper.toPickResultList(folderId, pickResultList);
+	}
+
 	private boolean isParentFolderChanged(Long originalFolderId, Long destinationFolderId) {
 		return ObjectUtils.notEqual(originalFolderId, destinationFolderId);
 	}
