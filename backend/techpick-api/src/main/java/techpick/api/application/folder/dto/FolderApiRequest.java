@@ -9,7 +9,6 @@ import jakarta.validation.constraints.NotNull;
 public class FolderApiRequest {
 
 	public record Create(
-		@Schema(example = "1") @NotNull Long folderId,
 		@Schema(example = "backend") @NotBlank String name,
 		@Schema(example = "3") @NotNull Long parentFolderId
 	) {
