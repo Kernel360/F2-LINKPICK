@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import type { KeyboardEvent } from 'react';
 import { Plus } from 'lucide-react';
 import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
@@ -16,14 +16,14 @@ export function CreateFolderInput({ parentFolderId }: CreateFolderInputProps) {
   const { createFolder: createFolderInStore } = useTreeStore();
   const { closeCreateFolderInput } = useCreateFolderInputStore();
 
-  const createFolder = () => {
+  const createFolder = useCallback(() => {
     const folderName = inputRef.current?.value.trim() ?? '';
 
     if (isEmptyString(folderName)) return;
 
     createFolderInStore({ parentFolderId, newFolderName: folderName });
     closeCreateFolderInput();
-  };
+  }, [closeCreateFolderInput, createFolderInStore, parentFolderId]);
 
   const onEnter = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -31,21 +31,30 @@ export function CreateFolderInput({ parentFolderId }: CreateFolderInputProps) {
     }
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        createFolder();
-        closeCreateFolderInput();
-      }
-    };
+  useEffect(
+    function detectOutsideClick() {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          containerRef.current &&
+          !containerRef.current.contains(event.target as Node)
+        ) {
+          createFolder();
+          closeCreateFolderInput();
+        }
+      };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    },
+    [closeCreateFolderInput, createFolder]
+  );
+
+  useEffect(function focusCreateFolderInput() {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
   }, []);
 
   return (
