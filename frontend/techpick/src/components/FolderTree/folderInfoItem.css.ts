@@ -6,15 +6,15 @@ import {
   borderRadius,
 } from 'techpick-shared';
 
-colorThemeContract.backgroundBase;
-export const draggableItemStyle = style({
+export const folderInfoItemStyle = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: space['8'],
   minWidth: sizes['3xs'],
   minHeight: '32px',
   padding: space['8'],
-  border: '1px solid',
-  borderColor: colorThemeContract.borderNeutral,
   borderRadius: borderRadius['base'],
-  backgroundColor: '#fff',
+  backgroundColor: colorThemeContract.backgroundBase,
   cursor: 'grab',
   transition: 'background-color 0.2s',
   selectors: {
@@ -33,4 +33,8 @@ export const draggingItem = style({
 
 export const selectedDragItemStyle = style({
   backgroundColor: colorThemeContract.primary,
+});
+
+export const FolderIconStyle = style({
+  flexShrink: 0,
 });

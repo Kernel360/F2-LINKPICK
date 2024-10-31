@@ -25,4 +25,7 @@ export type fontWeightVariantKeyTypes = keyof typeof fontWeightVariants;
 
 export const textStyle = style({
   color: colorThemeContract.color.font,
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
 });

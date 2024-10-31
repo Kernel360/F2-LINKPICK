@@ -1,15 +1,18 @@
 import type { MouseEvent } from 'react';
+import { Folder } from 'lucide-react';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import {
-  draggableItemStyle,
+  folderInfoItemStyle,
   draggingItem,
   selectedDragItemStyle,
+  FolderIconStyle,
 } from './folderInfoItem.css';
 import {
   getSelectedFolderRange,
   isSameParentFolder,
   isSelectionActive,
 } from './folderInfoItem.util';
+import { Text } from '../Text';
 import type { FolderMapType } from '@/types';
 
 export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
@@ -57,10 +60,11 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
 
   return (
     <div
-      className={`${draggableItemStyle} ${isDragging ? draggingItem : ''} ${isSelected ? selectedDragItemStyle : ''}`}
+      className={`${folderInfoItemStyle}  ${isDragging ? draggingItem : ''} ${isSelected ? selectedDragItemStyle : ''}`}
       onClick={(event) => handleClick(id, event)}
     >
-      {name}
+      <Folder className={FolderIconStyle} />
+      <Text>{name}</Text>
     </div>
   );
 };
