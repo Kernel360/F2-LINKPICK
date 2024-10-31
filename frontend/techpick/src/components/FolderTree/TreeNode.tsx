@@ -5,7 +5,6 @@ import {
 import { FolderDraggable } from '@/components/FolderTree/FolderDraggable';
 import { FolderInfoItem } from '@/components/FolderTree/FolderInfoItem';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
-import { treeNodeLayout } from './treeNode.css';
 import type { UniqueIdentifier } from '@dnd-kit/core';
 
 export function TreeNode({ id, depth }: TreeNodeProps) {
@@ -18,12 +17,13 @@ export function TreeNode({ id, depth }: TreeNodeProps) {
    * 따라서 해당 코드는 1-depth의 SortableContext로 바꾸는 방식으로 추후 진행되어야합니다.
    */
   return (
-    <SortableContext
-      id={`${id}`}
-      items={curTreeNodeChildList.map((item) => item.id)}
-      strategy={verticalListSortingStrategy}
-    >
-      <div className={treeNodeLayout}>
+    <>
+      <div>crete folder input</div>
+      <SortableContext
+        id={`${id}`}
+        items={curTreeNodeChildList.map((item) => item.id)}
+        strategy={verticalListSortingStrategy}
+      >
         {curTreeNodeChildList.map((treeData) => {
           return (
             <div key={treeData.id} style={{ width: 'fit-content' }}>
@@ -37,8 +37,8 @@ export function TreeNode({ id, depth }: TreeNodeProps) {
             </div>
           );
         })}
-      </div>
-    </SortableContext>
+      </SortableContext>
+    </>
   );
 }
 

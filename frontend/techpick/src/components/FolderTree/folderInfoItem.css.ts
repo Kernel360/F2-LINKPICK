@@ -1,11 +1,10 @@
 import { style } from '@vanilla-extract/css';
 import { colorThemeContract } from 'techpick-shared';
 
-export const draggableItem = style({
+export const draggableItemStyle = style({
   minWidth: '200px',
   minHeight: '30px',
   padding: '8px 12px',
-  margin: '4px 0',
   border: '1px solid #ccc',
   borderRadius: '4px',
   backgroundColor: '#fff',

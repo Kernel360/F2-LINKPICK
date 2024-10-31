@@ -52,7 +52,6 @@ export const FolderDraggable = ({
       style={{
         width: 'fit-content',
         height: 'fit-content',
-        padding: '4px',
         ...style,
       }}
     >

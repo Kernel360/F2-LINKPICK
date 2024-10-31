@@ -1,7 +1,7 @@
 import type { MouseEvent } from 'react';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import {
-  draggableItem,
+  draggableItemStyle,
   draggingItem,
   selectedDragItemStyle,
 } from './folderInfoItem.css';
@@ -57,7 +57,7 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
 
   return (
     <div
-      className={`${draggableItem} ${isDragging ? draggingItem : ''} ${isSelected ? selectedDragItemStyle : ''}`}
+      className={`${draggableItemStyle} ${isDragging ? draggingItem : ''} ${isSelected ? selectedDragItemStyle : ''}`}
       onClick={(event) => handleClick(id, event)}
     >
       {name}
