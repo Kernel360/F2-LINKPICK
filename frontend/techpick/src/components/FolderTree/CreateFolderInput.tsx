@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import type { KeyboardEvent } from 'react';
-import { Plus } from 'lucide-react';
+import { FolderPlus } from 'lucide-react';
 import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { isEmptyString } from '@/utils';
@@ -60,7 +60,7 @@ export function CreateFolderInput({ parentFolderId }: CreateFolderInputProps) {
   return (
     <div ref={containerRef} className={createFolderInputLayout}>
       <label htmlFor="" className={labelStyle}>
-        <Plus size={16} />
+        <FolderPlus size={24} />
       </label>
       <input
         type="text"

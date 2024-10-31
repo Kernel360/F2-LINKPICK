@@ -4,14 +4,14 @@ import { colorThemeContract, fontSize, sizes, space } from 'techpick-shared';
 export const createFolderInputLayout = style({
   display: 'flex',
   alignItems: 'center',
-  gap: space['4'],
+  gap: space['8'],
   minWidth: sizes['3xs'],
   maxWidth: sizes['full'],
   padding: space['8'],
 });
 
 export const labelStyle = style({
-  color: colorThemeContract.primary,
+  color: colorThemeContract.textPrimary,
 });
 
 export const inputStyle = style({
