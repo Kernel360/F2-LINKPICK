@@ -32,7 +32,7 @@ public class PickApiController {
 	private final PickService pickService;
 	private final PickApiMapper pickApiMapper;
 
-	@GetMapping
+	@PostMapping("/list")
 	@Operation(summary = "폴더 리스트 내 픽 리스트 조회", description = "해당 폴더 리스트 각각의 픽 리스트를 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 리스트 조회 성공")
