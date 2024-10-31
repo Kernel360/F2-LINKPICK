@@ -9,7 +9,7 @@ public class PickCommand {
 	public record Read(Long userId, Long pickId) {
 	}
 
-	public record Fetch(Long userId, List<Long> folderIdList, List<String> searchTokenList) {
+	public record Search(Long userId, List<Long> folderIdList, List<String> searchTokenList) {
 	}
 
 	public record Create(Long userId, String title, String memo, List<Long> tagOrderList, Long parentFolderId,

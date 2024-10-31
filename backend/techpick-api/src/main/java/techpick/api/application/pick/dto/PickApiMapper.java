@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import techpick.api.domain.pick.dto.PickCommand;
@@ -19,7 +18,7 @@ public interface PickApiMapper {
 
 	PickCommand.Read toReadCommand(Long userId, PickApiRequest.Read request);
 
-	PickCommand.Fetch toFetchCommand(Long userId, PickApiRequest.Fetch request);
+	PickCommand.Search toSearchCommand(Long userId, List<Long> folderIdList, List<String> searchTokenList);
 
 	PickCommand.Create toCreateCommand(Long userId, PickApiRequest.Create request);
 

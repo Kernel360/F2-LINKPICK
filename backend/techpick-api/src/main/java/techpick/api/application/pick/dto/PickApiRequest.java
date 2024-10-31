@@ -22,12 +22,6 @@ public class PickApiRequest {
 	) {
 	}
 
-	public record Fetch(
-		@Schema(example = "[1, 2, 3]") @NotNull List<Long> folderIdList,
-		@Schema(example = "[\"리액트\", \"쿼리\", \"서버\"]") @NotNull List<String> searchTokenList
-	) {
-	}
-
 	public record Update(
 		@Schema(example = "1") @NotNull Long pickId,
 		@Schema(example = "Record란 뭘까?") String title,
