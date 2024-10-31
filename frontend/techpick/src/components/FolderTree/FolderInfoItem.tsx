@@ -34,10 +34,7 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
     selectedList: number[],
     treeDataMap: FolderMapType
   ) => {
-    if (
-      !isSameParentFolder(id, selectedList[0], treeDataMap) ||
-      !focusFolderId
-    ) {
+    if (!focusFolderId || !isSameParentFolder(id, focusFolderId, treeDataMap)) {
       selectSingleFolder(id);
       return;
     }
