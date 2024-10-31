@@ -5,7 +5,7 @@ export const mockFolders: FolderMapType = {
     id: -1,
     name: 'Root',
     parentFolderId: 0,
-    childFolderList: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    childFolderList: [2, 1, 3, 4, 5, 6, 7, 8, 9],
   },
   '1': {
     id: 1,

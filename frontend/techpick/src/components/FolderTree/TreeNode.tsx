@@ -32,7 +32,7 @@ export function TreeNode({ id, depth }: TreeNodeProps) {
       >
         {curTreeNodeChildList.map((treeData) => {
           return (
-            <div key={treeData.id} style={{ width: 'fit-content' }}>
+            <div key={treeData.id}>
               <FolderDraggable id={treeData.id}>
                 <FolderInfoItem id={treeData.id} name={treeData.name} />
                 {/** depth가 있는 폴더구조는 추후에 적용될 예정입니다.*/}

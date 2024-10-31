@@ -39,22 +39,13 @@ export const FolderDraggable = ({
         ref={setNodeRef}
         {...attributes}
         {...listeners}
-        style={{ border: '1px solid black', ...style, width: '200px' }}
+        style={{ border: '1px solid black', ...style }}
       ></div>
     );
   }
 
   return (
-    <div
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
-      style={{
-        width: 'fit-content',
-        height: 'fit-content',
-        ...style,
-      }}
-    >
+    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
       {children}
     </div>
   );

@@ -1,12 +1,19 @@
 import { style } from '@vanilla-extract/css';
-import { colorThemeContract } from 'techpick-shared';
+import {
+  colorThemeContract,
+  sizes,
+  space,
+  borderRadius,
+} from 'techpick-shared';
 
+colorThemeContract.backgroundBase;
 export const draggableItemStyle = style({
-  minWidth: '200px',
-  minHeight: '30px',
-  padding: '8px 12px',
-  border: '1px solid #ccc',
-  borderRadius: '4px',
+  minWidth: sizes['3xs'],
+  minHeight: '32px',
+  padding: space['8'],
+  border: '1px solid',
+  borderColor: colorThemeContract.borderNeutral,
+  borderRadius: borderRadius['base'],
   backgroundColor: '#fff',
   cursor: 'grab',
   transition: 'background-color 0.2s',
