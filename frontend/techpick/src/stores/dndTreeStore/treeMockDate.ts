@@ -5,7 +5,7 @@ export const mockFolders: FolderMapType = {
     id: -1,
     name: 'Root',
     parentFolderId: 0,
-    childFolderList: [1, 2, 3, 4, 5],
+    childFolderList: [1, 2, 3, 4, 5, 6, 7, 8, 9],
   },
   '1': {
     id: 1,
@@ -34,6 +34,30 @@ export const mockFolders: FolderMapType = {
   '5': {
     id: 5,
     name: 'Downloads',
+    parentFolderId: -1,
+    childFolderList: [],
+  },
+  '6': {
+    id: 6,
+    name: 'Projects',
+    parentFolderId: -1,
+    childFolderList: [],
+  },
+  '7': {
+    id: 7,
+    name: 'Notes',
+    parentFolderId: -1,
+    childFolderList: [],
+  },
+  '8': {
+    id: 8,
+    name: 'Archives',
+    parentFolderId: -1,
+    childFolderList: [],
+  },
+  '9': {
+    id: 9,
+    name: 'Favorites',
     parentFolderId: -1,
     childFolderList: [],
   },

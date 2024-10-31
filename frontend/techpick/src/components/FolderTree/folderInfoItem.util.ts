@@ -13,30 +13,35 @@ export const isSameParentFolder = (
   );
 };
 
-export const getSelectedFolderRange = (
-  id: number,
-  selectedList: number[],
-  treeDataMap: FolderMapType
-) => {
-  const parentFolderInfo = treeDataMap[treeDataMap[id].parentFolderId];
-  const lastSelectedIndex = parentFolderInfo.childFolderList.findIndex(
-    (item) => item === selectedList[0]
+// 여기서 selectedFolderId
+export const getSelectedFolderRange = ({
+  startFolderId,
+  endFolderId,
+  treeDataMap,
+}: GetSelectedFolderRangePayload) => {
+  const parentFolderInfo = treeDataMap[treeDataMap[endFolderId].parentFolderId];
+  const firstSelectedIndex = parentFolderInfo.childFolderList.findIndex(
+    (childFolderId) => childFolderId === startFolderId
   );
-  const currentIndex = parentFolderInfo.childFolderList.findIndex(
-    (item) => item === id
+  const endSelectedIndex = parentFolderInfo.childFolderList.findIndex(
+    (childFolderId) => childFolderId === endFolderId
   );
 
-  if (!hasIndex(lastSelectedIndex) || !hasIndex(currentIndex)) return [];
+  if (!hasIndex(firstSelectedIndex) || !hasIndex(endSelectedIndex)) return [];
 
-  const start = Math.min(lastSelectedIndex, currentIndex);
-  const end = Math.max(lastSelectedIndex, currentIndex);
+  const start = Math.min(firstSelectedIndex, endSelectedIndex);
+  const end = Math.max(firstSelectedIndex, endSelectedIndex);
 
-  const newSelectedFolderList = parentFolderInfo.childFolderList
-    .slice(start, end + 1)
-    .filter((selectedItem) => selectedItem !== selectedList[0]);
+  const newSelectedFolderList = parentFolderInfo.childFolderList.slice(
+    start,
+    end + 1
+  );
 
-  /**
-   * shift click을 여러번 해도 처음 선택한 기준점이 바뀌지 않게 합니다.
-   */
-  return [selectedList[0], ...newSelectedFolderList];
+  return newSelectedFolderList;
 };
+
+interface GetSelectedFolderRangePayload {
+  startFolderId: number;
+  endFolderId: number;
+  treeDataMap: FolderMapType;
+}

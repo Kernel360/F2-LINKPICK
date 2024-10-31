@@ -13,12 +13,19 @@ import {
 import type { FolderMapType } from '@/types';
 
 export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
-  const { treeDataMap, selectedFolderList, setSelectedFolderList, isDragging } =
-    useTreeStore();
+  const {
+    treeDataMap,
+    selectedFolderList,
+    setSelectedFolderList,
+    isDragging,
+    setFocusFolderId,
+    focusFolderId,
+  } = useTreeStore();
 
   const isSelected = selectedFolderList.includes(id);
 
   const selectSingleFolder = (id: number) => {
+    setFocusFolderId(id);
     setSelectedFolderList([id]);
   };
 
@@ -27,16 +34,19 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
     selectedList: number[],
     treeDataMap: FolderMapType
   ) => {
-    if (!isSameParentFolder(id, selectedList[0], treeDataMap)) {
+    if (
+      !isSameParentFolder(id, selectedList[0], treeDataMap) ||
+      !focusFolderId
+    ) {
       selectSingleFolder(id);
       return;
     }
 
-    const newSelectedList = getSelectedFolderRange(
-      id,
-      selectedList,
-      treeDataMap
-    );
+    const newSelectedList = getSelectedFolderRange({
+      startFolderId: focusFolderId,
+      endFolderId: id,
+      treeDataMap,
+    });
     setSelectedFolderList(newSelectedList);
   };
 

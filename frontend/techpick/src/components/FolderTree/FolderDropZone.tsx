@@ -21,6 +21,7 @@ export function FolderDropZone({ children }: PropsWithChildren) {
     selectedFolderList,
     setSelectedFolderList,
     setIsDragging,
+    setFocusFolderId,
   } = useTreeStore();
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -41,7 +42,9 @@ export function FolderDropZone({ children }: PropsWithChildren) {
     const { active } = event;
 
     if (!selectedFolderList.includes(Number(active.id))) {
+      setFocusFolderId(Number(event.active.id));
       setSelectedFolderList([Number(event.active.id)]);
+
       return;
     }
   };

@@ -20,6 +20,7 @@ type MoveFolderPayload = {
 type TreeState = {
   treeDataMap: FolderMapType;
   selectedFolderList: SelectedFolderListType;
+  focusFolderId: number | null;
   from: Active | null;
   to: Over | null;
   isDragging: boolean;
@@ -31,7 +32,6 @@ type TreeAction = {
   updateFolder: () => void;
   deleteFolder: () => void;
   moveFolder: ({ from, to, selectedFolderList }: MoveFolderPayload) => void;
-  focusFolder: () => void;
   movePick: () => void;
   setTreeMap: (newTreeDate: FolderMapType) => void;
   setSelectedFolderList: (
@@ -40,12 +40,14 @@ type TreeAction = {
   setFrom: (newFrom: Active) => void;
   setTo: (newTo: Over) => void;
   setIsDragging: (isDragging: boolean) => void;
+  setFocusFolderId: (newFolderId: number) => void;
   filterByParentId: (parentId: UniqueIdentifier) => FolderType[];
 };
 
 const initialState: TreeState = {
   treeDataMap: {},
   selectedFolderList: [],
+  focusFolderId: null,
   from: null,
   to: null,
   isDragging: false,
@@ -112,8 +114,11 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         });
       });
     },
-
-    focusFolder: () => {},
+    setFocusFolderId: (newFolderId) => {
+      set((state) => {
+        state.focusFolderId = newFolderId;
+      });
+    },
     movePick: () => {},
     setTreeMap: (newTreeDate) => {
       set((state) => {
