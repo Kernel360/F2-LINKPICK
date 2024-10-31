@@ -5,6 +5,7 @@ import {
 import { FolderDraggable } from '@/components/FolderTree/FolderDraggable';
 import { FolderInfoItem } from '@/components/FolderTree/FolderInfoItem';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { CreateFolderInput } from './CreateFolderInput';
 import type { UniqueIdentifier } from '@dnd-kit/core';
 
 export function TreeNode({ id, depth }: TreeNodeProps) {
@@ -18,7 +19,7 @@ export function TreeNode({ id, depth }: TreeNodeProps) {
    */
   return (
     <>
-      <div>crete folder input</div>
+      <CreateFolderInput parentFolderId={Number(id)} />
       <SortableContext
         id={`${id}`}
         items={curTreeNodeChildList.map((item) => item.id)}
