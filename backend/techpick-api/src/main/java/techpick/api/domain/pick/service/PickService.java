@@ -1,4 +1,4 @@
-package kernel360.techpick.feature.domain.pick.service;
+package techpick.api.domain.pick.service;
 
 import java.util.List;
 import java.util.Objects;
@@ -7,21 +7,21 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kernel360.techpick.core.model.folder.Folder;
-import kernel360.techpick.core.model.folder.FolderType;
-import kernel360.techpick.core.model.pick.Pick;
-import kernel360.techpick.core.model.tag.Tag;
-import kernel360.techpick.feature.domain.folder.exception.ApiFolderException;
-import kernel360.techpick.feature.domain.pick.dto.PickCommand;
-import kernel360.techpick.feature.domain.pick.dto.PickMapper;
-import kernel360.techpick.feature.domain.pick.dto.PickResult;
-import kernel360.techpick.feature.domain.pick.exception.ApiPickException;
-import kernel360.techpick.feature.domain.tag.exception.ApiTagException;
-import kernel360.techpick.feature.infrastructure.folder.FolderDataHandler;
-import kernel360.techpick.feature.infrastructure.pick.PickDataHandler;
-import kernel360.techpick.feature.infrastructure.tag.TagDataHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import techpick.api.domain.folder.exception.ApiFolderException;
+import techpick.api.domain.pick.dto.PickCommand;
+import techpick.api.domain.pick.dto.PickMapper;
+import techpick.api.domain.pick.dto.PickResult;
+import techpick.api.domain.pick.exception.ApiPickException;
+import techpick.api.domain.tag.exception.ApiTagException;
+import techpick.api.infrastructure.folder.FolderDataHandler;
+import techpick.api.infrastructure.pick.PickDataHandler;
+import techpick.api.infrastructure.tag.TagDataHandler;
+import techpick.core.model.folder.Folder;
+import techpick.core.model.folder.FolderType;
+import techpick.core.model.pick.Pick;
+import techpick.core.model.tag.Tag;
 
 @Slf4j
 @Service
@@ -47,6 +47,8 @@ public class PickService {
 		return pickMapper.toPickResult(pick);
 	}
 
+	// 폴더 내에 있는 픽 리스트 조회
+	// 구현은 해두었지만, 추후 사용되지 않을 때 삭제 예정
 	@Transactional(readOnly = true)
 	public List<PickResult.Pick> getFolderChildPickList(Long userId, Long folderId) {
 		validateFolderAccess(userId, folderId);
@@ -58,6 +60,7 @@ public class PickService {
 			.toList();
 	}
 
+	// 폴더 리스트가 넘어오면, 각 폴더 내부에 있는 픽 리스트 조회
 	@Transactional(readOnly = true)
 	public List<PickResult.PickList> getFolderListChildPickList(PickCommand.Fetch command) {
 		// TODO: 검색 조건에 따라 바뀌는 부분은 동적 쿼리 발생 예정, QueryDSL 도입 필요

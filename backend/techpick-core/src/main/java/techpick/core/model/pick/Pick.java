@@ -1,4 +1,4 @@
-package kernel360.techpick.core.model.pick;
+package techpick.core.model.pick;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +17,15 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import kernel360.techpick.core.model.common.BaseEntity;
-import kernel360.techpick.core.model.folder.Folder;
-import kernel360.techpick.core.model.link.Link;
-import kernel360.techpick.core.model.user.User;
-import kernel360.techpick.core.util.OrderConverter;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import techpick.core.model.common.BaseEntity;
+import techpick.core.model.folder.Folder;
+import techpick.core.model.link.Link;
+import techpick.core.model.user.User;
+import techpick.core.util.OrderConverter;
 
 @Table(
 	name = "pick",

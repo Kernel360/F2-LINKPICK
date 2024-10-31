@@ -1,9 +1,9 @@
-package kernel360.techpick.feature.domain.pick.dto;
+package techpick.api.domain.pick.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import kernel360.techpick.feature.domain.link.dto.LinkInfo;
+import techpick.api.domain.link.dto.LinkInfo;
 
 public class PickResult {
 

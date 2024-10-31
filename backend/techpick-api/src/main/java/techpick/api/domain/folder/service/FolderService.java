@@ -5,14 +5,14 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kernel360.techpick.core.model.folder.Folder;
-import kernel360.techpick.core.model.folder.FolderType;
-import kernel360.techpick.feature.domain.folder.dto.FolderCommand;
-import kernel360.techpick.feature.domain.folder.dto.FolderMapper;
-import kernel360.techpick.feature.domain.folder.dto.FolderResult;
-import kernel360.techpick.feature.domain.folder.exception.ApiFolderException;
-import kernel360.techpick.feature.infrastructure.folder.FolderDataHandler;
 import lombok.RequiredArgsConstructor;
+import techpick.api.domain.folder.dto.FolderCommand;
+import techpick.api.domain.folder.dto.FolderMapper;
+import techpick.api.domain.folder.dto.FolderResult;
+import techpick.api.domain.folder.exception.ApiFolderException;
+import techpick.api.infrastructure.folder.FolderDataHandler;
+import techpick.core.model.folder.Folder;
+import techpick.core.model.folder.FolderType;
 
 @Service
 @RequiredArgsConstructor

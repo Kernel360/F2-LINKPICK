@@ -5,10 +5,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
-<<<<<<<< HEAD:backend/techpick-api/src/main/java/techpick/api/infrastructure/tag/TagDataHandler.java
 import lombok.extern.slf4j.Slf4j;
-========
+import lombok.RequiredArgsConstructor;
 import techpick.api.domain.tag.dto.TagCommand;
 import techpick.api.domain.tag.dto.TagMapper;
 import techpick.api.domain.tag.exception.ApiTagException;
@@ -19,7 +17,6 @@ import techpick.core.model.tag.Tag;
 import techpick.core.model.tag.TagRepository;
 import techpick.core.model.user.User;
 import techpick.core.model.user.UserRepository;
->>>>>>>> 086b2c5f1fe3271caa19190f0293f697116425b6:backend/techpick-api/src/main/java/techpick/api/infrastructure/tag/TagAdaptorImpl.java
 
 @Slf4j
 @Component

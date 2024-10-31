@@ -1,17 +1,17 @@
-package kernel360.techpick.feature.domain.tag.service;
+package techpick.api.domain.tag.service;
 
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import kernel360.techpick.core.model.tag.Tag;
-import kernel360.techpick.feature.domain.tag.dto.TagCommand;
-import kernel360.techpick.feature.domain.tag.dto.TagMapper;
-import kernel360.techpick.feature.domain.tag.dto.TagResult;
-import kernel360.techpick.feature.domain.tag.exception.ApiTagException;
-import kernel360.techpick.feature.infrastructure.tag.TagDataHandler;
 import lombok.RequiredArgsConstructor;
+import techpick.api.domain.tag.dto.TagCommand;
+import techpick.api.domain.tag.dto.TagMapper;
+import techpick.api.domain.tag.dto.TagResult;
+import techpick.api.domain.tag.exception.ApiTagException;
+import techpick.api.infrastructure.tag.TagDataHandler;
+import techpick.core.model.tag.Tag;
 
 @Service
 @RequiredArgsConstructor
