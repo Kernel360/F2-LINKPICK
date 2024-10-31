@@ -4,6 +4,7 @@ import {
 } from '@dnd-kit/sortable';
 import { FolderDraggable } from '@/components/FolderTree/FolderDraggable';
 import { FolderInfoItem } from '@/components/FolderTree/FolderInfoItem';
+import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { CreateFolderInput } from './CreateFolderInput';
 import type { UniqueIdentifier } from '@dnd-kit/core';
@@ -11,6 +12,8 @@ import type { UniqueIdentifier } from '@dnd-kit/core';
 export function TreeNode({ id, depth }: TreeNodeProps) {
   const { filterByParentId } = useTreeStore();
   const curTreeNodeChildList = filterByParentId(Number(id));
+  const { newFolderParentId } = useCreateFolderInputStore();
+  const isParentForNewFolder = newFolderParentId === id;
 
   /**
    * 폴더 구조는 현재 SortableContext가 중첩되는 방식으로 진행되고 있지만,
@@ -19,7 +22,9 @@ export function TreeNode({ id, depth }: TreeNodeProps) {
    */
   return (
     <>
-      <CreateFolderInput parentFolderId={Number(id)} />
+      {isParentForNewFolder && (
+        <CreateFolderInput parentFolderId={Number(id)} />
+      )}
       <SortableContext
         id={`${id}`}
         items={curTreeNodeChildList.map((item) => item.id)}

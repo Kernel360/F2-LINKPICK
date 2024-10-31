@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colorThemeContract, sizes, space } from 'techpick-shared';
+import { colorThemeContract, fontSize, sizes, space } from 'techpick-shared';
 
 export const createFolderInputLayout = style({
   display: 'flex',
@@ -20,4 +20,6 @@ export const inputStyle = style({
   border: 'none',
   borderBottom: '1px solid',
   borderColor: colorThemeContract.primary,
+  padding: '0',
+  fontSize: fontSize['md'],
 });

@@ -11,12 +11,6 @@ import type {
   SelectedFolderListType,
 } from '@/types';
 
-type MoveFolderPayload = {
-  from: Active;
-  to: Over;
-  selectedFolderList: SelectedFolderListType;
-};
-
 type TreeState = {
   treeDataMap: FolderMapType;
   selectedFolderList: SelectedFolderListType;
@@ -27,7 +21,7 @@ type TreeState = {
 };
 
 type TreeAction = {
-  createFolder: () => void;
+  createFolder: (payload: CreateFolderPayload) => void;
   readFolder: () => void;
   updateFolder: () => void;
   deleteFolder: () => void;
@@ -48,6 +42,7 @@ const initialState: TreeState = {
   treeDataMap: {},
   selectedFolderList: [],
   focusFolderId: null,
+
   from: null,
   to: null,
   isDragging: false,
@@ -56,7 +51,26 @@ const initialState: TreeState = {
 export const useTreeStore = create<TreeState & TreeAction>()(
   immer((set, get) => ({
     ...initialState,
-    createFolder: () => {},
+    createFolder: ({ parentFolderId, newFolderName, order = 0 }) => {
+      // get id from server.
+      const newFolderId = new Date().getUTCMilliseconds();
+
+      set((state) => {
+        // 자식 생성
+        state.treeDataMap[newFolderId] = {
+          id: newFolderId,
+          name: newFolderName,
+          parentFolderId: parentFolderId,
+          childFolderList: [],
+        };
+
+        // 부모에게 자식 연결
+        const curChildFolderList =
+          state.treeDataMap[parentFolderId].childFolderList;
+        curChildFolderList.splice(order, 0, newFolderId);
+        state.treeDataMap[parentFolderId].childFolderList = curChildFolderList;
+      });
+    },
     readFolder: () => {},
     updateFolder: () => {},
     deleteFolder: () => {},
@@ -169,3 +183,15 @@ export const useTreeStore = create<TreeState & TreeAction>()(
     },
   }))
 );
+
+type MoveFolderPayload = {
+  from: Active;
+  to: Over;
+  selectedFolderList: SelectedFolderListType;
+};
+
+type CreateFolderPayload = {
+  parentFolderId: number;
+  newFolderName: string;
+  order?: number;
+};
