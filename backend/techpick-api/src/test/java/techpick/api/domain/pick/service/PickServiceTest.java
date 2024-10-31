@@ -168,11 +168,11 @@ class PickServiceTest {
 			List<Long> folderIdList = List.of(unclassified.getId(), general.getId(), recycleBin.getId());
 			List<String> searchTokenList = List.of("리액트", "쿼리", "서버");
 
-			PickApiRequest.Fetch request = new PickApiRequest.Fetch(folderIdList, searchTokenList);
-			PickCommand.Fetch fetchCommand = pickApiMapper.toFetchCommand(user.getId(), request);
+			PickCommand.Search searchCommand = pickApiMapper.toSearchCommand(user.getId(), folderIdList,
+				searchTokenList);
 
 			// when
-			List<PickResult.PickList> pickList = pickService.getFolderListChildPickList(fetchCommand);
+			List<PickResult.PickList> pickList = pickService.getFolderListChildPickList(searchCommand);
 
 			for (PickResult.PickList list : pickList) {
 				log.info("list: {} ", list.toString());
