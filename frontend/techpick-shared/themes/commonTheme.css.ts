@@ -114,10 +114,26 @@ export const [commonThemeClass, commonTheme] = createTheme({
     min: 'min-content',
     /** @type {string} Full size, set to `100%`. */
     full: '100%',
+    /** @type {string} Size for ultra extra extra extra extra small screens (2rem, 32px). */
+    '12xs': '2rem',
+    /** @type {string} Size for ultra extra extra extra small screens (3rem, 48px). */
+    '11xs': '3rem',
+    /** @type {string} Size for ultra extra extra extra small screens (4rem, 64px). */
+    '10xs': '4rem',
+    /** @type {string} Size for ultra extra extra small screens (5rem, 80px). */
+    '9xs': '5rem',
+    /** @type {string} Size for ultra extra extra small screens (6rem, 96px). */
+    '8xs': '6rem',
+    /** @type {string} Size for ultra extra small screens (8rem, 128px). */
+    '7xs': '8rem',
+    /** @type {string} Size for ultra small screens (10rem, 160px). */
+    '6xs': '10rem',
+    /** @type {string} Size for extra extra extra small screens (12rem, 192px). */
+    '5xs': '12rem',
     /** @type {string} Size for extra extra small screens (14rem, 224px). */
-    '3xs': '14rem',
+    '4xs': '14rem',
     /** @type {string} Size for extra small screens (16rem, 256px). */
-    '2xs': '16rem',
+    '3xs': '16rem',
     /** @type {string} Size for small screens (20rem, 320px). */
     xs: '20rem',
     /** @type {string} Size for medium small screens (24rem, 384px). */
