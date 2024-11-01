@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import type { KeyboardEvent } from 'react';
 import { FolderPlus } from 'lucide-react';
 import { isEmptyString } from '@/utils';
@@ -12,12 +12,12 @@ export function FolderInput({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const submitIfNotEmptyString = () => {
+  const submitIfNotEmptyString = useCallback(() => {
     const folderName = inputRef.current?.value.trim() ?? '';
     if (isEmptyString(folderName)) return;
 
     onSubmit(folderName);
-  };
+  }, [onSubmit]);
 
   const onEnter = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
@@ -25,29 +25,35 @@ export function FolderInput({
     }
   };
 
-  useEffect(function detectOutsideClick() {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        submitIfNotEmptyString();
-        onClickOutSide();
+  useEffect(
+    function detectOutsideClick() {
+      const handleClickOutside = (event: MouseEvent) => {
+        if (
+          containerRef.current &&
+          !containerRef.current.contains(event.target as Node)
+        ) {
+          submitIfNotEmptyString();
+          onClickOutSide();
+        }
+      };
+
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    },
+    [onClickOutSide, submitIfNotEmptyString]
+  );
+
+  useEffect(
+    function initializeFolderInput() {
+      if (inputRef.current) {
+        inputRef.current.focus();
+        inputRef.current.value = initialValue;
       }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  useEffect(function initializeFolderInput() {
-    if (inputRef.current) {
-      inputRef.current.focus();
-      inputRef.current.value = initialValue;
-    }
-  }, []);
+    },
+    [initialValue]
+  );
 
   return (
     <div ref={containerRef} className={folderInputLayout}>
