@@ -1,4 +1,5 @@
 import { Inter } from 'next/font/google';
+import { PORTAL_CONTAINER_ID } from '@/constants';
 import { ToastProvider, ThemeProvider } from '@/providers';
 import { DndProviderWrapper } from '@/providers/DndProviderWrapper';
 import { QueryProvider } from '@/providers/QueryProvider';
@@ -24,7 +25,7 @@ export default function RootLayout({
             <DndProviderWrapper>
               <QueryProvider>
                 {children}
-                <div id="portalContainer" />
+                <div id={PORTAL_CONTAINER_ID} />
               </QueryProvider>
             </DndProviderWrapper>
           </ThemeProvider>
