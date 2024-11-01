@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -6,14 +7,24 @@ import { FolderDraggable } from '@/components/FolderTree/FolderDraggable';
 import { FolderInfoItem } from '@/components/FolderTree/FolderInfoItem';
 import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
-import { CreateFolderInput } from './CreateFolderInput';
+import { FolderInput } from './FolderInput';
 import type { UniqueIdentifier } from '@dnd-kit/core';
 
 export function TreeNode({ id, depth }: TreeNodeProps) {
-  const { filterByParentId } = useTreeStore();
+  const { filterByParentId, createFolder: createFolderInStore } =
+    useTreeStore();
   const curTreeNodeChildList = filterByParentId(Number(id));
   const { newFolderParentId } = useCreateFolderInputStore();
+  const { closeCreateFolderInput } = useCreateFolderInputStore();
   const isParentForNewFolder = newFolderParentId === id;
+
+  const createFolder = useCallback((folderName: string) => {
+    createFolderInStore({
+      parentFolderId: Number(id),
+      newFolderName: folderName,
+    });
+    closeCreateFolderInput();
+  }, []);
 
   /**
    * 폴더 구조는 현재 SortableContext가 중첩되는 방식으로 진행되고 있지만,
@@ -23,7 +34,10 @@ export function TreeNode({ id, depth }: TreeNodeProps) {
   return (
     <>
       {isParentForNewFolder && (
-        <CreateFolderInput parentFolderId={Number(id)} />
+        <FolderInput
+          onSubmit={createFolder}
+          onClickOutSide={closeCreateFolderInput}
+        />
       )}
       <SortableContext
         id={`${id}`}

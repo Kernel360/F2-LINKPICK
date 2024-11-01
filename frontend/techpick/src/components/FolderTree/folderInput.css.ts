@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 import { colorThemeContract, fontSize, sizes, space } from 'techpick-shared';
 
-export const createFolderInputLayout = style({
+export const folderInputLayout = style({
   display: 'flex',
   alignItems: 'center',
   gap: space['8'],
