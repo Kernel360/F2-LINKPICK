@@ -38,6 +38,9 @@ export const buttonColorVariants = styleVariants({
   white: {
     color: 'white',
   },
+  primary: {
+    color: colorThemeContract.primary,
+  },
 });
 export type buttonColorVariantKeyTypes = keyof typeof buttonColorVariants;
 
@@ -50,6 +53,9 @@ export const buttonBackgroundVariants = styleVariants({
   },
   warning: {
     backgroundColor: colorThemeContract.color.buttonWarning,
+  },
+  white: {
+    backgroundColor: colorThemeContract.white,
   },
 });
 

@@ -23,6 +23,13 @@ export const fontWeightVariants = styleVariants({
 
 export type fontWeightVariantKeyTypes = keyof typeof fontWeightVariants;
 
-export const textStyle = style({
-  color: colorThemeContract.color.font,
+export const textStyle = style({});
+
+export const fontColorVariants = styleVariants({
+  white: { color: colorThemeContract.white },
+  black: { color: colorThemeContract.black },
+  neutral: { color: colorThemeContract.textPrimary },
+  primary: { color: colorThemeContract.primary },
 });
+
+export type FontColorVariantsKtyTypes = keyof typeof fontColorVariants;
