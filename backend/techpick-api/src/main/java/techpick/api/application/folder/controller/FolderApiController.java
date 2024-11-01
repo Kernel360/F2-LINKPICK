@@ -13,17 +13,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import techpick.api.domain.folder.service.FolderService;
+import lombok.RequiredArgsConstructor;
 import techpick.api.application.folder.dto.FolderApiMapper;
 import techpick.api.application.folder.dto.FolderApiRequest;
 import techpick.api.application.folder.dto.FolderApiResponse;
+import techpick.api.domain.folder.service.FolderService;
 import techpick.security.annotation.LoginUserId;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class FolderApiController {
 			content = @Content(schema = @Schema(implementation = FolderApiResponse.class))
 		)
 	})
-	public ResponseEntity<FolderApiResponse> getRootFolder(@LoginUserId Long userId) {
+	public ResponseEntity<FolderApiResponse> getRootFolder(@Parameter(hidden = true) @LoginUserId Long userId) {
 		return ResponseEntity.ok(mapper.toApiResponse(folderService.getRootFolder(userId)));
 	}
 
@@ -52,7 +53,7 @@ public class FolderApiController {
 			content = @Content(schema = @Schema(implementation = FolderApiResponse.class))
 		)
 	})
-	public ResponseEntity<FolderApiResponse> getUnclassifiedFolder(@LoginUserId Long userId) {
+	public ResponseEntity<FolderApiResponse> getUnclassifiedFolder(@Parameter(hidden = true) @LoginUserId Long userId) {
 		return ResponseEntity.ok(mapper.toApiResponse(folderService.getUnclassifiedFolder(userId)));
 	}
 
@@ -63,7 +64,7 @@ public class FolderApiController {
 			content = @Content(schema = @Schema(implementation = FolderApiResponse.class))
 		)
 	})
-	public ResponseEntity<FolderApiResponse> getRecycleBinFolder(@LoginUserId Long userId) {
+	public ResponseEntity<FolderApiResponse> getRecycleBinFolder(@Parameter(hidden = true) @LoginUserId Long userId) {
 		return ResponseEntity.ok(mapper.toApiResponse(folderService.getRecycleBin(userId)));
 	}
 
@@ -75,7 +76,7 @@ public class FolderApiController {
 		),
 		@ApiResponse(responseCode = "401", description = "본인 폴더만 조회할 수 있습니다.")
 	})
-	public ResponseEntity<List<FolderApiResponse>> getChildrenFolder(@LoginUserId Long userId,
+	public ResponseEntity<List<FolderApiResponse>> getChildrenFolder(@Parameter(hidden = true) @LoginUserId Long userId,
 		@PathVariable Long folderId) {
 		return ResponseEntity.ok(
 			folderService.getChildFolderList(mapper.toReadCommand(userId, folderId))
@@ -92,7 +93,8 @@ public class FolderApiController {
 			content = @Content(schema = @Schema(implementation = FolderApiResponse.class))
 		)
 	})
-	public ResponseEntity<FolderApiResponse> createFolder(@LoginUserId Long userId, FolderApiRequest.Create request) {
+	public ResponseEntity<FolderApiResponse> createFolder(@Parameter(hidden = true) @LoginUserId Long userId,
+		FolderApiRequest.Create request) {
 		return ResponseEntity.ok(
 			mapper.toApiResponse(folderService.saveFolder(mapper.toCreateCommand(userId, request)))
 		);
@@ -107,7 +109,8 @@ public class FolderApiController {
 		@ApiResponse(responseCode = "400", description = "기본 폴더는 수정할 수 없습니다."),
 		@ApiResponse(responseCode = "401", description = "본인 폴더만 수정할 수 있습니다.")
 	})
-	public ResponseEntity<Void> updateFolder(@LoginUserId Long userId, FolderApiRequest.Update request) {
+	public ResponseEntity<Void> updateFolder(@Parameter(hidden = true) @LoginUserId Long userId,
+		FolderApiRequest.Update request) {
 		folderService.updateFolder(mapper.toUpdateCommand(userId, request));
 		return ResponseEntity.noContent().build();
 	}
@@ -122,7 +125,8 @@ public class FolderApiController {
 		@ApiResponse(responseCode = "401", description = "본인 폴더만 이동할 수 있습니다."),
 		@ApiResponse(responseCode = "406", description = "부모가 다른 폴더들을 동시에 이동할 수 없습니다.")
 	})
-	public ResponseEntity<Void> moveFolder(@LoginUserId Long userId, FolderApiRequest.Move request) {
+	public ResponseEntity<Void> moveFolder(@Parameter(hidden = true) @LoginUserId Long userId,
+		FolderApiRequest.Move request) {
 		folderService.moveFolder(mapper.toMoveCommand(userId, request));
 		return ResponseEntity.noContent().build();
 	}
@@ -136,7 +140,8 @@ public class FolderApiController {
 		@ApiResponse(responseCode = "400", description = "기본 폴더는 삭제할 수 없습니다."),
 		@ApiResponse(responseCode = "401", description = "본인 폴더만 삭제할 수 있습니다.")
 	})
-	public ResponseEntity<Void> deleteFolder(@LoginUserId Long userId, FolderApiRequest.Delete request) {
+	public ResponseEntity<Void> deleteFolder(@Parameter(hidden = true) @LoginUserId Long userId,
+		FolderApiRequest.Delete request) {
 		folderService.deleteFolder(mapper.toDeleteCommand(userId, request));
 		return ResponseEntity.noContent().build();
 	}
