@@ -2,20 +2,80 @@ package techpick.api.domain.tag.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 import techpick.api.domain.tag.dto.TagCommand;
+import techpick.api.domain.tag.dto.TagMapper;
 import techpick.api.domain.tag.dto.TagResult;
+import techpick.api.domain.tag.exception.ApiTagException;
+import techpick.api.infrastructure.tag.TagDataHandler;
+import techpick.core.model.tag.Tag;
 
-public interface TagService {
+@Service
+@RequiredArgsConstructor
+public class TagService {
 
-	TagResult getTag(TagCommand.Read command);
+	private final TagDataHandler tagDataHandler;
+	private final TagMapper tagMapper;
 
-	List<TagResult> getUserTagList(Long userId);
+	@Transactional(readOnly = true)
+	public TagResult getTag(TagCommand.Read command) throws ApiTagException {
+		Tag tag = tagDataHandler.getTag(command.tagId());
+		validateTagAccess(command.userId(), tag);
+		return tagMapper.toResult(tag);
+	}
 
-	TagResult saveTag(TagCommand.Create command);
+	@Transactional(readOnly = true)
+	public List<TagResult> getUserTagList(Long userId) {
+		return tagDataHandler.getTagList(userId).stream()
+			.map(tagMapper::toResult).toList();
+	}
 
-	TagResult updateTag(TagCommand.Update command);
+	@Transactional
+	public TagResult saveTag(TagCommand.Create command) {
+		validateDuplicateTagName(command.userId(), command.name());
+		return tagMapper.toResult(tagDataHandler.saveTag(command.userId(), command));
+	}
 
-	void moveUserTag(TagCommand.Move command);
+	@Transactional
+	public TagResult updateTag(TagCommand.Update command) {
+		Tag tag = tagDataHandler.getTag(command.tagId());
 
-	void deleteTag(TagCommand.Delete command);
+		validateTagAccess(command.userId(), tag);
+		validateDuplicateTagName(command.userId(), command.name());
+
+		return tagMapper.toResult(tagDataHandler.updateTag(command));
+	}
+
+	@Transactional
+	public void moveUserTag(TagCommand.Move command) {
+		Tag tag = tagDataHandler.getTag(command.tagId());
+
+		validateTagAccess(command.userId(), tag);
+
+		tagDataHandler.moveTag(command.userId(), command);
+	}
+
+	@Transactional
+	public void deleteTag(TagCommand.Delete command) {
+		Tag tag = tagDataHandler.getTag(command.tagId());
+
+		validateTagAccess(command.userId(), tag);
+
+		tagDataHandler.deleteTag(command.userId(), command);
+	}
+
+	private void validateTagAccess(Long userId, Tag tag) {
+		if (!userId.equals(tag.getUser().getId())) {
+			throw ApiTagException.UNAUTHORIZED_TAG_ACCESS();
+		}
+	}
+
+	private void validateDuplicateTagName(Long userId, String name) {
+		if (tagDataHandler.checkDuplicateTagName(userId, name)) {
+			throw ApiTagException.TAG_ALREADY_EXIST();
+		}
+	}
 }

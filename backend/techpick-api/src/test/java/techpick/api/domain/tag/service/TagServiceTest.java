@@ -1,4 +1,4 @@
-package techpick.api.application.domain.tag.service;
+package techpick.api.domain.tag.service;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,27 +23,33 @@ import techpick.TechPickApiApplication;
 import techpick.api.domain.tag.dto.TagCommand;
 import techpick.api.domain.tag.dto.TagResult;
 import techpick.api.domain.tag.exception.ApiTagException;
-import techpick.api.domain.tag.service.TagService;
-import techpick.api.infrastructure.user.UserAdaptor;
+import techpick.api.infrastructure.user.UserDataHandler;
 import techpick.core.model.user.Role;
 import techpick.core.model.user.SocialType;
 import techpick.core.model.user.User;
 import techpick.core.model.user.UserRepository;
 
 @Slf4j
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(classes = TechPickApiApplication.class)
 @ActiveProfiles("test")
+@Transactional
 class TagServiceTest {
 
 	@Autowired
 	TagService tagService;
 
 	@Autowired
-	UserAdaptor userAdaptor;
+	UserDataHandler userDataHandler;
+
+	@Autowired
+	UserRepository userRepository;
+
+	User user;
 
 	@BeforeAll
-	static void setUp(@Autowired UserRepository userRepository) {
-		User user = User.builder()
+	void setUp() {
+		user = User.builder()
 			.email("test@test.com")
 			.nickname("test")
 			.password("test")
@@ -56,11 +63,10 @@ class TagServiceTest {
 
 	@Test
 	@DisplayName("태그 저장 후 태그 상세 조회 테스트")
-	@Transactional
 	void getTagTest() {
 		// given
 		TagResult tagCreateResult = getTagCreateResult(0);
-		TagCommand.Read command = new TagCommand.Read(1L, tagCreateResult.id());
+		TagCommand.Read command = new TagCommand.Read(user.getId(), tagCreateResult.id());
 
 		// when
 		TagResult tagReadResult = tagService.getTag(command);
@@ -73,7 +79,6 @@ class TagServiceTest {
 
 	@Test
 	@DisplayName("태그 저장 후 태그 리스트 조회 테스트")
-	@Transactional
 	void getTagListTest() {
 		// given
 		for (int i = 0; i < 5; i++) {
@@ -81,7 +86,7 @@ class TagServiceTest {
 		}
 
 		// when
-		List<TagResult> tagList = tagService.getUserTagList(1L);
+		List<TagResult> tagList = tagService.getUserTagList(user.getId());
 
 		// then
 		assertThat(tagList).isNotNull();
@@ -90,7 +95,6 @@ class TagServiceTest {
 
 	@Test
 	@DisplayName("태그 중복 저장 테스트")
-	@Transactional
 	void duplicateTagTest() {
 		// given
 		getTagCreateResult(0);
@@ -103,11 +107,10 @@ class TagServiceTest {
 
 	@Test
 	@DisplayName("태그 수정 테스트")
-	@Transactional
 	void updateTagTest() {
 		// given
 		TagResult tagCreateResult = getTagCreateResult(0);
-		TagCommand.Update update = new TagCommand.Update(1L, tagCreateResult.id(), "태그태그", 2);
+		TagCommand.Update update = new TagCommand.Update(user.getId(), tagCreateResult.id(), "태그태그", 2);
 
 		// when
 		TagResult tagUpdateResult = tagService.updateTag(update);
@@ -120,7 +123,6 @@ class TagServiceTest {
 
 	@Test
 	@DisplayName("태그 이동 테스트")
-	@Transactional
 	void moveTagTest() {
 		// given
 		List<Long> tagIdList = new ArrayList<>();
@@ -131,22 +133,22 @@ class TagServiceTest {
 			expectedOrderList.add(tagResult.id());
 		}
 
-		User user = userAdaptor.getUser(1L);
-		user.updateTagOrderList(tagIdList);
+		User savedUser = userDataHandler.getUser(user.getId());
+		savedUser.updateTagOrderList(tagIdList);
 
 		Long targetId = expectedOrderList.get(0);
 		int targetIdx = 3;
 		expectedOrderList.remove(0);
 		expectedOrderList.add(targetIdx, targetId);
 
-		TagCommand.Move move = new TagCommand.Move(1L, targetId, targetIdx);
+		TagCommand.Move move = new TagCommand.Move(savedUser.getId(), targetId, targetIdx);
 
 		// when
 		tagService.moveUserTag(move);
 
 		// then
-		assertThat(user.getTagOrderList().size()).isEqualTo(5);
-		assertThat(user.getTagOrderList()).isEqualTo(expectedOrderList);
+		assertThat(savedUser.getTagOrderList().size()).isEqualTo(5);
+		assertThat(savedUser.getTagOrderList()).isEqualTo(expectedOrderList);
 	}
 
 	// TODO: orderIdx 음수인 경우 테스트 필요
@@ -157,12 +159,11 @@ class TagServiceTest {
 
 	@Test
 	@DisplayName("태그 삭제 테스트")
-	@Transactional
 	void deleteTagTest() {
 		// given
 		TagResult tagCreateResult = getTagCreateResult(0);
-		TagCommand.Delete delete = new TagCommand.Delete(1L, tagCreateResult.id());
-		TagCommand.Read read = new TagCommand.Read(1L, tagCreateResult.id());
+		TagCommand.Delete delete = new TagCommand.Delete(user.getId(), tagCreateResult.id());
+		TagCommand.Read read = new TagCommand.Read(user.getId(), tagCreateResult.id());
 
 		// when
 		tagService.deleteTag(delete);
@@ -175,7 +176,6 @@ class TagServiceTest {
 
 	@Test
 	@DisplayName("태그 저장 동시성 테스트")
-	@Transactional
 	void createTagConcurrencyTest() throws InterruptedException {
 		// given
 		int threadCount = 20;
@@ -184,12 +184,14 @@ class TagServiceTest {
 
 		AtomicInteger successCount = new AtomicInteger();
 		AtomicInteger failCount = new AtomicInteger();
-		// when
 
+		Long userId = user.getId();
+
+		// when
 		for (int i = 0; i < threadCount; i++) {
 			executorService.submit(() -> {
 				try {
-					TagCommand.Create command = new TagCommand.Create(1L, "태그12341", 2);
+					TagCommand.Create command = new TagCommand.Create(userId, "태그12341", 2);
 					tagService.saveTag(command);
 					successCount.incrementAndGet(); // 성공 카운트
 				} catch (Exception e) {
@@ -213,7 +215,7 @@ class TagServiceTest {
 	}
 
 	private TagResult getTagCreateResult(int n) {
-		TagCommand.Create create = new TagCommand.Create(1L, "태그" + n, 1);
+		TagCommand.Create create = new TagCommand.Create(user.getId(), "태그" + n, 1);
 		return tagService.saveTag(create);
 	}
 

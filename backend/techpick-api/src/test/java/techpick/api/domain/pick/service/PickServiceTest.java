@@ -1,4 +1,4 @@
-package techpick.api.application.domain.pick.service;
+package techpick.api.domain.pick.service;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -16,20 +16,20 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 import techpick.TechPickApiApplication;
+import techpick.api.application.pick.dto.PickApiMapper;
+import techpick.api.application.pick.dto.PickApiRequest;
 import techpick.api.domain.link.dto.LinkInfo;
 import techpick.api.domain.pick.dto.PickCommand;
 import techpick.api.domain.pick.dto.PickResult;
 import techpick.api.domain.pick.exception.ApiPickException;
-import techpick.api.domain.pick.service.PickService;
 import techpick.api.domain.tag.dto.TagCommand;
 import techpick.api.domain.tag.service.TagService;
-import techpick.api.infrastructure.pick.PickAdaptor;
+import techpick.api.infrastructure.pick.PickDataHandler;
 import techpick.core.model.folder.Folder;
 import techpick.core.model.folder.FolderRepository;
 import techpick.core.model.link.LinkRepository;
@@ -51,9 +51,11 @@ class PickServiceTest {
 	@Autowired
 	PickService pickService;
 	@Autowired
-	PickAdaptor pickAdaptor;
+	PickDataHandler pickDataHandler;
 	@Autowired
 	TagService tagService;
+	@Autowired
+	PickApiMapper pickApiMapper;
 
 	User user;
 	Folder root, recycleBin, unclassified, general;
@@ -102,17 +104,16 @@ class PickServiceTest {
 		@Autowired LinkRepository linkRepository
 	) {
 		// NOTE: 제거 순서 역시 FK 제약 조건을 신경써야 한다.
-		// pickTagRepository.deleteAll();
-		// pickRepository.deleteAll();
-		// userRepository.deleteAll(); // TODO: soft delete 이라 DB를 직접 비워야 한다.
-		// folderRepository.deleteAll();
-		// tagRepository.deleteAll();
-		// linkRepository.deleteAll();
+		pickTagRepository.deleteAll();
+		pickRepository.deleteAll();
+		userRepository.deleteAll(); // TODO: soft delete 이라 DB를 직접 비워야 한다.
+		folderRepository.deleteAll();
+		tagRepository.deleteAll();
+		linkRepository.deleteAll();
 	}
 
 	@Nested
 	@DisplayName("픽 조회")
-	@Transactional
 	class getPick {
 		@Test
 		@DisplayName("""
@@ -128,13 +129,67 @@ class PickServiceTest {
 			);
 
 			// when
-			PickResult saveResult = pickService.saveNewPick(command);
-			PickResult readResult = pickService.getPick(new PickCommand.Read(user.getId(), saveResult.id()));
+			PickResult.Pick saveResult = pickService.saveNewPick(command);
+			PickResult.Pick readResult = pickService.getPick(new PickCommand.Read(user.getId(), saveResult.id()));
 
 			// then
-			log.info("saveResult : {}", saveResult);
 			assertThat(readResult).isNotNull();
 			assertThat(readResult).isEqualTo(saveResult);
+		}
+
+		@Test
+		@DisplayName("폴더 리스트 id가 넘어오면, 각 폴더 내부에 있는 픽 리스트들을 조회한다.")
+		void folder_list_in_pick_list_test() {
+			// given
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo2 = new LinkInfo("linkUrl2", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo3 = new LinkInfo("linkUrl3", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo4 = new LinkInfo("linkUrl4", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo5 = new LinkInfo("linkUrl5", "linkTitle", "linkDescription", "imageUrl", null);
+
+			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+				recycleBin.getId(), linkInfo1);
+			PickCommand.Create command2 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+				unclassified.getId(), linkInfo2);
+			PickCommand.Create command3 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+				unclassified.getId(), linkInfo3);
+			PickCommand.Create command4 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+				general.getId(), linkInfo4);
+			PickCommand.Create command5 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+				unclassified.getId(), linkInfo5);
+
+			PickResult.Pick pick1 = pickService.saveNewPick(command1);
+			PickResult.Pick pick2 = pickService.saveNewPick(command2);
+			PickResult.Pick pick3 = pickService.saveNewPick(command3);
+			PickResult.Pick pick4 = pickService.saveNewPick(command4);
+			PickResult.Pick pick5 = pickService.saveNewPick(command5);
+
+			List<Long> folderIdList = List.of(unclassified.getId(), general.getId(), recycleBin.getId());
+			List<String> searchTokenList = List.of("리액트", "쿼리", "서버");
+
+			PickCommand.Search searchCommand = pickApiMapper.toSearchCommand(user.getId(), folderIdList,
+				searchTokenList);
+
+			// when
+			List<PickResult.PickList> pickList = pickService.getFolderListChildPickList(searchCommand);
+
+			for (PickResult.PickList list : pickList) {
+				log.info("list: {} ", list.toString());
+			}
+
+			// then
+			assertThat(pickList.get(0).pickList().size()).isEqualTo(3); // unclassified
+			assertThat(pickList.get(1).pickList().size()).isEqualTo(1); // general
+			assertThat(pickList.get(2).pickList().size()).isEqualTo(1); // recycleBin
+
+			assertThat(pickList.get(0).pickList().get(0).id()).isEqualTo(pick2.id()); // unclassified
+			assertThat(pickList.get(0).pickList().get(1).id()).isEqualTo(pick3.id());
+			assertThat(pickList.get(0).pickList().get(2).id()).isEqualTo(pick5.id());
+
+			assertThat(pickList.get(1).pickList().get(0).id()).isEqualTo(pick4.id()); // general
+
+			assertThat(pickList.get(2).pickList().get(0).id()).isEqualTo(pick1.id()); // recycleBin
 		}
 	}
 
@@ -162,6 +217,24 @@ class PickServiceTest {
 		}
 
 		@Test
+		@DisplayName("루트에 픽을 저장하는 경우, 실패해야 한다. - 루트는 폴더만 위치할 수 있다.")
+		void create_root_pick_test() {
+			// given
+			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl", null);
+			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
+			PickCommand.Create command = new PickCommand.Create(
+				user.getId(), "PICK", "MEMO",
+				tagOrder, null, linkInfo
+			);
+
+			// when, then
+			assertThatThrownBy(() -> pickService.saveNewPick(command))
+				.isInstanceOf(ApiPickException.class)
+				.hasMessageStartingWith(ApiPickException.PICK_UNAUTHORIZED_ROOT_ACCESS().getMessage());
+		}
+
+		@Test
+		@DirtiesContext
 		@DisplayName("""
 			    동시적으로 Pick 생성 요청이 들어올 경우, 하나만 생성되고 나머지는 실패해야 한다.
 			""")
@@ -209,6 +282,7 @@ class PickServiceTest {
 	}
 
 	@Nested
+	@DisplayName("픽 수정")
 	class updatePick {
 		@Test
 		@DisplayName("""
@@ -223,28 +297,27 @@ class PickServiceTest {
 				user.getId(), "PICK", "MEMO",
 				tagOrder, unclassified.getId(), linkInfo
 			);
-			PickResult createResult = pickService.saveNewPick(command);
+			PickResult.Pick savePick = pickService.saveNewPick(command);
 
 			// when
 			String newTitle = "NEW_PICK";
 			List<Long> newTagOrder = List.of(tag3.getId(), tag2.getId(), tag1.getId());
 			PickCommand.Update updateCommand = new PickCommand.Update(
-				user.getId(), createResult.id(),
+				user.getId(), savePick.id(),
 				newTitle, null /* memo not changed */, newTagOrder
 			);
-			PickResult updateResult = pickService.updatePick(updateCommand);
+			PickResult.Pick updatePick = pickService.updatePick(updateCommand);
 
 			// then
-			assertThat(updateResult.title()).isNotEqualTo(createResult.title()).isEqualTo(newTitle); // changed
-			assertThat(updateResult.tagOrderList()).isNotEqualTo(createResult.tagOrderList())
+			assertThat(updatePick.title()).isNotEqualTo(savePick.title()).isEqualTo(newTitle); // changed
+			assertThat(updatePick.tagOrderList()).isNotEqualTo(savePick.tagOrderList())
 				.isEqualTo(newTagOrder); // changed
-			assertThat(updateResult.memo()).isEqualTo(createResult.memo()); // unchanged
+			assertThat(updatePick.memo()).isEqualTo(savePick.memo()); // unchanged
 		}
 	}
 
 	@Nested
 	@DisplayName("픽 이동")
-	@Transactional
 	class movePick {
 		@Test
 		@DisplayName("""
@@ -257,6 +330,9 @@ class PickServiceTest {
 			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
 			LinkInfo linkInfo2 = new LinkInfo("linkUrl2", "linkTitle", "linkDescription", "imageUrl", null);
 			LinkInfo linkInfo3 = new LinkInfo("linkUrl3", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo4 = new LinkInfo("linkUrl4", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo5 = new LinkInfo("linkUrl5", "linkTitle", "linkDescription", "imageUrl", null);
+
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
 				unclassified.getId(), linkInfo1);
@@ -264,26 +340,35 @@ class PickServiceTest {
 				unclassified.getId(), linkInfo2);
 			PickCommand.Create command3 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
 				unclassified.getId(), linkInfo3);
+			PickCommand.Create command4 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+				unclassified.getId(), linkInfo4);
+			PickCommand.Create command5 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+				unclassified.getId(), linkInfo5);
 
-			PickResult pickResult1 = pickService.saveNewPick(command1);
-			PickResult pickResult2 = pickService.saveNewPick(command2);
-			PickResult pickResult3 = pickService.saveNewPick(command3);
+			PickResult.Pick pick1 = pickService.saveNewPick(command1);
+			PickResult.Pick pick2 = pickService.saveNewPick(command2);
+			PickResult.Pick pick3 = pickService.saveNewPick(command3);
+			PickResult.Pick pick4 = pickService.saveNewPick(command4);
+			PickResult.Pick pick5 = pickService.saveNewPick(command5);
 
-			List<Long> originalPickIdList = List.of(pickResult1.id(), pickResult2.id(), pickResult3.id());
-			List<Long> movePickIdList = List.of(pickResult2.id(), pickResult3.id());
+			List<Long> originalPickIdList = List.of(pick1.id(), pick2.id(), pick3.id(),
+				pick4.id(), pick5.id());
+			List<Long> movePickIdList = List.of(pick2.id(), pick3.id(), pick1.id());
 
 			PickCommand.Move command = new PickCommand.Move(user.getId(), movePickIdList, unclassified.getId(), 0);
 
 			// when
-			List<Long> pickIdList = pickService.movePick(command);
-			log.info("pickIdList: {} ", pickIdList.toString());
+			pickService.movePick(command);
+
+			List<PickResult.Pick> movedPickList = pickService.getFolderChildPickList(user.getId(),
+				unclassified.getId());
 
 			// then
-			assertThat(originalPickIdList).isNotEqualTo(pickIdList);
-			assertThat(pickIdList.size()).isEqualTo(3);
-			assertThat(pickIdList.get(2)).isEqualTo(originalPickIdList.get(0));
-			assertThat(pickIdList.get(0)).isEqualTo(originalPickIdList.get(1));
-			assertThat(pickIdList.get(1)).isEqualTo(originalPickIdList.get(2));
+			// 결과값 : [1, 2, 3, 4, 5] -> [2, 3, 1, 4, 5]
+			assertThat(originalPickIdList).isNotEqualTo(movedPickList);
+			assertThat(originalPickIdList.get(0)).isEqualTo(movedPickList.get(2).id());
+			assertThat(originalPickIdList.get(1)).isEqualTo(movedPickList.get(0).id());
+			assertThat(originalPickIdList.get(2)).isEqualTo(movedPickList.get(1).id());
 		}
 
 		@Test
@@ -305,22 +390,54 @@ class PickServiceTest {
 			PickCommand.Create command3 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
 				unclassified.getId(), linkInfo3);
 
-			PickResult pickResult1 = pickService.saveNewPick(command1);
-			PickResult pickResult2 = pickService.saveNewPick(command2);
-			PickResult pickResult3 = pickService.saveNewPick(command3);
+			PickResult.Pick pick1 = pickService.saveNewPick(command1);
+			PickResult.Pick pick2 = pickService.saveNewPick(command2);
+			PickResult.Pick pick3 = pickService.saveNewPick(command3);
 
-			List<Long> originalPickIdList = List.of(pickResult1.id(), pickResult2.id(), pickResult3.id());
-			List<Long> movePickIdList = List.of(pickResult3.id(), pickResult2.id());
-
+			List<Long> movePickIdList = List.of(pick3.id(), pick2.id());
 			PickCommand.Move command = new PickCommand.Move(user.getId(), movePickIdList, general.getId(), 0);
 
+			PickCommand.Read readCommand1 = new PickCommand.Read(user.getId(), pick1.id());
+			PickCommand.Read readCommand2 = new PickCommand.Read(user.getId(), pick2.id());
+			PickCommand.Read readCommand3 = new PickCommand.Read(user.getId(), pick3.id());
+
 			// when
-			List<Long> pickIdList = pickService.movePick(command);
+			pickService.movePick(command);
+
+			PickResult.Pick readPick1 = pickService.getPick(readCommand1);
+			PickResult.Pick readPick2 = pickService.getPick(readCommand2);
+			PickResult.Pick readPick3 = pickService.getPick(readCommand3);
+
+			List<PickResult.Pick> unclassifiedPickList = pickService.getFolderChildPickList(user.getId(),
+				unclassified.getId());
+			List<PickResult.Pick> generalPickList = pickService.getFolderChildPickList(user.getId(), general.getId());
 
 			// then
-			// 테스트 하려는데 잘 안됨.... 트랜잭션 범위 문제?
-			// assertThat(pickResult1.parentFolderId()).isEqualTo(command.destinationFolderId());
-			log.info("pickIdList: {} ", pickIdList.toString());
+			assertThat(readPick1.parentFolderId()).isNotEqualTo(command.destinationFolderId());
+			assertThat(readPick2.parentFolderId()).isEqualTo(command.destinationFolderId());
+			assertThat(readPick3.parentFolderId()).isEqualTo(command.destinationFolderId());
+			assertThat(unclassifiedPickList).contains(readPick1);
+			assertThat(generalPickList).contains(readPick2, readPick3);
+		}
+
+		@Test
+		@DisplayName("루트로 픽을 이동하는 경우, 실패해야 한다. - 루트는 폴더만 위치할 수 있다.")
+		void move_root_pick_test() {
+			// given
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
+			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+				unclassified.getId(), linkInfo1);
+			pickService.saveNewPick(command1);
+
+			List<Long> movePickIdList = List.of(1L, 2L);
+
+			PickCommand.Move command = new PickCommand.Move(user.getId(), movePickIdList, null, 0);
+
+			// when, then
+			assertThatThrownBy(() -> pickService.movePick(command))
+				.isInstanceOf(ApiPickException.class)
+				.hasMessageStartingWith(ApiPickException.PICK_UNAUTHORIZED_ROOT_ACCESS().getMessage());
 		}
 
 		@Test
@@ -348,7 +465,6 @@ class PickServiceTest {
 
 	@Nested
 	@DisplayName("픽 삭제")
-	@Transactional
 	class deletePick {
 		@Test
 		@DisplayName("""
@@ -360,7 +476,7 @@ class PickServiceTest {
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
 				recycleBin.getId(), linkInfo1);
-			PickResult pickResult = pickService.saveNewPick(command1);
+			PickResult.Pick pickResult = pickService.saveNewPick(command1);
 
 			List<Long> deletePickIdList = List.of(pickResult.id());
 
@@ -383,7 +499,7 @@ class PickServiceTest {
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
 				recycleBin.getId(), linkInfo1);
-			PickResult pickResult = pickService.saveNewPick(command1);
+			PickResult.Pick pickResult = pickService.saveNewPick(command1);
 
 			List<Long> deletePickIdList = List.of(pickResult.id());
 
@@ -392,7 +508,8 @@ class PickServiceTest {
 
 			// then
 			assertThatThrownBy(() -> pickService.deletePick(new PickCommand.Delete(user.getId(), deletePickIdList)))
-				.isInstanceOf(DataIntegrityViolationException.class);
+				.isInstanceOf(ApiPickException.class)
+				.hasMessageStartingWith(ApiPickException.PICK_NOT_FOUND().getMessage());
 		}
 
 		@Test
@@ -405,7 +522,7 @@ class PickServiceTest {
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
 				unclassified.getId(), linkInfo1);
-			PickResult pickResult = pickService.saveNewPick(command1);
+			PickResult.Pick pickResult = pickService.saveNewPick(command1);
 
 			List<Long> deletePickIdList = List.of(pickResult.id());
 
@@ -427,12 +544,12 @@ class PickServiceTest {
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
 				unclassified.getId(), linkInfo1);
-			PickResult savedPickResult = pickService.saveNewPick(command1);
+			PickResult.Pick savedPickResult = pickService.saveNewPick(command1);
 
 			// when
 			tagService.deleteTag(delete);
-			PickResult pickResult = pickService.getPick(new PickCommand.Read(user.getId(), savedPickResult.id()));
-			List<PickTag> pickTagList = pickAdaptor.getPickTagList(pickResult.id());
+			PickResult.Pick pickResult = pickService.getPick(new PickCommand.Read(user.getId(), savedPickResult.id()));
+			List<PickTag> pickTagList = pickDataHandler.getPickTagList(pickResult.id());
 
 			// then
 			assertThat(pickResult.tagOrderList().size()).isEqualTo(tagOrder.size() - 1);

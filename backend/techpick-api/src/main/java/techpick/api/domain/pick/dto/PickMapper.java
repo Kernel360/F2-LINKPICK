@@ -1,5 +1,7 @@
 package techpick.api.domain.pick.dto;
 
+import java.util.List;
+
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -19,7 +21,11 @@ public interface PickMapper {
 
 	@Mapping(source = "pick.link", target = "linkInfo")
 	@Mapping(source = "pick.parentFolder.id", target = "parentFolderId")
-	PickResult toPickResult(Pick pick);
+	PickResult.Pick toPickResult(Pick pick);
+
+	@Mapping(source = "folderId", target = "folderId")
+	@Mapping(source = "pick", target = "pickList")
+	PickResult.PickList toPickResultList(Long folderId, List<PickResult.Pick> pick);
 
 	@Mapping(source = "command.title", target = "title")
 	@Mapping(source = "parentFolder", target = "parentFolder")

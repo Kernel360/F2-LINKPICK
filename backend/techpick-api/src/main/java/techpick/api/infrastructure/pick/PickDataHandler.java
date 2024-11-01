@@ -1,5 +1,6 @@
 package techpick.api.infrastructure.pick;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ import techpick.core.model.user.UserRepository;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PickAdaptorImpl implements PickAdaptor {
+public class PickDataHandler {
 
 	private final PickMapper pickMapper;
 	private final PickRepository pickRepository;
@@ -38,32 +39,34 @@ public class PickAdaptorImpl implements PickAdaptor {
 	private final LinkRepository linkRepository;
 	private final LinkMapper linkMapper;
 
-	@Override
 	@Transactional(readOnly = true)
 	public Pick getPick(Long pickId) {
 		return pickRepository.findById(pickId).orElseThrow(ApiPickException::PICK_NOT_FOUND);
 	}
 
-	@Override
 	@Transactional(readOnly = true)
 	public Pick getPickUrl(Long userId, String url) {
 		return pickRepository.findByUserIdAndLinkUrl(userId, url)
 			.orElseThrow(ApiPickException::PICK_NOT_FOUND);
 	}
 
-	@Override
 	@Transactional(readOnly = true)
 	public List<Pick> getPickList(List<Long> idList) {
 		return pickRepository.findAllById(idList);
 	}
 
-	@Override
+	@Transactional(readOnly = true)
+	public List<Pick> getPickListPreservingOrder(List<Long> idList) {
+		List<Pick> pickList = pickRepository.findAllById(idList);
+		pickList.sort(Comparator.comparing(pick -> idList.indexOf(pick.getId())));
+		return pickList;
+	}
+
 	@Transactional(readOnly = true)
 	public List<PickTag> getPickTagList(Long pickId) {
 		return pickTagRepository.findAllByPickId(pickId);
 	}
 
-	@Override
 	@Transactional
 	public Pick savePick(PickCommand.Create command) throws ApiPickException {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -85,13 +88,11 @@ public class PickAdaptorImpl implements PickAdaptor {
 		return pickRepository.save(pickMapper.toEntity(command, user, folder, link));
 	}
 
-	@Override
 	@Transactional
 	public PickTag savePickTag(Pick pick, Tag tag) {
 		return pickTagRepository.save(PickTag.of(pick, tag));
 	}
 
-	@Override
 	@Transactional
 	public Pick updatePick(PickCommand.Update command) {
 		Pick pick = getPick(command.pickId());
@@ -100,7 +101,6 @@ public class PickAdaptorImpl implements PickAdaptor {
 		return pick;
 	}
 
-	@Override
 	@Transactional
 	public void movePickToCurrentFolder(PickCommand.Move command) {
 		List<Long> pickIdList = command.pickIdList();
@@ -109,7 +109,6 @@ public class PickAdaptorImpl implements PickAdaptor {
 		folder.updateChildPickOrderList(pickIdList, command.orderIdx());
 	}
 
-	@Override
 	@Transactional
 	public void movePickToOtherFolder(PickCommand.Move command) {
 		List<Long> pickIdList = command.pickIdList();
@@ -121,29 +120,25 @@ public class PickAdaptorImpl implements PickAdaptor {
 			Pick pick = getPick(pickId);
 			pick.getParentFolder().removeChildPickOrder(pickId);
 			pick.updateParentFolder(destinationFolder);
-			log.info("pick Folder Id : {}, {}", pick.getParentFolder().getId(), destinationFolder.getId());
 		}
 	}
 
-	@Override
 	@Transactional
 	public void deletePickList(PickCommand.Delete command) {
 		List<Long> pickIdList = command.pickIdList();
 		for (Long pickId : pickIdList) {
 			Pick pick = getPick(pickId);
 			pick.getParentFolder().removeChildPickOrder(pickId);
-			pickRepository.delete(pick);
 			pickTagRepository.deleteByPick(pick);
+			pickRepository.delete(pick);
 		}
 	}
 
-	@Override
 	@Transactional
 	public void detachTagFromPick(Pick pick, Long tagId) {
 		pickTagRepository.deleteByPickAndTagId(pick, tagId);
 	}
 
-	@Override
 	@Transactional
 	public void detachTagFromEveryPick(Long tagId) {
 		pickTagRepository.deleteByTagId(tagId);

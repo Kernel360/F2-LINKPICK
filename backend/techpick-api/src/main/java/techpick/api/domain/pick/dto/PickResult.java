@@ -5,14 +5,23 @@ import java.util.List;
 
 import techpick.api.domain.link.dto.LinkInfo;
 
-public record PickResult(
-	Long id,
-	String title,
-	String memo,
-	LinkInfo linkInfo,
-	Long parentFolderId,
-	List<Long> tagOrderList,
-	LocalDateTime createdAt,
-	LocalDateTime updatedAt
-) {
+public class PickResult {
+
+	public record Pick(
+		Long id,
+		String title,
+		String memo,
+		LinkInfo linkInfo,
+		Long parentFolderId,
+		List<Long> tagOrderList,
+		LocalDateTime createdAt,
+		LocalDateTime updatedAt
+	) {
+	}
+
+	public record PickList(
+		Long folderId,
+		List<PickResult.Pick> pickList
+	) {
+	}
 }

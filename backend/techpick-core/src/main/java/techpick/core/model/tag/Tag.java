@@ -21,7 +21,7 @@ import techpick.core.model.user.User;
 	uniqueConstraints = {
 		@UniqueConstraint(
 			name = "UC_TAG_NAME_PER_USER",
-			columnNames = {"user_id, name"}
+			columnNames = {"user_id", "name"}
 		)
 	}
 )
@@ -58,10 +58,14 @@ public class Tag {
 	// TODO: 엔티티 사용자가 정적 팩토리 메소드로 필요한 함수를 구현 하세요
 
 	public void updateTagName(String name) {
-		this.name = name;
+		if (name != null) {
+			this.name = name;
+		}
 	}
 
 	public void updateColorNumber(Integer colorNumber) {
-		this.colorNumber = colorNumber;
+		if (colorNumber != null) {
+			this.colorNumber = colorNumber;
+		}
 	}
 }

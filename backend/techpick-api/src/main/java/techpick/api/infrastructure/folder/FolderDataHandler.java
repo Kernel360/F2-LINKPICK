@@ -19,25 +19,24 @@ import techpick.core.model.user.UserRepository;
 
 @Component
 @RequiredArgsConstructor
-public class FolderAdaptorImpl implements FolderAdaptor {
+public class FolderDataHandler {
 
 	private final FolderRepository folderRepository;
 	private final UserRepository userRepository;
 	private final FolderMapper folderMapper;
 
-	@Override
 	@Transactional(readOnly = true)
 	public Folder getFolder(Long folderId) {
 		return folderRepository.findById(folderId).orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 	}
 
-	@Override
+	// idList에 포함된 모든 ID에 해당하는 폴더 리스트 조회, 순서를 보장하지 않음
 	@Transactional(readOnly = true)
 	public List<Folder> getFolderList(List<Long> idList) {
 		return folderRepository.findAllById(idList);
 	}
 
-	@Override
+	// idList에 포함된 모든 ID에 해당하는 폴더 리스트 조회, 순서는 idList의 순서를 따름
 	@Transactional(readOnly = true)
 	public List<Folder> getFolderListPreservingOrder(List<Long> idList) {
 		var folderList = folderRepository.findAllById(idList);
@@ -45,25 +44,22 @@ public class FolderAdaptorImpl implements FolderAdaptor {
 		return folderList;
 	}
 
-	@Override
 	@Transactional(readOnly = true)
 	public Folder getRootFolder(Long userId) {
 		return folderRepository.findRootByUserId(userId);
 	}
 
-	@Override
 	@Transactional(readOnly = true)
 	public Folder getRecycleBin(Long userId) {
 		return folderRepository.findRecycleBinByUserId(userId);
 	}
 
-	@Override
 	@Transactional(readOnly = true)
 	public Folder getUnclassifiedFolder(Long userId) {
 		return folderRepository.findUnclassifiedByUserId(userId);
 	}
 
-	@Override
+	// TODO: Folder Entity 생성 메서드 활용하도록 변경
 	@Transactional
 	public Folder saveFolder(FolderCommand.Create command) {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -73,7 +69,6 @@ public class FolderAdaptorImpl implements FolderAdaptor {
 		return folderRepository.save(folderMapper.toEntity(command, user, parentFolder));
 	}
 
-	@Override
 	@Transactional
 	public Folder updateFolder(FolderCommand.Update command) {
 		Folder folder = folderRepository.findById(command.folderId())
@@ -83,7 +78,6 @@ public class FolderAdaptorImpl implements FolderAdaptor {
 		return folder;
 	}
 
-	@Override
 	@Transactional
 	public List<Long> moveFolderWithinParent(FolderCommand.Move command) {
 		Folder parentFolder = folderRepository.findById(command.destinationFolderId())
@@ -95,7 +89,6 @@ public class FolderAdaptorImpl implements FolderAdaptor {
 		return parentFolder.getChildFolderOrderList();
 	}
 
-	@Override
 	@Transactional
 	public List<Long> moveFolderToDifferentParent(FolderCommand.Move command) {
 		Folder folder = folderRepository.findById(command.folderIdList().get(0))
@@ -113,7 +106,6 @@ public class FolderAdaptorImpl implements FolderAdaptor {
 		return newParent.getChildFolderOrderList();
 	}
 
-	@Override
 	@Transactional
 	public void deleteFolderList(FolderCommand.Delete command) {
 

@@ -17,8 +17,12 @@ public class ApiPickException extends ApiException {
 		return new ApiPickException(ApiPickErrorCode.PICK_ALREADY_EXIST);
 	}
 
-	public static ApiPickException PICK_UNAUTHORIZED_ACCESS() {
-		return new ApiPickException(ApiPickErrorCode.PICK_UNAUTHORIZED_ACCESS);
+	public static ApiPickException PICK_UNAUTHORIZED_USER_ACCESS() {
+		return new ApiPickException(ApiPickErrorCode.PICK_UNAUTHORIZED_USER_ACCESS);
+	}
+
+	public static ApiPickException PICK_UNAUTHORIZED_ROOT_ACCESS() {
+		return new ApiPickException(ApiPickErrorCode.PICK_UNAUTHORIZED_ROOT_ACCESS);
 	}
 
 	public static ApiPickException PICK_DELETE_NOT_ALLOWED() {

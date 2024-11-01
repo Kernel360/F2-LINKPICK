@@ -14,17 +14,15 @@ import techpick.core.model.link.LinkRepository;
 
 @Component
 @RequiredArgsConstructor
-public class LinkAdaptorImpl implements LinkAdaptor {
+public class LinkDataHandler {
 	private final LinkRepository linkRepository;
 	private final LinkMapper linkMapper;
 
-	@Override
 	@Transactional(readOnly = true)
 	public Link getLink(String url) {
 		return linkRepository.findByUrl(url).orElseThrow(ApiLinkException::LINK_NOT_FOUND);
 	}
 
-	@Override
 	@Transactional
 	public Link saveLink(LinkInfo info) {
 		Optional<Link> link = linkRepository.findByUrl(info.url());

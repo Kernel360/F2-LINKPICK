@@ -10,10 +10,9 @@ import techpick.core.model.user.UserRepository;
 
 @Component
 @RequiredArgsConstructor
-public class UserAdaptorImpl implements UserAdaptor {
+public class UserDataHandler {
 	private final UserRepository userRepository;
 
-	@Override
 	@Transactional(readOnly = true)
 	public User getUser(Long userId) {
 		return userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);

@@ -1,5 +1,7 @@
 package techpick.api.application.pick.dto;
 
+import java.util.List;
+
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -16,6 +18,8 @@ public interface PickApiMapper {
 
 	PickCommand.Read toReadCommand(Long userId, PickApiRequest.Read request);
 
+	PickCommand.Search toSearchCommand(Long userId, List<Long> folderIdList, List<String> searchTokenList);
+
 	PickCommand.Create toCreateCommand(Long userId, PickApiRequest.Create request);
 
 	PickCommand.Update toUpdateCommand(Long userId, PickApiRequest.Update request);
@@ -24,5 +28,9 @@ public interface PickApiMapper {
 
 	PickCommand.Delete toDeleteCommand(Long userId, PickApiRequest.Delete request);
 
-	PickApiResponse toApiResponse(PickResult pickResult);
+	PickApiResponse.Pick toApiResponse(PickResult.Pick pickResult);
+
+	default PickApiResponse.Fetch toApiFetchResponse(List<PickResult.PickList> pickList) {
+		return new PickApiResponse.Fetch(pickList);
+	}
 }
