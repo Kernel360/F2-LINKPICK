@@ -12,12 +12,21 @@ import {
 export function FolderContextMenu({
   showRenameInput,
   deleteFolder,
+  onShow = () => {},
   children,
 }: PropsWithChildren<FolderContextMenuProps>) {
   const portalContainer = getPortalContainer();
 
   return (
-    <ContextMenu.Root>
+    <ContextMenu.Root
+      onOpenChange={(open) => {
+        if (open) {
+          onShow();
+        }
+
+        return;
+      }}
+    >
       <ContextMenu.Trigger>{children}</ContextMenu.Trigger>
       <ContextMenu.Portal container={portalContainer}>
         <ContextMenu.Content className={contextMenuContentLayout}>
@@ -44,4 +53,5 @@ export function FolderContextMenu({
 interface FolderContextMenuProps {
   showRenameInput: () => void;
   deleteFolder: () => void;
+  onShow?: () => void;
 }

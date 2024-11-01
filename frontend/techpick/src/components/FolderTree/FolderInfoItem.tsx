@@ -81,6 +81,9 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
         setIsUpdate(true);
       }}
       deleteFolder={() => {}}
+      onShow={() => {
+        selectSingleFolder(id);
+      }}
     >
       <div
         className={`${folderInfoItemStyle}  ${isDragging ? draggingItem : ''} ${isSelected ? selectedDragItemStyle : ''}`}
