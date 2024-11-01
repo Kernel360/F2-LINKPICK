@@ -27,6 +27,7 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
     setFocusFolderId,
     focusFolderId,
     updateFolderName,
+    deleteFolder,
   } = useTreeStore();
   const isSelected = selectedFolderList.includes(id);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -80,7 +81,9 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
       showRenameInput={() => {
         setIsUpdate(true);
       }}
-      deleteFolder={() => {}}
+      deleteFolder={() => {
+        deleteFolder(id);
+      }}
       onShow={() => {
         selectSingleFolder(id);
       }}

@@ -24,7 +24,7 @@ type TreeAction = {
   createFolder: (payload: CreateFolderPayload) => void;
   readFolder: () => void;
   updateFolderName: (payload: UpdateFolderPayload) => void;
-  deleteFolder: () => void;
+  deleteFolder: (deleteFolderId: number) => void;
   moveFolder: ({ from, to, selectedFolderList }: MoveFolderPayload) => void;
   movePick: () => void;
   setTreeMap: (newTreeDate: FolderMapType) => void;
@@ -42,7 +42,6 @@ const initialState: TreeState = {
   treeDataMap: {},
   selectedFolderList: [],
   focusFolderId: null,
-
   from: null,
   to: null,
   isDragging: false,
@@ -77,7 +76,15 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         state.treeDataMap[folderId].name = newFolderName;
       });
     },
-    deleteFolder: () => {},
+    deleteFolder: (deleteFolderId) => {
+      set((state) => {
+        const parentFolderId = state.treeDataMap[deleteFolderId].parentFolderId;
+        const childFolderList =
+          state.treeDataMap[parentFolderId].childFolderList;
+        state.treeDataMap[parentFolderId].childFolderList =
+          childFolderList.filter((childId) => childId !== deleteFolderId);
+      });
+    },
     moveFolder: ({ from, to, selectedFolderList }) => {
       const fromData = from.data.current;
       const toData = to.data.current;

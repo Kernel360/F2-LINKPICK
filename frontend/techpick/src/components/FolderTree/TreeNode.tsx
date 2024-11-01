@@ -18,13 +18,16 @@ export function TreeNode({ id, depth }: TreeNodeProps) {
   const { closeCreateFolderInput } = useCreateFolderInputStore();
   const isParentForNewFolder = newFolderParentId === id;
 
-  const createFolder = useCallback((folderName: string) => {
-    createFolderInStore({
-      parentFolderId: Number(id),
-      newFolderName: folderName,
-    });
-    closeCreateFolderInput();
-  }, []);
+  const createFolder = useCallback(
+    (folderName: string) => {
+      createFolderInStore({
+        parentFolderId: Number(id),
+        newFolderName: folderName,
+      });
+      closeCreateFolderInput();
+    },
+    [closeCreateFolderInput, createFolderInStore, id]
+  );
 
   /**
    * 폴더 구조는 현재 SortableContext가 중첩되는 방식으로 진행되고 있지만,
