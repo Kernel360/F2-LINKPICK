@@ -16,15 +16,16 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import techpick.core.model.user.Role;
 import techpick.security.config.SecurityConfig;
 import techpick.security.util.CookieUtil;
 import techpick.security.util.JwtUtil;
-import techpick.core.model.user.Role;
 
 @Component
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
+	private final CookieUtil cookieUtil;
 	private final JwtUtil jwtUtil;
 
 	@Override
@@ -40,7 +41,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 		} else {
 			// 인증 실패시 techPickLogin 쿠키 삭제
-			CookieUtil.deleteCookie(request, response, SecurityConfig.LOGIN_FLAG_FOR_FRONTEND);
+			cookieUtil.deleteCookie(request, response, SecurityConfig.LOGIN_FLAG_FOR_FRONTEND);
 		}
 
 		filterChain.doFilter(request, response);

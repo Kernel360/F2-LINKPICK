@@ -22,6 +22,7 @@ import techpick.security.util.JwtUtil;
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+	private final CookieUtil cookieUtil;
 	private final JwtUtil jwtUtil;
 	private final UserRepository userRepository;
 	private static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
@@ -53,7 +54,20 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		int cookieMaxAge = (int)ACCESS_TOKEN_DURATION.toSeconds();
 
-		CookieUtil.deleteCookie(request, response, SecurityConfig.ACCESS_TOKEN_KEY);
-		CookieUtil.addAccessToken(response, token, cookieMaxAge);
+		cookieUtil.deleteCookie(request, response, SecurityConfig.ACCESS_TOKEN_KEY);
+		cookieUtil.addCookie(
+			response,
+			SecurityConfig.ACCESS_TOKEN_KEY,
+			token,
+			cookieMaxAge,
+			true
+		);
+		cookieUtil.addCookie(
+			response,
+			SecurityConfig.LOGIN_FLAG_FOR_FRONTEND,
+			token,
+			cookieMaxAge,
+			false
+		);
 	}
 }

@@ -54,3 +54,6 @@ oauth2-attribute-config-provider:
     naver:
       name: "id"
       email: "email"
+
+cookie:
+  domain: "minlife.me"
