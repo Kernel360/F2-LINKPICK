@@ -1,7 +1,3 @@
-# 참고 설정
-# https://github.com/Kernel360/E2E2-TALKKA/blob/develop/server/src/main/resources/application.yaml
-# https://github.com/kimminkyeu/E2E2-LOOK-US/blob/develop/backend/src/main/resources/application.yml
-
 spring:
   application:
     name: techpick-server
@@ -29,6 +25,7 @@ spring:
 
 api:
   base-url: ${TECHPICK_BASE_URL}
+  cookie-domain: minlife.me
 
 #logging: # /* Transaction Logging */
 #  level:

@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import techpick.core.model.user.User;
 import techpick.core.model.user.UserRepository;
 import techpick.security.config.SecurityConfig;
+import techpick.security.exception.ApiOAuth2Exception;
 import techpick.security.model.OAuth2UserInfo;
 import techpick.security.util.CookieUtil;
 import techpick.security.util.JwtUtil;
@@ -26,27 +27,29 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 	private final JwtUtil jwtUtil;
 	private final UserRepository userRepository;
 	private static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
+	// TODO: 설정파일 리팩토링 진행하며 정리할 예정 일단 하드코딩
+	private static final String DEFAULT_REDIRECT_URL = "https://app.minlife.me";
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
 
 		var oAuth2UserInfo = (OAuth2UserInfo)authentication.getPrincipal();
-		// TODO: custom exception 으로 변경 필요
-		User user = userRepository.findBySocialProviderId(oAuth2UserInfo.getName()).orElseThrow();
+
+		User user = userRepository.findBySocialProviderId(oAuth2UserInfo.getName())
+			.orElseThrow(ApiOAuth2Exception::INVALID_AUTHENTICATION);
 
 		String accessToken = jwtUtil.getToken(user, ACCESS_TOKEN_DURATION);
+
+		var redirectUrl = cookieUtil.findCookieValue(request.getCookies(),
+			SecurityConfig.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY).orElse(DEFAULT_REDIRECT_URL);
+
 		addAccessTokenToCookie(request, response, accessToken);
-
-		// Frontend Local
-		// response.sendRedirect("https://local.minlife.me:3000/login");
-
-		// Frontend Test Server
-		response.sendRedirect("https://app.minlife.me/login");
+		cookieUtil.deleteCookie(request, response, SecurityConfig.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY);
+		response.sendRedirect(redirectUrl);
 
 		super.clearAuthenticationAttributes(request);
 		super.onAuthenticationSuccess(request, response, authentication);
-
 	}
 
 	private void addAccessTokenToCookie(HttpServletRequest request, HttpServletResponse response,
@@ -65,7 +68,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		cookieUtil.addCookie(
 			response,
 			SecurityConfig.LOGIN_FLAG_FOR_FRONTEND,
-			token,
+			"true",
 			cookieMaxAge,
 			false
 		);
