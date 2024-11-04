@@ -40,7 +40,7 @@ public class SecurityConfig {
 
 	public static final String ACCESS_TOKEN_KEY = "access_token";
 	public static final String LOGIN_FLAG_FOR_FRONTEND = "techPickLogin";
-	public static final String OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY = "returnUrlToken";
+	public static final String OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY = "redirectUrl";
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
