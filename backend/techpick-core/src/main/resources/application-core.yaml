@@ -23,10 +23,35 @@ spring:
     password: ${DOCKER_MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-api:
-  base-url: ${TECHPICK_BASE_URL}
-  cookie-domain: minlife.me
-
 #logging: # /* Transaction Logging */
 #  level:
 #    org.springframework.orm.jpa: DEBUG
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+core:
+  base-url: http://localhost:8080
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+core:
+  base-url: https://api.minlife.me
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+core:
+  base-url: https://api.techpick.org
+
+---

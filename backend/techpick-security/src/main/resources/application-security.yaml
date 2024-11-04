@@ -54,3 +54,38 @@ oauth2-attribute-config-provider:
     naver:
       name: "id"
       email: "email"
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+security:
+  clientUrl: https://local.minlife.me:3000
+  cookie-domain: localhost
+  default-redirect-url: http://localhost:8080
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+security:
+  clientUrl: https://app.minlife.me
+  cookie-domain: minlife.me
+  default-redirect-url: https://local.minlife.me
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
+security:
+  clientUrl: https://app.techpick.org
+  cookie-domain: techpick.org
+  default-redirect-url: https://app.techpick.org
+
+---
