@@ -44,8 +44,9 @@ public class FolderService {
 			.toList();
 	}
 
-	@Transactional
-	public List<FolderResult> getAllFolderList(Long userId) {
+	// TODO: 현재는 1depth만 반환하고 있지만, 추후 ~3depth까지 반환할 예정
+	@Transactional(readOnly = true)
+	public List<FolderResult> getAllRootFolderList(Long userId) {
 		Folder rootFolder = folderDataHandler.getRootFolder(userId);
 
 		List<FolderResult> folderList = new ArrayList<>();

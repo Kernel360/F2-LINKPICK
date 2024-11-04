@@ -38,9 +38,9 @@ public class FolderApiController {
 		@ApiResponse(responseCode = "200", description = "조회 성공"),
 		@ApiResponse(responseCode = "401", description = "본인 폴더만 조회할 수 있습니다.")
 	})
-	public ResponseEntity<List<FolderApiResponse>> getAllFolderList(@LoginUserId Long userId) {
+	public ResponseEntity<List<FolderApiResponse>> getAllRootFolderList(@LoginUserId Long userId) {
 		return ResponseEntity.ok(
-			folderService.getAllFolderList(userId)
+			folderService.getAllRootFolderList(userId)
 				.stream()
 				.map(mapper::toApiResponse)
 				.toList()
