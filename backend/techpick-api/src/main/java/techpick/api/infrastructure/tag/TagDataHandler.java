@@ -1,5 +1,6 @@
 package techpick.api.infrastructure.tag;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import techpick.api.domain.tag.dto.TagCommand;
 import techpick.api.domain.tag.dto.TagMapper;
 import techpick.api.domain.tag.exception.ApiTagException;
 import techpick.api.domain.user.exception.ApiUserException;
+import techpick.core.model.folder.Folder;
 import techpick.core.model.pick.PickRepository;
 import techpick.core.model.pick.PickTagRepository;
 import techpick.core.model.tag.Tag;
@@ -36,9 +38,15 @@ public class TagDataHandler {
 
 	@Transactional(readOnly = true)
 	public List<Tag> getTagList(Long userId) {
-		return tagRepository.findAllByUserId(userId);
+		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
+		List<Long> tagOrderList = user.getTagOrderList();
+		List<Tag> tagList = tagRepository.findAllByUserId(userId);
+		tagList.sort(Comparator.comparing(tag -> tagOrderList.indexOf(tag.getId())));
+
+		return tagList;
 	}
 
+	@Transactional(readOnly = true)
 	public List<Tag> getTagList(List<Long> tagOrderList) {
 		return tagRepository.findAllById(tagOrderList);
 	}
