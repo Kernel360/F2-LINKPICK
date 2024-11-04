@@ -28,15 +28,7 @@ import techpick.core.model.common.BaseEntity;
 import techpick.core.model.user.User;
 import techpick.core.util.OrderConverter;
 
-@Table(
-	name = "folder",
-	uniqueConstraints = {
-		@UniqueConstraint(
-			name = "UC_FOLDER_NAME_PER_USER",
-			columnNames = {"user_id", "parent_folder_id", "name"}
-		)
-	}
-)
+@Table(name = "folder")
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

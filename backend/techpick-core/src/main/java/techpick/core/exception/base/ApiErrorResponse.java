@@ -2,6 +2,7 @@ package techpick.core.exception.base;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 public class ApiErrorResponse extends ResponseEntity<ApiErrorBody> {
 
@@ -18,6 +19,10 @@ public class ApiErrorResponse extends ResponseEntity<ApiErrorBody> {
 
 	public static ApiErrorResponse of(ApiErrorCode apiErrorCode) {
 		return new ApiErrorResponse(apiErrorCode);
+	}
+
+	public static ApiErrorResponse VALIDATION_ERROR() {
+		return new ApiErrorResponse("VALIDATION ERROR", "DTO @Valid 검증 에러, 잘못된 값 입력", HttpStatus.BAD_REQUEST);
 	}
 
 	public static ApiErrorResponse UNKNOWN_SERVER_ERROR() {

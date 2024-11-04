@@ -8,24 +8,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import techpick.api.domain.folder.service.FolderService;
 import techpick.api.application.folder.dto.FolderApiMapper;
 import techpick.api.application.folder.dto.FolderApiRequest;
 import techpick.api.application.folder.dto.FolderApiResponse;
-import techpick.api.domain.folder.service.FolderService;
 import techpick.security.annotation.LoginUserId;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,31 +32,34 @@ public class FolderApiController {
 	private final FolderService folderService;
 	private final FolderApiMapper mapper;
 
-	@GetMapping("/root")
-	@Operation(summary = "루트 폴더 조회", description = "사용자의 루트 폴더를 조회합니다.")
+	@GetMapping
+	@Operation(summary = "루트 폴더와 하위 리스트 조회", description = "사용자의 루트 폴더와 루트 하위 전체 폴더를 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "조회 성공")
+		@ApiResponse(responseCode = "200", description = "조회 성공"),
+		@ApiResponse(responseCode = "401", description = "본인 폴더만 조회할 수 있습니다.")
 	})
-	public ResponseEntity<FolderApiResponse> getRootFolder(@Parameter(hidden = true) @LoginUserId Long userId) {
-		return ResponseEntity.ok(mapper.toApiResponse(folderService.getRootFolder(userId)));
+	public ResponseEntity<List<FolderApiResponse>> getAllRootFolderList(@LoginUserId Long userId) {
+		return ResponseEntity.ok(
+			folderService.getAllRootFolderList(userId)
+				.stream()
+				.map(mapper::toApiResponse)
+				.toList()
+		);
 	}
 
-	@GetMapping("/unclassified")
-	@Operation(summary = "미분류 폴더 조회", description = "사용자의 미분류 폴더를 조회합니다.")
+	@GetMapping("/basic")
+	@Operation(summary = "기본 폴더 리스트 조회", description = "사용자의 루트, 미분류, 휴지통 폴더를 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "조회 성공")
+		@ApiResponse(responseCode = "200", description = "조회 성공"),
+		@ApiResponse(responseCode = "401", description = "본인 폴더만 조회할 수 있습니다.")
 	})
-	public ResponseEntity<FolderApiResponse> getUnclassifiedFolder(@Parameter(hidden = true) @LoginUserId Long userId) {
-		return ResponseEntity.ok(mapper.toApiResponse(folderService.getUnclassifiedFolder(userId)));
-	}
-
-	@GetMapping("/recycle-bin")
-	@Operation(summary = "휴지통 조회", description = "사용자의 휴지통을 조회합니다.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "조회 성공")
-	})
-	public ResponseEntity<FolderApiResponse> getRecycleBinFolder(@Parameter(hidden = true) @LoginUserId Long userId) {
-		return ResponseEntity.ok(mapper.toApiResponse(folderService.getRecycleBin(userId)));
+	public ResponseEntity<List<FolderApiResponse>> getBasicFolderList(@LoginUserId Long userId) {
+		return ResponseEntity.ok(
+			folderService.getBasicFolderList(userId)
+				.stream()
+				.map(mapper::toApiResponse)
+				.toList()
+		);
 	}
 
 	@GetMapping("/{folderId}/children")
@@ -71,11 +70,11 @@ public class FolderApiController {
 	})
 	public ResponseEntity<List<FolderApiResponse>> getChildrenFolder(@Parameter(hidden = true) @LoginUserId Long userId,
 		@PathVariable Long folderId) {
-	return ResponseEntity.ok(
+		return ResponseEntity.ok(
 			folderService.getChildFolderList(mapper.toReadCommand(userId, folderId))
 				.stream()
 				.map(mapper::toApiResponse)
-			.toList()
+				.toList()
 		);
 	}
 
@@ -94,7 +93,7 @@ public class FolderApiController {
 	@PatchMapping
 	@Operation(summary = "폴더 수정", description = "사용자가 등록한 폴더를 수정합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "폴더 수정 성공"),
+		@ApiResponse(responseCode = "204", description = "폴더 수정 성공"),
 		@ApiResponse(responseCode = "400", description = "기본 폴더는 수정할 수 없습니다."),
 		@ApiResponse(responseCode = "401", description = "본인 폴더만 수정할 수 있습니다.")
 	})
@@ -104,10 +103,10 @@ public class FolderApiController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PutMapping
+	@PatchMapping("/location")
 	@Operation(summary = "폴더 이동", description = "사용자가 등록한 폴더를 이동합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "폴더 이동 성공"),
+		@ApiResponse(responseCode = "204", description = "폴더 이동 성공"),
 		@ApiResponse(responseCode = "400", description = "기본 폴더는 이동할 수 없습니다."),
 		@ApiResponse(responseCode = "401", description = "본인 폴더만 이동할 수 있습니다."),
 		@ApiResponse(responseCode = "406", description = "부모가 다른 폴더들을 동시에 이동할 수 없습니다.")
@@ -121,7 +120,7 @@ public class FolderApiController {
 	@DeleteMapping
 	@Operation(summary = "폴더 삭제", description = "사용자가 등록한 폴더를 삭제합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "폴더 삭제 성공"),
+		@ApiResponse(responseCode = "204", description = "폴더 삭제 성공"),
 		@ApiResponse(responseCode = "400", description = "기본 폴더는 삭제할 수 없습니다."),
 		@ApiResponse(responseCode = "401", description = "본인 폴더만 삭제할 수 있습니다.")
 	})

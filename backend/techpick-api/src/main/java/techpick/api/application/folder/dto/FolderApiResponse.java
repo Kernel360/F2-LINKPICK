@@ -1,11 +1,14 @@
 package techpick.api.application.folder.dto;
 
+import java.util.List;
+
 import techpick.core.model.folder.FolderType;
 
 public record FolderApiResponse(
-	Long folderId,
+	Long id,
 	String name,
 	FolderType folderType,
-	Long parentFolderId
+	Long parentFolderId,
+	List<Long> childFolderList
 ) {
 }

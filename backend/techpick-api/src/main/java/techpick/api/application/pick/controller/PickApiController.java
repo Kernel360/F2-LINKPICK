@@ -101,26 +101,26 @@ public class PickApiController {
 	@PatchMapping("/location")
 	@Operation(summary = "픽 이동", description = "픽을 같은 폴더 혹은 다른 폴더로 이동합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "픽 이동 성공"),
+		@ApiResponse(responseCode = "204", description = "픽 이동 성공"),
 		@ApiResponse(responseCode = "400", description = "폴더가 존재하지 않음.")
 	})
 	public ResponseEntity<Void> movePick(@Parameter(hidden = true) @LoginUserId Long userId,
 		@Valid @RequestBody PickApiRequest.Move request) {
 		pickService.movePick(pickApiMapper.toMoveCommand(userId, request));
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 
 	@DeleteMapping
 	@Operation(summary = "픽 삭제", description = "휴지통에 있는 픽만 삭제 가능합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "픽 삭제 성공"),
+		@ApiResponse(responseCode = "204", description = "픽 삭제 성공"),
 		@ApiResponse(responseCode = "406", description = "휴지통이 아닌 폴더에서 픽 삭제 불가"),
 		@ApiResponse(responseCode = "500", description = "미확인 서버 에러 혹은 존재하지 않는 픽 삭제")
 	})
 	public ResponseEntity<Void> deletePick(@Parameter(hidden = true) @LoginUserId Long userId,
 		@Valid @RequestBody PickApiRequest.Delete request) {
 		pickService.deletePick(pickApiMapper.toDeleteCommand(userId, request));
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 
 }

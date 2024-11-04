@@ -155,7 +155,6 @@ public class PickService {
 		}
 	}
 
-	// TODO: root에 해당하는 경우 null이 아닌 -1로 설정
 	private void validateRootAccess(Long parentFolderId) {
 		if (Objects.isNull(parentFolderId)) {
 			throw ApiPickException.PICK_UNAUTHORIZED_ROOT_ACCESS();
