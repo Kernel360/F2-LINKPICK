@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import techpick.api.domain.folder.dto.FolderCommand;
-import techpick.api.domain.folder.dto.FolderMapper;
 import techpick.api.domain.folder.exception.ApiFolderException;
 import techpick.api.domain.user.exception.ApiUserException;
 import techpick.core.model.folder.Folder;
@@ -23,7 +22,6 @@ public class FolderDataHandler {
 
 	private final FolderRepository folderRepository;
 	private final UserRepository userRepository;
-	private final FolderMapper folderMapper;
 
 	@Transactional(readOnly = true)
 	public Folder getFolder(Long folderId) {
@@ -59,14 +57,15 @@ public class FolderDataHandler {
 		return folderRepository.findUnclassifiedByUserId(userId);
 	}
 
-	// TODO: Folder Entity 생성 메서드 활용하도록 변경
 	@Transactional
 	public Folder saveFolder(FolderCommand.Create command) {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
 		Folder parentFolder = folderRepository.findById(command.parentFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
-		return folderRepository.save(folderMapper.toEntity(command, user, parentFolder));
+		Folder folder = folderRepository.save(Folder.createEmptyGeneralFolder(user, parentFolder, command.name()));
+		folder.getParentFolder().getChildFolderOrderList().add(folder.getId());
+		return folder;
 	}
 
 	@Transactional
