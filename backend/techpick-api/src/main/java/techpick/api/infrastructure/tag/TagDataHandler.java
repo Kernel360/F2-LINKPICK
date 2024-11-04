@@ -53,6 +53,7 @@ public class TagDataHandler {
 
 	@Transactional
 	public Tag updateTag(TagCommand.Update command) {
+		log.info("TagDataHandler: tag id={}", command.tagId()); // for debug
 		Tag tag = tagRepository.findById(command.tagId()).orElseThrow(ApiTagException::TAG_NOT_FOUND);
 		tag.updateTagName(command.name());
 		tag.updateColorNumber(command.colorNumber());
