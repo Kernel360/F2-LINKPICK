@@ -1,6 +1,8 @@
 package techpick.api.domain.folder.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,19 +44,30 @@ public class FolderService {
 			.toList();
 	}
 
-	@Transactional(readOnly = true)
-	public FolderResult getRootFolder(Long userId) {
-		return folderMapper.toResult(folderDataHandler.getRootFolder(userId));
+	@Transactional
+	public List<FolderResult> getAllFolderList(Long userId) {
+		Folder rootFolder = folderDataHandler.getRootFolder(userId);
+
+		List<FolderResult> folderList = new ArrayList<>();
+		folderList.add(folderMapper.toResult(rootFolder));
+
+		rootFolder.getChildFolderOrderList().stream()
+			.map(folderDataHandler::getFolder)
+			.map(folderMapper::toResult)
+			.forEach(folderList::add);
+
+		return folderList;
 	}
 
 	@Transactional(readOnly = true)
-	public FolderResult getRecycleBin(Long userId) {
-		return folderMapper.toResult(folderDataHandler.getRecycleBin(userId));
-	}
-
-	@Transactional(readOnly = true)
-	public FolderResult getUnclassifiedFolder(Long userId) {
-		return folderMapper.toResult(folderDataHandler.getUnclassifiedFolder(userId));
+	public List<FolderResult> getBasicFolderList(Long userId) {
+		return Stream.of(
+				folderDataHandler.getRootFolder(userId),
+				folderDataHandler.getUnclassifiedFolder(userId),
+				folderDataHandler.getRecycleBin(userId)
+			)
+			.map(folderMapper::toResult)
+			.toList();
 	}
 
 	@Transactional
