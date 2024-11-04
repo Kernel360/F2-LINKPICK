@@ -15,15 +15,11 @@ import techpick.core.model.user.User;
 )
 public interface FolderMapper {
 
-	@Mapping(source = "id", target = "folderId")
+	@Mapping(source = "id", target = "id")
 	@Mapping(source = "parentFolder.id", target = "parentFolderId")
 	@Mapping(source = "user.id", target = "userId")
+	@Mapping(source = "childFolderOrderList", target = "childFolderList")
+	@Mapping(source = "childPickOrderList", target = "childPickList")
 	FolderResult toResult(Folder folder);
-
-	@Mapping(target = "folderType", constant = "GENERAL")
-	@Mapping(source = "command.name", target = "name")
-	@Mapping(target = "childFolderOrderList", expression = "java(new ArrayList<>())")
-	@Mapping(target = "childPickOrderList", expression = "java(new ArrayList<>())")
-	Folder toEntity(FolderCommand.Create command, User user, Folder parentFolder);
 
 }
