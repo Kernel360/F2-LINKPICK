@@ -63,10 +63,10 @@ public class TagApiController {
 			tagApiMapper.toCreateResponse(tagService.saveTag(tagApiMapper.toCreateCommand(userId, request))));
 	}
 
-	@PutMapping
+	@PatchMapping
 	@Operation(summary = "태그 수정", description = "사용자가 등록한 태그를 수정합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "태그 수정 성공"),
+		@ApiResponse(responseCode = "204", description = "태그 수정 성공"),
 		@ApiResponse(responseCode = "400", description = "중복된 태그 이름"),
 		@ApiResponse(responseCode = "401", description = "본인 태그만 수정할 수 있습니다.")
 	})
@@ -76,10 +76,10 @@ public class TagApiController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@PatchMapping
+	@PatchMapping("/location")
 	@Operation(summary = "태그 이동", description = "사용자가 등록한 태그의 순서를 변경합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "태그 이동 성공"),
+		@ApiResponse(responseCode = "204", description = "태그 이동 성공"),
 		@ApiResponse(responseCode = "401", description = "본인 태그만 이동할 수 있습니다.")
 	})
 	public ResponseEntity<Void> moveTag(@Parameter(hidden = true) @LoginUserId Long userId,
@@ -91,7 +91,7 @@ public class TagApiController {
 	@DeleteMapping
 	@Operation(summary = "태그 삭제", description = "사용자가 등록한 태그를 삭제합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "태그 삭제 성공"),
+		@ApiResponse(responseCode = "204", description = "태그 삭제 성공"),
 		@ApiResponse(responseCode = "401", description = "본인 태그만 삭제할 수 있습니다.")
 	})
 	public ResponseEntity<Void> deleteTag(@Parameter(hidden = true) @LoginUserId Long userId,
