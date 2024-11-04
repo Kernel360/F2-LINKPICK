@@ -1,5 +1,6 @@
 package techpick.core.exception.base;
 
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -20,6 +21,12 @@ public class ApiExceptionHandler {
 		ErrorLevel.MUST_NEVER_HAPPEN().handleError(exception);
 
 		return ApiErrorResponse.UNKNOWN_SERVER_ERROR();
+	}
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ApiErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception);
+		return ApiErrorResponse.VALIDATION_ERROR();
 	}
 
 	/**
