@@ -15,12 +15,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import techpick.security.TechPickAuthorizationRequestRepository;
 import techpick.security.filter.TokenAuthenticationFilter;
 import techpick.security.handler.OAuth2SuccessHandler;
 import techpick.security.handler.TechPickLogoutHandler;
 import techpick.security.service.CustomOAuth2Service;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @EnableWebSecurity
@@ -32,12 +33,14 @@ public class SecurityConfig {
 	private final OAuth2SuccessHandler oAuth2SuccessHandler;
 	private final TokenAuthenticationFilter tokenAuthenticationFilter;
 	private final TechPickLogoutHandler techPickLogoutHandler;
+	private final TechPickAuthorizationRequestRepository requestRepository;
 
 	@Value("${api.base-url}")
 	private String baseUrl;
 
 	public static final String ACCESS_TOKEN_KEY = "access_token";
 	public static final String LOGIN_FLAG_FOR_FRONTEND = "techPickLogin";
+	public static final String OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY = "returnUrlToken";
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -45,7 +48,6 @@ public class SecurityConfig {
 		// TODO: 이후 설정 추가 필요
 		http
 			.csrf(AbstractHttpConfigurer::disable) // csrf 비활성화 시 logout 했을 때 GET 메서드로 요청됨. POST로만 보내도록 하기 위해 주석 처리
-			.cors(AbstractHttpConfigurer::disable)
 			// .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.httpBasic(AbstractHttpConfigurer::disable)
 			.formLogin(AbstractHttpConfigurer::disable)
@@ -67,8 +69,8 @@ public class SecurityConfig {
 			.oauth2Login(
 				oauth -> oauth
 					.authorizationEndpoint(authorization -> authorization
-							.baseUri("/api/login")
-						// /* 붙이면 안됨
+						.baseUri("/api/login") // /* 붙이면 안됨
+						.authorizationRequestRepository(requestRepository)
 					)
 					.redirectionEndpoint(
 						redirection -> redirection
@@ -89,9 +91,10 @@ public class SecurityConfig {
 
 		config.setAllowCredentials(true);
 		config.setAllowedOrigins(List.of(
-			baseUrl, /* from env */
-			"https://local.minlife.me:3000" /* Frontend Local */,
-			"https://app.minlife.me" /* Frontend App server */
+			baseUrl,
+			// TODO: local - dev - prod 설정 분리하며 application.yaml로 옮길 예정
+			"https://local.minlife.me:3000",
+			"https://app.minlife.me"
 		));
 		config.addAllowedOriginPattern("chrome-extension://*");
 		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));

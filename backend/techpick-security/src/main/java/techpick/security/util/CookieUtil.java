@@ -1,5 +1,7 @@
 package techpick.security.util;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
@@ -11,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class CookieUtil {
 
-	@Value("${cookie.domain}")
+	@Value("${api.cookie-domain}")
 	private String COOKIE_DOMAIN;
 
 	/**
@@ -24,7 +26,7 @@ public class CookieUtil {
 	 * @param name 쿠키 이름
 	 * @param value 쿠키 값
 	 * @param maxAge 쿠키 유효기간
-	 * @param secure secure 설정 : true - secure , false - non-secure
+	 * @param httpOnly httpOnly 설정 : true / false
 	 *
 	 * */
 	public void addCookie(
@@ -32,13 +34,13 @@ public class CookieUtil {
 		String name,
 		String value,
 		int maxAge,
-		boolean secure
+		boolean httpOnly
 	) {
 		ResponseCookie responseCookie = ResponseCookie.from(name, value)
 			.maxAge(maxAge)
 			.path("/")
-			.httpOnly(true)
-			.secure(secure)
+			.httpOnly(httpOnly)
+			.secure(true)
 			.domain(COOKIE_DOMAIN)
 			.build();
 		response.addHeader("Set-Cookie", responseCookie.toString());
@@ -59,12 +61,12 @@ public class CookieUtil {
 			return;
 		}
 
-		Cookie[] cookies = request.getCookies();
-		if (cookies == null) {
+		Cookie[] requestCookies = request.getCookies();
+		if (requestCookies == null) {
 			return;
 		}
 
-		for (Cookie cookie : cookies) {
+		for (Cookie cookie : requestCookies) {
 			if (name.equals(cookie.getName())) {
 				cookie.setValue("");
 				cookie.setPath("/");
@@ -73,5 +75,17 @@ public class CookieUtil {
 				response.addCookie(cookie);
 			}
 		}
+	}
+
+	public Optional<String> findCookieValue(Cookie[] cookies, String name) {
+		if (cookies == null)
+			return Optional.empty();
+
+		for (Cookie cookie : cookies) {
+			if (name.equals(cookie.getName()) && !cookie.getValue().isEmpty()) {
+				return Optional.of(cookie.getValue());
+			}
+		}
+		return Optional.empty();
 	}
 }
