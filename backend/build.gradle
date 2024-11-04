@@ -61,8 +61,11 @@ subprojects {
         // map struct
         implementation 'org.mapstruct:mapstruct:1.5.3.Final'
         annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-        
+
         implementation 'javax.xml.bind:jaxb-api:2.3.1' //xml 문서와 자바 객체 간 매핑을 자동화
+
+        // springdoc swagger dependency
+        implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
     }
 
     tasks.named('test') {
