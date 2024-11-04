@@ -37,11 +37,7 @@ public class TagApiController {
 	@GetMapping
 	@Operation(summary = "태그 조회", description = "사용자가 등록한 전체 태그를 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "조회 성공",
-			content = {@Content(
-				mediaType = "application/json",
-				array = @ArraySchema(schema = @Schema(implementation = TagApiResponse.Read.class)))
-		})
+		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
 	public ResponseEntity<List<TagApiResponse.Read>> getAllUserTag(@Parameter(hidden = true) @LoginUserId Long userId) {
 		return ResponseEntity.ok(
@@ -54,9 +50,7 @@ public class TagApiController {
 	@PostMapping
 	@Operation(summary = "태그 추가", description = "새로운 태그를 추가합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "태그 추가 성공",
-			content = @Content(schema = @Schema(implementation = TagApiResponse.Create.class))
-		),
+		@ApiResponse(responseCode = "200", description = "태그 추가 성공"),
 		@ApiResponse(responseCode = "400", description = "중복된 태그 이름", content = @Content(schema = @Schema()))
 	})
 	public ResponseEntity<TagApiResponse.Create> createTag(@Parameter(hidden = true) @LoginUserId Long userId,
