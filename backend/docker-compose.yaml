@@ -39,7 +39,7 @@ services:
     env_file:
       - .env
     environment:
-      - DOCKER_MYSQL_URL=${DOCKER_MYSQL_URL}
+      - LOCAL_MYSQL_URL=${DOCKER_MYSQL_URL}
       - DOCKER_MYSQL_USERNAME=${DOCKER_MYSQL_USERNAME}
       - DOCKER_MYSQL_PASSWORD=${DOCKER_MYSQL_PASSWORD}
       - TZ=Asia/Seoul
@@ -57,7 +57,7 @@ services:
     env_file:
       - .env
     environment:
-      - DOCKER_MYSQL_URL=${DOCKER_MYSQL_URL}
+      - LOCAL_MYSQL_URL=${DOCKER_MYSQL_URL}
       - DOCKER_MYSQL_USERNAME=${DOCKER_MYSQL_USERNAME}
       - DOCKER_MYSQL_PASSWORD=${DOCKER_MYSQL_PASSWORD}
       - TZ=Asia/Seoul
