@@ -15,7 +15,7 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class SwaggerConfig {
 
-	@Value("${api.base-url}")
+	@Value("${core.base-url}")
 	private String baseUrl;
 
 	@Bean

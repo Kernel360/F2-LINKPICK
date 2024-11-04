@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class CookieUtil {
 
-	@Value("${api.cookie-domain}")
+	@Value("${security.cookie-domain}")
 	private String COOKIE_DOMAIN;
 
 	/**

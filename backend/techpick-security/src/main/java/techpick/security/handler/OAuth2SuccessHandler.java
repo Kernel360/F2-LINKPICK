@@ -3,6 +3,7 @@ package techpick.security.handler;
 import java.io.IOException;
 import java.time.Duration;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -27,8 +28,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 	private final JwtUtil jwtUtil;
 	private final UserRepository userRepository;
 	private static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
-	// TODO: 설정파일 리팩토링 진행하며 정리할 예정 일단 하드코딩
-	private static final String DEFAULT_REDIRECT_URL = "https://app.minlife.me";
+
+	@Value("${security.default-redirect-url}")
+	private String DEFAULT_REDIRECT_URL;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,

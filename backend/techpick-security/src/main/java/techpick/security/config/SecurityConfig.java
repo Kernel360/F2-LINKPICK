@@ -35,8 +35,11 @@ public class SecurityConfig {
 	private final TechPickLogoutHandler techPickLogoutHandler;
 	private final TechPickAuthorizationRequestRepository requestRepository;
 
-	@Value("${api.base-url}")
+	@Value("${core.base-url}")
 	private String baseUrl;
+
+	@Value("${security.clientUrl}")
+	private String clientUrl;
 
 	public static final String ACCESS_TOKEN_KEY = "access_token";
 	public static final String LOGIN_FLAG_FOR_FRONTEND = "techPickLogin";
@@ -92,9 +95,7 @@ public class SecurityConfig {
 		config.setAllowCredentials(true);
 		config.setAllowedOrigins(List.of(
 			baseUrl,
-			// TODO: local - dev - prod 설정 분리하며 application.yaml로 옮길 예정
-			"https://local.minlife.me:3000",
-			"https://app.minlife.me"
+			clientUrl
 		));
 		config.addAllowedOriginPattern("chrome-extension://*");
 		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
