@@ -39,10 +39,11 @@ services:
     env_file:
       - .env
     environment:
-      - DOCKER_MYSQL_URL=jdbc:mysql://techpick-mysql/TECHPICK_DB?createDatabaseIfNotExist=true
+      - DOCKER_MYSQL_URL=${DOCKER_MYSQL_URL}
       - DOCKER_MYSQL_USERNAME=${DOCKER_MYSQL_USERNAME}
       - DOCKER_MYSQL_PASSWORD=${DOCKER_MYSQL_PASSWORD}
       - TZ=Asia/Seoul
+      - SPRING_PROFILES_ACTIVE=local
     networks:
       - techpick-network
     depends_on:
@@ -53,15 +54,14 @@ services:
       context: ./techpick-batch
       dockerfile: Dockerfile
     container_name: techpick-batch
-    ports:
-      - "8081:8080"
     env_file:
       - .env
     environment:
-      - DOCKER_MYSQL_URL=jdbc:mysql://techpick-mysql/TECHPICK_DB?createDatabaseIfNotExist=true
+      - DOCKER_MYSQL_URL=${DOCKER_MYSQL_URL}
       - DOCKER_MYSQL_USERNAME=${DOCKER_MYSQL_USERNAME}
       - DOCKER_MYSQL_PASSWORD=${DOCKER_MYSQL_PASSWORD}
       - TZ=Asia/Seoul
+      - SPRING_PROFILES_ACTIVE=local
     networks:
       - techpick-network
     depends_on:
