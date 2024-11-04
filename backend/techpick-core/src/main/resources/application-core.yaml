@@ -11,12 +11,9 @@ spring:
   jpa:
     properties:
       hibernate:
-        format_sql: false
-        show_sql: false
         dialect: org.hibernate.dialect.MySQL8Dialect
-    hibernate:
-      ddl-auto: update # 이 부분 설정 주의 필요
     open-in-view: false
+
   datasource:
     url: ${DOCKER_MYSQL_URL}
     username: ${DOCKER_MYSQL_USERNAME}
@@ -33,6 +30,13 @@ spring:
   config:
     activate:
       on-profile: local
+  jpa:
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: true
+    hibernate:
+      ddl-auto: create
 core:
   base-url: http://localhost:8080
 
@@ -42,6 +46,13 @@ spring:
   config:
     activate:
       on-profile: dev
+  jpa:
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+    hibernate:
+      ddl-auto: update
 core:
   base-url: https://api.minlife.me
 
@@ -51,6 +62,13 @@ spring:
   config:
     activate:
       on-profile: prod
+  jpa:
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+    hibernate:
+      ddl-auto: none
 core:
   base-url: https://api.techpick.org
 
