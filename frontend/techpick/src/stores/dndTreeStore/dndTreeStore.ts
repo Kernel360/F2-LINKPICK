@@ -61,6 +61,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           name: newFolderName,
           parentFolderId: parentFolderId,
           childFolderList: [],
+          folderType: 'GENERAL',
         };
 
         // 부모에게 자식 연결
