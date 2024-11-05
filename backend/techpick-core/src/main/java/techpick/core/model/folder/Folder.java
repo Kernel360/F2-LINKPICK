@@ -19,7 +19,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,13 +58,13 @@ public class Folder extends BaseEntity {
 	// ex) [6,3,2,23,1] -> "6 3 2 23 1"
 	@Convert(converter = OrderConverter.class)
 	@Column(name = "child_folder_order", columnDefinition = "longblob", nullable = false)
-	private List<Long> childFolderOrderList = new ArrayList<>();
+	private List<Long> childFolderIdOrderedList = new ArrayList<>();
 
 	// 폴더에 속한 pick id들을 공백으로 분리된 String으로 변환하여 db에 저장
 	// ex) [6,3,2,23,1] -> "6 3 2 23 1"
 	@Convert(converter = OrderConverter.class)
 	@Column(name = "pick_order", columnDefinition = "longblob", nullable = false)
-	private List<Long> childPickOrderList = new ArrayList<>();
+	private List<Long> childPickIdOrderedList = new ArrayList<>();
 
 	public static Folder createEmptyRootFolder(User user) {
 		return Folder.builder()
@@ -125,26 +124,41 @@ public class Folder extends BaseEntity {
 	}
 
 	public void updateChildFolderOrder(Long pickId, int destination) {
-		childFolderOrderList.remove(pickId);
-		childFolderOrderList.add(destination, pickId);
+		childFolderIdOrderedList.remove(pickId);
+		childFolderIdOrderedList.add(destination, pickId);
 	}
 
 	public void updateChildPickOrder(Long pickId, int destination) {
-		childPickOrderList.remove(pickId);
-		childPickOrderList.add(destination, pickId);
+		childPickIdOrderedList.remove(pickId);
+		childPickIdOrderedList.add(destination, pickId);
 	}
 
-	public void updateChildPickOrderList(List<Long> pickIdList, int destination) {
-		childPickOrderList.removeAll(pickIdList);
-		childPickOrderList.addAll(destination, pickIdList);
+	public void updateChildPickIdOrderedList(List<Long> pickIdList, int destination) {
+		childPickIdOrderedList.removeAll(pickIdList);
+		int calculatedDestination = Math.min(destination, childPickIdOrderedList.size());
+		childPickIdOrderedList.addAll(calculatedDestination, pickIdList);
+	}
+
+	public void updateChildFolderIdOrderedList(List<Long> folderIdList, int destination) {
+		childFolderIdOrderedList.removeAll(folderIdList);
+		int calculatedDestination = Math.min(destination, childFolderIdOrderedList.size());
+		childFolderIdOrderedList.addAll(calculatedDestination, folderIdList);
+	}
+
+	public void addChildPickIdOrderedList(Long pickId) {
+		childPickIdOrderedList.add(0, pickId);
+	}
+
+	public void addChildFolderIdOrderedList(Long folderId) {
+		childFolderIdOrderedList.add(0, folderId);
 	}
 
 	public void removeChildFolderOrder(Long folderId) {
-		this.childFolderOrderList.remove(folderId);
+		this.childFolderIdOrderedList.remove(folderId);
 	}
 
 	public void removeChildPickOrder(Long pickId) {
-		this.childPickOrderList.remove(pickId);
+		this.childPickIdOrderedList.remove(pickId);
 	}
 
 	@Builder
@@ -153,14 +167,14 @@ public class Folder extends BaseEntity {
 		FolderType folderType,
 		Folder parentFolder,
 		User user,
-		List<Long> childFolderOrderList,
-		List<Long> childPickOrderList
+		List<Long> childFolderIdOrderedList,
+		List<Long> childPickIdOrderedList
 	) {
 		this.name = name;
 		this.folderType = folderType;
 		this.parentFolder = parentFolder;
 		this.user = user;
-		this.childFolderOrderList = childFolderOrderList != null ? childFolderOrderList : new ArrayList<>();
-		this.childPickOrderList = childPickOrderList != null ? childPickOrderList : new ArrayList<>();
+		this.childFolderIdOrderedList = childFolderIdOrderedList != null ? childFolderIdOrderedList : new ArrayList<>();
+		this.childPickIdOrderedList = childPickIdOrderedList != null ? childPickIdOrderedList : new ArrayList<>();
 	}
 }

@@ -64,7 +64,7 @@ public class FolderDataHandler {
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 		Folder folder = folderRepository.save(Folder.createEmptyGeneralFolder(user, parentFolder, command.name()));
-		folder.getParentFolder().getChildFolderOrderList().add(folder.getId());
+		folder.getParentFolder().addChildFolderIdOrderedList(folder.getId());
 		return folder;
 	}
 
@@ -82,10 +82,8 @@ public class FolderDataHandler {
 		Folder parentFolder = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
-		parentFolder.getChildFolderOrderList().removeAll(command.idList());
-		parentFolder.getChildFolderOrderList().addAll(command.orderIdx(), command.idList());
-
-		return parentFolder.getChildFolderOrderList();
+		parentFolder.updateChildFolderIdOrderedList(command.idList(), command.orderIdx());
+		return parentFolder.getChildFolderIdOrderedList();
 	}
 
 	@Transactional
@@ -94,15 +92,15 @@ public class FolderDataHandler {
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 		Folder oldParent = folder.getParentFolder();
-		oldParent.getChildFolderOrderList().removeAll(command.idList());
+		oldParent.getChildFolderIdOrderedList().removeAll(command.idList());
 
 		Folder newParent = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
-		newParent.getChildFolderOrderList().addAll(command.orderIdx(), command.idList());
+		newParent.getChildFolderIdOrderedList().addAll(command.orderIdx(), command.idList());
 
 		folder.updateParentFolder(newParent);
 
-		return newParent.getChildFolderOrderList();
+		return newParent.getChildFolderIdOrderedList();
 	}
 
 	@Transactional
@@ -115,7 +113,7 @@ public class FolderDataHandler {
 				.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 			Folder parentFolder = folder.getParentFolder();
-			parentFolder.getChildFolderOrderList().remove(folder.getId());
+			parentFolder.getChildFolderIdOrderedList().remove(folder.getId());
 
 			deleteList.add(folder);
 		}

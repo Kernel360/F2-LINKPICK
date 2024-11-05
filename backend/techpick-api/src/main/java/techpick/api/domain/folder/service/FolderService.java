@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +39,7 @@ public class FolderService {
 
 		validateFolderAccess(command.userId(), folder);
 
-		return folderDataHandler.getFolderListPreservingOrder(folder.getChildFolderOrderList())
+		return folderDataHandler.getFolderListPreservingOrder(folder.getChildFolderIdOrderedList())
 			.stream()
 			.map(folderMapper::toResult)
 			.toList();
@@ -52,7 +53,7 @@ public class FolderService {
 		List<FolderResult> folderList = new ArrayList<>();
 		folderList.add(folderMapper.toResult(rootFolder));
 
-		rootFolder.getChildFolderOrderList().stream()
+		rootFolder.getChildFolderIdOrderedList().stream()
 			.map(folderDataHandler::getFolder)
 			.map(folderMapper::toResult)
 			.forEach(folderList::add);
@@ -89,7 +90,6 @@ public class FolderService {
 
 	@Transactional
 	public void moveFolder(FolderCommand.Move command) {
-
 		List<Folder> folderList = folderDataHandler.getFolderList(command.idList());
 
 		for (Folder folder : folderList) {
@@ -98,14 +98,15 @@ public class FolderService {
 		}
 
 		// 부모가 다른 폴더들을 동시에 이동할 수 없음.
-		Long parentFolderId = folderList.get(0).getParentFolder().getId();
-		for (int i = 1; i < folderList.size(); i++) {
-			if (parentFolderId.equals(folderList.get(i).getParentFolder().getId())) {
+		Long destinationFolderId = command.destinationFolderId();
+		for (Folder folder : folderList) {
+			Long parentFolderId = folder.getParentFolder().getId();
+			if (ObjectUtils.notEqual(destinationFolderId, parentFolderId)) {
 				throw ApiFolderException.INVALID_MOVE_TARGET();
 			}
 		}
 
-		if (isParentFolderNotChanged(command, parentFolderId)) {
+		if (isParentFolderNotChanged(command, destinationFolderId)) {
 			folderDataHandler.moveFolderWithinParent(command);
 		} else {
 			folderDataHandler.moveFolderToDifferentParent(command);
