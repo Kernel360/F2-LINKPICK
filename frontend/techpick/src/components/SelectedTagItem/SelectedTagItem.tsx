@@ -15,7 +15,7 @@ export function SelectedTagItem({ tag, children }: SelectedTagItemProps) {
 
   return (
     <SelectedTagLayout style={style}>
-      <SelectedTagContent>{tag.tagName}</SelectedTagContent>
+      <SelectedTagContent>{tag.name}</SelectedTagContent>
       {children}
     </SelectedTagLayout>
   );

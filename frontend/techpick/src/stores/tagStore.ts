@@ -3,23 +3,31 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { handleHTTPError } from '@/apis';
 import { getTagList, createTag, deleteTag, updateTag } from '@/apis/tag';
-import type { TagType, TagUpdateType, CreateTagRequestType } from '@/types';
+import type {
+  TagType,
+  CreateTagRequestType,
+  UpdateTagRequestType,
+} from '@/types';
 
 type TagState = {
   tagList: TagType[];
   selectedTagList: TagType[];
-  fetchingTagState: { isError: boolean; isPending: boolean; data: TagType[] };
+  fetchingTagState: {
+    isError: boolean;
+    isPending: boolean;
+    data: TagType[];
+  };
 };
 
 type TagAction = {
   replaceSelectedTagList: (tagList: TagType[]) => void;
   selectTag: (tag: TagType) => void;
-  deselectTag: (tagId: TagType['tagId']) => void;
+  deselectTag: (tagId: TagType['id']) => void;
   updateSelectedTagList: (tag: TagType) => void;
   fetchingTagList: () => Promise<void>;
   createTag: (tagData: CreateTagRequestType) => Promise<TagType | undefined>;
-  deleteTag: (tagId: TagType['tagId']) => Promise<void>;
-  updateTag: (updatedTag: TagUpdateType) => Promise<void>;
+  deleteTag: (tagId: TagType['id']) => Promise<void>;
+  updateTag: (updatedTag: UpdateTagRequestType) => Promise<void>;
 };
 
 const initialState: TagState = {
@@ -39,7 +47,7 @@ export const useTagStore = create<TagState & TagAction>()(
 
     selectTag: (tag: TagType) =>
       set((state) => {
-        const exist = state.selectedTagList.some((t) => t.tagId === tag.tagId);
+        const exist = state.selectedTagList.some((t) => t.id === tag.id);
 
         // 이미 선택된 태그인지 확인
         if (exist) {
@@ -52,14 +60,14 @@ export const useTagStore = create<TagState & TagAction>()(
     deselectTag: (tagId) =>
       set((state) => {
         state.selectedTagList = state.selectedTagList.filter(
-          (t) => t.tagId !== tagId
+          (t) => t.id !== tagId
         );
       }),
 
     updateSelectedTagList: (updatedTag) => {
       set((state) => {
         const index = state.selectedTagList.findIndex(
-          (tag) => tag.tagId === updatedTag.tagId
+          (tag) => tag.id === updatedTag.id
         );
 
         if (index === -1) {
@@ -125,10 +133,10 @@ export const useTagStore = create<TagState & TagAction>()(
       try {
         set((state) => {
           deleteTargetTagIndex = state.tagList.findIndex(
-            (tag) => tag.tagId === tagId
+            (tag) => tag.id === tagId
           );
           deleteTargetSelectedIndex = state.selectedTagList.findIndex(
-            (tag) => tag.tagId === tagId
+            (tag) => tag.id === tagId
           );
 
           if (deleteTargetTagIndex !== -1) {
@@ -179,19 +187,21 @@ export const useTagStore = create<TagState & TagAction>()(
       try {
         set((state) => {
           const index = state.tagList.findIndex(
-            (tag) => tag.tagId === updatedTag.tagId
+            (tag) => tag.id === updatedTag.tagId
           );
 
           if (index !== -1) {
             previousTag = { ...state.tagList[index] };
+
             state.tagList[index] = {
-              userId: state.tagList[index].userId,
-              ...updatedTag,
+              id: updatedTag.tagId,
+              name: updatedTag.name,
+              colorNumber: updatedTag.colorNumber,
             };
           }
 
           const selectedTagListIndex = state.selectedTagList.findIndex(
-            (tag) => tag.tagId === updatedTag.tagId
+            (tag) => tag.id === updatedTag.tagId
           );
 
           if (selectedTagListIndex !== -1) {
@@ -199,8 +209,9 @@ export const useTagStore = create<TagState & TagAction>()(
               ...state.selectedTagList[selectedTagListIndex],
             };
             state.selectedTagList[selectedTagListIndex] = {
-              ...updatedTag,
-              userId: state.selectedTagList[selectedTagListIndex].userId,
+              id: updatedTag.tagId,
+              name: updatedTag.name,
+              colorNumber: updatedTag.colorNumber,
             };
           }
         });
@@ -210,14 +221,14 @@ export const useTagStore = create<TagState & TagAction>()(
         set((state) => {
           if (previousTag) {
             const index = state.tagList.findIndex(
-              (tag) => tag.tagId === previousTag?.tagId
+              (tag) => tag.id === previousTag?.id
             );
             state.tagList[index] = previousTag;
           }
 
           if (previousSelectedTag) {
             const selectedIndex = state.selectedTagList.findIndex(
-              (tag) => tag.tagId === previousSelectedTag?.tagId
+              (tag) => tag.id === previousSelectedTag?.id
             );
             state.selectedTagList[selectedIndex] = previousSelectedTag;
           }

@@ -1,22 +1,9 @@
-import { ApiTagData } from '@/types/ApiTypes';
-// import { components } from '@/schema';
-// export type GetPickResponseType = components['schemas']['PickResponse'];
+import type { Concrete } from '@/types/uitl.type';
+import type { components } from '@/schema';
 
-export type GetPickResponseType = {
-  id: number;
-  title: string;
-  memo: string;
-  folderId: number;
-  userId: number;
-  tagList: ApiTagData[];
-  linkUrlResponse: LinkUrlResponse;
-};
-
-type LinkUrlResponse = { id: number; url: string; imageUrl: string | null };
-
-export type UpdatePickRequestType = {
-  id: number;
-  title: string;
-  memo: string;
-  tagIdList: number[];
-};
+export type GetPickResponseType = Concrete<
+  components['schemas']['techpick.api.application.pick.dto.PickApiResponse$Pick']
+>;
+export type UpdatePickRequestType = Concrete<
+  components['schemas']['techpick.api.application.pick.dto.PickApiRequest$Update']
+>;

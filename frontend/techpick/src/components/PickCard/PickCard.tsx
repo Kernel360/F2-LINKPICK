@@ -39,8 +39,8 @@ export function PickCard({ children, node }: PropsWithChildren<PickCardProps>) {
     return <p>oops! something is wrong</p>;
   }
 
-  const { memo, title, linkUrlResponse } = pickData;
-  const { imageUrl, url } = linkUrlResponse;
+  const { memo, title, linkInfo } = pickData;
+  const { imageUrl, url } = linkInfo;
 
   return (
     <Link href={url} target="_blank" className={linkStyle}>

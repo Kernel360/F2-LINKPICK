@@ -1,6 +1,12 @@
 import { apiClient } from '@/apis';
-import { TagType } from '@/types';
+import { DeleteTagRequestType } from '@/types';
 
-export const deleteTag = async (deleteTagId: TagType['tagId']) => {
-  await apiClient.delete<never>(`tag/${deleteTagId}`);
+export const deleteTag = async (tagId: DeleteTagRequestType['tagId']) => {
+  const deleteTagRequest: DeleteTagRequestType = {
+    tagId,
+  };
+
+  await apiClient.delete<never>(`tags`, {
+    json: deleteTagRequest,
+  });
 };
