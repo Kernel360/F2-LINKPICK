@@ -12,7 +12,6 @@ import techpick.api.domain.tag.dto.TagCommand;
 import techpick.api.domain.tag.dto.TagMapper;
 import techpick.api.domain.tag.exception.ApiTagException;
 import techpick.api.domain.user.exception.ApiUserException;
-import techpick.core.model.folder.Folder;
 import techpick.core.model.pick.PickRepository;
 import techpick.core.model.pick.PickTagRepository;
 import techpick.core.model.tag.Tag;
@@ -61,8 +60,8 @@ public class TagDataHandler {
 
 	@Transactional
 	public Tag updateTag(TagCommand.Update command) {
-		log.info("TagDataHandler: tag id={}", command.tagId()); // for debug
-		Tag tag = tagRepository.findById(command.tagId()).orElseThrow(ApiTagException::TAG_NOT_FOUND);
+		log.info("TagDataHandler: tag id={}", command.id()); // for debug
+		Tag tag = tagRepository.findById(command.id()).orElseThrow(ApiTagException::TAG_NOT_FOUND);
 		tag.updateTagName(command.name());
 		tag.updateColorNumber(command.colorNumber());
 		return tag;
@@ -72,15 +71,15 @@ public class TagDataHandler {
 	public List<Long> moveTag(Long userId, TagCommand.Move command) {
 		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
 		var userTagOrder = user.getTagOrderList();
-		userTagOrder.remove(command.tagId());
-		userTagOrder.add(command.orderIdx(), command.tagId());
+		userTagOrder.remove(command.id());
+		userTagOrder.add(command.orderIdx(), command.id());
 		return userTagOrder;
 	}
 
 	@Transactional
 	public void deleteTag(Long userId, TagCommand.Delete command) {
 		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
-		Long tagId = command.tagId();
+		Long tagId = command.id();
 		user.getTagOrderList().remove(tagId);
 		pickTagRepository.findAllByTagId(tagId).stream()
 			.map(pickTag -> pickRepository.findById(pickTag.getPick().getId())
