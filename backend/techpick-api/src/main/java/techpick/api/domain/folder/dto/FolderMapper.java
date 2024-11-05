@@ -18,8 +18,8 @@ public interface FolderMapper {
 	@Mapping(source = "id", target = "id")
 	@Mapping(source = "parentFolder.id", target = "parentFolderId")
 	@Mapping(source = "user.id", target = "userId")
-	@Mapping(source = "childFolderOrderList", target = "childFolderList")
-	@Mapping(source = "childPickOrderList", target = "childPickList")
+	@Mapping(source = "childFolderIdOrderedList", target = "childFolderIdOrderedList")
+	@Mapping(source = "childPickIdOrderedList", target = "childPickIdOrderedList")
 	FolderResult toResult(Folder folder);
 
 }

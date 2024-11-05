@@ -9,6 +9,6 @@ public record FolderApiResponse(
 	String name,
 	FolderType folderType,
 	Long parentFolderId,
-	List<Long> childFolderList
+	List<Long> childFolderIdOrderedList
 ) {
 }
