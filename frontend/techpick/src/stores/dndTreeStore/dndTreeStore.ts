@@ -42,6 +42,7 @@ type TreeAction = {
     to,
     selectedFolderList,
   }: MoveFolderPayload) => Promise<void>;
+  moveFolderToRecycleBin: (payload: MoveFolderToRecycleBin) => Promise<void>;
   movePick: () => void;
   setTreeMap: (newTreeDate: FolderMapType) => void;
   setSelectedFolderList: (
@@ -138,7 +139,6 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         console.log('getBasicFolderMap error', error);
       }
     },
-
     moveFolder: async ({ from, to, selectedFolderList }) => {
       const fromData = from.data.current;
       const toData = to.data.current;
@@ -153,11 +153,11 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         const parentId = fromData.sortable.containerId;
         const fromId = from.id;
         const toId = to.id;
-        let prevChildeFolderList: ChildFolderListType = [];
+        let prevChildFolderList: ChildFolderListType = [];
 
         set((state) => {
           const childFolderList = state.treeDataMap[parentId].childFolderList;
-          prevChildeFolderList = [...childFolderList];
+          prevChildFolderList = [...childFolderList];
 
           state.treeDataMap[parentId].childFolderList =
             reorderFolderInSameParent({
@@ -176,7 +176,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           });
         } catch {
           set((state) => {
-            state.treeDataMap[parentId].childFolderList = prevChildeFolderList;
+            state.treeDataMap[parentId].childFolderList = prevChildFolderList;
           });
         }
 
@@ -207,6 +207,41 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           parentId: targetParentId,
         });
       });
+    },
+    moveFolderToRecycleBin: async ({ deleteFolderId }) => {
+      let parentFolderId = -1;
+      let prevChildFolderList: ChildFolderListType = [];
+      const FIRST = 0;
+      let recycleBinFolderId = -1;
+
+      set((state) => {
+        parentFolderId = state.treeDataMap[deleteFolderId].parentFolderId;
+        const childFolderList =
+          state.treeDataMap[parentFolderId].childFolderList;
+        state.treeDataMap[parentFolderId].childFolderList =
+          childFolderList.filter((childId) => childId !== deleteFolderId);
+
+        prevChildFolderList = [...childFolderList];
+      });
+
+      set((state) => {
+        if (state.basicFolderMap) {
+          recycleBinFolderId = state.basicFolderMap['RECYCLE_BIN'].id;
+        }
+      });
+
+      try {
+        await moveFolder({
+          idList: [deleteFolderId],
+          orderIdx: FIRST,
+          destinationFolderId: recycleBinFolderId,
+        });
+      } catch {
+        set((state) => {
+          state.treeDataMap[parentFolderId].childFolderList =
+            prevChildFolderList;
+        });
+      }
     },
     setFocusFolderId: (newFolderId) => {
       set((state) => {
@@ -279,4 +314,8 @@ type CreateFolderPayload = {
 type UpdateFolderPayload = {
   folderId: number;
   newFolderName: string;
+};
+
+type MoveFolderToRecycleBin = {
+  deleteFolderId: number;
 };

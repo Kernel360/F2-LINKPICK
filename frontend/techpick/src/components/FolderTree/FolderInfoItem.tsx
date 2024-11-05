@@ -27,7 +27,7 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
     setFocusFolderId,
     focusFolderId,
     updateFolderName,
-    deleteFolder,
+    moveFolderToRecycleBin,
   } = useTreeStore();
   const isSelected = selectedFolderList.includes(id);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -82,7 +82,7 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
         setIsUpdate(true);
       }}
       deleteFolder={() => {
-        deleteFolder(id);
+        moveFolderToRecycleBin({ deleteFolderId: id });
       }}
       onShow={() => {
         selectSingleFolder(id);
