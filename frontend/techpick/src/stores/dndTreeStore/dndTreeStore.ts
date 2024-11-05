@@ -1,6 +1,11 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { getFolderMap, getBasicFolderMap, moveFolder } from '@/apis/folder';
+import {
+  getFolderMap,
+  getBasicFolderMap,
+  moveFolder,
+  updateFolder,
+} from '@/apis/folder';
 import { changeParentFolderId } from './utils/changeParentFolderId';
 import { isDnDCurrentData } from './utils/isDnDCurrentData';
 import { moveFolderToDifferentParent } from './utils/moveFolderToDifferentParent';
@@ -28,7 +33,7 @@ type TreeState = {
 type TreeAction = {
   createFolder: (payload: CreateFolderPayload) => void;
   readFolder: () => void;
-  updateFolderName: (payload: UpdateFolderPayload) => void;
+  updateFolderName: (payload: UpdateFolderPayload) => Promise<void>;
   deleteFolder: (deleteFolderId: number) => void;
   getFolderMap: () => Promise<void>;
   getBasicFolderMap: () => Promise<void>;
@@ -85,10 +90,21 @@ export const useTreeStore = create<TreeState & TreeAction>()(
       });
     },
     readFolder: () => {},
-    updateFolderName: ({ folderId, newFolderName }) => {
+    updateFolderName: async ({ folderId, newFolderName }) => {
+      let previousFolderName = '';
+
       set((state) => {
+        previousFolderName = state.treeDataMap[folderId].name;
         state.treeDataMap[folderId].name = newFolderName;
       });
+
+      try {
+        await updateFolder({ id: folderId, name: newFolderName });
+      } catch {
+        set((state) => {
+          state.treeDataMap[folderId].name = previousFolderName;
+        });
+      }
     },
     deleteFolder: (deleteFolderId) => {
       set((state) => {
