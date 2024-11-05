@@ -19,7 +19,7 @@ public class PickResult {
 	) {
 	}
 
-	public record PickList(
+	public record FolderPickList(
 		Long folderId,
 		List<PickResult.Pick> pickList
 	) {

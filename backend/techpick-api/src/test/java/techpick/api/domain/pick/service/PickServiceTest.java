@@ -22,7 +22,6 @@ import org.springframework.test.context.ActiveProfiles;
 import lombok.extern.slf4j.Slf4j;
 import techpick.TechPickApiApplication;
 import techpick.api.application.pick.dto.PickApiMapper;
-import techpick.api.application.pick.dto.PickApiRequest;
 import techpick.api.domain.link.dto.LinkInfo;
 import techpick.api.domain.pick.dto.PickCommand;
 import techpick.api.domain.pick.dto.PickResult;
@@ -172,24 +171,24 @@ class PickServiceTest {
 				searchTokenList);
 
 			// when
-			List<PickResult.PickList> pickList = pickService.getFolderListChildPickList(searchCommand);
+			List<PickResult.FolderPickList> folderPickList = pickService.getFolderListChildPickList(searchCommand);
 
-			for (PickResult.PickList list : pickList) {
+			for (PickResult.FolderPickList list : folderPickList) {
 				log.info("list: {} ", list.toString());
 			}
 
 			// then
-			assertThat(pickList.get(0).pickList().size()).isEqualTo(3); // unclassified
-			assertThat(pickList.get(1).pickList().size()).isEqualTo(1); // general
-			assertThat(pickList.get(2).pickList().size()).isEqualTo(1); // recycleBin
+			assertThat(folderPickList.get(0).pickList().size()).isEqualTo(3); // unclassified
+			assertThat(folderPickList.get(1).pickList().size()).isEqualTo(1); // general
+			assertThat(folderPickList.get(2).pickList().size()).isEqualTo(1); // recycleBin
 
-			assertThat(pickList.get(0).pickList().get(0).id()).isEqualTo(pick2.id()); // unclassified
-			assertThat(pickList.get(0).pickList().get(1).id()).isEqualTo(pick3.id());
-			assertThat(pickList.get(0).pickList().get(2).id()).isEqualTo(pick5.id());
+			assertThat(folderPickList.get(0).pickList().get(0).id()).isEqualTo(pick2.id()); // unclassified
+			assertThat(folderPickList.get(0).pickList().get(1).id()).isEqualTo(pick3.id());
+			assertThat(folderPickList.get(0).pickList().get(2).id()).isEqualTo(pick5.id());
 
-			assertThat(pickList.get(1).pickList().get(0).id()).isEqualTo(pick4.id()); // general
+			assertThat(folderPickList.get(1).pickList().get(0).id()).isEqualTo(pick4.id()); // general
 
-			assertThat(pickList.get(2).pickList().get(0).id()).isEqualTo(pick1.id()); // recycleBin
+			assertThat(folderPickList.get(2).pickList().get(0).id()).isEqualTo(pick1.id()); // recycleBin
 		}
 	}
 

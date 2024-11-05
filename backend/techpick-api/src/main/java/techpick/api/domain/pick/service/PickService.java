@@ -35,8 +35,8 @@ public class PickService {
 
 	@Transactional(readOnly = true)
 	public PickResult.Pick getPick(PickCommand.Read command) {
-		validatePickAccess(command.userId(), command.pickId());
-		var pick = pickDataHandler.getPick(command.pickId());
+		validatePickAccess(command.userId(), command.id());
+		var pick = pickDataHandler.getPick(command.id());
 		return pickMapper.toPickResult(pick);
 	}
 
@@ -62,7 +62,7 @@ public class PickService {
 
 	// 폴더 리스트가 넘어오면, 각 폴더 내부에 있는 픽 리스트 조회
 	@Transactional(readOnly = true)
-	public List<PickResult.PickList> getFolderListChildPickList(PickCommand.Search command) {
+	public List<PickResult.FolderPickList> getFolderListChildPickList(PickCommand.Search command) {
 		// TODO: 검색 조건에 따라 바뀌는 부분은 동적 쿼리 발생 예정, QueryDSL 도입 필요
 		List<String> searchTokenList = command.searchTokenList();
 
@@ -93,14 +93,14 @@ public class PickService {
 
 	@Transactional
 	public PickResult.Pick updatePick(PickCommand.Update command) {
-		validatePickAccess(command.userId(), command.pickId());
+		validatePickAccess(command.userId(), command.id());
 		return pickMapper.toPickResult(pickDataHandler.updatePick(command));
 	}
 
 	@Transactional
 	public void movePick(PickCommand.Move command) {
 		validateRootAccess(command.destinationFolderId());
-		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(command.pickIdList());
+		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(command.idList());
 		for (Pick pick : pickList) {
 			validatePickAccess(command.userId(), pick.getId());
 		}
@@ -114,7 +114,7 @@ public class PickService {
 
 	@Transactional
 	public void deletePick(PickCommand.Delete command) {
-		List<Pick> pickList = pickDataHandler.getPickList(command.pickIdList());
+		List<Pick> pickList = pickDataHandler.getPickList(command.idList());
 		for (Pick pick : pickList) {
 			validatePickAccess(command.userId(), pick.getId());
 			if (pick.getParentFolder().getFolderType() != FolderType.RECYCLE_BIN) {
@@ -128,7 +128,7 @@ public class PickService {
 	/**
 	 * Internal Helper Functions
 	 **/
-	private PickResult.PickList getFolderChildPickResultList(Long folderId) {
+	private PickResult.FolderPickList getFolderChildPickResultList(Long folderId) {
 		Folder folder = folderDataHandler.getFolder(folderId);
 		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickOrderList());
 		List<PickResult.Pick> pickResultList = pickList.stream()

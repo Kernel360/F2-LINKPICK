@@ -25,7 +25,7 @@ public interface PickMapper {
 
 	@Mapping(source = "folderId", target = "folderId")
 	@Mapping(source = "pick", target = "pickList")
-	PickResult.PickList toPickResultList(Long folderId, List<PickResult.Pick> pick);
+	PickResult.FolderPickList toPickResultList(Long folderId, List<PickResult.Pick> pick);
 
 	@Mapping(source = "command.title", target = "title")
 	@Mapping(source = "parentFolder", target = "parentFolder")

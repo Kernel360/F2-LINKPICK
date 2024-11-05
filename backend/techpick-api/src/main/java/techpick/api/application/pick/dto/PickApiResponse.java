@@ -19,8 +19,9 @@ public class PickApiResponse {
 	) {
 	}
 
-	public record Fetch(
-		List<PickResult.PickList> pickResponseList
+	public record FolderPickList(
+		Long folderId,
+		List<PickResult.Pick> pickList
 	) {
 	}
 

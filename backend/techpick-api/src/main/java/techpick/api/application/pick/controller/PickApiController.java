@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import techpick.api.application.pick.dto.PickApiMapper;
 import techpick.api.application.pick.dto.PickApiRequest;
 import techpick.api.application.pick.dto.PickApiResponse;
+import techpick.api.domain.pick.dto.PickResult;
 import techpick.api.domain.pick.service.PickService;
 import techpick.security.annotation.LoginUserId;
 
@@ -40,15 +41,17 @@ public class PickApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 리스트 조회 성공")
 	})
-	public ResponseEntity<PickApiResponse.Fetch> getFolderChildPickList(
+	public ResponseEntity<List<PickApiResponse.FolderPickList>> getFolderChildPickList(
 		@LoginUserId Long userId,
 		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam List<Long> folderIdList,
 		@Parameter(description = "검색 토큰 목록", example = "리액트, 쿼리, 서버") @RequestParam(required = false) List<String> searchTokenList) {
+		List<PickResult.FolderPickList> folderPickList = pickService.getFolderListChildPickList(
+			pickApiMapper.toSearchCommand(userId, folderIdList, searchTokenList));
 
 		return ResponseEntity.ok(
-			pickApiMapper.toApiFetchResponse(
-				pickService.getFolderListChildPickList(
-					pickApiMapper.toSearchCommand(userId, folderIdList, searchTokenList))));
+			folderPickList.stream()
+				.map(pickApiMapper::toApiFolderPickList)
+				.toList());
 	}
 
 	@GetMapping("/link")
@@ -62,16 +65,16 @@ public class PickApiController {
 		return ResponseEntity.ok(pickApiMapper.toApiResponse(pickService.getPickUrl(userId, link)));
 	}
 
-	@GetMapping("/{pickId}")
+	@GetMapping("/{id}")
 	@Operation(summary = "픽 상세 조회", description = "픽을 상세 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 상세 조회 성공")
 	})
 	public ResponseEntity<PickApiResponse.Pick> getPick(@LoginUserId Long userId,
-		@PathVariable Long pickId) {
+		@PathVariable Long id) {
 		return ResponseEntity.ok(
 			pickApiMapper.toApiResponse(
-				pickService.getPick(pickApiMapper.toReadCommand(userId, new PickApiRequest.Read(pickId)))));
+				pickService.getPick(pickApiMapper.toReadCommand(userId, new PickApiRequest.Read(id)))));
 	}
 
 	@PostMapping
@@ -87,7 +90,7 @@ public class PickApiController {
 			pickApiMapper.toApiResponse(pickService.saveNewPick(pickApiMapper.toCreateCommand(userId, request))));
 	}
 
-	@PatchMapping("/{pickId}")
+	@PatchMapping
 	@Operation(summary = "픽 내용 수정", description = "픽 내용(제목, 메모)을 수정합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 내용 수정 성공")
