@@ -12997,6 +12997,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"re-resizable@npm:^6.10.0":
+  version: 6.10.0
+  resolution: "re-resizable@npm:6.10.0"
+  peerDependencies:
+    react: ^16.13.1 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.13.1 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/64a3730cdb82da3738d4252518caa40996e30623f48e326ff3c67d7ee06781e6e197797d90e5955c2d4d04c324cb03271d0494115d890fd2e47cc19655f676b9
+  languageName: node
+  linkType: hard
+
 "react-arborist@npm:^3.4.0":
   version: 3.4.0
   resolution: "react-arborist@npm:3.4.0"
@@ -14721,6 +14731,7 @@ __metadata:
     path: "npm:^0.12.7"
     prettier: "npm:3.3.3"
     randomcolor: "npm:^0.6.2"
+    re-resizable: "npm:^6.10.0"
     react: "npm:^18"
     react-arborist: "npm:^3.4.0"
     react-dnd: "npm:^16.0.1"

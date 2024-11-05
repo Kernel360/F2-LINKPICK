@@ -37,6 +37,7 @@
     "lucide-react": "^0.447.0",
     "next": "14.2.9",
     "randomcolor": "^0.6.2",
+    "re-resizable": "^6.10.0",
     "react": "^18",
     "react-arborist": "^3.4.0",
     "react-dnd": "^16.0.1",
