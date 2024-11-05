@@ -57,9 +57,9 @@ export function FolderDropZone({ children }: PropsWithChildren) {
     const activeData = active.data.current;
     const overData = over.data.current;
 
-    console.log('active over');
-    console.log('active', active);
-    console.log('over', over);
+    // console.log('active over');
+    // console.log('active', active);
+    // console.log('over', over);
 
     if (!isDnDCurrentData(activeData) || !isDnDCurrentData(overData)) {
       return;
@@ -77,7 +77,7 @@ export function FolderDropZone({ children }: PropsWithChildren) {
     });
   };
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!over) return; // 드래그 중 놓은 위치가 없을 때 종료
@@ -94,7 +94,7 @@ export function FolderDropZone({ children }: PropsWithChildren) {
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
+      onDragEnd={onDragEnd}
       onDragStart={onDragStart}
       onDragOver={onDragOver}
     >

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
+import { getFolderMap, getBasicFolderMap, moveFolder } from '@/apis/folder';
 import { changeParentFolderId } from './utils/changeParentFolderId';
 import { isDnDCurrentData } from './utils/isDnDCurrentData';
 import { moveFolderToDifferentParent } from './utils/moveFolderToDifferentParent';
@@ -9,6 +10,8 @@ import type {
   FolderType,
   FolderMapType,
   SelectedFolderListType,
+  BasicFolderMap,
+  ChildFolderListType,
 } from '@/types';
 
 type TreeState = {
@@ -18,6 +21,8 @@ type TreeState = {
   from: Active | null;
   to: Over | null;
   isDragging: boolean;
+  basicFolderMap: BasicFolderMap | null;
+  rootFolderId: number;
 };
 
 type TreeAction = {
@@ -25,7 +30,13 @@ type TreeAction = {
   readFolder: () => void;
   updateFolderName: (payload: UpdateFolderPayload) => void;
   deleteFolder: (deleteFolderId: number) => void;
-  moveFolder: ({ from, to, selectedFolderList }: MoveFolderPayload) => void;
+  getFolderMap: () => Promise<void>;
+  getBasicFolderMap: () => Promise<void>;
+  moveFolder: ({
+    from,
+    to,
+    selectedFolderList,
+  }: MoveFolderPayload) => Promise<void>;
   movePick: () => void;
   setTreeMap: (newTreeDate: FolderMapType) => void;
   setSelectedFolderList: (
@@ -45,6 +56,8 @@ const initialState: TreeState = {
   from: null,
   to: null,
   isDragging: false,
+  basicFolderMap: null,
+  rootFolderId: -1,
 };
 
 export const useTreeStore = create<TreeState & TreeAction>()(
@@ -86,7 +99,31 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           childFolderList.filter((childId) => childId !== deleteFolderId);
       });
     },
-    moveFolder: ({ from, to, selectedFolderList }) => {
+    getFolderMap: async () => {
+      try {
+        const folderMap = await getFolderMap();
+
+        set((state) => {
+          state.treeDataMap = folderMap;
+        });
+      } catch (error) {
+        console.log('getFolderMap error', error);
+      }
+    },
+    getBasicFolderMap: async () => {
+      try {
+        const basicFolderMap = await getBasicFolderMap();
+
+        set((state) => {
+          state.basicFolderMap = basicFolderMap;
+          state.rootFolderId = basicFolderMap['ROOT'].id;
+        });
+      } catch (error) {
+        console.log('getBasicFolderMap error', error);
+      }
+    },
+
+    moveFolder: async ({ from, to, selectedFolderList }) => {
       const fromData = from.data.current;
       const toData = to.data.current;
 
@@ -100,9 +137,12 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         const parentId = fromData.sortable.containerId;
         const fromId = from.id;
         const toId = to.id;
+        let prevChildeFolderList: ChildFolderListType = [];
 
         set((state) => {
           const childFolderList = state.treeDataMap[parentId].childFolderList;
+          prevChildeFolderList = [...childFolderList];
+
           state.treeDataMap[parentId].childFolderList =
             reorderFolderInSameParent({
               childFolderList,
@@ -111,6 +151,18 @@ export const useTreeStore = create<TreeState & TreeAction>()(
               selectedFolderList,
             });
         });
+
+        try {
+          await moveFolder({
+            idList: selectedFolderList,
+            orderIdx: toData.sortable.index,
+            destinationFolderId: Number(toData.sortable.containerId),
+          });
+        } catch {
+          set((state) => {
+            state.treeDataMap[parentId].childFolderList = prevChildeFolderList;
+          });
+        }
 
         return;
       }
