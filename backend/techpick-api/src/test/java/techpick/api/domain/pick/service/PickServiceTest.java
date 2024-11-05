@@ -309,7 +309,7 @@ class PickServiceTest {
 
 			// then
 			assertThat(updatePick.title()).isNotEqualTo(savePick.title()).isEqualTo(newTitle); // changed
-			assertThat(updatePick.tagOrderList()).isNotEqualTo(savePick.tagOrderList())
+			assertThat(updatePick.tagIdOrderedList()).isNotEqualTo(savePick.tagIdOrderedList())
 				.isEqualTo(newTagOrder); // changed
 			assertThat(updatePick.memo()).isEqualTo(savePick.memo()); // unchanged
 		}
@@ -551,9 +551,9 @@ class PickServiceTest {
 			List<PickTag> pickTagList = pickDataHandler.getPickTagList(pickResult.id());
 
 			// then
-			assertThat(pickResult.tagOrderList().size()).isEqualTo(tagOrder.size() - 1);
-			assertThat(pickResult.tagOrderList().size()).isEqualTo(pickTagList.size());
-			assertThat(pickResult.tagOrderList()).isEqualTo(List.of(tag2.getId(), tag3.getId()));
+			assertThat(pickResult.tagIdOrderedList().size()).isEqualTo(tagOrder.size() - 1);
+			assertThat(pickResult.tagIdOrderedList().size()).isEqualTo(pickTagList.size());
+			assertThat(pickResult.tagIdOrderedList()).isEqualTo(List.of(tag2.getId(), tag3.getId()));
 		}
 	}
 }

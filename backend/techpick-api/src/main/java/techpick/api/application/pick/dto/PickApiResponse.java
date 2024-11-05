@@ -13,7 +13,7 @@ public class PickApiResponse {
 		String title,
 		String memo,
 		LinkInfo linkInfo,
-		List<Long> tagOrderList,
+		List<Long> tagIdOrderedList,
 		LocalDateTime createdAt,
 		LocalDateTime updatedAt
 	) {

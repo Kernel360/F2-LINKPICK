@@ -53,7 +53,7 @@ public class PickService {
 	public List<PickResult.Pick> getFolderChildPickList(Long userId, Long folderId) {
 		validateFolderAccess(userId, folderId);
 		Folder folder = folderDataHandler.getFolder(folderId);
-		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickOrderList());
+		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickIdOrderedList());
 
 		return pickList.stream()
 			.map(pickMapper::toPickResult)
@@ -77,9 +77,9 @@ public class PickService {
 		validateRootAccess(command.parentFolderId());
 		validateFolderAccess(command.userId(), command.parentFolderId());
 		var pick = pickDataHandler.savePick(command);
-		pick.getParentFolder().getChildPickOrderList().add(pick.getId());
+		pick.getParentFolder().getChildPickIdOrderedList().add(pick.getId());
 
-		List<Long> tagOrderList = pick.getTagOrderList();
+		List<Long> tagOrderList = pick.getTagIdOrderedList();
 		List<Tag> tagList = tagDataHandler.getTagList(tagOrderList);
 		for (Tag tag : tagList) {
 			if (ObjectUtils.notEqual(tag.getUser(), pick.getUser())) {
@@ -130,7 +130,7 @@ public class PickService {
 	 **/
 	private PickResult.FolderPickList getFolderChildPickResultList(Long folderId) {
 		Folder folder = folderDataHandler.getFolder(folderId);
-		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickOrderList());
+		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickIdOrderedList());
 		List<PickResult.Pick> pickResultList = pickList.stream()
 			.map(pickMapper::toPickResult)
 			.toList();

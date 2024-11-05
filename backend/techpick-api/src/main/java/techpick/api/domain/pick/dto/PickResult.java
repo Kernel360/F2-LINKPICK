@@ -13,7 +13,7 @@ public class PickResult {
 		String memo,
 		LinkInfo linkInfo,
 		Long parentFolderId,
-		List<Long> tagOrderList,
+		List<Long> tagIdOrderedList,
 		LocalDateTime createdAt,
 		LocalDateTime updatedAt
 	) {

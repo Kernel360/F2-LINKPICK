@@ -30,6 +30,6 @@ public interface PickMapper {
 	@Mapping(source = "command.title", target = "title")
 	@Mapping(source = "parentFolder", target = "parentFolder")
 	@Mapping(source = "user", target = "user")
-	@Mapping(source = "command.tagIdList", target = "tagOrderList")
+	@Mapping(source = "command.tagIdOrderedList", target = "tagIdOrderedList")
 	Pick toEntity(PickCommand.Create command, User user, Folder parentFolder, Link link);
 }

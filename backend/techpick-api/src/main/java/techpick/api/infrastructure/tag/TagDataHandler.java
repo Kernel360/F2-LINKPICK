@@ -85,7 +85,7 @@ public class TagDataHandler {
 			.map(pickTag -> pickRepository.findById(pickTag.getPick().getId())
 				.orElseThrow(ApiTagException::TAG_NOT_FOUND))
 			.forEach(pick -> {
-				pick.getTagOrderList().remove(tagId);
+				pick.getTagIdOrderedList().remove(tagId);
 			});
 		pickTagRepository.deleteById(tagId);
 		tagRepository.deleteById(tagId);

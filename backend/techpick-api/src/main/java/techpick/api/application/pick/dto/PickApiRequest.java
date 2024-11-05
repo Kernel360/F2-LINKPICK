@@ -11,7 +11,7 @@ public class PickApiRequest {
 	public record Create(
 		@Schema(example = "Record란?") String title,
 		@Schema(example = "Java 레코드에 관한 글") String memo,
-		@Schema(example = "[4, 5, 2, 1, 3]") List<Long> tagIdList,
+		@Schema(example = "[4, 5, 2, 1, 3]") List<Long> tagIdOrderedList,
 		@Schema(example = "1") Long parentFolderId,
 		LinkInfo linkInfo
 	) {
@@ -26,7 +26,7 @@ public class PickApiRequest {
 		@Schema(example = "1") @NotNull Long id,
 		@Schema(example = "Record란 뭘까?") String title,
 		@Schema(example = "Java Record") String memo,
-		@Schema(example = "[4, 5, 2, 1]") List<Long> tagIdList
+		@Schema(example = "[4, 5, 2, 1]") List<Long> tagIdOrderedList
 	) {
 	}
 
