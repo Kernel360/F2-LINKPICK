@@ -80,15 +80,16 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           id: newFolderId,
           name: newFolderName,
           parentFolderId: parentFolderId,
-          childFolderList: [],
+          childFolderIdOrderedList: [],
           folderType: 'GENERAL',
         };
 
         // 부모에게 자식 연결
         const curChildFolderList =
-          state.treeDataMap[parentFolderId].childFolderList;
+          state.treeDataMap[parentFolderId].childFolderIdOrderedList;
         curChildFolderList.splice(order, 0, newFolderId);
-        state.treeDataMap[parentFolderId].childFolderList = curChildFolderList;
+        state.treeDataMap[parentFolderId].childFolderIdOrderedList =
+          curChildFolderList;
       });
     },
     readFolder: () => {},
@@ -112,8 +113,8 @@ export const useTreeStore = create<TreeState & TreeAction>()(
       set((state) => {
         const parentFolderId = state.treeDataMap[deleteFolderId].parentFolderId;
         const childFolderList =
-          state.treeDataMap[parentFolderId].childFolderList;
-        state.treeDataMap[parentFolderId].childFolderList =
+          state.treeDataMap[parentFolderId].childFolderIdOrderedList;
+        state.treeDataMap[parentFolderId].childFolderIdOrderedList =
           childFolderList.filter((childId) => childId !== deleteFolderId);
       });
     },
@@ -157,10 +158,11 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         let prevChildFolderList: ChildFolderListType = [];
 
         set((state) => {
-          const childFolderList = state.treeDataMap[parentId].childFolderList;
+          const childFolderList =
+            state.treeDataMap[parentId].childFolderIdOrderedList;
           prevChildFolderList = [...childFolderList];
 
-          state.treeDataMap[parentId].childFolderList =
+          state.treeDataMap[parentId].childFolderIdOrderedList =
             reorderFolderInSameParent({
               childFolderList,
               fromId,
@@ -177,7 +179,8 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           });
         } catch {
           set((state) => {
-            state.treeDataMap[parentId].childFolderList = prevChildFolderList;
+            state.treeDataMap[parentId].childFolderIdOrderedList =
+              prevChildFolderList;
           });
         }
 
@@ -218,8 +221,8 @@ export const useTreeStore = create<TreeState & TreeAction>()(
       set((state) => {
         parentFolderId = state.treeDataMap[deleteFolderId].parentFolderId;
         const childFolderList =
-          state.treeDataMap[parentFolderId].childFolderList;
-        state.treeDataMap[parentFolderId].childFolderList =
+          state.treeDataMap[parentFolderId].childFolderIdOrderedList;
+        state.treeDataMap[parentFolderId].childFolderIdOrderedList =
           childFolderList.filter((childId) => childId !== deleteFolderId);
 
         prevChildFolderList = [...childFolderList];
@@ -239,7 +242,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         });
       } catch {
         set((state) => {
-          state.treeDataMap[parentFolderId].childFolderList =
+          state.treeDataMap[parentFolderId].childFolderIdOrderedList =
             prevChildFolderList;
         });
       }
@@ -282,7 +285,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         return [];
       }
 
-      const childFolderIdList = parentFolder.childFolderList;
+      const childFolderIdList = parentFolder.childFolderIdOrderedList;
       const filteredFolderList = [];
 
       for (const childFolderId of childFolderIdList) {

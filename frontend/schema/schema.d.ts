@@ -272,7 +272,7 @@ export interface components {
              *       1,
              *       3
              *     ] */
-            tagOrderList?: number[];
+            tagIdOrderedList?: number[];
             /**
              * Format: int64
              * @example 1
@@ -301,7 +301,7 @@ export interface components {
             title?: string;
             memo?: string;
             linkInfo?: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
-            tagOrderList?: number[];
+            tagIdOrderedList?: number[];
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */
@@ -324,7 +324,7 @@ export interface components {
             folderType?: "UNCLASSIFIED" | "RECYCLE_BIN" | "ROOT" | "GENERAL";
             /** Format: int64 */
             parentFolderId?: number;
-            childFolderList?: number[];
+            childFolderIdOrderedList?: number[];
         };
         "techpick.api.application.tag.dto.TagApiRequest$Update": {
             /**
@@ -368,7 +368,7 @@ export interface components {
              *       2,
              *       1
              *     ] */
-            tagIdList?: number[];
+            tagIdOrderedList?: number[];
         };
         "techpick.api.application.pick.dto.PickApiRequest$Move": {
             /** @example [
@@ -437,7 +437,7 @@ export interface components {
             linkInfo?: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
             /** Format: int64 */
             parentFolderId?: number;
-            tagOrderList?: number[];
+            tagIdOrderedList?: number[];
             /** Format: date-time */
             createdAt?: string;
             /** Format: date-time */

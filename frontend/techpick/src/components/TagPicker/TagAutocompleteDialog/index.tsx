@@ -110,7 +110,7 @@ export function TagAutocompleteDialog({
         title,
         memo,
         id,
-        tagIdList: [...previousTagIdList, newTag.id],
+        tagIdOrderedList: [...previousTagIdList, newTag.id],
       });
     } catch (error) {
       if (error instanceof Error) {
@@ -155,7 +155,9 @@ export function TagAutocompleteDialog({
             title,
             memo,
             id,
-            tagIdList: selectedTagList.map((selectedTag) => selectedTag.id),
+            tagIdOrderedList: selectedTagList.map(
+              (selectedTag) => selectedTag.id
+            ),
           });
         }
 

@@ -53,7 +53,7 @@ export function TreeNode({ id, depth }: TreeNodeProps) {
               <FolderDraggable id={treeData.id}>
                 <FolderInfoItem id={treeData.id} name={treeData.name} />
                 {/** depth가 있는 폴더구조는 추후에 적용될 예정입니다.*/}
-                {0 < treeData.childFolderList.length && (
+                {0 < treeData.childFolderIdOrderedList.length && (
                   <TreeNode id={treeData.id} depth={depth + 1} />
                 )}
               </FolderDraggable>

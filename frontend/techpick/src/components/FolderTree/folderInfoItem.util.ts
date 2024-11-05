@@ -20,10 +20,11 @@ export const getSelectedFolderRange = ({
   treeDataMap,
 }: GetSelectedFolderRangePayload) => {
   const parentFolderInfo = treeDataMap[treeDataMap[endFolderId].parentFolderId];
-  const firstSelectedIndex = parentFolderInfo.childFolderList.findIndex(
-    (childFolderId) => childFolderId === startFolderId
-  );
-  const endSelectedIndex = parentFolderInfo.childFolderList.findIndex(
+  const firstSelectedIndex =
+    parentFolderInfo.childFolderIdOrderedList.findIndex(
+      (childFolderId) => childFolderId === startFolderId
+    );
+  const endSelectedIndex = parentFolderInfo.childFolderIdOrderedList.findIndex(
     (childFolderId) => childFolderId === endFolderId
   );
 
@@ -32,7 +33,7 @@ export const getSelectedFolderRange = ({
   const start = Math.min(firstSelectedIndex, endSelectedIndex);
   const end = Math.max(firstSelectedIndex, endSelectedIndex);
 
-  const newSelectedFolderList = parentFolderInfo.childFolderList.slice(
+  const newSelectedFolderList = parentFolderInfo.childFolderIdOrderedList.slice(
     start,
     end + 1
   );

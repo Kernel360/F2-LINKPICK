@@ -23,7 +23,7 @@ export const TagPicker = forwardRef<HTMLDivElement, TagPickerProps>(
         }
 
         const selectedTagList = tagList.filter((tag) =>
-          pickData.tagOrderList.includes(tag.id)
+          pickData.tagIdOrderedList.includes(tag.id)
         );
 
         setSelectedTagList(selectedTagList);

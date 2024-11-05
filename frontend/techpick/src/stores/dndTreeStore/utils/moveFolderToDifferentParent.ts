@@ -9,11 +9,12 @@ export const moveFolderToDifferentParent = ({
   targetParentId,
   targetId,
 }: moveFolderToDifferentParentPayload) => {
-  const fromChildFolderList = treeDataMap[sourceParentId].childFolderList;
-  treeDataMap[sourceParentId].childFolderList = fromChildFolderList.filter(
-    (child) => !selectedFolderList.includes(child)
-  );
-  const toChildFolderList = treeDataMap[targetParentId].childFolderList;
+  const fromChildFolderList =
+    treeDataMap[sourceParentId].childFolderIdOrderedList;
+  treeDataMap[sourceParentId].childFolderIdOrderedList =
+    fromChildFolderList.filter((child) => !selectedFolderList.includes(child));
+  const toChildFolderList =
+    treeDataMap[targetParentId].childFolderIdOrderedList;
   const targetIndex = toChildFolderList.findIndex((item) => item === targetId);
 
   if (!hasIndex(targetIndex)) {
