@@ -18,12 +18,12 @@ public class PickApiRequest {
 	}
 
 	public record Read(
-		@Schema(example = "1") @NotNull Long pickId
+		@Schema(example = "1") @NotNull Long id
 	) {
 	}
 
 	public record Update(
-		@Schema(example = "1") @NotNull Long pickId,
+		@Schema(example = "1") @NotNull Long id,
 		@Schema(example = "Record란 뭘까?") String title,
 		@Schema(example = "Java Record") String memo,
 		@Schema(example = "[4, 5, 2, 1]") List<Long> tagIdList
@@ -31,14 +31,14 @@ public class PickApiRequest {
 	}
 
 	public record Move(
-		@Schema(example = "[1, 2]") @NotNull List<Long> pickIdList,
+		@Schema(example = "[1, 2]") @NotNull List<Long> idList,
 		@Schema(example = "3") @NotNull Long destinationFolderId,
 		@Schema(example = "0") int orderIdx
 	) {
 	}
 
 	public record Delete(
-		@Schema(example = "[1]") @NotNull List<Long> pickIdList
+		@Schema(example = "[1]") @NotNull List<Long> idList
 	) {
 	}
 }

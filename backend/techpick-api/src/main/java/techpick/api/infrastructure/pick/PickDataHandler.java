@@ -95,7 +95,7 @@ public class PickDataHandler {
 
 	@Transactional
 	public Pick updatePick(PickCommand.Update command) {
-		Pick pick = getPick(command.pickId());
+		Pick pick = getPick(command.id());
 		pick.updateTitle(command.title()).updateMemo(command.memo());
 		updateNewTagIdList(pick, command.tagIdList());
 		return pick;
@@ -103,7 +103,7 @@ public class PickDataHandler {
 
 	@Transactional
 	public void movePickToCurrentFolder(PickCommand.Move command) {
-		List<Long> pickIdList = command.pickIdList();
+		List<Long> pickIdList = command.idList();
 		Folder folder = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 		folder.updateChildPickOrderList(pickIdList, command.orderIdx());
@@ -111,7 +111,7 @@ public class PickDataHandler {
 
 	@Transactional
 	public void movePickToOtherFolder(PickCommand.Move command) {
-		List<Long> pickIdList = command.pickIdList();
+		List<Long> pickIdList = command.idList();
 		Folder destinationFolder = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 		destinationFolder.updateChildPickOrderList(pickIdList, command.orderIdx());
@@ -125,7 +125,7 @@ public class PickDataHandler {
 
 	@Transactional
 	public void deletePickList(PickCommand.Delete command) {
-		List<Long> pickIdList = command.pickIdList();
+		List<Long> pickIdList = command.idList();
 		for (Long pickId : pickIdList) {
 			Pick pick = getPick(pickId);
 			pick.getParentFolder().removeChildPickOrder(pickId);

@@ -6,7 +6,7 @@ import techpick.api.domain.link.dto.LinkInfo;
 
 public class PickCommand {
 
-	public record Read(Long userId, Long pickId) {
+	public record Read(Long userId, Long id) {
 	}
 
 	public record Search(Long userId, List<Long> folderIdList, List<String> searchTokenList) {
@@ -16,12 +16,12 @@ public class PickCommand {
 						 LinkInfo linkInfo) {
 	}
 
-	public record Update(Long userId, Long pickId, String title, String memo, List<Long> tagIdList) {
+	public record Update(Long userId, Long id, String title, String memo, List<Long> tagIdList) {
 	}
 
-	public record Move(Long userId, List<Long> pickIdList, Long destinationFolderId, int orderIdx) {
+	public record Move(Long userId, List<Long> idList, Long destinationFolderId, int orderIdx) {
 	}
 
-	public record Delete(Long userId, List<Long> pickIdList) {
+	public record Delete(Long userId, List<Long> idList) {
 	}
 }
