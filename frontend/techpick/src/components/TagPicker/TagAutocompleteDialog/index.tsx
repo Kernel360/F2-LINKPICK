@@ -109,7 +109,7 @@ export function TagAutocompleteDialog({
       updatePickInfo({
         title,
         memo,
-        pickId: id,
+        id,
         tagIdList: [...previousTagIdList, newTag.id],
       });
     } catch (error) {
@@ -154,7 +154,7 @@ export function TagAutocompleteDialog({
           updatePickInfo({
             title,
             memo,
-            pickId: id,
+            id,
             tagIdList: selectedTagList.map((selectedTag) => selectedTag.id),
           });
         }

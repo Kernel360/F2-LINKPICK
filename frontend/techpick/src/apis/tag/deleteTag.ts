@@ -1,9 +1,9 @@
 import { apiClient } from '@/apis';
 import { DeleteTagRequestType } from '@/types';
 
-export const deleteTag = async (tagId: DeleteTagRequestType['tagId']) => {
+export const deleteTag = async (tagId: DeleteTagRequestType['id']) => {
   const deleteTagRequest: DeleteTagRequestType = {
-    tagId,
+    id: tagId,
   };
 
   await apiClient.delete<never>(`tags`, {

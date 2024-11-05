@@ -187,32 +187,24 @@ export const useTagStore = create<TagState & TagAction>()(
       try {
         set((state) => {
           const index = state.tagList.findIndex(
-            (tag) => tag.id === updatedTag.tagId
+            (tag) => tag.id === updatedTag.id
           );
 
           if (index !== -1) {
             previousTag = { ...state.tagList[index] };
 
-            state.tagList[index] = {
-              id: updatedTag.tagId,
-              name: updatedTag.name,
-              colorNumber: updatedTag.colorNumber,
-            };
+            state.tagList[index] = updatedTag;
           }
 
           const selectedTagListIndex = state.selectedTagList.findIndex(
-            (tag) => tag.id === updatedTag.tagId
+            (tag) => tag.id === updatedTag.id
           );
 
           if (selectedTagListIndex !== -1) {
             previousSelectedTag = {
               ...state.selectedTagList[selectedTagListIndex],
             };
-            state.selectedTagList[selectedTagListIndex] = {
-              id: updatedTag.tagId,
-              name: updatedTag.name,
-              colorNumber: updatedTag.colorNumber,
-            };
+            state.selectedTagList[selectedTagListIndex] = updatedTag;
           }
         });
 

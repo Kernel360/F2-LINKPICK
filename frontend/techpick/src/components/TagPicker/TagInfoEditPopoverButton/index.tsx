@@ -78,7 +78,7 @@ export function TagInfoEditPopoverButton({
 
     try {
       await updateTag({
-        tagId: tag.id,
+        id: tag.id,
         name: newTagName,
         colorNumber: tag.colorNumber,
       });

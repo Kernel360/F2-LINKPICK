@@ -4,7 +4,7 @@ import { API_URLS } from '../apiConstants';
 import { DeleteFolderRequestType } from '@/types';
 
 export const deleteFolder = async (
-  deleteFolderList: DeleteFolderRequestType['folderIdList']
+  deleteFolderList: DeleteFolderRequestType['idList']
 ) => {
   try {
     await apiClient.delete<DeleteFolderRequestType>(API_URLS.DELETE_FOLDER, {
