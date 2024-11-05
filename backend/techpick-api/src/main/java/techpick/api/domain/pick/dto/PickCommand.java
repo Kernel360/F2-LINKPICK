@@ -12,7 +12,7 @@ public class PickCommand {
 	public record Search(Long userId, List<Long> folderIdList, List<String> searchTokenList) {
 	}
 
-	public record Create(Long userId, String title, String memo, List<Long> tagOrderList, Long parentFolderId,
+	public record Create(Long userId, String title, String memo, List<Long> tagIdList, Long parentFolderId,
 						 LinkInfo linkInfo) {
 	}
 
