@@ -6,6 +6,7 @@ import {
   moveFolder,
   updateFolder,
 } from '@/apis/folder';
+import { UNKNOWN_FOLDER_ID } from '@/constants';
 import { changeParentFolderId } from './utils/changeParentFolderId';
 import { isDnDCurrentData } from './utils/isDnDCurrentData';
 import { moveFolderToDifferentParent } from './utils/moveFolderToDifferentParent';
@@ -63,7 +64,7 @@ const initialState: TreeState = {
   to: null,
   isDragging: false,
   basicFolderMap: null,
-  rootFolderId: -1,
+  rootFolderId: UNKNOWN_FOLDER_ID,
 };
 
 export const useTreeStore = create<TreeState & TreeAction>()(
@@ -209,10 +210,10 @@ export const useTreeStore = create<TreeState & TreeAction>()(
       });
     },
     moveFolderToRecycleBin: async ({ deleteFolderId }) => {
-      let parentFolderId = -1;
+      let parentFolderId = UNKNOWN_FOLDER_ID;
       let prevChildFolderList: ChildFolderListType = [];
       const FIRST = 0;
-      let recycleBinFolderId = -1;
+      let recycleBinFolderId = UNKNOWN_FOLDER_ID;
 
       set((state) => {
         parentFolderId = state.treeDataMap[deleteFolderId].parentFolderId;
