@@ -5,6 +5,7 @@ import {
   getBasicFolderMap,
   moveFolder,
   updateFolder,
+  createFolder,
 } from '@/apis/folder';
 import { UNKNOWN_FOLDER_ID } from '@/constants';
 import { changeParentFolderId } from './utils/changeParentFolderId';
@@ -32,7 +33,7 @@ type TreeState = {
 };
 
 type TreeAction = {
-  createFolder: (payload: CreateFolderPayload) => void;
+  createFolder: (payload: CreateFolderPayload) => Promise<void>;
   readFolder: () => void;
   updateFolderName: (payload: UpdateFolderPayload) => Promise<void>;
   deleteFolder: (deleteFolderId: number) => void;
@@ -70,27 +71,52 @@ const initialState: TreeState = {
 export const useTreeStore = create<TreeState & TreeAction>()(
   immer((set, get) => ({
     ...initialState,
-    createFolder: ({ parentFolderId, newFolderName, order = 0 }) => {
-      // get id from server.
-      const newFolderId = new Date().getUTCMilliseconds();
+    createFolder: async ({ parentFolderId, newFolderName, order = 0 }) => {
+      const temporalNewFolderId = -new Date().getUTCMilliseconds();
+      let prevChildIdOrderedList: ChildFolderListType = [];
 
       set((state) => {
-        // 자식 생성
-        state.treeDataMap[newFolderId] = {
-          id: newFolderId,
+        state.treeDataMap[temporalNewFolderId] = {
+          id: temporalNewFolderId,
           name: newFolderName,
           parentFolderId: parentFolderId,
           childFolderIdOrderedList: [],
           folderType: 'GENERAL',
         };
 
-        // 부모에게 자식 연결
         const curChildFolderList =
           state.treeDataMap[parentFolderId].childFolderIdOrderedList;
-        curChildFolderList.splice(order, 0, newFolderId);
+        prevChildIdOrderedList = [...curChildFolderList];
+        curChildFolderList.splice(order, 0, temporalNewFolderId);
         state.treeDataMap[parentFolderId].childFolderIdOrderedList =
           curChildFolderList;
       });
+
+      try {
+        const newFolder = await createFolder({
+          name: newFolderName,
+          parentFolderId,
+        });
+
+        set((state) => {
+          state.treeDataMap[`${newFolder.id}`] = newFolder;
+          const childFolderIdOrderedList =
+            state.treeDataMap[parentFolderId].childFolderIdOrderedList;
+          state.treeDataMap[parentFolderId].childFolderIdOrderedList =
+            childFolderIdOrderedList.map((childId) => {
+              if (childId === temporalNewFolderId) {
+                return newFolder.id;
+              }
+
+              return childId;
+            });
+        });
+      } catch {
+        set((state) => {
+          state.treeDataMap[parentFolderId].childFolderIdOrderedList =
+            prevChildIdOrderedList;
+        });
+      }
     },
     readFolder: () => {},
     updateFolderName: async ({ folderId, newFolderName }) => {
