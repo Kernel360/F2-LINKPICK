@@ -1,3 +1,5 @@
+'use client';
+
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { folderTreeHeaderLayout } from './folderTreeHeader.css';
 import { ShowCreateFolderInputButton } from './ShowCreateFolderInputButton';

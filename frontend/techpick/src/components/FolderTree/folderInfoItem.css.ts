@@ -10,7 +10,7 @@ export const folderInfoItemStyle = style({
   display: 'flex',
   alignItems: 'center',
   gap: space['8'],
-  minWidth: sizes['3xs'],
+  minWidth: sizes['6xs'],
   minHeight: '32px',
   padding: space['8'],
   borderRadius: borderRadius['base'],

@@ -5,7 +5,7 @@ export const folderInputLayout = style({
   display: 'flex',
   alignItems: 'center',
   gap: space['8'],
-  minWidth: sizes['3xs'],
+  minWidth: sizes['6xs'],
   maxWidth: sizes['full'],
   padding: space['8'],
 });
