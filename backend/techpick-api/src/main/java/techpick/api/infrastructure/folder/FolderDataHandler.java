@@ -70,7 +70,7 @@ public class FolderDataHandler {
 
 	@Transactional
 	public Folder updateFolder(FolderCommand.Update command) {
-		Folder folder = folderRepository.findById(command.folderId())
+		Folder folder = folderRepository.findById(command.id())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 		folder.updateFolderName(command.name());
 
@@ -82,23 +82,23 @@ public class FolderDataHandler {
 		Folder parentFolder = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
-		parentFolder.getChildFolderOrderList().removeAll(command.folderIdList());
-		parentFolder.getChildFolderOrderList().addAll(command.orderIdx(), command.folderIdList());
+		parentFolder.getChildFolderOrderList().removeAll(command.idList());
+		parentFolder.getChildFolderOrderList().addAll(command.orderIdx(), command.idList());
 
 		return parentFolder.getChildFolderOrderList();
 	}
 
 	@Transactional
 	public List<Long> moveFolderToDifferentParent(FolderCommand.Move command) {
-		Folder folder = folderRepository.findById(command.folderIdList().get(0))
+		Folder folder = folderRepository.findById(command.idList().get(0))
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 		Folder oldParent = folder.getParentFolder();
-		oldParent.getChildFolderOrderList().removeAll(command.folderIdList());
+		oldParent.getChildFolderOrderList().removeAll(command.idList());
 
 		Folder newParent = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
-		newParent.getChildFolderOrderList().addAll(command.orderIdx(), command.folderIdList());
+		newParent.getChildFolderOrderList().addAll(command.orderIdx(), command.idList());
 
 		folder.updateParentFolder(newParent);
 
@@ -110,7 +110,7 @@ public class FolderDataHandler {
 
 		List<Folder> deleteList = new ArrayList<>();
 
-		for (Long id : command.folderIdList()) {
+		for (Long id : command.idList()) {
 			Folder folder = folderRepository.findById(id)
 				.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 

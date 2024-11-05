@@ -12,19 +12,19 @@ public class FolderCommand {
 
 	public record Read(
 		Long userId,
-		Long folderId) {
+		Long id) {
 	}
 
 	public record Update(
 		Long userId,
-		Long folderId,
+		Long id,
 		String name
 	) {
 	}
 
 	public record Move(
 		Long userId,
-		List<Long> folderIdList,
+		List<Long> idList,
 		Long destinationFolderId,
 		int orderIdx
 	) {
@@ -32,7 +32,7 @@ public class FolderCommand {
 
 	public record Delete(
 		Long userId,
-		List<Long> folderIdList
+		List<Long> idList
 	) {
 	}
 }

@@ -15,7 +15,7 @@ import techpick.api.domain.folder.dto.FolderResult;
 public interface FolderApiMapper {
 	FolderCommand.Create toCreateCommand(Long userId, FolderApiRequest.Create request);
 
-	FolderCommand.Read toReadCommand(Long userId, Long folderId);
+	FolderCommand.Read toReadCommand(Long userId, Long id);
 
 	FolderCommand.Update toUpdateCommand(Long userId, FolderApiRequest.Update request);
 

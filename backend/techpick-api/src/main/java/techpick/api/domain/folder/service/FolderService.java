@@ -25,7 +25,7 @@ public class FolderService {
 
 	@Transactional(readOnly = true)
 	public FolderResult getFolder(FolderCommand.Read command) {
-		Folder folder = folderDataHandler.getFolder(command.folderId());
+		Folder folder = folderDataHandler.getFolder(command.id());
 
 		validateFolderAccess(command.userId(), folder);
 
@@ -34,7 +34,7 @@ public class FolderService {
 
 	@Transactional(readOnly = true)
 	public List<FolderResult> getChildFolderList(FolderCommand.Read command) {
-		Folder folder = folderDataHandler.getFolder(command.folderId());
+		Folder folder = folderDataHandler.getFolder(command.id());
 
 		validateFolderAccess(command.userId(), folder);
 
@@ -79,7 +79,7 @@ public class FolderService {
 	@Transactional
 	public FolderResult updateFolder(FolderCommand.Update command) {
 
-		Folder folder = folderDataHandler.getFolder(command.folderId());
+		Folder folder = folderDataHandler.getFolder(command.id());
 
 		validateFolderAccess(command.userId(), folder);
 		validateBasicFolderChange(folder);
@@ -90,7 +90,7 @@ public class FolderService {
 	@Transactional
 	public void moveFolder(FolderCommand.Move command) {
 
-		List<Folder> folderList = folderDataHandler.getFolderList(command.folderIdList());
+		List<Folder> folderList = folderDataHandler.getFolderList(command.idList());
 
 		for (Folder folder : folderList) {
 			validateFolderAccess(command.userId(), folder);
@@ -115,7 +115,7 @@ public class FolderService {
 	@Transactional
 	public void deleteFolder(FolderCommand.Delete command) {
 
-		List<Folder> folderList = folderDataHandler.getFolderList(command.folderIdList());
+		List<Folder> folderList = folderDataHandler.getFolderList(command.idList());
 
 		for (Folder folder : folderList) {
 			validateFolderAccess(command.userId(), folder);

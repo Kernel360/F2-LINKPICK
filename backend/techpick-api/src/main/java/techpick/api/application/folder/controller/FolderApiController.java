@@ -64,16 +64,16 @@ public class FolderApiController {
 		);
 	}
 
-	@GetMapping("/{folderId}/children")
+	@GetMapping("/{id}/children")
 	@Operation(summary = "자식 폴더 리스트 조회", description = "특정 폴더의 자식 폴더 리스트를 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공"),
 		@ApiResponse(responseCode = "401", description = "본인 폴더만 조회할 수 있습니다.")
 	})
 	public ResponseEntity<List<FolderApiResponse>> getChildrenFolder(@LoginUserId Long userId,
-		@PathVariable Long folderId) {
+		@PathVariable Long id) {
 		return ResponseEntity.ok(
-			folderService.getChildFolderList(mapper.toReadCommand(userId, folderId))
+			folderService.getChildFolderList(mapper.toReadCommand(userId, id))
 				.stream()
 				.map(mapper::toApiResponse)
 				.toList()
