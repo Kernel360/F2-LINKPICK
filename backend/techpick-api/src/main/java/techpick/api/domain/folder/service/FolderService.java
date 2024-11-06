@@ -99,6 +99,8 @@ public class FolderService {
 		}
 
 		Folder destinationFolder = folderDataHandler.getFolder(command.destinationFolderId());
+		// TODO: 현재 프론트에서 같은 부모 폴더에서만 폴더들을 선택하여 이동할 수 있음.
+		//  추후 다른 부모 폴더도 선택이 가능해지게 된다면, get(0) 사용하는 방식이 아닌 다른 방식을 고려해야 함.
 		Long parentFolderId = folderList.get(0).getParentFolder().getId();
 		if (isParentFolderNotChanged(command, parentFolderId)) {
 			validateWithinParentFolder(folderList, destinationFolder);
