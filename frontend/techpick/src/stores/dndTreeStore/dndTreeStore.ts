@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import {
   getFolders,
@@ -69,264 +70,267 @@ const initialState: TreeState = {
 };
 
 export const useTreeStore = create<TreeState & TreeAction>()(
-  immer((set, get) => ({
-    ...initialState,
-    createFolder: async ({ parentFolderId, newFolderName, order = 0 }) => {
-      const temporalNewFolderId = -new Date().getUTCMilliseconds();
-      let prevChildIdOrderedList: ChildFolderListType = [];
-
-      set((state) => {
-        state.treeDataMap[temporalNewFolderId] = {
-          id: temporalNewFolderId,
-          name: newFolderName,
-          parentFolderId: parentFolderId,
-          childFolderIdOrderedList: [],
-          folderType: 'GENERAL',
-        };
-
-        const curChildFolderList =
-          state.treeDataMap[parentFolderId].childFolderIdOrderedList;
-        prevChildIdOrderedList = [...curChildFolderList];
-        curChildFolderList.splice(order, 0, temporalNewFolderId);
-        state.treeDataMap[parentFolderId].childFolderIdOrderedList =
-          curChildFolderList;
-      });
-
-      try {
-        const newFolder = await createFolder({
-          name: newFolderName,
-          parentFolderId,
-        });
+  subscribeWithSelector(
+    immer((set, get) => ({
+      ...initialState,
+      createFolder: async ({ parentFolderId, newFolderName, order = 0 }) => {
+        const temporalNewFolderId = -new Date().getUTCMilliseconds();
+        let prevChildIdOrderedList: ChildFolderListType = [];
 
         set((state) => {
-          state.treeDataMap[`${newFolder.id}`] = newFolder;
-          const childFolderIdOrderedList =
+          state.treeDataMap[temporalNewFolderId] = {
+            id: temporalNewFolderId,
+            name: newFolderName,
+            parentFolderId: parentFolderId,
+            childFolderIdOrderedList: [],
+            folderType: 'GENERAL',
+          };
+
+          const curChildFolderList =
+            state.treeDataMap[parentFolderId].childFolderIdOrderedList;
+          prevChildIdOrderedList = [...curChildFolderList];
+          curChildFolderList.splice(order, 0, temporalNewFolderId);
+          state.treeDataMap[parentFolderId].childFolderIdOrderedList =
+            curChildFolderList;
+        });
+
+        try {
+          const newFolder = await createFolder({
+            name: newFolderName,
+            parentFolderId,
+          });
+
+          set((state) => {
+            state.treeDataMap[`${newFolder.id}`] = newFolder;
+            const childFolderIdOrderedList =
+              state.treeDataMap[parentFolderId].childFolderIdOrderedList;
+            state.treeDataMap[parentFolderId].childFolderIdOrderedList =
+              childFolderIdOrderedList.map((childId) => {
+                if (childId === temporalNewFolderId) {
+                  return newFolder.id;
+                }
+
+                return childId;
+              });
+          });
+        } catch {
+          set((state) => {
+            state.treeDataMap[parentFolderId].childFolderIdOrderedList =
+              prevChildIdOrderedList;
+          });
+        }
+      },
+      readFolder: () => {},
+      updateFolderName: async ({ folderId, newFolderName }) => {
+        let previousFolderName = '';
+
+        set((state) => {
+          previousFolderName = state.treeDataMap[folderId].name;
+          state.treeDataMap[folderId].name = newFolderName;
+        });
+
+        try {
+          await updateFolder({ id: folderId, name: newFolderName });
+        } catch {
+          set((state) => {
+            state.treeDataMap[folderId].name = previousFolderName;
+          });
+        }
+      },
+      deleteFolder: (deleteFolderId) => {
+        set((state) => {
+          const parentFolderId =
+            state.treeDataMap[deleteFolderId].parentFolderId;
+          const childFolderList =
             state.treeDataMap[parentFolderId].childFolderIdOrderedList;
           state.treeDataMap[parentFolderId].childFolderIdOrderedList =
-            childFolderIdOrderedList.map((childId) => {
-              if (childId === temporalNewFolderId) {
-                return newFolder.id;
-              }
+            childFolderList.filter((childId) => childId !== deleteFolderId);
+        });
+      },
+      getFolders: async () => {
+        try {
+          const folderMap = await getFolders();
 
-              return childId;
+          set((state) => {
+            state.treeDataMap = folderMap;
+          });
+        } catch (error) {
+          console.log('getFolderMap error', error);
+        }
+      },
+      getBasicFolders: async () => {
+        try {
+          const basicFolderMap = await getBasicFolders();
+
+          set((state) => {
+            state.basicFolderMap = basicFolderMap;
+            state.rootFolderId = basicFolderMap['ROOT'].id;
+          });
+        } catch (error) {
+          console.log('getBasicFolderMap error', error);
+        }
+      },
+      moveFolder: async ({ from, to, selectedFolderList }) => {
+        const fromData = from.data.current;
+        const toData = to.data.current;
+
+        if (!isDnDCurrentData(fromData) || !isDnDCurrentData(toData)) return;
+        // SortableContext에 id가 없으면 종료
+        if (!fromData.sortable.containerId || !toData.sortable.containerId)
+          return;
+
+        // 부모 containerId가 같으면
+        if (fromData.sortable.containerId === toData.sortable.containerId) {
+          const parentId = fromData.sortable.containerId;
+          const fromId = from.id;
+          const toId = to.id;
+          let prevChildFolderList: ChildFolderListType = [];
+
+          set((state) => {
+            const childFolderList =
+              state.treeDataMap[parentId].childFolderIdOrderedList;
+            prevChildFolderList = [...childFolderList];
+
+            state.treeDataMap[parentId].childFolderIdOrderedList =
+              reorderFolderInSameParent({
+                childFolderList,
+                fromId,
+                toId,
+                selectedFolderList,
+              });
+          });
+
+          try {
+            await moveFolder({
+              idList: selectedFolderList,
+              orderIdx: toData.sortable.index,
+              destinationFolderId: Number(toData.sortable.containerId),
             });
-        });
-      } catch {
-        set((state) => {
-          state.treeDataMap[parentFolderId].childFolderIdOrderedList =
-            prevChildIdOrderedList;
-        });
-      }
-    },
-    readFolder: () => {},
-    updateFolderName: async ({ folderId, newFolderName }) => {
-      let previousFolderName = '';
+          } catch {
+            set((state) => {
+              state.treeDataMap[parentId].childFolderIdOrderedList =
+                prevChildFolderList;
+            });
+          }
 
-      set((state) => {
-        previousFolderName = state.treeDataMap[folderId].name;
-        state.treeDataMap[folderId].name = newFolderName;
-      });
+          return;
+        }
 
-      try {
-        await updateFolder({ id: folderId, name: newFolderName });
-      } catch {
-        set((state) => {
-          state.treeDataMap[folderId].name = previousFolderName;
-        });
-      }
-    },
-    deleteFolder: (deleteFolderId) => {
-      set((state) => {
-        const parentFolderId = state.treeDataMap[deleteFolderId].parentFolderId;
-        const childFolderList =
-          state.treeDataMap[parentFolderId].childFolderIdOrderedList;
-        state.treeDataMap[parentFolderId].childFolderIdOrderedList =
-          childFolderList.filter((childId) => childId !== deleteFolderId);
-      });
-    },
-    getFolders: async () => {
-      try {
-        const folderMap = await getFolders();
+        const sourceParentId = fromData.sortable.containerId;
+        const targetParentId = toData.sortable.containerId;
+        const targetId = to.id;
 
         set((state) => {
-          state.treeDataMap = folderMap;
+          const newTreeDataMap = moveFolderToDifferentParent({
+            treeDataMap: state.treeDataMap,
+            selectedFolderList: state.selectedFolderList,
+            sourceParentId,
+            targetParentId,
+            targetId,
+          });
+
+          if (!newTreeDataMap) {
+            return;
+          }
+
+          state.treeDataMap = newTreeDataMap;
+          state.treeDataMap = changeParentFolderId({
+            treeDataMap: state.treeDataMap,
+            childFolderList: state.selectedFolderList,
+            parentId: targetParentId,
+          });
         });
-      } catch (error) {
-        console.log('getFolderMap error', error);
-      }
-    },
-    getBasicFolders: async () => {
-      try {
-        const basicFolderMap = await getBasicFolders();
-
-        set((state) => {
-          state.basicFolderMap = basicFolderMap;
-          state.rootFolderId = basicFolderMap['ROOT'].id;
-        });
-      } catch (error) {
-        console.log('getBasicFolderMap error', error);
-      }
-    },
-    moveFolder: async ({ from, to, selectedFolderList }) => {
-      const fromData = from.data.current;
-      const toData = to.data.current;
-
-      if (!isDnDCurrentData(fromData) || !isDnDCurrentData(toData)) return;
-      // SortableContext에 id가 없으면 종료
-      if (!fromData.sortable.containerId || !toData.sortable.containerId)
-        return;
-
-      // 부모 containerId가 같으면
-      if (fromData.sortable.containerId === toData.sortable.containerId) {
-        const parentId = fromData.sortable.containerId;
-        const fromId = from.id;
-        const toId = to.id;
+      },
+      moveFolderToRecycleBin: async ({ deleteFolderId }) => {
+        let parentFolderId = UNKNOWN_FOLDER_ID;
         let prevChildFolderList: ChildFolderListType = [];
+        const FIRST = 0;
+        let recycleBinFolderId = UNKNOWN_FOLDER_ID;
 
         set((state) => {
+          parentFolderId = state.treeDataMap[deleteFolderId].parentFolderId;
           const childFolderList =
-            state.treeDataMap[parentId].childFolderIdOrderedList;
-          prevChildFolderList = [...childFolderList];
+            state.treeDataMap[parentFolderId].childFolderIdOrderedList;
+          state.treeDataMap[parentFolderId].childFolderIdOrderedList =
+            childFolderList.filter((childId) => childId !== deleteFolderId);
 
-          state.treeDataMap[parentId].childFolderIdOrderedList =
-            reorderFolderInSameParent({
-              childFolderList,
-              fromId,
-              toId,
-              selectedFolderList,
-            });
+          prevChildFolderList = [...childFolderList];
+        });
+
+        set((state) => {
+          if (state.basicFolderMap) {
+            recycleBinFolderId = state.basicFolderMap['RECYCLE_BIN'].id;
+          }
         });
 
         try {
           await moveFolder({
-            idList: selectedFolderList,
-            orderIdx: toData.sortable.index,
-            destinationFolderId: Number(toData.sortable.containerId),
+            idList: [deleteFolderId],
+            orderIdx: FIRST,
+            destinationFolderId: recycleBinFolderId,
           });
         } catch {
           set((state) => {
-            state.treeDataMap[parentId].childFolderIdOrderedList =
+            state.treeDataMap[parentFolderId].childFolderIdOrderedList =
               prevChildFolderList;
           });
         }
-
-        return;
-      }
-
-      const sourceParentId = fromData.sortable.containerId;
-      const targetParentId = toData.sortable.containerId;
-      const targetId = to.id;
-
-      set((state) => {
-        const newTreeDataMap = moveFolderToDifferentParent({
-          treeDataMap: state.treeDataMap,
-          selectedFolderList: state.selectedFolderList,
-          sourceParentId,
-          targetParentId,
-          targetId,
-        });
-
-        if (!newTreeDataMap) {
-          return;
-        }
-
-        state.treeDataMap = newTreeDataMap;
-        state.treeDataMap = changeParentFolderId({
-          treeDataMap: state.treeDataMap,
-          childFolderList: state.selectedFolderList,
-          parentId: targetParentId,
-        });
-      });
-    },
-    moveFolderToRecycleBin: async ({ deleteFolderId }) => {
-      let parentFolderId = UNKNOWN_FOLDER_ID;
-      let prevChildFolderList: ChildFolderListType = [];
-      const FIRST = 0;
-      let recycleBinFolderId = UNKNOWN_FOLDER_ID;
-
-      set((state) => {
-        parentFolderId = state.treeDataMap[deleteFolderId].parentFolderId;
-        const childFolderList =
-          state.treeDataMap[parentFolderId].childFolderIdOrderedList;
-        state.treeDataMap[parentFolderId].childFolderIdOrderedList =
-          childFolderList.filter((childId) => childId !== deleteFolderId);
-
-        prevChildFolderList = [...childFolderList];
-      });
-
-      set((state) => {
-        if (state.basicFolderMap) {
-          recycleBinFolderId = state.basicFolderMap['RECYCLE_BIN'].id;
-        }
-      });
-
-      try {
-        await moveFolder({
-          idList: [deleteFolderId],
-          orderIdx: FIRST,
-          destinationFolderId: recycleBinFolderId,
-        });
-      } catch {
+      },
+      setFocusFolderId: (newFolderId) => {
         set((state) => {
-          state.treeDataMap[parentFolderId].childFolderIdOrderedList =
-            prevChildFolderList;
+          state.focusFolderId = newFolderId;
         });
-      }
-    },
-    setFocusFolderId: (newFolderId) => {
-      set((state) => {
-        state.focusFolderId = newFolderId;
-      });
-    },
-    movePick: () => {},
-    setTreeMap: (newTreeDate) => {
-      set((state) => {
-        state.treeDataMap = newTreeDate;
-      });
-    },
-    setSelectedFolderList: (newSelectedFolderData) => {
-      set((state) => {
-        state.selectedFolderList = newSelectedFolderData;
-      });
-    },
-    setFrom: (newFrom) => {
-      set((state) => {
-        state.from = newFrom;
-      });
-    },
-    setTo: (newTo) => {
-      set((state) => {
-        state.to = newTo;
-      });
-    },
-    setIsDragging: (isDragging) => {
-      set((state) => {
-        state.isDragging = isDragging; // 드래그 상태 설정
-      });
-    },
-    filterByParentId: (parentId) => {
-      const parentFolder = get().treeDataMap[parentId.toString()];
+      },
+      movePick: () => {},
+      setTreeMap: (newTreeDate) => {
+        set((state) => {
+          state.treeDataMap = newTreeDate;
+        });
+      },
+      setSelectedFolderList: (newSelectedFolderData) => {
+        set((state) => {
+          state.selectedFolderList = newSelectedFolderData;
+        });
+      },
+      setFrom: (newFrom) => {
+        set((state) => {
+          state.from = newFrom;
+        });
+      },
+      setTo: (newTo) => {
+        set((state) => {
+          state.to = newTo;
+        });
+      },
+      setIsDragging: (isDragging) => {
+        set((state) => {
+          state.isDragging = isDragging; // 드래그 상태 설정
+        });
+      },
+      filterByParentId: (parentId) => {
+        const parentFolder = get().treeDataMap[parentId.toString()];
 
-      if (!parentFolder) {
-        return [];
-      }
-
-      const childFolderIdList = parentFolder.childFolderIdOrderedList;
-      const filteredFolderList = [];
-
-      for (const childFolderId of childFolderIdList) {
-        const curFolderInfo = get().treeDataMap[childFolderId];
-
-        if (!curFolderInfo) {
-          continue;
+        if (!parentFolder) {
+          return [];
         }
 
-        filteredFolderList.push(curFolderInfo);
-      }
+        const childFolderIdList = parentFolder.childFolderIdOrderedList;
+        const filteredFolderList = [];
 
-      return filteredFolderList;
-    },
-  }))
+        for (const childFolderId of childFolderIdList) {
+          const curFolderInfo = get().treeDataMap[childFolderId];
+
+          if (!curFolderInfo) {
+            continue;
+          }
+
+          filteredFolderList.push(curFolderInfo);
+        }
+
+        return filteredFolderList;
+      },
+    }))
+  )
 );
 
 type MoveFolderPayload = {
