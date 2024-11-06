@@ -4,12 +4,12 @@ import { API_URLS } from '../apiConstants';
 import type { GetFolderListResponseType, FolderMapType } from '@/types';
 
 export const getFolders = async () => {
-  const data = await getFolderList();
+  const data = await getRootFolderList();
   const folderMap = generateFolderMap(data);
   return folderMap;
 };
 
-const getFolderList = async () => {
+const getRootFolderList = async () => {
   try {
     const response = await apiClient.get<GetFolderListResponseType>(
       API_URLS.GET_FOLDERS
