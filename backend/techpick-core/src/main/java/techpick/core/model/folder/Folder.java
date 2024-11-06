@@ -145,12 +145,17 @@ public class Folder extends BaseEntity {
 		childFolderIdOrderedList.addAll(calculatedDestination, folderIdList);
 	}
 
-	public void addChildPickIdOrderedList(Long pickId) {
+	public void addChildPickIdOrdered(Long pickId) {
 		childPickIdOrderedList.add(0, pickId);
 	}
 
-	public void addChildFolderIdOrderedList(Long folderId) {
+	public void addChildFolderIdOrdered(Long folderId) {
 		childFolderIdOrderedList.add(0, folderId);
+	}
+
+	public void addChildFolderIdOrderedList(List<Long> folderIdList, int destination) {
+		int calculatedDestination = Math.min(destination, childFolderIdOrderedList.size());
+		childFolderIdOrderedList.addAll(calculatedDestination, folderIdList);
 	}
 
 	public void removeChildFolderOrder(Long folderId) {

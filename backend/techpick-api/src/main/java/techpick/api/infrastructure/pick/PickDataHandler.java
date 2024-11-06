@@ -93,7 +93,7 @@ public class PickDataHandler {
 		validateTagIdList(command.tagIdOrderedList());
 
 		Pick savedPick = pickRepository.save(pickMapper.toEntity(command, user, folder, link));
-		savedPick.getParentFolder().addChildPickIdOrderedList(savedPick.getId());
+		savedPick.getParentFolder().addChildPickIdOrdered(savedPick.getId());
 		return savedPick;
 	}
 

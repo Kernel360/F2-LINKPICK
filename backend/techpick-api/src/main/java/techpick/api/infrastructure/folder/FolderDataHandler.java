@@ -3,7 +3,9 @@ package techpick.api.infrastructure.folder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,7 +66,7 @@ public class FolderDataHandler {
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 		Folder folder = folderRepository.save(Folder.createEmptyGeneralFolder(user, parentFolder, command.name()));
-		folder.getParentFolder().addChildFolderIdOrderedList(folder.getId());
+		folder.getParentFolder().addChildFolderIdOrdered(folder.getId());
 		return folder;
 	}
 
@@ -79,11 +81,20 @@ public class FolderDataHandler {
 
 	@Transactional
 	public List<Long> moveFolderWithinParent(FolderCommand.Move command) {
-		Folder parentFolder = folderRepository.findById(command.destinationFolderId())
+		Long destinationFolderId = command.destinationFolderId();
+		Folder destinationFolder = folderRepository.findById(destinationFolderId)
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+		List<Folder> folderList = getFolderList(command.idList());
 
-		parentFolder.updateChildFolderIdOrderedList(command.idList(), command.orderIdx());
-		return parentFolder.getChildFolderIdOrderedList();
+		for (Folder parentFolder : folderList) {
+			Long parentFolderId = parentFolder.getParentFolder().getId();
+			if (ObjectUtils.notEqual(parentFolderId, destinationFolderId)) {
+				throw ApiFolderException.INVALID_MOVE_TARGET();
+			}
+		}
+
+		destinationFolder.updateChildFolderIdOrderedList(command.idList(), command.orderIdx());
+		return destinationFolder.getChildFolderIdOrderedList();
 	}
 
 	@Transactional
@@ -96,9 +107,17 @@ public class FolderDataHandler {
 
 		Folder newParent = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
-		newParent.getChildFolderIdOrderedList().addAll(command.orderIdx(), command.idList());
+		newParent.addChildFolderIdOrderedList(command.idList(), command.orderIdx());
 
-		folder.updateParentFolder(newParent);
+		List<Folder> folderList = getFolderList(command.idList());
+		Long destinationFolderId = command.destinationFolderId();
+		for (Folder moveFolder : folderList) {
+			Long parentFolderId = moveFolder.getParentFolder().getId();
+			if (Objects.equals(parentFolderId, destinationFolderId)) {
+				throw ApiFolderException.INVALID_MOVE_TARGET();
+			}
+			moveFolder.updateParentFolder(newParent);
+		}
 
 		return newParent.getChildFolderIdOrderedList();
 	}

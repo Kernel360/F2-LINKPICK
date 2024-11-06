@@ -97,16 +97,8 @@ public class FolderService {
 			validateBasicFolderChange(folder);
 		}
 
-		// 부모가 다른 폴더들을 동시에 이동할 수 없음.
-		Long destinationFolderId = command.destinationFolderId();
-		for (Folder folder : folderList) {
-			Long parentFolderId = folder.getParentFolder().getId();
-			if (ObjectUtils.notEqual(destinationFolderId, parentFolderId)) {
-				throw ApiFolderException.INVALID_MOVE_TARGET();
-			}
-		}
-
-		if (isParentFolderNotChanged(command, destinationFolderId)) {
+		Long parentFolderId = folderList.get(0).getParentFolder().getId();
+		if (isParentFolderNotChanged(command, parentFolderId)) {
 			folderDataHandler.moveFolderWithinParent(command);
 		} else {
 			folderDataHandler.moveFolderToDifferentParent(command);
