@@ -2,6 +2,7 @@ package techpick.api.domain.folder.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import org.apache.commons.lang3.ObjectUtils;
@@ -97,12 +98,15 @@ public class FolderService {
 			validateBasicFolderChange(folder);
 		}
 
+		Folder destinationFolder = folderDataHandler.getFolder(command.destinationFolderId());
 		Long parentFolderId = folderList.get(0).getParentFolder().getId();
 		if (isParentFolderNotChanged(command, parentFolderId)) {
+			validateWithinParentFolder(folderList, destinationFolder);
 			folderDataHandler.moveFolderWithinParent(command);
-		} else {
-			folderDataHandler.moveFolderToDifferentParent(command);
+			return;
 		}
+		validateDifferentParentFolder(folderList, destinationFolder);
+		folderDataHandler.moveFolderToDifferentParent(command);
 	}
 
 	@Transactional
@@ -131,6 +135,30 @@ public class FolderService {
 	private void validateBasicFolderChange(Folder folder) {
 		if (FolderType.GENERAL != folder.getFolderType()) {
 			throw ApiFolderException.BASIC_FOLDER_CANNOT_CHANGED();
+		}
+	}
+
+	private void validateWithinParentFolder(List<Folder> folderList, Folder destinationFolder) {
+		for (Folder folder : folderList) {
+			Folder parentFolder = folder.getParentFolder();
+			if (Objects.equals(destinationFolder.getFolderType(), FolderType.UNCLASSIFIED)) {
+				throw ApiFolderException.FOLDER_ACCESS_DENIED();
+			}
+			if (ObjectUtils.notEqual(parentFolder.getId(), destinationFolder.getId())) {
+				throw ApiFolderException.INVALID_MOVE_TARGET();
+			}
+		}
+	}
+
+	private void validateDifferentParentFolder(List<Folder> folderList, Folder destinationFolder) {
+		for (Folder folder : folderList) {
+			Folder parentFolder = folder.getParentFolder();
+			if (Objects.equals(destinationFolder.getFolderType(), FolderType.UNCLASSIFIED)) {
+				throw ApiFolderException.FOLDER_ACCESS_DENIED();
+			}
+			if (Objects.equals(parentFolder.getId(), destinationFolder.getId())) {
+				throw ApiFolderException.INVALID_MOVE_TARGET();
+			}
 		}
 	}
 }

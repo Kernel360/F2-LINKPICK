@@ -3,9 +3,7 @@ package techpick.api.infrastructure.folder;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,14 +82,6 @@ public class FolderDataHandler {
 		Long destinationFolderId = command.destinationFolderId();
 		Folder destinationFolder = folderRepository.findById(destinationFolderId)
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
-		List<Folder> folderList = getFolderList(command.idList());
-
-		for (Folder parentFolder : folderList) {
-			Long parentFolderId = parentFolder.getParentFolder().getId();
-			if (ObjectUtils.notEqual(parentFolderId, destinationFolderId)) {
-				throw ApiFolderException.INVALID_MOVE_TARGET();
-			}
-		}
 
 		destinationFolder.updateChildFolderIdOrderedList(command.idList(), command.orderIdx());
 		return destinationFolder.getChildFolderIdOrderedList();
@@ -110,12 +100,7 @@ public class FolderDataHandler {
 		newParent.addChildFolderIdOrderedList(command.idList(), command.orderIdx());
 
 		List<Folder> folderList = getFolderList(command.idList());
-		Long destinationFolderId = command.destinationFolderId();
 		for (Folder moveFolder : folderList) {
-			Long parentFolderId = moveFolder.getParentFolder().getId();
-			if (Objects.equals(parentFolderId, destinationFolderId)) {
-				throw ApiFolderException.INVALID_MOVE_TARGET();
-			}
 			moveFolder.updateParentFolder(newParent);
 		}
 
