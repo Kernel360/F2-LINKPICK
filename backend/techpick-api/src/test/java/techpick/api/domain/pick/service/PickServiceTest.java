@@ -22,7 +22,6 @@ import org.springframework.test.context.ActiveProfiles;
 import lombok.extern.slf4j.Slf4j;
 import techpick.TechPickApiApplication;
 import techpick.api.application.pick.dto.PickApiMapper;
-import techpick.api.application.pick.dto.PickApiRequest;
 import techpick.api.domain.link.dto.LinkInfo;
 import techpick.api.domain.pick.dto.PickCommand;
 import techpick.api.domain.pick.dto.PickResult;
@@ -45,7 +44,7 @@ import techpick.core.model.user.UserRepository;
 
 @Slf4j
 @SpringBootTest(classes = TechPickApiApplication.class)
-@ActiveProfiles("test")
+@ActiveProfiles("local")
 class PickServiceTest {
 
 	@Autowired
