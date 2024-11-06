@@ -9,7 +9,11 @@ import { dragOverStyle, treeLayout } from './tree.css';
 import { TreeNode } from './TreeNode';
 
 export function FolderTree() {
+  const { getFolders, getBasicFolders } = useTreeStore.getState();
   const rootFolderId = useTreeStore((state) => state.rootFolderId);
+
+  getFolders();
+  getBasicFolders();
 
   return (
     <HorizontalResizableContainer>
