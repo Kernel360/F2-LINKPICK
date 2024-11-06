@@ -3,7 +3,7 @@ import { apiClient, returnErrorFromHTTPError } from '@/apis';
 import { API_URLS } from '../apiConstants';
 import type { GetBasicFolderListType, BasicFolderMap } from '@/types';
 
-export const getBasicFolderMap = async () => {
+export const getBasicFolders = async () => {
   const data = await getBasicFolderList();
   const basicFolderMap = classifyByFolderType(data);
   return basicFolderMap;

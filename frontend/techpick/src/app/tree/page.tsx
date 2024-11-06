@@ -5,10 +5,10 @@ import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { pageContainerLayout } from './page.css';
 
 export default function TreePage() {
-  const { getFolderMap, getBasicFolderMap } = useTreeStore.getState();
+  const { getFolders, getBasicFolders } = useTreeStore.getState();
 
-  getFolderMap();
-  getBasicFolderMap();
+  getFolders();
+  getBasicFolders();
 
   return (
     <div className={pageContainerLayout}>

@@ -3,7 +3,7 @@ import { apiClient, returnErrorFromHTTPError } from '@/apis';
 import { API_URLS } from '../apiConstants';
 import type { GetFolderListResponseType, FolderMapType } from '@/types';
 
-export const getFolderMap = async () => {
+export const getFolders = async () => {
   const data = await getFolderList();
   const folderMap = generateFolderMap(data);
   return folderMap;

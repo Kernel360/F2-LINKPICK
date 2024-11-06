@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import {
-  getFolderMap,
-  getBasicFolderMap,
+  getFolders,
+  getBasicFolders,
   moveFolder,
   updateFolder,
   createFolder,
@@ -37,8 +37,8 @@ type TreeAction = {
   readFolder: () => void;
   updateFolderName: (payload: UpdateFolderPayload) => Promise<void>;
   deleteFolder: (deleteFolderId: number) => void;
-  getFolderMap: () => Promise<void>;
-  getBasicFolderMap: () => Promise<void>;
+  getFolders: () => Promise<void>;
+  getBasicFolders: () => Promise<void>;
   moveFolder: ({
     from,
     to,
@@ -144,9 +144,9 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           childFolderList.filter((childId) => childId !== deleteFolderId);
       });
     },
-    getFolderMap: async () => {
+    getFolders: async () => {
       try {
-        const folderMap = await getFolderMap();
+        const folderMap = await getFolders();
 
         set((state) => {
           state.treeDataMap = folderMap;
@@ -155,9 +155,9 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         console.log('getFolderMap error', error);
       }
     },
-    getBasicFolderMap: async () => {
+    getBasicFolders: async () => {
       try {
-        const basicFolderMap = await getBasicFolderMap();
+        const basicFolderMap = await getBasicFolders();
 
         set((state) => {
           state.basicFolderMap = basicFolderMap;

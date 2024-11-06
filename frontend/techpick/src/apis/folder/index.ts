@@ -1,6 +1,6 @@
 export { createFolder } from './createFolder';
 export { deleteFolder } from './deleteFolder';
-export { getFolderMap } from './getFolderMap';
+export { getFolders } from './getFolders';
 export { updateFolder } from './updateFolder';
 export { moveFolder } from './moveFolder';
-export { getBasicFolderMap } from './getBasicFolderMap';
+export { getBasicFolders } from './getBasicFolders';
