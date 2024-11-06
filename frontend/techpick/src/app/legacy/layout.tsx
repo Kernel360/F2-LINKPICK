@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google';
 import { PORTAL_CONTAINER_ID } from '@/constants';
 import { ToastProvider, ThemeProvider } from '@/providers';
+import { DndProviderWrapper } from '@/providers/DndProviderWrapper';
 import { QueryProvider } from '@/providers/QueryProvider';
 import type { Metadata } from 'next';
 import '@/styles/reset.css';
@@ -21,10 +22,12 @@ export default function RootLayout({
       <body className={`${inter.className}`}>
         <ToastProvider>
           <ThemeProvider>
-            <QueryProvider>
-              {children}
-              <div id={PORTAL_CONTAINER_ID} />
-            </QueryProvider>
+            <DndProviderWrapper>
+              <QueryProvider>
+                {children}
+                <div id={PORTAL_CONTAINER_ID} />
+              </QueryProvider>
+            </DndProviderWrapper>
           </ThemeProvider>
         </ToastProvider>
       </body>

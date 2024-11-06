@@ -3,7 +3,6 @@
 import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { NodeApi } from 'react-arborist';
-import { rootLayout } from '@/app/style.css';
 import {
   DirectoryTreeSection,
   LinkEditorSection,
@@ -12,7 +11,7 @@ import {
 import { useGetDefaultFolderData } from '@/components/nodeManagement/api/folder/useGetDefaultFolderData';
 import { useTreeStore } from '@/stores/treeStore';
 import { getClientCookie } from '@/utils';
-import { viewContainer, viewWrapper } from './style.css';
+import { rootLayout, viewContainer, viewWrapper } from './style.css';
 
 export default function MainPage() {
   const router = useRouter();
