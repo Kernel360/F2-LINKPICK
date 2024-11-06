@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
+import Link from 'next/link';
 import { Folder } from 'lucide-react';
+import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import {
   folderInfoItemStyle,
@@ -53,6 +55,7 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
 
   const handleClick = (id: number, event: MouseEvent) => {
     if (event.shiftKey && isSelectionActive(selectedFolderList.length)) {
+      event.preventDefault();
       handleShiftSelect(id, treeDataMap);
     } else {
       selectSingleFolder(id);
@@ -88,13 +91,15 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
         selectSingleFolder(id);
       }}
     >
-      <div
-        className={`${folderInfoItemStyle}  ${isDragging ? draggingItem : ''} ${isSelected ? selectedDragItemStyle : ''}`}
-        onClick={(event) => handleClick(id, event)}
-      >
-        <Folder className={FolderIconStyle} />
-        <Text>{name}</Text>
-      </div>
+      <Link href={ROUTES.FOLDER_DETAIL(id)}>
+        <div
+          className={`${folderInfoItemStyle}  ${isDragging ? draggingItem : ''} ${isSelected ? selectedDragItemStyle : ''}`}
+          onClick={(event) => handleClick(id, event)}
+        >
+          <Folder className={FolderIconStyle} />
+          <Text>{name}</Text>
+        </div>
+      </Link>
     </FolderContextMenu>
   );
 };

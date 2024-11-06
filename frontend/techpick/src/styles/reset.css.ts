@@ -68,6 +68,11 @@ globalStyle('table', {
   borderSpacing: 0,
 });
 
+globalStyle('a', {
+  textDecoration: 'none',
+  color: 'inherit',
+});
+
 // NOTE(Jason): disable react-arborist node focus outline style
 globalStyle('[role="treeitem"]', {
   outline: 'none',
