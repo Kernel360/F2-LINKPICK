@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,7 +38,12 @@ public class FolderApiController {
 	@GetMapping
 	@Operation(summary = "루트 폴더와 하위 리스트 조회", description = "사용자의 루트 폴더와 루트 하위 전체 폴더를 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "조회 성공"),
+		@ApiResponse(responseCode = "200",
+			description = "조회 성공",
+			content = @Content(
+				mediaType = "application/json",
+				examples = @ExampleObject(value = FolderApiConstant.ROOT_FOLDER_EXAMPLE)
+			)),
 		@ApiResponse(responseCode = "401", description = "본인 폴더만 조회할 수 있습니다.")
 	})
 	public ResponseEntity<List<FolderApiResponse>> getAllRootFolderList(@LoginUserId Long userId) {
