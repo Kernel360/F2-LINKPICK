@@ -1,4 +1,4 @@
-import type { Concrete } from '@/types/uitl.type';
+import type { Concrete } from '@/types/util.type';
 import type { components } from '@/schema';
 
 export type GetPickResponseType = Concrete<

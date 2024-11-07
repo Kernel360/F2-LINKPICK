@@ -1,4 +1,4 @@
-import type { Concrete } from './uitl.type';
+import type { Concrete } from './util.type';
 import type { UniqueIdentifier } from '@dnd-kit/core';
 import type { components } from '@/schema';
 

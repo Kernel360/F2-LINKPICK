@@ -1,4 +1,4 @@
-import type { Concrete } from './uitl.type';
+import type { Concrete } from './util.type';
 import type { components } from '@/schema';
 
 export type TagType = Concrete<
