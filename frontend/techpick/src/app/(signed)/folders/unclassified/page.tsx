@@ -7,13 +7,16 @@ export default function UnclassifiedFolderPage() {
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
 
-  useEffect(() => {
-    if (!basicFolderMap) {
-      return;
-    }
+  useEffect(
+    function selectUnclassifiedFolderId() {
+      if (!basicFolderMap) {
+        return;
+      }
 
-    selectSingleFolder(basicFolderMap['UNCLASSIFIED'].id);
-  }, [basicFolderMap, selectSingleFolder]);
+      selectSingleFolder(basicFolderMap['UNCLASSIFIED'].id);
+    },
+    [basicFolderMap, selectSingleFolder]
+  );
 
   return <h1>UnclassifiedFolderPage page</h1>;
 }
