@@ -1,9 +1,9 @@
 import { style } from '@vanilla-extract/css';
 import {
+  borderRadius,
   colorThemeContract,
   sizes,
   space,
-  borderRadius,
 } from 'techpick-shared';
 
 export const folderInfoItemStyle = style({
@@ -25,10 +25,6 @@ export const folderInfoItemStyle = style({
       cursor: 'grabbing',
     },
   },
-});
-
-export const draggingItem = style({
-  opacity: 0.8,
 });
 
 export const selectedDragItemStyle = style({

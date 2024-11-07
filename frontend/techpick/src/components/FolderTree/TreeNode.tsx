@@ -4,10 +4,10 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { FolderDraggable } from '@/components/FolderTree/FolderDraggable';
-import { FolderInfoItem } from '@/components/FolderTree/FolderInfoItem';
 import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { FolderInput } from './FolderInput';
+import { FolderListItem } from './FolderListItem';
 import type { UniqueIdentifier } from '@dnd-kit/core';
 
 export function TreeNode({ id, depth }: TreeNodeProps) {
@@ -51,7 +51,7 @@ export function TreeNode({ id, depth }: TreeNodeProps) {
           return (
             <div key={treeData.id}>
               <FolderDraggable id={treeData.id}>
-                <FolderInfoItem id={treeData.id} name={treeData.name} />
+                <FolderListItem id={treeData.id} name={treeData.name} />
                 {/** depth가 있는 폴더구조는 추후에 적용될 예정입니다.*/}
                 {0 < treeData.childFolderIdOrderedList.length && (
                   <TreeNode id={treeData.id} depth={depth + 1} />

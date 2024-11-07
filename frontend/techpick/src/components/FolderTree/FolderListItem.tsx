@@ -1,47 +1,33 @@
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
-import Link from 'next/link';
-import { Folder } from 'lucide-react';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
-import {
-  folderInfoItemStyle,
-  draggingItem,
-  selectedDragItemStyle,
-  FolderIconStyle,
-} from './folderInfoItem.css';
+import { FolderContextMenu } from './FolderContextMenu';
+import { FolderInput } from './FolderInput';
+import { FolderLinkItem } from './FolderLinkItem';
 import {
   getSelectedFolderRange,
   isSameParentFolder,
   isSelectionActive,
-} from './folderInfoItem.util';
-import { Text } from '../Text';
-import { FolderContextMenu } from './FolderContextMenu';
-import { FolderInput } from './FolderInput';
+} from './folderListItem.util';
 import type { FolderMapType } from '@/types';
 
-export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
+export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
   const {
     treeDataMap,
     selectedFolderList,
     setSelectedFolderList,
     isDragging,
-    setFocusFolderId,
     focusFolderId,
     updateFolderName,
     moveFolderToRecycleBin,
+    selectSingleFolder,
   } = useTreeStore();
   const isSelected = selectedFolderList.includes(id);
   const [isUpdate, setIsUpdate] = useState(false);
 
-  const selectSingleFolder = (id: number) => {
-    setFocusFolderId(id);
-    setSelectedFolderList([id]);
-  };
-
   const handleShiftSelect = (id: number, treeDataMap: FolderMapType) => {
     if (!focusFolderId || !isSameParentFolder(id, focusFolderId, treeDataMap)) {
-      selectSingleFolder(id);
       return;
     }
 
@@ -57,8 +43,6 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
     if (event.shiftKey && isSelectionActive(selectedFolderList.length)) {
       event.preventDefault();
       handleShiftSelect(id, treeDataMap);
-    } else {
-      selectSingleFolder(id);
     }
   };
 
@@ -91,15 +75,13 @@ export const FolderInfoItem = ({ id, name }: FolderInfoItemProps) => {
         selectSingleFolder(id);
       }}
     >
-      <Link href={ROUTES.FOLDER_DETAIL(id)}>
-        <div
-          className={`${folderInfoItemStyle}  ${isDragging ? draggingItem : ''} ${isSelected ? selectedDragItemStyle : ''}`}
-          onClick={(event) => handleClick(id, event)}
-        >
-          <Folder className={FolderIconStyle} />
-          <Text>{name}</Text>
-        </div>
-      </Link>
+      <FolderLinkItem
+        href={ROUTES.FOLDER_DETAIL(id)}
+        isDragging={isDragging}
+        isSelected={isSelected}
+        name={name}
+        onClick={(event) => handleClick(id, event)}
+      />
     </FolderContextMenu>
   );
 };

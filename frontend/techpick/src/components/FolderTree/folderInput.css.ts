@@ -12,6 +12,8 @@ export const folderInputLayout = style({
 
 export const labelStyle = style({
   color: colorThemeContract.textPrimary,
+  flexShrink: '0',
+  flexGrow: '0',
 });
 
 export const inputStyle = style({
@@ -22,4 +24,5 @@ export const inputStyle = style({
   borderColor: colorThemeContract.primary,
   padding: '0',
   fontSize: fontSize['md'],
+  width: '0px',
 });
