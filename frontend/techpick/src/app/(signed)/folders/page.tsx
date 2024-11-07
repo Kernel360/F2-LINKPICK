@@ -1,3 +1,6 @@
+import { redirect } from 'next/navigation';
+import { ROUTES } from '@/constants';
+
 export default function FolderPage() {
-  return <h1>folder page</h1>;
+  redirect(ROUTES.FOLDERS_UNCLASSIFIED);
 }

@@ -47,6 +47,7 @@ type TreeAction = {
   }: MoveFolderPayload) => Promise<void>;
   moveFolderToRecycleBin: (payload: MoveFolderToRecycleBin) => Promise<void>;
   movePick: () => void;
+  selectSingleFolder: (folderId: number) => void;
   setTreeMap: (newTreeDate: FolderMapType) => void;
   setSelectedFolderList: (
     newSelectedFolderData: SelectedFolderListType
@@ -275,6 +276,12 @@ export const useTreeStore = create<TreeState & TreeAction>()(
               prevChildFolderList;
           });
         }
+      },
+      selectSingleFolder: (folderId) => {
+        set((state) => {
+          state.focusFolderId = folderId;
+          state.selectedFolderList = [folderId];
+        });
       },
       setFocusFolderId: (newFolderId) => {
         set((state) => {
