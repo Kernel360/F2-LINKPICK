@@ -8,6 +8,7 @@ import {
   updateFolder,
   createFolder,
 } from '@/apis/folder';
+import { getEntries } from '@/components/PickListViewerPanel/types/common.type';
 import { UNKNOWN_FOLDER_ID } from '@/constants';
 import { changeParentFolderId } from './utils/changeParentFolderId';
 import { isDnDCurrentData } from './utils/isDnDCurrentData';
@@ -347,9 +348,18 @@ export const useTreeStore = create<TreeState & TreeAction>()(
 
         return filteredFolderList;
       },
+      findFolderByName: (name: string) => {
+        const map = get().treeDataMap;
+        return getEntries(map)
+          .filter(([_, folder]) => folder.name === name)
+          .map((entity) => entity[1]);
+      },
+      getFolderList: () => {
+        const map = get().treeDataMap;
+        return Array.from(getEntries(map).map((entry) => entry[1]));
+      },
     }))
   )
-
 );
 
 type MoveFolderPayload = {
