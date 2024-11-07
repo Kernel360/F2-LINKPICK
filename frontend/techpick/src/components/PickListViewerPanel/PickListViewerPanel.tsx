@@ -9,6 +9,8 @@ import { ViewTemplate } from './template/view/ViewTemplate';
 import { Pick } from './types/common.type';
 import { getStream } from './util';
 
+/// activeOptions.viewTemplate 이 현재 어떤 viewTemplate인지.
+
 /**
  * @todo
  *  자세한 이름으로 변경 필요
@@ -49,7 +51,10 @@ function PickListWidget({ activeFilters, viewTemplate }: ListWidgetProps) {
   return (
     <div className={viewTemplate.listLayoutStyle}>
       {processedPickList.map((pick, idx) => (
-        <viewTemplate.renderComponent uiData={pick} key={idx} />
+        <viewTemplate.renderComponent
+          props={{ pickId: pick.id, children: <div>hi</div> }}
+          key={idx}
+        />
       ))}
     </div>
   );

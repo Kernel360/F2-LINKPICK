@@ -44,12 +44,14 @@ export interface UiLabel {
 
 export interface UiListComponent<T> {
   listLayoutStyle: string;
-  renderComponent: <Props extends UiProps<T>>(props: Props) => ReactElement;
+  renderComponent: (props: UiProps<T>) => ReactElement;
 }
 
 export interface UiProps<T> {
-  uiData: T;
+  props: T;
 }
+
+export interface DraggablePickUiProps extends UiProps<Pick> {}
 
 export interface Comparable<T> {
   compare: CompareFn<T>;
