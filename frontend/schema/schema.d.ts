@@ -320,7 +320,10 @@ export interface components {
             /** Format: int64 */
             id?: number;
             name?: string;
-            /** @enum {string} */
+            /**
+             * @example GENERAL
+             * @enum {string}
+             */
             folderType?: "UNCLASSIFIED" | "RECYCLE_BIN" | "ROOT" | "GENERAL";
             /** Format: int64 */
             parentFolderId?: number;
@@ -740,7 +743,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.folder.dto.FolderApiResponse"][];
+                    "application/json": unknown;
                 };
             };
             /** @description 본인 폴더만 조회할 수 있습니다. */
