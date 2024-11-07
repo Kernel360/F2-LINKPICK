@@ -17,7 +17,6 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     treeDataMap,
     selectedFolderList,
     setSelectedFolderList,
-    isDragging,
     focusFolderId,
     updateFolderName,
     moveFolderToRecycleBin,
@@ -77,7 +76,6 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     >
       <FolderLinkItem
         href={ROUTES.FOLDER_DETAIL(id)}
-        isDragging={isDragging}
         isSelected={isSelected}
         name={name}
         onClick={(event) => handleClick(id, event)}

@@ -31,7 +31,6 @@ export function FolderLinkItem({
 interface FolderListItemProps {
   name: string;
   href: string;
-  isDragging?: boolean;
   isSelected?: boolean;
   onClick?: (event: MouseEvent<HTMLDivElement>) => void;
   icon?: ElementType;
