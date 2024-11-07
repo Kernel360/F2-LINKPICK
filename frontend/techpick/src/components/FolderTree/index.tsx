@@ -1,20 +1,31 @@
 'use client';
 
 import { DragOverlay } from '@dnd-kit/core';
+import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { FolderDropZone } from './FolderDropZone';
 import { FolderTreeHeader } from './FolderTreeHeader';
 import { HorizontalResizableContainer } from './HorizontalResizableContainer';
+import { ShowCreateFolderInputButton } from './ShowCreateFolderInputButton';
 import { dragOverStyle, treeLayout } from './tree.css';
 import { TreeNode } from './TreeNode';
 
 export function FolderTree() {
+  const { newFolderParentId } = useCreateFolderInputStore();
+  const { getFolders, getBasicFolders } = useTreeStore.getState();
   const rootFolderId = useTreeStore((state) => state.rootFolderId);
+  const isShow = newFolderParentId !== rootFolderId;
+
+  getFolders();
+  getBasicFolders();
 
   return (
     <HorizontalResizableContainer>
       <div className={treeLayout}>
         <FolderTreeHeader />
+        {isShow && (
+          <ShowCreateFolderInputButton newFolderParentId={rootFolderId} />
+        )}
         <FolderDropZone>
           <TreeNode id={rootFolderId} depth={0} />
           <DragOverlay>

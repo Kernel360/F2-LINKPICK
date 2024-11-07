@@ -34,6 +34,9 @@ export function HorizontalResizableContainer({ children }: PropsWithChildren) {
         topRight: false,
       }}
       minWidth={minWidth}
+      defaultSize={{
+        width: minWidth,
+      }}
     >
       {children}
     </Resizable>
