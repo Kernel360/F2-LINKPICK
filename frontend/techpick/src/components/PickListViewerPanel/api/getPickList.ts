@@ -1,7 +1,7 @@
 import { HTTPError } from 'ky';
 import { returnErrorFromHTTPError } from '@/apis';
 import { DummyData } from '@/components/PickListViewerPanel/api/dummyData';
-import { SearchParam } from '@/components/PickListViewerPanel/model/useSearchParam';
+// import { SearchParam } from '@/components/PickListViewerPanel/model/useSearchParam';
 import { Pick } from '@/components/PickListViewerPanel/types/common.type';
 
 export interface GetPickRequest {
@@ -17,6 +17,7 @@ export type GetPickResponse = [
   },
 ];
 
+/*
 const queryParameter = (
   ...params: { key: string; values: unknown[] }[]
 ): string => {
@@ -26,11 +27,11 @@ const queryParameter = (
   }
   return queryParams.join('&');
 };
+*/
 
 export const getPickList = {
-  withSearchParam: async (
-    searchParam: SearchParam
-  ): Promise<GetPickResponse> => {
+  withSearchParam: async () // searchParam: SearchParam
+  : Promise<GetPickResponse> => {
     try {
       // const response = await apiClient.get<GetPickResponse>(
       //   `picks?${queryParameter({

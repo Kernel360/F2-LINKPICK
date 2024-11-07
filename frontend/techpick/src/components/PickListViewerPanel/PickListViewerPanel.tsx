@@ -1,63 +1,66 @@
-import { useGetPickSearchQuery } from './api/useGetPickSearchQuery';
+import { useEffect, useState } from 'react';
+import {
+  getPickList,
+  GetPickResponse,
+} from '@/components/PickListViewerPanel/api/getPickList';
+// import { useSearchParam } from '@/components/PickListViewerPanel/model/useSearchParam';
+import {
+  globalLayout,
+  mainLayout,
+} from '@/components/PickListViewerPanel/PickListViewerPanel.css';
+import { SearchWidget } from '@/components/PickListViewerPanel/SearchWidget/SearchWidget';
 import { useViewerOptions } from './model/useViewerOptions';
-import { useSearchParamReader } from './model/useViewerState';
-import { OptionWidget } from './OptionWidget/OptionWidget';
-import { globalLayout, mainLayout } from './PickListViewerPanel.css';
-import { SearchWidget } from './SearchWidget/SearchWidget';
-import { Filter } from './template/filter/FilterTemplate';
 import { ViewTemplate } from './template/view/ViewTemplate';
-import { Pick } from './types/common.type';
-import { getStream } from './util';
 
-/**
- * @todo
- *  자세한 이름으로 변경 필요
- */
 export function PickListViewerPanel() {
-  const { activeOptions, optionsHandler } = useViewerOptions();
+  const { activeOptions } = useViewerOptions();
 
   return (
     <div className={globalLayout}>
       <SearchWidget />
       <div className={mainLayout}>
-        <OptionWidget
-          selectedOptions={activeOptions}
-          optionsHandler={optionsHandler}
-        />
-        <PickListWidget
-          activeFilters={activeOptions.activeFilters}
-          viewTemplate={activeOptions.viewTemplate}
-        />
+        <PickListWidget viewTemplate={activeOptions.viewTemplate} />
       </div>
     </div>
   );
 }
 
 interface ListWidgetProps {
-  activeFilters: Filter[];
   viewTemplate: ViewTemplate;
 }
 
-function PickListWidget({ activeFilters, viewTemplate }: ListWidgetProps) {
-  const { data: dataFromServer } = useGetPickSearchQuery({
-    searchParamList: useSearchParamReader().readSearchParamList(),
-  });
+function PickListWidget({ viewTemplate }: ListWidgetProps) {
+  const [pickResponse, setPickResponse] = useState<GetPickResponse>();
 
-  if (!dataFromServer) return null;
-  const processedPickList = applyFilters(dataFromServer, activeFilters);
+  useEffect(() => {
+    (async () => {
+      const response = await getPickList
+        .withSearchParam
+        // useSearchParam.getState()
+        ();
+      if (response) setPickResponse(response);
+    })(/*IIFE*/);
+  }, [pickResponse]);
+
+  /*
+  const removeDuplicate = (res: GetPickResponse) => {
+    const pickList = res.flatMap((eachFolder) => eachFolder.pickList);
+    return groupBy((pick) => pick.parentFolderId, pickList);
+  };
+  */
 
   return (
     <div className={viewTemplate.listLayoutStyle}>
-      {processedPickList.map((pick, idx) => (
-        <viewTemplate.renderComponent uiData={pick} key={idx} />
-      ))}
+      {/*{pickResponse &&*/}
+      {/*  removeDuplicate(pickResponse).map((pick, idx) => (*/}
+      {/*    <viewTemplate.renderComponent uiData={pick} key={idx} />*/}
+      {/*  ))}*/}
     </div>
   );
 }
 
-/** 선택된 필터와 정렬을 일괄 적용 */
-const applyFilters = (source: Pick[], filters: Filter[]): Pick[] => {
-  return getStream(source)
-    .filters(filters.map((filter) => filter.predicate))
-    .applyAll();
+/*
+const groupBy = <T,>(selector: (data: T) => unknown, sourceList: T[]) => {
+  return Array.from(Map.groupBy(sourceList, selector).values()).flat();
 };
+*/
