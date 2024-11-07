@@ -5,10 +5,9 @@ import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { FolderLinkItem } from './FolderLinkItem';
 import { folderTreeHeaderLayout } from './folderTreeHeader.css';
-import { ShowCreateFolderInputButton } from './ShowCreateFolderInputButton';
 
 export function FolderTreeHeader() {
-  const { rootFolderId, basicFolderMap, focusFolderId } = useTreeStore();
+  const { basicFolderMap, focusFolderId } = useTreeStore();
 
   const isUnclassifiedSelected = !!(
     basicFolderMap && focusFolderId === basicFolderMap['UNCLASSIFIED'].id
@@ -20,7 +19,6 @@ export function FolderTreeHeader() {
 
   return (
     <div className={folderTreeHeaderLayout}>
-      <ShowCreateFolderInputButton newFolderParentId={rootFolderId} />
       {basicFolderMap && (
         <>
           <FolderLinkItem
@@ -38,6 +36,7 @@ export function FolderTreeHeader() {
           />
         </>
       )}
+      <hr />
     </div>
   );
 }
