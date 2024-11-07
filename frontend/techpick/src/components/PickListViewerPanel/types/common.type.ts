@@ -1,7 +1,6 @@
 import { ReactElement } from 'react';
 import { IconProps } from '@radix-ui/react-icons/dist/types';
 import { ApiLinkUrlData, ApiPickData, ApiTagData } from '@/types/ApiTypes';
-import { InputType } from '../template/filter/FilterTemplate';
 
 export type Tag = ApiTagData;
 
@@ -10,8 +9,6 @@ export type Pick = ApiPickData;
 export type Link = ApiLinkUrlData;
 
 export type PredicateFn<T> = (src: T) => boolean;
-
-export type CompareFn<T> = (lh: T, rh: T, direction?: Direction) => number;
 
 /**
  * @description
@@ -51,19 +48,6 @@ export interface UiProps<T> {
   uiData: T;
 }
 
-export interface Comparable<T> {
-  compare: CompareFn<T>;
-}
-
-export interface CreateFilter<T> {
-  createFilter: (input: InputType) => PredicateFn<T>; // closure를 이용한 동적 필터 생성
-}
-
 export type RadixUiIconElement = React.ForwardRefExoticComponent<
   IconProps & React.RefAttributes<SVGSVGElement>
 >;
-
-export enum Direction {
-  DESC,
-  ASC,
-}

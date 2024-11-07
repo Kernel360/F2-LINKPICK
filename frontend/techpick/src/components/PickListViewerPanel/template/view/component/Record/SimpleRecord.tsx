@@ -4,7 +4,7 @@ import {
   UiProps,
 } from '@/components/PickListViewerPanel/types/common.type';
 import {
-  ChipItem,
+  // ChipItem,
   ChipItemList,
 } from '@/components/PickListViewerPanel/ui/SelectedTagItem';
 import { recordLayout } from './SimpleRecord.css';
@@ -18,9 +18,9 @@ export function SimpleRecord({
     <div className={recordLayout}>
       {pick.title}
       <ChipItemList>
-        {pick.tagList.map((tag, idx) => (
-          <ChipItem backgroundColor="#d17699" label={tag.tagName} key={idx} />
-        ))}
+        {/*{pick.tagList.map((tag, idx) => (*/}
+        {/*  <ChipItem backgroundColor="#d17699" label={tag.tagName} key={idx} />*/}
+        {/*))}*/}
       </ChipItemList>
     </div>
   );

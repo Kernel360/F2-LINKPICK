@@ -1,4 +1,4 @@
-import type { CompareFn, PredicateFn } from '../../types/common.type';
+import type { PredicateFn } from '../../types/common.type';
 
 /**
  * @description 주어진 데이터 배열을 1회성 Stream으로 한번에 연산합니다.
@@ -13,9 +13,6 @@ import type { CompareFn, PredicateFn } from '../../types/common.type';
 export interface BatchStream<T> {
   /** 필터 함수 설정 */
   filters: (filters?: PredicateFn<T>[]) => BatchStream<T>;
-
-  /** 정렬 함수 설정 */
-  sorts: (sorts?: CompareFn<T>[]) => BatchStream<T>;
 
   /** 필터와 정렬 함수들을 일괄 적용, 새로운 리스트로 반환 */
   applyAll: () => T[];

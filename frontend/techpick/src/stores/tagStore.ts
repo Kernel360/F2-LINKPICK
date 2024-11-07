@@ -28,6 +28,13 @@ type TagAction = {
   createTag: (tagData: CreateTagRequestType) => Promise<TagType | undefined>;
   deleteTag: (tagId: TagType['id']) => Promise<void>;
   updateTag: (updatedTag: UpdateTagRequestType) => Promise<void>;
+  /**
+   * TODO: 익스텐션과 앱이 중복되는 Store를 가지고 있는데 이 부분 해결 필요.
+   * @author 김민규
+   * @description 미리 로딩한 나의 태그 리스트 정보에서 찾는다.
+   * @return {TagType[]} 찾지 못한 경우 빈 배열 반환
+   * */
+  findTagByName: (name: string) => TagType[];
 };
 
 const initialState: TagState = {
@@ -37,7 +44,7 @@ const initialState: TagState = {
 };
 
 export const useTagStore = create<TagState & TagAction>()(
-  immer((set) => ({
+  immer((set, get) => ({
     ...initialState,
 
     replaceSelectedTagList: (tagList) =>
@@ -230,6 +237,9 @@ export const useTagStore = create<TagState & TagAction>()(
           await handleHTTPError(error);
         }
       }
+    },
+    findTagByName: (name) => {
+      return get().tagList.filter((tag) => tag.name === name);
     },
   }))
 );
