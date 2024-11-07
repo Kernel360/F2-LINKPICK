@@ -30,7 +30,7 @@ export default async function middleware(req: NextRequest) {
   }
 
   if (isAuthenticated && pathname === '/') {
-    return NextResponse.redirect(new URL('/folders', req.url));
+    return NextResponse.redirect(new URL('/folders/unclassified', req.url));
   }
 
   return NextResponse.next();
