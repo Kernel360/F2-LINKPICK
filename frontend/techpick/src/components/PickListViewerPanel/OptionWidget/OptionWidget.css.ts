@@ -11,8 +11,6 @@ export const optionWidgetLayout = style({
   border: '1px solid red', // test
 });
 
-export const filterWidgetLayout = style({});
-
 export const viewWidgetLayout = style({});
 
 export const inputStyle = style({

@@ -29,21 +29,22 @@ export interface ApiTagData {
 }
 
 export interface ApiLinkUrlData {
-  id: number;
   url: string;
-  imageUrl: string | null;
+  title: string;
+  description: string;
+  imageUrl: string;
+  invalidatedAt: string;
 }
 
 export interface ApiPickData {
   id: number;
   title: string;
   memo: string;
-  folderId: number;
-  userId: number;
-  tagList: ApiTagData[];
-  linkUrlResponse: ApiLinkUrlData;
-  updatedAt: Date;
-  createdAt: Date;
+  linkInfo: ApiLinkUrlData;
+  parentFolderId: number;
+  tagOrderList: number[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ApiPickLinkRequestData {

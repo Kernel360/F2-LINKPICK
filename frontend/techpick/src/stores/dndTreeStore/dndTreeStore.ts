@@ -8,6 +8,7 @@ import {
   updateFolder,
   createFolder,
 } from '@/apis/folder';
+import { getEntries } from '@/components/PickListViewerPanel/types/common.type';
 import { UNKNOWN_FOLDER_ID } from '@/constants';
 import { changeParentFolderId } from './utils/changeParentFolderId';
 import { isDnDCurrentData } from './utils/isDnDCurrentData';
@@ -57,6 +58,17 @@ type TreeAction = {
   setIsDragging: (isDragging: boolean) => void;
   setFocusFolderId: (newFolderId: number) => void;
   filterByParentId: (parentId: UniqueIdentifier) => FolderType[];
+  /**
+   * @author 김민규
+   * @description 미리 로딩한 나의 폴더 리스트 에서 찾는다.
+   * @return {FolderType[]} 찾지 못한 경우 빈 배열 반환
+   * */
+  findFolderByName: (name: string) => FolderType[];
+  /**
+   * @author 김민규
+   * @description 미리 로딩한 나의 폴더 리스트를 반환
+   * */
+  getFolderList: () => FolderType[];
 };
 
 const initialState: TreeState = {
@@ -335,6 +347,16 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         }
 
         return filteredFolderList;
+      },
+      findFolderByName: (name: string) => {
+        const map = get().treeDataMap;
+        return getEntries(map)
+          .filter(([_, folder]) => folder.name === name)
+          .map((entity) => entity[1]);
+      },
+      getFolderList: () => {
+        const map = get().treeDataMap;
+        return Array.from(getEntries(map).map((entry) => entry[1]));
       },
     }))
   )

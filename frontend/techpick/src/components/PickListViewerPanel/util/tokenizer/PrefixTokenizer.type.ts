@@ -1,19 +1,26 @@
-export type TokenKey = string;
 export type Token = string;
 export type Prefix = string;
 
-export type TokenPrefixPattern = Record<TokenKey, Prefix>;
+export type TokenPrefixPattern<KeyType extends string> = Record<
+  KeyType,
+  Prefix
+>;
 
-export interface TokenizerFactory {
-  addPattern(pattern: TokenPrefixPattern): TokenizerFactory;
-  removePattern(pattern: TokenPrefixPattern): TokenizerFactory;
-  build(): Tokenizer;
+export interface TokenizerFactory<KeyType extends string> {
+  addPattern(pattern: TokenPrefixPattern<KeyType>): TokenizerFactory<KeyType>;
+  removePattern(
+    pattern: TokenPrefixPattern<KeyType>
+  ): TokenizerFactory<KeyType>;
+  build(): Tokenizer<KeyType>;
 }
 
-export interface Tokenizer {
-  tokenize(str: string): TokenizeResult;
+export interface Tokenizer<KeyType extends string> {
+  tokenize(str: string): TokenizeResult<KeyType>;
 }
 
-export interface TokenizeResult {
-  getTokens(key: TokenKey): Array<Token>;
+export type TokenInfo<KeyType> = { key: KeyType; token: Token };
+
+export interface TokenizeResult<KeyType extends string> {
+  getTokensByKey(key: KeyType): Array<Token>;
+  getLastTokenInfo(): TokenInfo<KeyType> | undefined;
 }
