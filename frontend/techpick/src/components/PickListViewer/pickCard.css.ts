@@ -1,9 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
-import { space, color, sizes } from 'techpick-shared';
-
-export const linkStyle = style({
-  width: sizes['fit'],
-});
+import { space, color } from 'techpick-shared';
 
 export const pickCardLayout = style({
   display: 'flex',
@@ -15,6 +11,7 @@ export const pickCardLayout = style({
   border: `1px solid ${color.border}`,
   borderRadius: '4px',
   backgroundColor: color.background,
+  cursor: 'pointer',
 });
 
 export const cardImageSectionStyle = style({

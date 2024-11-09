@@ -1,5 +1,7 @@
+'use client';
+
+import { useCallback } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { PickViewItemComponentProps } from '.';
 import {
   cardDescriptionSectionStyle,
@@ -7,7 +9,6 @@ import {
   cardImageStyle,
   cardTitleSectionStyle,
   defaultCardImageSectionStyle,
-  linkStyle,
   pickCardLayout,
 } from './pickCard.css';
 
@@ -15,30 +16,32 @@ export function PickCard({ pickInfo }: PickViewItemComponentProps) {
   const { memo, title, linkInfo } = pickInfo;
   const { imageUrl, url } = linkInfo;
 
-  return (
-    <Link href={url} target="_blank" className={linkStyle}>
-      <div className={pickCardLayout}>
-        <div className={cardImageSectionStyle}>
-          {imageUrl ? (
-            <Image
-              src={imageUrl}
-              width={278}
-              height={64}
-              className={cardImageStyle}
-              alt=""
-            />
-          ) : (
-            <div className={defaultCardImageSectionStyle} />
-          )}
-        </div>
+  const openUrl = useCallback(() => {
+    window.open(url, '_blank');
+  }, [url]);
 
-        <div className={cardTitleSectionStyle}>
-          <p>{title}</p>
-        </div>
-        <div className={cardDescriptionSectionStyle}>
-          <p>{memo}</p>
-        </div>
+  return (
+    <div className={pickCardLayout} onDoubleClick={openUrl}>
+      <div className={cardImageSectionStyle}>
+        {imageUrl ? (
+          <Image
+            src={imageUrl}
+            width={278}
+            height={64}
+            className={cardImageStyle}
+            alt=""
+          />
+        ) : (
+          <div className={defaultCardImageSectionStyle} />
+        )}
       </div>
-    </Link>
+
+      <div className={cardTitleSectionStyle}>
+        <p>{title}</p>
+      </div>
+      <div className={cardDescriptionSectionStyle}>
+        <p>{memo}</p>
+      </div>
+    </div>
   );
 }
