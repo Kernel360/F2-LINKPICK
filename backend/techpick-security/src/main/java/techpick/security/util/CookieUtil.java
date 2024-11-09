@@ -2,19 +2,20 @@ package techpick.security.util;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import techpick.security.config.SecurityProperties;
 
 @Component
+@RequiredArgsConstructor
 public class CookieUtil {
 
-	@Value("${security.cookie-domain}")
-	private String COOKIE_DOMAIN;
+	private final SecurityProperties properties;
 
 	/**
 	 * response에 쿠키를 등록하는 메소드
@@ -41,7 +42,7 @@ public class CookieUtil {
 			.path("/")
 			.httpOnly(httpOnly)
 			.secure(true)
-			.domain(COOKIE_DOMAIN)
+			.domain(properties.getCookieDomain())
 			.build();
 		response.addHeader("Set-Cookie", responseCookie.toString());
 

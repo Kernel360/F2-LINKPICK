@@ -3,7 +3,6 @@ package techpick.security.handler;
 import java.io.IOException;
 import java.time.Duration;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import techpick.core.model.user.User;
 import techpick.core.model.user.UserRepository;
-import techpick.security.config.SecurityConfig;
+import techpick.security.config.SecurityProperties;
 import techpick.security.exception.ApiOAuth2Exception;
 import techpick.security.model.OAuth2UserInfo;
 import techpick.security.util.CookieUtil;
@@ -28,9 +27,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 	private final JwtUtil jwtUtil;
 	private final UserRepository userRepository;
 	private static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
-
-	@Value("${security.default-redirect-url}")
-	private String DEFAULT_REDIRECT_URL;
+	private final SecurityProperties properties;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -44,10 +41,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		String accessToken = jwtUtil.getToken(user, ACCESS_TOKEN_DURATION);
 
 		var redirectUrl = cookieUtil.findCookieValue(request.getCookies(),
-			SecurityConfig.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY).orElse(DEFAULT_REDIRECT_URL);
+			properties.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY).orElse(properties.getDefaultRedirectUrl());
 
 		addAccessTokenToCookie(request, response, accessToken);
-		cookieUtil.deleteCookie(request, response, SecurityConfig.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY);
+		cookieUtil.deleteCookie(request, response, properties.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY);
 		response.sendRedirect(redirectUrl);
 
 		super.clearAuthenticationAttributes(request);
@@ -59,17 +56,17 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		int cookieMaxAge = (int)ACCESS_TOKEN_DURATION.toSeconds();
 
-		cookieUtil.deleteCookie(request, response, SecurityConfig.ACCESS_TOKEN_KEY);
+		cookieUtil.deleteCookie(request, response, properties.ACCESS_TOKEN_KEY);
 		cookieUtil.addCookie(
 			response,
-			SecurityConfig.ACCESS_TOKEN_KEY,
+			properties.ACCESS_TOKEN_KEY,
 			token,
 			cookieMaxAge,
 			true
 		);
 		cookieUtil.addCookie(
 			response,
-			SecurityConfig.LOGIN_FLAG_FOR_FRONTEND,
+			properties.LOGIN_FLAG_FOR_FRONTEND,
 			"true",
 			cookieMaxAge,
 			false

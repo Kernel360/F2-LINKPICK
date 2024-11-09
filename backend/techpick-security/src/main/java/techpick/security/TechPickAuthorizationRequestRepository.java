@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import techpick.security.config.SecurityConfig;
+import techpick.security.config.SecurityProperties;
 import techpick.security.util.CookieUtil;
 
 /**
@@ -21,6 +21,7 @@ public class TechPickAuthorizationRequestRepository
 	implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
 	private final CookieUtil cookieUtil;
+	private final SecurityProperties properties;
 	private final AuthorizationRequestRepository<OAuth2AuthorizationRequest> defaultRepository
 		= new HttpSessionOAuth2AuthorizationRequestRepository();
 
@@ -41,8 +42,8 @@ public class TechPickAuthorizationRequestRepository
 		HttpServletRequest request,
 		HttpServletResponse response
 	) {
-		String returnUrl = request.getParameter(SecurityConfig.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY);
-		cookieUtil.addCookie(response, SecurityConfig.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY, returnUrl, 180, true);
+		String returnUrl = request.getParameter(properties.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY);
+		cookieUtil.addCookie(response, properties.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY, returnUrl, 180, true);
 		defaultRepository.saveAuthorizationRequest(authorizationRequest, request, response);
 	}
 
