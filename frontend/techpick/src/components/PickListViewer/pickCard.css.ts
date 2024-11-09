@@ -1,23 +1,8 @@
 import { keyframes, style } from '@vanilla-extract/css';
-import { space, color } from 'techpick-shared';
+import { space, color, sizes } from 'techpick-shared';
 
 export const linkStyle = style({
-  color: 'inherit', // 부모의 텍스트 색상 따르기
-  textDecoration: 'none', // 밑줄 제거
-  selectors: {
-    '&:hover': {
-      color: 'inherit',
-      textDecoration: 'none',
-    },
-    '&:active': {
-      color: 'inherit',
-      textDecoration: 'none',
-    },
-    '&:visited': {
-      color: 'inherit',
-      textDecoration: 'none',
-    },
-  },
+  width: sizes['fit'],
 });
 
 export const pickCardLayout = style({
