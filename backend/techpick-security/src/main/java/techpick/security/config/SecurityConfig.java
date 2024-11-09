@@ -3,6 +3,7 @@ package techpick.security.config;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -27,6 +28,7 @@ import techpick.security.service.CustomOAuth2Service;
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Slf4j
+@EnableConfigurationProperties(SecurityProperties.class)
 public class SecurityConfig {
 
 	private final CustomOAuth2Service customOAuth2Service;
@@ -34,16 +36,10 @@ public class SecurityConfig {
 	private final TokenAuthenticationFilter tokenAuthenticationFilter;
 	private final TechPickLogoutHandler techPickLogoutHandler;
 	private final TechPickAuthorizationRequestRepository requestRepository;
-
+	private final SecurityProperties securityProperties;
+	
 	@Value("${core.base-url}")
 	private String baseUrl;
-
-	@Value("${security.cors-pattern}")
-	private String corsPattern;
-
-	public static final String ACCESS_TOKEN_KEY = "access_token";
-	public static final String LOGIN_FLAG_FOR_FRONTEND = "techPickLogin";
-	public static final String OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY = "redirectUrl";
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -94,7 +90,7 @@ public class SecurityConfig {
 
 		config.setAllowCredentials(true);
 		config.setAllowedOrigins(List.of(baseUrl));
-		config.setAllowedOriginPatterns(List.of("chrome-extension://*", corsPattern));
+		config.setAllowedOriginPatterns(securityProperties.getCorsPatterns());
 		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 		config.setAllowedHeaders(List.of("*"));
 		config.setExposedHeaders(List.of("*"));
