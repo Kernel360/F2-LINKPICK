@@ -13,23 +13,23 @@ public class TagApiRequest {
 	}
 
 	public record Read(
-		@Schema(example = "2") @NotNull Long tagId) {
+		@Schema(example = "2") @NotNull Long id) {
 	}
 
 	public record Update(
-		@Schema(example = "2") @NotNull Long tagId,
+		@Schema(example = "2") @NotNull Long id,
 		@Schema(example = "new tag name") @NotEmpty String name,
 		@Schema(example = "7") @NotNull Integer colorNumber) {
 	}
 
 	public record Move(
-		@Schema(example = "3") @NotNull Long tagId,
+		@Schema(example = "3") @NotNull Long id,
 		@Schema(example = "1") @NotNull int orderIdx
 	) {
 	}
 
 	public record Delete(
-		@Schema(example = "4") @NotNull Long tagId
+		@Schema(example = "4") @NotNull Long id
 	) {
 	}
 }

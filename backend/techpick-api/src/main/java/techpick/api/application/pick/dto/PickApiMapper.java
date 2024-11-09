@@ -30,7 +30,6 @@ public interface PickApiMapper {
 
 	PickApiResponse.Pick toApiResponse(PickResult.Pick pickResult);
 
-	default PickApiResponse.Fetch toApiFetchResponse(List<PickResult.PickList> pickList) {
-		return new PickApiResponse.Fetch(pickList);
-	}
+	PickApiResponse.FolderPickList toApiFolderPickList(PickResult.FolderPickList folderPickList);
+
 }

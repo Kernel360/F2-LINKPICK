@@ -32,7 +32,7 @@ import techpick.core.model.user.UserRepository;
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(classes = TechPickApiApplication.class)
-@ActiveProfiles("test")
+@ActiveProfiles("local")
 @Transactional
 class TagServiceTest {
 

@@ -10,7 +10,7 @@ public record FolderResult(
 	FolderType folderType,
 	Long parentFolderId,
 	Long userId,
-	List<Long> childFolderList,
-	List<Long> childPickList
+	List<Long> childFolderIdOrderedList,
+	List<Long> childPickIdOrderedList
 ) {
 }

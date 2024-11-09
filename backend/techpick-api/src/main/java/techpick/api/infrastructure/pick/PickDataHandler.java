@@ -13,6 +13,7 @@ import techpick.api.domain.link.dto.LinkMapper;
 import techpick.api.domain.pick.dto.PickCommand;
 import techpick.api.domain.pick.dto.PickMapper;
 import techpick.api.domain.pick.exception.ApiPickException;
+import techpick.api.domain.tag.exception.ApiTagException;
 import techpick.api.domain.user.exception.ApiUserException;
 import techpick.core.model.folder.Folder;
 import techpick.core.model.folder.FolderRepository;
@@ -23,6 +24,7 @@ import techpick.core.model.pick.PickRepository;
 import techpick.core.model.pick.PickTag;
 import techpick.core.model.pick.PickTagRepository;
 import techpick.core.model.tag.Tag;
+import techpick.core.model.tag.TagRepository;
 import techpick.core.model.user.User;
 import techpick.core.model.user.UserRepository;
 
@@ -38,6 +40,7 @@ public class PickDataHandler {
 	private final FolderRepository folderRepository;
 	private final LinkRepository linkRepository;
 	private final LinkMapper linkMapper;
+	private final TagRepository tagRepository;
 
 	@Transactional(readOnly = true)
 	public Pick getPick(Long pickId) {
@@ -80,12 +83,18 @@ public class PickDataHandler {
 			})
 			.orElseGet(() -> linkRepository.save(linkMapper.of(command.linkInfo())));
 
+		// 픽 존재 여부 검증
 		pickRepository.findByUserAndLink(user, link)
 			.ifPresent((__) -> {
 				throw ApiPickException.PICK_MUST_BE_UNIQUE_FOR_A_URL();
 			});
 
-		return pickRepository.save(pickMapper.toEntity(command, user, folder, link));
+		// 태그 존재 여부 검증
+		validateTagIdList(command.tagIdOrderedList());
+
+		Pick savedPick = pickRepository.save(pickMapper.toEntity(command, user, folder, link));
+		savedPick.getParentFolder().addChildPickIdOrdered(savedPick.getId());
+		return savedPick;
 	}
 
 	@Transactional
@@ -95,26 +104,30 @@ public class PickDataHandler {
 
 	@Transactional
 	public Pick updatePick(PickCommand.Update command) {
-		Pick pick = getPick(command.pickId());
+		Pick pick = getPick(command.id());
+
+		// 태그 존재 여부 검증
+		validateTagIdList(command.tagIdOrderedList());
+
 		pick.updateTitle(command.title()).updateMemo(command.memo());
-		updateNewTagIdList(pick, command.tagIdList());
+		updateNewTagIdList(pick, command.tagIdOrderedList());
 		return pick;
 	}
 
 	@Transactional
 	public void movePickToCurrentFolder(PickCommand.Move command) {
-		List<Long> pickIdList = command.pickIdList();
+		List<Long> pickIdList = command.idList();
 		Folder folder = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
-		folder.updateChildPickOrderList(pickIdList, command.orderIdx());
+		folder.updateChildPickIdOrderedList(pickIdList, command.orderIdx());
 	}
 
 	@Transactional
 	public void movePickToOtherFolder(PickCommand.Move command) {
-		List<Long> pickIdList = command.pickIdList();
+		List<Long> pickIdList = command.idList();
 		Folder destinationFolder = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
-		destinationFolder.updateChildPickOrderList(pickIdList, command.orderIdx());
+		destinationFolder.updateChildPickIdOrderedList(pickIdList, command.orderIdx());
 
 		for (Long pickId : pickIdList) {
 			Pick pick = getPick(pickId);
@@ -125,7 +138,7 @@ public class PickDataHandler {
 
 	@Transactional
 	public void deletePickList(PickCommand.Delete command) {
-		List<Long> pickIdList = command.pickIdList();
+		List<Long> pickIdList = command.idList();
 		for (Long pickId : pickIdList) {
 			Pick pick = getPick(pickId);
 			pick.getParentFolder().removeChildPickOrder(pickId);
@@ -145,10 +158,16 @@ public class PickDataHandler {
 	}
 
 	private void updateNewTagIdList(Pick pick, List<Long> newTagOrderList) {
-		pick.getTagOrderList().stream()
+		pick.getTagIdOrderedList().stream()
 			.filter(tagId -> !newTagOrderList.contains(tagId))
 			.forEach(tagId -> detachTagFromPick(pick, tagId));
 		pick.updateTagOrderList(newTagOrderList);
+	}
+
+	private void validateTagIdList(List<Long> tagIdOrderedList) {
+		tagIdOrderedList
+			.forEach(tagId -> tagRepository.findById(tagId)
+				.orElseThrow(ApiTagException::TAG_NOT_FOUND));
 	}
 
 }

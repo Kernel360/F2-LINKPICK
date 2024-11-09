@@ -2,8 +2,10 @@ package techpick.api.domain.folder.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +27,7 @@ public class FolderService {
 
 	@Transactional(readOnly = true)
 	public FolderResult getFolder(FolderCommand.Read command) {
-		Folder folder = folderDataHandler.getFolder(command.folderId());
+		Folder folder = folderDataHandler.getFolder(command.id());
 
 		validateFolderAccess(command.userId(), folder);
 
@@ -34,11 +36,11 @@ public class FolderService {
 
 	@Transactional(readOnly = true)
 	public List<FolderResult> getChildFolderList(FolderCommand.Read command) {
-		Folder folder = folderDataHandler.getFolder(command.folderId());
+		Folder folder = folderDataHandler.getFolder(command.id());
 
 		validateFolderAccess(command.userId(), folder);
 
-		return folderDataHandler.getFolderListPreservingOrder(folder.getChildFolderOrderList())
+		return folderDataHandler.getFolderListPreservingOrder(folder.getChildFolderIdOrderedList())
 			.stream()
 			.map(folderMapper::toResult)
 			.toList();
@@ -52,7 +54,7 @@ public class FolderService {
 		List<FolderResult> folderList = new ArrayList<>();
 		folderList.add(folderMapper.toResult(rootFolder));
 
-		rootFolder.getChildFolderOrderList().stream()
+		rootFolder.getChildFolderIdOrderedList().stream()
 			.map(folderDataHandler::getFolder)
 			.map(folderMapper::toResult)
 			.forEach(folderList::add);
@@ -79,7 +81,7 @@ public class FolderService {
 	@Transactional
 	public FolderResult updateFolder(FolderCommand.Update command) {
 
-		Folder folder = folderDataHandler.getFolder(command.folderId());
+		Folder folder = folderDataHandler.getFolder(command.id());
 
 		validateFolderAccess(command.userId(), folder);
 		validateBasicFolderChange(folder);
@@ -89,33 +91,30 @@ public class FolderService {
 
 	@Transactional
 	public void moveFolder(FolderCommand.Move command) {
-
-		List<Folder> folderList = folderDataHandler.getFolderList(command.folderIdList());
+		List<Folder> folderList = folderDataHandler.getFolderList(command.idList());
 
 		for (Folder folder : folderList) {
 			validateFolderAccess(command.userId(), folder);
 			validateBasicFolderChange(folder);
 		}
 
-		// 부모가 다른 폴더들을 동시에 이동할 수 없음.
+		Folder destinationFolder = folderDataHandler.getFolder(command.destinationFolderId());
+		// TODO: 현재 프론트에서 같은 부모 폴더에서만 폴더들을 선택하여 이동할 수 있음.
+		//  추후 다른 부모 폴더도 선택이 가능해지게 된다면, get(0) 사용하는 방식이 아닌 다른 방식을 고려해야 함.
 		Long parentFolderId = folderList.get(0).getParentFolder().getId();
-		for (int i = 1; i < folderList.size(); i++) {
-			if (parentFolderId.equals(folderList.get(i).getParentFolder().getId())) {
-				throw ApiFolderException.INVALID_MOVE_TARGET();
-			}
-		}
-
 		if (isParentFolderNotChanged(command, parentFolderId)) {
+			validateWithinParentFolder(folderList, destinationFolder);
 			folderDataHandler.moveFolderWithinParent(command);
-		} else {
-			folderDataHandler.moveFolderToDifferentParent(command);
+			return;
 		}
+		validateDifferentParentFolder(folderList, destinationFolder);
+		folderDataHandler.moveFolderToDifferentParent(command);
 	}
 
 	@Transactional
 	public void deleteFolder(FolderCommand.Delete command) {
 
-		List<Folder> folderList = folderDataHandler.getFolderList(command.folderIdList());
+		List<Folder> folderList = folderDataHandler.getFolderList(command.idList());
 
 		for (Folder folder : folderList) {
 			validateFolderAccess(command.userId(), folder);
@@ -138,6 +137,30 @@ public class FolderService {
 	private void validateBasicFolderChange(Folder folder) {
 		if (FolderType.GENERAL != folder.getFolderType()) {
 			throw ApiFolderException.BASIC_FOLDER_CANNOT_CHANGED();
+		}
+	}
+
+	private void validateWithinParentFolder(List<Folder> folderList, Folder destinationFolder) {
+		for (Folder folder : folderList) {
+			Folder parentFolder = folder.getParentFolder();
+			if (Objects.equals(destinationFolder.getFolderType(), FolderType.UNCLASSIFIED)) {
+				throw ApiFolderException.FOLDER_ACCESS_DENIED();
+			}
+			if (ObjectUtils.notEqual(parentFolder.getId(), destinationFolder.getId())) {
+				throw ApiFolderException.INVALID_MOVE_TARGET();
+			}
+		}
+	}
+
+	private void validateDifferentParentFolder(List<Folder> folderList, Folder destinationFolder) {
+		for (Folder folder : folderList) {
+			Folder parentFolder = folder.getParentFolder();
+			if (Objects.equals(destinationFolder.getFolderType(), FolderType.UNCLASSIFIED)) {
+				throw ApiFolderException.FOLDER_ACCESS_DENIED();
+			}
+			if (Objects.equals(parentFolder.getId(), destinationFolder.getId())) {
+				throw ApiFolderException.INVALID_MOVE_TARGET();
+			}
 		}
 	}
 }

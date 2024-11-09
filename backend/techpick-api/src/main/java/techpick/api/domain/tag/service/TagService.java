@@ -22,7 +22,7 @@ public class TagService {
 
 	@Transactional(readOnly = true)
 	public TagResult getTag(TagCommand.Read command) throws ApiTagException {
-		Tag tag = tagDataHandler.getTag(command.tagId());
+		Tag tag = tagDataHandler.getTag(command.id());
 		validateTagAccess(command.userId(), tag);
 		return tagMapper.toResult(tag);
 	}
@@ -41,7 +41,7 @@ public class TagService {
 
 	@Transactional
 	public TagResult updateTag(TagCommand.Update command) {
-		Tag tag = tagDataHandler.getTag(command.tagId());
+		Tag tag = tagDataHandler.getTag(command.id());
 
 		validateTagAccess(command.userId(), tag);
 		validateDuplicateTagName(command.userId(), command.name());
@@ -51,7 +51,7 @@ public class TagService {
 
 	@Transactional
 	public void moveUserTag(TagCommand.Move command) {
-		Tag tag = tagDataHandler.getTag(command.tagId());
+		Tag tag = tagDataHandler.getTag(command.id());
 
 		validateTagAccess(command.userId(), tag);
 
@@ -60,7 +60,7 @@ public class TagService {
 
 	@Transactional
 	public void deleteTag(TagCommand.Delete command) {
-		Tag tag = tagDataHandler.getTag(command.tagId());
+		Tag tag = tagDataHandler.getTag(command.id());
 
 		validateTagAccess(command.userId(), tag);
 

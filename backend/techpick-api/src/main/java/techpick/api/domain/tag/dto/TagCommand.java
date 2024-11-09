@@ -10,26 +10,26 @@ public class TagCommand {
 
 	public record Read(
 		Long userId,
-		Long tagId) {
+		Long id) {
 	}
 
 	public record Update(
 		Long userId,
-		Long tagId,
+		Long id,
 		String name,
 		Integer colorNumber) {
 	}
 
 	public record Move(
 		Long userId,
-		Long tagId,
+		Long id,
 		int orderIdx
 	) {
 	}
 
 	public record Delete(
 		Long userId,
-		Long tagId
+		Long id
 	) {
 	}
 }

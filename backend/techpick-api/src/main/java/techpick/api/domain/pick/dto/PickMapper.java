@@ -25,11 +25,11 @@ public interface PickMapper {
 
 	@Mapping(source = "folderId", target = "folderId")
 	@Mapping(source = "pick", target = "pickList")
-	PickResult.PickList toPickResultList(Long folderId, List<PickResult.Pick> pick);
+	PickResult.FolderPickList toPickResultList(Long folderId, List<PickResult.Pick> pick);
 
 	@Mapping(source = "command.title", target = "title")
 	@Mapping(source = "parentFolder", target = "parentFolder")
 	@Mapping(source = "user", target = "user")
-	@Mapping(source = "command.tagOrderList", target = "tagOrderList")
+	@Mapping(source = "command.tagIdOrderedList", target = "tagIdOrderedList")
 	Pick toEntity(PickCommand.Create command, User user, Folder parentFolder, Link link);
 }

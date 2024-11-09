@@ -13,14 +13,15 @@ public class PickApiResponse {
 		String title,
 		String memo,
 		LinkInfo linkInfo,
-		List<Long> tagOrderList,
+		List<Long> tagIdOrderedList,
 		LocalDateTime createdAt,
 		LocalDateTime updatedAt
 	) {
 	}
 
-	public record Fetch(
-		List<PickResult.PickList> pickResponseList
+	public record FolderPickList(
+		Long folderId,
+		List<PickResult.Pick> pickList
 	) {
 	}
 
