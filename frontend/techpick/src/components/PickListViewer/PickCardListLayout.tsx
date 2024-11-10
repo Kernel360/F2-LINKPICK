@@ -1,3 +1,5 @@
+'use client';
+
 import { PickViewItemListLayoutComponentProps } from '.';
 import { pickCardGridLayoutStyle } from './pickCardGridLayout.css';
 
