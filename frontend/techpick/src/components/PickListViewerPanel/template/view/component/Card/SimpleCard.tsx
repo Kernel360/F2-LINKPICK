@@ -1,22 +1,10 @@
 import { ReactElement } from 'react';
-import {
-  Pick,
-  UiProps,
-} from '@/components/PickListViewerPanel/types/common.type';
-import { ChipItemList } from '@/components/PickListViewerPanel/ui/SelectedTagItem';
+import { UiProps } from '@/components/PickListViewerPanel/types/common.type';
 import { cardLayout } from './SimpleCard.css';
+import { ListProps } from '../../ViewTemplate';
 
-interface CardProps extends UiProps<Pick> {}
+export function SimpleCard(props: UiProps<ListProps>): ReactElement {
+  console.log('props', props);
 
-export function SimpleCard({ uiData: pick }: CardProps): ReactElement {
-  return (
-    <div className={cardLayout}>
-      {pick.title}
-      <ChipItemList>
-        {/*{pick.tagOrderList.map((tag, idx) => (*/}
-        {/*  <ChipItem backgroundColor="#d17699" label={tag.tagName} key={idx} />*/}
-        {/*))}*/}
-      </ChipItemList>
-    </div>
-  );
+  return <div className={cardLayout}>{}</div>;
 }

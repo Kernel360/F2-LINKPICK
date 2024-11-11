@@ -2,6 +2,7 @@ const API_ENDPOINTS = {
   FOLDERS: 'folders',
   LOCATION: 'location',
   BASIC: 'basic',
+  PICKS: 'picks',
 };
 
 export const API_URLS = {
@@ -11,4 +12,7 @@ export const API_URLS = {
   UPDATE_FOLDER: API_ENDPOINTS.FOLDERS,
   MOVE_FOLDER: `${API_ENDPOINTS.FOLDERS}/${API_ENDPOINTS.LOCATION}`,
   GET_BASIC_FOLDERS: `${API_ENDPOINTS.FOLDERS}/${API_ENDPOINTS.BASIC}`,
+  GET_PICKS_BY_FOLDER_ID: (folderId: number) =>
+    `${API_ENDPOINTS.PICKS}?folderIdList=${folderId}`,
+  MOVE_PICKS: `${API_ENDPOINTS.PICKS}/${API_ENDPOINTS.LOCATION}`,
 };

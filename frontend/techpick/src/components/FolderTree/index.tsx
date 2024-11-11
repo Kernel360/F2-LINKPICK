@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { DragOverlay } from '@dnd-kit/core';
 import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
@@ -12,12 +13,14 @@ import { TreeNode } from './TreeNode';
 
 export function FolderTree() {
   const { newFolderParentId } = useCreateFolderInputStore();
-  const { getFolders, getBasicFolders } = useTreeStore.getState();
+  const { getFolders, getBasicFolders } = useTreeStore();
   const rootFolderId = useTreeStore((state) => state.rootFolderId);
   const isShow = newFolderParentId !== rootFolderId;
 
-  getFolders();
-  getBasicFolders();
+  useEffect(() => {
+    getFolders();
+    getBasicFolders();
+  }, [getBasicFolders, getFolders]);
 
   return (
     <HorizontalResizableContainer>

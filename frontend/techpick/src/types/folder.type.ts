@@ -1,19 +1,9 @@
-import type { Concrete } from './uitl.type';
-import type { UniqueIdentifier } from '@dnd-kit/core';
+import type { Concrete } from './util.type';
 import type { components } from '@/schema';
 
 export type SelectedFolderListType = number[];
 
 export type ChildFolderListType = number[];
-
-export type DnDCurrentType = {
-  id: UniqueIdentifier;
-  sortable: {
-    containerId: string | null;
-    items: UniqueIdentifier[];
-    index: number;
-  };
-};
 
 export type GetFolderListResponseType = Concrete<
   components['schemas']['techpick.api.application.folder.dto.FolderApiResponse']

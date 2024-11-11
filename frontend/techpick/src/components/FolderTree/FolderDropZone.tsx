@@ -8,7 +8,7 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
-import { isDnDCurrentData } from '@/stores/dndTreeStore/utils/isDnDCurrentData';
+import { isDnDCurrentData } from '@/utils';
 import type {
   DragEndEvent,
   DragOverEvent,

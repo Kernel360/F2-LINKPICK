@@ -1,17 +1,20 @@
+import type { ReactNode } from 'react';
 import { ListBulletIcon, ViewGridIcon } from '@radix-ui/react-icons';
 import { SimpleCard } from './component/Card/SimpleCard';
 import { SimpleRecord } from './component/Record/SimpleRecord';
 import { gridLayout } from './layout/GridLayout.css';
 import { listLayout } from './layout/ListLayout.css';
-import {
-  Pick,
-  UiIcon,
-  UiLabel,
-  UiListComponent,
-} from '../../types/common.type';
+import { UiIcon, UiLabel, UiListComponent } from '../../types/common.type';
 
-export type ViewTemplate = UiIcon & UiLabel & UiListComponent<Pick>;
+export interface ListProps {
+  pickId: number;
+  children: ReactNode;
+}
 
+// 여기
+export type ViewTemplate = UiIcon & UiLabel & UiListComponent<ListProps>;
+
+// ViewTemplateType을 가져간다.
 export type ViewTemplateType = 'GRID' | 'LIST';
 
 /**

@@ -10,10 +10,9 @@ import {
 } from '@/apis/folder';
 import { getEntries } from '@/components/PickListViewerPanel/types/common.type';
 import { UNKNOWN_FOLDER_ID } from '@/constants';
+import { isDnDCurrentData, reorderSortableIdList } from '@/utils';
 import { changeParentFolderId } from './utils/changeParentFolderId';
-import { isDnDCurrentData } from './utils/isDnDCurrentData';
 import { moveFolderToDifferentParent } from './utils/moveFolderToDifferentParent';
-import { reorderFolderInSameParent } from './utils/reorderFoldersInSameParent';
 import type { Active, Over, UniqueIdentifier } from '@dnd-kit/core';
 import type {
   FolderType,
@@ -205,8 +204,8 @@ export const useTreeStore = create<TreeState & TreeAction>()(
             prevChildFolderList = [...childFolderList];
 
             state.treeDataMap[parentId].childFolderIdOrderedList =
-              reorderFolderInSameParent({
-                childFolderList,
+              reorderSortableIdList({
+                sortableIdList: childFolderList,
                 fromId,
                 toId,
                 selectedFolderList,

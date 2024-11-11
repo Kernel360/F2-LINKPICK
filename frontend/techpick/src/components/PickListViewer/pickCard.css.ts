@@ -1,25 +1,6 @@
 import { keyframes, style } from '@vanilla-extract/css';
 import { space, color } from 'techpick-shared';
 
-export const linkStyle = style({
-  color: 'inherit', // 부모의 텍스트 색상 따르기
-  textDecoration: 'none', // 밑줄 제거
-  selectors: {
-    '&:hover': {
-      color: 'inherit',
-      textDecoration: 'none',
-    },
-    '&:active': {
-      color: 'inherit',
-      textDecoration: 'none',
-    },
-    '&:visited': {
-      color: 'inherit',
-      textDecoration: 'none',
-    },
-  },
-});
-
 export const pickCardLayout = style({
   display: 'flex',
   flexDirection: 'column',
@@ -30,6 +11,7 @@ export const pickCardLayout = style({
   border: `1px solid ${color.border}`,
   borderRadius: '4px',
   backgroundColor: color.background,
+  cursor: 'pointer',
 });
 
 export const cardImageSectionStyle = style({
