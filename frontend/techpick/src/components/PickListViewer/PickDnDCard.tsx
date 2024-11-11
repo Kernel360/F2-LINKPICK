@@ -2,7 +2,6 @@
 
 import { useCallback } from 'react';
 import Image from 'next/image';
-import { PickViewDnDItemComponentProps } from '.';
 import {
   cardDescriptionSectionStyle,
   cardImageSectionStyle,
@@ -11,6 +10,7 @@ import {
   defaultCardImageSectionStyle,
   pickCardLayout,
 } from './pickCard.css';
+import { PickViewDnDItemComponentProps } from './PickListViewer';
 
 export function PickDnDCard({ pickInfo }: PickViewDnDItemComponentProps) {
   const { memo, title, linkInfo } = pickInfo;

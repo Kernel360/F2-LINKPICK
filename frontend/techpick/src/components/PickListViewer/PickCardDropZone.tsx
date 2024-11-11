@@ -10,7 +10,7 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext } from '@dnd-kit/sortable';
 import { usePickStore } from '@/stores/pickStore/pickStore';
-import { PickViewDnDItemListLayoutComponentProps } from '.';
+import { PickViewDnDItemListLayoutComponentProps } from './DraggablePickListViewer';
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 
 export function PickCardDropZone({

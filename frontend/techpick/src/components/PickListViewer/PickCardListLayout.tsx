@@ -1,7 +1,7 @@
 'use client';
 
-import { PickViewItemListLayoutComponentProps } from '.';
 import { pickCardGridLayoutStyle } from './pickCardGridLayout.css';
+import { PickViewItemListLayoutComponentProps } from './PickListViewer';
 
 export function PickCardListLayout({
   children,

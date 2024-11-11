@@ -1,6 +1,6 @@
 'use client';
 
-import { PickViewDnDItemListLayoutComponentProps } from '.';
+import { PickViewDnDItemListLayoutComponentProps } from './DraggablePickListViewer';
 import { PickCardDropZone } from './PickCardDropZone';
 import { pickCardGridLayoutStyle } from './pickCardGridLayout.css';
 
