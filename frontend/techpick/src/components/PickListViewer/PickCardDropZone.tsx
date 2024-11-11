@@ -3,14 +3,16 @@
 import {
   closestCenter,
   DndContext,
+  DragOverlay,
   MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
-import { SortableContext } from '@dnd-kit/sortable';
+import { SortableContext, rectSortingStrategy } from '@dnd-kit/sortable';
 import { usePickStore } from '@/stores/pickStore/pickStore';
 import { PickViewDnDItemListLayoutComponentProps } from './DraggablePickListViewer';
+import { PickCard } from './PickCard';
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
 
 export function PickCardDropZone({
@@ -18,13 +20,27 @@ export function PickCardDropZone({
   children,
 }: PickViewDnDItemListLayoutComponentProps) {
   const {
-    getOrderedPickListByFolderId,
+    getOrderedPickIdListByFolderId,
+    getPickInfoByFolderIdAndPickId,
     movePick,
     selectedPickIdList,
     selectSinglePick,
+    setIsDragging,
+    setFocusedPickId,
+    isDragging,
+    focusPickId,
   } = usePickStore();
-  const orderedPickList = getOrderedPickListByFolderId(folderId);
-  const orderedPickIdList = orderedPickList.map((pickInfo) => pickInfo.id);
+  const orderedPickIdList = getOrderedPickIdListByFolderId(folderId);
+  const orderedPickIdListWithoutSelectedIdList = isDragging
+    ? orderedPickIdList.filter(
+        (orderedPickId) =>
+          !selectedPickIdList.includes(orderedPickId) ||
+          orderedPickId === focusPickId
+      )
+    : orderedPickIdList;
+  const draggingPickInfo = focusPickId
+    ? getPickInfoByFolderIdAndPickId(folderId, focusPickId)
+    : null;
 
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
@@ -40,16 +56,16 @@ export function PickCardDropZone({
   const sensors = useSensors(mouseSensor, touchSensor);
 
   const onDragStart = (event: DragStartEvent) => {
+    setIsDragging(true);
     const { active } = event;
     const pickId = Number(active.id);
 
     if (!selectedPickIdList.includes(pickId)) {
       selectSinglePick(pickId);
-
       return;
     }
 
-    // console.log('onDragStart! active:', active);
+    setFocusedPickId(pickId);
   };
 
   const onDragEnd = (event: DragEndEvent) => {
@@ -58,10 +74,7 @@ export function PickCardDropZone({
     if (!over) return; // 드래그 중 놓은 위치가 없을 때 종료
 
     movePick({ folderId, from: active, to: over });
-
-    // console.log('onDragEnd!');
-    // console.log('active', active);
-    // console.log('over', over);
+    setIsDragging(false);
   };
 
   return (
@@ -71,9 +84,18 @@ export function PickCardDropZone({
       onDragStart={onDragStart}
       onDragEnd={onDragEnd}
     >
-      <SortableContext id={`${folderId}`} items={orderedPickIdList}>
+      <SortableContext
+        id={`${folderId}`}
+        items={orderedPickIdListWithoutSelectedIdList}
+        strategy={rectSortingStrategy}
+      >
         {children}
       </SortableContext>
+      {isDragging && draggingPickInfo && (
+        <DragOverlay>
+          <PickCard pickInfo={draggingPickInfo}></PickCard>
+        </DragOverlay>
+      )}
     </DndContext>
   );
 }

@@ -22,6 +22,10 @@ type PickAction = {
   fetchPickDataByFolderId: (folderId: number) => Promise<void>;
   getOrderedPickIdListByFolderId: (folderId: number) => number[];
   getOrderedPickListByFolderId: (folderId: number) => PickInfoType[];
+  getPickInfoByFolderIdAndPickId: (
+    folderId: number,
+    pickId: number
+  ) => PickInfoType | null | undefined;
   hasPickRecordValue: (
     pickRecordValue: PickRecordValueType | undefined
   ) => pickRecordValue is PickRecordValueType;
@@ -30,6 +34,8 @@ type PickAction = {
     newSelectedPickIdList: SelectedPickIdListType
   ) => void;
   selectSinglePick: (pickId: number) => void;
+  setIsDragging: (isDragging: boolean) => void;
+  setFocusedPickId: (focusedPickId: number) => void;
 };
 
 const initialState: PickState = {
@@ -88,6 +94,21 @@ export const usePickStore = create<PickState & PickAction>()(
 
         return pickOrderedList;
       },
+      getPickInfoByFolderIdAndPickId: (folderId, pickId) => {
+        const pickRecordValue = get().pickRecord[`${folderId}`];
+
+        if (!get().hasPickRecordValue(pickRecordValue)) {
+          return null;
+        }
+
+        const { pickIdOrderedList, pickInfoRecord } = pickRecordValue;
+
+        if (!pickIdOrderedList.includes(pickId)) {
+          return null;
+        }
+
+        return pickInfoRecord[`${pickId}`];
+      },
       hasPickRecordValue: (
         pickRecordValue
       ): pickRecordValue is PickRecordValueType => {
@@ -139,6 +160,16 @@ export const usePickStore = create<PickState & PickAction>()(
         set((state) => {
           state.focusPickId = pickId;
           state.selectedPickIdList = [pickId];
+        });
+      },
+      setIsDragging: (isDragging) => {
+        set((state) => {
+          state.isDragging = isDragging;
+        });
+      },
+      setFocusedPickId: (focusedPickId) => {
+        set((state) => {
+          state.focusPickId = focusedPickId;
         });
       },
     }))

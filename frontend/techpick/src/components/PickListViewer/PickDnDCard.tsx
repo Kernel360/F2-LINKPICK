@@ -15,7 +15,10 @@ import {
   defaultCardImageSectionStyle,
   pickCardLayout,
 } from './pickCard.css';
-import { selectedDragItemStyle } from './pickDnDCard.css';
+import {
+  selectedDragItemStyle,
+  isActiveDraggingItemStyle,
+} from './pickDnDCard.css';
 import { getSelectedPickRange } from './pickDnDCard.util';
 import { PickViewDnDItemComponentProps } from './PickListViewer';
 
@@ -26,18 +29,18 @@ export function PickDnDCard({ pickInfo }: PickViewDnDItemComponentProps) {
     getOrderedPickIdListByFolderId,
     focusPickId,
     setSelectedPickIdList,
+    isDragging,
   } = usePickStore();
   const { memo, title, linkInfo, id: pickId, parentFolderId } = pickInfo;
   const { imageUrl, url } = linkInfo;
   const isSelected = selectedPickIdList.includes(pickId);
-
   const {
     attributes,
     listeners,
     setNodeRef,
     transform,
     transition,
-    // isDragging: isActiveDragging, 나중에 multi-select 때 동작하자
+    isDragging: isActiveDragging,
   } = useSortable({
     id: pickId,
     data: {
@@ -85,10 +88,14 @@ export function PickDnDCard({ pickInfo }: PickViewDnDItemComponentProps) {
     selectSinglePick(pickId);
   };
 
+  if (isDragging && isSelected && !isActiveDragging) {
+    return null;
+  }
+
   return (
     <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
       <div
-        className={`${pickCardLayout} ${isSelected ? selectedDragItemStyle : ''}`}
+        className={`${pickCardLayout} ${isSelected ? selectedDragItemStyle : ''} ${isActiveDragging ? isActiveDraggingItemStyle : ''}`}
         onDoubleClick={openUrl}
         onClick={(event) => handleClick(pickId, event)}
       >

@@ -5,3 +5,7 @@ export const selectedDragItemStyle = style({
   backgroundColor: colorThemeContract.primary,
   userSelect: 'none',
 });
+
+export const isActiveDraggingItemStyle = style({
+  opacity: 0,
+});
