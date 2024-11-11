@@ -22,7 +22,7 @@ export function PickCardDropZone({
   const {
     getOrderedPickIdListByFolderId,
     getPickInfoByFolderIdAndPickId,
-    movePick,
+    movePicks,
     selectedPickIdList,
     selectSinglePick,
     setIsDragging,
@@ -73,7 +73,7 @@ export function PickCardDropZone({
 
     if (!over) return; // 드래그 중 놓은 위치가 없을 때 종료
 
-    movePick({ folderId, from: active, to: over });
+    movePicks({ folderId, from: active, to: over });
     setIsDragging(false);
   };
 

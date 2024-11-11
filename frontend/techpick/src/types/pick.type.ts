@@ -31,3 +31,6 @@ export type GetPicksByFolderIdResponseType = {
 
 export type OrderedPickIdListType = number[];
 export type SelectedPickIdListType = number[];
+
+export type MovePicksRequestType =
+  components['schemas']['techpick.api.application.pick.dto.PickApiRequest$Move'];

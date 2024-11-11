@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { getPicksByFolderId } from '@/apis/pick';
+import { getPicksByFolderId, movePicks } from '@/apis/pick';
 import { isDnDCurrentData, reorderSortableIdList } from '@/utils';
 import type { Active, Over } from '@dnd-kit/core';
 import type {
@@ -29,7 +29,7 @@ type PickAction = {
   hasPickRecordValue: (
     pickRecordValue: PickRecordValueType | undefined
   ) => pickRecordValue is PickRecordValueType;
-  movePick: (movePickPayload: MovePickPayload) => void;
+  movePicks: (movePickPayload: MovePickPayload) => Promise<void>;
   setSelectedPickIdList: (
     newSelectedPickIdList: SelectedPickIdListType
   ) => void;
@@ -118,7 +118,7 @@ export const usePickStore = create<PickState & PickAction>()(
 
         return true;
       },
-      movePick: ({ from, to }) => {
+      movePicks: async ({ from, to }) => {
         const fromData = from.data.current;
         const toData = to.data.current;
 
@@ -150,6 +150,25 @@ export const usePickStore = create<PickState & PickAction>()(
             selectedFolderList: state.selectedPickIdList,
           });
         });
+
+        try {
+          await movePicks({
+            idList: get().selectedPickIdList,
+            orderIdx: toData.sortable.index,
+            destinationFolderId: Number(folderId),
+          });
+        } catch {
+          set((state) => {
+            const curPickRecordValue = state.pickRecord[`${folderId}`];
+
+            if (!get().hasPickRecordValue(curPickRecordValue)) {
+              return;
+            }
+
+            curPickRecordValue.pickIdOrderedList = prevPickIdOrderedList;
+            state.pickRecord[`${folderId}`] = curPickRecordValue;
+          });
+        }
       },
       setSelectedPickIdList: (newSelectedPickIdList) => {
         set((state) => {
