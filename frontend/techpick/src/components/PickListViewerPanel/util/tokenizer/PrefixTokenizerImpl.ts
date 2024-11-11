@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { getEntries } from '@/components/PickListViewerPanel/types/common.type';
 import type {
   Prefix,
@@ -48,24 +49,20 @@ class PrefixTokenizer<KeyType extends string> implements Tokenizer<KeyType> {
 
   tokenize(str: string): TokenizeResult<KeyType> {
     const matches = str.matchAll(this.regex);
-    const arr = Array.from(matches);
-    const groups = arr.map((d) => d.groups);
+    const groups = Array.from(matches).map((d) => d.groups);
+    const resultArray = new Array<Token<KeyType>>();
 
-    const map = new Map<KeyType, Array<Token>>();
-    this.keys.forEach((key) => map.set(key, []));
-
-    let lastTokenInfo: { key: KeyType; token: Token } | undefined;
     groups.forEach((group, idx) => {
       if (!group) return;
       const tokenKey = this.keys.find((key) => group[key] !== undefined);
-      if (!tokenKey) return;
-      map.get(tokenKey)?.push(group[tokenKey]);
-      // 구현상 마지막 매치는 항상 '' 빈 문자열이다. 따라서 뒤에서 2번째 것을 마지막 토큰으로 처리
-      if (idx === groups.length - 2) {
-        lastTokenInfo = { key: tokenKey, token: group[tokenKey] };
+      if (!tokenKey || groups.length <= idx) {
+        // 정규 표현식 구현상 마지막 그룹 매치는 '' 빈 문자열이다. 이를 무시해야 한다.
+        return;
       }
+      const token = { key: tokenKey, text: group[tokenKey], id: uuidv4() };
+      resultArray.push(token);
     });
-    return new PrefixTokenizeResult(map, lastTokenInfo);
+    return new PrefixTokenizeResult(resultArray);
   }
 
   /**
@@ -91,25 +88,17 @@ class PrefixTokenizer<KeyType extends string> implements Tokenizer<KeyType> {
 class PrefixTokenizeResult<KeyType extends string>
   implements TokenizeResult<KeyType>
 {
-  private readonly resultMap: Map<KeyType, Array<Token>>;
-  private readonly lastTokenInfo?: { key: KeyType; token: Token };
+  private readonly resultArray: Array<Token<KeyType>>;
 
-  constructor(
-    map: Map<KeyType, Array<Token>>,
-    lastTokenInfo?: { key: KeyType; token: Token }
-  ) {
-    this.resultMap = map;
-    this.lastTokenInfo = lastTokenInfo;
+  constructor(array: Array<Token<KeyType>>) {
+    this.resultArray = array;
   }
 
-  public getTokensByKey(key: KeyType): Array<Token> {
-    if (this.resultMap.has(key)) {
-      return this.resultMap.get(key) as Array<Token>;
-    }
-    return [];
+  public getTokensByKey(key: KeyType): Array<Token<KeyType>> {
+    return this.resultArray.filter((token) => token.key === key);
   }
 
-  getLastTokenInfo(): { key: KeyType; token: Token } | undefined {
-    return this.lastTokenInfo;
+  getLastToken(): Token<KeyType> | undefined {
+    return this.resultArray.at(this.resultArray.length - 2);
   }
 }
