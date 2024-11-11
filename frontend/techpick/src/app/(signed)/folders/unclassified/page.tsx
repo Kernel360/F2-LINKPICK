@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { PickListViewerPanel } from '@/components/PickListViewerPanel/PickListViewerPanel';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 
 export default function UnclassifiedFolderPage() {
@@ -18,5 +19,5 @@ export default function UnclassifiedFolderPage() {
     [basicFolderMap, selectSingleFolder]
   );
 
-  return <h1>UnclassifiedFolderPage page</h1>;
+  return <PickListViewerPanel />;
 }
