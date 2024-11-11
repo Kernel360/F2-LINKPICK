@@ -20,6 +20,7 @@ type PickState = {
 
 type PickAction = {
   fetchPickDataByFolderId: (folderId: number) => Promise<void>;
+  getOrderedPickIdListByFolderId: (folderId: number) => number[];
   getOrderedPickListByFolderId: (folderId: number) => PickInfoType[];
   hasPickRecordValue: (
     pickRecordValue: PickRecordValueType | undefined
@@ -56,6 +57,16 @@ export const usePickStore = create<PickState & PickAction>()(
         } catch (error) {
           console.log('fetchPickDataByFolderId error', error);
         }
+      },
+      getOrderedPickIdListByFolderId: (folderId) => {
+        const pickRecordValue = get().pickRecord[`${folderId}`];
+
+        if (!get().hasPickRecordValue(pickRecordValue)) {
+          return [];
+        }
+        const { pickIdOrderedList } = pickRecordValue;
+
+        return pickIdOrderedList;
       },
       getOrderedPickListByFolderId: (folderId: number) => {
         const pickRecordValue = get().pickRecord[`${folderId}`];

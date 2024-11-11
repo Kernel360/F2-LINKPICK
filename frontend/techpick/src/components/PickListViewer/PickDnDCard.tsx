@@ -15,13 +15,21 @@ import {
   defaultCardImageSectionStyle,
   pickCardLayout,
 } from './pickCard.css';
+import { selectedDragItemStyle } from './pickDnDCard.css';
+import { getSelectedPickRange } from './pickDnDCard.util';
 import { PickViewDnDItemComponentProps } from './PickListViewer';
 
 export function PickDnDCard({ pickInfo }: PickViewDnDItemComponentProps) {
-  const { memo, title, linkInfo, id: pickId } = pickInfo;
+  const {
+    selectedPickIdList,
+    selectSinglePick,
+    getOrderedPickIdListByFolderId,
+    focusPickId,
+    setSelectedPickIdList,
+  } = usePickStore();
+  const { memo, title, linkInfo, id: pickId, parentFolderId } = pickInfo;
   const { imageUrl, url } = linkInfo;
-
-  const { selectedPickIdList, selectSinglePick } = usePickStore();
+  const isSelected = selectedPickIdList.includes(pickId);
 
   const {
     attributes,
@@ -47,14 +55,30 @@ export function PickDnDCard({ pickInfo }: PickViewDnDItemComponentProps) {
     window.open(url, '_blank');
   }, [url]);
 
+  const handleShiftSelect = (parentFolderId: number, pickId: number) => {
+    if (!focusPickId) {
+      return;
+    }
+
+    // 새로운 선택된 배열 만들기.
+    const orderedPickIdList = getOrderedPickIdListByFolderId(parentFolderId);
+
+    const newSelectedPickIdList = getSelectedPickRange({
+      orderedPickIdList,
+      startPickId: focusPickId,
+      endPickId: pickId,
+    });
+
+    setSelectedPickIdList(newSelectedPickIdList);
+  };
+
   const handleClick = (
     pickId: number,
     event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
   ) => {
-    event.preventDefault();
-
     if (event.shiftKey && isSelectionActive(selectedPickIdList.length)) {
-      // 니중에 다중선택
+      event.preventDefault();
+      handleShiftSelect(parentFolderId, pickId);
       return;
     }
 
@@ -64,7 +88,7 @@ export function PickDnDCard({ pickInfo }: PickViewDnDItemComponentProps) {
   return (
     <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
       <div
-        className={pickCardLayout}
+        className={`${pickCardLayout} ${isSelected ? selectedDragItemStyle : ''}`}
         onDoubleClick={openUrl}
         onClick={(event) => handleClick(pickId, event)}
       >
