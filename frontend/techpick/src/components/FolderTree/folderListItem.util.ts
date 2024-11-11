@@ -1,8 +1,6 @@
 import { hasIndex } from '@/utils';
 import type { FolderMapType } from '@/types';
 
-export const isSelectionActive = (length: number) => 0 < length;
-
 export const isSameParentFolder = (
   id: number,
   selectedId: number,

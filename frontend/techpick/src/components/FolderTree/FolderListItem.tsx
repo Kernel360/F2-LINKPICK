@@ -2,13 +2,13 @@ import { useState } from 'react';
 import type { MouseEvent } from 'react';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { isSelectionActive } from '@/utils';
 import { FolderContextMenu } from './FolderContextMenu';
 import { FolderInput } from './FolderInput';
 import { FolderLinkItem } from './FolderLinkItem';
 import {
   getSelectedFolderRange,
   isSameParentFolder,
-  isSelectionActive,
 } from './folderListItem.util';
 import type { FolderMapType } from '@/types';
 
