@@ -28,6 +28,9 @@ class PickBulkInsertTest {
 	@Autowired
 	PickService pickService;
 
+	@Autowired
+	PickBulkService pickBulkService;
+
 	User user;
 	Folder root, recycleBin, unclassified, general;
 
@@ -61,7 +64,7 @@ class PickBulkInsertTest {
 	@DisplayName("픽 10000개 bulk insert test")
 	void pickBulkInsertTest() {
 		long start = System.currentTimeMillis();
-		pickService.saveBulkPick(user.getId(), unclassified.getId());
+		pickBulkService.saveBulkPick(user.getId(), unclassified.getId());
 		long end = System.currentTimeMillis();
 
 		log.info("bulk insert time : {}", (end - start));

@@ -18,7 +18,7 @@ import techpick.core.model.link.LinkRepository;
 
 @Repository
 @RequiredArgsConstructor
-public class PickBulkRepository {
+public class PickBulkDataHandler {
 
 	private final JdbcTemplate jdbcTemplate;
 	private final LinkRepository linkRepository;
