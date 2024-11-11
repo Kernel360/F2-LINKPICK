@@ -3,7 +3,7 @@ import {
   getPickList,
   GetPickResponse,
 } from '@/components/PickListViewerPanel/api/getPickList';
-// import { useSearchParam } from '@/components/PickListViewerPanel/model/useSearchParam';
+import { useSearchParam } from '@/components/PickListViewerPanel/model/useSearchParam';
 import {
   globalLayout,
   mainLayout,
@@ -34,20 +34,17 @@ function PickListWidget({ viewTemplate }: ListWidgetProps) {
 
   useEffect(() => {
     (async () => {
-      const response = await getPickList
-        .withSearchParam
-        // useSearchParam.getState()
-        ();
+      const response = await getPickList.withSearchParam(
+        useSearchParam.getState()
+      );
       if (response) setPickResponse(response);
     })(/*IIFE*/);
   }, [pickResponse]);
 
-  /*
-  const removeDuplicate = (res: GetPickResponse) => {
-    const pickList = res.flatMap((eachFolder) => eachFolder.pickList);
-    return groupBy((pick) => pick.parentFolderId, pickList);
-  };
-  */
+  // const removeDuplicate = (res: GetPickResponse) => {
+  //   const pickList = res.flatMap((eachFolder) => eachFolder.pickList);
+  //   return groupBy((pick) => pick.parentFolderId, pickList);
+  // };
 
   return (
     <div className={viewTemplate.listLayoutStyle}>
@@ -58,7 +55,6 @@ function PickListWidget({ viewTemplate }: ListWidgetProps) {
     </div>
   );
 }
-
 /*
 const groupBy = <T,>(selector: (data: T) => unknown, sourceList: T[]) => {
   return Array.from(Map.groupBy(sourceList, selector).values()).flat();

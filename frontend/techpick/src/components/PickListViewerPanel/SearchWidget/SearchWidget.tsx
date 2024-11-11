@@ -1,17 +1,20 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Command } from 'cmdk';
+import { FolderOpen, Tag } from 'lucide-react';
+import WrappedTokenInput, {
+  KEY_DOWN_HANDLER_CONFIG_OPTION,
+  TokenInputRef,
+} from 'react-customize-token-input';
 import { SelectedTagItem } from '@/components';
 import { listItemStyle } from '@/components/PickListViewerPanel/SearchWidget/SearchWidget.css';
-import { getEntries } from '@/components/PickListViewerPanel/types/common.type';
-import {
-  TokenInfo,
-  TokenPrefixPattern,
-} from '@/components/PickListViewerPanel/util/tokenizer/PrefixTokenizer.type';
+import { Token } from '@/components/PickListViewerPanel/util/tokenizer/PrefixTokenizer.type';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { useTagStore } from '@/stores/tagStore';
 import { getStringTokenizer } from '../util';
 import { PrefixPatternBuilder } from '../util/tokenizer/PrefixPatternBuilder';
 import { FolderType, TagType } from '@/types';
+
+import './tokenInput.css';
 
 type SearchKey = 'TAG' | 'FOLDER' | 'NONE';
 
@@ -21,110 +24,179 @@ const pattern = new PrefixPatternBuilder<SearchKey>()
   .ifNoneMatch('NONE')
   .build();
 
-const findPrefixByKey = (
-  targetKey: SearchKey,
-  pattern: TokenPrefixPattern<SearchKey>
-) => {
-  const target = getEntries(pattern).find(([key, _]) => key === targetKey);
-  return target![1]; // target cannot be null
-};
+interface TokenLabelProps {
+  token: Token<SearchKey>;
+  icon?: React.ReactNode;
+}
 
-const initialAutocompleteContext: TokenInfo<SearchKey> = {
-  key: 'NONE',
-  token: '',
-};
+export function TokenLabel(props: TokenLabelProps) {
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: '4px',
+      }}
+    >
+      {props.icon}
+      {`${props.token.text}`}
+    </div>
+  );
+}
 
 export function SearchWidget() {
-  // tokenizer
+  // tokenizer + input
+  const [input, setInput] = useState('');
+  const inputRef = useRef<TokenInputRef>(null);
   const inputTokenizer = useMemo(
     () => getStringTokenizer<SearchKey>(pattern),
     []
   );
-  // basic inputs
-  const inputRef = useRef<HTMLInputElement>(null);
-  // last input Token
-  const [autocompleteContext, setAutocompleteContext] = useState<
-    TokenInfo<SearchKey>
-  >(initialAutocompleteContext);
-  // full input value
-  const [searchInput, setSearchInput] = useState('');
-  // user data to use in recommendation
+  // token list + current token context
+  const [tokens, setTokens] = useState<Token<SearchKey>[]>([]);
+  const [tokenInputContext, setTokenInputContext] =
+    useState<Token<SearchKey> | null>(null);
+  // fetched user data for auto-completion
   const { tagList, fetchingTagList } = useTagStore();
-  // user data to use in recommendation
   const { getFolderList, getFolders } = useTreeStore();
 
-  useEffect(function loadTagAndFolderList() {
-    fetchingTagList(); // fetch tag list
-    getFolders(); // fetch folder list
-  }, []);
-
+  /**
+   * @description
+   * 토큰 리스트에 변경이 일어나면, 실제 검색 api를 호출하기 위한 작업을 수행.
+   */
   useEffect(
-    function parseLastTokenOfSearchInput() {
-      const wordList = searchInput.split(' ');
-      const lastTokenInfo = inputTokenizer
-        .tokenize(wordList[wordList.length - 1])
-        .getLastTokenInfo();
-      setAutocompleteContext(lastTokenInfo ?? initialAutocompleteContext);
+    function fixSearchQueryOnTokenListChange() {
+      if (tokens.length <= 0) return;
+      console.log(tokens);
+      // TODO: convert token lists to global search state
+      // const tagList = tokens.filter((token) => token.key === 'TAG');
+      // const folderList = tokens.filter((token) => token.key === 'FOLDER');
+      // const textList = tokens.filter((token) => token.key === 'NONE');
     },
-    [searchInput]
+    [tokens]
   );
 
-  const doInputAutoComplete = (item: TagType | FolderType) => () => {
-    const prefix = findPrefixByKey(autocompleteContext.key, pattern);
-    setSearchInput((prev) => {
-      const wordList = prev.split(' ');
-      wordList.pop();
-      wordList.push(`${prefix}${item.name}`);
-      return wordList.join(' ');
-    });
-    // close autocomplete context
-    setAutocompleteContext({ key: 'NONE', token: '' });
+  useEffect(
+    function loadTagAndFolderList() {
+      fetchingTagList(); // fetch tag list
+      getFolders(); // fetch folder list
+    },
+    [fetchingTagList, getFolders]
+  );
+
+  useEffect(
+    function setAutocompleteModeByInput() {
+      if (!input) {
+        resetInputContext();
+        return;
+      }
+      const currentToken = inputTokenizer.tokenize(input).getLastToken();
+      currentToken && setTokenInputContext(currentToken);
+    },
+    [input, inputTokenizer]
+  );
+
+  const buildTokenIfNotAutocomplete = (input: string): Token<SearchKey> => {
+    return {
+      key: 'NONE',
+      text: input,
+      id: -1,
+    };
+  };
+
+  const editTokenList = (newTokenValues: Token<SearchKey>[]) => {
+    setTokens(newTokenValues);
+    resetInputContext();
+  };
+
+  const renderTokenLabel = (token: Token<SearchKey>) => {
+    switch (token.key) {
+      case 'FOLDER':
+        return <TokenLabel token={token} icon={<FolderOpen size={'14px'} />} />;
+      case 'TAG':
+        return <TokenLabel token={token} icon={<Tag size={'14px'} />} />;
+      case 'NONE':
+      default:
+        return <>{`${token.text}`}</>;
+    }
+  };
+
+  const onAutocompleteSelect = (item: TagType | FolderType) => () => {
+    if (!tokenInputContext) return;
+    setTokens((prev) => [
+      ...prev,
+      { key: tokenInputContext.key, text: item.name, id: item.id },
+    ]);
+    resetInputContext();
+  };
+
+  const resetInputContext = () => {
+    setInput('');
+    setTokenInputContext(null);
+    inputRef.current?.setCreatorValue('');
     inputRef.current?.focus();
+  };
+
+  const setKeyEvent = (key?: SearchKey) => {
+    return key && key !== 'NONE'
+      ? { onEnter: KEY_DOWN_HANDLER_CONFIG_OPTION.OFF }
+      : { onEnter: KEY_DOWN_HANDLER_CONFIG_OPTION.ON };
   };
 
   return (
     <Command
+      style={{ width: '70%' }} // TODO: change to css.ts + 화면 크기에 따라 맞추기
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
       }}
       label={'Search'}
     >
-      <input // NOTE: 화면에 렌더링되는 Input
-        ref={inputRef}
-        // className={inputStyle}
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-      />
-      <Command.Input // NOTE: 자동 완성 기능을 위한 Input 이며, 화면에 렌더링 되지 않음
+      <Command.Input // just for auto-completion
         style={{ display: 'none' }}
-        value={autocompleteContext.token}
+        value={tokenInputContext?.text}
+      />
+      {/* TODO: 현재 Enter를 누르지 않고 다른 UI 클릭 시 그냥 토큰이 생성됩니다.
+            이 부분을 막아 주는 작업이 추가로 필요합니다.
+            -----------------------------------------------------------
+            재현 예시
+            - 1. #을 누르면 태그 리스트가 보여짐.
+            - 2. 그 상태로 다른 UI 창 클릭시, #이 그대로 입력 된다.
+            - 3. 또 자동 완성 아이템이 아닌, input 창을 클릭하면 #이 그대로 입력된다.
+            ----------------------------------------------------------- */}
+      <WrappedTokenInput
+        ref={inputRef}
+        tokenValues={tokens}
+        specialKeyDown={setKeyEvent(tokenInputContext?.key)}
+        onTokenValuesChange={editTokenList}
+        onBuildTokenValue={buildTokenIfNotAutocomplete}
+        onGetTokenDisplayLabel={renderTokenLabel}
+        onInputValueChange={setInput}
       />
       <Command.List>
-        <Command.Empty>No results found.</Command.Empty>
-        {autocompleteContext.key === 'TAG' &&
+        {tokenInputContext?.key === 'TAG' &&
           tagList.map((tag) => (
             <Command.Item
               key={tag.id}
               className={listItemStyle}
               value={tag.name}
-              onSelect={doInputAutoComplete(tag)}
+              onSelect={onAutocompleteSelect(tag)}
               keywords={[tag.name]}
             >
               <SelectedTagItem tag={tag} />
             </Command.Item>
           ))}
-        {autocompleteContext.key === 'FOLDER' &&
+        {tokenInputContext?.key === 'FOLDER' &&
           getFolderList().map((folder) => (
             <Command.Item
               key={folder.id}
               className={listItemStyle}
               value={folder.name}
-              onSelect={doInputAutoComplete(folder)}
+              onSelect={onAutocompleteSelect(folder)}
               keywords={[folder.name]}
             >
               {folder.name /* TODO: 폴더 아이템 컴포넌트로 수정 할 것 */}
-              {/*<FolderItem folder={folder} />*/}
             </Command.Item>
           ))}
       </Command.List>
