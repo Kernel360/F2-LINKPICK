@@ -17,7 +17,12 @@ export function PickCardDropZone({
   folderId,
   children,
 }: PickViewDnDItemListLayoutComponentProps) {
-  const { getOrderedPickListByFolderId } = usePickStore();
+  const {
+    getOrderedPickListByFolderId,
+    movePick,
+    selectedPickIdList,
+    selectSinglePick,
+  } = usePickStore();
   const orderedPickList = getOrderedPickListByFolderId(folderId);
   const orderedPickIdList = orderedPickList.map((pickInfo) => pickInfo.id);
 
@@ -36,8 +41,15 @@ export function PickCardDropZone({
 
   const onDragStart = (event: DragStartEvent) => {
     const { active } = event;
+    const pickId = Number(active.id);
 
-    console.log('onDragStart! active:', active);
+    if (!selectedPickIdList.includes(pickId)) {
+      selectSinglePick(pickId);
+
+      return;
+    }
+
+    // console.log('onDragStart! active:', active);
   };
 
   const onDragEnd = (event: DragEndEvent) => {
@@ -45,9 +57,11 @@ export function PickCardDropZone({
 
     if (!over) return; // 드래그 중 놓은 위치가 없을 때 종료
 
-    console.log('onDragEnd!');
-    console.log('active', active);
-    console.log('over', over);
+    movePick({ folderId, from: active, to: over });
+
+    // console.log('onDragEnd!');
+    // console.log('active', active);
+    // console.log('over', over);
   };
 
   return (

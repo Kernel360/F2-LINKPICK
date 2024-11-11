@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { PickListViewer } from '@/components';
+import { DraggablePickListViewer } from '@/components';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { usePickStore } from '@/stores/pickStore/pickStore';
 
@@ -38,8 +38,9 @@ export default function UnclassifiedFolderPage() {
   }
 
   return (
-    <PickListViewer
+    <DraggablePickListViewer
       pickList={getOrderedPickListByFolderId(basicFolderMap['UNCLASSIFIED'].id)}
+      folderId={basicFolderMap['UNCLASSIFIED'].id}
     />
   );
 }

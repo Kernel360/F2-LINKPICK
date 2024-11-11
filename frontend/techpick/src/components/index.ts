@@ -11,4 +11,4 @@ export { ToggleThemeButton } from './ToggleThemeButton';
 export { FeaturedSection } from './FeaturedSection/FeaturedSection';
 export { TagPicker } from './TagPicker';
 export { FolderTree } from './FolderTree';
-export { PickListViewer } from './PickListViewer';
+export { PickListViewer, DraggablePickListViewer } from './PickListViewer';

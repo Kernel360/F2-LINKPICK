@@ -28,3 +28,5 @@ export type GetPicksByFolderIdResponseType = {
   folderId: number;
   pickList: PickListType;
 }[];
+
+export type SelectedPickIdListType = number[];
