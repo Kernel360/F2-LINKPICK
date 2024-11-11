@@ -40,6 +40,7 @@
     "re-resizable": "^6.10.0",
     "react": "^18",
     "react-arborist": "^3.4.0",
+    "react-customize-token-input": "^2.6.1",
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18",
@@ -47,6 +48,7 @@
     "react-spinners": "^0.14.1",
     "techpick-shared": "workspace:*",
     "use-immer": "^0.10.0",
+    "uuid": "^11.0.2",
     "zustand": "^4.5.5"
   },
   "devDependencies": {
