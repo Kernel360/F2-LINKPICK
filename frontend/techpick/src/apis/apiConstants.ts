@@ -14,5 +14,7 @@ export const API_URLS = {
   GET_BASIC_FOLDERS: `${API_ENDPOINTS.FOLDERS}/${API_ENDPOINTS.BASIC}`,
   GET_PICKS_BY_FOLDER_ID: (folderId: number) =>
     `${API_ENDPOINTS.PICKS}?folderIdList=${folderId}`,
+  GET_PICKS_BY_QUERY_PARAM: (queryParam: string) =>
+    `${API_ENDPOINTS.PICKS}?${queryParam}`,
   MOVE_PICKS: `${API_ENDPOINTS.PICKS}/${API_ENDPOINTS.LOCATION}`,
 };
