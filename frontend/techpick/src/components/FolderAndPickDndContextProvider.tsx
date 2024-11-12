@@ -1,15 +1,8 @@
 'use client';
 
 import type { PropsWithChildren } from 'react';
-import {
-  DndContext,
-  DragOverlay,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-  pointerWithin,
-} from '@dnd-kit/core';
+import { DndContext, DragOverlay, pointerWithin } from '@dnd-kit/core';
+import { useGetDndContextSensor } from '@/hooks';
 import { DndMonitorContext } from './DndMonitorContext';
 
 /**
@@ -18,18 +11,7 @@ import { DndMonitorContext } from './DndMonitorContext';
 export function FolderAndPickDndContextProvider({
   children,
 }: PropsWithChildren) {
-  const mouseSensor = useSensor(MouseSensor, {
-    activationConstraint: {
-      distance: 10, // MouseSensor: 10px 이동해야 드래그 시작
-    },
-  });
-  const touchSensor = useSensor(TouchSensor, {
-    activationConstraint: {
-      delay: 250,
-      tolerance: 5,
-    },
-  });
-  const sensors = useSensors(mouseSensor, touchSensor);
+  const { sensors } = useGetDndContextSensor();
 
   return (
     <DndContext sensors={sensors} collisionDetection={pointerWithin}>
