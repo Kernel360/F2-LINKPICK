@@ -1,7 +1,9 @@
+import { enableMapSet } from 'immer';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { getPicksByFolderId, movePicks } from '@/apis/pick';
+import { getPicksByQueryParam } from '@/apis/pick/getPicks';
 import { isDnDCurrentData, reorderSortableIdList } from '@/utils';
 import type { Active, Over } from '@dnd-kit/core';
 import type {
@@ -11,7 +13,11 @@ import type {
   SelectedPickIdListType,
 } from '@/types';
 
+enableMapSet();
+
 type PickState = {
+  // 전체 검색 시, 실제 조회 결과에 포함된 folder만을 pickRecord에서 획득하고자 추가함.
+  recentlyFetchedFolderIdList: Set<number>;
   pickRecord: PickRecordType;
   focusPickId: number | null;
   selectedPickIdList: SelectedPickIdListType;
@@ -36,9 +42,18 @@ type PickAction = {
   selectSinglePick: (pickId: number) => void;
   setIsDragging: (isDragging: boolean) => void;
   setFocusedPickId: (focusedPickId: number) => void;
+  /**
+   * queryParam을 통으로 검색에 사용합니다. (search 패널)
+   */
+  fetchPickDataByQueryParam: (param: string) => Promise<void>;
+  /**
+   * 가장 최근 조회된 폴더 id 리스트 반환 (전체 검색용)
+   */
+  getRecentlyFetchedFolderIdList: () => number[];
 };
 
 const initialState: PickState = {
+  recentlyFetchedFolderIdList: new Set<number>(),
   pickRecord: {},
   focusPickId: null,
   selectedPickIdList: [],
@@ -55,6 +70,7 @@ export const usePickStore = create<PickState & PickAction>()(
             await getPicksByFolderId(folderId);
 
           set((state) => {
+            state.recentlyFetchedFolderIdList.add(folderId);
             state.pickRecord[folderId] = {
               pickIdOrderedList,
               pickInfoRecord,
@@ -190,6 +206,29 @@ export const usePickStore = create<PickState & PickAction>()(
         set((state) => {
           state.focusPickId = focusedPickId;
         });
+      },
+      fetchPickDataByQueryParam: async (param) => {
+        try {
+          const result = await getPicksByQueryParam(param);
+          result.forEach((record) => {
+            // 전체 검색 조회시 사용자의 모든 폴더 목록을 보여주는게 아니다.
+            // 검색 결과에 포함된 것만 보여줘야 한다.
+            // 따라서, 아래 Set을 이용해서 response에 담겨온 폴더 id만을 조회한다.
+            // 반복문을 통한 partial update의 성능에 대해 고민해볼 것.
+            set((state) => {
+              state.recentlyFetchedFolderIdList.add(record.parentFolderId);
+              state.pickRecord[record.parentFolderId] = {
+                pickIdOrderedList: record.pickIdOrderedList,
+                pickInfoRecord: record.pickInfoRecord,
+              };
+            });
+          });
+        } catch (error) {
+          console.log('fetchPickDataByFolderId error', error);
+        }
+      },
+      getRecentlyFetchedFolderIdList: () => {
+        return Array.from(get().recentlyFetchedFolderIdList);
       },
     }))
   )

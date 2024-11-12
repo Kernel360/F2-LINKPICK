@@ -8,7 +8,7 @@ import {
   updateFolder,
   createFolder,
 } from '@/apis/folder';
-import { getEntries } from '@/components/PickListViewerPanel/types/common.type';
+import getObjectEntries from '@/components/SearchWidget/util/getObjectEntries';
 import { UNKNOWN_FOLDER_ID } from '@/constants';
 import { isDnDCurrentData, reorderSortableIdList } from '@/utils';
 import { changeParentFolderId } from './utils/changeParentFolderId';
@@ -349,13 +349,13 @@ export const useTreeStore = create<TreeState & TreeAction>()(
       },
       findFolderByName: (name: string) => {
         const map = get().treeDataMap;
-        return getEntries(map)
+        return getObjectEntries(map)
           .filter(([_, folder]) => folder.name === name)
           .map((entity) => entity[1]);
       },
       getFolderList: () => {
         const map = get().treeDataMap;
-        return Array.from(getEntries(map).map((entry) => entry[1]));
+        return Array.from(getObjectEntries(map).map((entry) => entry[1]));
       },
     }))
   )
