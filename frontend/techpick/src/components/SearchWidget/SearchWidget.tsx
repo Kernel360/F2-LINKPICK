@@ -35,6 +35,7 @@ interface TokenLabelProps {
   icon?: React.ReactNode;
 }
 
+// TODO: inline style은 css로 빼기
 export function TokenLabel(props: TokenLabelProps) {
   return (
     <div
@@ -139,6 +140,7 @@ export function SearchWidget() {
     router.push(`/folders/search?${exportSearchQuery()}`);
   };
 
+  // TODO: 해당 함수는 외부로 빼기 (리팩토링)
   const exportSearchQuery = () => {
     return createQueryParameter(
       {
