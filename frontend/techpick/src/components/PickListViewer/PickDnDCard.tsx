@@ -45,6 +45,7 @@ export function PickDnDCard({ pickInfo }: PickViewDnDItemComponentProps) {
     id: pickId,
     data: {
       id: `pick ${pickId}`,
+      type: 'pick',
     },
   });
 

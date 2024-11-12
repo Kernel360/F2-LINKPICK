@@ -10,7 +10,7 @@ import {
 } from '@/apis/folder';
 import { getEntries } from '@/components/PickListViewerPanel/types/common.type';
 import { UNKNOWN_FOLDER_ID } from '@/constants';
-import { isDnDCurrentData, reorderSortableIdList } from '@/utils';
+import { isFolderDraggableObject, reorderSortableIdList } from '@/utils';
 import { changeParentFolderId } from './utils/changeParentFolderId';
 import { moveFolderToDifferentParent } from './utils/moveFolderToDifferentParent';
 import type { Active, Over, UniqueIdentifier } from '@dnd-kit/core';
@@ -186,7 +186,11 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         const fromData = from.data.current;
         const toData = to.data.current;
 
-        if (!isDnDCurrentData(fromData) || !isDnDCurrentData(toData)) return;
+        if (
+          !isFolderDraggableObject(fromData) ||
+          !isFolderDraggableObject(toData)
+        )
+          return;
         // SortableContext에 id가 없으면 종료
         if (!fromData.sortable.containerId || !toData.sortable.containerId)
           return;

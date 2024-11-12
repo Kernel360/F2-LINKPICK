@@ -18,7 +18,8 @@ export const FolderDraggable = ({
   } = useSortable({
     id,
     data: {
-      id: `test ${id}`,
+      id: `folder ${id}`,
+      type: 'folder',
     },
   });
 

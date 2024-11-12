@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 import { getPicksByFolderId, movePicks } from '@/apis/pick';
-import { isDnDCurrentData, reorderSortableIdList } from '@/utils';
+import { isPickDraggableObject, reorderSortableIdList } from '@/utils';
 import type { Active, Over } from '@dnd-kit/core';
 import type {
   PickRecordType,
@@ -122,7 +122,8 @@ export const usePickStore = create<PickState & PickAction>()(
         const fromData = from.data.current;
         const toData = to.data.current;
 
-        if (!isDnDCurrentData(fromData) || !isDnDCurrentData(toData)) return;
+        if (!isPickDraggableObject(fromData) || !isPickDraggableObject(toData))
+          return;
         // SortableContext에 id가 없으면 종료
         if (!fromData.sortable.containerId || !toData.sortable.containerId)
           return;

@@ -8,7 +8,7 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
-import { isDnDCurrentData } from '@/utils';
+import { isFolderDraggableObject } from '@/utils';
 import type {
   DragEndEvent,
   DragOverEvent,
@@ -61,7 +61,10 @@ export function FolderDropZone({ children }: PropsWithChildren) {
     // console.log('active', active);
     // console.log('over', over);
 
-    if (!isDnDCurrentData(activeData) || !isDnDCurrentData(overData)) {
+    if (
+      !isFolderDraggableObject(activeData) ||
+      !isFolderDraggableObject(overData)
+    ) {
       return;
     }
 

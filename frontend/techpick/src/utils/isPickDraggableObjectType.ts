@@ -1,11 +1,17 @@
-import type { DnDCurrentType } from '@/types';
+import type { FolderDraggableObjectType } from '@/types';
 
-export const isDnDCurrentData = (data: unknown): data is DnDCurrentType => {
+export const isPickDraggableObject = (
+  data: unknown
+): data is FolderDraggableObjectType => {
   if (!data || typeof data !== 'object') {
     return false;
   }
 
   if ('id' in data === false) {
+    return false;
+  }
+
+  if (!('type' in data && data.type === 'pick')) {
     return false;
   }
 
