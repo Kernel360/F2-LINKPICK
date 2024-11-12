@@ -1,5 +1,3 @@
-import { BatchStream } from './stream/BatchStream.type';
-import { BatchStreamImpl } from './stream/BatchStreamImpl';
 import { PrefixTokenizerFactory } from './tokenizer/PrefixTokenizerImpl';
 import type {
   Tokenizer,
@@ -15,8 +13,4 @@ export function getStringTokenizer<KeyType extends string>(
   pattern: TokenPrefixPattern<KeyType>
 ): Tokenizer<KeyType> {
   return new PrefixTokenizerFactory<KeyType>().addPattern(pattern).build();
-}
-
-export function getStream<T>(source: T[]): BatchStream<T> {
-  return new BatchStreamImpl(source);
 }
