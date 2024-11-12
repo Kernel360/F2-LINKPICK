@@ -1,8 +1,8 @@
 'use client';
 
 import { PickViewDnDItemListLayoutComponentProps } from './DraggablePickListViewer';
-import { PickCardDropZone } from './PickCardDropZone';
 import { pickCardGridLayoutStyle } from './pickCardGridLayout.css';
+import { PickListSortableContext } from './PickListSortableContext';
 
 export function PickDnDCardListLayout({
   children,
@@ -10,7 +10,9 @@ export function PickDnDCardListLayout({
 }: PickViewDnDItemListLayoutComponentProps) {
   return (
     <div className={pickCardGridLayoutStyle}>
-      <PickCardDropZone folderId={folderId}>{children}</PickCardDropZone>
+      <PickListSortableContext folderId={folderId}>
+        {children}
+      </PickListSortableContext>
     </div>
   );
 }

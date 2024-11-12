@@ -1,13 +1,7 @@
-import type { PropsWithChildren } from 'react';
-import {
-  closestCenter,
-  DndContext,
-  MouseSensor,
-  TouchSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+'use client';
+
+import { useDndMonitor } from '@dnd-kit/core';
+import { useTreeStore } from '@/stores';
 import { isFolderDraggableObject } from '@/utils';
 import type {
   DragEndEvent,
@@ -15,7 +9,10 @@ import type {
   DragStartEvent,
 } from '@dnd-kit/core';
 
-export function FolderDropZone({ children }: PropsWithChildren) {
+/**
+ * @description folder에서 folder로 dnd를 할 때의 이벤트를 감지하고 동작하는 hook입니다.
+ */
+export function useFolderToFolderDndMonitor() {
   const {
     moveFolder,
     selectedFolderList,
@@ -23,30 +20,24 @@ export function FolderDropZone({ children }: PropsWithChildren) {
     setIsDragging,
     setFocusFolderId,
   } = useTreeStore();
-  const mouseSensor = useSensor(MouseSensor, {
-    activationConstraint: {
-      distance: 10, // MouseSensor: 10px 이동해야 드래그 시작
-    },
-  });
-  const touchSensor = useSensor(TouchSensor, {
-    activationConstraint: {
-      delay: 250,
-      tolerance: 5,
-    },
-  });
-  const sensors = useSensors(mouseSensor, touchSensor);
 
   const onDragStart = (event: DragStartEvent) => {
+    const { active } = event;
+    const activeObject = active.data.current;
+
+    if (!isFolderDraggableObject(activeObject)) return;
+
+    const folderId = Number(activeObject.id);
     setIsDragging(true);
 
-    const { active } = event;
-
-    if (!selectedFolderList.includes(Number(active.id))) {
-      setFocusFolderId(Number(event.active.id));
-      setSelectedFolderList([Number(event.active.id)]);
+    if (!selectedFolderList.includes(folderId)) {
+      setFocusFolderId(folderId);
+      setSelectedFolderList([folderId]);
 
       return;
     }
+
+    setFocusFolderId(folderId);
   };
 
   const onDragOver = (event: DragOverEvent) => {
@@ -56,10 +47,6 @@ export function FolderDropZone({ children }: PropsWithChildren) {
 
     const activeData = active.data.current;
     const overData = over.data.current;
-
-    // console.log('active over');
-    // console.log('active', active);
-    // console.log('over', over);
 
     if (
       !isFolderDraggableObject(activeData) ||
@@ -82,26 +69,29 @@ export function FolderDropZone({ children }: PropsWithChildren) {
 
   const onDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
+    setIsDragging(false);
 
     if (!over) return; // 드래그 중 놓은 위치가 없을 때 종료
+    const activeData = active.data.current;
+    const overData = over.data.current;
+
+    if (
+      !isFolderDraggableObject(activeData) ||
+      !isFolderDraggableObject(overData)
+    ) {
+      return;
+    }
 
     moveFolder({
       from: active,
       to: over,
       selectedFolderList,
     });
-    setIsDragging(false);
   };
 
-  return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={onDragEnd}
-      onDragStart={onDragStart}
-      onDragOver={onDragOver}
-    >
-      {children}
-    </DndContext>
-  );
+  useDndMonitor({
+    onDragStart: onDragStart,
+    onDragOver: onDragOver,
+    onDragEnd: onDragEnd,
+  });
 }
