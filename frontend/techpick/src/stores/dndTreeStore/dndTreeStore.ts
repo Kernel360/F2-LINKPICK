@@ -56,7 +56,9 @@ type TreeAction = {
   setTo: (newTo: Over) => void;
   setIsDragging: (isDragging: boolean) => void;
   setFocusFolderId: (newFolderId: number) => void;
-  filterByParentId: (parentId: UniqueIdentifier) => FolderType[];
+  getChildFolderListByParentFolderId: (
+    parentId: UniqueIdentifier
+  ) => FolderType[];
   /**
    * @author 김민규
    * @description 미리 로딩한 나의 폴더 리스트 에서 찾는다.
@@ -198,8 +200,8 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         // 부모 containerId가 같으면
         if (fromData.sortable.containerId === toData.sortable.containerId) {
           const parentId = fromData.sortable.containerId;
-          const fromId = from.id;
-          const toId = to.id;
+          const fromId = fromData.id;
+          const toId = toData.id;
           let prevChildFolderList: ChildFolderListType = [];
 
           set((state) => {
@@ -329,27 +331,28 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           state.isDragging = isDragging; // 드래그 상태 설정
         });
       },
-      filterByParentId: (parentId) => {
-        const parentFolder = get().treeDataMap[parentId.toString()];
+      getChildFolderListByParentFolderId: (parentFolderId) => {
+        const parentFolderInfo = get().treeDataMap[parentFolderId.toString()];
 
-        if (!parentFolder) {
+        if (!parentFolderInfo) {
           return [];
         }
 
-        const childFolderIdList = parentFolder.childFolderIdOrderedList;
-        const filteredFolderList = [];
+        const childFolderIdOrderedList =
+          parentFolderInfo.childFolderIdOrderedList;
+        const childFolderList = [];
 
-        for (const childFolderId of childFolderIdList) {
+        for (const childFolderId of childFolderIdOrderedList) {
           const curFolderInfo = get().treeDataMap[childFolderId];
 
           if (!curFolderInfo) {
             continue;
           }
 
-          filteredFolderList.push(curFolderInfo);
+          childFolderList.push(curFolderInfo);
         }
 
-        return filteredFolderList;
+        return childFolderList;
       },
       findFolderByName: (name: string) => {
         const map = get().treeDataMap;

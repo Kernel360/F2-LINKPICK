@@ -10,10 +10,25 @@ import { FolderInput } from './FolderInput';
 import { FolderListItem } from './FolderListItem';
 import type { UniqueIdentifier } from '@dnd-kit/core';
 
-export function TreeNode({ id, depth }: TreeNodeProps) {
-  const { filterByParentId, createFolder: createFolderInStore } =
-    useTreeStore();
-  const curTreeNodeChildList = filterByParentId(Number(id));
+export function TreeNode({ id }: TreeNodeProps) {
+  const {
+    getChildFolderListByParentFolderId,
+    createFolder: createFolderInStore,
+    selectedFolderList,
+    isDragging,
+    focusFolderId,
+  } = useTreeStore();
+  const curTreeNodeChildList = getChildFolderListByParentFolderId(Number(id));
+  const orderedChildFolderIdList = curTreeNodeChildList.map(
+    (childFolder) => childFolder.id
+  );
+  const orderedChildFolderIdListWithoutSelectedIdList = isDragging
+    ? orderedChildFolderIdList.filter(
+        (childFolderId) =>
+          !selectedFolderList.includes(childFolderId) ||
+          childFolderId === focusFolderId
+      )
+    : orderedChildFolderIdList;
   const { newFolderParentId } = useCreateFolderInputStore();
   const { closeCreateFolderInput } = useCreateFolderInputStore();
   const isParentForNewFolder = newFolderParentId === id;
@@ -29,11 +44,6 @@ export function TreeNode({ id, depth }: TreeNodeProps) {
     [closeCreateFolderInput, createFolderInStore, id]
   );
 
-  /**
-   * 폴더 구조는 현재 SortableContext가 중첩되는 방식으로 진행되고 있지만,
-   * 해당 방식은 depth가 늘어날 수록 drag & drop이 올바르게 일어나지 않고 있습니다.
-   * 따라서 해당 코드는 1-depth의 SortableContext로 바꾸는 방식으로 추후 진행되어야합니다.
-   */
   return (
     <>
       {isParentForNewFolder && (
@@ -42,22 +52,21 @@ export function TreeNode({ id, depth }: TreeNodeProps) {
           onClickOutSide={closeCreateFolderInput}
         />
       )}
+      {/**
+       * @description folder-${childFolderId}로 id가 정해졌다면 내부의 FolderDraggable의 id도 동일해야합니다.
+       */}
       <SortableContext
         id={`${id}`}
-        items={curTreeNodeChildList.map((item) => item.id)}
+        items={orderedChildFolderIdListWithoutSelectedIdList.map(
+          (childFolderId) => `folder-${childFolderId}`
+        )}
         strategy={verticalListSortingStrategy}
       >
         {curTreeNodeChildList.map((treeData) => {
           return (
-            <div key={treeData.id}>
-              <FolderDraggable id={treeData.id}>
-                <FolderListItem id={treeData.id} name={treeData.name} />
-                {/** depth가 있는 폴더구조는 추후에 적용될 예정입니다.*/}
-                {0 < treeData.childFolderIdOrderedList.length && (
-                  <TreeNode id={treeData.id} depth={depth + 1} />
-                )}
-              </FolderDraggable>
-            </div>
+            <FolderDraggable id={treeData.id} key={treeData.id}>
+              <FolderListItem id={treeData.id} name={treeData.name} />
+            </FolderDraggable>
           );
         })}
       </SortableContext>

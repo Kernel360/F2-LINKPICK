@@ -16,9 +16,9 @@ export const FolderDraggable = ({
     transition,
     isDragging: isActiveDragging,
   } = useSortable({
-    id,
+    id: `folder-${id}`,
     data: {
-      id: `folder ${id}`,
+      id: id,
       type: 'folder',
     },
   });
@@ -34,7 +34,7 @@ export const FolderDraggable = ({
     return null;
   }
 
-  if (isActiveDragging) {
+  if (isActiveDragging && isDragging) {
     return (
       <div
         ref={setNodeRef}
