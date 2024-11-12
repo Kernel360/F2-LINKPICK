@@ -12,4 +12,4 @@ export { FeaturedSection } from './FeaturedSection/FeaturedSection';
 export { TagPicker } from './TagPicker';
 export { FolderTree } from './FolderTree';
 export { PickListViewer, DraggablePickListViewer } from './PickListViewer';
-export { FolderAndPickDndContext } from './FolderAndPickDndContext';
+export { FolderAndPickDndContextProvider } from './FolderAndPickDndContextProvider';

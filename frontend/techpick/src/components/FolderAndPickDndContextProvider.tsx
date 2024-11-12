@@ -15,7 +15,9 @@ import { DndMonitorContext } from './DndMonitorContext';
 /**
  * @description pick과 folder에서 drag & drop을 이용할 시에 콘텐스트로 감싸줘야합니다.
  */
-export function FolderAndPickDndContext({ children }: PropsWithChildren) {
+export function FolderAndPickDndContextProvider({
+  children,
+}: PropsWithChildren) {
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10, // MouseSensor: 10px 이동해야 드래그 시작

@@ -1,14 +1,14 @@
 import type { PropsWithChildren } from 'react';
-import { FolderTree, FolderAndPickDndContext } from '@/components';
+import { FolderTree, FolderAndPickDndContextProvider } from '@/components';
 import { pageContainerLayout } from './layout.css';
 
 export default function FolderLayout({ children }: PropsWithChildren) {
   return (
     <div className={pageContainerLayout}>
-      <FolderAndPickDndContext>
+      <FolderAndPickDndContextProvider>
         <FolderTree />
         {children}
-      </FolderAndPickDndContext>
+      </FolderAndPickDndContextProvider>
     </div>
   );
 }
