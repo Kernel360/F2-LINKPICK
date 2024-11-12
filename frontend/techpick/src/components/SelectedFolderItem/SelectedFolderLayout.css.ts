@@ -1,10 +1,9 @@
 import { style } from '@vanilla-extract/css';
-import { ChipCommonStyle } from './ChipItemCommonStyle';
 
-export const chipItemStyle = style({
+export const selectedFolderLayoutStyle = style({
   display: 'inline-flex',
   alignItems: 'center',
-  maxWidth: `calc(${ChipCommonStyle.width})`,
+  maxWidth: `264px`,
   height: '20px',
   borderRadius: '4px',
 });

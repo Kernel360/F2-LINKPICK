@@ -1,6 +1,5 @@
 import { cloneDeep } from 'es-toolkit/object';
-import { BatchStream } from './BatchStream.type';
-import { PredicateFn } from '../../types/common.type';
+import { BatchStream, PredicateFn } from './BatchStream.type';
 
 export class BatchStreamImpl<T> implements BatchStream<T> {
   private readonly source: T[]; // 원본 데이터 배열

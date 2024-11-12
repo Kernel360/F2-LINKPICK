@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import { getEntries } from '@/components/PickListViewerPanel/types/common.type';
+import getObjectEntries from '@/components/SearchWidget/util/getObjectEntries';
 import type {
   Prefix,
   TokenizerFactory,
@@ -19,7 +19,7 @@ export class PrefixTokenizerFactory<KeyType extends string>
   private readonly patterns: Map<KeyType, Prefix> = new Map();
 
   addPattern(pattern: TokenPrefixPattern<KeyType>): TokenizerFactory<KeyType> {
-    for (const [key, value] of getEntries(pattern)) {
+    for (const [key, value] of getObjectEntries(pattern)) {
       if (this.patterns.has(key)) {
         throw new Error('패턴 Key는 중복될 수 없습니다.');
       }
@@ -30,7 +30,7 @@ export class PrefixTokenizerFactory<KeyType extends string>
   removePattern(
     pattern: TokenPrefixPattern<KeyType>
   ): TokenizerFactory<KeyType> {
-    getEntries(pattern).forEach(([key, _]) => this.patterns.delete(key));
+    getObjectEntries(pattern).forEach(([key, _]) => this.patterns.delete(key));
     return this;
   }
   build(): Tokenizer<KeyType> {

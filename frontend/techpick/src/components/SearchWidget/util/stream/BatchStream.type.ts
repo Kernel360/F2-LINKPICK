@@ -1,5 +1,4 @@
-import type { PredicateFn } from '../../types/common.type';
-
+export type PredicateFn<T> = (value: T) => boolean;
 /**
  * @description 주어진 데이터 배열을 1회성 Stream으로 한번에 연산합니다.
  *              (1) 원본 데이터 배열은 변경하지 않습니다.
