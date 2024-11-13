@@ -16,6 +16,7 @@ type PickState = {
   focusPickId: number | null;
   selectedPickIdList: SelectedPickIdListType;
   isDragging: boolean;
+  draggingPickInfo: PickInfoType | null | undefined;
 };
 
 type PickAction = {
@@ -36,6 +37,9 @@ type PickAction = {
   selectSinglePick: (pickId: number) => void;
   setIsDragging: (isDragging: boolean) => void;
   setFocusedPickId: (focusedPickId: number) => void;
+  setDraggingPickInfo: (
+    draggingPickInfo: PickInfoType | null | undefined
+  ) => void;
 };
 
 const initialState: PickState = {
@@ -43,6 +47,7 @@ const initialState: PickState = {
   focusPickId: null,
   selectedPickIdList: [],
   isDragging: false,
+  draggingPickInfo: null,
 };
 
 export const usePickStore = create<PickState & PickAction>()(
@@ -190,6 +195,11 @@ export const usePickStore = create<PickState & PickAction>()(
       setFocusedPickId: (focusedPickId) => {
         set((state) => {
           state.focusPickId = focusedPickId;
+        });
+      },
+      setDraggingPickInfo: (draggingPickInfo) => {
+        set((state) => {
+          state.draggingPickInfo = draggingPickInfo;
         });
       },
     }))
