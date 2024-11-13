@@ -1,8 +1,8 @@
-import type { FolderDraggableObjectType } from '@/types';
+import type { PickDraggableObjectType } from '@/types';
 
 export const isPickDraggableObject = (
   data: unknown
-): data is FolderDraggableObjectType => {
+): data is PickDraggableObjectType => {
   if (!data || typeof data !== 'object') {
     return false;
   }
@@ -12,6 +12,10 @@ export const isPickDraggableObject = (
   }
 
   if (!('type' in data && data.type === 'pick')) {
+    return false;
+  }
+
+  if ('parentFolderId' in data === false) {
     return false;
   }
 
