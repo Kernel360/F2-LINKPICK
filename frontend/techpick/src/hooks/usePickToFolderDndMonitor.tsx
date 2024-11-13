@@ -2,7 +2,7 @@
 
 import { useDndMonitor } from '@dnd-kit/core';
 import { useTreeStore } from '@/stores';
-import { isPickDraggableObject, isFolderDraggableObject } from '@/utils';
+import { isPickDraggableObject, isPickToFolderDroppableObject } from '@/utils';
 import type { DragEndEvent, DragOverEvent } from '@dnd-kit/core';
 
 /**
@@ -20,11 +20,12 @@ export function usePickToFolderDndMonitor() {
 
     if (
       !isPickDraggableObject(activeObject) ||
-      !isFolderDraggableObject(overObject)
+      !isPickToFolderDroppableObject(overObject)
     )
       return;
 
     const currentHoverFolderId = Number(overObject.id);
+
     setHoverFolderId(currentHoverFolderId);
   };
 
@@ -39,13 +40,14 @@ export function usePickToFolderDndMonitor() {
 
     if (
       !isPickDraggableObject(activeObject) ||
-      !isFolderDraggableObject(overObject)
+      !isPickToFolderDroppableObject(overObject)
     )
       return;
   };
 
   useDndMonitor({
     onDragOver,
+
     onDragEnd,
   });
 }

@@ -5,3 +5,4 @@ export type * from './pick.type';
 export type * from './dnd.type';
 export type { PickDraggableObjectType } from './PickDraggableObjectType';
 export type { FolderDraggableObjectType } from './FolderDraggableObjectType';
+export type { PickToFolderDroppableObjectType } from './PickToFolderDroppableObjectType';
