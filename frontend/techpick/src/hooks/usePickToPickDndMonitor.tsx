@@ -15,6 +15,8 @@ export function usePickToPickDndMonitor() {
     selectSinglePick,
     setIsDragging,
     setFocusedPickId,
+    getPickInfoByFolderIdAndPickId,
+    setDraggingPickInfo,
   } = usePickStore();
   const focusFolderId = useTreeStore((state) => state.focusFolderId);
 
@@ -24,9 +26,11 @@ export function usePickToPickDndMonitor() {
 
     if (!isPickDraggableObject(activeObject)) return;
 
+    const pickId = Number(activeObject.id);
+    const parentFolderId = activeObject.parentFolderId;
+    const pickInfo = getPickInfoByFolderIdAndPickId(parentFolderId, pickId);
     setIsDragging(true);
-
-    const pickId = Number(active.id);
+    setDraggingPickInfo(pickInfo);
 
     if (!selectedPickIdList.includes(pickId)) {
       selectSinglePick(pickId);
@@ -37,6 +41,9 @@ export function usePickToPickDndMonitor() {
   };
 
   const onDragEnd = (event: DragEndEvent) => {
+    setIsDragging(false);
+    setDraggingPickInfo(null);
+
     const { active, over } = event;
     if (!over) return; // 드래그 중 놓은 위치가 없을 때 종료
     if (!focusFolderId) return;
@@ -50,10 +57,7 @@ export function usePickToPickDndMonitor() {
     )
       return;
 
-    console.log('usePickToPickDndMonitor onDragEnd work!');
-
     movePicks({ folderId: focusFolderId, from: active, to: over });
-    setIsDragging(false);
   };
 
   useDndMonitor({
