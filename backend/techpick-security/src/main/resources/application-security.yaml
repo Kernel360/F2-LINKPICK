@@ -11,14 +11,12 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID}
             client-secret: ${GOOGLE_CLIENT_SECRET}
-            redirect-uri: ${TECHPICK_BASE_URL}/api/login/oauth2/code/google
             scope:
               - email
           naver:
             client-id: ${NAVER_CLIENT_ID}
             client-secret: ${NAVER_CLIENT_SECRET}
             client-name: Naver
-            redirect-uri: ${TECHPICK_BASE_URL}/api/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             scope:
               - email
@@ -26,7 +24,6 @@ spring:
             client-id: ${KAKAO_CLIENT_ID}
             client-secret: ${KAKAO_CLIENT_SECRET}
             client-name: Kakao
-            redirect-uri: ${TECHPICK_BASE_URL}/api/login/oauth2/code/kakao
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
             scope:
@@ -61,12 +58,23 @@ spring:
   config:
     activate:
       on-profile: local
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: http://localhost:8080/api/login/oauth2/code/google
+          naver:
+            redirect-uri: http://localhost:8080/api/login/oauth2/code/naver
+          kakao:
+            redirect-uri: http://localhost:8080/api/login/oauth2/code/kakao
 security:
   cors-patterns:
     - chrome-extension://*
     - https://local.minlife.me:3000
   cookie-domain: localhost
   default-redirect-url: http://localhost:8080
+  base-url: http://localhost:8080
 
 ---
 
@@ -74,6 +82,16 @@ spring:
   config:
     activate:
       on-profile: dev
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: https://v2.minlife.me/api/login/oauth2/code/google
+          naver:
+            redirect-uri: https://v2.minlife.me/api/login/oauth2/code/naver
+          kakao:
+            redirect-uri: https://v2.minlife.me/api/login/oauth2/code/kakao
 security:
   cors-patterns:
     - chrome-extension://*
@@ -81,6 +99,7 @@ security:
     - https://local.minlife.me:3000
   cookie-domain: minlife.me
   default-redirect-url: https://local.minlife.me
+  base-url: https://v2.minlife.me
 
 ---
 
@@ -88,11 +107,22 @@ spring:
   config:
     activate:
       on-profile: prod
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: https://api.techpick.org/api/login/oauth2/code/google
+          naver:
+            redirect-uri: https://api.techpick.org/api/login/oauth2/code/naver
+          kakao:
+            redirect-uri: https://api.techpick.org/api/login/oauth2/code/kakao
 security:
   cors-patterns:
     - chrome-extension://*
     - https://*.techpick.org
   cookie-domain: techpick.org
   default-redirect-url: https://app.techpick.org
+  base-url: https://api.techpick.org
 
 ---

@@ -2,7 +2,6 @@ package techpick.security.config;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,10 +35,7 @@ public class SecurityConfig {
 	private final TokenAuthenticationFilter tokenAuthenticationFilter;
 	private final TechPickLogoutHandler techPickLogoutHandler;
 	private final TechPickAuthorizationRequestRepository requestRepository;
-	private final SecurityProperties securityProperties;
-	
-	@Value("${core.base-url}")
-	private String baseUrl;
+	private final SecurityProperties properties;
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -89,8 +85,8 @@ public class SecurityConfig {
 		CorsConfiguration config = new CorsConfiguration();
 
 		config.setAllowCredentials(true);
-		config.setAllowedOrigins(List.of(baseUrl));
-		config.setAllowedOriginPatterns(securityProperties.getCorsPatterns());
+		config.setAllowedOrigins(List.of(properties.getBaseUrl()));
+		config.setAllowedOriginPatterns(properties.getCorsPatterns());
 		config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
 		config.setAllowedHeaders(List.of("*"));
 		config.setExposedHeaders(List.of("*"));

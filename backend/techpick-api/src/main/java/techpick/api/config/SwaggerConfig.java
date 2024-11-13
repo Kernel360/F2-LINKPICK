@@ -2,7 +2,6 @@ package techpick.api.config;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,12 +10,16 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
+import techpick.security.config.SecurityProperties;
 
 @Configuration
 public class SwaggerConfig {
 
-	@Value("${core.base-url}")
-	private String baseUrl;
+	private final SecurityProperties properties;
+
+	public SwaggerConfig(SecurityProperties properties) {
+		this.properties = properties;
+	}
 
 	@Bean
 	public OpenAPI openAPI() {
@@ -47,8 +50,6 @@ public class SwaggerConfig {
 	}
 
 	private Server getServer() {
-		// TODO: AWS배포 이후 local prod에 따라 다른 url 적용하도록 리팩토링 필요
-		// 현재는 홈서버 반환
-		return new Server().url(baseUrl);
+		return new Server().url(properties.getBaseUrl());
 	}
 }

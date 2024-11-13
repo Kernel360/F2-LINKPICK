@@ -24,4 +24,5 @@ public class SecurityProperties {
 
 	private final String defaultRedirectUrl;
 
+	private final String baseUrl;
 }
