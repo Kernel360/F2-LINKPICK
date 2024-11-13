@@ -30,7 +30,7 @@ type PickAction = {
   hasPickRecordValue: (
     pickRecordValue: PickRecordValueType | undefined
   ) => pickRecordValue is PickRecordValueType;
-  movePicks: (movePickPayload: MovePickPayload) => Promise<void>;
+  movePicksToEqualFolder: (movePickPayload: MovePickPayload) => Promise<void>;
   setSelectedPickIdList: (
     newSelectedPickIdList: SelectedPickIdListType
   ) => void;
@@ -123,7 +123,7 @@ export const usePickStore = create<PickState & PickAction>()(
 
         return true;
       },
-      movePicks: async ({ from, to }) => {
+      movePicksToEqualFolder: async ({ from, to }) => {
         const fromData = from.data.current;
         const toData = to.data.current;
 

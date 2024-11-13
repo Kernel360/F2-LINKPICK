@@ -10,7 +10,7 @@ import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';
  */
 export function usePickToPickDndMonitor() {
   const {
-    movePicks,
+    movePicksToEqualFolder,
     selectedPickIdList,
     selectSinglePick,
     setIsDragging,
@@ -57,7 +57,7 @@ export function usePickToPickDndMonitor() {
     )
       return;
 
-    movePicks({ folderId: focusFolderId, from: active, to: over });
+    movePicksToEqualFolder({ folderId: focusFolderId, from: active, to: over });
   };
 
   useDndMonitor({
