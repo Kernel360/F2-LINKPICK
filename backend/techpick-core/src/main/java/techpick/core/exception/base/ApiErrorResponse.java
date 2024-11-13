@@ -2,7 +2,6 @@ package techpick.core.exception.base;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 public class ApiErrorResponse extends ResponseEntity<ApiErrorBody> {
 
@@ -27,5 +26,9 @@ public class ApiErrorResponse extends ResponseEntity<ApiErrorBody> {
 
 	public static ApiErrorResponse UNKNOWN_SERVER_ERROR() {
 		return new ApiErrorResponse("UNKNOWN", "미확인 서버 에러", HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+
+	public static ApiErrorResponse INVALID_JSON_ERROR() {
+		return new ApiErrorResponse("INVALID JSON ERROR", "올바르지 않은 Json 형식입니다.", HttpStatus.BAD_REQUEST);
 	}
 }

@@ -1,5 +1,6 @@
 package techpick.core.exception.base;
 
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -38,5 +39,13 @@ public class ApiExceptionHandler {
 		exception.handleErrorByLevel();
 
 		return ApiErrorResponse.of(exception.getApiErrorCode());
+	}
+
+	// Json 파싱 과정 중 에러가 났을때 처리하는 handler
+	// 참고 : https://be-student.tistory.com/52
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ApiErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
+		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception);
+		return ApiErrorResponse.INVALID_JSON_ERROR();
 	}
 }
