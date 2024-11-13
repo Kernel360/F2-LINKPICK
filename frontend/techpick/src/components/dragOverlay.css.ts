@@ -20,3 +20,7 @@ export const pickDragOverlayStyle = style({
     },
   },
 });
+
+export const scaledDownStyle = style({
+  transform: 'scale(0.8)',
+});

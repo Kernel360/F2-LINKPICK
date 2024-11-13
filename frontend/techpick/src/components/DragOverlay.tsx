@@ -2,7 +2,7 @@
 
 import { DragOverlay as DndKitDragOverlay } from '@dnd-kit/core';
 import { usePickStore, useTreeStore } from '@/stores';
-import { pickDragOverlayStyle } from './dragOverlay.css';
+import { pickDragOverlayStyle, scaledDownStyle } from './dragOverlay.css';
 import { PickCard } from './PickListViewer/PickCard';
 
 export function DargOverlay() {
@@ -12,7 +12,9 @@ export function DargOverlay() {
   if (isPickDragging && draggingPickInfo) {
     return (
       <DndKitDragOverlay>
-        <PickCard pickInfo={draggingPickInfo}></PickCard>
+        <div className={scaledDownStyle}>
+          <PickCard pickInfo={draggingPickInfo}></PickCard>
+        </div>
       </DndKitDragOverlay>
     );
   }
@@ -27,13 +29,5 @@ export function DargOverlay() {
     );
   }
 
-  return (
-    <DndKitDragOverlay>
-      <div
-        style={{ width: '200px', height: '50px', border: '1px solid black' }}
-      >
-        {isFolderDragging ? 'folder' : null}
-      </div>
-    </DndKitDragOverlay>
-  );
+  return null;
 }
