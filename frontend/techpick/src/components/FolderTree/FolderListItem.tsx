@@ -18,12 +18,14 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     selectedFolderList,
     setSelectedFolderList,
     focusFolderId,
+    hoverFolderId,
     updateFolderName,
     moveFolderToRecycleBin,
     selectSingleFolder,
   } = useTreeStore();
-  const isSelected = selectedFolderList.includes(id);
   const [isUpdate, setIsUpdate] = useState(false);
+  const isSelected = selectedFolderList.includes(id);
+  const isHover = id === hoverFolderId;
 
   const handleShiftSelect = (id: number, treeDataMap: FolderMapType) => {
     if (!focusFolderId || !isSameParentFolder(id, focusFolderId, treeDataMap)) {
@@ -77,6 +79,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
       <FolderLinkItem
         href={ROUTES.FOLDER_DETAIL(id)}
         isSelected={isSelected}
+        isHovered={isHover}
         name={name}
         onClick={(event) => handleClick(id, event)}
       />

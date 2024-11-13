@@ -31,6 +31,10 @@ export const selectedDragItemStyle = style({
   backgroundColor: colorThemeContract.primary,
 });
 
+export const dragOverItemStyle = style({
+  backgroundColor: colorThemeContract.primaryFaded,
+});
+
 export const FolderIconStyle = style({
   flexShrink: 0,
 });

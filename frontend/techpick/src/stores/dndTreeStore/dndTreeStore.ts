@@ -26,6 +26,7 @@ type TreeState = {
   treeDataMap: FolderMapType;
   selectedFolderList: SelectedFolderListType;
   focusFolderId: number | null;
+  hoverFolderId: number | null | undefined;
   from: Active | null;
   to: Over | null;
   isDragging: boolean;
@@ -58,6 +59,7 @@ type TreeAction = {
   setTo: (newTo: Over) => void;
   setIsDragging: (isDragging: boolean) => void;
   setFocusFolderId: (newFolderId: number) => void;
+  setHoverFolderId: (hoverFolderId: number | null | undefined) => void;
   setDraggingFolderInfo: (
     draggingFolderInfo: FolderType | null | undefined
   ) => void;
@@ -81,11 +83,12 @@ const initialState: TreeState = {
   treeDataMap: {},
   selectedFolderList: [],
   focusFolderId: null,
+  rootFolderId: UNKNOWN_FOLDER_ID,
+  hoverFolderId: null,
   from: null,
   to: null,
   isDragging: false,
   basicFolderMap: null,
-  rootFolderId: UNKNOWN_FOLDER_ID,
   draggingFolderInfo: null,
 };
 
@@ -355,6 +358,11 @@ export const useTreeStore = create<TreeState & TreeAction>()(
       setDraggingFolderInfo: (draggingFolderInfo) => {
         set((state) => {
           state.draggingFolderInfo = draggingFolderInfo;
+        });
+      },
+      setHoverFolderId: (hoverFolderId) => {
+        set((state) => {
+          state.hoverFolderId = hoverFolderId;
         });
       },
       getChildFolderListByParentFolderId: (parentFolderId) => {
