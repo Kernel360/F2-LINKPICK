@@ -14,11 +14,13 @@ import type {
  */
 export function useFolderToFolderDndMonitor() {
   const {
+    getFolderInfoByFolderId,
     moveFolder,
     selectedFolderList,
     setSelectedFolderList,
-    setIsDragging,
     setFocusFolderId,
+    setIsDragging,
+    setDraggingFolderInfo,
   } = useTreeStore();
 
   const onDragStart = (event: DragStartEvent) => {
@@ -28,7 +30,12 @@ export function useFolderToFolderDndMonitor() {
     if (!isFolderDraggableObject(activeObject)) return;
 
     const folderId = Number(activeObject.id);
+    const folderInfo = getFolderInfoByFolderId(folderId);
+
+    if (!folderInfo) return;
+
     setIsDragging(true);
+    setDraggingFolderInfo(folderInfo);
 
     if (!selectedFolderList.includes(folderId)) {
       setFocusFolderId(folderId);

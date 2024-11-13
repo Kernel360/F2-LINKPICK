@@ -29,6 +29,7 @@ type TreeState = {
   from: Active | null;
   to: Over | null;
   isDragging: boolean;
+  draggingFolderInfo: FolderType | null | undefined;
   basicFolderMap: BasicFolderMap | null;
   rootFolderId: number;
 };
@@ -38,6 +39,7 @@ type TreeAction = {
   readFolder: () => void;
   updateFolderName: (payload: UpdateFolderPayload) => Promise<void>;
   deleteFolder: (deleteFolderId: number) => void;
+  getFolderInfoByFolderId: (folderId: number) => FolderType | null;
   getFolders: () => Promise<void>;
   getBasicFolders: () => Promise<void>;
   moveFolder: ({
@@ -56,6 +58,9 @@ type TreeAction = {
   setTo: (newTo: Over) => void;
   setIsDragging: (isDragging: boolean) => void;
   setFocusFolderId: (newFolderId: number) => void;
+  setDraggingFolderInfo: (
+    draggingFolderInfo: FolderType | null | undefined
+  ) => void;
   getChildFolderListByParentFolderId: (
     parentId: UniqueIdentifier
   ) => FolderType[];
@@ -81,6 +86,7 @@ const initialState: TreeState = {
   isDragging: false,
   basicFolderMap: null,
   rootFolderId: UNKNOWN_FOLDER_ID,
+  draggingFolderInfo: null,
 };
 
 export const useTreeStore = create<TreeState & TreeAction>()(
@@ -160,6 +166,21 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           state.treeDataMap[parentFolderId].childFolderIdOrderedList =
             childFolderList.filter((childId) => childId !== deleteFolderId);
         });
+      },
+      getFolderInfoByFolderId: (folderId) => {
+        const treeDataMap = get().treeDataMap;
+
+        if (!treeDataMap) {
+          return null;
+        }
+
+        const folderInfo = treeDataMap[folderId];
+
+        if (!folderInfo) {
+          return null;
+        }
+
+        return folderInfo;
       },
       getFolders: async () => {
         try {
@@ -329,6 +350,11 @@ export const useTreeStore = create<TreeState & TreeAction>()(
       setIsDragging: (isDragging) => {
         set((state) => {
           state.isDragging = isDragging; // 드래그 상태 설정
+        });
+      },
+      setDraggingFolderInfo: (draggingFolderInfo) => {
+        set((state) => {
+          state.draggingFolderInfo = draggingFolderInfo;
         });
       },
       getChildFolderListByParentFolderId: (parentFolderId) => {
