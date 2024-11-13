@@ -44,8 +44,9 @@ export function PickDnDCard({ pickInfo }: PickViewDnDItemComponentProps) {
   } = useSortable({
     id: pickId,
     data: {
-      id: `pick ${pickId}`,
+      id: pickId,
       type: 'pick',
+      parentFolderId: parentFolderId,
     },
   });
 
