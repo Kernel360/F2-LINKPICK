@@ -50,7 +50,7 @@ public class CookieUtil {
 
 	/**
 	 * 쿠키 삭제를 위한 메소드
-	 *
+	 * 삭제하려는 쿠키를 덮어씌워 삭제함
 	 * @author Gyaak
 	 *
 	 * @param request
@@ -58,24 +58,7 @@ public class CookieUtil {
 	 * @param name 삭제하려는 쿠키 이름
 	 */
 	public void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
-		if (request == null || response == null) {
-			return;
-		}
-
-		Cookie[] requestCookies = request.getCookies();
-		if (requestCookies == null) {
-			return;
-		}
-
-		for (Cookie cookie : requestCookies) {
-			if (name.equals(cookie.getName())) {
-				cookie.setValue("");
-				cookie.setPath("/");
-				cookie.setMaxAge(0);
-				cookie.setHttpOnly(true);
-				response.addCookie(cookie);
-			}
-		}
+		this.addCookie(response, name, "", 0, true);
 	}
 
 	public Optional<String> findCookieValue(Cookie[] cookies, String name) {
