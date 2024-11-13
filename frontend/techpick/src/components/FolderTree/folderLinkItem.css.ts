@@ -14,7 +14,7 @@ export const folderInfoItemStyle = style({
   minHeight: '32px',
   padding: space['8'],
   borderRadius: borderRadius['base'],
-  backgroundColor: colorThemeContract.backgroundBase,
+  backgroundColor: colorThemeContract.backgroundNeutral,
   cursor: 'grab',
   transition: 'background-color 0.2s',
   selectors: {

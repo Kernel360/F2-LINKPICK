@@ -4,7 +4,7 @@ import { FolderInputIcon, Trash2Icon } from 'lucide-react';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { FolderLinkItem } from './FolderLinkItem';
-import { folderTreeHeaderLayout } from './folderTreeHeader.css';
+import { folderTreeHeaderLayout, dividerStyle } from './folderTreeHeader.css';
 
 export function FolderTreeHeader() {
   const { basicFolderMap, focusFolderId } = useTreeStore();
@@ -36,7 +36,7 @@ export function FolderTreeHeader() {
           />
         </>
       )}
-      <hr />
+      <hr className={dividerStyle} />
     </div>
   );
 }

@@ -44,7 +44,7 @@ export const lightTheme = createTheme(colorThemeContract, {
   borderPositive: '#2e7d32',
   borderPositiveFaded: 'rgba(46, 125, 50, 0.5)',
 
-  backgroundNeutral: 'rgb(240, 240, 240)',
+  backgroundNeutral: '#F9F9F9',
   backgroundNeutralFaded: 'rgba(240, 240, 240, 0.6)',
 
   backgroundPrimary: 'rgb(0, 120, 255)',

@@ -77,3 +77,8 @@ globalStyle('a', {
 globalStyle('[role="treeitem"]', {
   outline: 'none',
 });
+
+globalStyle('hr', {
+  outline: 'none',
+  margin: 0,
+});
