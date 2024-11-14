@@ -167,8 +167,7 @@ public class FolderService {
 			targetPickIdList.addAll(folder.getChildPickIdOrderedList());
 		}
 
-		Folder recycleBin = folderDataHandler.getRecycleBin(command.userId());
-		pickDataHandler.updateParentFolder(targetPickIdList, recycleBin);
+		pickDataHandler.movePickListToRecycleBin(command.userId(), targetPickIdList);
 		folderDataHandler.deleteFolderList(command);
 	}
 

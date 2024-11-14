@@ -114,18 +114,6 @@ public class PickDataHandler {
 		return pick;
 	}
 
-	/**
-	 * 폴더 삭제시 안에있는 픽들의 부모를 일괄로 휴지통폴더로 업데이트 하기 위함
-	 * */
-	@Transactional
-	public void updateParentFolder(List<Long> pickIdList, Folder parentFolder) {
-		List<Pick> pickList = pickRepository.findAllById(pickIdList);
-
-		pickList.forEach(pick -> pick.updateParentFolder(parentFolder));
-
-		pickRepository.saveAll(pickList);
-	}
-
 	@Transactional
 	public void movePickToCurrentFolder(PickCommand.Move command) {
 		List<Long> pickIdList = command.idList();
@@ -146,6 +134,17 @@ public class PickDataHandler {
 			pick.getParentFolder().removeChildPickOrder(pickId);
 			pick.updateParentFolder(destinationFolder);
 		}
+	}
+
+	@Transactional
+	public void movePickListToRecycleBin(Long userId, List<Long> pickIdList) {
+		// 휴지통에 픽 추가
+		Folder recycleBin = folderRepository.findRecycleBinByUserId(userId);
+		recycleBin.getChildPickIdOrderedList().addAll(0, pickIdList);
+
+		// 픽들의 부모를 휴지통으로 변경
+		List<Pick> pickList = pickRepository.findAllById(pickIdList);
+		pickList.forEach(pick -> pick.updateParentFolder(recycleBin));
 	}
 
 	@Transactional
