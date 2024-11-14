@@ -100,26 +100,6 @@ public class FolderService {
 	}
 
 	/**
-	 * 같은 폴더 내에서 폴더들의 순서를 변경
-	 * 현재 폴더들의 부모가 같은지 검증합니다.
-	 * */
-	@Transactional
-	public void changeFolderOrder(FolderCommand.Order command) {
-		Folder parentFolder = folderDataHandler.getFolder(command.parentFolderId());
-		validateFolderAccess(command.userId(), parentFolder);
-
-		List<Folder> folderList = folderDataHandler.getFolderList(command.idList());
-		for (Folder folder : folderList) {
-			validateFolderAccess(command.userId(), folder);
-			validateBasicFolderChange(folder);
-		}
-
-		validateParentFolder(folderList, command.parentFolderId());
-		folderDataHandler.moveFolderWithinParent(command);
-	}
-
-	/**
-	 * 다른 폴더로 폴더를 이동
 	 * 현재 폴더들의 부모가 같은지 검증합니다.
 	 * 이동하려는 폴더가 미분류폴더, 휴지통이 아닌지 검증합니다.
 	 * */
@@ -134,9 +114,13 @@ public class FolderService {
 			validateFolderAccess(command.userId(), folder);
 			validateBasicFolderChange(folder);
 		}
-		validateParentFolder(folderList, command.parentFolderId());
 
-		folderDataHandler.moveFolderToDifferentParent(command);
+		validateParentFolder(folderList, command.parentFolderId());
+		if (Objects.equals(command.parentFolderId(), command.destinationFolderId())) {
+			folderDataHandler.moveFolderWithinParent(command);
+		} else {
+			folderDataHandler.moveFolderToDifferentParent(command);
+		}
 	}
 
 	@Transactional

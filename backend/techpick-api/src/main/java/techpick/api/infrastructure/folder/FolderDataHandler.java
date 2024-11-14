@@ -83,7 +83,7 @@ public class FolderDataHandler {
 	}
 
 	@Transactional
-	public List<Long> moveFolderWithinParent(FolderCommand.Order command) {
+	public List<Long> moveFolderWithinParent(FolderCommand.Move command) {
 		Folder parentFolder = folderRepository.findById(command.parentFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 

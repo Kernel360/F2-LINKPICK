@@ -28,13 +28,6 @@ public class FolderApiRequest {
 	) {
 	}
 
-	public record Order(
-		@Schema(example = "[12, 11, 4, 5, 1, 6]") @NotNull List<Long> idList,
-		@Schema(example = "3") @NotNull Long parentFolderId,
-		@Schema(example = "2") int orderIdx
-	) {
-	}
-
 	public record Delete(
 		@Schema(example = "[12, 11, 4, 5, 1, 6]") @NotNull List<Long> idList
 	) {
