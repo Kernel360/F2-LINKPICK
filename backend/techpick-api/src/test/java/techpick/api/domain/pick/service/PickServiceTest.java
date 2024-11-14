@@ -123,8 +123,7 @@ class PickServiceTest {
 			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl", null);
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command = new PickCommand.Create(
-				user.getId(), "PICK", "MEMO",
-				tagOrder, unclassified.getId(), linkInfo
+				user.getId(), "PICK", tagOrder, unclassified.getId(), linkInfo
 			);
 
 			// when
@@ -147,15 +146,15 @@ class PickServiceTest {
 			LinkInfo linkInfo5 = new LinkInfo("linkUrl5", "linkTitle", "linkDescription", "imageUrl", null);
 
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
-			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				recycleBin.getId(), linkInfo1);
-			PickCommand.Create command2 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command2 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo2);
-			PickCommand.Create command3 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command3 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo3);
-			PickCommand.Create command4 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command4 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				general.getId(), linkInfo4);
-			PickCommand.Create command5 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command5 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo5);
 
 			PickResult.Pick pick1 = pickService.saveNewPick(command1);
@@ -165,13 +164,10 @@ class PickServiceTest {
 			PickResult.Pick pick5 = pickService.saveNewPick(command5);
 
 			List<Long> folderIdList = List.of(unclassified.getId(), general.getId(), recycleBin.getId());
-			List<String> searchTokenList = List.of("리액트", "쿼리", "서버");
-
-			PickCommand.Search searchCommand = pickApiMapper.toSearchCommand(user.getId(), folderIdList,
-				searchTokenList);
+			PickCommand.ReadList readListCommand = pickApiMapper.toReadListCommand(user.getId(), folderIdList);
 
 			// when
-			List<PickResult.FolderPickList> folderPickList = pickService.getFolderListChildPickList(searchCommand);
+			List<PickResult.FolderPickList> folderPickList = pickService.getFolderListChildPickList(readListCommand);
 
 			for (PickResult.FolderPickList list : folderPickList) {
 				log.info("list: {} ", list.toString());
@@ -202,8 +198,7 @@ class PickServiceTest {
 			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl", null);
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command = new PickCommand.Create(
-				user.getId(), "PICK", "MEMO",
-				tagOrder, unclassified.getId(), linkInfo
+				user.getId(), "PICK", tagOrder, unclassified.getId(), linkInfo
 			);
 
 			// when
@@ -222,8 +217,7 @@ class PickServiceTest {
 			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl", null);
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command = new PickCommand.Create(
-				user.getId(), "PICK", "MEMO",
-				tagOrder, null, linkInfo
+				user.getId(), "PICK", tagOrder, null, linkInfo
 			);
 
 			// when, then
@@ -254,8 +248,7 @@ class PickServiceTest {
 				executorService.submit(() -> {
 					try {
 						PickCommand.Create command = new PickCommand.Create(
-							user.getId(), "PICK", "MEMO",
-							tagOrder, unclassified.getId(), linkInfo
+							user.getId(), "PICK", tagOrder, unclassified.getId(), linkInfo
 						);
 						pickService.saveNewPick(command);
 						successCount.incrementAndGet(); // 성공 카운트
@@ -293,8 +286,7 @@ class PickServiceTest {
 			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl", null);
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command = new PickCommand.Create(
-				user.getId(), "PICK", "MEMO",
-				tagOrder, unclassified.getId(), linkInfo
+				user.getId(), "PICK", tagOrder, unclassified.getId(), linkInfo
 			);
 			PickResult.Pick savePick = pickService.saveNewPick(command);
 
@@ -302,8 +294,7 @@ class PickServiceTest {
 			String newTitle = "NEW_PICK";
 			List<Long> newTagOrder = List.of(tag3.getId(), tag2.getId(), tag1.getId());
 			PickCommand.Update updateCommand = new PickCommand.Update(
-				user.getId(), savePick.id(),
-				newTitle, null /* memo not changed */, newTagOrder
+				user.getId(), savePick.id(), newTitle, newTagOrder
 			);
 			PickResult.Pick updatePick = pickService.updatePick(updateCommand);
 
@@ -311,7 +302,6 @@ class PickServiceTest {
 			assertThat(updatePick.title()).isNotEqualTo(savePick.title()).isEqualTo(newTitle); // changed
 			assertThat(updatePick.tagIdOrderedList()).isNotEqualTo(savePick.tagIdOrderedList())
 				.isEqualTo(newTagOrder); // changed
-			assertThat(updatePick.memo()).isEqualTo(savePick.memo()); // unchanged
 		}
 	}
 
@@ -333,15 +323,15 @@ class PickServiceTest {
 			LinkInfo linkInfo5 = new LinkInfo("linkUrl5", "linkTitle", "linkDescription", "imageUrl", null);
 
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
-			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo1);
-			PickCommand.Create command2 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command2 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo2);
-			PickCommand.Create command3 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command3 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo3);
-			PickCommand.Create command4 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command4 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo4);
-			PickCommand.Create command5 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command5 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo5);
 
 			PickResult.Pick pick1 = pickService.saveNewPick(command1);
@@ -382,11 +372,11 @@ class PickServiceTest {
 			LinkInfo linkInfo2 = new LinkInfo("linkUrl2", "linkTitle", "linkDescription", "imageUrl", null);
 			LinkInfo linkInfo3 = new LinkInfo("linkUrl3", "linkTitle", "linkDescription", "imageUrl", null);
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
-			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo1);
-			PickCommand.Create command2 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command2 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo2);
-			PickCommand.Create command3 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command3 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo3);
 
 			PickResult.Pick pick1 = pickService.saveNewPick(command1);
@@ -425,7 +415,7 @@ class PickServiceTest {
 			// given
 			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
-			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo1);
 			pickService.saveNewPick(command1);
 
@@ -448,7 +438,7 @@ class PickServiceTest {
 			// given
 			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
-			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo1);
 			pickService.saveNewPick(command1);
 
@@ -473,7 +463,7 @@ class PickServiceTest {
 			// given
 			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
-			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				recycleBin.getId(), linkInfo1);
 			PickResult.Pick pickResult = pickService.saveNewPick(command1);
 
@@ -496,7 +486,7 @@ class PickServiceTest {
 			// given
 			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
-			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				recycleBin.getId(), linkInfo1);
 			PickResult.Pick pickResult = pickService.saveNewPick(command1);
 
@@ -519,7 +509,7 @@ class PickServiceTest {
 			// given
 			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
-			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo1);
 			PickResult.Pick pickResult = pickService.saveNewPick(command1);
 
@@ -541,7 +531,7 @@ class PickServiceTest {
 
 			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
-			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", "MEMO", tagOrder,
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo1);
 			PickResult.Pick savedPickResult = pickService.saveNewPick(command1);
 
