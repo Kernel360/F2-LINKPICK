@@ -17,10 +17,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import techpick.security.TechPickAuthorizationRequestRepository;
 import techpick.security.filter.TokenAuthenticationFilter;
 import techpick.security.handler.OAuth2SuccessHandler;
 import techpick.security.handler.TechPickLogoutHandler;
+import techpick.security.repository.TechPickAuthorizationRequestRepository;
 import techpick.security.service.CustomOAuth2Service;
 
 @Configuration

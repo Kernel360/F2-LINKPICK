@@ -1,4 +1,4 @@
-package techpick.security;
+package techpick.security.repository;
 
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
