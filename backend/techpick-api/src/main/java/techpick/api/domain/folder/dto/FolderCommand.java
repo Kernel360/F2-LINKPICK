@@ -25,7 +25,16 @@ public class FolderCommand {
 	public record Move(
 		Long userId,
 		List<Long> idList,
+		Long parentFolderId,
 		Long destinationFolderId,
+		int orderIdx
+	) {
+	}
+
+	public record Order(
+		Long userId,
+		List<Long> idList,
+		Long parentFolderId,
 		int orderIdx
 	) {
 	}

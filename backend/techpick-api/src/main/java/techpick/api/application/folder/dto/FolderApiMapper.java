@@ -21,6 +21,8 @@ public interface FolderApiMapper {
 
 	FolderCommand.Move toMoveCommand(Long userId, FolderApiRequest.Move request);
 
+	FolderCommand.Order toOrderCommand(Long userId, FolderApiRequest.Order request);
+
 	FolderCommand.Delete toDeleteCommand(Long userId, FolderApiRequest.Delete request);
 
 	FolderApiResponse toApiResponse(FolderResult result);

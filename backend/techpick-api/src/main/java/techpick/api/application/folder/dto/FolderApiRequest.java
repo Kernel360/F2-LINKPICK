@@ -22,7 +22,15 @@ public class FolderApiRequest {
 
 	public record Move(
 		@Schema(example = "[12, 11, 4, 5, 1, 6]") @NotNull List<Long> idList,
+		@Schema(example = "7") @NotNull Long parentFolderId,
 		@Schema(example = "3") @NotNull Long destinationFolderId,
+		@Schema(example = "2") int orderIdx
+	) {
+	}
+
+	public record Order(
+		@Schema(example = "[12, 11, 4, 5, 1, 6]") @NotNull List<Long> idList,
+		@Schema(example = "3") @NotNull Long parentFolderId,
 		@Schema(example = "2") int orderIdx
 	) {
 	}
