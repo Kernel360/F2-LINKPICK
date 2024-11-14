@@ -5,6 +5,7 @@ import {
   getFolders,
   getBasicFolders,
   moveFolder,
+  deleteFolder,
   updateFolder,
   createFolder,
 } from '@/apis/folder';
@@ -247,6 +248,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
               idList: selectedFolderList,
               orderIdx: toData.sortable.index,
               destinationFolderId: Number(toData.sortable.containerId),
+              parentFolderId: Number(fromData.sortable.containerId),
             });
           } catch {
             set((state) => {
@@ -283,11 +285,16 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           });
         });
       },
+      /**
+       * @description 나중에 dfs로 휴지통으로 픽들 이동.
+       */
       moveFolderToRecycleBin: async ({ deleteFolderId }) => {
         let parentFolderId = UNKNOWN_FOLDER_ID;
         let prevChildFolderList: ChildFolderListType = [];
-        const FIRST = 0;
-        let recycleBinFolderId = UNKNOWN_FOLDER_ID;
+        /**
+         * @description - 나중에 dfs로 휴지통으로 픽들 이동
+         */
+        // let recycleBinFolderId = UNKNOWN_FOLDER_ID;
 
         set((state) => {
           parentFolderId = state.treeDataMap[deleteFolderId].parentFolderId;
@@ -299,18 +306,14 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           prevChildFolderList = [...childFolderList];
         });
 
-        set((state) => {
-          if (state.basicFolderMap) {
-            recycleBinFolderId = state.basicFolderMap['RECYCLE_BIN'].id;
-          }
-        });
+        // set((state) => {
+        //   if (state.basicFolderMap) {
+        //     recycleBinFolderId = state.basicFolderMap['RECYCLE_BIN'].id;
+        //   }
+        // });
 
         try {
-          await moveFolder({
-            idList: [deleteFolderId],
-            orderIdx: FIRST,
-            destinationFolderId: recycleBinFolderId,
-          });
+          await deleteFolder([deleteFolderId]);
         } catch {
           set((state) => {
             state.treeDataMap[parentFolderId].childFolderIdOrderedList =

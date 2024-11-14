@@ -7,8 +7,8 @@ export const deleteFolder = async (
   deleteFolderList: DeleteFolderRequestType['idList']
 ) => {
   try {
-    await apiClient.delete<DeleteFolderRequestType>(API_URLS.DELETE_FOLDER, {
-      json: deleteFolderList,
+    await apiClient.delete(API_URLS.DELETE_FOLDER, {
+      json: { idList: deleteFolderList },
     });
 
     return;

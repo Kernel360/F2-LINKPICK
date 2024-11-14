@@ -411,6 +411,11 @@ export interface components {
             idList: number[];
             /**
              * Format: int64
+             * @example 7
+             */
+            parentFolderId: number;
+            /**
+             * Format: int64
              * @example 3
              */
             destinationFolderId: number;
@@ -945,7 +950,7 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description 부모가 다른 폴더들을 동시에 이동할 수 없습니다. */
+            /** @description 미분류폴더, 휴지통 폴더로 이동할 수 없습니다. */
             406: {
                 headers: {
                     [name: string]: unknown;
