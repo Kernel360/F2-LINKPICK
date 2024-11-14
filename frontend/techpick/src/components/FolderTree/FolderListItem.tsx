@@ -1,5 +1,8 @@
+'use client';
+
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { isSelectionActive } from '@/utils';
@@ -13,6 +16,8 @@ import {
 import type { FolderMapType } from '@/types';
 
 export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
+  const { folderId: urlFolderId } = useParams<{ folderId: string }>();
+  const router = useRouter();
   const {
     treeDataMap,
     selectedFolderList,
@@ -71,6 +76,10 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
       }}
       deleteFolder={() => {
         moveFolderToRecycleBin({ deleteFolderId: id });
+
+        if (Number(urlFolderId) === id) {
+          router.push(ROUTES.FOLDERS_UNCLASSIFIED);
+        }
       }}
       onShow={() => {
         selectSingleFolder(id);
