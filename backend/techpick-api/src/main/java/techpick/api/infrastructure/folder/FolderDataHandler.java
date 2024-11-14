@@ -43,6 +43,11 @@ public class FolderDataHandler {
 	}
 
 	@Transactional(readOnly = true)
+	public List<Folder> getFolderListByUserId(Long userId) {
+		return folderRepository.findByUserId(userId);
+	}
+
+	@Transactional(readOnly = true)
 	public Folder getRootFolder(Long userId) {
 		return folderRepository.findRootByUserId(userId);
 	}
@@ -78,13 +83,12 @@ public class FolderDataHandler {
 	}
 
 	@Transactional
-	public List<Long> moveFolderWithinParent(FolderCommand.Move command) {
-		Long destinationFolderId = command.destinationFolderId();
-		Folder destinationFolder = folderRepository.findById(destinationFolderId)
+	public List<Long> moveFolderWithinParent(FolderCommand.Order command) {
+		Folder parentFolder = folderRepository.findById(command.parentFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
-		destinationFolder.updateChildFolderIdOrderedList(command.idList(), command.orderIdx());
-		return destinationFolder.getChildFolderIdOrderedList();
+		parentFolder.updateChildFolderIdOrderedList(command.idList(), command.orderIdx());
+		return parentFolder.getChildFolderIdOrderedList();
 	}
 
 	@Transactional

@@ -3,9 +3,6 @@ package techpick.core.model.pick;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
@@ -56,9 +53,7 @@ public class Pick extends BaseEntity {
 	@JoinColumn(name = "link_id", nullable = false)
 	private Link link;
 
-	// 부모 폴더가 삭제되면 자식픽 또한 삭제됨, OnDelete 옵션을 위해 FK필요
 	@ManyToOne(fetch = FetchType.LAZY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "parent_folder_id", nullable = false)
 	private Folder parentFolder;
 

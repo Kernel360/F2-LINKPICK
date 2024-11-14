@@ -8,6 +8,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface FolderRepository extends JpaRepository<Folder, Long> {
 
+	List<Folder> findByUserId(Long userId);
+	
 	List<Folder> findByParentFolderId(Long parentFolderId);
 
 	// TODO: QueryDSL 도입 후 리팩토링 필요

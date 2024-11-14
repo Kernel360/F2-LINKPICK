@@ -114,6 +114,18 @@ public class PickDataHandler {
 		return pick;
 	}
 
+	/**
+	 * 폴더 삭제시 안에있는 픽들의 부모를 일괄로 휴지통폴더로 업데이트 하기 위함
+	 * */
+	@Transactional
+	public void updateParentFolder(List<Long> pickIdList, Folder parentFolder) {
+		List<Pick> pickList = pickRepository.findAllById(pickIdList);
+
+		pickList.forEach(pick -> pick.updateParentFolder(parentFolder));
+
+		pickRepository.saveAll(pickList);
+	}
+
 	@Transactional
 	public void movePickToCurrentFolder(PickCommand.Move command) {
 		List<Long> pickIdList = command.idList();
