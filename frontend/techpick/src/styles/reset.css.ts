@@ -82,3 +82,7 @@ globalStyle('hr', {
   outline: 'none',
   margin: 0,
 });
+
+globalStyle('*', {
+  outline: 'none',
+});
