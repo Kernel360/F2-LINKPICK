@@ -43,4 +43,8 @@ public class ApiFolderException extends ApiException {
 	public static ApiFolderException INVALID_MOVE_TARGET() {
 		return new ApiFolderException(ApiFolderErrorCode.INVALID_MOVE_TARGET);
 	}
+
+	public static ApiFolderException INVALID_PARENT_FOLDER() {
+		return new ApiFolderException(ApiFolderErrorCode.INVALID_PARENT_FOLDER);
+	}
 }
