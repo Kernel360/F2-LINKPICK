@@ -2,6 +2,7 @@ package techpick.api.application.pick.controller;
 
 import java.util.List;
 
+import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,9 @@ import lombok.RequiredArgsConstructor;
 import techpick.api.application.pick.dto.PickApiMapper;
 import techpick.api.application.pick.dto.PickApiRequest;
 import techpick.api.application.pick.dto.PickApiResponse;
+import techpick.api.application.pick.dto.SliceResponse;
 import techpick.api.domain.pick.dto.PickResult;
+import techpick.api.domain.pick.service.PickSearchService;
 import techpick.api.domain.pick.service.PickService;
 import techpick.security.annotation.LoginUserId;
 
@@ -35,6 +38,7 @@ public class PickApiController {
 
 	private final PickService pickService;
 	private final PickApiMapper pickApiMapper;
+	private final PickSearchService pickSearchService;
 
 	@GetMapping
 	@Operation(summary = "폴더 리스트 내 픽 리스트 조회", description = "해당 폴더 리스트 각각의 픽 리스트를 조회합니다.")
@@ -43,15 +47,33 @@ public class PickApiController {
 	})
 	public ResponseEntity<List<PickApiResponse.FolderPickList>> getFolderChildPickList(
 		@LoginUserId Long userId,
-		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam List<Long> folderIdList,
-		@Parameter(description = "검색 토큰 목록", example = "리액트, 쿼리, 서버") @RequestParam(required = false) List<String> searchTokenList) {
+		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> folderIdList) {
 		List<PickResult.FolderPickList> folderPickList = pickService.getFolderListChildPickList(
-			pickApiMapper.toSearchCommand(userId, folderIdList, searchTokenList));
+			pickApiMapper.toReadListCommand(userId, folderIdList));
 
 		return ResponseEntity.ok(
 			folderPickList.stream()
 				.map(pickApiMapper::toApiFolderPickList)
 				.toList());
+	}
+
+	@GetMapping("/search")
+	@Operation(summary = "픽 리스트 검색", description = "해당 폴더에 내에 있는 픽 리스트 검색")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "조회 성공")
+	})
+	public ResponseEntity<SliceResponse<PickApiResponse.Pick>> searchPickAndRssList(
+		@LoginUserId Long userId,
+		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> folderIdList,
+		@Parameter(description = "검색 토큰 목록", example = "리액트, 쿼리, 서버") @RequestParam(required = false, defaultValue = "") List<String> searchTokenList,
+		@Parameter(description = "검색 태그 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> tagIdList,
+		@Parameter(description = "픽 시작 id 조회", example = "1") @RequestParam(required = false, defaultValue = "0") Long cursor,
+		@Parameter(description = "한 페이지에 가져올 픽 개수", example = "1") @RequestParam(required = false, defaultValue = "20") int size
+	) {
+		Slice<PickResult.Pick> pickResultList = pickSearchService.searchPick(
+			pickApiMapper.toSearchCommand(userId, folderIdList, searchTokenList, tagIdList, cursor, size));
+
+		return ResponseEntity.ok(new SliceResponse<>(pickApiMapper.toSliceApiResponse(pickResultList)));
 	}
 
 	@GetMapping("/link")
