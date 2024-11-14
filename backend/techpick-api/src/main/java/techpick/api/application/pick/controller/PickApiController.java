@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 import techpick.api.application.pick.dto.PickApiMapper;
 import techpick.api.application.pick.dto.PickApiRequest;
 import techpick.api.application.pick.dto.PickApiResponse;
-import techpick.api.application.pick.dto.SliceResponse;
+import techpick.api.application.pick.dto.PickSliceResponse;
 import techpick.api.domain.pick.dto.PickResult;
 import techpick.api.domain.pick.service.PickSearchService;
 import techpick.api.domain.pick.service.PickService;
@@ -62,7 +62,7 @@ public class PickApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	public ResponseEntity<SliceResponse<PickApiResponse.Pick>> searchPickAndRssList(
+	public ResponseEntity<PickSliceResponse<PickApiResponse.Pick>> searchPickAndRssList(
 		@LoginUserId Long userId,
 		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> folderIdList,
 		@Parameter(description = "검색 토큰 목록", example = "리액트, 쿼리, 서버") @RequestParam(required = false, defaultValue = "") List<String> searchTokenList,
@@ -73,7 +73,7 @@ public class PickApiController {
 		Slice<PickResult.Pick> pickResultList = pickSearchService.searchPick(
 			pickApiMapper.toSearchCommand(userId, folderIdList, searchTokenList, tagIdList, cursor, size));
 
-		return ResponseEntity.ok(new SliceResponse<>(pickApiMapper.toSliceApiResponse(pickResultList)));
+		return ResponseEntity.ok(new PickSliceResponse<>(pickApiMapper.toSliceApiResponse(pickResultList)));
 	}
 
 	@GetMapping("/link")

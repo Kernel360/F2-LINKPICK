@@ -9,12 +9,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Getter
-public class SliceResponse<T> {
+public class PickSliceResponse<T> {
 	private final List<T> content;
 	private final Long lastCursor;
 	private final int size;
 
-	public SliceResponse(Slice<T> slice) {
+	public PickSliceResponse(Slice<T> slice) {
 		this.content = slice.getContent();
 		this.lastCursor =
 			slice.hasContent() ? ((PickApiResponse.Pick)slice.getContent().get(slice.getNumberOfElements() - 1)).id() :
