@@ -9,6 +9,8 @@ import type {
   PickInfoType,
   PickRecordValueType,
   SelectedPickIdListType,
+  PickDraggableObjectType,
+  PickToFolderDroppableObjectType,
 } from '@/types';
 
 type PickState = {
@@ -31,6 +33,9 @@ type PickAction = {
     pickRecordValue: PickRecordValueType | undefined
   ) => pickRecordValue is PickRecordValueType;
   movePicksToEqualFolder: (movePickPayload: MovePickPayload) => Promise<void>;
+  movePicksToDifferentFolder: (
+    movePickPayload: movePicksToDifferentFolder
+  ) => Promise<void>;
   setSelectedPickIdList: (
     newSelectedPickIdList: SelectedPickIdListType
   ) => void;
@@ -176,6 +181,129 @@ export const usePickStore = create<PickState & PickAction>()(
           });
         }
       },
+      movePicksToDifferentFolder: async ({ from, to }) => {
+        const currentFolderId = from.parentFolderId;
+        const nextFolderId = to.id;
+
+        const currentPickRecordValue = get().pickRecord[currentFolderId];
+        let nextPickRecordValue = get().pickRecord[nextFolderId];
+
+        if (!get().hasPickRecordValue(currentPickRecordValue)) {
+          return;
+        }
+
+        /**
+         * @description 다음 들어갈 곳에 값이 없으면 만들어줘야한다.
+         */
+        if (!get().hasPickRecordValue(nextPickRecordValue)) {
+          set((state) => {
+            state.pickRecord[nextFolderId] = {
+              pickIdOrderedList: [],
+              pickInfoRecord: {},
+            };
+          });
+          nextPickRecordValue = get().pickRecord[currentFolderId];
+        }
+
+        if (!nextPickRecordValue) {
+          return;
+        }
+
+        // a. 다른 폴더에서 추가(0번째 인덕스)
+        // 어떤 정보를 가져와야한다.
+        const selectedPickIdList = get().selectedPickIdList;
+        const selectedPickInfoList: PickInfoType[] = [];
+        const {
+          pickInfoRecord: prevCurrentPickInfoRecord,
+          pickIdOrderedList: prevCurrentPickIdOrderedList,
+        } = currentPickRecordValue;
+
+        // 선택된 정보 가져오기.
+        for (const selectedPickId of selectedPickIdList) {
+          const selectedPickInfo = get().getPickInfoByFolderIdAndPickId(
+            currentFolderId,
+            selectedPickId
+          );
+
+          if (selectedPickInfo) {
+            selectedPickInfoList.push(selectedPickInfo);
+          }
+        }
+
+        // 다른 폴더에 저장하기 전에 이전 상태를 저장해야한다.
+        const {
+          pickIdOrderedList: prevNextPickIdOrderedList,
+          pickInfoRecord: prevNextPickInfoRecord,
+        } = nextPickRecordValue;
+
+        // 값 추가하기.
+        set((state) => {
+          if (!get().hasPickRecordValue(state.pickRecord[nextFolderId])) {
+            return;
+          }
+
+          for (const selectedPickInfo of selectedPickInfoList) {
+            state.pickRecord[nextFolderId].pickInfoRecord[
+              `${selectedPickInfo.id}`
+            ] = selectedPickInfo;
+          }
+
+          state.pickRecord[nextFolderId].pickIdOrderedList.splice(
+            selectedPickIdList.length,
+            0,
+            ...selectedPickIdList
+          );
+        });
+
+        // 현재 폴더에서 삭제.
+        set((state) => {
+          if (!get().hasPickRecordValue(state.pickRecord[currentFolderId])) {
+            return;
+          }
+
+          for (const selectedPickInfo of selectedPickInfoList) {
+            state.pickRecord[currentFolderId].pickInfoRecord[
+              `${selectedPickInfo.id}`
+            ] = undefined;
+          }
+
+          state.pickRecord[currentFolderId].pickIdOrderedList =
+            prevCurrentPickIdOrderedList.filter(
+              (pickId) => !selectedPickIdList.includes(pickId)
+            );
+        });
+
+        // api 요청
+        try {
+          await movePicks({
+            idList: get().selectedPickIdList,
+            destinationFolderId: Number(nextFolderId),
+          });
+        } catch {
+          // 현재 폴더에서 이전 상태로 원복
+          set((state) => {
+            if (!state.pickRecord[currentFolderId]) {
+              return;
+            }
+            state.pickRecord[currentFolderId].pickIdOrderedList =
+              prevCurrentPickIdOrderedList;
+            state.pickRecord[currentFolderId].pickInfoRecord =
+              prevCurrentPickInfoRecord;
+          });
+
+          // 이동한 폴더를 이전 상태로 원복
+          set((state) => {
+            if (!state.pickRecord[nextFolderId]) {
+              return;
+            }
+
+            state.pickRecord[nextFolderId].pickIdOrderedList =
+              prevNextPickIdOrderedList;
+            state.pickRecord[nextFolderId].pickInfoRecord =
+              prevNextPickInfoRecord;
+          });
+        }
+      },
       setSelectedPickIdList: (newSelectedPickIdList) => {
         set((state) => {
           state.selectedPickIdList = newSelectedPickIdList;
@@ -210,4 +338,9 @@ type MovePickPayload = {
   folderId: number;
   from: Active;
   to: Over;
+};
+
+type movePicksToDifferentFolder = {
+  from: PickDraggableObjectType;
+  to: PickToFolderDroppableObjectType;
 };

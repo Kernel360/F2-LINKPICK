@@ -1,7 +1,7 @@
 'use client';
 
 import { useDndMonitor } from '@dnd-kit/core';
-import { useTreeStore } from '@/stores';
+import { usePickStore, useTreeStore } from '@/stores';
 import { isPickDraggableObject, isPickToFolderDroppableObject } from '@/utils';
 import type { DragEndEvent, DragOverEvent } from '@dnd-kit/core';
 
@@ -10,6 +10,7 @@ import type { DragEndEvent, DragOverEvent } from '@dnd-kit/core';
  */
 export function usePickToFolderDndMonitor() {
   const { setHoverFolderId } = useTreeStore();
+  const { movePicksToDifferentFolder } = usePickStore();
 
   const onDragOver = (event: DragOverEvent) => {
     const { active, over } = event;
@@ -43,6 +44,15 @@ export function usePickToFolderDndMonitor() {
       !isPickToFolderDroppableObject(overObject)
     )
       return;
+
+    const pickParentFolderId = activeObject.parentFolderId;
+    const folderId = overObject.id;
+
+    if (pickParentFolderId === folderId) {
+      return;
+    }
+
+    movePicksToDifferentFolder({ from: activeObject, to: overObject });
   };
 
   useDndMonitor({
