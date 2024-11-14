@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import { DndContext, pointerWithin } from '@dnd-kit/core';
 import { useGetDndContextSensor } from '@/hooks';
@@ -12,22 +13,18 @@ import { DargOverlay } from './DragOverlay';
 export function FolderAndPickDndContextProvider({
   children,
 }: PropsWithChildren) {
-  const { sensors } = useGetDndContextSensor();
+  const [elementClickPosition, setElementClickPosition] = useState({
+    x: 0,
+    y: 0,
+  });
+  const { sensors } = useGetDndContextSensor({
+    setElementClickPosition,
+  });
 
   return (
     <DndContext sensors={sensors} collisionDetection={pointerWithin}>
       <DndMonitorContext>{children}</DndMonitorContext>
-      <DargOverlay />
+      <DargOverlay elementClickPosition={elementClickPosition} />
     </DndContext>
   );
-}
-
-/**
- * @description FolderTreeDragOverlay
- */
-{
-  /* <DragOverlay>
-
-<div className={`${dragOverStyle}`}>Drag 한 폴더의 이름</div>
-</DragOverlay> */
 }

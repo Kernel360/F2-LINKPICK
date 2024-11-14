@@ -22,7 +22,7 @@ export const FolderDraggable = ({
       type: 'folder',
     },
   });
-
+  const folderElementId = `folderId-${id}`;
   const isSelected = selectedFolderList.includes(id);
   const style: CSSProperties = {
     transform: CSS.Transform.toString(transform),
@@ -46,7 +46,13 @@ export const FolderDraggable = ({
   }
 
   return (
-    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+    <div
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={style}
+      id={folderElementId}
+    >
       {children}
     </div>
   );

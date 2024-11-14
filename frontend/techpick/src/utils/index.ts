@@ -9,3 +9,4 @@ export { isSelectionActive } from './dnd/isSelectionActive';
 export { isFolderDraggableObject } from './isFolderDraggableObject';
 export { isPickDraggableObject } from './isPickDraggableObjectType';
 export { isPickToFolderDroppableObject } from './isPickToFolderDroppableObject';
+export { getElementById } from './getElementById';

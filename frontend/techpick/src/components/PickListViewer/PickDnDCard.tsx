@@ -49,6 +49,7 @@ export function PickDnDCard({ pickInfo }: PickViewDnDItemComponentProps) {
       parentFolderId: parentFolderId,
     },
   });
+  const pickElementId = `pickId-${pickId}`;
 
   const style: CSSProperties = {
     transform: CSS.Transform.toString(transform),
@@ -100,6 +101,7 @@ export function PickDnDCard({ pickInfo }: PickViewDnDItemComponentProps) {
         className={`${pickCardLayout} ${isSelected ? selectedDragItemStyle : ''} ${isActiveDragging ? isActiveDraggingItemStyle : ''}`}
         onDoubleClick={openUrl}
         onClick={(event) => handleClick(pickId, event)}
+        id={pickElementId}
       >
         <div className={cardImageSectionStyle}>
           {imageUrl ? (

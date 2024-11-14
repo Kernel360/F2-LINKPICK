@@ -22,6 +22,7 @@ export function usePickToPickDndMonitor() {
 
   const onDragStart = (event: DragStartEvent) => {
     const { active } = event;
+
     const activeObject = active.data.current;
 
     if (!isPickDraggableObject(activeObject)) return;
@@ -29,6 +30,7 @@ export function usePickToPickDndMonitor() {
     const pickId = Number(activeObject.id);
     const parentFolderId = activeObject.parentFolderId;
     const pickInfo = getPickInfoByFolderIdAndPickId(parentFolderId, pickId);
+    setFocusedPickId(pickId);
     setIsDragging(true);
     setDraggingPickInfo(pickInfo);
 
@@ -36,8 +38,6 @@ export function usePickToPickDndMonitor() {
       selectSinglePick(pickId);
       return;
     }
-
-    setFocusedPickId(pickId);
   };
 
   const onDragEnd = (event: DragEndEvent) => {
