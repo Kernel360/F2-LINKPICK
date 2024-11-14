@@ -172,7 +172,7 @@ public class PickDataHandler {
 	}
 
 	private void updateNewTagIdList(Pick pick, List<Long> newTagOrderList) {
-		// 1. 기존 태그에 없는 태그를 PickTag 테이블에서 제거
+		// 1. 기존 태그와 새로운 태그를 비교하여 없어진 태그를 PickTag 테이블에서 제거
 		pick.getTagIdOrderedList().stream()
 			.filter(tagId -> !newTagOrderList.contains(tagId))
 			.forEach(tagId -> detachTagFromPick(pick, tagId));
