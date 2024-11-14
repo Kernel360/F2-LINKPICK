@@ -9,14 +9,18 @@ public class PickCommand {
 	public record Read(Long userId, Long id) {
 	}
 
-	public record Search(Long userId, List<Long> folderIdList, List<String> searchTokenList) {
+	public record ReadList(Long userId, List<Long> folderIdList) {
 	}
 
-	public record Create(Long userId, String title, String memo, List<Long> tagIdOrderedList, Long parentFolderId,
+	public record Search(Long userId, List<Long> folderIdList, List<String> searchTokenList,
+						 List<Long> tagIdList, Long cursor, int size) {
+	}
+
+	public record Create(Long userId, String title, List<Long> tagIdOrderedList, Long parentFolderId,
 						 LinkInfo linkInfo) {
 	}
 
-	public record Update(Long userId, Long id, String title, String memo, List<Long> tagIdOrderedList) {
+	public record Update(Long userId, Long id, String title, List<Long> tagIdOrderedList) {
 	}
 
 	public record Move(Long userId, List<Long> idList, Long destinationFolderId, int orderIdx) {

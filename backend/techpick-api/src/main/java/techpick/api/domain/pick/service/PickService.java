@@ -62,10 +62,7 @@ public class PickService {
 
 	// 폴더 리스트가 넘어오면, 각 폴더 내부에 있는 픽 리스트 조회
 	@Transactional(readOnly = true)
-	public List<PickResult.FolderPickList> getFolderListChildPickList(PickCommand.Search command) {
-		// TODO: 검색 조건에 따라 바뀌는 부분은 동적 쿼리 발생 예정, QueryDSL 도입 필요
-		List<String> searchTokenList = command.searchTokenList();
-
+	public List<PickResult.FolderPickList> getFolderListChildPickList(PickCommand.ReadList command) {
 		return command.folderIdList().stream()
 			.peek(folderId -> validateFolderAccess(command.userId(), folderId))  // 폴더 접근 유효성 검사
 			.map(this::getFolderChildPickResultList)

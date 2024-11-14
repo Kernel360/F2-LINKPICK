@@ -10,7 +10,6 @@ public class PickResult {
 	public record Pick(
 		Long id,
 		String title,
-		String memo,
 		LinkInfo linkInfo,
 		Long parentFolderId,
 		List<Long> tagIdOrderedList,

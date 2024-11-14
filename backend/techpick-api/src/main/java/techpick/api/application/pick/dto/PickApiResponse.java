@@ -11,8 +11,8 @@ public class PickApiResponse {
 	public record Pick(
 		Long id,
 		String title,
-		String memo,
 		LinkInfo linkInfo,
+		Long parentFolderId,
 		List<Long> tagIdOrderedList,
 		LocalDateTime createdAt,
 		LocalDateTime updatedAt
@@ -21,7 +21,7 @@ public class PickApiResponse {
 
 	public record FolderPickList(
 		Long folderId,
-		List<PickResult.Pick> pickList
+		List<PickApiResponse.Pick> pickList
 	) {
 	}
 

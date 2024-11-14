@@ -53,7 +53,7 @@ public class PickBulkDataHandler {
 				ps.setString(4, pick.title());
 				ps.setString(5,
 					String.join(" ", pick.tagIdOrderedList().stream().map(String::valueOf).toArray(String[]::new)));
-				ps.setString(6, pick.memo());
+				ps.setString(6, "");
 				ps.setString(7, String.valueOf(LocalDateTime.now()));
 				ps.setString(8, String.valueOf(LocalDateTime.now()));
 			}
