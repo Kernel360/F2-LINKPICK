@@ -4,7 +4,7 @@ import { FolderInputIcon, Trash2Icon } from 'lucide-react';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { FolderLinkItem } from './FolderLinkItem';
-import { folderTreeHeaderLayout } from './folderTreeHeader.css';
+import { folderTreeHeaderLayout, dividerStyle } from './folderTreeHeader.css';
 import { PickToFolderDropZone } from './PickToFolderDropZone';
 
 export function FolderTreeHeader() {
@@ -50,7 +50,7 @@ export function FolderTreeHeader() {
           </PickToFolderDropZone>
         </>
       )}
-      <hr />
+      <hr className={dividerStyle} />
     </div>
   );
 }

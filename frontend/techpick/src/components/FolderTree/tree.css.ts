@@ -5,6 +5,8 @@ export const treeLayout = style({
   minWidth: sizes['6xs'],
   height: '100vh',
   padding: space['8'],
+  overflowY: 'scroll',
+  backgroundColor: colorThemeContract.backgroundNeutral,
 
   '@media': {
     'screen and (min-width: 1440px)': {

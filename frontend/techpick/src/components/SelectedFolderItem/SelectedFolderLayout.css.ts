@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
 
-export const selectedTagLayoutStyle = style({
+export const selectedFolderLayoutStyle = style({
   display: 'inline-flex',
   alignItems: 'center',
   maxWidth: `264px`,

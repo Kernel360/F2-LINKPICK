@@ -24,7 +24,7 @@ export type PickListType = Concrete<
   components['schemas']['techpick.api.domain.pick.dto.PickResult$Pick']
 >[];
 
-export type GetPicksByFolderIdResponseType = {
+export type GetPicksResponseType = {
   folderId: number;
   pickList: PickListType;
 }[];
