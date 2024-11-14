@@ -66,6 +66,10 @@ subprojects {
 
         // springdoc swagger dependency
         implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+        // https://mvnrepository.com/artifact/org.mockito/mockito-core
+        testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.14.2'
+
     }
 
     tasks.named('test') {
