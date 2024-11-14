@@ -1,9 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { DraggablePickListViewer } from '@/components';
+import { usePickStore, useTreeStore } from '@/stores';
 
 export default function RecycleBinFolderPage() {
+  const { fetchPickDataByFolderId, getOrderedPickListByFolderId } =
+    usePickStore();
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
 
@@ -18,5 +21,25 @@ export default function RecycleBinFolderPage() {
     [basicFolderMap, selectSingleFolder]
   );
 
-  return <h1>RecycleBinFolderPage page</h1>;
+  useEffect(
+    function loadPickDataFromRemote() {
+      if (!basicFolderMap) {
+        return;
+      }
+
+      fetchPickDataByFolderId(basicFolderMap['RECYCLE_BIN'].id);
+    },
+    [basicFolderMap, fetchPickDataByFolderId]
+  );
+
+  if (!basicFolderMap) {
+    return <div>loading...</div>;
+  }
+
+  return (
+    <DraggablePickListViewer
+      pickList={getOrderedPickListByFolderId(basicFolderMap['RECYCLE_BIN'].id)}
+      folderId={basicFolderMap['RECYCLE_BIN'].id}
+    />
+  );
 }
