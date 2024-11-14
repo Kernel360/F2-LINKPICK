@@ -14,6 +14,10 @@ import {
 } from './page.css';
 
 export default function LoginPage() {
+  const redirectUrl = encodeURIComponent(
+    process.env.NEXT_PUBLIC_REDIRECT_URL ?? ''
+  );
+
   useEffect(() => {
     const isLoggedInCookie = getClientCookie('techPickLogin');
 
@@ -35,7 +39,7 @@ export default function LoginPage() {
         <div className={googleLoginContainer}>
           <Link
             className={loginLink}
-            href={`${process.env.NEXT_PUBLIC_API}/login/google`}
+            href={`${process.env.NEXT_PUBLIC_API}/login/google?redirectUrl=${redirectUrl}`}
           >
             <Image
               src={`/image/logo_google.png`}
@@ -49,7 +53,7 @@ export default function LoginPage() {
         <div className={kakaoLoginContainer}>
           <Link
             className={loginLink}
-            href={`${process.env.NEXT_PUBLIC_API}/login/kakao`}
+            href={`${process.env.NEXT_PUBLIC_API}/login/kakao?redirectUrl=${redirectUrl}`}
           >
             <Image
               src={`/image/logo_kakao.svg`}
