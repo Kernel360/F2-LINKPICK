@@ -112,6 +112,8 @@ export const [commonThemeClass, commonTheme] = createTheme({
     max: 'max-content',
     /** @type {string} Minimum size, set to `min-content`. */
     min: 'min-content',
+    /** @type {string} fit size, set to `fit-content`. */
+    fit: 'fit-content',
     /** @type {string} Full size, set to `100%`. */
     full: '100%',
     /** @type {string} Size for ultra extra extra extra extra small screens (2rem, 32px). */

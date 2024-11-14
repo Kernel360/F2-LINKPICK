@@ -48,8 +48,10 @@ export function FolderInput({
   useEffect(
     function initializeFolderInput() {
       if (inputRef.current) {
-        inputRef.current.focus();
         inputRef.current.value = initialValue;
+
+        // 타이밍 이슈 탓으로 인해 setTimeout 사용
+        setTimeout(() => inputRef.current?.focus(), 0);
       }
     },
     [initialValue]

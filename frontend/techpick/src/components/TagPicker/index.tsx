@@ -3,6 +3,7 @@
 import { forwardRef, useEffect, useRef, useState } from 'react';
 import { useGetPickQuery } from '@/apis/pick';
 import { SelectedTagItem, SelectedTagListLayout } from '@/components';
+import { useTagStore } from '@/stores/tagStore';
 import { TagAutocompleteDialog } from './TagAutocompleteDialog';
 import { tagPickerLayout, tagDialogTriggerLayout } from './TagPicker.css';
 import type { TagType } from '@/types';
@@ -13,6 +14,7 @@ export const TagPicker = forwardRef<HTMLDivElement, TagPickerProps>(
     const [selectedTagList, setSelectedTagList] = useState<TagType[]>([]);
     const tagInputContainerRef = useRef<HTMLDivElement>(null);
     const { data: pickData } = useGetPickQuery(pickId);
+    const { tagList } = useTagStore();
 
     useEffect(
       function tagPickerLoad() {
@@ -20,9 +22,13 @@ export const TagPicker = forwardRef<HTMLDivElement, TagPickerProps>(
           return;
         }
 
-        setSelectedTagList(pickData.tagList);
+        const selectedTagList = tagList.filter((tag) =>
+          pickData.tagIdOrderedList.includes(tag.id)
+        );
+
+        setSelectedTagList(selectedTagList);
       },
-      [pickData]
+      [pickData, tagList]
     );
 
     const openDialog = () => {
@@ -52,7 +58,7 @@ export const TagPicker = forwardRef<HTMLDivElement, TagPickerProps>(
         >
           <SelectedTagListLayout height="fixed">
             {selectedTagList.map((tag) => (
-              <SelectedTagItem key={tag.tagName} tag={tag} />
+              <SelectedTagItem key={tag.name} tag={tag} />
             ))}
           </SelectedTagListLayout>
         </div>

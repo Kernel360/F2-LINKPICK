@@ -42,7 +42,7 @@ export function FolderContextMenu({
             onSelect={deleteFolder}
           >
             <FolderX />
-            <p>삭제</p>
+            <p>휴지통으로 이동</p>
           </ContextMenu.Item>
         </ContextMenu.Content>
       </ContextMenu.Portal>

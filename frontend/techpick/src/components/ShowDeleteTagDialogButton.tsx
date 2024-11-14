@@ -12,7 +12,7 @@ export function ShowDeleteTagDialogButton({
 
   const showDeleteTagDialog = () => {
     setIsOpen(true);
-    setDeleteTagId(tag.tagId);
+    setDeleteTagId(tag.id);
     parentOnClick();
   };
 

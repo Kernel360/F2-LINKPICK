@@ -2,10 +2,17 @@ import { style } from '@vanilla-extract/css';
 import { colorThemeContract, sizes, space } from 'techpick-shared';
 
 export const treeLayout = style({
-  minWidth: sizes['3xs'],
+  minWidth: sizes['6xs'],
   height: '100vh',
   padding: space['8'],
-  margin: 'auto',
+  overflowY: 'scroll',
+  backgroundColor: colorThemeContract.backgroundNeutral,
+
+  '@media': {
+    'screen and (min-width: 1440px)': {
+      minWidth: sizes['3xs'],
+    },
+  },
 });
 
 export const dragOverStyle = style({

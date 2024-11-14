@@ -19,7 +19,7 @@ export const contextMenuItemStyle = style({
   display: 'flex',
   alignItems: 'center',
   gap: space['8'],
-  width: sizes['7xs'],
+  width: sizes['6xs'],
   height: sizes['12xs'],
   borderRadius: borderRadius['base'],
   padding: space['8'],

@@ -1,5 +1,4 @@
 import { HTTPError } from 'ky';
-import { components } from '@/schema';
 
 export const handleHTTPError = async (error: HTTPError): Promise<never> => {
   const errorData = await error.response.json<ApiErrorBody>();
@@ -23,4 +22,7 @@ export const returnErrorFromHTTPError = async (
   return new Error(`알 수 없는 에러: ${error.response.statusText}`);
 };
 
-export type ApiErrorBody = components['schemas']['ApiErrorBody'];
+export type ApiErrorBody = {
+  code: string;
+  message: string;
+};

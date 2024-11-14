@@ -5,13 +5,15 @@ export const folderInputLayout = style({
   display: 'flex',
   alignItems: 'center',
   gap: space['8'],
-  minWidth: sizes['3xs'],
+  minWidth: sizes['6xs'],
   maxWidth: sizes['full'],
   padding: space['8'],
 });
 
 export const labelStyle = style({
   color: colorThemeContract.textPrimary,
+  flexShrink: '0',
+  flexGrow: '0',
 });
 
 export const inputStyle = style({
@@ -22,4 +24,5 @@ export const inputStyle = style({
   borderColor: colorThemeContract.primary,
   padding: '0',
   fontSize: fontSize['md'],
+  width: '0px',
 });

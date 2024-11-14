@@ -57,33 +57,30 @@ export function TagInfoEditPopoverButton({
 
     const newTagName = DOMPurify.sanitize(tagNameInputRef.current.value.trim());
 
-    if (isEmptyString(newTagName) || isSameValue(newTagName, tag.tagName)) {
+    if (isEmptyString(newTagName) || isSameValue(newTagName, tag.name)) {
       closePopover();
       return;
     }
 
     const index = selectedTagList.findIndex(
-      (selectedTag) => selectedTag.tagId === tag.tagId
+      (selectedTag) => selectedTag.id === tag.id
     );
 
     if (index !== -1) {
       const tempSelectedTagList = [...selectedTagList];
       tempSelectedTagList[index] = {
-        tagId: tag.tagId,
-        tagName: newTagName,
+        id: tag.id,
+        name: newTagName,
         colorNumber: tag.colorNumber,
-        tagOrder: tag.tagOrder,
-        userId: tag.userId,
       };
       setSelectedTagList(tempSelectedTagList);
     }
 
     try {
       await updateTag({
-        tagId: tag.tagId,
-        tagName: newTagName,
+        id: tag.id,
+        name: newTagName,
         colorNumber: tag.colorNumber,
-        tagOrder: tag.tagOrder,
       });
       queryClient.invalidateQueries({
         queryKey: ['pick'],
@@ -128,7 +125,7 @@ export function TagInfoEditPopoverButton({
           >
             <input
               type="text"
-              defaultValue={tag.tagName}
+              defaultValue={tag.name}
               ref={tagNameInputRef}
               autoFocus
               onKeyDown={handleInputKeyDown}

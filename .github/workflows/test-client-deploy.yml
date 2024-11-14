@@ -20,6 +20,7 @@ jobs:
           touch .env.production
           echo "NEXT_PUBLIC_API=${{ secrets.FRONT_NEXT_PUBLIC_API }}" >> .env.production
           echo "NEXT_PUBLIC_DOMAIN=${{ secrets.FRONT_NEXT_PUBLIC_DOMAIN }}" >> .env.production
+          echo "NEXT_PUBLIC_REDIRECT_URL=${{secrets.FRONT_NEXT_PUBLIC_REDIRECT_URL}}" >> .env.production
 
       - # Docker image 빌드
         name: Build docker image

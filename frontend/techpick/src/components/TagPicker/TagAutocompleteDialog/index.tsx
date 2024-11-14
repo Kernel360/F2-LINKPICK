@@ -63,7 +63,7 @@ export function TagAutocompleteDialog({
 
   const selectTag = (tag: TagType) => {
     const index = selectedTagList.findIndex(
-      (selectedTag) => selectedTag.tagId === tag.tagId
+      (selectedTag) => selectedTag.id === tag.id
     );
 
     if (index !== -1) {
@@ -75,7 +75,7 @@ export function TagAutocompleteDialog({
 
   const deselectTag = (tag: TagType) => {
     const filteredSelectedTagList = selectedTagList.filter(
-      (selectedTag) => selectedTag.tagId !== tag.tagId
+      (selectedTag) => selectedTag.id !== tag.id
     );
 
     setSelectedTagList([...filteredSelectedTagList]);
@@ -90,7 +90,7 @@ export function TagAutocompleteDialog({
   const onSelectCreatableTag = async () => {
     try {
       const newTag = await createTag({
-        tagName: tagInputValue,
+        name: tagInputValue,
         colorNumber: randomNumber.current,
       });
       randomNumber.current = getRandomInt();
@@ -103,14 +103,14 @@ export function TagAutocompleteDialog({
       const { title, memo, id } = pickData;
 
       const previousTagIdList = selectedTagList.map(
-        (selectedTag) => selectedTag.tagId
+        (selectedTag) => selectedTag.id
       );
 
       updatePickInfo({
         title,
         memo,
         id,
-        tagIdList: [...previousTagIdList, newTag.tagId],
+        tagIdOrderedList: [...previousTagIdList, newTag.id],
       });
     } catch (error) {
       if (error instanceof Error) {
@@ -128,7 +128,7 @@ export function TagAutocompleteDialog({
 
   useEffect(
     function checkIsCreatableTag() {
-      const isUnique = !tagList.some((tag) => tag.tagName === tagInputValue);
+      const isUnique = !tagList.some((tag) => tag.name === tagInputValue);
       const isNotInitialValue = tagInputValue.trim() !== '';
       const isCreatable = isUnique && isNotInitialValue;
 
@@ -155,7 +155,9 @@ export function TagAutocompleteDialog({
             title,
             memo,
             id,
-            tagIdList: selectedTagList.map((selectedTag) => selectedTag.tagId),
+            tagIdOrderedList: selectedTagList.map(
+              (selectedTag) => selectedTag.id
+            ),
           });
         }
 
@@ -169,7 +171,7 @@ export function TagAutocompleteDialog({
       {/**선택한 태그 리스트 */}
       <SelectedTagListLayout ref={selectedTagListRef} focusStyle="focus">
         {selectedTagList.map((tag) => (
-          <SelectedTagItem key={tag.tagId} tag={tag}>
+          <SelectedTagItem key={tag.id} tag={tag}>
             <DeselectTagButton
               onClick={() => {
                 focusTagInput();
@@ -206,12 +208,12 @@ export function TagAutocompleteDialog({
 
         {tagList.map((tag) => (
           <Command.Item
-            key={tag.tagId}
+            key={tag.id}
             className={tagListItemStyle}
             onSelect={() => onSelectTag(tag)}
-            keywords={[tag.tagName]}
+            keywords={[tag.name]}
           >
-            <SelectedTagItem key={tag.tagId} tag={tag} />
+            <SelectedTagItem key={tag.id} tag={tag} />
             <TagInfoEditPopoverButton
               tag={tag}
               selectedTagList={selectedTagList}

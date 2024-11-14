@@ -16,12 +16,13 @@ export const FolderDraggable = ({
     transition,
     isDragging: isActiveDragging,
   } = useSortable({
-    id,
+    id: `folder-${id}`,
     data: {
-      id: `test ${id}`,
+      id: id,
+      type: 'folder',
     },
   });
-
+  const folderElementId = `folderId-${id}`;
   const isSelected = selectedFolderList.includes(id);
   const style: CSSProperties = {
     transform: CSS.Transform.toString(transform),
@@ -33,7 +34,7 @@ export const FolderDraggable = ({
     return null;
   }
 
-  if (isActiveDragging) {
+  if (isActiveDragging && isDragging) {
     return (
       <div
         ref={setNodeRef}
@@ -45,7 +46,13 @@ export const FolderDraggable = ({
   }
 
   return (
-    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+    <div
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={style}
+      id={folderElementId}
+    >
       {children}
     </div>
   );

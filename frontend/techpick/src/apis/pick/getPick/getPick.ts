@@ -4,7 +4,12 @@ import type { GetPickResponseType } from '../pickApi.type';
 
 export const getPick = async (pickId: number): Promise<GetPickResponseType> => {
   try {
-    return await apiClient.get<GetPickResponseType>(`picks/${pickId}`).json();
+    const response = await apiClient.get<GetPickResponseType>(
+      `picks/${pickId}`
+    );
+    const data = await response.json();
+
+    return data;
   } catch (httpError) {
     if (httpError instanceof HTTPError) {
       const error = returnErrorFromHTTPError(httpError);
