@@ -13,6 +13,7 @@ public class PickSliceResponse<T> {
 	private final List<T> content;
 	private final Long lastCursor;
 	private final int size;
+	private final boolean hasNext;
 
 	public PickSliceResponse(Slice<T> slice) {
 		this.content = slice.getContent();
@@ -20,5 +21,6 @@ public class PickSliceResponse<T> {
 			slice.hasContent() ? ((PickApiResponse.Pick)slice.getContent().get(slice.getNumberOfElements() - 1)).id() :
 				null;
 		this.size = slice.getSize();
+		this.hasNext = slice.hasNext();
 	}
 }

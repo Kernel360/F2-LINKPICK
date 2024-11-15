@@ -89,6 +89,15 @@ class PickQueryTest {
 	}
 
 	@Test
+	void test() {
+		List<Long> pickIdList = List.of(2L, 1L, 3L);
+		List<PickResult.Pick> pickList = pickQuery.getPickList(user.getId(), pickIdList);
+		for (PickResult.Pick pick : pickList) {
+			log.info("pick : {}", pick);
+		}
+	}
+
+	@Test
 	void searchTest() {
 		// 검색 1
 		List<Long> folderIdList1 = List.of(unclassified.getId(), recycleBin.getId(), root.getId());

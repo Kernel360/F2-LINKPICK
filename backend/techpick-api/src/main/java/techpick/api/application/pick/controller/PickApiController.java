@@ -67,8 +67,8 @@ public class PickApiController {
 		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> folderIdList,
 		@Parameter(description = "검색 토큰 목록", example = "리액트, 쿼리, 서버") @RequestParam(required = false, defaultValue = "") List<String> searchTokenList,
 		@Parameter(description = "검색 태그 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> tagIdList,
-		@Parameter(description = "픽 시작 id 조회", example = "1") @RequestParam(required = false, defaultValue = "0") Long cursor,
-		@Parameter(description = "한 페이지에 가져올 픽 개수", example = "1") @RequestParam(required = false, defaultValue = "20") int size
+		@Parameter(description = "픽 시작 id 조회", example = "0") @RequestParam(required = false, defaultValue = "0") Long cursor,
+		@Parameter(description = "한 페이지에 가져올 픽 개수", example = "20") @RequestParam(required = false, defaultValue = "20") int size
 	) {
 		Slice<PickResult.Pick> pickResultList = pickSearchService.searchPick(
 			pickApiMapper.toSearchCommand(userId, folderIdList, searchTokenList, tagIdList, cursor, size));

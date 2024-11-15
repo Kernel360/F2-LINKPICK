@@ -40,7 +40,7 @@ public class PickBulkDataHandler {
 
 	@Transactional
 	public void bulkInsertPick(List<PickCommand.Create> pickList) {
-		String sql = "INSERT INTO pick (user_id, link_id, parent_folder_id, title, tag_order, memo, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO pick (user_id, link_id, parent_folder_id, title, tag_order, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 		jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
 			@Override
@@ -53,9 +53,8 @@ public class PickBulkDataHandler {
 				ps.setString(4, pick.title());
 				ps.setString(5,
 					String.join(" ", pick.tagIdOrderedList().stream().map(String::valueOf).toArray(String[]::new)));
-				ps.setString(6, "");
+				ps.setString(6, String.valueOf(LocalDateTime.now()));
 				ps.setString(7, String.valueOf(LocalDateTime.now()));
-				ps.setString(8, String.valueOf(LocalDateTime.now()));
 			}
 
 			@Override

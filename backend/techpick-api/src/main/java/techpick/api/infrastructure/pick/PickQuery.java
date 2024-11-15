@@ -45,7 +45,7 @@ public class PickQuery {
 		OrderSpecifier<Integer> orderSpecifier = new OrderSpecifier<>(Order.ASC, orderByField);
 
 		return jpaQueryFactory
-			.select(getPickResult())
+			.select(pickResultFields())
 			.from(pick)
 			.where(
 				userEqCondition(userId),
@@ -60,7 +60,7 @@ public class PickQuery {
 		List<Long> tagIdList, Long cursor, int size) {
 
 		List<PickResult.Pick> pickList = jpaQueryFactory
-			.select(getPickResult()) // dto로 반환
+			.select(pickResultFields()) // dto로 반환
 			.from(pick)
 			.leftJoin(pickTag).on(pick.id.eq(pickTag.pick.id))
 			.where(
@@ -88,7 +88,7 @@ public class PickQuery {
 		return new SliceImpl<>(pickList, PageRequest.ofSize(size), hasNext);
 	}
 
-	private ConstructorExpression<PickResult.Pick> getPickResult() {
+	private ConstructorExpression<PickResult.Pick> pickResultFields() {
 		return Projections.constructor(
 			PickResult.Pick.class,
 			pick.id,

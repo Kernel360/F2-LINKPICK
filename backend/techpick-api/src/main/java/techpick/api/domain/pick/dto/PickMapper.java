@@ -31,6 +31,5 @@ public interface PickMapper {
 	@Mapping(source = "parentFolder", target = "parentFolder")
 	@Mapping(source = "user", target = "user")
 	@Mapping(source = "command.tagIdOrderedList", target = "tagIdOrderedList")
-	@Mapping(target = "memo", expression = "java(\"\")")
 	Pick toEntity(PickCommand.Create command, User user, Folder parentFolder, Link link);
 }

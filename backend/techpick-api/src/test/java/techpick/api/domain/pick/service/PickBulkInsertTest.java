@@ -76,7 +76,7 @@ class PickBulkInsertTest {
 		long start = System.currentTimeMillis();
 		for (int i = 0; i < 10000; i++) {
 			LinkInfo linkInfo = new LinkInfo("test" + i, "링크 제목", "링크 설명", "링크 이미지 url", null);
-			PickCommand.Create command = new PickCommand.Create(user.getId(), "테스트 제목", "테스트 메모", new ArrayList<>(),
+			PickCommand.Create command = new PickCommand.Create(user.getId(), "테스트 제목", new ArrayList<>(),
 				unclassified.getId(), linkInfo);
 			pickService.saveNewPick(command);
 		}
