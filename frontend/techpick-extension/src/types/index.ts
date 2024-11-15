@@ -6,7 +6,6 @@ export type { DeleteTagRequestType } from './DeleteTagRequestType';
 export type { GetTagListResponseType } from './GetTagListResponseType';
 export type { TagType } from './TagType';
 export type { UpdateTagRequestType } from './UpdateTagRequestType';
-export type { UpdateTagResponseType } from './UpdateTagResponseType';
 export type { ApiErrorBodyType } from './ApiErrorBodyType';
 export type { CreatePickRequestType } from './CreatePickRequestType';
 export type { CreatePickResponseType } from './CreatePickResponseType';
