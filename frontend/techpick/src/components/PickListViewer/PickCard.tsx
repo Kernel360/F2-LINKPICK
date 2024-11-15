@@ -3,7 +3,6 @@
 import { useCallback } from 'react';
 import Image from 'next/image';
 import {
-  cardDescriptionSectionStyle,
   cardImageSectionStyle,
   cardImageStyle,
   cardTitleSectionStyle,
@@ -13,7 +12,7 @@ import {
 import { PickViewItemComponentProps } from './PickListViewer';
 
 export function PickCard({ pickInfo }: PickViewItemComponentProps) {
-  const { memo, title, linkInfo } = pickInfo;
+  const { title, linkInfo } = pickInfo;
   const { imageUrl, url } = linkInfo;
 
   const openUrl = useCallback(() => {
@@ -38,9 +37,6 @@ export function PickCard({ pickInfo }: PickViewItemComponentProps) {
 
       <div className={cardTitleSectionStyle}>
         <p>{title}</p>
-      </div>
-      <div className={cardDescriptionSectionStyle}>
-        <p>{memo}</p>
       </div>
     </div>
   );

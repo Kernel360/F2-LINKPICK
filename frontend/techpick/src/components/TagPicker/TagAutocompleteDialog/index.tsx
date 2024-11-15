@@ -100,7 +100,7 @@ export function TagAutocompleteDialog({
         return;
       }
 
-      const { title, memo, id } = pickData;
+      const { title, id } = pickData;
 
       const previousTagIdList = selectedTagList.map(
         (selectedTag) => selectedTag.id
@@ -108,7 +108,7 @@ export function TagAutocompleteDialog({
 
       updatePickInfo({
         title,
-        memo,
+
         id,
         tagIdOrderedList: [...previousTagIdList, newTag.id],
       });
@@ -149,11 +149,11 @@ export function TagAutocompleteDialog({
         onOpenChange(open);
 
         if (!open && pickData) {
-          const { title, memo, id } = pickData;
+          const { title, id } = pickData;
 
           updatePickInfo({
             title,
-            memo,
+
             id,
             tagIdOrderedList: selectedTagList.map(
               (selectedTag) => selectedTag.id

@@ -2,7 +2,7 @@ import type { Concrete } from './util.type';
 import type { components } from '@/schema';
 
 export type PickInfoType = Concrete<
-  components['schemas']['techpick.api.domain.pick.dto.PickResult$Pick']
+  components['schemas']['techpick.api.application.pick.dto.PickApiResponse$Pick']
 >;
 
 export type PickInfoRecordType = {
@@ -20,9 +20,7 @@ export type PickRecordType = {
   [folderId: string]: PickRecordValueType | undefined;
 };
 
-export type PickListType = Concrete<
-  components['schemas']['techpick.api.domain.pick.dto.PickResult$Pick']
->[];
+export type PickListType = PickInfoType[];
 
 export type GetPicksResponseType = {
   folderId: number;

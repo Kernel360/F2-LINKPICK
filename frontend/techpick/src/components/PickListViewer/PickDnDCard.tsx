@@ -8,7 +8,6 @@ import { CSS } from '@dnd-kit/utilities';
 import { usePickStore } from '@/stores/pickStore/pickStore';
 import { isSelectionActive } from '@/utils';
 import {
-  cardDescriptionSectionStyle,
   cardImageSectionStyle,
   cardImageStyle,
   cardTitleSectionStyle,
@@ -31,7 +30,7 @@ export function PickDnDCard({ pickInfo }: PickViewDnDItemComponentProps) {
     setSelectedPickIdList,
     isDragging,
   } = usePickStore();
-  const { memo, title, linkInfo, id: pickId, parentFolderId } = pickInfo;
+  const { title, linkInfo, id: pickId, parentFolderId } = pickInfo;
   const { imageUrl, url } = linkInfo;
   const isSelected = selectedPickIdList.includes(pickId);
   const {
@@ -119,9 +118,6 @@ export function PickDnDCard({ pickInfo }: PickViewDnDItemComponentProps) {
 
         <div className={cardTitleSectionStyle}>
           <p>{title}</p>
-        </div>
-        <div className={cardDescriptionSectionStyle}>
-          <p>{memo}</p>
         </div>
       </div>
     </div>

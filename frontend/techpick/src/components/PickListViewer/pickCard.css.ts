@@ -38,15 +38,6 @@ export const cardTitleSectionStyle = style({
   overflowY: 'scroll',
 });
 
-export const cardDescriptionSectionStyle = style({
-  width: '264px',
-  height: '64px',
-  whiteSpace: 'normal',
-  wordBreak: 'break-all',
-  overflowY: 'scroll',
-  fontSize: '14px',
-});
-
 const shimmer = keyframes({
   '0%': {
     backgroundPosition: '100% 0',
