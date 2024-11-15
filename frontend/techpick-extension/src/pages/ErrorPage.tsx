@@ -1,5 +1,5 @@
 import { useRouteError } from 'react-router-dom';
-import { Text, Gap } from '@/shared';
+import { Text, Gap } from '@/libs/@components';
 import { errorPageLayout } from './ErrorPage.css';
 
 export function ErrorPage() {

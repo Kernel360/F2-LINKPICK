@@ -1,6 +1,7 @@
 import { BookMarked } from 'lucide-react';
 import { colorThemeContract } from 'techpick-shared';
-import { Text, Button, PUBLIC_DOMAIN } from '@/shared';
+import { Text, Button } from '@/libs/@components';
+import { PUBLIC_DOMAIN } from '@/constants/publicDomain';
 import { loginPageLayout } from './LoginPage.css';
 
 export function LoginPage() {
