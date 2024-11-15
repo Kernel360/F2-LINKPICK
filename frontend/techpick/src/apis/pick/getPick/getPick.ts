@@ -12,7 +12,7 @@ export const getPick = async (pickId: number): Promise<GetPickResponseType> => {
     return data;
   } catch (httpError) {
     if (httpError instanceof HTTPError) {
-      const error = returnErrorFromHTTPError(httpError);
+      const error = await returnErrorFromHTTPError(httpError);
       throw error;
     }
     throw httpError;

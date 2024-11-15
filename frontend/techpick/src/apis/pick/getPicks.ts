@@ -43,7 +43,7 @@ export const getPickListByQueryParam = async (queryParam: string) => {
     return data;
   } catch (httpError) {
     if (httpError instanceof HTTPError) {
-      const error = returnErrorFromHTTPError(httpError);
+      const error = await returnErrorFromHTTPError(httpError);
       throw error;
     }
     throw httpError;
@@ -60,7 +60,7 @@ const getPickListByFolderId = async (folderId: number) => {
     return data;
   } catch (httpError) {
     if (httpError instanceof HTTPError) {
-      const error = returnErrorFromHTTPError(httpError);
+      const error = await returnErrorFromHTTPError(httpError);
       throw error;
     }
     throw httpError;

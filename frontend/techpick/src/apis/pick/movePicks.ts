@@ -8,7 +8,7 @@ export const movePicks = async (movePicksInfo: MovePicksRequestType) => {
     await apiClient.patch(API_URLS.MOVE_PICKS, { json: movePicksInfo });
   } catch (httpError) {
     if (httpError instanceof HTTPError) {
-      const error = returnErrorFromHTTPError(httpError);
+      const error = await returnErrorFromHTTPError(httpError);
       throw error;
     }
     throw httpError;
