@@ -1,33 +1,29 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { PickListViewer } from '@/components';
+import { PickListViewerInfiniteScroll } from '@/components/PickListViewer/PickListViewerInfiniteScroll';
 import { usePickStore } from '@/stores/pickStore/pickStore';
+import { PickListType } from '@/types';
 
 export default function SearchPickResultPage() {
   const searchParams = useSearchParams();
-  const {
-    fetchPickDataByQueryParam,
-    getOrderedPickListByFolderId,
-    getRecentlyFetchedFolderIdList,
-  } = usePickStore();
+  const { getSearchResult, searchPicksByQueryParam } = usePickStore();
+  const [pickList, setPickList] = useState<PickListType>([]);
 
-  useEffect(
-    function loadPickDataFromUrlPath() {
-      fetchPickDataByQueryParam(searchParams.toString());
-    },
-    [fetchPickDataByQueryParam, searchParams]
-  );
-
-  /**
-   * usePickStore의 구조를 그대로 활용하기 위해
-   * folderId 기반 record를 탐색하는 식으로 구현함.
-   */
-  const getSearchedPickList = () =>
-    getRecentlyFetchedFolderIdList().flatMap((folderId) =>
-      getOrderedPickListByFolderId(folderId)
+  const loadNextSlice = async () => {
+    await searchPicksByQueryParam(
+      searchParams.toString(),
+      getSearchResult().lastCursor
     );
+    console.log('loadModeItems', getSearchResult().content); // NOTE: debug purpose
+    setPickList((prev) => prev.concat(getSearchResult().content));
+  };
 
-  return <PickListViewer pickList={getSearchedPickList()} />;
+  return (
+    <PickListViewerInfiniteScroll
+      pickList={pickList}
+      loadNextSlice={loadNextSlice}
+    />
+  );
 }

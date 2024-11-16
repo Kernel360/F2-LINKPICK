@@ -35,6 +35,7 @@ type TagAction = {
    * @return {TagType[]} 찾지 못한 경우 빈 배열 반환
    * */
   findTagByName: (name: string) => TagType[];
+  findTagById: (id: number) => TagType | undefined;
 };
 
 const initialState: TagState = {
@@ -238,8 +239,7 @@ export const useTagStore = create<TagState & TagAction>()(
         }
       }
     },
-    findTagByName: (name) => {
-      return get().tagList.filter((tag) => tag.name === name);
-    },
+    findTagByName: (name) => get().tagList.filter((tag) => tag.name === name),
+    findTagById: (id) => get().tagList.find((tag) => tag.id === id),
   }))
 );

@@ -1,5 +1,5 @@
 import { style, styleVariants } from '@vanilla-extract/css';
-import { color } from 'techpick-shared';
+import { color, space } from 'techpick-shared';
 
 export const ListLayoutHeightVariants = styleVariants({
   fixed: {
@@ -30,8 +30,7 @@ export type SelectedTagListLayoutFocusStyleVarianKeyTypes =
 
 export const SelectedTagListLayoutStyle = style({
   display: 'flex',
-  gap: '4px',
+  alignItems: 'center',
+  gap: space['4'],
   flexWrap: 'wrap',
-  padding: '4px',
-  width: '264px',
 });
