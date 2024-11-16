@@ -50,7 +50,7 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
           {0 < pick.tagIdOrderedList.length && (
             <SelectedTagListLayout height="fixed">
               {pick.tagIdOrderedList
-                .map((id) => findTagById(id))
+                .map(findTagById)
                 .map(
                   (tag) => tag && <SelectedTagItem key={tag.id} tag={tag} />
                 )}
