@@ -1,10 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import {
-  borderRadius,
-  colorThemeContract,
-  sizes,
-  space,
-} from 'techpick-shared';
+import { borderRadius, colorVars, sizes, space } from 'techpick-shared';
 
 export const folderInfoItemStyle = style({
   display: 'flex',
@@ -14,12 +9,12 @@ export const folderInfoItemStyle = style({
   minHeight: '32px',
   padding: space['8'],
   borderRadius: borderRadius['base'],
-  backgroundColor: colorThemeContract.backgroundNeutral,
+  backgroundColor: colorVars.backgroundNeutral,
   cursor: 'grab',
   transition: 'background-color 0.2s',
   selectors: {
     '&:hover': {
-      backgroundColor: colorThemeContract.primaryFaded,
+      backgroundColor: colorVars.primaryFaded,
     },
     '&:active': {
       cursor: 'grabbing',
@@ -28,11 +23,11 @@ export const folderInfoItemStyle = style({
 });
 
 export const selectedDragItemStyle = style({
-  backgroundColor: colorThemeContract.primary,
+  backgroundColor: colorVars.primary,
 });
 
 export const dragOverItemStyle = style({
-  backgroundColor: colorThemeContract.primaryFaded,
+  backgroundColor: colorVars.primaryFaded,
 });
 
 export const FolderIconStyle = style({

@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colorThemeContract } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 
 export const pickDragOverlayStyle = style({
   width: '200px',
@@ -16,7 +16,7 @@ export const pickDragOverlayStyle = style({
   textOverflow: 'ellipsis',
   selectors: {
     '&:hover': {
-      backgroundColor: colorThemeContract.primaryFaded,
+      backgroundColor: colorVars.primaryFaded,
     },
     '&:active': {
       cursor: 'grabbing',

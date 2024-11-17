@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { color } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 
 export const pickFormLayout = style({
   display: 'flex',
@@ -20,14 +20,14 @@ export const titleInputStyle = style({
   border: '1px solid transparent',
   borderRadius: '4px',
   padding: '8px',
-  backgroundColor: color.inputBackground,
+  backgroundColor: colorVars.color.inputBackground,
   fontSize: '1rem',
-  color: color.font,
+  color: colorVars.color.font,
 
   ':focus': {
-    border: `1px solid ${color.inputBorderFocus}`,
+    border: `1px solid ${colorVars.color.inputBorderFocus}`,
     outline: 'none',
-    backgroundColor: color.inputBackground,
+    backgroundColor: colorVars.color.inputBackground,
     transition: 'border 0.3s ease',
   },
 });
@@ -39,14 +39,14 @@ export const textAreaStyle = style({
   fontSize: '1rem',
   border: '1px solid transparent',
   borderRadius: '4px',
-  backgroundColor: color.inputBackground,
+  backgroundColor: colorVars.color.inputBackground,
   resize: 'none',
-  color: color.font,
+  color: colorVars.color.font,
 
   ':focus': {
-    border: `1px solid ${color.inputBorderFocus}`,
+    border: `1px solid ${colorVars.color.inputBorderFocus}`,
     outline: 'none',
-    backgroundColor: color.inputBackground,
+    backgroundColor: colorVars.color.inputBackground,
     transition: 'border 0.3s ease',
   },
 });

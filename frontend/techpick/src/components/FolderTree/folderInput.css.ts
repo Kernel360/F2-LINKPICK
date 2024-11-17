@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colorThemeContract, fontSize, sizes, space } from 'techpick-shared';
+import { colorVars, fontSize, sizes, space } from 'techpick-shared';
 
 export const folderInputLayout = style({
   display: 'flex',
@@ -11,7 +11,7 @@ export const folderInputLayout = style({
 });
 
 export const labelStyle = style({
-  color: colorThemeContract.textPrimary,
+  color: colorVars.textPrimary,
   flexShrink: '0',
   flexGrow: '0',
 });
@@ -21,7 +21,7 @@ export const inputStyle = style({
   outline: 'none',
   border: 'none',
   borderBottom: '1px solid',
-  borderColor: colorThemeContract.primary,
+  borderColor: colorVars.primary,
   padding: '0',
   fontSize: fontSize['md'],
   width: '0px',

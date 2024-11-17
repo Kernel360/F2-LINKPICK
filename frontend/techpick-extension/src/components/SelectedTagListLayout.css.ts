@@ -1,6 +1,6 @@
 import { style, styleVariants } from '@vanilla-extract/css';
 import { SelectedTagCommonStyle } from './SelectedTagCommonStyle.css';
-import { color } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 
 export const ListLayoutHeightVariants = styleVariants({
   fixed: {
@@ -19,7 +19,7 @@ export type ListLayoutHeightVariantKeyTypes =
 
 export const SelectedTagListLayoutFocusStyleVariant = styleVariants({
   focus: {
-    border: `1px solid ${color.inputBorderFocus}`,
+    border: `1px solid ${colorVars.color.inputBorderFocus}`,
     borderTopLeftRadius: '4px',
     borderTopRightRadius: '4px',
   },

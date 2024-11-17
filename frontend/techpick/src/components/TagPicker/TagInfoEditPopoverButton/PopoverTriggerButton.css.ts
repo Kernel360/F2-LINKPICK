@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { color } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 
 export const PopoverTriggerButtonStyle = style({
   position: 'relative',
@@ -11,10 +11,10 @@ export const PopoverTriggerButtonStyle = style({
   border: '1px solid transparent',
   backgroundColor: 'transparent',
   cursor: 'pointer',
-  color: color.font,
+  color: colorVars.color.font,
 
   ':hover': {
-    backgroundColor: color.popoverButtonHover,
+    backgroundColor: colorVars.color.popoverButtonHover,
     transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
   },
 });

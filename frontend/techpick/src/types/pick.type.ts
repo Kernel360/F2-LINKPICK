@@ -27,6 +27,13 @@ export type GetPicksResponseType = {
   pickList: PickListType;
 }[];
 
+export type SearchPicksResponseType = {
+  content: PickListType;
+  lastCursor: number;
+  size: number;
+  hasNext: boolean;
+};
+
 export type OrderedPickIdListType = number[];
 export type SelectedPickIdListType = number[];
 

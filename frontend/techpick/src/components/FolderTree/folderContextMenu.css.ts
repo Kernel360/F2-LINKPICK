@@ -1,18 +1,13 @@
 import { style } from '@vanilla-extract/css';
-import {
-  colorThemeContract,
-  sizes,
-  space,
-  borderRadius,
-} from 'techpick-shared';
+import { colorVars, sizes, space, borderRadius } from 'techpick-shared';
 
 export const contextMenuContentLayout = style({
   width: sizes['min'],
   height: sizes['min'],
   border: '1px solid',
-  borderColor: colorThemeContract.borderNeutral,
+  borderColor: colorVars.borderNeutral,
   borderRadius: borderRadius['base'],
-  backgroundColor: colorThemeContract.backgroundBase,
+  backgroundColor: colorVars.backgroundBase,
 });
 
 export const contextMenuItemStyle = style({
@@ -27,8 +22,8 @@ export const contextMenuItemStyle = style({
 
   selectors: {
     '&[data-highlighted]': {
-      outline: colorThemeContract.primaryFaded,
-      backgroundColor: colorThemeContract.primary,
+      outline: colorVars.primaryFaded,
+      backgroundColor: colorVars.primary,
     },
   },
 });

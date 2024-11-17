@@ -1,12 +1,12 @@
 import { style } from '@vanilla-extract/css';
-import { colorThemeContract, sizes, space } from 'techpick-shared';
+import { colorVars, sizes, space } from 'techpick-shared';
 
 export const treeLayout = style({
   minWidth: sizes['6xs'],
   height: '100vh',
   padding: space['8'],
   overflowY: 'scroll',
-  backgroundColor: colorThemeContract.backgroundNeutral,
+  backgroundColor: colorVars.backgroundNeutral,
 
   '@media': {
     'screen and (min-width: 1440px)': {
@@ -27,7 +27,7 @@ export const dragOverStyle = style({
   transition: 'background-color 0.2s',
   selectors: {
     '&:hover': {
-      backgroundColor: colorThemeContract.primaryFaded,
+      backgroundColor: colorVars.primaryFaded,
     },
     '&:active': {
       cursor: 'grabbing',

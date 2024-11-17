@@ -6,41 +6,25 @@ import type {
   PickIdOrderedListType,
   PickInfoRecordType,
   PickListType,
-  PickRecordValueType,
+  SearchPicksResponseType,
 } from '@/types';
-
-const removeDuplicates = (res: GetPicksResponseType) => {
-  const pickList = res.flatMap((eachFolder) => eachFolder.pickList);
-  return Map.groupBy(pickList, (pick) => pick.parentFolderId);
-};
-
-export const getPicksByQueryParam = async (queryParam: string) => {
-  const pickListsPerFolder = removeDuplicates(
-    await getPickListByQueryParam(queryParam)
-  );
-  const result = [] as (PickRecordValueType & { parentFolderId: number })[];
-  pickListsPerFolder.forEach((pickList, parentFolderId) => {
-    result.push({
-      ...generatePickRecordData(pickList),
-      parentFolderId: parentFolderId,
-    });
-  });
-  return result;
-};
 
 export const getPicksByFolderId = async (folderId: number) => {
   const data = await getPickListByFolderId(folderId);
   return generatePickRecordData(data[0]['pickList']);
 };
 
-export const getPickListByQueryParam = async (queryParam: string) => {
+export const getPickListByQueryParam = async (
+  queryParam: string,
+  cursor?: number | string,
+  size?: number
+): Promise<SearchPicksResponseType> => {
   try {
-    const response = await apiClient.get<GetPicksResponseType>(
-      API_URLS.GET_PICKS_BY_QUERY_PARAM(queryParam)
-    );
+    const URL = API_URLS.SEARCH_PICKS_BY_QUERY_PARAM(queryParam, cursor, size);
+    const response = await apiClient.get<SearchPicksResponseType>(URL);
     const data = await response.json();
 
-    return data;
+    return data as SearchPicksResponseType;
   } catch (httpError) {
     if (httpError instanceof HTTPError) {
       const error = await returnErrorFromHTTPError(httpError);

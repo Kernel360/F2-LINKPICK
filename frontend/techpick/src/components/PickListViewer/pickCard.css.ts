@@ -1,5 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
-import { space, color } from 'techpick-shared';
+import { space, colorVars } from 'techpick-shared';
 
 export const pickCardLayout = style({
   display: 'flex',
@@ -8,9 +8,9 @@ export const pickCardLayout = style({
   gap: space[8],
   width: '280px',
   height: '320px',
-  border: `1px solid ${color.border}`,
+  border: `1px solid ${colorVars.color.border}`,
   borderRadius: '4px',
-  backgroundColor: color.background,
+  backgroundColor: colorVars.color.background,
   cursor: 'pointer',
 });
 

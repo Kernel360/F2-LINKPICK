@@ -1,5 +1,5 @@
 import { style, styleVariants } from '@vanilla-extract/css';
-import { colorThemeContract, commonTheme } from 'techpick-shared';
+import { colorVars, commonTheme } from 'techpick-shared';
 
 export const fontSizeVariants = styleVariants({
   xs: { fontSize: '0.75rem' }, // 12
@@ -26,10 +26,10 @@ export type fontWeightVariantKeyTypes = keyof typeof fontWeightVariants;
 export const textStyle = style({});
 
 export const fontColorVariants = styleVariants({
-  white: { color: colorThemeContract.white },
-  black: { color: colorThemeContract.black },
-  neutral: { color: colorThemeContract.textPrimary },
-  primary: { color: colorThemeContract.primary },
+  white: { color: colorVars.white },
+  black: { color: colorVars.black },
+  neutral: { color: colorVars.textPrimary },
+  primary: { color: colorVars.primary },
 });
 
 export type FontColorVariantsKtyTypes = keyof typeof fontColorVariants;

@@ -1,11 +1,11 @@
 import { style } from '@vanilla-extract/css';
-import { colorThemeContract, sizes, space } from 'techpick-shared';
+import { colorVars, sizes, space } from 'techpick-shared';
 
 export const folderTreeHeaderLayout = style({
   position: 'sticky',
   top: 0,
   minWidth: sizes['6xs'],
-  backgroundColor: colorThemeContract.backgroundNeutral,
+  backgroundColor: colorVars.backgroundNeutral,
 });
 
 export const dividerStyle = style({

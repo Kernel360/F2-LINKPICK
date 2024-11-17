@@ -1,8 +1,8 @@
 import { style } from '@vanilla-extract/css';
-import { colorThemeContract } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 
 export const selectedDragItemStyle = style({
-  backgroundColor: colorThemeContract.primary,
+  backgroundColor: colorVars.primary,
   userSelect: 'none',
 });
 

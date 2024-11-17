@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Command } from 'cmdk';
 import { BarLoader } from 'react-spinners';
-import { color } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 import { useThemeStore, useTagStore } from '@/stores';
 import { numberToRandomColor } from '@/utils';
 import { notifyError } from '@/libs/@toast';
@@ -137,7 +137,7 @@ export function TagAutocompleteDialog({
       >
         {fetchingTagState.isPending && (
           <Command.Loading className={tagListLoadingStyle}>
-            <BarLoader color={color.font} />
+            <BarLoader color={colorVars.color.font} />
           </Command.Loading>
         )}
 

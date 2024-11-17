@@ -1,8 +1,8 @@
 import { style } from '@vanilla-extract/css';
-import { colorThemeContract } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 import { SelectedTagCommonStyle } from './SelectedTagCommonStyle.css';
 
-const { color } = colorThemeContract;
+const { color } = colorVars;
 
 export const tagPickerLayout = style({
   position: 'relative',

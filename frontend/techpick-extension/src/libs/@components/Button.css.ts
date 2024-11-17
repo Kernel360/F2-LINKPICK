@@ -1,5 +1,5 @@
 import { style, styleVariants } from '@vanilla-extract/css';
-import { colorThemeContract } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 
 export const buttonSizeVariants = styleVariants({
   xs: {
@@ -39,23 +39,23 @@ export const buttonColorVariants = styleVariants({
     color: 'white',
   },
   primary: {
-    color: colorThemeContract.primary,
+    color: colorVars.primary,
   },
 });
 export type buttonColorVariantKeyTypes = keyof typeof buttonColorVariants;
 
 export const buttonBackgroundVariants = styleVariants({
   primary: {
-    backgroundColor: colorThemeContract.color.buttonPrimary,
+    backgroundColor: colorVars.color.buttonPrimary,
   },
   secondary: {
-    backgroundColor: colorThemeContract.color.buttonSecondary,
+    backgroundColor: colorVars.color.buttonSecondary,
   },
   warning: {
-    backgroundColor: colorThemeContract.color.buttonWarning,
+    backgroundColor: colorVars.color.buttonWarning,
   },
   white: {
-    backgroundColor: colorThemeContract.white,
+    backgroundColor: colorVars.white,
   },
 });
 
@@ -77,11 +77,11 @@ export const buttonStyle = style({
 
   selectors: {
     '&[data-variant="primary"]:hover, &[data-variant="primary"]:focus': {
-      backgroundColor: colorThemeContract.color.buttonPrimaryFocus,
+      backgroundColor: colorVars.color.buttonPrimaryFocus,
     },
 
     '&[data-variant="warning"]:hover, &[data-variant="warning"]:focus': {
-      backgroundColor: colorThemeContract.color.buttonWarningFocus,
+      backgroundColor: colorVars.color.buttonWarningFocus,
     },
   },
 });
