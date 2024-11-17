@@ -1,12 +1,12 @@
 import { style } from '@vanilla-extract/css';
-import { colorThemeContract } from 'techpick-shared';
-const { color } = colorThemeContract;
+import { colorVars } from 'techpick-shared';
+const { color } = colorVars;
 
 export const bookmarkPageLayout = style({
   width: '360px',
   height: '400px',
   padding: '16px',
-  backgroundColor: colorThemeContract.color.background,
+  backgroundColor: colorVars.color.background,
 });
 
 export const pickFormLayout = style({

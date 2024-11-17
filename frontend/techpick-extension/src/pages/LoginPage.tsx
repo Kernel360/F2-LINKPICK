@@ -1,5 +1,5 @@
 import { BookMarked } from 'lucide-react';
-import { colorThemeContract } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 import { Text, Button } from '@/libs/@components';
 import { PUBLIC_DOMAIN } from '@/constants/publicDomain';
 import { loginPageLayout } from './LoginPage.css';
@@ -8,11 +8,7 @@ export function LoginPage() {
   return (
     <div className={loginPageLayout}>
       <a href={`${PUBLIC_DOMAIN}`} target="_blank">
-        <BookMarked
-          size={64}
-          strokeWidth={1}
-          color={colorThemeContract.onMedia}
-        />
+        <BookMarked size={64} strokeWidth={1} color={colorVars.onMedia} />
       </a>
 
       <Text size="2xl" color="white" asChild>

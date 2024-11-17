@@ -1,10 +1,10 @@
 import { style } from '@vanilla-extract/css';
-import { color } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 
 export const DeselectTagButtonStyle = style({
   width: '20px',
   height: '20px',
   backgroundColor: 'transparent',
   cursor: 'pointer',
-  color: color.font,
+  color: colorVars.color.font,
 });

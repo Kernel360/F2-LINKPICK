@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colorThemeContract, sizes, space } from 'techpick-shared';
+import { colorVars, sizes, space } from 'techpick-shared';
 
 export const loginPageLayout = style({
   display: 'flex',
@@ -9,5 +9,5 @@ export const loginPageLayout = style({
   width: sizes['xs'],
   height: sizes['4xs'],
   padding: space['16'],
-  backgroundImage: `linear-gradient(135deg, ${colorThemeContract.primary} 0%, ${colorThemeContract.secondary} 100%)`,
+  backgroundImage: `linear-gradient(135deg, ${colorVars.primary} 0%, ${colorVars.secondary} 100%)`,
 });

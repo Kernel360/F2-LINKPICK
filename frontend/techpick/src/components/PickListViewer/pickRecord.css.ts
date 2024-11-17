@@ -1,22 +1,16 @@
 import { style } from '@vanilla-extract/css';
-import {
-  sizes,
-  typography,
-  colorThemeContract,
-  color,
-  space,
-} from 'techpick-shared';
+import { sizes, typography, colorVars, space } from 'techpick-shared';
 import { RECORD_HEIGHT } from '@/components/PickListViewer/pickRecordListLayout.css';
 
 export const RecordContainerLayout = style({
   // -------------------------------
   height: RECORD_HEIGHT,
   padding: space['16'],
-  borderBottom: `1px solid ${color.border}`,
+  borderBottom: `1px solid ${colorVars.color.border}`,
   cursor: 'pointer',
   selectors: {
     '&:hover': {
-      backgroundColor: colorThemeContract.primaryFaded,
+      backgroundColor: colorVars.primaryFaded,
     },
   },
   // -------------------------------
@@ -65,5 +59,5 @@ export const recordBodySectionStyle = style({
 export const recordSubTextStyle = style({
   fontSize: typography.fontSize['sm'],
   fontWeight: typography.fontWeights['normal'],
-  color: colorThemeContract.textSecondary,
+  color: colorVars.textSecondary,
 });

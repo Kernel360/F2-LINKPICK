@@ -1,12 +1,12 @@
 import { style } from '@vanilla-extract/css';
 // import { SelectedTagCommonStyle } from '@/entities/tag';
-import { color } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 
 export const searchDialogPortalLayout = style({
   position: 'absolute',
   top: '0',
   zIndex: '1',
-  backgroundColor: color.inputBackground,
+  backgroundColor: colorVars.color.inputBackground,
 });
 
 export const commandInputStyle = style({
@@ -17,7 +17,7 @@ export const commandInputStyle = style({
   outline: 'none',
   border: 'none',
   padding: '0 4px',
-  color: color.font,
+  color: colorVars.color.font,
 });
 
 export const listItemStyle = style({
@@ -31,7 +31,7 @@ export const listItemStyle = style({
   // 선택된 상태일 때
   selectors: {
     '&[data-selected="true"]': {
-      backgroundColor: color.tagSelectedBackground,
+      backgroundColor: colorVars.color.tagSelectedBackground,
     },
     '&[data-disabled="true"]': {
       display: 'none',
@@ -40,7 +40,7 @@ export const listItemStyle = style({
 });
 
 export const searchListStyle = style({
-  border: `1px solid ${color.tagBorder}`,
+  border: `1px solid ${colorVars.color.tagBorder}`,
   borderRadius: '4px',
   padding: '4px 0',
   boxShadow:
@@ -69,7 +69,7 @@ export const searchListItemStyle = style({
   // 선택된 상태일 때
   selectors: {
     '&[data-selected="true"]': {
-      backgroundColor: color.tagSelectedBackground,
+      backgroundColor: colorVars.color.tagSelectedBackground,
     },
     '&[data-disabled="true"]': {
       display: 'none',
@@ -87,11 +87,11 @@ export const searchListItemContentStyle = style({
   whiteSpace: 'nowrap', // 줄 바꿈 방지
   overflow: 'hidden', // 넘치는 내용 숨김
   textOverflow: 'ellipsis', // 생략 부호 추가
-  color: color.font,
+  color: colorVars.color.font,
 });
 
 export const searchCreateTextStyle = style({
   width: '26px',
   fontSize: '14px',
-  color: color.font,
+  color: colorVars.color.font,
 });

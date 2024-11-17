@@ -1,5 +1,5 @@
 import { style, styleVariants } from '@vanilla-extract/css';
-import { color, space } from 'techpick-shared';
+import { colorVars, space } from 'techpick-shared';
 
 export const ListLayoutHeightVariants = styleVariants({
   fixed: {
@@ -18,7 +18,7 @@ export type ListLayoutHeightVariantKeyTypes =
 
 export const SelectedTagListLayoutFocusStyleVariant = styleVariants({
   focus: {
-    border: `1px solid ${color.inputBorderFocus}`,
+    border: `1px solid ${colorVars.color.inputBorderFocus}`,
     borderTopLeftRadius: '4px',
     borderTopRightRadius: '4px',
   },
