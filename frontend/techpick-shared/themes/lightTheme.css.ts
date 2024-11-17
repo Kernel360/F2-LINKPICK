@@ -118,6 +118,8 @@ export const [lightTheme, colorVars] = createTheme({
   borderDisabled: '#c4c4c4', // 연한 회색 테두리
   foregroundDisabled: '#9e9e9e', // 텍스트 포그라운드 (중간 회색)
 
+  text: 'rgb(0, 0, 0)', // 라이트 모드에서는 검은색 텍스트
+
   ...bronze,
   ...gold,
   ...brown,
