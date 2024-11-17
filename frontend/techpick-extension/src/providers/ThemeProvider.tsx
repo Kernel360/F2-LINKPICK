@@ -6,15 +6,15 @@ import { lightTheme, darkTheme, commonThemeClass } from 'techpick-shared';
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const { isDarkMode } = useThemeStore();
-  const isLoadFirst = useRef<boolean>(false);
+  const isLoadFirst = useRef<boolean>(true);
   const getThemeModeFromLocalhost = useThemeStore(
     (state) => state.getThemeModeFromLocalhost
   );
 
   useEffect(() => {
-    if (isLoadFirst.current === false) {
+    if (isLoadFirst.current === true) {
       getThemeModeFromLocalhost();
-      isLoadFirst.current = true;
+      isLoadFirst.current = false;
     }
   }, [getThemeModeFromLocalhost]);
 

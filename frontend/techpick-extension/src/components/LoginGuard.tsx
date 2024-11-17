@@ -1,31 +1,30 @@
-import { PropsWithChildren, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { HOST_PERMISSIONS_HTTPS } from '@/constants';
+import { PropsWithChildren, useEffect, useRef, useState } from 'react';
+import { HOST_PERMISSIONS_HTTPS, PUBLIC_DOMAIN } from '@/constants';
 
 export function LoginGuard({ children }: PropsWithChildren) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
+  const isLoadFirst = useRef<boolean>(true);
 
-  useEffect(
-    function checkAccessToken() {
-      const getAccessToken = async () => {
-        const accessTokenCookie = await chrome.cookies.get({
-          name: 'access_token',
-          url: HOST_PERMISSIONS_HTTPS,
-        });
+  useEffect(function checkAccessToken() {
+    const getAccessToken = async () => {
+      const accessTokenCookie = await chrome.cookies.get({
+        name: 'access_token',
+        url: HOST_PERMISSIONS_HTTPS,
+      });
 
-        if (!accessTokenCookie) {
-          navigate('/login');
-          return;
-        }
+      if (!accessTokenCookie) {
+        chrome.tabs.create({ url: PUBLIC_DOMAIN });
+        return;
+      }
 
-        setIsLoggedIn(true);
-      };
+      setIsLoggedIn(true);
+    };
 
+    if (isLoadFirst.current) {
+      isLoadFirst.current = false;
       getAccessToken();
-    },
-    [navigate]
-  );
+    }
+  }, []);
 
   return <>{isLoggedIn && children}</>;
 }

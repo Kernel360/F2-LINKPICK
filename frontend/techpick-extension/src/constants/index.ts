@@ -5,3 +5,4 @@ export { REQUEST_THEME_STATE_FROM_LOCALHOST_MESSAGE } from './requestThemeStateF
 export { DARK_THEME_STATE, LIGHT_THEME_STATE } from './themeState';
 export { THEME_STATE_LOCALHOST_KEY } from './themeStateLocalhostKey';
 export { CHANGE_THEME_STATE_TO_LOCALHOST_PORT_NAME } from './changeThemeStateToLocalhostPortName';
+export { PUBLIC_DOMAIN } from './publicDomain';
