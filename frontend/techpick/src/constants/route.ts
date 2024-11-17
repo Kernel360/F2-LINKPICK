@@ -4,5 +4,6 @@ export const ROUTES = {
   FOLDERS_UNCLASSIFIED: '/folders/unclassified',
   FOLDERS_RECYCLE_BIN: '/folders/recycle-bin',
   FOLDER_DETAIL: (folderId: number) => `/folders/${folderId}`,
+  SEARCH: '/folders/search',
   LOGIN: '/login',
 };

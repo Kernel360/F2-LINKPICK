@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Command } from 'cmdk';
-import { FolderOpen, Tag } from 'lucide-react';
+import { FolderOpen, SearchIcon, Tag } from 'lucide-react';
 import WrappedTokenInput, {
   JS__TOKEN__DELETE_BUTTON__CLASS_NAME,
   KEY_DOWN_HANDLER_CONFIG_OPTION,
@@ -11,12 +11,20 @@ import WrappedTokenInput, {
 } from 'react-customize-token-input';
 import { SpecialKeyDownConfig } from 'react-customize-token-input/lib/types/specialKeyDown';
 import { SelectedTagItem } from '@/components';
-import { listItemStyle } from '@/components/SearchWidget/SearchWidget.css';
+import {
+  autoCompleteLayoutStyle,
+  inputIconStyle,
+  inputLayoutStyle,
+  listItemStyle,
+  searchWidgetLayoutStyle,
+  searchWidgetWidth,
+} from '@/components/SearchWidget/SearchWidget.css';
 import { getStringTokenizer } from '@/components/SearchWidget/util';
 import createQueryParameter from '@/components/SearchWidget/util/createQueryParameter';
 import { PrefixPatternBuilder } from '@/components/SearchWidget/util/tokenizer/PrefixPatternBuilder';
 import { Token } from '@/components/SearchWidget/util/tokenizer/PrefixTokenizer.type';
 import { SelectedFolderItem } from '@/components/SelectedFolderItem';
+import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { useTagStore } from '@/stores/tagStore';
 import { FolderType, TagType } from '@/types';
@@ -25,7 +33,7 @@ import './SearchInput.css';
 type SearchKey = 'TAG' | 'FOLDER' | 'NONE';
 
 const pattern = new PrefixPatternBuilder<SearchKey>()
-  .match({ prefix: 'folder:', key: 'FOLDER' })
+  .match({ prefix: '@', key: 'FOLDER' })
   .match({ prefix: '#', key: 'TAG' })
   .ifNoneMatch('NONE')
   .build();
@@ -122,7 +130,7 @@ export function SearchWidget() {
    */
   const syncSearchInputStateWithUrl = () => {
     // 왼쪽 폴더 클릭 시 검색 창을 초기화
-    if (pathname !== '/folders/search') {
+    if (pathname !== ROUTES.SEARCH) {
       resetInputAndAutocompleteContext();
       setTokens([]);
       return;
@@ -137,7 +145,7 @@ export function SearchWidget() {
    * route to [search] page when search action is executed
    */
   const doSearchWithTokensAndInput = () => {
-    router.push(`/folders/search?${exportSearchQuery()}`);
+    router.push(`${ROUTES.SEARCH}?${exportSearchQuery()}`);
   };
 
   // TODO: 해당 함수는 외부로 빼기 (리팩토링)
@@ -260,53 +268,68 @@ export function SearchWidget() {
   };
 
   return (
-    <Command
-      label={'Search'}
-      style={{ width: '70%' }} // TODO: change to css.ts + 화면 크기에 따라 맞추기
-      filter={distinguishCommandItemWithSameValue}
-    >
-      <Command.Input // just for auto-completion, hidden from screen
-        style={{ display: 'none' }}
-        value={tokenInputContext?.text}
-      />
-      <WrappedTokenInput
-        ref={inputRef}
-        disableCreateOnBlur
-        tokenValues={tokens}
-        onInputValueChange={setInput}
-        specialKeyDown={KeyEventConfig}
-        onGetIsTokenEditable={() => false}
-        onCreatorKeyDown={onCreatorKeyDown}
-        onTokenValuesChange={editTokenList}
-        onGetTokenDisplayLabel={renderTokenLabel}
-      />
-      <Command.List>
-        {tokenInputContext?.key === 'TAG' &&
-          tagList.filter(isUnselectedItem).map((tag) => (
-            <Command.Item
-              key={tag.id}
-              className={listItemStyle}
-              value={tag.name + ' ' + tag.id}
-              onSelect={onAutocomplete(tag)}
-            >
-              <SelectedTagItem tag={tag} />
-            </Command.Item>
-          ))}
-        {tokenInputContext?.key === 'FOLDER' &&
-          getFolderList()
-            .filter((folder) => folder.folderType !== 'ROOT')
-            .filter(isUnselectedItem)
-            .map((folder) => (
-              <Command.Item
-                key={folder.id}
-                className={listItemStyle}
-                value={folder.name + ' ' + folder.id}
-                onSelect={onAutocomplete(folder)}
-              >
-                <SelectedFolderItem folder={folder} />
-              </Command.Item>
-            ))}
-      </Command.List>
-    </Command>
+    <div className={searchWidgetLayoutStyle}>
+      <div className={inputLayoutStyle}>
+        <SearchIcon className={inputIconStyle} />
+        <WrappedTokenInput
+          ref={inputRef}
+          disableCreateOnBlur
+          tokenValues={tokens}
+          onInputValueChange={setInput}
+          specialKeyDown={KeyEventConfig}
+          onGetIsTokenEditable={() => false}
+          onCreatorKeyDown={onCreatorKeyDown}
+          onTokenValuesChange={editTokenList}
+          onGetTokenDisplayLabel={renderTokenLabel}
+        />
+      </div>
+      <div className={autoCompleteLayoutStyle}>
+        <Command
+          label={'Search'}
+          style={{ width: searchWidgetWidth }}
+          filter={distinguishCommandItemWithSameValue}
+        >
+          <Command.Input // just for auto-completion, hidden from screen
+            style={{ display: 'none' }}
+            value={tokenInputContext?.text}
+          />
+          <Command.List>
+            {tokenInputContext?.key === 'TAG' && (
+              <>
+                <Command.Empty>No tags found.</Command.Empty>
+                {tagList.filter(isUnselectedItem).map((tag) => (
+                  <Command.Item
+                    key={tag.id}
+                    className={listItemStyle}
+                    value={tag.name + ' ' + tag.id}
+                    onSelect={onAutocomplete(tag)}
+                  >
+                    <SelectedTagItem tag={tag} />
+                  </Command.Item>
+                ))}
+              </>
+            )}
+            {tokenInputContext?.key === 'FOLDER' && (
+              <>
+                <Command.Empty>No folders found.</Command.Empty>
+                {getFolderList()
+                  .filter((folder) => folder.folderType !== 'ROOT')
+                  .filter(isUnselectedItem)
+                  .map((folder) => (
+                    <Command.Item
+                      key={folder.id}
+                      className={listItemStyle}
+                      value={folder.name + ' ' + folder.id}
+                      onSelect={onAutocomplete(folder)}
+                    >
+                      <SelectedFolderItem folder={folder} />
+                    </Command.Item>
+                  ))}
+              </>
+            )}
+          </Command.List>
+        </Command>
+      </div>
+    </div>
   );
 }

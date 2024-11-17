@@ -1,7 +1,14 @@
-import type { PropsWithChildren } from 'react';
+import { PropsWithChildren, Suspense } from 'react';
 import { FolderTree, FolderAndPickDndContextProvider } from '@/components';
+import { CurrentPathIndicator } from '@/components/FolderPathIndicator/CurrentPathIndicator';
 import { SearchWidget } from '@/components/SearchWidget/SearchWidget';
-import { pageContainerLayout, ListViewerLayout } from './layout.css';
+import {
+  pageContainerLayout,
+  ListViewerLayout,
+  ListViewerHeaderLayout,
+  ListViewerHeaderMainLayout,
+  ListViewerHeaderSubLayout,
+} from './layout.css';
 
 export default function FolderLayout({ children }: PropsWithChildren) {
   return (
@@ -9,7 +16,16 @@ export default function FolderLayout({ children }: PropsWithChildren) {
       <FolderAndPickDndContextProvider>
         <FolderTree />
         <div className={ListViewerLayout}>
-          <SearchWidget />
+          <div className={ListViewerHeaderLayout}>
+            <div className={ListViewerHeaderMainLayout}>
+              <SearchWidget />
+            </div>
+            <div className={ListViewerHeaderSubLayout}>
+              <Suspense>
+                <CurrentPathIndicator />
+              </Suspense>
+            </div>
+          </div>
           {children}
         </div>
       </FolderAndPickDndContextProvider>

@@ -41,6 +41,9 @@ type TreeAction = {
   readFolder: () => void;
   updateFolderName: (payload: UpdateFolderPayload) => Promise<void>;
   deleteFolder: (deleteFolderId: number) => void;
+  // TODO: getter, find 같은 규칙 통일 필요.
+  //       어떤 get은 fetch 함수고, 어떤 get은 getter임.
+  //       findById, findByName 등의 getter는 묶어주기
   getFolderInfoByFolderId: (folderId: number) => FolderType | null;
   getFolders: () => Promise<void>;
   getBasicFolders: () => Promise<void>;

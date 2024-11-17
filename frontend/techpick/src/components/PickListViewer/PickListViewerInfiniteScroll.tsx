@@ -1,7 +1,9 @@
 import { CSSProperties, ReactNode } from 'react';
+import { BarLoader } from 'react-spinners';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
+import { colorVars } from 'techpick-shared';
 import { PickRecord } from '@/components/PickListViewer/PickRecord';
 import {
   pickRecordListLayoutStyle,
@@ -44,7 +46,7 @@ export function PickListViewerInfiniteScroll(
         {isItemLoaded(index) ? (
           <PickRecord pickInfo={props.pickList[index]} />
         ) : (
-          <div>{'loading...'}</div> // TODO: use loading skeleton
+          <BarLoader color={colorVars.gray3} />
         )}
       </div>
     );

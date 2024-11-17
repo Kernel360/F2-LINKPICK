@@ -16,7 +16,6 @@ export default function SearchPickResultPage() {
       searchParams.toString(),
       getSearchResult().lastCursor
     );
-    console.log('loadModeItems', getSearchResult().content); // NOTE: debug purpose
     setPickList((prev) => prev.concat(getSearchResult().content));
   };
 

@@ -1,24 +1,7 @@
 import { style } from '@vanilla-extract/css';
-// import { SelectedTagCommonStyle } from '@/entities/tag';
-import { colorVars } from 'techpick-shared';
+import { colorVars, space } from 'techpick-shared';
 
-export const searchDialogPortalLayout = style({
-  position: 'absolute',
-  top: '0',
-  zIndex: '1',
-  backgroundColor: colorVars.color.inputBackground,
-});
-
-export const commandInputStyle = style({
-  display: 'flex',
-  flex: '1 1 60px',
-  minWidth: '64px',
-  height: '20px',
-  outline: 'none',
-  border: 'none',
-  padding: '0 4px',
-  color: colorVars.color.font,
-});
+export const searchWidgetWidth = '100%';
 
 export const listItemStyle = style({
   display: 'flex',
@@ -26,72 +9,35 @@ export const listItemStyle = style({
   alignItems: 'center',
   borderRadius: '4px',
   backgroundColor: 'transparent',
-  padding: '4px',
-
+  padding: space['8'],
+  cursor: 'pointer',
   // 선택된 상태일 때
   selectors: {
-    '&[data-selected="true"]': {
-      backgroundColor: colorVars.color.tagSelectedBackground,
-    },
-    '&[data-disabled="true"]': {
-      display: 'none',
+    '&:hover': {
+      backgroundColor: colorVars.yellow3, // TODO: 적용 되는지 체크
     },
   },
 });
 
-export const searchListStyle = style({
-  border: `1px solid ${colorVars.color.tagBorder}`,
-  borderRadius: '4px',
-  padding: '4px 0',
-  boxShadow:
-    'rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px',
-  overflowY: 'auto',
-  '::-webkit-scrollbar': {
-    display: 'none',
-  },
+export const searchWidgetLayoutStyle = style({
+  position: 'relative',
+  width: '100%',
 });
 
-export const searchListLoadingStyle = style({
+export const inputLayoutStyle = style({
   display: 'flex',
-  justifyContent: 'center',
+  flexDirection: 'row',
   alignItems: 'center',
-  height: '20px',
+  backgroundColor: colorVars.gray4,
 });
 
-export const searchListItemStyle = style({
-  display: 'flex',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  borderRadius: '4px',
-  backgroundColor: 'transparent',
-  padding: '4px',
-
-  // 선택된 상태일 때
-  selectors: {
-    '&[data-selected="true"]': {
-      backgroundColor: colorVars.color.tagSelectedBackground,
-    },
-    '&[data-disabled="true"]': {
-      display: 'none',
-    },
-  },
+export const inputIconStyle = style({
+  margin: `0 ${space['8']}`,
 });
 
-export const searchListItemContentStyle = style({
-  maxWidth: `calc('264px' - 34px)`, // 26px은 생성 텍스트의 영역 8px는 패딩
-  height: '20px',
-  lineHeight: '20px',
-  borderRadius: '4px',
-  padding: '0 4px',
-  fontSize: '14px',
-  whiteSpace: 'nowrap', // 줄 바꿈 방지
-  overflow: 'hidden', // 넘치는 내용 숨김
-  textOverflow: 'ellipsis', // 생략 부호 추가
-  color: colorVars.color.font,
-});
-
-export const searchCreateTextStyle = style({
-  width: '26px',
-  fontSize: '14px',
-  color: colorVars.color.font,
+export const autoCompleteLayoutStyle = style({
+  position: 'absolute',
+  backgroundColor: colorVars.gray4,
+  width: '100%',
+  zIndex: 1,
 });

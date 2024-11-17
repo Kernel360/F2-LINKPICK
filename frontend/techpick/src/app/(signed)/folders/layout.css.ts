@@ -12,7 +12,7 @@ export const ListViewerLayout = style({
   flexDirection: 'column',
   width: '100%',
   height: '100vh',
-  padding: space['8'],
+  padding: space['32'],
 
   '@media': {
     'screen and (min-width: 1440px)': {
@@ -20,3 +20,19 @@ export const ListViewerLayout = style({
     },
   },
 });
+
+export const ListViewerHeaderLayout = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: space['12'],
+  marginBottom: space['16'],
+});
+
+// search module
+export const ListViewerHeaderMainLayout = style({
+  maxWidth: sizes['2xl'],
+  minWidth: sizes['xs'],
+});
+
+// pathIndicator module
+export const ListViewerHeaderSubLayout = style({});

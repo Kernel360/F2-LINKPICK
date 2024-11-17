@@ -6,11 +6,11 @@ export const RecordContainerLayout = style({
   // -------------------------------
   height: RECORD_HEIGHT,
   padding: space['16'],
-  borderBottom: `1px solid ${colorVars.color.border}`,
+  borderTop: `1px solid ${colorVars.gray6}`,
   cursor: 'pointer',
   selectors: {
-    '&:hover': {
-      backgroundColor: colorVars.primaryFaded,
+    '&:hover, &:focus': {
+      backgroundColor: colorVars.gray3,
     },
   },
   // -------------------------------
@@ -59,5 +59,5 @@ export const recordBodySectionStyle = style({
 export const recordSubTextStyle = style({
   fontSize: typography.fontSize['sm'],
   fontWeight: typography.fontWeights['normal'],
-  color: colorVars.textSecondary,
+  color: colorVars.gray11,
 });

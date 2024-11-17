@@ -43,13 +43,13 @@ export type buttonColorVariantKeyTypes = keyof typeof buttonColorVariants;
 
 export const buttonBackgroundVariants = styleVariants({
   primary: {
-    backgroundColor: colorVars.color.buttonPrimary,
+    backgroundColor: colorVars.blue1,
   },
   secondary: {
-    backgroundColor: colorVars.color.buttonSecondary,
+    backgroundColor: colorVars.green1,
   },
   warning: {
-    backgroundColor: colorVars.color.buttonWarning,
+    backgroundColor: colorVars.orange1,
   },
 });
 
@@ -71,11 +71,11 @@ export const buttonStyle = style({
 
   selectors: {
     '&[data-variant="primary"]:hover, &[data-variant="primary"]:focus': {
-      backgroundColor: colorVars.color.buttonPrimaryFocus,
+      backgroundColor: colorVars.amber1,
     },
 
     '&[data-variant="warning"]:hover, &[data-variant="warning"]:focus': {
-      backgroundColor: colorVars.color.buttonWarningFocus,
+      backgroundColor: colorVars.orange1,
     },
   },
 });
