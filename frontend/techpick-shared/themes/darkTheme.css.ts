@@ -1,7 +1,40 @@
 import { createTheme } from '@vanilla-extract/css';
-import { colorThemeContract } from './colorThemeContract.css';
+import {
+  bronzeDark,
+  goldDark,
+  brownDark,
+  orangeDark,
+  tomatoDark,
+  redDark,
+  rubyDark,
+  crimsonDark,
+  pinkDark,
+  plumDark,
+  purpleDark,
+  violetDark,
+  irisDark,
+  indigoDark,
+  blueDark,
+  cyanDark,
+  tealDark,
+  jadeDark,
+  greenDark,
+  grassDark,
+  skyDark,
+  mintDark,
+  limeDark,
+  yellowDark,
+  amberDark,
+  grayDark,
+  mauveDark,
+  slateDark,
+  sageDark,
+  oliveDark,
+  sandDark,
+} from '@radix-ui/colors';
+import { colorVars } from './lightTheme.css';
 
-export const darkTheme = createTheme(colorThemeContract, {
+export const darkTheme = createTheme(colorVars, {
   color: {
     primary: '#00306e',
     secondary: '#95004d',
@@ -81,4 +114,36 @@ export const darkTheme = createTheme(colorThemeContract, {
 
   borderDisabled: '#4a4a4a', // 어두운 회색 테두리
   foregroundDisabled: '#6b6b6b', // 텍스트 포그라운드 (밝은 회색)
+
+  ...bronzeDark,
+  ...goldDark,
+  ...brownDark,
+  ...orangeDark,
+  ...tomatoDark,
+  ...redDark,
+  ...rubyDark,
+  ...crimsonDark,
+  ...pinkDark,
+  ...plumDark,
+  ...purpleDark,
+  ...violetDark,
+  ...irisDark,
+  ...indigoDark,
+  ...blueDark,
+  ...cyanDark,
+  ...tealDark,
+  ...jadeDark,
+  ...greenDark,
+  ...grassDark,
+  ...skyDark,
+  ...mintDark,
+  ...limeDark,
+  ...yellowDark,
+  ...amberDark,
+  ...grayDark,
+  ...mauveDark,
+  ...slateDark,
+  ...sageDark,
+  ...oliveDark,
+  ...sandDark,
 });

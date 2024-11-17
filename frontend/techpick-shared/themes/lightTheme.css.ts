@@ -1,7 +1,43 @@
 import { createTheme } from '@vanilla-extract/css';
-import { colorThemeContract } from './colorThemeContract.css';
+import {
+  bronze,
+  gold,
+  brown,
+  orange,
+  tomato,
+  red,
+  ruby,
+  crimson,
+  pink,
+  plum,
+  purple,
+  violet,
+  iris,
+  indigo,
+  blue,
+  cyan,
+  teal,
+  jade,
+  green,
+  grass,
+  sky,
+  mint,
+  lime,
+  yellow,
+  amber,
+  gray,
+  mauve,
+  slate,
+  sage,
+  olive,
+  sand,
+} from '@radix-ui/colors';
 
-export const lightTheme = createTheme(colorThemeContract, {
+export const [lightTheme, colorVars] = createTheme({
+  /**
+   * @deprecated 더이상 사용되지 않습니다. 가급적 colorVars에서 직접 color를 선택하세요
+   *
+   */
   color: {
     primary: '#0070f3',
     secondary: '#ff0080',
@@ -81,4 +117,36 @@ export const lightTheme = createTheme(colorThemeContract, {
 
   borderDisabled: '#c4c4c4', // 연한 회색 테두리
   foregroundDisabled: '#9e9e9e', // 텍스트 포그라운드 (중간 회색)
+
+  ...bronze,
+  ...gold,
+  ...brown,
+  ...orange,
+  ...tomato,
+  ...red,
+  ...ruby,
+  ...crimson,
+  ...pink,
+  ...plum,
+  ...purple,
+  ...violet,
+  ...iris,
+  ...indigo,
+  ...blue,
+  ...cyan,
+  ...teal,
+  ...jade,
+  ...green,
+  ...grass,
+  ...sky,
+  ...mint,
+  ...lime,
+  ...yellow,
+  ...amber,
+  ...gray,
+  ...mauve,
+  ...slate,
+  ...sage,
+  ...olive,
+  ...sand,
 });
