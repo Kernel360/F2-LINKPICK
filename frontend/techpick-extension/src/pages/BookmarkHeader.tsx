@@ -1,18 +1,21 @@
-import { BookMarked } from 'lucide-react';
-import { colorVars } from 'techpick-shared';
 import { Text } from '@/libs/@components';
 import { ToggleThemeButton } from '@/components';
 import { BookmarkHeaderLayout, logoSectionLayout } from './BookmarkHeader.css';
+import teckpickIconLink from '@/assets/pick32.png';
+import { PUBLIC_DOMAIN } from '@/constants/publicDomain';
 
 export function BookmarkHeader() {
   return (
     <div className={BookmarkHeaderLayout}>
-      <div className={logoSectionLayout}>
-        <BookMarked size={20} color={colorVars.color.font} />
-        <Text size="2xl" asChild>
-          <h1>PICK</h1>
-        </Text>
-      </div>
+      <a href={`${PUBLIC_DOMAIN}`} target="_blank">
+        <div className={logoSectionLayout}>
+          <img src={teckpickIconLink} alt="techpick logo icon image" />
+
+          <Text size="2xl" asChild>
+            <h1>PICK</h1>
+          </Text>
+        </div>
+      </a>
       <ToggleThemeButton />
     </div>
   );

@@ -8,4 +8,5 @@ export const BookmarkHeaderLayout = style({
 
 export const logoSectionLayout = style({
   display: 'flex',
+  alignItems: 'center',
 });
