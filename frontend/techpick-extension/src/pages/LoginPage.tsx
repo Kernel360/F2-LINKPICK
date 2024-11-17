@@ -1,13 +1,13 @@
 import { Text, Button } from '@/libs/@components';
 import { PUBLIC_DOMAIN } from '@/constants/publicDomain';
 import { loginPageLayout } from './LoginPage.css';
-import teckpickIconLink from '@/assets/pick128.png';
+import techpickIconLink from '@/assets/pick128.png';
 
 export function LoginPage() {
   return (
     <div className={loginPageLayout}>
       <a href={`${PUBLIC_DOMAIN}`} target="_blank">
-        <img src={teckpickIconLink} alt="techpick logo icon" />
+        <img src={techpickIconLink} alt="techpick logo icon" />
       </a>
 
       <Text size="2xl" color="white" asChild>

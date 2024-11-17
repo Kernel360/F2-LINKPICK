@@ -1,7 +1,7 @@
 import { Text } from '@/libs/@components';
 import { ToggleThemeButton } from '@/components';
 import { BookmarkHeaderLayout, logoSectionLayout } from './BookmarkHeader.css';
-import teckpickIconLink from '@/assets/pick32.png';
+import techpickIconLink from '@/assets/pick32.png';
 import { PUBLIC_DOMAIN } from '@/constants/publicDomain';
 
 export function BookmarkHeader() {
@@ -9,7 +9,7 @@ export function BookmarkHeader() {
     <div className={BookmarkHeaderLayout}>
       <a href={`${PUBLIC_DOMAIN}`} target="_blank">
         <div className={logoSectionLayout}>
-          <img src={teckpickIconLink} alt="techpick logo icon image" />
+          <img src={techpickIconLink} alt="techpick logo icon image" />
 
           <Text size="2xl" asChild>
             <h1>PICK</h1>
