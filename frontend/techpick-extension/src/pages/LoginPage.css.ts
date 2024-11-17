@@ -4,10 +4,10 @@ import { colorThemeContract, sizes, space } from 'techpick-shared';
 export const loginPageLayout = style({
   display: 'flex',
   flexDirection: 'column',
-  gap: space['32'],
+  gap: space['16'],
   alignItems: 'center',
   width: sizes['xs'],
-  height: sizes['4xs'],
+  height: sizes['3xs'],
   padding: space['16'],
   backgroundImage: `linear-gradient(135deg, ${colorThemeContract.primary} 0%, ${colorThemeContract.secondary} 100%)`,
 });
