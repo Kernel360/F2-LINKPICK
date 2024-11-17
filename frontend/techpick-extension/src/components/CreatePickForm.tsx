@@ -10,7 +10,6 @@ import {
   pickFormLayout,
   formFieldLayout,
   titleInputStyle,
-  textAreaStyle,
   submitButtonLayout,
   labelLayout,
 } from './CreatePickForm.css';
@@ -25,18 +24,13 @@ export function CreatePickForm({
 }: CreatePickFormProps) {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagPickerRef = useRef<HTMLDivElement>(null);
-  const memoInputRef = useRef<HTMLTextAreaElement>(null);
+
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const { selectedTagList } = useTagStore();
   const [basicFolderList, setBasicFolderList] =
     useState<GetBasicFolderListType>();
 
-  useChangeFocusUsingArrowKey([
-    titleInputRef,
-    tagPickerRef,
-    memoInputRef,
-    submitButtonRef,
-  ]);
+  useChangeFocusUsingArrowKey([titleInputRef, tagPickerRef, submitButtonRef]);
 
   useEffect(function onLoadCreatePickForm() {
     getBasicFolderList().then((value) => {
@@ -99,18 +93,6 @@ export function CreatePickForm({
           </Text>
         </div>
         <TagPicker ref={tagPickerRef} />
-      </div>
-      <div className={formFieldLayout}>
-        <div className={labelLayout}>
-          <Text size="2xl" asChild>
-            <label htmlFor="">메모</label>
-          </Text>
-        </div>
-        <textarea
-          id="memo"
-          className={textAreaStyle}
-          ref={memoInputRef}
-        ></textarea>
       </div>
       <div className={submitButtonLayout}>
         <Button onClick={onSubmit} ref={submitButtonRef}>

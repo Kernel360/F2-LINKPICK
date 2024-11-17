@@ -3,7 +3,6 @@ import {
   pickFormLayout,
   formFieldLayout,
   titleInputStyle,
-  textAreaStyle,
   submitButtonLayout,
   labelLayout,
 } from './CreatePickForm.css';
@@ -31,14 +30,7 @@ export function SkeltonPickForm() {
         </div>
         <div className={`${skeletonTagInputStyle} ${skeleton}`}></div>
       </div>
-      <div className={formFieldLayout}>
-        <div className={labelLayout}>
-          <Text size="2xl" asChild>
-            <label htmlFor="">메모</label>
-          </Text>
-        </div>
-        <div className={`${textAreaStyle} ${skeleton}`}></div>
-      </div>
+
       <div className={submitButtonLayout}>
         <Button>제출</Button>
       </div>

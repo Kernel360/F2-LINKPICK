@@ -32,25 +32,6 @@ export const titleInputStyle = style({
   },
 });
 
-export const textAreaStyle = style({
-  width: '264px',
-  height: '72px',
-  padding: '8px',
-  fontSize: '1rem',
-  border: '1px solid transparent',
-  borderRadius: '4px',
-  backgroundColor: colorVars.color.inputBackground,
-  resize: 'none',
-  color: colorVars.color.font,
-
-  ':focus': {
-    border: `1px solid ${colorVars.color.inputBorderFocus}`,
-    outline: 'none',
-    backgroundColor: colorVars.color.inputBackground,
-    transition: 'border 0.3s ease',
-  },
-});
-
 export const submitButtonLayout = style({
   marginLeft: 'auto',
 });
