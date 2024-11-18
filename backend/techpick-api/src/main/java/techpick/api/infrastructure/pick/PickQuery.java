@@ -1,5 +1,6 @@
 package techpick.api.infrastructure.pick;
 
+import static techpick.core.model.folder.QFolder.*;
 import static techpick.core.model.pick.QPick.*;
 import static techpick.core.model.pick.QPickTag.*;
 
@@ -34,7 +35,20 @@ public class PickQuery {
 	private final JPAQueryFactory jpaQueryFactory;
 
 	// TODO: 폴더 리스트 내 픽 조회 시 java sort vs querydsl 시간 측정 후 빠르면 사용 예정
-	public List<PickResult.Pick> getPickList(Long userId, List<Long> pickIdList) {
+	//  Java sort에 비해 속도가 느린 것을 확인. 참고를 위해 코드 유지
+	public List<PickResult.Pick> getPickList(Long userId, List<Long> folderIdList) {
+		if (folderIdList == null || folderIdList.isEmpty()) {
+			return List.of();
+		}
+
+		List<Long> pickIdList = folderIdList.stream()
+			.flatMap(folderId -> getChildPickIdOrderedList(folderId).stream())
+			.toList();
+
+		if (pickIdList.isEmpty()) {
+			return List.of();
+		}
+
 		String orderListStr = pickIdList.stream()
 			.map(String::valueOf)
 			.collect(Collectors.joining(", "));
@@ -48,8 +62,7 @@ public class PickQuery {
 			.select(pickResultFields())
 			.from(pick)
 			.where(
-				userEqCondition(userId),
-				pickIdListCondition(pickIdList)
+				userEqCondition(userId)
 			)
 			.orderBy(orderSpecifier)
 			.fetch();
@@ -115,11 +128,12 @@ public class PickQuery {
 		return cursorId == null ? null : pick.id.gt(cursorId);
 	}
 
-	private BooleanExpression pickIdListCondition(List<Long> pickIdList) {
-		if (pickIdList == null || pickIdList.isEmpty()) {
-			return null;
-		}
-		return pick.id.in(pickIdList);
+	private List<Long> getChildPickIdOrderedList(Long folderId) {
+		return jpaQueryFactory
+			.select(folder.childPickIdOrderedList)
+			.from(folder)
+			.where(folder.id.eq(folderId))
+			.fetchOne();
 	}
 
 	private BooleanExpression folderIdCondition(List<Long> folderIdList) {
@@ -140,7 +154,6 @@ public class PickQuery {
 				BooleanExpression combinedCondition = null;
 				while (stringTokenizer.hasMoreTokens()) {
 					String part = stringTokenizer.nextToken().toLowerCase();
-					// lower() 메서드를 사용하여 pick.title을 소문자로 변환
 					BooleanExpression condition = pick.title.lower().like("%" + part + "%");
 					combinedCondition = (combinedCondition == null) ? condition : combinedCondition.and(condition);
 				}
