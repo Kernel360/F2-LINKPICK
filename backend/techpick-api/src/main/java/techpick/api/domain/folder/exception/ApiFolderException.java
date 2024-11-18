@@ -47,4 +47,9 @@ public class ApiFolderException extends ApiException {
 	public static ApiFolderException INVALID_PARENT_FOLDER() {
 		return new ApiFolderException(ApiFolderErrorCode.INVALID_PARENT_FOLDER);
 	}
+
+	public static ApiFolderException ROOT_FOLDER_SEARCH_NOT_ALLOWED() {
+		return new ApiFolderException(ApiFolderErrorCode.ROOT_FOLDER_SEARCH_NOT_ALLOWED);
+	}
+
 }
