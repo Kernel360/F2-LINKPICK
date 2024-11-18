@@ -6,8 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import techpick.api.domain.tag.dto.TagCommand;
 import techpick.api.domain.tag.dto.TagMapper;
 import techpick.api.domain.tag.exception.ApiTagException;
@@ -47,7 +47,12 @@ public class TagDataHandler {
 
 	@Transactional(readOnly = true)
 	public List<Tag> getTagList(List<Long> tagOrderList) {
-		return tagRepository.findAllById(tagOrderList);
+		List<Tag> tagList = tagRepository.findAllById(tagOrderList);
+		// 조회리스트에 존재하지 않는 태그id가 존재하면 예외 발생
+		if (tagList.size() != tagOrderList.size()) {
+			throw ApiTagException.TAG_NOT_FOUND();
+		}
+		return tagList;
 	}
 
 	@Transactional

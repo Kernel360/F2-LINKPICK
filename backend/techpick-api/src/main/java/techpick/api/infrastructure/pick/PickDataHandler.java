@@ -2,9 +2,7 @@ package techpick.api.infrastructure.pick;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,12 +55,21 @@ public class PickDataHandler {
 
 	@Transactional(readOnly = true)
 	public List<Pick> getPickList(List<Long> pickIdList) {
-		return pickRepository.findAllById(pickIdList);
+		List<Pick> pickList = pickRepository.findAllById(pickIdList);
+		// 조회리스트에 존재하지 않는 픽이 있으면 예외 발생
+		if (pickList.size() != pickIdList.size()) {
+			throw ApiPickException.PICK_NOT_FOUND();
+		}
+		return pickList;
 	}
 
 	@Transactional(readOnly = true)
 	public List<Pick> getPickListPreservingOrder(List<Long> pickIdList) {
 		List<Pick> pickList = pickRepository.findAllById(pickIdList);
+		// 조회리스트에 존재하지 않는 픽이 있으면 예외 발생
+		if (pickList.size() != pickIdList.size()) {
+			throw ApiPickException.PICK_NOT_FOUND();
+		}
 		pickList.sort(Comparator.comparing(pick -> pickIdList.indexOf(pick.getId())));
 		return pickList;
 	}
@@ -91,32 +98,28 @@ public class PickDataHandler {
 				throw ApiPickException.PICK_MUST_BE_UNIQUE_FOR_A_URL();
 			});
 
-		// 태그 존재 여부 검증
-		validateTagIdList(command.tagIdOrderedList());
-
 		Pick savedPick = pickRepository.save(pickMapper.toEntity(command, user, folder, link));
 		savedPick.getParentFolder().addChildPickIdOrdered(savedPick.getId());
-		return savedPick;
-	}
+		List<PickTag> pickTagList = tagRepository.findAllById(command.tagIdOrderedList())
+			.stream()
+			.map(tag -> PickTag.of(savedPick, tag))
+			.toList();
+		pickTagRepository.saveAll(pickTagList);
 
-	@Transactional
-	public PickTag savePickTag(Pick pick, Tag tag) {
-		return pickTagRepository.save(PickTag.of(pick, tag));
+		return savedPick;
 	}
 
 	@Transactional
 	public Pick updatePick(PickCommand.Update command) {
 		Pick pick = getPick(command.id());
 		pick.updateTitle(command.title());
-
-		// 제목만 수정하는 경우
-		if (ObjectUtils.isNotEmpty(command.title()) && Objects.isNull(command.tagIdOrderedList())) {
-			return pick;
+		if (command.parentFolderId() != null) {
+			pick.updateParentFolder(
+				folderRepository.findById(command.parentFolderId()).orElseThrow(ApiFolderException::FOLDER_NOT_FOUND));
 		}
-
-		// 태그 존재 여부 검증
-		validateTagIdList(command.tagIdOrderedList());
-		updateNewTagIdList(pick, command.tagIdOrderedList());
+		if (command.tagIdOrderedList() != null) {
+			updateNewTagIdList(pick, command.tagIdOrderedList());
+		}
 		return pick;
 	}
 
@@ -177,11 +180,6 @@ public class PickDataHandler {
 		pickTagRepository.deleteByPickAndTagId(pick, tagId);
 	}
 
-	@Transactional
-	public void detachTagFromEveryPick(Long tagId) {
-		pickTagRepository.deleteByTagId(tagId);
-	}
-
 	private void updateNewTagIdList(Pick pick, List<Long> newTagOrderList) {
 		// 1. 기존 태그와 새로운 태그를 비교하여 없어진 태그를 PickTag 테이블에서 제거
 		pick.getTagIdOrderedList().stream()
@@ -194,12 +192,6 @@ public class PickDataHandler {
 			.forEach(tagId -> attachTagToPick(pick, tagId));
 
 		pick.updateTagOrderList(newTagOrderList);
-	}
-
-	private void validateTagIdList(List<Long> tagIdOrderedList) {
-		tagIdOrderedList
-			.forEach(tagId -> tagRepository.findById(tagId)
-				.orElseThrow(ApiTagException::TAG_NOT_FOUND));
 	}
 
 }
