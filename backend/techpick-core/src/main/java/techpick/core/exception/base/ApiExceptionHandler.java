@@ -5,12 +5,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import techpick.core.exception.level.ErrorLevel;
+import techpick.core.util.RequestHolder;
 
 @RestControllerAdvice
 @Slf4j
+@RequiredArgsConstructor
 public class ApiExceptionHandler {
+
+	private final RequestHolder requestHolder;
 
 	/**
 	 * ApiException 에서 잡지 못한 예외는
@@ -19,14 +24,14 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ApiErrorResponse handleGlobalException(Exception exception) {
 
-		ErrorLevel.MUST_NEVER_HAPPEN().handleError(exception);
+		ErrorLevel.MUST_NEVER_HAPPEN().handleError(exception, requestHolder.getRequest());
 
 		return ApiErrorResponse.UNKNOWN_SERVER_ERROR();
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ApiErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception);
+		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception, requestHolder.getRequest());
 		return ApiErrorResponse.VALIDATION_ERROR();
 	}
 
@@ -36,7 +41,7 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(ApiException.class)
 	public ApiErrorResponse handleApiException(ApiException exception) {
 
-		exception.handleErrorByLevel();
+		exception.handleErrorByLevel(requestHolder.getRequest());
 
 		return ApiErrorResponse.of(exception.getApiErrorCode());
 	}
@@ -45,7 +50,7 @@ public class ApiExceptionHandler {
 	// 참고 : https://be-student.tistory.com/52
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ApiErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
-		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception);
+		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception, requestHolder.getRequest());
 		return ApiErrorResponse.INVALID_JSON_ERROR();
 	}
 }
