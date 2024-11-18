@@ -1,3 +1,4 @@
+import { PUBLIC_DOMAIN } from '@/constants';
 import {
   pickFormLayout,
   formFieldLayout,
@@ -5,6 +6,8 @@ import {
   submitButtonStyle,
   plusIconStyle,
   pickFormFieldListLayout,
+  footerStyle,
+  footerTextStyle,
 } from './CreatePickForm.css';
 import {
   skeleton,
@@ -29,6 +32,12 @@ export function SkeltonPickForm() {
         </div>
         <div className={formFieldLayout}>
           <div className={`${skeletonTagInputStyle} ${skeleton}`}></div>
+        </div>
+
+        <div className={footerStyle}>
+          <a href={PUBLIC_DOMAIN} target="_blank">
+            <p className={footerTextStyle}>app.techpick.org</p>
+          </a>
         </div>
       </div>
       <button className={submitButtonStyle}>
