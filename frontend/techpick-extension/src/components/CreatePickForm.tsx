@@ -14,6 +14,7 @@ import {
   plusIconStyle,
   footerStyle,
   footerTextStyle,
+  pickFormFieldListLayout,
 } from './CreatePickForm.css';
 import { useRef, useState } from 'react';
 import { FolderType } from '@/types';
@@ -68,15 +69,7 @@ export function CreatePickForm({
 
   return (
     <form className={pickFormLayout} onSubmit={(e) => e.preventDefault()}>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '20px',
-          padding: '16px 24px 0px 24px',
-          height: '244px',
-        }}
-      >
+      <div className={pickFormFieldListLayout}>
         <div className={formFieldLayout}>
           <ThumbnailImage image={imageUrl} />
           <input

@@ -7,6 +7,14 @@ export const pickFormLayout = style({
   justifyContent: 'space-between',
 });
 
+export const pickFormFieldListLayout = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '20px',
+  padding: '16px 24px 0px 24px',
+  height: '244px',
+});
+
 export const formFieldLayout = style({
   display: 'flex',
   gap: '16px',

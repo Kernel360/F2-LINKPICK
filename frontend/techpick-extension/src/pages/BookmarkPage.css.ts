@@ -4,7 +4,7 @@ const { color } = colorVars;
 
 export const bookmarkPageLayout = style({
   width: '430px',
-  height: 'fit-content',
+  height: '244px',
   backgroundColor: colorVars.background,
 });
 
