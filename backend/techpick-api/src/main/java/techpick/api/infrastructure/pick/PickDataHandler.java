@@ -56,14 +56,14 @@ public class PickDataHandler {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Pick> getPickList(List<Long> idList) {
-		return pickRepository.findAllById(idList);
+	public List<Pick> getPickList(List<Long> pickIdList) {
+		return pickRepository.findAllById(pickIdList);
 	}
 
 	@Transactional(readOnly = true)
-	public List<Pick> getPickListPreservingOrder(List<Long> idList) {
-		List<Pick> pickList = pickRepository.findAllById(idList);
-		pickList.sort(Comparator.comparing(pick -> idList.indexOf(pick.getId())));
+	public List<Pick> getPickListPreservingOrder(List<Long> pickIdList) {
+		List<Pick> pickList = pickRepository.findAllById(pickIdList);
+		pickList.sort(Comparator.comparing(pick -> pickIdList.indexOf(pick.getId())));
 		return pickList;
 	}
 
