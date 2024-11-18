@@ -4,11 +4,15 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Slice;
@@ -32,9 +36,9 @@ import techpick.core.model.user.User;
 import techpick.core.model.user.UserRepository;
 
 @Slf4j
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(classes = TechPickApiApplication.class)
 @ActiveProfiles("local")
-@Transactional
 class PickSearchTest {
 
 	@Autowired
@@ -48,7 +52,7 @@ class PickSearchTest {
 	Folder root2, recycleBin2, unclassified2, general2;
 	Tag tag1, tag2, tag3, tag4, tag5, tag6;
 
-	@BeforeEach
+	@BeforeAll
 	void setUp(
 		@Autowired UserRepository userRepository,
 		@Autowired FolderRepository folderRepository,
@@ -61,579 +65,126 @@ class PickSearchTest {
 		saveUser2TestPick();
 	}
 
-	@Nested
-	@DisplayName("검색 여러 조건 테스트")
-	class SearchConditionTest {
+	@ParameterizedTest(name = "다중 검색 조건 테스트 : {index} - {0} ")
+	@MethodSource("provideSearchTestCases")
+	void parameterizedSearchTest(TestCase testCase) {
+		// given
+		PickCommand.Search search = new PickCommand.Search(
+			user1.getId(),
+			testCase.folderIdList,
+			testCase.searchTokenList,
+			testCase.tagIdList,
+			0L,
+			30
+		);
 
-		@Test
-		@DisplayName("모든 조건 검색")
-		void searchTest1() {
-			// given
-			List<Long> folderIdList = List.of(unclassified1.getId(), recycleBin1.getId());
-			List<String> searchTokenList = List.of("리액트", "서버", "스프링");
-			List<Long> tagIdList = List.of(tag1.getId(), tag2.getId());
+		// when
+		Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
 
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
+		// then
+		assertThat(pickList).isNotNull();
+		assertThat(pickList.getNumberOfElements()).isEqualTo(testCase.expectedCount);
 
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
+		if (testCase.searchTokenList != null && !testCase.searchTokenList.isEmpty()) {
 			for (PickResult.Pick pick : pickList) {
-				assertThat(searchTokenList.stream().allMatch(pick.title()::contains)).isTrue(); // 검색어 포함 여부
-				assertThat(pick.tagIdOrderedList()).contains(tag1.getId(), tag2.getId()); // 태그 조건 확인
-				assertThat(folderIdList).contains(pick.parentFolderId()); // 폴더 ID 조건 확인
-			}
-		}
-
-		@Test
-		@DisplayName("폴더 null")
-		void searchTest2() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("리액트", "서버", "스프링");
-			List<Long> tagIdList = List.of(tag1.getId(), tag2.getId());
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(searchTokenList.stream().allMatch(pick.title()::contains)).isTrue();
-				assertThat(pick.tagIdOrderedList()).containsAll(tagIdList);
-				assertThat(List.of(unclassified1.getId(), recycleBin1.getId(), root1.getId(), general1.getId()))
-					.contains(pick.parentFolderId());
-			}
-		}
-
-		@Test
-		@DisplayName("제목 검색 null")
-		void searchTest3() {
-			// given
-			List<Long> folderIdList = List.of(unclassified1.getId(), recycleBin1.getId());
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = List.of(tag1.getId(), tag2.getId());
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(20); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.tagIdOrderedList()).containsAll(tagIdList);
-				assertThat(folderIdList).contains(pick.parentFolderId());
-			}
-		}
-
-		@Test
-		@DisplayName("태그 null")
-		void searchTest4() {
-			// given
-			List<Long> folderIdList = List.of(unclassified1.getId(), recycleBin1.getId());
-			List<String> searchTokenList = List.of("리액트", "서버", "스프링");
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(searchTokenList.stream().allMatch(pick.title()::contains)).isTrue();
-				assertThat(folderIdList).contains(pick.parentFolderId());
-			}
-		}
-
-		@Test
-		@DisplayName("폴더, 검색 null")
-		void searchTest5() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = List.of(tag1.getId(), tag2.getId());
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(20); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.tagIdOrderedList()).containsAll(tagIdList);
-			}
-		}
-
-		@Test
-		@DisplayName("전체 null : 전체 검색")
-		void searchTest6() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(30); // 검색 결과 수
-		}
-
-		@Test
-		@DisplayName("폴더 : 일반, 제목 : s")
-		void searchTest7() {
-			// given
-			List<Long> folderIdList = List.of(general1.getId());
-			List<String> searchTokenList = List.of("s");
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				boolean containsAllTokens = searchTokenList.stream()
+				boolean containsAllTokens = testCase.searchTokenList.stream()
 					.allMatch(token -> pick.title().toLowerCase().contains(token.toLowerCase()));
 				assertThat(containsAllTokens).isTrue();
-				assertThat(folderIdList).contains(pick.parentFolderId());
 			}
 		}
 
-		@Test
-		@DisplayName("폴더 : 일반, 제목 : T")
-		void searchTest8() {
-			// given
-			List<Long> folderIdList = List.of(general1.getId());
-			List<String> searchTokenList = List.of("T");
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(5); // 검색 결과 수
-
+		if (testCase.tagIdList != null && !testCase.tagIdList.isEmpty()) {
 			for (PickResult.Pick pick : pickList) {
-				boolean containsAllTokens = searchTokenList.stream()
-					.allMatch(token -> pick.title().toLowerCase().contains(token.toLowerCase()));
-				assertThat(containsAllTokens).isTrue();
-				assertThat(folderIdList).contains(pick.parentFolderId());
+				assertThat(pick.tagIdOrderedList()).containsAll(testCase.tagIdList);
 			}
 		}
 
-		@Test
-		@DisplayName("폴더 : 일반, 태그 : 3")
-		void searchTest9() {
-			// given
-			List<Long> folderIdList = List.of(general1.getId());
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = List.of(tag3.getId());
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
+		if (testCase.folderIdList != null && !testCase.folderIdList.isEmpty()) {
 			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.tagIdOrderedList()).containsAll(tagIdList);
-				assertThat(folderIdList).contains(pick.parentFolderId());
+				assertThat(testCase.folderIdList).contains(pick.parentFolderId());
 			}
 		}
+	}
 
-		@Test
-		@DisplayName("폴더 : 휴지통, 태그 : 3")
-		void searchTest10() {
-			// given
-			List<Long> folderIdList = List.of(recycleBin1.getId());
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = List.of(tag3.getId());
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(0); // 검색 결과 수
-		}
+	@MethodSource("provideSearchTestCases")
+	Stream<TestCase> provideSearchTestCases() {
+		return Stream.of(
+			new TestCase(List.of(unclassified1.getId(), recycleBin1.getId()), List.of("리액트", "서버", "스프링"),
+				List.of(tag1.getId(), tag2.getId()), 10, "모든 조건 검색"),
+			new TestCase(null, List.of("리액트", "서버", "스프링"), List.of(tag1.getId(), tag2.getId()), 10, "폴더 null"),
+			new TestCase(List.of(unclassified1.getId(), recycleBin1.getId()), null, List.of(tag1.getId(), tag2.getId()),
+				20, "제목 검색 null"),
+			new TestCase(List.of(unclassified1.getId(), recycleBin1.getId()), List.of("리액트", "서버", "스프링"), null, 10,
+				"태그 null"),
+			new TestCase(null, null, List.of(tag1.getId(), tag2.getId()), 20, "폴더, 검색 null"),
+			new TestCase(null, null, null, 30, "전체 null : 전체 검색"),
+			new TestCase(List.of(general1.getId()), List.of("s"), null, 10, "폴더 : 일반, 제목 : s"),
+			new TestCase(List.of(general1.getId()), List.of("T"), null, 5, "폴더 : 일반, 제목 : T"),
+			new TestCase(List.of(general1.getId()), null, List.of(tag3.getId()), 10, "폴더 : 일반, 태그 : 3"),
+			new TestCase(List.of(recycleBin1.getId()), null, List.of(tag3.getId()), 0, "폴더 : 휴지통, 태그 : 3")
+		);
 	}
 
 	@Nested
 	@DisplayName("제목 검색 테스트")
+	@Transactional
 	class TitleSearchConditionTest {
-		@Test
-		@DisplayName("리액트")
-		void titleSearchTest() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("리액트");
-			List<Long> tagIdList = null;
 
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
+		static Stream<TestCase> provideTestCases() {
+			return Stream.of(
+				new TestCase(null, List.of("리액트"), null, 10, "리액트"),
+				new TestCase(null, List.of("스프링"), null, 20, "스프링"),
+				new TestCase(null, List.of("Spring"), null, 5, "Spring"),
+				new TestCase(null, List.of("S", "g"), null, 5, "S g"),
+				new TestCase(null, List.of("S"), null, 10, "S"),
+				new TestCase(null, List.of("g"), null, 5, "g"),
+				new TestCase(null, List.of("스", "링"), null, 20, "스 링"),
+				new TestCase(null, List.of("프링"), null, 20, "프링"),
+				new TestCase(null, List.of("서버"), null, 10, "서버"),
+				new TestCase(null, List.of("트"), null, 10, "트"),
+				new TestCase(null, List.of("a".repeat(500)), null, 0, "긴 검색어") // 매우 긴 검색어
+			);
+		}
+
+		@ParameterizedTest(name = "제목 검색 테스트 : {index} - {0}")
+		@MethodSource("provideTestCases")
+		void parameterizedTitleSearchTest(TestCase testCase) {
+			// given
+			PickCommand.Search search = new PickCommand.Search(
+				user1.getId(),
+				testCase.folderIdList,
+				testCase.searchTokenList,
+				testCase.tagIdList,
+				0L,
+				30
+			);
 
 			// when
 			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
 
 			// then
 			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
+			assertThat(pickList.getNumberOfElements()).isEqualTo(testCase.expectedCount);
 
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.title()).contains(searchTokenList);
+			if (testCase.expectedCount > 0) {
+				for (PickResult.Pick pick : pickList) {
+					boolean containsAllTokens = testCase.searchTokenList.stream()
+						.allMatch(token -> pick.title().toLowerCase().contains(token.toLowerCase()));
+					assertThat(containsAllTokens).isTrue();
+				}
 			}
 		}
-
-		@Test
-		@DisplayName("스프링")
-		void titleSearchTest2() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("스프링");
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(20); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.title()).contains(searchTokenList);
-			}
-		}
-
-		@Test
-		@DisplayName("Spring")
-		void titleSearchTest3() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("Spring");
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.title()).contains(searchTokenList);
-			}
-		}
-
-		@Test
-		@DisplayName("S g")
-		void titleSearchTest4() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("S", "g");
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				boolean containsAllTokens = searchTokenList.stream().allMatch(token -> pick.title().contains(token));
-				assertThat(containsAllTokens).isTrue();
-			}
-		}
-
-		@Test
-		@DisplayName("S")
-		void titleSearchTest5() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("S");
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.title()).contains(searchTokenList);
-			}
-		}
-
-		@Test
-		@DisplayName("g")
-		void titleSearchTest6() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("g");
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.title()).contains(searchTokenList);
-			}
-		}
-
-		@Test
-		@DisplayName("스 링")
-		void titleSearchTest7() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("스", "링");
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(20); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				boolean containsAllTokens = searchTokenList.stream().allMatch(token -> pick.title().contains(token));
-				assertThat(containsAllTokens).isTrue();
-			}
-		}
-
-		@Test
-		@DisplayName("프링")
-		void titleSearchTest8() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("프링");
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(20); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.title()).contains(searchTokenList);
-			}
-		}
-
-		@Test
-		@DisplayName("서버")
-		void titleSearchTest9() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("서버");
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.title()).contains(searchTokenList);
-			}
-		}
-
-		@Test
-		@DisplayName("트")
-		void titleSearchTest10() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("트");
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.title()).contains(searchTokenList);
-			}
-		}
-
-		@Test
-		@DisplayName("제목이 매우 긴 경우")
-		void titleSearchTest11() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("a".repeat(500)); // 500자 검색어
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(0); // 검색 결과 없음
-		}
-
 	}
 
+	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 	@Nested
 	@DisplayName("폴더 검색 테스트")
+	@Transactional
 	class FolderSearchConditionTest {
 
 		@Test
-		@DisplayName("미분류 폴더")
-		void folderSearchTest1() {
-			// given
-			List<Long> folderIdList = List.of(unclassified1.getId());
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(20); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.parentFolderId()).isEqualTo(unclassified1.getId());
-			}
-		}
-
-		@Test
-		@DisplayName("일반 폴더 - React.js")
-		void folderSearchTest2() {
-			// given
-			List<Long> folderIdList = List.of(general1.getId());
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.parentFolderId()).isEqualTo(general1.getId());
-			}
-		}
-
-		@Test
-		@DisplayName("휴지통 폴더")
-		void folderSearchTest3() {
-			// given
-			List<Long> folderIdList = List.of(recycleBin1.getId());
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = null;
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(0); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.parentFolderId()).isEqualTo(general1.getId());
-			}
-		}
-
-		@Test
 		@DisplayName("루트 폴더 - 검색 불가")
-		void folderSearchTest4() {
+		void rootFolderSearchTest() {
 			// given
 			List<Long> folderIdList = List.of(root1.getId());
 			List<String> searchTokenList = null;
@@ -648,171 +199,87 @@ class PickSearchTest {
 				.hasMessageStartingWith(ApiFolderException.ROOT_FOLDER_SEARCH_NOT_ALLOWED().getMessage());
 		}
 
+		@ParameterizedTest(name = "폴더 검색 테스트 : {index} - {0}")
+		@MethodSource("provideFolderSearchTestCases")
+		void parameterizedFolderSearchTest(TestCase testCase) {
+			// given
+			PickCommand.Search search = new PickCommand.Search(
+				user1.getId(),
+				testCase.folderIdList,
+				testCase.searchTokenList,
+				testCase.tagIdList,
+				0L,
+				30
+			);
+
+			// when
+			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
+
+			// then
+			assertThat(pickList).isNotNull();
+			assertThat(pickList.getNumberOfElements()).isEqualTo(testCase.expectedCount);
+
+			if (testCase.expectedCount > 0) {
+				for (PickResult.Pick pick : pickList) {
+					assertThat(pick.parentFolderId()).isEqualTo(testCase.folderIdList.get(0));
+				}
+			}
+		}
+
+		@MethodSource("provideFolderSearchTestCases")
+		Stream<TestCase> provideFolderSearchTestCases() {
+			return Stream.of(
+				new TestCase(List.of(unclassified1.getId()), null, null, 20, "미분류 폴더"),
+				new TestCase(List.of(general1.getId()), null, null, 10, "일반 폴더 - React.js"),
+				new TestCase(List.of(recycleBin1.getId()), null, null, 0, "휴지통 폴더")
+			);
+		}
 	}
 
+	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 	@Nested
 	@DisplayName("태그 검색 테스트")
+	@Transactional
 	class TagSearchConditionTest {
 
-		@Test
-		@DisplayName("태그 1")
-		void tagSearchTest1() {
+		@ParameterizedTest(name = "태그 검색 테스트 : {index} - {0}")
+		@MethodSource("provideTagSearchTestCases")
+		void parameterizedTagSearchTest(TestCase testCase) {
 			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = List.of(tag1.getId());
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
+			PickCommand.Search search = new PickCommand.Search(
+				user1.getId(),
+				testCase.folderIdList,
+				testCase.searchTokenList,
+				testCase.tagIdList,
+				0L,
+				30
+			);
 
 			// when
 			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
 
 			// then
 			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(30); // 검색 결과 수
+			assertThat(pickList.getNumberOfElements()).isEqualTo(testCase.expectedCount);
 
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.tagIdOrderedList()).contains(tag1.getId()); // 태그 조건 확인
+			if (testCase.expectedCount > 0) {
+				for (PickResult.Pick pick : pickList) {
+					assertThat(pick.tagIdOrderedList()).containsAll(testCase.tagIdList);
+				}
 			}
 		}
 
-		@Test
-		@DisplayName("태그 2")
-		void tagSearchTest2() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = List.of(tag2.getId());
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(20); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.tagIdOrderedList()).contains(tag2.getId()); // 태그 조건 확인
-			}
-		}
-
-		@Test
-		@DisplayName("태그 3")
-		void tagSearchTest3() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = List.of(tag3.getId());
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(20); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.tagIdOrderedList()).contains(tag3.getId()); // 태그 조건 확인
-			}
-		}
-
-		@Test
-		@DisplayName("태그 1, 2")
-		void tagSearchTest4() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = List.of(tag1.getId(), tag2.getId());
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(20); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.tagIdOrderedList()).containsAll(tagIdList); // 태그 조건 확인
-			}
-		}
-
-		@Test
-		@DisplayName("태그 1, 3")
-		void tagSearchTest5() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = List.of(tag1.getId(), tag3.getId());
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(20); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.tagIdOrderedList()).containsAll(tagIdList); // 태그 조건 확인
-			}
-		}
-
-		@Test
-		@DisplayName("태그 2, 3")
-		void tagSearchTest6() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = List.of(tag2.getId(), tag3.getId());
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.tagIdOrderedList()).containsAll(tagIdList); // 태그 조건 확인
-			}
-		}
-
-		@Test
-		@DisplayName("태그 1, 2, 3")
-		void tagSearchTest7() {
-			// given
-			List<Long> folderIdList = null;
-			List<String> searchTokenList = null;
-			List<Long> tagIdList = List.of(tag1.getId(), tag2.getId(), tag3.getId());
-
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
-				0L, 30);
-
-			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
-
-			// then
-			assertThat(pickList).isNotNull();
-			assertThat(pickList.getNumberOfElements()).isEqualTo(10); // 검색 결과 수
-
-			for (PickResult.Pick pick : pickList) {
-				assertThat(pick.tagIdOrderedList()).containsAll(tagIdList); // 태그 조건 확인
-			}
+		@MethodSource("provideTagSearchTestCases")
+		Stream<TestCase> provideTagSearchTestCases() {
+			return Stream.of(
+				new TestCase(null, null, List.of(tag1.getId()), 30, "태그 1"),
+				new TestCase(null, null, List.of(tag2.getId()), 20, "태그 2"),
+				new TestCase(null, null, List.of(tag3.getId()), 20, "태그 3"),
+				new TestCase(null, null, List.of(tag1.getId(), tag2.getId()), 20, "태그 1, 2"),
+				new TestCase(null, null, List.of(tag1.getId(), tag3.getId()), 20, "태그 1, 3"),
+				new TestCase(null, null, List.of(tag2.getId(), tag3.getId()), 10, "태그 2, 3"),
+				new TestCase(null, null, List.of(tag1.getId(), tag2.getId(), tag3.getId()), 10, "태그 1, 2, 3")
+			);
 		}
 	}
 
@@ -908,6 +375,30 @@ class PickSearchTest {
 		}
 	}
 
+	// Test Case Class
+	static class TestCase {
+		List<Long> folderIdList;
+		List<String> searchTokenList;
+		List<Long> tagIdList;
+		int expectedCount;
+		String description;
+
+		TestCase(List<Long> folderIdList, List<String> searchTokenList, List<Long> tagIdList, int expectedCount,
+			String description) {
+			this.folderIdList = folderIdList;
+			this.searchTokenList = searchTokenList;
+			this.tagIdList = tagIdList;
+			this.expectedCount = expectedCount;
+			this.description = description;
+		}
+
+		@Override
+		public String toString() {
+			return description;
+		}
+	}
+
+	// Test Data Setting Method
 	private void saveUser1TestPick() {
 		for (int i = 0; i < 10; i++) {
 			LinkInfo linkInfo = new LinkInfo("리액트" + i, "링크 제목", "링크 설명", "링크 이미지 url", null);
