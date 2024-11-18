@@ -1,5 +1,5 @@
 import DOMPurify from 'dompurify';
-import { Button, Text } from '@/libs/@components';
+
 import { notifyError, notifySuccess } from '@/libs/@toast';
 import { useChangeFocusUsingArrowKey } from '@/hooks';
 import { useTagStore } from '@/stores';
@@ -10,12 +10,16 @@ import {
   pickFormLayout,
   formFieldLayout,
   titleInputStyle,
-  submitButtonLayout,
-  labelLayout,
+  submitButtonStyle,
+  plusIconStyle,
+  footerStyle,
+  footerTextStyle,
 } from './CreatePickForm.css';
 import { useRef, useState } from 'react';
 import { FolderType } from '@/types';
 import { FolderSelect } from './FolderSelect';
+import { PlusIcon } from '@radix-ui/react-icons';
+import { PUBLIC_DOMAIN } from '@/constants';
 
 export function CreatePickForm({
   title,
@@ -29,6 +33,7 @@ export function CreatePickForm({
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const { selectedTagList } = useTagStore();
   useChangeFocusUsingArrowKey([titleInputRef, tagPickerRef, submitButtonRef]);
+
   /**
    * @description 현재는 0번째가 기본 선택이지만 추후에는 최신 선택순으로 바뀔 예정이다.
    */
@@ -63,40 +68,50 @@ export function CreatePickForm({
 
   return (
     <form className={pickFormLayout} onSubmit={(e) => e.preventDefault()}>
-      <div className={formFieldLayout}>
-        <ThumbnailImage image={imageUrl} />
-        <input
-          type="text"
-          defaultValue={title}
-          ref={titleInputRef}
-          className={titleInputStyle}
-        />
-      </div>
-      <div className={formFieldLayout}>
-        <div className={labelLayout}>
-          <Text size="2xl" asChild>
-            <label htmlFor="">폴더</label>
-          </Text>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+          padding: '16px 24px 0px 24px',
+          height: '244px',
+        }}
+      >
+        <div className={formFieldLayout}>
+          <ThumbnailImage image={imageUrl} />
+          <input
+            type="text"
+            defaultValue={title}
+            ref={titleInputRef}
+            className={titleInputStyle}
+          />
         </div>
-        <FolderSelect
-          folderInfoList={folderInfoList}
-          selectedFolderId={selectedFolderId}
-          setSelectedFolderId={setSelectedFolderId}
-        />
-      </div>
-      <div className={formFieldLayout}>
-        <div className={labelLayout}>
-          <Text size="2xl" asChild>
-            <label htmlFor="">태그</label>
-          </Text>
+        <div className={formFieldLayout}>
+          <TagPicker ref={tagPickerRef} />
         </div>
-        <TagPicker ref={tagPickerRef} />
+        <div className={formFieldLayout}>
+          <FolderSelect
+            folderInfoList={folderInfoList}
+            selectedFolderId={selectedFolderId}
+            setSelectedFolderId={setSelectedFolderId}
+          />
+        </div>
+        <div className={footerStyle}>
+          <a href={PUBLIC_DOMAIN} target="_blank">
+            <p className={footerTextStyle}>app.techpick.org</p>
+          </a>
+        </div>
       </div>
-      <div className={submitButtonLayout}>
-        <Button onClick={onSubmit} ref={submitButtonRef}>
-          제출
-        </Button>
-      </div>
+
+      <button
+        className={submitButtonStyle}
+        onClick={onSubmit}
+        ref={submitButtonRef}
+      >
+        <div className={plusIconStyle}>
+          <PlusIcon width={40} height={40} />
+        </div>
+      </button>
     </form>
   );
 }
