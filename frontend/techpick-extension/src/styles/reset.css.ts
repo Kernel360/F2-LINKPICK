@@ -5,6 +5,15 @@ globalStyle('*', {
   backgroundColor: 'transparent',
 });
 
+// Google Fonts를 직접 가져오기
+globalStyle('@import', {
+  content: `url('https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap')`,
+});
+
+globalStyle('*', {
+  fontFamily: '"Gothic A1", "sans-serif"',
+});
+
 globalStyle('*::-webkit-scrollbar', {
   display: 'none',
 });
@@ -70,4 +79,5 @@ globalStyle('table', {
 
 globalStyle('a', {
   textDecoration: 'none',
+  color: 'inherit',
 });
