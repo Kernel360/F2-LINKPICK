@@ -78,6 +78,8 @@ export function BookmarkPage() {
           title={pickData.title}
           tagList={selectedTagInfoList}
           imageUrl={imageUrl}
+          folderId={pickData.parentFolderId}
+          folderInfoList={folderInfoList}
         />
       ) : (
         <CreatePickForm

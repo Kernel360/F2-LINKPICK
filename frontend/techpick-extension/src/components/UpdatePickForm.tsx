@@ -3,7 +3,7 @@ import { Button, Text } from '@/libs/@components';
 import { notifyError, notifySuccess } from '@/libs/@toast';
 import { useChangeFocusUsingArrowKey } from '@/hooks';
 import { useTagStore } from '@/stores';
-import { TagType } from '@/types';
+import { FolderType, TagType } from '@/types';
 import { updatePick } from '@/apis';
 import { TagPicker } from '@/components';
 import { ThumbnailImage } from './ThumbnailImage';
@@ -14,13 +14,16 @@ import {
   submitButtonLayout,
   labelLayout,
 } from './CreatePickForm.css';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { FolderSelect } from './FolderSelect';
 
 export function UpdatePickForm({
   id,
   title,
   tagList,
   imageUrl,
+  folderId,
+  folderInfoList,
 }: UpdatePickFormProps) {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagPickerRef = useRef<HTMLDivElement>(null);
@@ -33,6 +36,13 @@ export function UpdatePickForm({
     memoInputRef,
     submitButtonRef,
   ]);
+
+  const currentSelectedFolderInfo = folderInfoList.find(
+    (folder) => folder.id === folderId
+  );
+  const [selectedFolderId, setSelectedFolderId] = useState(
+    `${currentSelectedFolderInfo?.id ?? folderInfoList[0].id}`
+  );
 
   useEffect(
     function onUpdatePickFormLoad() {
@@ -47,7 +57,6 @@ export function UpdatePickForm({
     updatePick({
       id,
       title: DOMPurify.sanitize(userModifiedTitle),
-
       tagIdOrderedList: selectedTagList.map((tag) => tag.id),
     })
       .then(() => {
@@ -67,6 +76,18 @@ export function UpdatePickForm({
           defaultValue={title}
           ref={titleInputRef}
           className={titleInputStyle}
+        />
+      </div>
+      <div className={formFieldLayout}>
+        <div className={labelLayout}>
+          <Text size="2xl" asChild>
+            <label htmlFor="">폴더</label>
+          </Text>
+        </div>
+        <FolderSelect
+          folderInfoList={folderInfoList}
+          selectedFolderId={selectedFolderId}
+          setSelectedFolderId={setSelectedFolderId}
         />
       </div>
       <div className={formFieldLayout}>
@@ -92,4 +113,6 @@ interface UpdatePickFormProps {
   title: string;
   tagList: TagType[];
   imageUrl: string;
+  folderId: number;
+  folderInfoList: FolderType[];
 }
