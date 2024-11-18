@@ -6,7 +6,7 @@ export const ListLayoutHeightVariants = styleVariants({
   fixed: {
     overflow: 'hidden',
     minHeight: '30px',
-    maxHeight: '60px',
+    maxHeight: '50px',
   },
   flexible: {
     overflow: 'visible',
@@ -20,8 +20,6 @@ export type ListLayoutHeightVariantKeyTypes =
 export const SelectedTagListLayoutFocusStyleVariant = styleVariants({
   focus: {
     border: `1px solid ${colorVars.color.inputBorderFocus}`,
-    borderTopLeftRadius: '4px',
-    borderTopRightRadius: '4px',
   },
   none: {},
 });
@@ -35,4 +33,5 @@ export const SelectedTagListLayoutStyle = style({
   flexWrap: 'wrap',
   padding: '4px',
   width: SelectedTagCommonStyle.width,
+  overflowY: 'scroll',
 });

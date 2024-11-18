@@ -1,3 +1,3 @@
 export const SelectedTagCommonStyle = {
-  width: '264px',
+  width: '288px',
 };
