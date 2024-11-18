@@ -7,12 +7,10 @@ import {
   selectItemStyle,
   selectTextStyle,
 } from './FolderSelect.css';
-import {
-  Folder as FolderIcon,
-  ChevronDown as ChevronDownIcon,
-} from 'lucide-react';
+import { ChevronDown as ChevronDownIcon } from 'lucide-react';
 import { FolderType } from '@/types';
 import type { Dispatch, SetStateAction } from 'react';
+import { CubeIcon } from '@radix-ui/react-icons';
 
 export function FolderSelect({
   folderInfoList,
@@ -29,13 +27,16 @@ export function FolderSelect({
       }}
     >
       <Select.Trigger className={folderSelectTriggerButtonStyle}>
-        <FolderIcon />
-        <p className={selectTextStyle}>
-          <Select.Value placeholder={'folder를 선택해주세요.'} />
-        </p>
-        <Select.Icon>
-          <ChevronDownIcon size={16} />
-        </Select.Icon>
+        <div className={selectItemStyle}>
+          <CubeIcon width={16} height={16} />
+
+          <p className={selectTextStyle}>
+            <Select.Value placeholder={'folder를 선택해주세요.'} />
+          </p>
+          <Select.Icon>
+            <ChevronDownIcon size={16} />
+          </Select.Icon>
+        </div>
       </Select.Trigger>
 
       <Select.Portal container={portalContainerElement}>
@@ -47,7 +48,7 @@ export function FolderSelect({
                 value={`${folderInfo.id}`}
                 className={selectItemStyle}
               >
-                <FolderIcon />
+                <CubeIcon width={16} height={16} />
                 <p className={selectTextStyle}>
                   <Select.ItemText>{folderInfo.name}</Select.ItemText>
                 </p>
