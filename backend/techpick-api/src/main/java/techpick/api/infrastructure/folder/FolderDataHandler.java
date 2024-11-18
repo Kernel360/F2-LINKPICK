@@ -31,13 +31,22 @@ public class FolderDataHandler {
 	// idList에 포함된 모든 ID에 해당하는 폴더 리스트 조회, 순서를 보장하지 않음
 	@Transactional(readOnly = true)
 	public List<Folder> getFolderList(List<Long> idList) {
-		return folderRepository.findAllById(idList);
+		List<Folder> folderList = folderRepository.findAllById(idList);
+		// 조회리스트에 존재하지 않는 태그id가 존재하면 예외 발생
+		if (folderList.size() != idList.size()) {
+			throw ApiFolderException.FOLDER_NOT_FOUND();
+		}
+		return folderList;
 	}
 
 	// idList에 포함된 모든 ID에 해당하는 폴더 리스트 조회, 순서는 idList의 순서를 따름
 	@Transactional(readOnly = true)
 	public List<Folder> getFolderListPreservingOrder(List<Long> idList) {
-		var folderList = folderRepository.findAllById(idList);
+		List<Folder> folderList = folderRepository.findAllById(idList);
+		// 조회리스트에 존재하지 않는 태그id가 존재하면 예외 발생
+		if (folderList.size() != idList.size()) {
+			throw ApiFolderException.FOLDER_NOT_FOUND();
+		}
 		folderList.sort(Comparator.comparing(folder -> idList.indexOf(folder.getId())));
 		return folderList;
 	}
