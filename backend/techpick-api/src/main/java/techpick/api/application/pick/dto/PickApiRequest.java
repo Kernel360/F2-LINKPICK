@@ -24,6 +24,7 @@ public class PickApiRequest {
 	public record Update(
 		@Schema(example = "1") @NotNull Long id,
 		@Schema(example = "Record란 뭘까?") String title,
+		@Schema(example = "3") Long parentFolderId,
 		@Schema(example = "[4, 5, 2, 1]") List<Long> tagIdOrderedList
 	) {
 	}

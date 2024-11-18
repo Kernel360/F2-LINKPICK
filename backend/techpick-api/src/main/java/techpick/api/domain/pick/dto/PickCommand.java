@@ -20,7 +20,7 @@ public class PickCommand {
 						 LinkInfo linkInfo) {
 	}
 
-	public record Update(Long userId, Long id, String title, List<Long> tagIdOrderedList) {
+	public record Update(Long userId, Long id, String title, Long parentFolderId, List<Long> tagIdOrderedList) {
 	}
 
 	public record Move(Long userId, List<Long> idList, Long destinationFolderId, int orderIdx) {

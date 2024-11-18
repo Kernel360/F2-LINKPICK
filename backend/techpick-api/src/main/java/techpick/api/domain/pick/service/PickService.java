@@ -73,23 +73,16 @@ public class PickService {
 	public PickResult.Pick saveNewPick(PickCommand.Create command) {
 		validateRootAccess(command.parentFolderId());
 		validateFolderAccess(command.userId(), command.parentFolderId());
-		var pick = pickDataHandler.savePick(command);
+		validateTagListAccess(command.userId(), command.tagIdOrderedList());
 
-		List<Long> tagOrderList = pick.getTagIdOrderedList();
-		List<Tag> tagList = tagDataHandler.getTagList(tagOrderList);
-		for (Tag tag : tagList) {
-			if (ObjectUtils.notEqual(tag.getUser(), pick.getUser())) {
-				throw ApiTagException.UNAUTHORIZED_TAG_ACCESS();
-			}
-			pickDataHandler.savePickTag(pick, tag);
-		}
-
-		return pickMapper.toPickResult(pick);
+		return pickMapper.toPickResult(pickDataHandler.savePick(command));
 	}
 
 	@Transactional
 	public PickResult.Pick updatePick(PickCommand.Update command) {
 		validatePickAccess(command.userId(), command.id());
+		validateFolderAccess(command.userId(), command.parentFolderId());
+		validateTagListAccess(command.userId(), command.tagIdOrderedList());
 		return pickMapper.toPickResult(pickDataHandler.updatePick(command));
 	}
 
@@ -145,6 +138,10 @@ public class PickService {
 	}
 
 	private void validateFolderAccess(Long userId, Long folderId) {
+		// folderId가 null인 경우 변경이 없는 것이니 검증하지 않음
+		if (folderId == null) {
+			return;
+		}
 		Folder parentFolder = folderDataHandler.getFolder(folderId);
 		if (ObjectUtils.notEqual(userId, parentFolder.getUser().getId())) {
 			throw ApiFolderException.FOLDER_ACCESS_DENIED();
@@ -154,6 +151,18 @@ public class PickService {
 	private void validateRootAccess(Long parentFolderId) {
 		if (Objects.isNull(parentFolderId)) {
 			throw ApiPickException.PICK_UNAUTHORIZED_ROOT_ACCESS();
+		}
+	}
+
+	private void validateTagListAccess(Long userId, List<Long> tagIdList) {
+		// tagIdList가 null인 경우 변경이 없는 것이니 검증하지 않음
+		if (tagIdList == null) {
+			return;
+		}
+		for (Tag tag : tagDataHandler.getTagList(tagIdList)) {
+			if (ObjectUtils.notEqual(userId, tag.getUser().getId())) {
+				throw ApiTagException.UNAUTHORIZED_TAG_ACCESS();
+			}
 		}
 	}
 }
