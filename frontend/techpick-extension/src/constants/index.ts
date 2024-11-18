@@ -7,3 +7,4 @@ export { THEME_STATE_LOCALHOST_KEY } from './themeStateLocalhostKey';
 export { CHANGE_THEME_STATE_TO_LOCALHOST_PORT_NAME } from './changeThemeStateToLocalhostPortName';
 export { PUBLIC_DOMAIN } from './publicDomain';
 export { PORTAL_CONTAINER_ID } from './portalContainer';
+export { COLOR_LIST } from './colorList';
