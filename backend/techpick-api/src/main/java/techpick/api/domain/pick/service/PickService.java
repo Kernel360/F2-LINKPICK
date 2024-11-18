@@ -74,7 +74,6 @@ public class PickService {
 		validateRootAccess(command.parentFolderId());
 		validateFolderAccess(command.userId(), command.parentFolderId());
 		var pick = pickDataHandler.savePick(command);
-		pick.getParentFolder().getChildPickIdOrderedList().add(pick.getId());
 
 		List<Long> tagOrderList = pick.getTagIdOrderedList();
 		List<Tag> tagList = tagDataHandler.getTagList(tagOrderList);

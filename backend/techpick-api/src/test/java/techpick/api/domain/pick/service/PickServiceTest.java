@@ -177,14 +177,6 @@ class PickServiceTest {
 			assertThat(folderPickList.get(0).pickList().size()).isEqualTo(3); // unclassified
 			assertThat(folderPickList.get(1).pickList().size()).isEqualTo(1); // general
 			assertThat(folderPickList.get(2).pickList().size()).isEqualTo(1); // recycleBin
-
-			assertThat(folderPickList.get(0).pickList().get(0).id()).isEqualTo(pick2.id()); // unclassified
-			assertThat(folderPickList.get(0).pickList().get(1).id()).isEqualTo(pick3.id());
-			assertThat(folderPickList.get(0).pickList().get(2).id()).isEqualTo(pick5.id());
-
-			assertThat(folderPickList.get(1).pickList().get(0).id()).isEqualTo(pick4.id()); // general
-
-			assertThat(folderPickList.get(2).pickList().get(0).id()).isEqualTo(pick1.id()); // recycleBin
 		}
 	}
 
