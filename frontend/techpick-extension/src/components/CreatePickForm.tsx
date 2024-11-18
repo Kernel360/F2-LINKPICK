@@ -15,6 +15,7 @@ import {
 } from './CreatePickForm.css';
 import { useEffect, useRef, useState } from 'react';
 import { GetBasicFolderListType } from '@/types';
+import { FolderSelect } from './FolderSelect';
 
 export function CreatePickForm({
   title,
@@ -85,6 +86,14 @@ export function CreatePickForm({
           ref={titleInputRef}
           className={titleInputStyle}
         />
+      </div>
+      <div className={formFieldLayout}>
+        <div className={labelLayout}>
+          <Text size="2xl" asChild>
+            <label htmlFor="">폴더</label>
+          </Text>
+        </div>
+        <FolderSelect />
       </div>
       <div className={formFieldLayout}>
         <div className={labelLayout}>
