@@ -11,5 +11,6 @@ export const router = createMemoryRouter([
       </LoginGuard>
     ),
     errorElement: <ErrorPage />,
+    children: [],
   },
 ]);

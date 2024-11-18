@@ -6,3 +6,4 @@ export { getTagList } from './getTagList';
 export { updatePick } from './updatePick';
 export { updateTag } from './updateTag';
 export { getBasicFolderList } from './getBasicFolders';
+export { getRootFolderChildFolders } from './getRootFolderChildFolders';

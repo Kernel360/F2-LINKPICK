@@ -15,6 +15,8 @@ export const folderSelectTriggerButtonStyle = style({
 
 export const selectTextStyle = style({
   width: sizes['5xs'],
+  height: sizes['12xs'],
+  lineHeight: sizes['12xs'],
   overflow: 'hidden',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
@@ -23,6 +25,8 @@ export const selectTextStyle = style({
 
 export const folderSelectContentStyle = style({
   width: sizes['2xs'],
+  border: '1px solid black',
+  borderRadius: borderRadius['md'],
 });
 
 export const selectItemStyle = style({

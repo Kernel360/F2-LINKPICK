@@ -11,13 +11,23 @@ import {
   Folder as FolderIcon,
   ChevronDown as ChevronDownIcon,
 } from 'lucide-react';
+import { FolderType } from '@/types';
+import type { Dispatch, SetStateAction } from 'react';
 
-export function FolderSelect() {
-  const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+export function FolderSelect({
+  folderInfoList,
+  selectedFolderId,
+  setSelectedFolderId,
+}: FolderSelectProps) {
   const portalContainerElement = getElementById(PORTAL_CONTAINER_ID);
 
   return (
-    <Select.Root>
+    <Select.Root
+      value={selectedFolderId}
+      onValueChange={(value) => {
+        setSelectedFolderId(value);
+      }}
+    >
       <Select.Trigger className={folderSelectTriggerButtonStyle}>
         <FolderIcon />
         <p className={selectTextStyle}>
@@ -31,15 +41,15 @@ export function FolderSelect() {
       <Select.Portal container={portalContainerElement}>
         <Select.Content className={folderSelectContentStyle}>
           <Select.Viewport>
-            {arr.map((value) => (
+            {folderInfoList.map((folderInfo) => (
               <Select.Item
-                key={value}
-                value={`${value}`}
+                key={folderInfo.id}
+                value={`${folderInfo.id}`}
                 className={selectItemStyle}
               >
                 <FolderIcon />
                 <p className={selectTextStyle}>
-                  <Select.ItemText>{value}</Select.ItemText>
+                  <Select.ItemText>{folderInfo.name}</Select.ItemText>
                 </p>
 
                 <Select.ItemIndicator />
@@ -50,4 +60,10 @@ export function FolderSelect() {
       </Select.Portal>
     </Select.Root>
   );
+}
+
+interface FolderSelectProps {
+  folderInfoList: FolderType[];
+  selectedFolderId: string;
+  setSelectedFolderId: Dispatch<SetStateAction<string>>;
 }

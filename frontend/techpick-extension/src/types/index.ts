@@ -13,3 +13,5 @@ export type { UpdatePickRequestType } from './UpdatePickRequestType';
 export type { UpdatePickResponseType } from './UpdatePickResponseType';
 export type { GetPickByUrlResponseType } from './GetPickByUrlResponseType';
 export type { GetBasicFolderListType } from './GetBasicFolderListType';
+export type { GetRootFolderChildFoldersResponseType } from './GetRootFolderChildFoldersResponseType';
+export type { FolderType } from './FolderType';
