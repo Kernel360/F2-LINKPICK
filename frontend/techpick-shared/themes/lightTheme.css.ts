@@ -119,6 +119,9 @@ export const [lightTheme, colorVars] = createTheme({
   foregroundDisabled: '#9e9e9e', // 텍스트 포그라운드 (중간 회색)
 
   text: 'rgb(0, 0, 0)', // 라이트 모드에서는 검은색 텍스트
+  lightGray: '#f9f9f9',
+  background: '#ffffff',
+  point: '#F4661E',
 
   ...bronze,
   ...gold,
