@@ -286,7 +286,7 @@ class PickServiceTest {
 			String newTitle = "NEW_PICK";
 			List<Long> newTagOrder = List.of(tag3.getId(), tag2.getId(), tag1.getId());
 			PickCommand.Update updateCommand = new PickCommand.Update(
-				user.getId(), savePick.id(), newTitle, newTagOrder
+				user.getId(), savePick.id(), newTitle, null, newTagOrder
 			);
 			PickResult.Pick updatePick = pickService.updatePick(updateCommand);
 
@@ -423,8 +423,7 @@ class PickServiceTest {
 
 		@Test
 		@DisplayName("""
-			    1. 순서 설정값이 음수가 들어오면 예외를 발생시킨다.
-			    2. 순서 설정값이 전체 길이보다 큰 값이 들어오면 예외를 발생시킨다.
+			    순서 id 리스트가 존재하지 않는 픽 Id면 ApiPickException.PICK_NOT_FOUND() 예외를 발생시킨다.
 			""")
 		void move_pick_invalid_order_value_test() {
 			// given
@@ -440,7 +439,7 @@ class PickServiceTest {
 
 			// when, then
 			assertThatThrownBy(() -> pickService.movePick(command))
-				.isInstanceOf(IndexOutOfBoundsException.class);
+				.isInstanceOf(ApiPickException.class);
 		}
 	}
 
