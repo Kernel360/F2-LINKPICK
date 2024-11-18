@@ -47,8 +47,6 @@ export function BookmarkPage() {
       }
 
       setFolderInfoList(folderInfoList);
-      console.log('folderInfoList', folderInfoList);
-
       setIsFolderInfoListLoading(false);
     };
 

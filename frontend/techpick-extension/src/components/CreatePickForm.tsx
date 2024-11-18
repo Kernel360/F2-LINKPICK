@@ -31,9 +31,15 @@ export function CreatePickForm({
 }: CreatePickFormProps) {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagPickerRef = useRef<HTMLDivElement>(null);
+  const folderSelectRef = useRef<HTMLButtonElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const { selectedTagList } = useTagStore();
-  useChangeFocusUsingArrowKey([titleInputRef, tagPickerRef, submitButtonRef]);
+  useChangeFocusUsingArrowKey([
+    titleInputRef,
+    tagPickerRef,
+    folderSelectRef,
+    submitButtonRef,
+  ]);
 
   /**
    * @description 현재는 0번째가 기본 선택이지만 추후에는 최신 선택순으로 바뀔 예정이다.
@@ -87,6 +93,7 @@ export function CreatePickForm({
             folderInfoList={folderInfoList}
             selectedFolderId={selectedFolderId}
             setSelectedFolderId={setSelectedFolderId}
+            ref={folderSelectRef}
           />
         </div>
         <div className={footerStyle}>

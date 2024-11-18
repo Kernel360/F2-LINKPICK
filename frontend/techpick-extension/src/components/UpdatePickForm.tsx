@@ -31,13 +31,13 @@ export function UpdatePickForm({
 }: UpdatePickFormProps) {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagPickerRef = useRef<HTMLDivElement>(null);
-  const memoInputRef = useRef<HTMLTextAreaElement>(null);
+  const folderSelectRef = useRef<HTMLButtonElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const { selectedTagList, replaceSelectedTagList } = useTagStore();
   useChangeFocusUsingArrowKey([
     titleInputRef,
     tagPickerRef,
-    memoInputRef,
+    folderSelectRef,
     submitButtonRef,
   ]);
 
@@ -93,6 +93,7 @@ export function UpdatePickForm({
             folderInfoList={folderInfoList}
             selectedFolderId={selectedFolderId}
             setSelectedFolderId={setSelectedFolderId}
+            ref={folderSelectRef}
           />
         </div>
 
