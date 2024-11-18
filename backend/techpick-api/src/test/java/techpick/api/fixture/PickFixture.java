@@ -26,7 +26,7 @@ public class PickFixture {
 
 	private Folder parentFolder;
 
-	private String title = "";
+	private String title;
 
 	private List<Long> tagIdOrderedList;
 
