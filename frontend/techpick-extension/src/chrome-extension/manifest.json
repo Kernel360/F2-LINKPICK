@@ -10,7 +10,14 @@
     "128": "./pick128.png"
   },
 
-  "permissions": ["tabs", "activeTab", "scripting", "cookies", "storage"],
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "scripting",
+    "cookies",
+    "storage",
+    "contextMenus"
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"
