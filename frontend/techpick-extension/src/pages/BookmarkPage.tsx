@@ -1,7 +1,6 @@
-import { Gap, DeferredComponent } from '@/libs/@components';
+import { DeferredComponent } from '@/libs/@components';
 import { useGetTabInfo } from '@/libs/@chrome/useGetTabInfo';
 import { useHasPick } from '@/hooks';
-import { BookmarkHeader } from './BookmarkHeader';
 import { SkeltonPickForm, CreatePickForm, UpdatePickForm } from '@/components';
 import { bookmarkPageLayout } from './BookmarkPage.css';
 import { useTagStore } from '@/stores';
@@ -59,8 +58,6 @@ export function BookmarkPage() {
   if (isGetPickInfoLoading || isFolderInfoListLoading) {
     return (
       <div className={bookmarkPageLayout}>
-        <BookmarkHeader />
-        <Gap verticalSize="gap24" />
         <DeferredComponent>
           <SkeltonPickForm />
         </DeferredComponent>
@@ -70,8 +67,6 @@ export function BookmarkPage() {
 
   return (
     <div className={bookmarkPageLayout}>
-      <BookmarkHeader />
-      <Gap verticalSize="gap24" />
       {hasLink ? (
         <UpdatePickForm
           id={pickData.id}
