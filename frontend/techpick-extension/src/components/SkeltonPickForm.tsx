@@ -25,6 +25,14 @@ export function SkeltonPickForm() {
       <div className={formFieldLayout}>
         <div className={labelLayout}>
           <Text size="2xl" asChild>
+            <label htmlFor="">폴더</label>
+          </Text>
+        </div>
+        <div className={`${skeletonTagInputStyle} ${skeleton}`}></div>
+      </div>
+      <div className={formFieldLayout}>
+        <div className={labelLayout}>
+          <Text size="2xl" asChild>
             <label htmlFor="">태그</label>
           </Text>
         </div>
