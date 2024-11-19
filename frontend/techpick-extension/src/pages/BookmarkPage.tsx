@@ -52,6 +52,12 @@ export function BookmarkPage() {
         }
       }
 
+      folderInfoList.sort((a, b) => {
+        return (
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        );
+      });
+
       setFolderInfoList(folderInfoList);
       setIsFolderInfoListLoading(false);
     };

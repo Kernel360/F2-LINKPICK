@@ -41,14 +41,8 @@ export function CreatePickForm({
     submitButtonRef,
   ]);
 
-  /**
-   * @description 현재는 0번째가 기본 선택이지만 추후에는 최신 선택순으로 바뀔 예정이다.
-   */
-  const unclassifiedFolderInfo = folderInfoList.find(
-    (folder) => folder.folderType === 'UNCLASSIFIED'
-  );
   const [selectedFolderId, setSelectedFolderId] = useState(
-    `${unclassifiedFolderInfo?.id ?? folderInfoList[0].id}`
+    `${folderInfoList[0].id}`
   );
 
   const onSubmit = () => {
