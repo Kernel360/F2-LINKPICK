@@ -73,12 +73,9 @@ public class TagDataHandler {
 	}
 
 	@Transactional
-	public List<Long> moveTag(Long userId, TagCommand.Move command) {
+	public void moveTag(Long userId, TagCommand.Move command) {
 		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
-		var userTagOrder = user.getTagOrderList();
-		userTagOrder.remove(command.id());
-		userTagOrder.add(command.orderIdx(), command.id());
-		return userTagOrder;
+		user.updateTagOrderList(command.id(), command.orderIdx());
 	}
 
 	@Transactional
