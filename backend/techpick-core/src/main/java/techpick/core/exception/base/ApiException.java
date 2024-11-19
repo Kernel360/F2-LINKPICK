@@ -1,5 +1,7 @@
 package techpick.core.exception.base;
 
+import techpick.core.util.CachedHttpServletRequest;
+
 public abstract class ApiException extends RuntimeException {
 
 	private final ApiErrorCode errorCode;
@@ -13,7 +15,7 @@ public abstract class ApiException extends RuntimeException {
 		return errorCode;
 	}
 
-	public final void handleErrorByLevel() {
-		errorCode.getErrorLevel().handleError(this);
+	public final void handleErrorByLevel(CachedHttpServletRequest request) {
+		errorCode.getErrorLevel().handleError(this, request);
 	}
 }
