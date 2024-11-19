@@ -60,7 +60,7 @@ export const tagListItemStyle = style({
 });
 
 export const tagListItemContentStyle = style({
-  maxWidth: `calc(${SelectedTagCommonStyle.width} - 34px)`, // 26px은 생성 텍스트의 영역 8px는 패딩
+  maxWidth: `calc(${SelectedTagCommonStyle.width} - 38px)`, // 26px은 생성 텍스트의 영역 12px는 패딩
   height: '20px',
   lineHeight: '20px',
   borderRadius: '4px',
@@ -73,7 +73,7 @@ export const tagListItemContentStyle = style({
 });
 
 export const tagCreateTextStyle = style({
-  width: '26px',
+  width: '28px',
   fontSize: '14px',
   color: color.font,
 });
