@@ -68,6 +68,7 @@ export function UpdatePickForm({
       id,
       title: DOMPurify.sanitize(userModifiedTitle),
       tagIdOrderedList: selectedTagList.map((tag) => tag.id),
+      parentFolderId: Number(selectedFolderId),
     })
       .then(() => {
         notifySuccess('수정되었습니다!');
