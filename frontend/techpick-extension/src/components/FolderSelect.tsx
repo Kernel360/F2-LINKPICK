@@ -15,7 +15,8 @@ import {
   type Dispatch,
   type SetStateAction,
 } from 'react';
-import { CubeIcon } from '@radix-ui/react-icons';
+
+import { FolderOpen as FolderOpenIcon } from 'lucide-react';
 
 export const FolderSelect = forwardRef<HTMLButtonElement, FolderSelectProps>(
   function TagPicker(
@@ -52,15 +53,17 @@ export const FolderSelect = forwardRef<HTMLButtonElement, FolderSelectProps>(
           onKeyDown={onEnterKeyDown}
           onClick={openDialog}
         >
-          <div className={selectItemStyle}>
-            <CubeIcon width={16} height={16} />
+          <div className={folderSelectContentStyle}>
+            <div className={selectItemStyle}>
+              <FolderOpenIcon width={16} height={16} />
 
-            <p className={selectTextStyle}>
-              <Select.Value placeholder={'folder를 선택해주세요.'} />
-            </p>
-            <Select.Icon>
-              <ChevronDownIcon size={16} />
-            </Select.Icon>
+              <p className={selectTextStyle}>
+                <Select.Value placeholder={'folder를 선택해주세요.'} />
+              </p>
+              <Select.Icon>
+                <ChevronDownIcon size={16} />
+              </Select.Icon>
+            </div>
           </div>
         </Select.Trigger>
 
@@ -73,7 +76,7 @@ export const FolderSelect = forwardRef<HTMLButtonElement, FolderSelectProps>(
                   value={`${folderInfo.id}`}
                   className={selectItemStyle}
                 >
-                  <CubeIcon width={16} height={16} />
+                  <FolderOpenIcon size={16} />
                   <p className={selectTextStyle}>
                     <Select.ItemText>{folderInfo.name}</Select.ItemText>
                   </p>

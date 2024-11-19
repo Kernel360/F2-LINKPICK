@@ -36,6 +36,7 @@ export const titleInputStyle = style({
     outline: 'none',
     backgroundColor: colorVars.lightGray,
     transition: 'border 0.3s ease',
+    boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',
   },
 });
 

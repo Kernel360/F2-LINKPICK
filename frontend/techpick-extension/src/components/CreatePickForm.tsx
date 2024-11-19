@@ -16,7 +16,7 @@ import {
   footerTextStyle,
   pickFormFieldListLayout,
 } from './CreatePickForm.css';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FolderType } from '@/types';
 import { FolderSelect } from './FolderSelect';
 import { PlusIcon } from '@radix-ui/react-icons';
@@ -65,6 +65,12 @@ export function CreatePickForm({
       }, 900);
     });
   };
+
+  useEffect(() => {
+    if (titleInputRef.current) {
+      titleInputRef.current.focus();
+    }
+  }, []);
 
   return (
     <form className={pickFormLayout} onSubmit={(e) => e.preventDefault()}>

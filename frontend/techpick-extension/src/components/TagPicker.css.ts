@@ -36,5 +36,6 @@ export const tagDialogTriggerLayout = style({
     border: `1px solid ${color.inputBorderFocus}`,
     outline: 'none',
     backgroundColor: colorVars.lightGray,
+    boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',
   },
 });

@@ -55,6 +55,12 @@ export function UpdatePickForm({
     [tagList, replaceSelectedTagList]
   );
 
+  useEffect(() => {
+    if (titleInputRef.current) {
+      titleInputRef.current.focus();
+    }
+  }, []);
+
   const onSubmit = () => {
     const userModifiedTitle = titleInputRef.current?.value ?? '';
 

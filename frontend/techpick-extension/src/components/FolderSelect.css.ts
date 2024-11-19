@@ -5,12 +5,21 @@ export const folderSelectTriggerButtonStyle = style({
   display: 'flex',
   alignItems: 'center',
   gap: space['4'],
-  width: sizes['5xs'],
-  height: sizes['12xs'],
+  width: '200px',
+  height: '34px',
 
   padding: space['4'],
   outline: 'none',
   backgroundColor: colorVars.backgroundNeutral,
+  border: '1px solid transparent',
+
+  ':focus': {
+    border: `1px solid ${colorVars.color.inputBorderFocus}`,
+    outline: 'none',
+    backgroundColor: colorVars.lightGray,
+    transition: 'border 0.3s ease',
+    boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',
+  },
 });
 
 export const selectTextStyle = style({
@@ -25,8 +34,16 @@ export const selectTextStyle = style({
 
 export const folderSelectContentStyle = style({
   width: sizes['5xs'],
-  border: '1px solid black',
-  boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',
+
+  selectors: {
+    '&[data-state="open"]': {
+      border: `1px solid ${colorVars.color.inputBorderFocus}`,
+      outline: 'none',
+      backgroundColor: colorVars.lightGray,
+      transition: 'border 0.3s ease',
+      boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',
+    },
+  },
 });
 
 export const selectItemStyle = style({
