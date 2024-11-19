@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify';
 
-import { notifyError, notifySuccess } from '@/libs/@toast';
+import { notifySuccess } from '@/libs/@toast';
 import { useChangeFocusUsingArrowKey } from '@/hooks';
 import { useTagStore } from '@/stores';
 import { createPick } from '@/apis';
@@ -64,13 +64,9 @@ export function CreatePickForm({
         description,
       },
       parentFolderId: Number(selectedFolderId),
-    })
-      .then(() => {
-        notifySuccess('저장되었습니다!');
-      })
-      .catch((error: Error) => {
-        notifyError(`${error.message}로 인해 북마크가 실패했습니다!`);
-      });
+    }).then(() => {
+      notifySuccess('저장되었습니다!');
+    });
   };
 
   return (

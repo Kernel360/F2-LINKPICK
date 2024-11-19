@@ -8,3 +8,4 @@ export { CHANGE_THEME_STATE_TO_LOCALHOST_PORT_NAME } from './changeThemeStateToL
 export { PUBLIC_DOMAIN } from './publicDomain';
 export { PORTAL_CONTAINER_ID } from './portalContainer';
 export { COLOR_LIST } from './colorList';
+export { ERROR_MESSAGE_JSON } from './errorMessageJson';
