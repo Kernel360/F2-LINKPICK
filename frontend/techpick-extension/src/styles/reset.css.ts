@@ -73,14 +73,14 @@ globalStyle('a', {
   color: 'inherit',
 });
 
-export const gothicA1 = 'gothicA1';
+export const notoSansKR = 'notoSansKR';
 
-globalFontFace(gothicA1, {
-  src: 'url("./../assets/GothicA1-Regular.ttf") format("truetype")',
+globalFontFace(notoSansKR, {
+  src: 'url("./../assets/NotoSansKR-Regular.ttf") format("truetype")',
   fontWeight: 'normal',
   fontStyle: 'normal',
 });
 
 globalStyle('body', {
-  fontFamily: gothicA1,
+  fontFamily: notoSansKR,
 });
