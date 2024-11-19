@@ -44,4 +44,10 @@ public class FolderCommand {
 		List<Long> idList
 	) {
 	}
+
+	public record Export(
+		Long userId,
+		Long folderId
+	) {
+	}
 }
