@@ -1,6 +1,6 @@
 import DOMPurify from 'dompurify';
 
-import { notifySuccess } from '@/libs/@toast';
+import { notifyError, notifySuccess } from '@/libs/@toast';
 import { useChangeFocusUsingArrowKey } from '@/hooks';
 import { useTagStore } from '@/stores';
 import { createPick } from '@/apis';
@@ -47,6 +47,11 @@ export function CreatePickForm({
 
   const onSubmit = () => {
     const userModifiedTitle = titleInputRef.current?.value ?? '';
+
+    if (!url.startsWith('http')) {
+      notifyError('해당 url을 저장할 수 없습니다.');
+      return;
+    }
 
     createPick({
       title: DOMPurify.sanitize(userModifiedTitle),
