@@ -122,6 +122,7 @@ export const [lightTheme, colorVars] = createTheme({
   lightGray: '#f9f9f9',
   background: '#ffffff',
   point: '#F4661E',
+  softPoint: '#FBC6AC',
 
   ...bronze,
   ...gold,

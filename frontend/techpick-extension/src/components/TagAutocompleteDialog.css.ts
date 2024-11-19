@@ -26,7 +26,6 @@ export const tagListStyle = style({
   maxHeight: '90px',
   border: `1px solid black`,
   borderTop: 'none',
-  padding: '4px 0',
   boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',
   overflowY: 'auto',
   '::-webkit-scrollbar': {
@@ -51,7 +50,7 @@ export const tagListItemStyle = style({
   // 선택된 상태일 때
   selectors: {
     '&[data-selected="true"]': {
-      backgroundColor: color.tagSelectedBackground,
+      backgroundColor: colorVars.softPoint,
     },
     '&[data-disabled="true"]': {
       display: 'none',

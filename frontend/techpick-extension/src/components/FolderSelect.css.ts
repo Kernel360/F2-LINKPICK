@@ -44,7 +44,7 @@ export const selectItemStyle = style({
 
   selectors: {
     '&:focus': {
-      backgroundColor: colorVars.primary,
+      backgroundColor: colorVars.softPoint,
     },
   },
 });

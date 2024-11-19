@@ -119,6 +119,7 @@ export const darkTheme = createTheme(colorVars, {
   lightGray: '#1a1a1a', // 입력 필드 기본 배경색
   background: '#000',
   point: '#F4661E',
+  softPoint: '#FBC6AC',
 
   ...bronzeDark,
   ...goldDark,
