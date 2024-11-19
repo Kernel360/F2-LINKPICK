@@ -15,6 +15,7 @@ import {
   plusIconStyle,
   footerStyle,
   footerTextStyle,
+  footerLinkStyle,
 } from './CreatePickForm.css';
 import { useEffect, useRef, useState } from 'react';
 import { FolderSelect } from './FolderSelect';
@@ -109,8 +110,9 @@ export function UpdatePickForm({
 
         <div className={footerStyle}>
           <a href={PUBLIC_DOMAIN} target="_blank">
-            <p className={footerTextStyle}>app.techpick.org</p>
+            <p className={footerLinkStyle}>app.techpick.org</p>
           </a>
+          <p className={footerTextStyle}>수정하기</p>
         </div>
       </div>
       <button

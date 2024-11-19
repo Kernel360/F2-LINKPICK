@@ -15,6 +15,7 @@ import {
   footerStyle,
   footerTextStyle,
   pickFormFieldListLayout,
+  footerLinkStyle,
 } from './CreatePickForm.css';
 import { useEffect, useRef, useState } from 'react';
 import { FolderType } from '@/types';
@@ -102,8 +103,9 @@ export function CreatePickForm({
         </div>
         <div className={footerStyle}>
           <a href={PUBLIC_DOMAIN} target="_blank">
-            <p className={footerTextStyle}>app.techpick.org</p>
+            <p className={footerLinkStyle}>app.techpick.org</p>
           </a>
+          <p className={footerTextStyle}>새로 만들기</p>
         </div>
       </div>
 
