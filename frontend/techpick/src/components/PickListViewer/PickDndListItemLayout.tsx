@@ -1,17 +1,17 @@
 import { PickViewDnDItemListLayoutComponentProps } from './DraggablePickListViewer';
+import { PickListItemLayout } from './PickListItemLayout';
 import { PickListSortableContext } from './PickListSortableContext';
-import { PickRecordListLayout } from './PickRecordListLayout';
 
-export function PickDndRecordListLayout({
+export function PickDndListItemLayout({
   children,
   folderId,
   viewType,
 }: PickViewDnDItemListLayoutComponentProps) {
   return (
-    <PickRecordListLayout>
+    <PickListItemLayout>
       <PickListSortableContext folderId={folderId} viewType={viewType}>
         {children}
       </PickListSortableContext>
-    </PickRecordListLayout>
+    </PickListItemLayout>
   );
 }

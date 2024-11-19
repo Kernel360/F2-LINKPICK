@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react';
 import { PickDnDCard } from './PickDnDCard';
 import { PickDnDCardListLayout } from './PickDnDCardListLayout';
-import { PickDndRecord } from './PickDndRecord';
-import { PickDndRecordListLayout } from './PickDndRecordListLayout';
+import { PickDndListItem } from './PickDndListItem';
+import { PickDndListItemLayout } from './PickDndListItemLayout';
 import type {
   PickViewItemComponentProps,
   PickViewItemListLayoutComponentProps,
@@ -41,8 +41,8 @@ const DND_PICK_LIST_VIEW_TEMPLATES: Record<
     PickViewItemListLayoutComponent: PickDnDCardListLayout,
   },
   list: {
-    PickViewItemComponent: PickDndRecord,
-    PickViewItemListLayoutComponent: PickDndRecordListLayout,
+    PickViewItemComponent: PickDndListItem,
+    PickViewItemListLayoutComponent: PickDndListItemLayout,
   },
 };
 

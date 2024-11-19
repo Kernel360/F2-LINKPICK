@@ -10,3 +10,4 @@ export { isFolderDraggableObject } from './isFolderDraggableObject';
 export { isPickDraggableObject } from './isPickDraggableObjectType';
 export { isPickToFolderDroppableObject } from './isPickToFolderDroppableObject';
 export { getElementById } from './getElementById';
+export { formatDateString } from './formatDateString';

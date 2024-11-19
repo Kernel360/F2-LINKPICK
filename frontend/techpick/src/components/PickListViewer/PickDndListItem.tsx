@@ -1,6 +1,6 @@
 'use client';
 
-import { MouseEvent, useCallback, type CSSProperties } from 'react';
+import { MouseEvent, type CSSProperties } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { usePickStore } from '@/stores';
@@ -10,10 +10,10 @@ import {
   selectedDragItemStyle,
 } from './pickDnDCard.css';
 import { getSelectedPickRange } from './pickDnDCard.util';
-import { PickRecord } from './PickRecord';
+import { PickListItem } from './PickListItem';
 import type { PickViewDnDItemComponentProps } from './PickListViewer';
 
-export function PickDndRecord({ pickInfo }: PickViewDnDItemComponentProps) {
+export function PickDndListItem({ pickInfo }: PickViewDnDItemComponentProps) {
   const {
     selectedPickIdList,
     selectSinglePick,
@@ -22,8 +22,7 @@ export function PickDndRecord({ pickInfo }: PickViewDnDItemComponentProps) {
     setSelectedPickIdList,
     isDragging,
   } = usePickStore();
-  const { linkInfo, id: pickId, parentFolderId } = pickInfo;
-  const { url } = linkInfo;
+  const { id: pickId, parentFolderId } = pickInfo;
   const isSelected = selectedPickIdList.includes(pickId);
   const {
     attributes,
@@ -47,10 +46,6 @@ export function PickDndRecord({ pickInfo }: PickViewDnDItemComponentProps) {
     transition,
     opacity: 1,
   };
-
-  const openUrl = useCallback(() => {
-    window.open(url, '_blank');
-  }, [url]);
 
   const handleShiftSelect = (parentFolderId: number, pickId: number) => {
     if (!focusPickId) {
@@ -87,17 +82,14 @@ export function PickDndRecord({ pickInfo }: PickViewDnDItemComponentProps) {
   }
 
   return (
-    <>
-      <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
-        <div
-          className={`${isSelected ? selectedDragItemStyle : ''} ${isActiveDragging ? isActiveDraggingItemStyle : ''}`}
-          onDoubleClick={openUrl}
-          onClick={(event) => handleClick(pickId, event)}
-          id={pickElementId}
-        >
-          <PickRecord pickInfo={pickInfo} />
-        </div>
+    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+      <div
+        className={`${isSelected ? selectedDragItemStyle : ''} ${isActiveDragging ? isActiveDraggingItemStyle : ''}`}
+        onClick={(event) => handleClick(pickId, event)}
+        id={pickElementId}
+      >
+        <PickListItem pickInfo={pickInfo} />
       </div>
-    </>
+    </div>
   );
 }
