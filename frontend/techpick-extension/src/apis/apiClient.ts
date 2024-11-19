@@ -24,6 +24,8 @@ export const apiClient = ky.create({
             notifyError(ERROR_MESSAGE_JSON[errorCode]);
           } else if (errorCode === 'PK-000') {
             /* empty */
+          } else if (errorCode === 'UNKNOWN') {
+            notifyError('서버에서 알 수 없는 에러가 발생했습니다.');
           }
         }
 
