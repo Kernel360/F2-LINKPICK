@@ -18,7 +18,7 @@ import techpick.security.annotation.LoginUserId;
 public class FolderMigrationController {
 	private final FolderMigrationService folderMigrationService;
 
-	@GetMapping("/folders/{folderId}/export")
+	@GetMapping("/api/folders/{folderId}/export")
 	public ResponseEntity<ByteArrayResource> exportFolder(@LoginUserId Long userId, @PathVariable Long folderId) {
 		String exportResult = folderMigrationService.exportFolder(new FolderCommand.Export(userId, folderId));
 
@@ -34,7 +34,7 @@ public class FolderMigrationController {
 			.body(resource);
 	}
 
-	@GetMapping("/folders/export")
+	@GetMapping("/api/folders/export")
 	public ResponseEntity<ByteArrayResource> exportUserFolder(@LoginUserId Long userId) {
 		String exportResult = folderMigrationService.exportUserFolder(userId);
 
