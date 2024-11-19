@@ -3,13 +3,15 @@
 import { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { DragOverlay as DndKitDragOverlay } from '@dnd-kit/core';
-import { usePickStore, useTreeStore } from '@/stores';
+import { usePickRenderModeStore, usePickStore, useTreeStore } from '@/stores';
 import { pickDragOverlayStyle } from './dragOverlay.css';
 import { PickCard } from './PickListViewer/PickCard';
+import { PickRecord } from './PickListViewer/PickRecord';
 
 export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   const { isDragging: isFolderDragging, draggingFolderInfo } = useTreeStore();
   const { isDragging: isPickDragging, draggingPickInfo } = usePickStore();
+  const { pickRenderMode } = usePickRenderModeStore();
   const [mousePosition, setMousePosition] = useState({ x: -1, y: -1 });
   const overlayStyle: CSSProperties = {
     top: `${mousePosition.y}px`,
@@ -72,6 +74,14 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   }
 
   if (isPickDragging && draggingPickInfo) {
+    if (pickRenderMode === 'list') {
+      return (
+        <DndKitDragOverlay style={overlayStyle}>
+          <PickRecord pickInfo={draggingPickInfo} />
+        </DndKitDragOverlay>
+      );
+    }
+
     return (
       <DndKitDragOverlay style={overlayStyle}>
         <div>

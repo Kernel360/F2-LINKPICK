@@ -41,6 +41,7 @@ export default function UnclassifiedFolderPage() {
     <DraggablePickListViewer
       pickList={getOrderedPickListByFolderId(basicFolderMap['UNCLASSIFIED'].id)}
       folderId={basicFolderMap['UNCLASSIFIED'].id}
+      viewType="list"
     />
   );
 }
