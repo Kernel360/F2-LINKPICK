@@ -1,17 +1,8 @@
-import { globalStyle } from '@vanilla-extract/css';
+import { globalStyle, globalFontFace } from '@vanilla-extract/css';
 
 globalStyle('*', {
   boxSizing: 'border-box',
   backgroundColor: 'transparent',
-});
-
-// Google Fonts를 직접 가져오기
-globalStyle('@import', {
-  content: `url('https://fonts.googleapis.com/css2?family=Gothic+A1&display=swap')`,
-});
-
-globalStyle('*', {
-  fontFamily: '"Gothic A1", "sans-serif"',
 });
 
 globalStyle('*::-webkit-scrollbar', {
@@ -80,4 +71,16 @@ globalStyle('table', {
 globalStyle('a', {
   textDecoration: 'none',
   color: 'inherit',
+});
+
+export const gothicA1 = 'gothicA1';
+
+globalFontFace(gothicA1, {
+  src: 'url("./../assets/GothicA1-Regular.ttf") format("truetype")',
+  fontWeight: 'normal',
+  fontStyle: 'normal',
+});
+
+globalStyle('body', {
+  fontFamily: gothicA1,
 });
