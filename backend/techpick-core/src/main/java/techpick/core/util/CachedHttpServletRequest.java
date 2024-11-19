@@ -20,6 +20,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import lombok.Getter;
 
+/**
+ * HttpServletRequest의 경우 reqeust body를 한번 읽으면 소모되기 때문에,
+ * 로깅을 위해 controller 전에 body를 읽는경우 controller에서 body 정보를 가져올 수 없음
+ * 이를위해 body를 미리 읽고 캐싱해둘수 있는 wrapper 클래스 사용
+ * */
 @Getter
 public class CachedHttpServletRequest extends HttpServletRequestWrapper {
 
@@ -39,6 +44,7 @@ public class CachedHttpServletRequest extends HttpServletRequestWrapper {
 	public CachedHttpServletRequest(HttpServletRequest request) throws IOException {
 		super(request);
 		cachedBody = readBodyFromRequest(request);
+		// 추가로 로깅하려는 내용은 여기에 추가해주세요
 		infoMap.put("requestURI", request.getRequestURI());
 		infoMap.put("method", request.getMethod());
 		infoMap.put("requestBody", cachedBody);

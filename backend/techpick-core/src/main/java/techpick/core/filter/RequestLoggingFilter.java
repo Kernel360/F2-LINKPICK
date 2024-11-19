@@ -27,6 +27,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 			requestHolder.setRequest(cachedRequest);
 			filterChain.doFilter(cachedRequest, response);
 		} finally {
+			// 요청이 마무리되면 무조건 ThreadLocal에 저장한 요청정보를 초기화
 			requestHolder.clearRequest();
 		}
 	}
