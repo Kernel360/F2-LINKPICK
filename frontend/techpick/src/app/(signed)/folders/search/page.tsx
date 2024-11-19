@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { PickListViewerInfiniteScroll } from '@/components/PickListViewer/PickListViewerInfiniteScroll';
 import { usePickStore } from '@/stores/pickStore/pickStore';
@@ -10,6 +10,13 @@ export default function SearchPickResultPage() {
   const searchParams = useSearchParams();
   const { getSearchResult, searchPicksByQueryParam } = usePickStore();
   const [pickList, setPickList] = useState<PickListType>([]);
+
+  useEffect(() => {
+    setPickList([]);
+    (async () => {
+      await loadNextSlice();
+    })(/*IIFE*/);
+  }, [searchParams]);
 
   const loadNextSlice = async () => {
     await searchPicksByQueryParam(
