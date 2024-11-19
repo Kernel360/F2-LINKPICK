@@ -1,5 +1,6 @@
 package techpick.api.application.folder.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,6 +12,8 @@ public record FolderApiResponse(
 	@Schema(example = "GENERAL")
 	FolderType folderType,
 	Long parentFolderId,
-	List<Long> childFolderIdOrderedList
+	List<Long> childFolderIdOrderedList,
+	LocalDateTime createdAt,
+	LocalDateTime updatedAt
 ) {
 }
