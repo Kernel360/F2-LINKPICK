@@ -5,12 +5,13 @@ import {
   rectSortingStrategy,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { usePickRenderModeStore, usePickStore } from '@/stores';
+import { usePickStore } from '@/stores';
 import { PickViewDnDItemListLayoutComponentProps } from './DraggablePickListViewer';
 
 export function PickListSortableContext({
   folderId,
   children,
+  viewType,
 }: PickViewDnDItemListLayoutComponentProps) {
   const {
     getOrderedPickIdListByFolderId,
@@ -18,7 +19,6 @@ export function PickListSortableContext({
     isDragging,
     focusPickId,
   } = usePickStore();
-  const { pickRenderMode } = usePickRenderModeStore();
   const orderedPickIdList = getOrderedPickIdListByFolderId(folderId);
   const orderedPickIdListWithoutSelectedIdList = isDragging
     ? orderedPickIdList.filter(
@@ -32,9 +32,7 @@ export function PickListSortableContext({
    * @description card일때와 vertical일 때 렌더링이 다릅니다.
    */
   const strategy =
-    pickRenderMode === 'card'
-      ? rectSortingStrategy
-      : verticalListSortingStrategy;
+    viewType === 'card' ? rectSortingStrategy : verticalListSortingStrategy;
 
   return (
     <SortableContext

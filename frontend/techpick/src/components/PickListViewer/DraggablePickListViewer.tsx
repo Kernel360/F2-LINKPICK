@@ -11,14 +11,14 @@ import type { PickInfoType, PickRenderModeType } from '@/types';
 
 export function DraggablePickListViewer({
   pickList,
-  viewType = 'card',
+  viewType = 'list',
   folderId,
 }: PickListViewerProps) {
   const { PickViewItemComponent, PickViewItemListLayoutComponent } =
     DND_PICK_LIST_VIEW_TEMPLATES[viewType];
 
   return (
-    <PickViewItemListLayoutComponent folderId={folderId}>
+    <PickViewItemListLayoutComponent folderId={folderId} viewType={viewType}>
       {pickList.map((pickInfo) => (
         <PickViewItemComponent key={pickInfo.id} pickInfo={pickInfo} />
       ))}
@@ -54,6 +54,9 @@ interface DnDViewTemplateValueType {
 }
 
 export type PickViewDnDItemListLayoutComponentProps =
-  PickViewItemListLayoutComponentProps<{ folderId: number }>;
+  PickViewItemListLayoutComponentProps<{
+    folderId: number;
+    viewType: PickRenderModeType;
+  }>;
 
 export type PickViewDnDItemComponentProps = PickViewItemComponentProps;

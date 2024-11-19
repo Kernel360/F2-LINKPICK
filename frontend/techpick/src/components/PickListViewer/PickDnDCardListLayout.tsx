@@ -6,11 +6,12 @@ import { PickListSortableContext } from './PickListSortableContext';
 
 export function PickDnDCardListLayout({
   children,
+  viewType,
   folderId,
 }: PickViewDnDItemListLayoutComponentProps) {
   return (
     <div className={pickCardGridLayoutStyle}>
-      <PickListSortableContext folderId={folderId}>
+      <PickListSortableContext folderId={folderId} viewType={viewType}>
         {children}
       </PickListSortableContext>
     </div>
