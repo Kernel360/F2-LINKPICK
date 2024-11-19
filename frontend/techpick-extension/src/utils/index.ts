@@ -4,3 +4,4 @@ export { hasIndex } from './hasIndex';
 export { numberToRandomColor } from './numberToRandomColor';
 export { isShallowEqualValue } from './isShallowEqualValue';
 export { isEmptyString } from './isEmptyString';
+export { getElementById } from './getElementById';

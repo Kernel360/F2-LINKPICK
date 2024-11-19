@@ -8,7 +8,7 @@ export const tagDialogPortalLayout = style({
   position: 'absolute',
   top: '0',
   zIndex: '1',
-  backgroundColor: color.inputBackground,
+  backgroundColor: colorVars.lightGray,
 });
 
 export const commandInputStyle = style({
@@ -23,11 +23,11 @@ export const commandInputStyle = style({
 });
 
 export const tagListStyle = style({
-  border: `1px solid ${color.tagBorder}`,
-  borderRadius: '4px',
+  maxHeight: '90px',
+  border: `1px solid black`,
+  borderTop: 'none',
   padding: '4px 0',
-  boxShadow:
-    'rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px',
+  boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',
   overflowY: 'auto',
   '::-webkit-scrollbar': {
     display: 'none',
@@ -45,7 +45,6 @@ export const tagListItemStyle = style({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  borderRadius: '4px',
   backgroundColor: 'transparent',
   padding: '4px',
 

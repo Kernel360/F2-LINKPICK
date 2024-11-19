@@ -10,7 +10,7 @@ import { SelectedTagListLayout } from './SelectedTagListLayout';
 import { DeselectTagButton } from './DeselectTagButton';
 import { DeleteTagDialog } from './DeleteTagDialog';
 import { TagInfoEditPopoverButton } from './TagInfoEditPopoverButton';
-import { useCalculateCommandListHeight } from '@/hooks';
+
 import {
   filterCommandItems,
   CREATABLE_TAG_KEYWORD,
@@ -47,12 +47,11 @@ export function TagAutocompleteDialog({
     fetchingTagList,
     createTag,
   } = useTagStore();
-  const { commandListHeight } =
-    useCalculateCommandListHeight(selectedTagListRef);
   const { isDarkMode } = useThemeStore();
 
   const focusTagInput = () => {
     tagInputRef.current?.focus();
+    tagInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const clearTagInputValue = () => {
@@ -115,7 +114,11 @@ export function TagAutocompleteDialog({
       filter={filterCommandItems}
     >
       {/**선택한 태그 리스트 */}
-      <SelectedTagListLayout ref={selectedTagListRef} focusStyle="focus">
+      <SelectedTagListLayout
+        ref={selectedTagListRef}
+        focusStyle="focus"
+        height="fixed"
+      >
         {selectedTagList.map((tag) => (
           <SelectedTagItem key={tag.id} tag={tag}>
             <DeselectTagButton tag={tag} onClick={focusTagInput} />
@@ -131,10 +134,7 @@ export function TagAutocompleteDialog({
       </SelectedTagListLayout>
 
       {/**전체 태그 리스트 */}
-      <Command.List
-        className={tagListStyle}
-        style={{ maxHeight: commandListHeight }}
-      >
+      <Command.List className={tagListStyle}>
         {fetchingTagState.isPending && (
           <Command.Loading className={tagListLoadingStyle}>
             <BarLoader color={colorVars.color.font} />

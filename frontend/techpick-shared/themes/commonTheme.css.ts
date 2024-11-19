@@ -136,6 +136,8 @@ export const [commonThemeClass, commonTheme] = createTheme({
     '4xs': '14rem',
     /** @type {string} Size for extra small screens (16rem, 256px). */
     '3xs': '16rem',
+    /** @type {string} Size for extra small screens (16rem, 264px). */
+    '2xs': '16.5rem',
     /** @type {string} Size for small screens (20rem, 320px). */
     xs: '20rem',
     /** @type {string} Size for medium small screens (24rem, 384px). */

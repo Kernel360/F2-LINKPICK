@@ -3,10 +3,9 @@ import { colorVars } from 'techpick-shared';
 const { color } = colorVars;
 
 export const bookmarkPageLayout = style({
-  width: '360px',
-  height: '400px',
-  padding: '16px',
-  backgroundColor: colorVars.color.background,
+  width: '430px',
+  height: '244px',
+  backgroundColor: colorVars.background,
 });
 
 export const pickFormLayout = style({

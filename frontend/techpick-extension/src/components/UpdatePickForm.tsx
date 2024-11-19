@@ -1,9 +1,8 @@
 import DOMPurify from 'dompurify';
-import { Button, Text } from '@/libs/@components';
 import { notifyError, notifySuccess } from '@/libs/@toast';
 import { useChangeFocusUsingArrowKey } from '@/hooks';
 import { useTagStore } from '@/stores';
-import { TagType } from '@/types';
+import { FolderType, TagType } from '@/types';
 import { updatePick } from '@/apis';
 import { TagPicker } from '@/components';
 import { ThumbnailImage } from './ThumbnailImage';
@@ -11,28 +10,43 @@ import {
   pickFormLayout,
   formFieldLayout,
   titleInputStyle,
-  submitButtonLayout,
-  labelLayout,
+  pickFormFieldListLayout,
+  submitButtonStyle,
+  plusIconStyle,
+  footerStyle,
+  footerTextStyle,
 } from './CreatePickForm.css';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { FolderSelect } from './FolderSelect';
+import { PlusIcon } from '@radix-ui/react-icons';
+import { PUBLIC_DOMAIN } from '@/constants';
 
 export function UpdatePickForm({
   id,
   title,
   tagList,
   imageUrl,
+  folderId,
+  folderInfoList,
 }: UpdatePickFormProps) {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagPickerRef = useRef<HTMLDivElement>(null);
-  const memoInputRef = useRef<HTMLTextAreaElement>(null);
+  const folderSelectRef = useRef<HTMLButtonElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const { selectedTagList, replaceSelectedTagList } = useTagStore();
   useChangeFocusUsingArrowKey([
     titleInputRef,
     tagPickerRef,
-    memoInputRef,
+    folderSelectRef,
     submitButtonRef,
   ]);
+
+  const currentSelectedFolderInfo = folderInfoList.find(
+    (folder) => folder.id === folderId
+  );
+  const [selectedFolderId, setSelectedFolderId] = useState(
+    `${currentSelectedFolderInfo?.id ?? folderInfoList[0].id}`
+  );
 
   useEffect(
     function onUpdatePickFormLoad() {
@@ -47,7 +61,6 @@ export function UpdatePickForm({
     updatePick({
       id,
       title: DOMPurify.sanitize(userModifiedTitle),
-
       tagIdOrderedList: selectedTagList.map((tag) => tag.id),
     })
       .then(() => {
@@ -60,29 +73,45 @@ export function UpdatePickForm({
 
   return (
     <form className={pickFormLayout} onSubmit={(e) => e.preventDefault()}>
-      <div className={formFieldLayout}>
-        <ThumbnailImage image={imageUrl} />
-        <input
-          type="text"
-          defaultValue={title}
-          ref={titleInputRef}
-          className={titleInputStyle}
-        />
-      </div>
-      <div className={formFieldLayout}>
-        <div className={labelLayout}>
-          <Text size="2xl" asChild>
-            <label htmlFor="">태그</label>
-          </Text>
+      <div className={pickFormFieldListLayout}>
+        <div className={formFieldLayout}>
+          <ThumbnailImage image={imageUrl} />
+          <input
+            type="text"
+            defaultValue={title}
+            ref={titleInputRef}
+            className={titleInputStyle}
+          />
         </div>
-        <TagPicker ref={tagPickerRef} />
-      </div>
 
-      <div className={submitButtonLayout}>
-        <Button onClick={onSubmit} ref={submitButtonRef}>
-          제출
-        </Button>
+        <div className={formFieldLayout}>
+          <TagPicker ref={tagPickerRef} />
+        </div>
+
+        <div className={formFieldLayout}>
+          <FolderSelect
+            folderInfoList={folderInfoList}
+            selectedFolderId={selectedFolderId}
+            setSelectedFolderId={setSelectedFolderId}
+            ref={folderSelectRef}
+          />
+        </div>
+
+        <div className={footerStyle}>
+          <a href={PUBLIC_DOMAIN} target="_blank">
+            <p className={footerTextStyle}>app.techpick.org</p>
+          </a>
+        </div>
       </div>
+      <button
+        className={submitButtonStyle}
+        onClick={onSubmit}
+        ref={submitButtonRef}
+      >
+        <div className={plusIconStyle}>
+          <PlusIcon width={40} height={40} />
+        </div>
+      </button>
     </form>
   );
 }
@@ -92,4 +121,6 @@ interface UpdatePickFormProps {
   title: string;
   tagList: TagType[];
   imageUrl: string;
+  folderId: number;
+  folderInfoList: FolderType[];
 }

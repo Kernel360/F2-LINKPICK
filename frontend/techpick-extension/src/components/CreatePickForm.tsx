@@ -1,67 +1,59 @@
 import DOMPurify from 'dompurify';
-import { Button, Text } from '@/libs/@components';
+
 import { notifyError, notifySuccess } from '@/libs/@toast';
 import { useChangeFocusUsingArrowKey } from '@/hooks';
 import { useTagStore } from '@/stores';
-import { createPick, getBasicFolderList } from '@/apis';
+import { createPick } from '@/apis';
 import { TagPicker } from '@/components';
 import { ThumbnailImage } from './ThumbnailImage';
 import {
   pickFormLayout,
   formFieldLayout,
   titleInputStyle,
-  textAreaStyle,
-  submitButtonLayout,
-  labelLayout,
+  submitButtonStyle,
+  plusIconStyle,
+  footerStyle,
+  footerTextStyle,
+  pickFormFieldListLayout,
 } from './CreatePickForm.css';
-import { useEffect, useRef, useState } from 'react';
-import { GetBasicFolderListType } from '@/types';
+import { useRef, useState } from 'react';
+import { FolderType } from '@/types';
+import { FolderSelect } from './FolderSelect';
+import { PlusIcon } from '@radix-ui/react-icons';
+import { PUBLIC_DOMAIN } from '@/constants';
 
 export function CreatePickForm({
   title,
   url,
   imageUrl,
   description,
+  folderInfoList,
 }: CreatePickFormProps) {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagPickerRef = useRef<HTMLDivElement>(null);
-  const memoInputRef = useRef<HTMLTextAreaElement>(null);
+  const folderSelectRef = useRef<HTMLButtonElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const { selectedTagList } = useTagStore();
-  const [basicFolderList, setBasicFolderList] =
-    useState<GetBasicFolderListType>();
-
   useChangeFocusUsingArrowKey([
     titleInputRef,
     tagPickerRef,
-    memoInputRef,
+    folderSelectRef,
     submitButtonRef,
   ]);
 
-  useEffect(function onLoadCreatePickForm() {
-    getBasicFolderList().then((value) => {
-      setBasicFolderList(value);
-    });
-  }, []);
+  /**
+   * @description 현재는 0번째가 기본 선택이지만 추후에는 최신 선택순으로 바뀔 예정이다.
+   */
+  const unclassifiedFolderInfo = folderInfoList.find(
+    (folder) => folder.folderType === 'UNCLASSIFIED'
+  );
+  const [selectedFolderId, setSelectedFolderId] = useState(
+    `${unclassifiedFolderInfo?.id ?? folderInfoList[0].id}`
+  );
 
   const onSubmit = () => {
     const userModifiedTitle = titleInputRef.current?.value ?? '';
 
-    if (!basicFolderList) {
-      return;
-    }
-
-    const unclassifiedFolderInfo = basicFolderList.find(
-      (folder) => folder.folderType === 'UNCLASSIFIED'
-    );
-
-    if (!unclassifiedFolderInfo) {
-      return;
-    }
-
-    /**
-     * @description 현재는 미분류폴더로만 이동합니다.
-     */
     createPick({
       title: DOMPurify.sanitize(userModifiedTitle),
       tagIdOrderedList: selectedTagList.map((tag) => tag.id),
@@ -71,7 +63,7 @@ export function CreatePickForm({
         imageUrl,
         description,
       },
-      parentFolderId: unclassifiedFolderInfo.id,
+      parentFolderId: Number(selectedFolderId),
     })
       .then(() => {
         notifySuccess('저장되었습니다!');
@@ -83,40 +75,43 @@ export function CreatePickForm({
 
   return (
     <form className={pickFormLayout} onSubmit={(e) => e.preventDefault()}>
-      <div className={formFieldLayout}>
-        <ThumbnailImage image={imageUrl} />
-        <input
-          type="text"
-          defaultValue={title}
-          ref={titleInputRef}
-          className={titleInputStyle}
-        />
-      </div>
-      <div className={formFieldLayout}>
-        <div className={labelLayout}>
-          <Text size="2xl" asChild>
-            <label htmlFor="">태그</label>
-          </Text>
+      <div className={pickFormFieldListLayout}>
+        <div className={formFieldLayout}>
+          <ThumbnailImage image={imageUrl} />
+          <input
+            type="text"
+            defaultValue={title}
+            ref={titleInputRef}
+            className={titleInputStyle}
+          />
         </div>
-        <TagPicker ref={tagPickerRef} />
-      </div>
-      <div className={formFieldLayout}>
-        <div className={labelLayout}>
-          <Text size="2xl" asChild>
-            <label htmlFor="">메모</label>
-          </Text>
+        <div className={formFieldLayout}>
+          <TagPicker ref={tagPickerRef} />
         </div>
-        <textarea
-          id="memo"
-          className={textAreaStyle}
-          ref={memoInputRef}
-        ></textarea>
+        <div className={formFieldLayout}>
+          <FolderSelect
+            folderInfoList={folderInfoList}
+            selectedFolderId={selectedFolderId}
+            setSelectedFolderId={setSelectedFolderId}
+            ref={folderSelectRef}
+          />
+        </div>
+        <div className={footerStyle}>
+          <a href={PUBLIC_DOMAIN} target="_blank">
+            <p className={footerTextStyle}>app.techpick.org</p>
+          </a>
+        </div>
       </div>
-      <div className={submitButtonLayout}>
-        <Button onClick={onSubmit} ref={submitButtonRef}>
-          제출
-        </Button>
-      </div>
+
+      <button
+        className={submitButtonStyle}
+        onClick={onSubmit}
+        ref={submitButtonRef}
+      >
+        <div className={plusIconStyle}>
+          <PlusIcon width={40} height={40} />
+        </div>
+      </button>
     </form>
   );
 }
@@ -126,4 +121,5 @@ interface CreatePickFormProps {
   title: string;
   url: string;
   description: string;
+  folderInfoList: FolderType[];
 }

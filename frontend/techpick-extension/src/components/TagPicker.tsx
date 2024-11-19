@@ -3,7 +3,11 @@ import { useTagStore } from '@/stores';
 import { SelectedTagItem } from './SelectedTagItem';
 import { SelectedTagListLayout } from './SelectedTagListLayout';
 import { TagAutocompleteDialog } from './TagAutocompleteDialog';
-import { tagPickerLayout, tagDialogTriggerLayout } from './TagPicker.css';
+import {
+  tagPickerLayout,
+  tagDialogTriggerLayout,
+  tagPickerPlaceholderStyle,
+} from './TagPicker.css';
 
 export const TagPicker = forwardRef<HTMLDivElement>(
   function TagPickerWithRef(_props, tabFocusRef) {
@@ -32,6 +36,9 @@ export const TagPicker = forwardRef<HTMLDivElement>(
           tabIndex={0}
           ref={tabFocusRef}
         >
+          {selectedTagList.length === 0 && (
+            <p className={tagPickerPlaceholderStyle}>태그를 넣어주세요</p>
+          )}
           <SelectedTagListLayout height="fixed">
             {selectedTagList.map((tag) => (
               <SelectedTagItem key={tag.name} tag={tag} />

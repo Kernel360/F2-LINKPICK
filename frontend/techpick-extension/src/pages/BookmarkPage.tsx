@@ -1,10 +1,12 @@
-import { Gap, DeferredComponent } from '@/libs/@components';
+import { DeferredComponent } from '@/libs/@components';
 import { useGetTabInfo } from '@/libs/@chrome/useGetTabInfo';
 import { useHasPick } from '@/hooks';
-import { BookmarkHeader } from './BookmarkHeader';
 import { SkeltonPickForm, CreatePickForm, UpdatePickForm } from '@/components';
 import { bookmarkPageLayout } from './BookmarkPage.css';
 import { useTagStore } from '@/stores';
+import { useEffect, useState } from 'react';
+import { FolderType } from '@/types';
+import { getBasicFolderList, getRootFolderChildFolders } from '@/apis';
 
 export function BookmarkPage() {
   const {
@@ -13,17 +15,47 @@ export function BookmarkPage() {
     url,
     ogDescription: description,
   } = useGetTabInfo();
-  const { isLoading, hasLink, data: pickData } = useHasPick(url);
+  const {
+    isLoading: isGetPickInfoLoading,
+    hasLink,
+    data: pickData,
+  } = useHasPick(url);
   const tagList = useTagStore((state) => state.tagList);
   const selectedTagInfoList = pickData
     ? tagList.filter((tag) => pickData.tagIdOrderedList.includes(tag.id))
     : [];
+  const [isFolderInfoListLoading, setIsFolderInfoListLoading] = useState(true);
+  const [folderInfoList, setFolderInfoList] = useState<FolderType[]>([]);
 
-  if (isLoading) {
+  useEffect(function onBookmarkPageLoad() {
+    const getFolderInfoList = async () => {
+      const folderInfoList: FolderType[] = [];
+
+      const basicFolders = await getBasicFolderList();
+      const rootFolderChildFolders = await getRootFolderChildFolders();
+
+      for (const folderInfo of rootFolderChildFolders) {
+        if (folderInfo.folderType !== 'ROOT') {
+          folderInfoList.push(folderInfo);
+        }
+      }
+
+      for (const folderInfo of basicFolders) {
+        if (folderInfo.folderType !== 'ROOT') {
+          folderInfoList.push(folderInfo);
+        }
+      }
+
+      setFolderInfoList(folderInfoList);
+      setIsFolderInfoListLoading(false);
+    };
+
+    getFolderInfoList();
+  }, []);
+
+  if (isGetPickInfoLoading || isFolderInfoListLoading) {
     return (
       <div className={bookmarkPageLayout}>
-        <BookmarkHeader />
-        <Gap verticalSize="gap24" />
         <DeferredComponent>
           <SkeltonPickForm />
         </DeferredComponent>
@@ -33,14 +65,14 @@ export function BookmarkPage() {
 
   return (
     <div className={bookmarkPageLayout}>
-      <BookmarkHeader />
-      <Gap verticalSize="gap24" />
       {hasLink ? (
         <UpdatePickForm
           id={pickData.id}
           title={pickData.title}
           tagList={selectedTagInfoList}
           imageUrl={imageUrl}
+          folderId={pickData.parentFolderId}
+          folderInfoList={folderInfoList}
         />
       ) : (
         <CreatePickForm
@@ -48,6 +80,7 @@ export function BookmarkPage() {
           url={url}
           imageUrl={imageUrl}
           description={description}
+          folderInfoList={folderInfoList}
         />
       )}
     </div>
