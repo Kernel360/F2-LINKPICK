@@ -4402,7 +4402,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-query@npm:^5.55.4, @tanstack/react-query@npm:^5.59.0":
+"@tanstack/react-query@npm:^5.59.0":
   version: 5.59.20
   resolution: "@tanstack/react-query@npm:5.59.20"
   dependencies:
@@ -14128,10 +14128,8 @@ __metadata:
     "@radix-ui/react-select": "npm:^2.1.2"
     "@radix-ui/react-slot": "npm:^1.1.0"
     "@radix-ui/react-visually-hidden": "npm:^1.1.0"
-    "@tanstack/react-query": "npm:^5.55.4"
     "@types/chrome": "npm:^0.0.271"
     "@types/dompurify": "npm:^3"
-    "@types/randomcolor": "npm:^0.5.9"
     "@types/react": "npm:^18.3.3"
     "@types/react-dom": "npm:^18.3.0"
     "@vanilla-extract/css": "npm:^1.15.5"
@@ -14148,7 +14146,6 @@ __metadata:
     ky: "npm:^1.7.2"
     lucide-react: "npm:^0.446.0"
     path: "npm:^0.12.7"
-    randomcolor: "npm:^0.6.2"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-hot-toast: "npm:^2.4.1"
