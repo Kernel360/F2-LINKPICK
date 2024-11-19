@@ -3,18 +3,16 @@
 import { useRef, memo, KeyboardEvent, MouseEvent } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import { useQueryClient } from '@tanstack/react-query';
-import { Text, Button, Gap } from '@/components';
-import { useDeleteTagDialogStore } from '@/stores/deleteTagDialogStore';
-import { useTagStore } from '@/stores/tagStore';
-import { notifyError } from '@/utils';
+import { useTagStore, useDeleteTagDialogStore } from '@/stores';
+import { Button } from '../Button';
+import { Gap } from '../Gap';
+import { Text } from '../Text';
 import { dialogContentStyle, dialogOverlayStyle } from './DeleteTagDialog.css';
 
 export const DeleteTagDialog = memo(function DeleteTagDialog() {
   const cancelButtonRef = useRef<HTMLButtonElement | null>(null);
   const { deleteTag } = useTagStore();
   const { deleteTagId, isOpen, setIsOpen } = useDeleteTagDialogStore();
-  const queryClient = useQueryClient();
 
   const closeDialog = () => {
     setIsOpen(false);
@@ -33,20 +31,13 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
       return;
     }
 
-    try {
-      closeDialog();
-      await deleteTag(deleteTagId);
-    } catch (error) {
-      if (error instanceof Error) {
-        notifyError(error.message);
-      }
-    }
+    closeDialog();
+    await deleteTag(deleteTagId);
   };
 
   const DeleteTagByClick = async (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     await handleDeleteTag();
-    queryClient.invalidateQueries({ queryKey: ['pick'] });
   };
 
   const DeleteTagByEnterKey = async (e: KeyboardEvent<HTMLButtonElement>) => {

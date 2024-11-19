@@ -3,3 +3,4 @@ export { usePickToPickDndMonitor } from './usePickToPickDndMonitor';
 export { useGetDndContextSensor } from './useGetDndContextSensor';
 export { usePickToFolderDndMonitor } from './usePickToFolderDndMonitor';
 export { useOpenUrlInNewTab } from './useOpenUrlInNewTab';
+export { useCalculateCommandListHeight } from './useCalculateCommandListHeight';

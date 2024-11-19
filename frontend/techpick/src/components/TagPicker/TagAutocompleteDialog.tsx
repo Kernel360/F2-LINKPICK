@@ -1,20 +1,14 @@
 'use client';
 
-import { Dispatch, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Command } from 'cmdk';
 import { BarLoader } from 'react-spinners';
 import { colorVars } from 'techpick-shared';
-import { useUpdatePickMutation, useGetPickQuery } from '@/apis/pick';
-import {
-  SelectedTagItem,
-  SelectedTagListLayout,
-  DeleteTagDialog,
-  DeselectTagButton,
-} from '@/components';
-import { useTagStore } from '@/stores/tagStore';
-import { useThemeStore } from '@/stores/themeStore';
+import { useThemeStore, useTagStore } from '@/stores';
 import { notifyError, numberToRandomColor } from '@/utils';
-import { TagInfoEditPopoverButton } from '../TagInfoEditPopoverButton';
+import { DeleteTagDialog } from './DeleteTagDialog';
+import { DeselectTagButton } from './DeselectTagButton';
+import { SelectedTagItem } from '../SelectedTagItem';
 import {
   tagDialogPortalLayout,
   commandInputStyle,
@@ -29,56 +23,39 @@ import {
   CREATABLE_TAG_KEYWORD,
   getRandomInt,
 } from './TagAutocompleteDialog.lib';
-import { useCalculateCommandListHeight } from './useCalculateCommandListHeight';
-import type { TagType } from '@/types';
+import { TagInfoEditPopoverButton } from './TagInfoEditPopoverButton';
+import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
+import { TagType } from '@/types';
 
 export function TagAutocompleteDialog({
   open,
   onOpenChange,
   container,
-  pickId,
-  selectedTagList,
-  setSelectedTagList,
 }: TagSelectionDialogProps) {
   const [tagInputValue, setTagInputValue] = useState('');
   const [canCreateTag, setCanCreateTag] = useState(false);
   const tagInputRef = useRef<HTMLInputElement | null>(null);
   const selectedTagListRef = useRef<HTMLDivElement | null>(null);
+  const isCreateFetchPendingRef = useRef<boolean>(false);
   const randomNumber = useRef<number>(getRandomInt());
-  const { tagList, fetchingTagState, fetchingTagList, createTag } =
-    useTagStore();
-  const { commandListHeight } =
-    useCalculateCommandListHeight(selectedTagListRef);
+
+  const {
+    tagList,
+    selectedTagList,
+    fetchingTagState,
+    selectTag,
+    fetchingTagList,
+    createTag,
+  } = useTagStore();
   const { isDarkMode } = useThemeStore();
-  const { data: pickData } = useGetPickQuery(pickId);
-  const { mutate: updatePickInfo } = useUpdatePickMutation(pickId);
 
   const focusTagInput = () => {
     tagInputRef.current?.focus();
+    tagInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   const clearTagInputValue = () => {
     setTagInputValue('');
-  };
-
-  const selectTag = (tag: TagType) => {
-    const index = selectedTagList.findIndex(
-      (selectedTag) => selectedTag.id === tag.id
-    );
-
-    if (index !== -1) {
-      return;
-    }
-
-    setSelectedTagList([...selectedTagList, tag]);
-  };
-
-  const deselectTag = (tag: TagType) => {
-    const filteredSelectedTagList = selectedTagList.filter(
-      (selectedTag) => selectedTag.id !== tag.id
-    );
-
-    setSelectedTagList([...filteredSelectedTagList]);
   };
 
   const onSelectTag = (tag: TagType) => {
@@ -88,34 +65,25 @@ export function TagAutocompleteDialog({
   };
 
   const onSelectCreatableTag = async () => {
+    if (isCreateFetchPendingRef.current) {
+      return;
+    }
+
     try {
+      isCreateFetchPendingRef.current = true;
+
       const newTag = await createTag({
         name: tagInputValue,
         colorNumber: randomNumber.current,
       });
       randomNumber.current = getRandomInt();
       onSelectTag(newTag!);
-
-      if (!pickData || !newTag) {
-        return;
-      }
-
-      const { title, id } = pickData;
-
-      const previousTagIdList = selectedTagList.map(
-        (selectedTag) => selectedTag.id
-      );
-
-      updatePickInfo({
-        title,
-
-        id,
-        tagIdOrderedList: [...previousTagIdList, newTag.id],
-      });
     } catch (error) {
       if (error instanceof Error) {
         notifyError(error.message);
       }
+    } finally {
+      isCreateFetchPendingRef.current = false;
     }
   };
 
@@ -140,44 +108,20 @@ export function TagAutocompleteDialog({
   return (
     <Command.Dialog
       open={open}
-      onClick={(e) => {
-        console.log('Command.Dialog click');
-        e.stopPropagation();
-        e.preventDefault();
-      }}
-      onOpenChange={async (open) => {
-        onOpenChange(open);
-
-        if (!open && pickData) {
-          const { title, id } = pickData;
-
-          updatePickInfo({
-            title,
-
-            id,
-            tagIdOrderedList: selectedTagList.map(
-              (selectedTag) => selectedTag.id
-            ),
-          });
-        }
-
-        // updatePickInfo()
-        // 비동기 api 요청을 보내자!
-      }}
+      onOpenChange={onOpenChange}
       container={container?.current ?? undefined}
       className={tagDialogPortalLayout}
       filter={filterCommandItems}
     >
       {/**선택한 태그 리스트 */}
-      <SelectedTagListLayout ref={selectedTagListRef} focusStyle="focus">
+      <SelectedTagListLayout
+        ref={selectedTagListRef}
+        focusStyle="focus"
+        height="fixed"
+      >
         {selectedTagList.map((tag) => (
           <SelectedTagItem key={tag.id} tag={tag}>
-            <DeselectTagButton
-              onClick={() => {
-                focusTagInput();
-                deselectTag(tag);
-              }}
-            />
+            <DeselectTagButton tag={tag} onClick={focusTagInput} />
           </SelectedTagItem>
         ))}
 
@@ -190,10 +134,7 @@ export function TagAutocompleteDialog({
       </SelectedTagListLayout>
 
       {/**전체 태그 리스트 */}
-      <Command.List
-        className={tagListStyle}
-        style={{ maxHeight: commandListHeight }}
-      >
+      <Command.List className={tagListStyle}>
         {fetchingTagState.isPending && (
           <Command.Loading className={tagListLoadingStyle}>
             <BarLoader color={colorVars.color.font} />
@@ -214,11 +155,7 @@ export function TagAutocompleteDialog({
             keywords={[tag.name]}
           >
             <SelectedTagItem key={tag.id} tag={tag} />
-            <TagInfoEditPopoverButton
-              tag={tag}
-              selectedTagList={selectedTagList}
-              setSelectedTagList={setSelectedTagList}
-            />
+            <TagInfoEditPopoverButton tag={tag} />
           </Command.Item>
         ))}
 
@@ -256,7 +193,4 @@ interface TagSelectionDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   container?: React.RefObject<HTMLElement>;
-  pickId: number;
-  selectedTagList: TagType[];
-  setSelectedTagList: Dispatch<React.SetStateAction<TagType[]>>;
 }

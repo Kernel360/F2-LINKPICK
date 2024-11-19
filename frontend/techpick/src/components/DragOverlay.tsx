@@ -6,7 +6,7 @@ import { DragOverlay as DndKitDragOverlay } from '@dnd-kit/core';
 import { usePickRenderModeStore, usePickStore, useTreeStore } from '@/stores';
 import { pickDragOverlayStyle } from './dragOverlay.css';
 import { PickCard } from './PickListViewer/PickCard';
-import { PickRecord } from './PickListViewer/PickRecord';
+import { PickListItem } from './PickListViewer/PickListItem';
 
 export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   const { isDragging: isFolderDragging, draggingFolderInfo } = useTreeStore();
@@ -77,7 +77,7 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
     if (pickRenderMode === 'list') {
       return (
         <DndKitDragOverlay style={overlayStyle}>
-          <PickRecord pickInfo={draggingPickInfo} />
+          <PickListItem pickInfo={draggingPickInfo} />
         </DndKitDragOverlay>
       );
     }
