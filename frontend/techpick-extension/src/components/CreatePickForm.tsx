@@ -66,6 +66,9 @@ export function CreatePickForm({
       parentFolderId: Number(selectedFolderId),
     }).then(() => {
       notifySuccess('저장되었습니다!');
+      setTimeout(() => {
+        window.close();
+      }, 900);
     });
   };
 
