@@ -27,7 +27,7 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ApiErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
 		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception);
-		return ApiErrorResponse.VALIDATION_ERROR();
+		return ApiErrorResponse.VALIDATION_ERROR(exception.getBindingResult().getFieldError().getDefaultMessage());
 	}
 
 	/**
