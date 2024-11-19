@@ -6,7 +6,7 @@ import InfiniteLoader from 'react-window-infinite-loader';
 import { colorVars } from 'techpick-shared';
 import { PickRecord } from '@/components/PickListViewer/PickRecord';
 import {
-  pickRecordListLayoutStyle,
+  pickRecordListLayoutInlineStyle,
   RECORD_HEIGHT,
 } from '@/components/PickListViewer/pickRecordListLayout.css';
 import { usePickStore } from '@/stores';
@@ -62,7 +62,7 @@ export function PickListViewerInfiniteScroll(
         >
           {({ onItemsRendered, ref }) => (
             <List
-              style={pickRecordListLayoutStyle}
+              style={pickRecordListLayoutInlineStyle}
               onItemsRendered={onItemsRendered}
               itemSize={RECORD_HEIGHT}
               itemCount={itemCount}
