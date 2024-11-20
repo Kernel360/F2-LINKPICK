@@ -125,7 +125,7 @@ public class PickDataHandler {
 			Folder destinationFolder = folderRepository.findById(command.parentFolderId())
 				.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
-			detachPickToParentFolder(pick, parentFolder);
+			detachPickFromParentFolder(pick, parentFolder);
 			attachPickToParentFolder(pick, destinationFolder);
 			updatePickParentFolder(pick, destinationFolder);
 		}
@@ -151,7 +151,7 @@ public class PickDataHandler {
 
 		List<Pick> pickList = pickRepository.findAllById(pickIdList);
 		pickList.forEach(pick -> {
-			detachPickToParentFolder(pick, pick.getParentFolder());
+			detachPickFromParentFolder(pick, pick.getParentFolder());
 			updatePickParentFolder(pick, destinationFolder);
 		});
 
@@ -176,7 +176,7 @@ public class PickDataHandler {
 		List<Pick> pickList = pickRepository.findAllById(pickIdList);
 
 		pickList.forEach(pick -> {
-			detachPickToParentFolder(pick, pick.getParentFolder());
+			detachPickFromParentFolder(pick, pick.getParentFolder());
 			pickTagRepository.deleteByPick(pick);
 			pickRepository.delete(pick);
 		});
@@ -191,7 +191,7 @@ public class PickDataHandler {
 	}
 
 	@Transactional
-	public void detachTagToPickTag(Pick pick, Long tagId) {
+	public void detachTagFromPickTag(Pick pick, Long tagId) {
 		pickTagRepository.deleteByPickAndTagId(pick, tagId);
 	}
 
@@ -201,7 +201,7 @@ public class PickDataHandler {
 	}
 
 	// 부모 폴더의 픽 리스트에서 제거
-	private void detachPickToParentFolder(Pick pick, Folder folder) {
+	private void detachPickFromParentFolder(Pick pick, Folder folder) {
 		folder.removeChildPickIdOrdered(pick.getId());
 	}
 
@@ -219,7 +219,7 @@ public class PickDataHandler {
 		// 1. 기존 태그와 새로운 태그를 비교하여 없어진 태그를 PickTag 테이블에서 제거
 		pick.getTagIdOrderedList().stream()
 			.filter(tagId -> !newTagOrderList.contains(tagId))
-			.forEach(tagId -> detachTagToPickTag(pick, tagId));
+			.forEach(tagId -> detachTagFromPickTag(pick, tagId));
 
 		// 2. 새로운 태그 중 기존에 없는 태그를 PickTag 테이블에 추가
 		newTagOrderList.stream()
