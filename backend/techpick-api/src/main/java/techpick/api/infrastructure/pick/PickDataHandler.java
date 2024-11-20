@@ -165,7 +165,6 @@ public class PickDataHandler {
 		// 픽들의 부모를 휴지통으로 변경
 		List<Pick> pickList = pickRepository.findAllById(pickIdList);
 		pickList.forEach(pick -> {
-			detachPickToParentFolder(pick, pick.getParentFolder());
 			attachPickToParentFolder(pick, recycleBin);
 			updatePickParentFolder(pick, recycleBin);
 		});
