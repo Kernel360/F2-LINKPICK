@@ -92,7 +92,7 @@ public class TagDataHandler {
 			.forEach(pick -> {
 				pick.getTagIdOrderedList().remove(tagId);
 			});
-		pickTagRepository.deleteById(tagId);
+		pickTagRepository.deleteByTagId(tagId);
 		tagRepository.deleteById(tagId);
 	}
 
