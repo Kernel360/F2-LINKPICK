@@ -24,4 +24,5 @@ export const API_URLS = {
     `${cursor ? '&cursor=' + cursor : ''}` +
     `${size ? '&size=' + size : ''}`,
   MOVE_PICKS: `${API_ENDPOINTS.PICKS}/${API_ENDPOINTS.LOCATION}`,
+  UPDATE_PICKS: `${API_ENDPOINTS.PICKS}`,
 };
