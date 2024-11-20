@@ -6,8 +6,8 @@ export const pickRecordLayoutStyle = style({
   display: 'flex',
   width: 'fit-content',
   minHeight: '60px',
+  height: 'fit-content',
   alignItems: 'center',
-  borderTop: '1px solid black',
 });
 
 export const pickImageStyle = style({
