@@ -142,4 +142,9 @@ security:
   default-redirect-url: https://app.techpick.org
   base-url: https://api.techpick.org
 
+# 운영 환경에서 스웨거 접근 못하도록 막는 설정
+springdoc:
+  swagger-ui:
+    enabled: true  # false로 변경하면, swagger 접근 불가
+
 ---
