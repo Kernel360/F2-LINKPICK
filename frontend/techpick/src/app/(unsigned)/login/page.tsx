@@ -8,9 +8,13 @@ import { getClientCookie } from '@/utils';
 import {
   googleLoginContainer,
   kakaoLoginContainer,
-  loginContainer,
+  screenContainer,
   loginLink,
-  logoContainer,
+  loginBlockContainer,
+  pickIconContainer,
+  pickBrandContainer,
+  dividerStyle,
+  pickBrandContainerWithText,
 } from './page.css';
 
 export default function LoginPage() {
@@ -27,42 +31,53 @@ export default function LoginPage() {
   }, []);
 
   return (
-    <div className={loginContainer}>
-      <div className={logoContainer}>
-        <Image
-          src={`/image/logo_techpick.png`}
-          alt="TechPick Logo"
-          width={220}
-          height={220}
-        />
-
-        <div className={googleLoginContainer}>
-          <Link
-            className={loginLink}
-            href={`${process.env.NEXT_PUBLIC_API}/login/google?redirectUrl=${redirectUrl}`}
-          >
-            <Image
-              src={`/image/logo_google.png`}
-              alt="Google Logo"
-              width={24}
-              height={24}
-            />
-            <span>Sign up with Google</span>
-          </Link>
+    <div className={screenContainer}>
+      <div className={loginBlockContainer}>
+        <div className={pickBrandContainer}>
+          <div className={pickBrandContainerWithText}>
+            <div className={pickIconContainer}>
+              <Image
+                src={`/image/logo_techpick.png`}
+                alt="TechPick Logo"
+                fill
+                objectFit={'contain'}
+              />
+            </div>
+            <h1>SIGN UP</h1>
+          </div>
         </div>
-        <div className={kakaoLoginContainer}>
-          <Link
-            className={loginLink}
-            href={`${process.env.NEXT_PUBLIC_API}/login/kakao?redirectUrl=${redirectUrl}`}
-          >
-            <Image
-              src={`/image/logo_kakao.svg`}
-              alt="Kakao Logo"
-              width={24}
-              height={24}
-            />
-            Sign up with Kakao
-          </Link>
+        <hr className={dividerStyle} />
+        <div style={{ padding: '36px 0' }}>
+          <div className={googleLoginContainer}>
+            <Link
+              className={loginLink}
+              href={`${process.env.NEXT_PUBLIC_API}/login/google?redirectUrl=${redirectUrl}`}
+            >
+              <Image
+                style={{ filter: 'brightness(100)' }}
+                src={`/image/logo_google.png`}
+                alt="Google Logo"
+                width={20}
+                height={20}
+              />
+              <span>Sign up with Google</span>
+            </Link>
+          </div>
+          <div className={kakaoLoginContainer}>
+            <Link
+              className={loginLink}
+              href={`${process.env.NEXT_PUBLIC_API}/login/kakao?redirectUrl=${redirectUrl}`}
+            >
+              <Image
+                style={{ filter: 'invert(100%)' }}
+                src={`/image/logo_kakao.svg`}
+                alt="Kakao Logo"
+                width={20}
+                height={20}
+              />
+              Sign up with Kakao
+            </Link>
+          </div>
         </div>
       </div>
     </div>
