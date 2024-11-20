@@ -123,16 +123,6 @@ public class Folder extends BaseEntity {
 		this.parentFolder = parentFolder;
 	}
 
-	public void updateChildFolderOrder(Long pickId, int destination) {
-		childFolderIdOrderedList.remove(pickId);
-		childFolderIdOrderedList.add(destination, pickId);
-	}
-
-	public void updateChildPickOrder(Long pickId, int destination) {
-		childPickIdOrderedList.remove(pickId);
-		childPickIdOrderedList.add(destination, pickId);
-	}
-
 	public void updateChildPickIdOrderedList(List<Long> pickIdList, int destination) {
 		childPickIdOrderedList.removeAll(pickIdList);
 		int calculatedDestination = Math.min(destination, childPickIdOrderedList.size());
@@ -158,12 +148,8 @@ public class Folder extends BaseEntity {
 		childFolderIdOrderedList.addAll(calculatedDestination, folderIdList);
 	}
 
-	public void removeChildFolderOrder(Long folderId) {
-		this.childFolderIdOrderedList.remove(folderId);
-	}
-
-	public void removeChildPickOrder(Long pickId) {
-		this.childPickIdOrderedList.remove(pickId);
+	public void removeChildPickIdOrdered(Long pickId) {
+		childPickIdOrderedList.remove(pickId);
 	}
 
 	@Builder
