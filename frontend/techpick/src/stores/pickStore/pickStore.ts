@@ -2,7 +2,7 @@ import { enableMapSet } from 'immer';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { getPicksByFolderId, movePicks } from '@/apis/pick';
+import { getPicksByFolderId, movePicks, updatePick } from '@/apis/pick';
 import { getPickListByQueryParam } from '@/apis/pick/getPicks';
 import { isPickDraggableObject, reorderSortableIdList } from '@/utils';
 import type { Active, Over } from '@dnd-kit/core';
@@ -14,6 +14,7 @@ import type {
   PickDraggableObjectType,
   PickToFolderDroppableObjectType,
   SearchPicksResponseType,
+  UpdatePickRequestType,
 } from '@/types';
 
 enableMapSet();
@@ -60,6 +61,10 @@ type PickAction = {
     size?: number
   ) => Promise<void>;
   getSearchResult: () => SearchPicksResponseType;
+  updatePickInfo: (
+    pickParentFolderId: number,
+    pickInfo: UpdatePickRequestType
+  ) => Promise<void>;
 };
 
 const initialState: PickState = {
@@ -364,6 +369,56 @@ export const usePickStore = create<PickState & PickAction>()(
       },
       getSearchResult: () => {
         return get().searchResult;
+      },
+      updatePickInfo: async (pickParentFolderId, pickInfo) => {
+        const {
+          id: pickId,
+          tagIdOrderedList: newTagOrderedList,
+          title: newTitle,
+        } = pickInfo;
+
+        const pickRecordValue = get().pickRecord[pickParentFolderId];
+
+        if (!get().hasPickRecordValue(pickRecordValue)) {
+          return;
+        }
+
+        const { pickInfoRecord } = pickRecordValue;
+
+        if (!pickInfoRecord[pickId]) {
+          return;
+        }
+
+        const prevPickInfo = pickInfoRecord[pickId];
+        const newPickInfo: PickInfoType = {
+          ...prevPickInfo,
+          title: newTitle ?? prevPickInfo.title,
+          tagIdOrderedList: newTagOrderedList ?? prevPickInfo.tagIdOrderedList,
+        };
+
+        // 미리 업데이트
+        set((state) => {
+          if (!state.pickRecord[pickParentFolderId]) {
+            return;
+          }
+
+          const { pickInfoRecord } = state.pickRecord[pickParentFolderId];
+          pickInfoRecord[pickId] = newPickInfo;
+        });
+
+        try {
+          await updatePick(pickInfo);
+        } catch {
+          // 실패하면 원복하기.
+          set((state) => {
+            if (!state.pickRecord[pickParentFolderId]) {
+              return;
+            }
+
+            const { pickInfoRecord } = state.pickRecord[pickParentFolderId];
+            pickInfoRecord[pickId] = prevPickInfo;
+          });
+        }
       },
     }))
   )
