@@ -2,6 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { sizes, typography, colorVars, space } from 'techpick-shared';
 
 export const pickListItemLayoutStyle = style({
+  position: 'relative',
   display: 'flex',
   flexDirection: 'row',
   gap: space['16'],
@@ -39,6 +40,7 @@ export const pickTitleSectionStyle = style({
   fontSize: typography.fontSize['2xl'],
   fontWeight: typography.fontWeights['light'],
   height: '32px',
+  lineHeight: '32px',
   overflow: 'hidden',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',

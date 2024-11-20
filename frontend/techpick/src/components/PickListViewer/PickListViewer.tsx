@@ -1,7 +1,9 @@
 import type { PropsWithChildren, ReactNode } from 'react';
 import { PickCard } from './PickCard';
 import { PickCardListLayout } from './PickCardListLayout';
-import type { PickInfoType } from '@/types';
+import { PickListItem } from './PickListItem';
+import { PickListItemLayout } from './PickListItemLayout';
+import type { PickInfoType, PickRenderModeType } from '@/types';
 
 export function PickListViewer({
   pickList,
@@ -21,23 +23,22 @@ export function PickListViewer({
 
 interface PickListViewerProps {
   pickList: PickInfoType[];
-  viewType?: ViewTemplateType;
+  viewType?: PickRenderModeType;
 }
 
 const NORMAL_PICK_LIST_VIEW_TEMPLATES: Record<
-  ViewTemplateType,
+  PickRenderModeType,
   ViewTemplateValueType
 > = {
   card: {
     PickViewItemListLayoutComponent: PickCardListLayout,
     PickViewItemComponent: PickCard,
   },
+  list: {
+    PickViewItemListLayoutComponent: PickListItemLayout,
+    PickViewItemComponent: PickListItem,
+  },
 };
-
-/**
- * @description ViewTemplateType은 pickInfo를 어떤 UI로 보여줄지 나타냅니다. ex) card, list
- */
-type ViewTemplateType = 'card';
 
 interface ViewTemplateValueType {
   PickViewItemListLayoutComponent: (

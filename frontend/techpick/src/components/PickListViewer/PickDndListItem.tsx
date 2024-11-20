@@ -3,7 +3,7 @@
 import { MouseEvent, type CSSProperties } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { usePickStore } from '@/stores';
+import { usePickStore, useUpdatePickStore } from '@/stores';
 import { isSelectionActive } from '@/utils';
 import {
   isActiveDraggingItemStyle,
@@ -22,6 +22,7 @@ export function PickDndListItem({ pickInfo }: PickViewDnDItemComponentProps) {
     setSelectedPickIdList,
     isDragging,
   } = usePickStore();
+  const { setCurrentPickIdToNull } = useUpdatePickStore();
   const { id: pickId, parentFolderId } = pickInfo;
   const isSelected = selectedPickIdList.includes(pickId);
   const {
@@ -74,6 +75,7 @@ export function PickDndListItem({ pickInfo }: PickViewDnDItemComponentProps) {
       return;
     }
 
+    setCurrentPickIdToNull();
     selectSinglePick(pickId);
   };
 
