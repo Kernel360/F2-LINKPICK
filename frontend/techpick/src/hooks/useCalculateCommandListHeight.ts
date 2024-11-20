@@ -1,14 +1,11 @@
 'use client';
 
 import { MutableRefObject, useEffect, useState } from 'react';
-import { useTagStore } from '@/stores/tagStore';
 
 export function useCalculateCommandListHeight(
   selectedTagListRef: MutableRefObject<HTMLDivElement | null>
 ) {
   const [commandListHeight, setCommandListHeight] = useState(0);
-
-  const { selectedTagList } = useTagStore();
 
   useEffect(
     function calculateCommandListHeight() {
@@ -28,7 +25,7 @@ export function useCalculateCommandListHeight(
       );
       setCommandListHeight(commandListHeight);
     },
-    [selectedTagList, selectedTagListRef]
+    [selectedTagListRef]
   );
 
   return { commandListHeight };
