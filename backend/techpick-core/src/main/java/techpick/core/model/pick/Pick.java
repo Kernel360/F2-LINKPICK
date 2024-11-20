@@ -29,7 +29,7 @@ import techpick.core.util.OrderConverter;
 	uniqueConstraints = {
 		@UniqueConstraint(
 			name = "UC_PICK_NAME_PER_USER",
-			columnNames = {"user_id", "link_id", "title"}
+			columnNames = {"user_id", "link_id"}
 		)
 	}
 )
