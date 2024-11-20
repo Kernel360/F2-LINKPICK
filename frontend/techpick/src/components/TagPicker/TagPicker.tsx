@@ -1,7 +1,6 @@
 'use client';
 
 import { forwardRef, useRef, useState } from 'react';
-import { useTagStore } from '@/stores';
 import { SelectedTagItem } from '../SelectedTagItem';
 import { TagAutocompleteDialog } from './TagAutocompleteDialog';
 import {
@@ -10,12 +9,12 @@ import {
   tagPickerPlaceholderStyle,
 } from './TagPicker.css';
 import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
+import { PickInfoType, TagType } from '@/types';
 
-export const TagPicker = forwardRef<HTMLDivElement>(
-  function TagPickerWithRef(_props, tabFocusRef) {
+export const TagPicker = forwardRef<HTMLDivElement, TagPickerProps>(
+  function TagPickerWithRef({ pickInfo, selectedTagList }, tabFocusRef) {
     const [open, setOpen] = useState(false);
     const tagInputContainerRef = useRef<HTMLDivElement>(null);
-    const { selectedTagList } = useTagStore();
 
     const openDialog = () => {
       setOpen(true);
@@ -41,7 +40,7 @@ export const TagPicker = forwardRef<HTMLDivElement>(
           {selectedTagList.length === 0 && (
             <p className={tagPickerPlaceholderStyle}>태그를 넣어주세요</p>
           )}
-          <SelectedTagListLayout height="fixed">
+          <SelectedTagListLayout>
             {selectedTagList.map((tag) => (
               <SelectedTagItem key={tag.name} tag={tag} />
             ))}
@@ -52,8 +51,15 @@ export const TagPicker = forwardRef<HTMLDivElement>(
           open={open}
           onOpenChange={setOpen}
           container={tagInputContainerRef}
+          pickInfo={pickInfo}
+          selectedTagList={selectedTagList}
         />
       </div>
     );
   }
 );
+
+interface TagPickerProps {
+  pickInfo: PickInfoType;
+  selectedTagList: TagType[];
+}

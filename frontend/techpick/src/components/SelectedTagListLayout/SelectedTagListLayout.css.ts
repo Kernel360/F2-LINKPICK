@@ -5,7 +5,7 @@ export const ListLayoutHeightVariants = styleVariants({
   fixed: {
     overflow: 'hidden',
     minHeight: '30px',
-    maxHeight: '48px',
+    maxHeight: '58px',
   },
   flexible: {
     overflow: 'visible',

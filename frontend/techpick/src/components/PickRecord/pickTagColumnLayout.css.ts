@@ -2,5 +2,5 @@ import { style } from '@vanilla-extract/css';
 
 export const pickTagColumnLayoutStyle = style({
   width: '320px',
-  height: '100%',
+  height: 'fit-content',
 });

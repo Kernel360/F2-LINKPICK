@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colorVars } from 'techpick-shared';
+import { colorVars, fontSize } from 'techpick-shared';
 
 export const tagInfoEditFormLayout = style({
   position: 'relative',
@@ -16,8 +16,10 @@ export const tagInfoEditFormLayout = style({
 
 export const tagInputStyle = style({
   outline: 'none',
+  margin: 0,
   border: `1px solid ${colorVars.color.font}`,
   color: colorVars.color.font,
+  fontSize: fontSize['md'],
 });
 
 export const popoverOverlayStyle = style({

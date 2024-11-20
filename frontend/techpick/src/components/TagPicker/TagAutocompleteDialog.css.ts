@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colorVars } from 'techpick-shared';
+import { colorVars, fontSize } from 'techpick-shared';
 
 const { color } = colorVars;
 
@@ -19,7 +19,9 @@ export const commandInputStyle = style({
   outline: 'none',
   border: 'none',
   padding: '0 4px',
+  fontSize: fontSize['sm'],
   color: color.font,
+  margin: 0,
 });
 
 export const tagListStyle = style({

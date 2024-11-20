@@ -5,7 +5,7 @@ export const pickRecordLayoutStyle = style({
   position: 'relative',
   display: 'flex',
   width: 'fit-content',
-  height: '60px',
+  minHeight: '60px',
   alignItems: 'center',
   borderTop: '1px solid black',
 });

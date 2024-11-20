@@ -24,11 +24,7 @@ export const tagDialogTriggerLayout = style({
   boxSizing: 'border-box',
   cursor: 'pointer',
   width: '288px',
-
-  minHeight: '30px',
-  maxHeight: '60px',
   border: '1px solid transparent',
-  backgroundColor: colorVars.lightGray,
   transition: 'border 0.3s ease',
 
   ':focus': {

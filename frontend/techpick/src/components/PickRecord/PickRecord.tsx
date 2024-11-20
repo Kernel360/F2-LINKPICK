@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useOpenUrlInNewTab } from '@/hooks';
-import { usePickStore, useUpdatePickStore } from '@/stores';
+import { usePickStore, useTagStore, useUpdatePickStore } from '@/stores';
 import { formatDateString } from '@/utils';
 import { PickDateColumnLayout } from './PickDateColumnLayout';
 import { PickImageColumnLayout } from './PickImageColumnLayout';
@@ -17,12 +17,13 @@ import { PickRecordTitleInput } from './PickRecordTitleInput';
 import { PickTagColumnLayout } from './PickTagColumnLayout';
 import { PickTitleColumnLayout } from './PickTitleColumnLayout';
 import { Separator } from './Separator';
-import { PickViewItemComponentProps } from '@/types';
+import { TagPicker } from '../TagPicker';
+import { PickViewItemComponentProps, TagType } from '@/types';
 
 export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
   const pick = pickInfo;
   const link = pickInfo.linkInfo;
-  // const { findTagById } = useTagStore();
+  const { findTagById } = useTagStore();
   const { updatePickInfo } = usePickStore();
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
   const {
@@ -31,6 +32,15 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
     setCurrentUpdatePickId,
   } = useUpdatePickStore();
   const isUpdateTitle = currentUpdatePickId === pickInfo.id;
+
+  const filteredSelectedTagList: TagType[] = [];
+
+  pickInfo.tagIdOrderedList.forEach((tagId) => {
+    const tagInfo = findTagById(tagId);
+    if (tagInfo) {
+      filteredSelectedTagList.push(tagInfo);
+    }
+  });
 
   return (
     <div className={pickRecordLayoutStyle}>
@@ -76,8 +86,12 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
       </PickTitleColumnLayout>
 
       <Separator />
+
       <PickTagColumnLayout>
-        <div style={{ width: '320px' }}>Tags</div>
+        <TagPicker
+          pickInfo={pickInfo}
+          selectedTagList={filteredSelectedTagList}
+        />
       </PickTagColumnLayout>
 
       <Separator />

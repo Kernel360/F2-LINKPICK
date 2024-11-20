@@ -3,7 +3,9 @@
 import { useRef, memo, KeyboardEvent, MouseEvent } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
+import { PORTAL_CONTAINER_ID } from '@/constants';
 import { useTagStore, useDeleteTagDialogStore } from '@/stores';
+import { getElementById } from '@/utils';
 import { Button } from '../Button';
 import { Gap } from '../Gap';
 import { Text } from '../Text';
@@ -13,6 +15,7 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
   const cancelButtonRef = useRef<HTMLButtonElement | null>(null);
   const { deleteTag } = useTagStore();
   const { deleteTagId, isOpen, setIsOpen } = useDeleteTagDialogStore();
+  const portalContainer = getElementById(PORTAL_CONTAINER_ID);
 
   const closeDialog = () => {
     setIsOpen(false);
@@ -50,7 +53,7 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-      <Dialog.Portal container={document.querySelector('#portalContainer')}>
+      <Dialog.Portal container={portalContainer}>
         <Dialog.Overlay className={dialogOverlayStyle} />
         <Dialog.Content className={dialogContentStyle}>
           <Text>이 태그를 삭제하시겠습니까?</Text>
