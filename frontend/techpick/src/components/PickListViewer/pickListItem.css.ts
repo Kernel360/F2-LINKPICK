@@ -5,7 +5,9 @@ export const pickListItemLayoutStyle = style({
   display: 'flex',
   flexDirection: 'row',
   gap: space['16'],
-  height: '100px',
+  minWidth: 0,
+  maxWidth: '100%',
+  height: '130px',
   padding: space['16'],
   borderTop: `1px solid ${colorVars.gray6}`,
   cursor: 'pointer',
@@ -14,6 +16,7 @@ export const pickListItemLayoutStyle = style({
 export const pickImageSectionLayoutStyle = style({
   position: 'relative',
   width: sizes['8xs'],
+  flexShrink: 0,
 });
 
 export const pickImageStyle = style({
@@ -26,18 +29,19 @@ export const pickEmptyImageStyle = style({
 });
 
 export const pickContentSectionLayoutStyle = style({
-  display: 'flex',
-  flexDirection: 'column',
+  flexGrow: '1',
+  flexShrink: '1',
+  minWidth: '0',
+  maxWidth: '100%',
 });
 
 export const pickTitleSectionStyle = style({
   fontSize: typography.fontSize['2xl'],
   fontWeight: typography.fontWeights['light'],
-  width: '264px',
-  height: '96px',
-  whiteSpace: 'normal',
-  wordBreak: 'break-all',
-  overflowY: 'scroll',
+  height: '32px',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
 });
 
 export const pickDetailInfoLayoutStyle = style({

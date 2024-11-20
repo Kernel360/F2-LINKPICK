@@ -21,7 +21,6 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
   const link = pickInfo.linkInfo;
   const { findTagById } = useTagStore();
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
-
   return (
     <div className={pickListItemLayoutStyle} onDoubleClick={openUrlInNewTab}>
       <div className={pickImageSectionLayoutStyle}>
@@ -32,9 +31,7 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
         )}
       </div>
       <div className={pickContentSectionLayoutStyle}>
-        <div className={pickTitleSectionStyle}>
-          <p>{pick.title}</p>
-        </div>
+        <div className={pickTitleSectionStyle}>{pick.title}</div>
         <div className={pickDetailInfoLayoutStyle}>
           {0 < pick.tagIdOrderedList.length && (
             <SelectedTagListLayout height="fixed">
