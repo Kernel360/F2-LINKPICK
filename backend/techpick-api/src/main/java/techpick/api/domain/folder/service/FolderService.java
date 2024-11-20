@@ -53,7 +53,6 @@ public class FolderService {
 	}
 
 	// TODO: 현재는 1depth만 반환하고 있지만, 추후 ~3depth까지 반환할 예정
-	// Root 폴더를 받아야하는 이유가 있나..? 내일 승태님께 물어보기
 	@Transactional(readOnly = true)
 	public List<FolderResult> getAllRootFolderList(Long userId) {
 		Folder rootFolder = folderDataHandler.getRootFolder(userId);
@@ -80,10 +79,14 @@ public class FolderService {
 			.toList();
 	}
 
+	/**
+	 * 생성하려는 폴더가 미분류폴더, 휴지통이 아닌지 검증합니다.
+	 * */
 	@Transactional
 	public FolderResult saveFolder(FolderCommand.Create command) {
 		Folder parentFolder = folderDataHandler.getFolder(command.parentFolderId());
 		validateFolderAccess(command.userId(), parentFolder);
+		validateDestinationFolder(parentFolder);
 
 		return folderMapper.toResult(folderDataHandler.saveFolder(command));
 	}
@@ -181,14 +184,14 @@ public class FolderService {
 	}
 
 	/**
-	 * 폴더 이동시 미분류폴더, 휴지통으로는 이동할 수 없습니다.
+	 * 폴더 생성, 이동시 미분류폴더, 휴지통으로는 이동할 수 없습니다.
 	 * */
 	private void validateDestinationFolder(Folder destinationFolder) {
 		if (Objects.equals(destinationFolder.getFolderType(), FolderType.UNCLASSIFIED)) {
-			throw ApiFolderException.INVALID_MOVE_TARGET();
+			throw ApiFolderException.INVALID_TARGET();
 		}
 		if (Objects.equals(destinationFolder.getFolderType(), FolderType.RECYCLE_BIN)) {
-			throw ApiFolderException.INVALID_MOVE_TARGET();
+			throw ApiFolderException.INVALID_TARGET();
 		}
 	}
 }

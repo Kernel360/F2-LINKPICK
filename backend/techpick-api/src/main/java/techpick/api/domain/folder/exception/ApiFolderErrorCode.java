@@ -23,14 +23,14 @@ public enum ApiFolderErrorCode implements ApiErrorCode {
 	INVALID_FOLDER_TYPE
 		("FO-005", HttpStatus.NOT_IMPLEMENTED, "미구현 폴더 타입에 대한 서비스 요청", ErrorLevel.MUST_NEVER_HAPPEN()),
 	BASIC_FOLDER_ALREADY_EXISTS
-		("FO-006", HttpStatus.NOT_ACCEPTABLE, "기본 폴더는 1개만 존재할 수 있음.", ErrorLevel.MUST_NEVER_HAPPEN()),
-	INVALID_MOVE_TARGET
-		("FO-007", HttpStatus.NOT_ACCEPTABLE, "이동하려는 폴더들의 범위가 올바르지 않음", ErrorLevel.SHOULD_NOT_HAPPEN()),
+		("FO-006", HttpStatus.NOT_ACCEPTABLE, "기본 폴더는 1개만 존재할 수 있음", ErrorLevel.MUST_NEVER_HAPPEN()),
+	INVALID_TARGET
+		("FO-007", HttpStatus.NOT_ACCEPTABLE, "휴지통 또는 미분류 폴더에 폴더를 (생성/이동)할 수 없음", ErrorLevel.SHOULD_NOT_HAPPEN()),
 	INVALID_PARENT_FOLDER
 		("FO-008", HttpStatus.NOT_ACCEPTABLE, "부모 폴더가 올바르지 않음", ErrorLevel.SHOULD_NOT_HAPPEN()),
 	// TODO: folder depth 추가 시 예외 삭제 예정
 	ROOT_FOLDER_SEARCH_NOT_ALLOWED
-		("FO-009", HttpStatus.NOT_ACCEPTABLE, "루트 폴더에 대한 검색은 허용되지 않음.", ErrorLevel.SHOULD_NOT_HAPPEN()),
+		("FO-009", HttpStatus.NOT_ACCEPTABLE, "루트 폴더에 대한 검색은 허용되지 않음", ErrorLevel.SHOULD_NOT_HAPPEN()),
 	;
 
 	private final String code;

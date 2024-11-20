@@ -40,8 +40,8 @@ public class ApiFolderException extends ApiException {
 		return new ApiFolderException(ApiFolderErrorCode.BASIC_FOLDER_ALREADY_EXISTS);
 	}
 
-	public static ApiFolderException INVALID_MOVE_TARGET() {
-		return new ApiFolderException(ApiFolderErrorCode.INVALID_MOVE_TARGET);
+	public static ApiFolderException INVALID_TARGET() {
+		return new ApiFolderException(ApiFolderErrorCode.INVALID_TARGET);
 	}
 
 	public static ApiFolderException INVALID_PARENT_FOLDER() {
