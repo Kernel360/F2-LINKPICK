@@ -14,9 +14,9 @@ import {
   recordBodySectionStyle,
   recordTitleAndBodySectionLayoutStyle,
   recordSubTextStyle,
-} from './pickRecord.css';
+} from './pickSearchRecord.css';
 
-export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
+export function PickSearchRecord({ pickInfo }: PickViewItemComponentProps) {
   const { findTagById } = useTagStore();
   const pick = pickInfo;
   const link = pickInfo.linkInfo;
