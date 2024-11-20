@@ -8,3 +8,6 @@ export type { FolderDraggableObjectType } from './FolderDraggableObjectType';
 export type { PickToFolderDroppableObjectType } from './PickToFolderDroppableObjectType';
 export type { PickRenderModeType } from './PickRenderModeType';
 export type { UpdatePickRequestType } from './UpdatePickRequestType';
+export type { PickViewItemComponentProps } from './PickViewItemComponentProps';
+export type { PickViewDraggableItemComponentProps } from './PickViewDraggableItemComponentProps';
+export type { PickViewDraggableItemListLayoutComponentProps } from './PickViewDraggableItemListLayoutComponentProps';

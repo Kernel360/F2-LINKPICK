@@ -11,3 +11,4 @@ export { TagPicker, DeleteTagDialog, DeselectTagButton } from './TagPicker';
 export { FolderTree } from './FolderTree';
 export { PickListViewer, DraggablePickListViewer } from './PickListViewer';
 export { FolderAndPickDndContextProvider } from './FolderAndPickDndContextProvider';
+export { PickRecordHeader } from './PickRecord';

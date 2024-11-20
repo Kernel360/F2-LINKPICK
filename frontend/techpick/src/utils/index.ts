@@ -12,3 +12,4 @@ export { isPickToFolderDroppableObject } from './isPickToFolderDroppableObject';
 export { getElementById } from './getElementById';
 export { formatDateString } from './formatDateString';
 export { isShallowEqualValue } from './isShallowEqualValue';
+export { getSelectedPickRange } from './getSelectedPickRange';
