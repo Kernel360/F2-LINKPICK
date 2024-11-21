@@ -25,10 +25,11 @@ export const commandInputStyle = style({
 });
 
 export const tagListStyle = style({
+  minWidth: '288px',
   maxHeight: '150px',
   border: `1px solid black`,
-
   overflowY: 'auto',
+
   '::-webkit-scrollbar': {
     display: 'none',
   },
