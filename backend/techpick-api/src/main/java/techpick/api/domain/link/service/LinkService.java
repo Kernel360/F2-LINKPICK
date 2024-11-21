@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import techpick.api.domain.link.dto.LinkMapper;
+import techpick.api.domain.link.dto.LinkResult;
 import techpick.api.infrastructure.link.LinkDataHandler;
 import techpick.core.model.link.Link;
 
@@ -18,7 +20,9 @@ import techpick.core.model.link.Link;
 @RequiredArgsConstructor
 @Slf4j
 public class LinkService {
+
 	private final LinkDataHandler linkDataHandler;
+	private final LinkMapper linkMapper;
 
 	@Transactional
 	public void updateOgTag(String url) {
@@ -37,6 +41,26 @@ public class LinkService {
 		} catch (Exception e) {
 			log.info("url : {} 의 og tag 추출에 실패했습니다.", url);
 		}
+	}
+
+	@Transactional
+	public LinkResult getUpdateOgTag(String url) {
+		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
+		try {
+			String html = getJsoupResponse(url).body();
+
+			Document document = Jsoup.parse(html);
+
+			String title = getTitle(document);
+			String description = getMetaContent(document, "og:description");
+			String imageUrl = correctImageUrl(url, getMetaContent(document, "og:image"));
+
+			link.updateMetadata(title, description, imageUrl);
+			return linkMapper.toLinkResult(linkDataHandler.saveLink(link));
+		} catch (Exception e) {
+			log.info("url : {} 의 og tag 추출에 실패했습니다.", url);
+		}
+		return linkMapper.toLinkResult(link);
 	}
 
 	private Connection.Response getJsoupResponse(String url) throws IOException {
