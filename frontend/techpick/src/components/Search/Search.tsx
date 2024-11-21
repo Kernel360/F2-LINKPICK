@@ -76,7 +76,7 @@ export function Search() {
   const router = useRouter();
   // fetched user data for auto-completion
   const { tagList, fetchingTagList } = useTagStore();
-  const { getFolderList, getFolders } = useTreeStore();
+  const { getFolderList } = useTreeStore();
   // tokenizer + text input
   const [input, setInput] = useState('');
   const inputRef = useRef<TokenInputRef>(null);
@@ -106,10 +106,9 @@ export function Search() {
   useEffect(
     function loadTagAndFolderList() {
       fetchingTagList();
-      getFolders();
       syncSearchInputStateWithUrl();
     },
-    [pathname, fetchingTagList, getFolders]
+    [pathname, fetchingTagList]
   );
 
   useEffect(
