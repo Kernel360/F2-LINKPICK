@@ -42,7 +42,7 @@ export function TagAutocompleteDialog({
   const isCreateFetchPendingRef = useRef<boolean>(false);
   const randomNumber = useRef<number>(getRandomInt());
   const tagIdOrderedList = selectedTagList.map((tag) => tag.id);
-  const { refs, floatingStyles } = useFloating({
+  const { refs, floatingStyles, update } = useFloating({
     middleware: [
       flip({
         fallbackAxisSideDirection: 'start',
@@ -69,7 +69,7 @@ export function TagAutocompleteDialog({
     }
 
     const newTagIdOrderedList = [...tagIdOrderedList, tag.id];
-
+    update();
     focusTagInput();
     clearTagInputValue();
     updatePickInfo(pickInfo.parentFolderId, {
@@ -127,7 +127,10 @@ export function TagAutocompleteDialog({
             <SelectedTagItem key={tag.id} tag={tag}>
               <DeselectTagButton
                 tag={tag}
-                onClick={focusTagInput}
+                onClick={() => {
+                  focusTagInput();
+                  update();
+                }}
                 pickInfo={pickInfo}
                 selectedTagList={selectedTagList}
               />
