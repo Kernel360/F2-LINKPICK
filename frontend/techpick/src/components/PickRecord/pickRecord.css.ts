@@ -39,3 +39,12 @@ export const dateTextStyle = style({
   color: colorVars.gray11,
   whiteSpace: 'nowrap',
 });
+
+export const externalLinkIconStyle = style({
+  position: 'absolute',
+  left: 0,
+  bottom: 0,
+  width: '30px',
+  height: '30px',
+  cursor: 'pointer',
+});

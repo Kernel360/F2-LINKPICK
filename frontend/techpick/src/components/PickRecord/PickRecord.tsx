@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import Image from 'next/image';
+import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
 import { useOpenUrlInNewTab } from '@/hooks';
 import { usePickStore, useTagStore, useUpdatePickStore } from '@/stores';
 import { formatDateString } from '@/utils';
@@ -12,6 +14,7 @@ import {
   pickEmptyImageStyle,
   pickTitleSectionStyle,
   dateTextStyle,
+  externalLinkIconStyle,
 } from './pickRecord.css';
 import { PickRecordTitleInput } from './PickRecordTitleInput';
 import { PickTagColumnLayout } from './PickTagColumnLayout';
@@ -31,8 +34,8 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
     setCurrentPickIdToNull,
     setCurrentUpdatePickId,
   } = useUpdatePickStore();
+  const [isHovered, setIsHovered] = useState(false);
   const isUpdateTitle = currentUpdatePickId === pickInfo.id;
-
   const filteredSelectedTagList: TagType[] = [];
 
   pickInfo.tagIdOrderedList.forEach((tagId) => {
@@ -43,7 +46,11 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
   });
 
   return (
-    <div className={pickRecordLayoutStyle}>
+    <div
+      className={pickRecordLayoutStyle}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <PickImageColumnLayout>
         <div className={pickImageStyle}>
           {link.imageUrl ? (
@@ -100,21 +107,13 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
         <div className={dateTextStyle}>{formatDateString(pick.updatedAt)}</div>
       </PickDateColumnLayout>
 
-      <div
-        style={{
-          position: 'absolute',
-          left: 0,
-          bottom: 0,
-          width: '30px',
-          height: '30px',
-          backgroundColor: 'red',
-          cursor: 'pointer',
-        }}
-        onClick={openUrlInNewTab}
-        data-description={'나중에 hover시에 링크보여주기'}
-      >
-        link
-      </div>
+      {isHovered && (
+        <ExternalLinkIcon
+          className={externalLinkIconStyle}
+          onClick={openUrlInNewTab}
+          strokeWidth={1}
+        />
+      )}
     </div>
   );
 }
