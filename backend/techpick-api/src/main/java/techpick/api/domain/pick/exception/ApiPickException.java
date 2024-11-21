@@ -28,4 +28,8 @@ public class ApiPickException extends ApiException {
 	public static ApiPickException PICK_DELETE_NOT_ALLOWED() {
 		return new ApiPickException(ApiPickErrorCode.PICK_DELETE_NOT_ALLOWED);
 	}
+
+	public static ApiPickException PICK_TITLE_TOO_LONG() {
+		return new ApiPickException(ApiPickErrorCode.PICK_TITLE_TOO_LONG);
+	}
 }

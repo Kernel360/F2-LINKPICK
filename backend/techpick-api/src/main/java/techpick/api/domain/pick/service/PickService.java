@@ -78,7 +78,6 @@ public class PickService {
 		return pickMapper.toPickResult(pickDataHandler.savePick(command));
 	}
 
-	@Transactional
 	public PickResult.Pick updatePick(PickCommand.Update command) {
 		validatePickAccess(command.userId(), command.id());
 		validateFolderAccess(command.userId(), command.parentFolderId());

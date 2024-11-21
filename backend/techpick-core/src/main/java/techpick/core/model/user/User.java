@@ -75,8 +75,10 @@ public class User extends BaseEntity /* implements UserDetails --> 시큐리티 
 	@Column(name = "tag_order", columnDefinition = "longblob", nullable = false)
 	private List<Long> tagOrderList = new ArrayList<>();
 
-	public void updateTagOrderList(List<Long> tagOrderList) {
-		this.tagOrderList = tagOrderList;
+	public void updateTagOrderList(Long id, int destination) {
+		tagOrderList.remove(id);
+		int calculatedDestination = Math.min(destination, tagOrderList.size());
+		tagOrderList.add(calculatedDestination, id);
 	}
 
 	@Override

@@ -12,6 +12,9 @@ repositories {
 dependencies {
     implementation project(":techpick-core")
 
+    // Spring Retry 의존성 추가
+    implementation 'org.springframework.retry:spring-retry'
+
     // spring security and oauth client
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'

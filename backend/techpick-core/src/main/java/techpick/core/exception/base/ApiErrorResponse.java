@@ -20,8 +20,8 @@ public class ApiErrorResponse extends ResponseEntity<ApiErrorBody> {
 		return new ApiErrorResponse(apiErrorCode);
 	}
 
-	public static ApiErrorResponse VALIDATION_ERROR() {
-		return new ApiErrorResponse("VALIDATION ERROR", "DTO @Valid 검증 에러, 잘못된 값 입력", HttpStatus.BAD_REQUEST);
+	public static ApiErrorResponse VALIDATION_ERROR(String message) {
+		return new ApiErrorResponse("VALIDATION ERROR", message, HttpStatus.BAD_REQUEST);
 	}
 
 	public static ApiErrorResponse UNKNOWN_SERVER_ERROR() {

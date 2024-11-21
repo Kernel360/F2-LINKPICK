@@ -19,7 +19,9 @@ public enum ApiPickErrorCode implements ApiErrorCode {
 	PICK_UNAUTHORIZED_ROOT_ACCESS
 		("PK-003", HttpStatus.UNAUTHORIZED, "잘못된 Pick 접근, 폴더가 아닌 Root에 접근", ErrorLevel.SHOULD_NOT_HAPPEN()),
 	PICK_DELETE_NOT_ALLOWED
-		("PK-004", HttpStatus.NOT_ACCEPTABLE, "휴지통이 아닌 폴더에서 픽 삭제는 허용되지 않음.", ErrorLevel.SHOULD_NOT_HAPPEN()),
+		("PK-004", HttpStatus.NOT_ACCEPTABLE, "휴지통이 아닌 폴더에서 픽 삭제는 허용되지 않음", ErrorLevel.SHOULD_NOT_HAPPEN()),
+	PICK_TITLE_TOO_LONG
+		("PK-005", HttpStatus.BAD_REQUEST, "픽 제목이 허용된 최대 길이를 초과했습니다", ErrorLevel.CAN_HAPPEN()),
 	;
 
 	private final String code;

@@ -3,6 +3,9 @@ package techpick.api.infrastructure.pick;
 import java.util.Comparator;
 import java.util.List;
 
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -104,7 +107,9 @@ public class PickDataHandler {
 			});
 
 		Pick savedPick = pickRepository.save(pickMapper.toEntity(command, user, folder, link));
-		savedPick.getParentFolder().addChildPickIdOrdered(savedPick.getId());
+		Folder parentFolder = savedPick.getParentFolder();
+		attachPickToParentFolder(savedPick, parentFolder);
+
 		List<PickTag> pickTagList = tagRepository.findAllById(command.tagIdOrderedList())
 			.stream()
 			.map(tag -> PickTag.of(savedPick, tag))
@@ -114,13 +119,28 @@ public class PickDataHandler {
 		return savedPick;
 	}
 
+	/**
+	 * 부모 폴더 픽 리스트에서 pick 제거 후
+	 * 이동하는 폴더 픽 리스트에 pick 추가
+	 */
+	@Retryable(
+		value = {ObjectOptimisticLockingFailureException.class},
+		maxAttempts = 3,
+		backoff = @Backoff(delay = 100)
+	)
 	@Transactional
 	public Pick updatePick(PickCommand.Update command) {
-		Pick pick = getPick(command.id());
+		Pick pick = pickRepository.findByIdForUpdate(command.id()).orElseThrow(ApiPickException::PICK_NOT_FOUND);
 		pick.updateTitle(command.title());
+
 		if (command.parentFolderId() != null) {
-			pick.updateParentFolder(
-				folderRepository.findById(command.parentFolderId()).orElseThrow(ApiFolderException::FOLDER_NOT_FOUND));
+			Folder parentFolder = pick.getParentFolder();
+			Folder destinationFolder = folderRepository.findById(command.parentFolderId())
+				.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+
+			detachPickFromParentFolder(pick, parentFolder);
+			attachPickToParentFolder(pick, destinationFolder);
+			updatePickParentFolder(pick, destinationFolder);
 		}
 		if (command.tagIdOrderedList() != null) {
 			updateNewTagIdList(pick, command.tagIdOrderedList());
@@ -133,7 +153,7 @@ public class PickDataHandler {
 		List<Long> pickIdList = command.idList();
 		Folder folder = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
-		folder.updateChildPickIdOrderedList(pickIdList, command.orderIdx());
+		movePickListToDestinationFolder(pickIdList, folder, command.orderIdx());
 	}
 
 	@Transactional
@@ -141,39 +161,42 @@ public class PickDataHandler {
 		List<Long> pickIdList = command.idList();
 		Folder destinationFolder = folderRepository.findById(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
-		destinationFolder.updateChildPickIdOrderedList(pickIdList, command.orderIdx());
 
-		for (Long pickId : pickIdList) {
-			Pick pick = getPick(pickId);
-			pick.getParentFolder().removeChildPickOrder(pickId);
-			pick.updateParentFolder(destinationFolder);
-		}
+		List<Pick> pickList = pickRepository.findAllById(pickIdList);
+		pickList.forEach(pick -> {
+			detachPickFromParentFolder(pick, pick.getParentFolder());
+			updatePickParentFolder(pick, destinationFolder);
+		});
+
+		movePickListToDestinationFolder(pickIdList, destinationFolder, command.orderIdx());
 	}
 
 	@Transactional
 	public void movePickListToRecycleBin(Long userId, List<Long> pickIdList) {
-		// 휴지통에 픽 추가
 		Folder recycleBin = folderRepository.findRecycleBinByUserId(userId);
-		recycleBin.getChildPickIdOrderedList().addAll(0, pickIdList);
 
 		// 픽들의 부모를 휴지통으로 변경
 		List<Pick> pickList = pickRepository.findAllById(pickIdList);
-		pickList.forEach(pick -> pick.updateParentFolder(recycleBin));
+		pickList.forEach(pick -> {
+			attachPickToParentFolder(pick, recycleBin);
+			updatePickParentFolder(pick, recycleBin);
+		});
 	}
 
 	@Transactional
 	public void deletePickList(PickCommand.Delete command) {
 		List<Long> pickIdList = command.idList();
-		for (Long pickId : pickIdList) {
-			Pick pick = getPick(pickId);
-			pick.getParentFolder().removeChildPickOrder(pickId);
+		List<Pick> pickList = pickRepository.findAllById(pickIdList);
+
+		pickList.forEach(pick -> {
+			detachPickFromParentFolder(pick, pick.getParentFolder());
 			pickTagRepository.deleteByPick(pick);
 			pickRepository.delete(pick);
-		}
+		});
 	}
 
 	@Transactional
-	public void attachTagToPick(Pick pick, Long tagId) {
+	public void attachTagToPickTag(Pick pick, Long tagId) {
 		Tag tag = tagRepository.findById(tagId)
 			.orElseThrow(ApiTagException::TAG_NOT_FOUND);
 		PickTag pickTag = PickTag.of(pick, tag);
@@ -181,20 +204,41 @@ public class PickDataHandler {
 	}
 
 	@Transactional
-	public void detachTagFromPick(Pick pick, Long tagId) {
-		pickTagRepository.deleteByPickAndTagId(pick, tagId);
+	public void detachTagFromPickTag(Pick pick, Long tagId) {
+		pickTagRepository.findByPickAndTagId(pick, tagId)
+			.ifPresent(pickTagRepository::delete);
+	}
+
+	// 부모 폴더의 픽 리스트에 추가
+	private void attachPickToParentFolder(Pick pick, Folder folder) {
+		folder.addChildPickIdOrdered(pick.getId());
+	}
+
+	// 부모 폴더의 픽 리스트에서 제거
+	private void detachPickFromParentFolder(Pick pick, Folder folder) {
+		folder.removeChildPickIdOrdered(pick.getId());
+	}
+
+	// 픽의 부모 폴더 변경
+	private void updatePickParentFolder(Pick pick, Folder folder) {
+		pick.updateParentFolder(folder);
+	}
+
+	// 픽 리스트 순서를 유지한 채 목적지 폴더로 이동
+	private void movePickListToDestinationFolder(List<Long> pickIdList, Folder folder, int orderIdx) {
+		folder.updateChildPickIdOrderedList(pickIdList, orderIdx);
 	}
 
 	private void updateNewTagIdList(Pick pick, List<Long> newTagOrderList) {
 		// 1. 기존 태그와 새로운 태그를 비교하여 없어진 태그를 PickTag 테이블에서 제거
 		pick.getTagIdOrderedList().stream()
 			.filter(tagId -> !newTagOrderList.contains(tagId))
-			.forEach(tagId -> detachTagFromPick(pick, tagId));
+			.forEach(tagId -> detachTagFromPickTag(pick, tagId));
 
 		// 2. 새로운 태그 중 기존에 없는 태그를 PickTag 테이블에 추가
 		newTagOrderList.stream()
 			.filter(tagId -> !pick.getTagIdOrderedList().contains(tagId))
-			.forEach(tagId -> attachTagToPick(pick, tagId));
+			.forEach(tagId -> attachTagToPickTag(pick, tagId));
 
 		pick.updateTagOrderList(newTagOrderList);
 	}

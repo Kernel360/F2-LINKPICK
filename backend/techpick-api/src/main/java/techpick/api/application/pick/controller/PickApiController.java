@@ -1,6 +1,7 @@
 package techpick.api.application.pick.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +22,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import techpick.api.application.pick.dto.PickApiMapper;
 import techpick.api.application.pick.dto.PickApiRequest;
 import techpick.api.application.pick.dto.PickApiResponse;
 import techpick.api.application.pick.dto.PickSliceResponse;
 import techpick.api.domain.pick.dto.PickResult;
+import techpick.api.domain.pick.exception.ApiPickException;
 import techpick.api.domain.pick.service.PickSearchService;
 import techpick.api.domain.pick.service.PickService;
 import techpick.security.annotation.LoginUserId;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/picks")
@@ -108,6 +112,10 @@ public class PickApiController {
 	})
 	public ResponseEntity<PickApiResponse.Pick> savePick(@LoginUserId Long userId,
 		@Valid @RequestBody PickApiRequest.Create request) {
+		if (!Objects.isNull(request.title()) && 200 < request.title().length()) {
+			throw ApiPickException.PICK_TITLE_TOO_LONG();
+		}
+
 		return ResponseEntity.ok(
 			pickApiMapper.toApiResponse(pickService.saveNewPick(pickApiMapper.toCreateCommand(userId, request))));
 	}
@@ -119,6 +127,10 @@ public class PickApiController {
 	})
 	public ResponseEntity<PickApiResponse.Pick> updatePick(@LoginUserId Long userId,
 		@Valid @RequestBody PickApiRequest.Update request) {
+		if (!Objects.isNull(request.title()) && 200 < request.title().length()) {
+			throw ApiPickException.PICK_TITLE_TOO_LONG();
+		}
+
 		return ResponseEntity.ok(
 			pickApiMapper.toApiResponse(pickService.updatePick(pickApiMapper.toUpdateCommand(userId, request))));
 	}
