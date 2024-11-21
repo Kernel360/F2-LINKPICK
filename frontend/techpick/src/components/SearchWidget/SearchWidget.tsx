@@ -119,7 +119,9 @@ export function SearchWidget() {
         return;
       }
       const lastWordToken = inputTokenizer.tokenize(input).getLastToken();
-      lastWordToken && setTokenInputContext(lastWordToken);
+      if (lastWordToken) {
+        setTokenInputContext(lastWordToken);
+      }
     },
     [input, inputTokenizer]
   );
