@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
 
 export const selectedDragItemStyle = style({
-  backgroundColor: colorVars.primary,
+  backgroundColor: colorVars.gold3,
   userSelect: 'none',
 });
 

@@ -23,6 +23,7 @@ export const ListViewerLayout = style({
 export const ListViewerHeaderLayout = style({
   display: 'flex',
   flexDirection: 'column',
+  maxWidth: '1116px',
   borderBottom: `2px solid ${colorVars.neutral}`,
 });
 

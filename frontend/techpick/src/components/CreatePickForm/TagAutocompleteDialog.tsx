@@ -8,7 +8,6 @@ import {
   SelectedTagListLayout,
 } from '@/components';
 import { DeselectTagButton } from '@/components/CreatePickForm/DeselectTagButton';
-import { TagInfoEditPopoverButton } from '@/components/TagPicker/TagInfoEditPopoverButton';
 import { useThemeStore, useTagStore } from '@/stores';
 import { notifyError, numberToRandomColor } from '@/utils';
 import {
@@ -25,6 +24,7 @@ import {
   CREATABLE_TAG_KEYWORD,
   getRandomInt,
 } from './TagAutocompleteDialog.lib';
+import { TagInfoEditPopoverButton } from './TagInfoEditPopoverButton';
 import { TagType } from '@/types';
 
 export function TagAutocompleteDialog({

@@ -7,7 +7,7 @@ export function PickDraggableListLayout({
   children,
 }: PickViewDraggableItemListLayoutComponentProps) {
   return (
-    <div>
+    <div style={{ width: 'fit-content' }}>
       <PickListSortableContextProvider folderId={folderId} viewType={viewType}>
         {children}
       </PickListSortableContextProvider>

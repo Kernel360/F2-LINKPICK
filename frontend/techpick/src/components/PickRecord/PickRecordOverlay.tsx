@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
 import { useOpenUrlInNewTab } from '@/hooks';
@@ -16,7 +15,7 @@ import {
   dateTextStyle,
   externalLinkIconStyle,
   linkLayoutStyle,
-} from './pickRecord.css';
+} from './pickRecordOverlay.css';
 import { PickRecordTitleInput } from './PickRecordTitleInput';
 import { PickTagColumnLayout } from './PickTagColumnLayout';
 import { PickTitleColumnLayout } from './PickTitleColumnLayout';
@@ -24,7 +23,7 @@ import { Separator } from './Separator';
 import { TagPicker } from '../TagPicker';
 import { PickViewItemComponentProps, TagType } from '@/types';
 
-export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
+export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
   const pick = pickInfo;
   const link = pickInfo.linkInfo;
   const { findTagById } = useTagStore();
@@ -35,9 +34,8 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
     setCurrentPickIdToNull,
     setCurrentUpdatePickId,
   } = useUpdatePickStore();
-  const [isHovered, setIsHovered] = useState(false);
+
   const isUpdateTitle = currentUpdatePickId === pickInfo.id;
-  const { isDragging } = usePickStore();
 
   const filteredSelectedTagList: TagType[] = [];
 
@@ -49,11 +47,7 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
   });
 
   return (
-    <div
-      className={pickRecordLayoutStyle}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div className={pickRecordLayoutStyle}>
       <PickImageColumnLayout>
         <div className={pickImageStyle}>
           {link.imageUrl ? (
@@ -63,11 +57,9 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
           )}
         </div>
       </PickImageColumnLayout>
-      {isHovered && !isDragging && (
-        <div className={linkLayoutStyle} onClick={openUrlInNewTab}>
-          <ExternalLinkIcon className={externalLinkIconStyle} strokeWidth={2} />
-        </div>
-      )}
+      <div className={linkLayoutStyle} onClick={openUrlInNewTab}>
+        <ExternalLinkIcon className={externalLinkIconStyle} strokeWidth={2} />
+      </div>
 
       <Separator />
 

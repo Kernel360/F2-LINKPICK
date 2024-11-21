@@ -10,6 +10,7 @@ export const pickRecordLayoutStyle = style({
   height: 'fit-content',
   border: '1px solid black',
   borderTop: 'none',
+  background: colorVars.gold3,
 });
 
 export const pickImageStyle = style({

@@ -43,15 +43,15 @@ export function FolderTreeHeader() {
           <div className={folderTreeHeaderTitleLayout}>
             <h1>정리함</h1>
           </div>
-          <PickToFolderDropZone folderId={basicFolderMap['ROOT'].id}>
-            <FolderLinkItem
-              href={ROUTES.FOLDERS_ROOT}
-              name="내 컬렉션"
-              icon={ArchiveIcon}
-              isSelected={isRootSelected}
-              isHovered={isRootFolderHover}
-            />
-          </PickToFolderDropZone>
+
+          <FolderLinkItem
+            href={ROUTES.FOLDERS_ROOT}
+            name="내 컬렉션"
+            icon={ArchiveIcon}
+            isSelected={isRootSelected}
+            isHovered={isRootFolderHover}
+          />
+
           <PickToFolderDropZone folderId={basicFolderMap['UNCLASSIFIED'].id}>
             <FolderLinkItem
               href={ROUTES.FOLDERS_UNCLASSIFIED}

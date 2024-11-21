@@ -31,10 +31,16 @@ export const selectedDragItemStyle = style({
 });
 
 export const dragOverItemStyle = style({
-  backgroundColor: colorVars.primaryFaded,
+  backgroundColor: colorVars.neutral,
 });
 
 export const FolderIconStyle = style({
   width: '20px',
   flexShrink: 0,
+});
+
+export const folderTextStyle = style({
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+  textOverflow: 'ellipsis',
 });

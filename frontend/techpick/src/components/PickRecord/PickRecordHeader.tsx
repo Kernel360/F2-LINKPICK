@@ -1,7 +1,5 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-import { isCurrentPathRootOrGeneral } from '@/utils/isCurrentPathRootOrGeneral';
 import { PickDateColumnLayout } from './PickDateColumnLayout';
 import { PickImageColumnLayout } from './PickImageColumnLayout';
 import { pickRecordHeaderLayoutStyle } from './pickRecordHeader.css';
@@ -10,9 +8,7 @@ import { PickTitleColumnLayout } from './PickTitleColumnLayout';
 import { Separator } from './Separator';
 
 export function PickRecordHeader() {
-  return !isCurrentPathRootOrGeneral(usePathname()) ? (
-    <>{/* do not show record header */} </>
-  ) : (
+  return (
     <div className={pickRecordHeaderLayoutStyle}>
       <PickImageColumnLayout>
         <p>Image</p>

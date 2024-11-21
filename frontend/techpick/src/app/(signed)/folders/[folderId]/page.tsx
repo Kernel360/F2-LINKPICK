@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { DraggablePickListViewer } from '@/components';
+import { DraggablePickListViewer, PickRecordHeader } from '@/components';
+import { PickContentLayout } from '@/components/PickContentLayout';
 import { PickContextMenu } from '@/components/PickContextMenu';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
@@ -63,20 +64,23 @@ export default function FolderDetailPage() {
   const pickList = getOrderedPickListByFolderId(folderId);
 
   return (
-    <PickDraggableListLayout folderId={folderId} viewType="record">
-      {pickList.map((pickInfo) => {
-        return (
-          <PickContextMenu
-            basicFolderMap={basicFolderMap}
-            pickInfo={pickInfo}
-            key={pickInfo.id}
-            data-pick-draggable={true}
-          >
-            <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
-          </PickContextMenu>
-        );
-      })}
-    </PickDraggableListLayout>
+    <PickContentLayout>
+      <PickRecordHeader />
+      <PickDraggableListLayout folderId={folderId} viewType="record">
+        {pickList.map((pickInfo) => {
+          return (
+            <PickContextMenu
+              basicFolderMap={basicFolderMap}
+              pickInfo={pickInfo}
+              key={pickInfo.id}
+              data-pick-draggable={true}
+            >
+              <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
+            </PickContextMenu>
+          );
+        })}
+      </PickDraggableListLayout>
+    </PickContentLayout>
   );
 
   return (

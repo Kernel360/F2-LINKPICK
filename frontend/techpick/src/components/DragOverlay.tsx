@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react';
 import { DragOverlay as DndKitDragOverlay } from '@dnd-kit/core';
 import { usePickStore, useTreeStore } from '@/stores';
 import { pickDragOverlayStyle } from './dragOverlay.css';
-import { PickRecord } from './PickRecord';
+import { PickRecordOverlay } from './PickRecord/PickRecordOverlay';
 
 export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   const { isDragging: isFolderDragging, draggingFolderInfo } = useTreeStore();
@@ -74,9 +74,7 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   if (isPickDragging && draggingPickInfo) {
     return (
       <DndKitDragOverlay style={overlayStyle}>
-        <div>
-          <PickRecord pickInfo={draggingPickInfo}></PickRecord>
-        </div>
+        <PickRecordOverlay pickInfo={draggingPickInfo}></PickRecordOverlay>
       </DndKitDragOverlay>
     );
   }

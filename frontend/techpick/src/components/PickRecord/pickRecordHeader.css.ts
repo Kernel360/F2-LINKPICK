@@ -2,7 +2,9 @@ import { style } from '@vanilla-extract/css';
 
 export const pickRecordHeaderLayoutStyle = style({
   display: 'flex',
-  width: 'fit-content',
-  height: '20px',
-  borderBottom: '1px solid black',
+  alignItems: 'center',
+  width: '1044px',
+  height: '24px',
+  border: '1px solid black',
+  marginTop: '24px',
 });

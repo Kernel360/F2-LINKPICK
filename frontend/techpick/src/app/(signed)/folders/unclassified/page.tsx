@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
+import { PickRecordHeader } from '@/components';
+import { PickContentLayout } from '@/components/PickContentLayout';
 import { PickContextMenu } from '@/components/PickContextMenu';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
@@ -50,21 +52,24 @@ export default function UnclassifiedFolderPage() {
   );
 
   return (
-    <PickDraggableListLayout
-      folderId={basicFolderMap['UNCLASSIFIED'].id}
-      viewType="record"
-    >
-      {pickList.map((pickInfo) => {
-        return (
-          <PickContextMenu
-            basicFolderMap={basicFolderMap}
-            pickInfo={pickInfo}
-            key={pickInfo.id}
-          >
-            <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
-          </PickContextMenu>
-        );
-      })}
-    </PickDraggableListLayout>
+    <PickContentLayout>
+      <PickRecordHeader />
+      <PickDraggableListLayout
+        folderId={basicFolderMap['UNCLASSIFIED'].id}
+        viewType="record"
+      >
+        {pickList.map((pickInfo) => {
+          return (
+            <PickContextMenu
+              basicFolderMap={basicFolderMap}
+              pickInfo={pickInfo}
+              key={pickInfo.id}
+            >
+              <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
+            </PickContextMenu>
+          );
+        })}
+      </PickDraggableListLayout>
+    </PickContentLayout>
   );
 }
