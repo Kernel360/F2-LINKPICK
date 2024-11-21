@@ -77,8 +77,8 @@ export const googleLoginContainer = style({
   width: '220px',
   marginBottom: '18px',
   bottom: 0,
+  transition: 'all 0.3s ease',
   ':hover': {
-    transition: '0.3s ease',
     backgroundColor: colorVars.primary,
     border: `1px solid ${colorVars.primary}`,
   },
@@ -90,8 +90,8 @@ export const kakaoLoginContainer = style({
   boxShadow: `2px 2px 0px 0px ${subColor}`,
   width: '220px',
   marginBottom: '12px',
+  transition: 'all 0.3s ease',
   ':hover': {
-    transition: '0.3s ease',
     backgroundColor: colorVars.primary,
     border: `1px solid ${colorVars.primary}`,
   },

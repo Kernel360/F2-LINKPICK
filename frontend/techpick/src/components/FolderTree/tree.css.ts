@@ -1,13 +1,28 @@
 import { style } from '@vanilla-extract/css';
-import { colorVars, sizes, space } from 'techpick-shared';
+import { colorVars, sizes } from 'techpick-shared';
+
+export const horizontalResizingContainerLayout = style({
+  transition: 'width 0.2s', // Resizing에 애니메이션 적용
+});
+
+export const resizeHandleStyle = style({
+  backgroundColor: colorVars.backgroundNeutral,
+  outline: '16px solid transparent',
+  height: '100%',
+  transition: 'all 0.2s', // Resizing에 애니메이션 적용
+  selectors: {
+    '&:hover, &:active': {
+      boxShadow: `4px 0 8px -2px ${'#cbcbcb'}`,
+    },
+  },
+});
 
 export const treeLayout = style({
-  minWidth: sizes['6xs'],
   height: '100vh',
-  padding: space['8'],
+  padding: '12px 0 12px 12px',
   overflowY: 'scroll',
   backgroundColor: colorVars.backgroundNeutral,
-
+  // backgroundColor: colorVars.secondary,
   '@media': {
     'screen and (min-width: 1440px)': {
       minWidth: sizes['3xs'],

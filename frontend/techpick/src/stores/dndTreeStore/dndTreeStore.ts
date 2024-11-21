@@ -9,7 +9,7 @@ import {
   updateFolder,
   createFolder,
 } from '@/apis/folder';
-import getObjectEntries from '@/components/SearchWidget/util/getObjectEntries';
+import getObjectEntries from '@/components/Search/util/getObjectEntries';
 import { UNKNOWN_FOLDER_ID } from '@/constants';
 import { isFolderDraggableObject, reorderSortableIdList } from '@/utils';
 import { changeParentFolderId } from './utils/changeParentFolderId';

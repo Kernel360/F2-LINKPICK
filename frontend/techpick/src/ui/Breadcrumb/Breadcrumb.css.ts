@@ -7,14 +7,15 @@ export const breadcrumbListStyle = style({
   flexWrap: 'wrap',
   alignItems: 'center',
   overflowWrap: 'break-word',
-  fontSize: typography.fontSize['sm'],
-  lineHeight: typography.lineHeight['sm'],
+  color: colorVars.gray8,
+  fontSize: typography.fontSize['lg'],
+  lineHeight: typography.lineHeight['lg'],
+  fontWeight: typography.fontWeights['semibold'],
 });
 
 export const breadcrumbItemStyle = style({
   display: 'inline-flex',
   alignItems: 'center',
-  // gap: space['px'],
 });
 
 export const breadcrumbLinkStyle = style({

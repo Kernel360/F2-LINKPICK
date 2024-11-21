@@ -1,5 +1,3 @@
-'use client';
-
 import { PropsWithChildren, forwardRef } from 'react';
 import {
   buttonSizeVariants,
@@ -17,9 +15,9 @@ export const Button = forwardRef<
   PropsWithChildren<ButtonProps>
 >(function Button(
   {
-    size = 'md',
-    color = 'white',
-    background = 'primary',
+    size = 'lg',
+    color = 'default',
+    background = 'warning',
     wide = false,
     onClick,
     onKeyDown,

@@ -1,6 +1,3 @@
-export * from './Text';
-export * from './Button';
-export * from './Gap';
 export { DeferredComponent } from './DeferredComponent';
 export { SelectedTagItem } from './SelectedTagItem';
 export { SelectedTagListLayout } from './SelectedTagListLayout/SelectedTagListLayout';

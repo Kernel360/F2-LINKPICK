@@ -11,7 +11,7 @@ import type {
 
 type TagState = {
   tagList: TagType[];
-
+  selectedTagList: TagType[];
   fetchingTagState: {
     isError: boolean;
     isPending: boolean;
@@ -21,6 +21,8 @@ type TagState = {
 
 type TagAction = {
   fetchingTagList: () => Promise<void>;
+  selectTag: (tag: TagType) => void;
+  deselectTag: (tagId: TagType['id']) => void;
   createTag: (tagData: CreateTagRequestType) => Promise<TagType | undefined>;
   deleteTag: (tagId: TagType['id']) => Promise<void>;
   updateTag: (updatedTag: UpdateTagRequestType) => Promise<void>;
@@ -36,7 +38,7 @@ type TagAction = {
 
 const initialState: TagState = {
   tagList: [],
-
+  selectedTagList: [],
   fetchingTagState: { isError: false, isPending: false, data: [] },
 };
 
@@ -71,6 +73,25 @@ export const useTagStore = create<TagState & TagAction>()(
 
       return;
     },
+
+    selectTag: (tag: TagType) =>
+      set((state) => {
+        const exist = state.selectedTagList.some((t) => t.id === tag.id);
+
+        // 이미 선택된 태그인지 확인
+        if (exist) {
+          return;
+        }
+
+        state.selectedTagList.push(tag);
+      }),
+
+    deselectTag: (tagId) =>
+      set((state) => {
+        state.selectedTagList = state.selectedTagList.filter(
+          (t) => t.id !== tagId
+        );
+      }),
 
     createTag: async (tagData) => {
       try {

@@ -1,10 +1,13 @@
 'use client';
 
-import { FolderInputIcon, Trash2Icon } from 'lucide-react';
+import { Trash2Icon, ArchiveIcon } from 'lucide-react';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { FolderLinkItem } from './FolderLinkItem';
-import { folderTreeHeaderLayout, dividerStyle } from './folderTreeHeader.css';
+import {
+  folderTreeHeaderLayout,
+  folderTreeHeaderTitleLayout,
+} from './folderTreeHeader.css';
 import { PickToFolderDropZone } from './PickToFolderDropZone';
 
 export function FolderTreeHeader() {
@@ -18,6 +21,13 @@ export function FolderTreeHeader() {
     basicFolderMap && focusFolderId === basicFolderMap['RECYCLE_BIN'].id
   );
 
+  const isRootSelected = !!(
+    basicFolderMap && focusFolderId === basicFolderMap['ROOT'].id
+  );
+
+  const isRootFolderHover =
+    (basicFolderMap && basicFolderMap['ROOT'].id === hoverFolderId) ?? false;
+
   const isUnclassifiedFolderHover =
     (basicFolderMap && basicFolderMap['UNCLASSIFIED'].id === hoverFolderId) ??
     false;
@@ -29,12 +39,24 @@ export function FolderTreeHeader() {
   return (
     <div className={folderTreeHeaderLayout}>
       {basicFolderMap && (
-        <>
+        <div>
+          <div className={folderTreeHeaderTitleLayout}>
+            <h1>정리함</h1>
+          </div>
+          <PickToFolderDropZone folderId={basicFolderMap['ROOT'].id}>
+            <FolderLinkItem
+              href={ROUTES.FOLDERS_ROOT}
+              name="내 컬렉션"
+              icon={ArchiveIcon}
+              isSelected={isRootSelected}
+              isHovered={isRootFolderHover}
+            />
+          </PickToFolderDropZone>
           <PickToFolderDropZone folderId={basicFolderMap['UNCLASSIFIED'].id}>
             <FolderLinkItem
               href={ROUTES.FOLDERS_UNCLASSIFIED}
               name="미분류"
-              icon={FolderInputIcon}
+              icon={ArchiveIcon}
               isSelected={isUnclassifiedSelected}
               isHovered={isUnclassifiedFolderHover}
             />
@@ -48,9 +70,9 @@ export function FolderTreeHeader() {
               isHovered={isRecycleBinFolderHover}
             />
           </PickToFolderDropZone>
-        </>
+        </div>
       )}
-      <hr className={dividerStyle} />
+      {/*<hr className={dividerStyle} />*/}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { sizes, space } from 'techpick-shared';
+import { colorVars, sizes } from 'techpick-shared';
 
 export const pageContainerLayout = style({
   display: 'flex',
@@ -10,7 +10,6 @@ export const pageContainerLayout = style({
 export const ListViewerLayout = style({
   width: '100%',
   height: '100vh',
-  padding: space['32'],
   flexShrink: 1,
   minWidth: 0,
 
@@ -24,15 +23,19 @@ export const ListViewerLayout = style({
 export const ListViewerHeaderLayout = style({
   display: 'flex',
   flexDirection: 'column',
-  gap: space['12'],
-  marginBottom: space['16'],
+  borderBottom: `2px solid ${colorVars.neutral}`,
 });
 
-// search module
+// search module + add button
 export const ListViewerHeaderMainLayout = style({
-  maxWidth: sizes['2xl'],
-  minWidth: sizes['xs'],
+  padding: '24px 36px',
+  display: 'flex',
+  flexDirection: 'row',
+  width: '100%',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  transition: '0.3s ease',
 });
 
-// pathIndicator module
-export const ListViewerHeaderSubLayout = style({});
+// indicator module layout (title + location)
+export const ListViewerHeaderBodyLayout = style({});

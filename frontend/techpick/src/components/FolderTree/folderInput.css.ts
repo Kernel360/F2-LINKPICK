@@ -11,7 +11,7 @@ export const folderInputLayout = style({
 });
 
 export const labelStyle = style({
-  color: colorVars.textPrimary,
+  color: colorVars.primary,
   flexShrink: '0',
   flexGrow: '0',
 });

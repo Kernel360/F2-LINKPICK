@@ -3,12 +3,12 @@
 import { useRef, memo, KeyboardEvent, MouseEvent } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
+import { Button } from '@/components/Button/Button';
 import { PORTAL_CONTAINER_ID } from '@/constants';
 import { useTagStore, useDeleteTagDialogStore } from '@/stores';
+import { Text } from '@/ui/Text/Text';
 import { getElementById } from '@/utils';
-import { Button } from '../Button';
 import { Gap } from '../Gap';
-import { Text } from '../Text';
 import { dialogContentStyle, dialogOverlayStyle } from './DeleteTagDialog.css';
 
 export const DeleteTagDialog = memo(function DeleteTagDialog() {
