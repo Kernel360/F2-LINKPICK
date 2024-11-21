@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { FolderOpenIcon } from 'lucide-react';
-import { colorVars } from 'techpick-shared';
 import {
   indicatorBodyLayoutStyle,
   indicatorLayoutStyle,

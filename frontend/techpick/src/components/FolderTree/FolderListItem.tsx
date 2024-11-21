@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
-import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
