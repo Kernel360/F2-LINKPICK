@@ -11,16 +11,21 @@ export function PickRecordTitleInput({
   initialValue = '',
 }: PickRecordTitleInputProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const submitIfNotEmptyString = useCallback(() => {
-    const pickTitle = inputRef.current?.value.trim() ?? '';
+    const pickTitle = textAreaRef.current?.value.trim() ?? '';
     if (isEmptyString(pickTitle)) return;
 
     onSubmit(pickTitle);
   }, [onSubmit]);
 
-  const onEnter = (event: KeyboardEvent<HTMLInputElement>) => {
+  const onKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (event.key === 'Enter' && event.shiftKey) {
+      event.preventDefault();
+      return;
+    }
+
     if (event.key === 'Enter') {
       submitIfNotEmptyString();
     }
@@ -50,11 +55,11 @@ export function PickRecordTitleInput({
 
   useEffect(
     function initializeFolderInput() {
-      if (inputRef.current) {
-        inputRef.current.value = initialValue;
+      if (textAreaRef.current) {
+        textAreaRef.current.value = initialValue;
 
         // 타이밍 이슈 탓으로 인해 setTimeout 사용
-        setTimeout(() => inputRef.current?.focus(), 0);
+        setTimeout(() => textAreaRef.current?.focus(), 0);
       }
     },
     [initialValue]
@@ -62,10 +67,9 @@ export function PickRecordTitleInput({
 
   return (
     <div ref={containerRef} onClick={(e) => e.stopPropagation()}>
-      <input
-        type="text"
-        ref={inputRef}
-        onKeyDown={onEnter}
+      <textarea
+        ref={textAreaRef}
+        onKeyDown={onKeyDown}
         className={pickTitleInputStyle}
       />
     </div>

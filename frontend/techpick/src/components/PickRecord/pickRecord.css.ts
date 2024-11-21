@@ -26,12 +26,15 @@ export const pickEmptyImageStyle = style({
 export const pickTitleSectionStyle = style({
   fontSize: typography.fontSize['lg'],
   fontWeight: typography.fontWeights['light'],
-  height: '32px',
-  lineHeight: '32px',
+  height: '40px',
+  lineHeight: '20px',
   overflow: 'hidden',
-  whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
   cursor: 'pointer',
+  wordBreak: 'break-all',
+  display: '-webkit-box',
+  WebkitLineClamp: 2,
+  WebkitBoxOrient: 'vertical',
 });
 
 export const dateTextStyle = style({
