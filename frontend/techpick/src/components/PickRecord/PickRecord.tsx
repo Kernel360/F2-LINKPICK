@@ -36,6 +36,7 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
   } = useUpdatePickStore();
   const [isHovered, setIsHovered] = useState(false);
   const isUpdateTitle = currentUpdatePickId === pickInfo.id;
+
   const filteredSelectedTagList: TagType[] = [];
 
   pickInfo.tagIdOrderedList.forEach((tagId) => {
