@@ -9,7 +9,7 @@ export function PickRecordHeader() {
   return (
     <div className={pickRecordHeaderLayoutStyle}>
       <PickImageColumnLayout>
-        <div style={{ width: '48px' }}>Image</div>
+        <p>Image</p>
       </PickImageColumnLayout>
 
       <Separator />
