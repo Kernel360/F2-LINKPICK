@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import getObjectEntries from '@/components/SearchWidget/util/getObjectEntries';
+import getObjectEntries from '@/components/Search/util/getObjectEntries';
 import type {
   Prefix,
   TokenizerFactory,

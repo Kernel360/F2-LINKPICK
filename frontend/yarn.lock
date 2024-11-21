@@ -14061,6 +14061,7 @@ __metadata:
     "@radix-ui/react-dialog": "npm:^1.1.2"
     "@radix-ui/react-icons": "npm:1.3.0"
     "@radix-ui/react-popover": "npm:1.1.2"
+    "@radix-ui/react-select": "npm:^2.1.2"
     "@radix-ui/react-separator": "npm:^1.1.0"
     "@radix-ui/react-slot": "npm:^1.1.0"
     "@radix-ui/react-visually-hidden": "npm:^1.1.0"

@@ -2,16 +2,22 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { FolderOpenIcon } from 'lucide-react';
+import {
+  indicatorBodyLayoutStyle,
+  indicatorLayoutStyle,
+  indicatorTitleStyle,
+} from '@/components/FolderPathIndicator/CurrentPathIndicator.css';
+import { ROUTES } from '@/constants';
+import { useTreeStore } from '@/stores';
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from '@/components/Breadcrumb/Breadcumb';
-import { indicatorLayoutStyle } from '@/components/FolderPathIndicator/CurrentPathIndicator.css';
-import { ROUTES } from '@/constants';
-import { useTreeStore } from '@/stores';
+} from '@/ui/Breadcrumb/Breadcrumb';
+import { Text } from '@/ui/Text/Text';
 import { FolderType } from '@/types';
 
 /**
@@ -22,8 +28,8 @@ export function CurrentPathIndicator() {
   // next.js client component hook
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  // search module
-  // const { getSearchResult } = usePickStore();
+  // -------------------------------------------------------------
+  const [currentFolder, setCurrentFolder] = useState<FolderType | null>(null);
   const { getFolderInfoByFolderId } = useTreeStore();
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
   const [indicatorContext, setIndicatorContext] = useState<
@@ -33,14 +39,10 @@ export function CurrentPathIndicator() {
   useEffect(
     function getCurrentPathContext() {
       setIndicatorContext(pathname === ROUTES.SEARCH ? 'SEARCH' : 'SELECT');
+      setCurrentFolder(getFolderByPathname(pathname));
     },
     [pathname, searchParams]
   );
-
-  const getFolderListFromRoot = () => {
-    const currentFolder = getFolderByPathname(pathname);
-    return getFullFolderPathFromLeaf(currentFolder);
-  };
 
   const getFolderByPathname = (pathname: string): FolderType | null => {
     if (!basicFolderMap) return null;
@@ -50,6 +52,8 @@ export function CurrentPathIndicator() {
         return basicFolderMap.UNCLASSIFIED;
       case ROUTES.FOLDERS_RECYCLE_BIN:
         return basicFolderMap.RECYCLE_BIN;
+      case ROUTES.FOLDERS_ROOT:
+        return basicFolderMap.ROOT;
       default:
         return getFolderInfoByFolderId(
           parseInt(pathname.substring(pathname.lastIndexOf('/') + 1))
@@ -62,7 +66,7 @@ export function CurrentPathIndicator() {
     const pathListFromLeaf: FolderType[] = [];
 
     let currentFolder = getFolderInfoByFolderId(leaf.id);
-    while (currentFolder?.parentFolderId) {
+    while (currentFolder) {
       pathListFromLeaf.push(currentFolder);
       currentFolder = getFolderInfoByFolderId(currentFolder.parentFolderId);
     }
@@ -71,8 +75,31 @@ export function CurrentPathIndicator() {
 
   return (
     <div className={indicatorLayoutStyle}>
+      {/* -----------------------------------------------------------*/}
+      {/* TODO: 검색 결과에 대한 뷰는 다르게 할 것.*/}
+      {/* -----------------------------------------------------------*/}
+      {/* 폴더 선택에 대한 뷰 */}
       {indicatorContext === 'SELECT' && (
-        <PathIndicator folderListFromParentToChild={getFolderListFromRoot()} />
+        <>
+          {/*<div style={{ backgroundColor: colorVars.gray3, height: '140px' }}>*/}
+          {/*currentFolder.image*/}
+          {/*</div>*/}
+          {currentFolder?.folderType === 'GENERAL' && (
+            <div className={indicatorBodyLayoutStyle}>
+              <div className={indicatorTitleStyle}>
+                <FolderOpenIcon size={28} />
+                <Text size={'4xl'} weight={'regular'}>
+                  {currentFolder?.name}
+                </Text>
+              </div>
+              <PathIndicator
+                folderListFromParentToChild={getFullFolderPathFromLeaf(
+                  currentFolder
+                )}
+              />
+            </div>
+          )}
+        </>
       )}
     </div>
   );
@@ -84,18 +111,51 @@ interface PathIndicatorProps {
 }
 
 export function PathIndicator(props: PathIndicatorProps) {
+  const getFolderLinkByType = (folder: FolderType) => {
+    switch (folder.folderType) {
+      case 'ROOT':
+        return (
+          <BreadcrumbLink href={`${ROUTES.FOLDERS_ROOT}`}>
+            {'내 컬렉션'}
+          </BreadcrumbLink>
+        );
+      case 'UNCLASSIFIED':
+        return (
+          <BreadcrumbLink href={`${ROUTES.FOLDERS_UNCLASSIFIED}`}>
+            {'미분류'}
+          </BreadcrumbLink>
+        );
+      case 'RECYCLE_BIN':
+        return (
+          <BreadcrumbLink href={`${ROUTES.FOLDERS_RECYCLE_BIN}`}>
+            {'휴지통'}
+          </BreadcrumbLink>
+        );
+      default:
+        return (
+          <BreadcrumbLink href={`${ROUTES.FOLDER_DETAIL(folder.id)}`}>
+            {folder.name}
+          </BreadcrumbLink>
+        );
+    }
+  };
+
   return (
-    <Breadcrumb>
-      <BreadcrumbList>
-        {props.folderListFromParentToChild.map((folder, idx, array) => (
-          <BreadcrumbItem key={idx}>
-            {idx < array.length && <BreadcrumbSeparator />}
-            <BreadcrumbLink href={`${ROUTES.FOLDER_DETAIL(folder.id)}`}>
-              {folder.name}
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        ))}
-      </BreadcrumbList>
-    </Breadcrumb>
+    <div>
+      <Breadcrumb>
+        <BreadcrumbList>
+          {props.folderListFromParentToChild.map((folder, idx, array) => (
+            <BreadcrumbItem key={idx}>
+              {0 < idx && idx < array.length && (
+                <BreadcrumbSeparator>
+                  {/* defaults to '>' */}
+                </BreadcrumbSeparator>
+              )}
+              {getFolderLinkByType(folder)}
+            </BreadcrumbItem>
+          ))}
+        </BreadcrumbList>
+      </Breadcrumb>
+    </div>
   );
 }

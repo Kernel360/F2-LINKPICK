@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { isSelectionActive } from '@/utils';
@@ -16,8 +17,9 @@ import {
 import type { FolderMapType } from '@/types';
 
 export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
-  const { folderId: urlFolderId } = useParams<{ folderId: string }>();
   const router = useRouter();
+
+  const { folderId: urlFolderId } = useParams<{ folderId: string }>();
   const {
     treeDataMap,
     selectedFolderList,
@@ -89,6 +91,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
         href={ROUTES.FOLDER_DETAIL(id)}
         isSelected={isSelected}
         isHovered={isHover}
+        icon={isSelected ? FolderOpenIcon : FolderClosedIcon}
         name={name}
         onClick={(event) => handleClick(id, event)}
       />

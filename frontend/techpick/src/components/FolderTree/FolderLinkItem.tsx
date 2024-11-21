@@ -7,7 +7,6 @@ import {
   FolderIconStyle,
   dragOverItemStyle,
 } from './folderLinkItem.css';
-import { Text } from '../Text';
 
 export function FolderLinkItem({
   name,
@@ -24,7 +23,7 @@ export function FolderLinkItem({
         onClick={onClick}
       >
         <IconComponent className={FolderIconStyle} />
-        <Text>{name}</Text>
+        {name}
       </div>
     </Link>
   );

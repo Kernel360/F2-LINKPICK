@@ -8,7 +8,7 @@ import {
   breadcrumbListStyle,
   breadcrumbPageStyle,
   breadcrumbSeparatorStyle,
-} from '@/components/Breadcrumb/Breadcrumb.css';
+} from '@/ui/Breadcrumb/Breadcrumb.css';
 
 const Breadcrumb = React.forwardRef<
   HTMLElement,

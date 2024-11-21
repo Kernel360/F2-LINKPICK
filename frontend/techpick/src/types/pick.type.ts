@@ -39,3 +39,15 @@ export type SelectedPickIdListType = number[];
 
 export type MovePicksRequestType =
   components['schemas']['techpick.api.application.pick.dto.PickApiRequest$Move'];
+
+type ConcreteType<Type> = {
+  [Property in keyof Type]-?: Type[Property];
+};
+
+export type CreatePickRequestType = ConcreteType<
+  components['schemas']['techpick.api.application.pick.dto.PickApiRequest$Create']
+>;
+
+export type CreatePickResponseType = ConcreteType<
+  components['schemas']['techpick.api.application.pick.dto.PickApiResponse$Pick']
+>;

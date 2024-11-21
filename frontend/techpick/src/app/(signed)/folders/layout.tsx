@@ -4,14 +4,15 @@ import {
   FolderAndPickDndContextProvider,
   PickRecordHeader,
 } from '@/components';
+import { CreatePickPopover } from '@/components/CreatePickPopover/CreatePickPopover';
 import { CurrentPathIndicator } from '@/components/FolderPathIndicator/CurrentPathIndicator';
-import { SearchWidget } from '@/components/SearchWidget/SearchWidget';
+import { Search } from '@/components/Search/Search';
 import {
   pageContainerLayout,
   ListViewerLayout,
   ListViewerHeaderLayout,
   ListViewerHeaderMainLayout,
-  ListViewerHeaderSubLayout,
+  ListViewerHeaderBodyLayout,
 } from './layout.css';
 
 export default function FolderLayout({ children }: PropsWithChildren) {
@@ -22,9 +23,10 @@ export default function FolderLayout({ children }: PropsWithChildren) {
         <div className={ListViewerLayout}>
           <div className={ListViewerHeaderLayout}>
             <div className={ListViewerHeaderMainLayout}>
-              <SearchWidget />
+              <Search />
+              <CreatePickPopover />
             </div>
-            <div className={ListViewerHeaderSubLayout}>
+            <div className={ListViewerHeaderBodyLayout}>
               <Suspense>
                 <CurrentPathIndicator />
               </Suspense>

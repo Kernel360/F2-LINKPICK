@@ -18,11 +18,11 @@ import {
   listItemStyle,
   searchWidgetLayoutStyle,
   searchWidgetWidth,
-} from '@/components/SearchWidget/SearchWidget.css';
-import { getStringTokenizer } from '@/components/SearchWidget/util';
-import createQueryParameter from '@/components/SearchWidget/util/createQueryParameter';
-import { PrefixPatternBuilder } from '@/components/SearchWidget/util/tokenizer/PrefixPatternBuilder';
-import { Token } from '@/components/SearchWidget/util/tokenizer/PrefixTokenizer.type';
+} from '@/components/Search/Search.css';
+import { getStringTokenizer } from '@/components/Search/util';
+import createQueryParameter from '@/components/Search/util/createQueryParameter';
+import { PrefixPatternBuilder } from '@/components/Search/util/tokenizer/PrefixPatternBuilder';
+import { Token } from '@/components/Search/util/tokenizer/PrefixTokenizer.type';
 import { SelectedFolderItem } from '@/components/SelectedFolderItem';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
@@ -70,13 +70,13 @@ export function TokenLabel(props: TokenLabelProps) {
   );
 }
 
-export function SearchWidget() {
+export function Search() {
   // next.js client component hook
   const pathname = usePathname();
   const router = useRouter();
   // fetched user data for auto-completion
   const { tagList, fetchingTagList } = useTagStore();
-  const { getFolderList, getFolders } = useTreeStore();
+  const { getFolderList } = useTreeStore();
   // tokenizer + text input
   const [input, setInput] = useState('');
   const inputRef = useRef<TokenInputRef>(null);
@@ -106,10 +106,9 @@ export function SearchWidget() {
   useEffect(
     function loadTagAndFolderList() {
       fetchingTagList();
-      getFolders();
       syncSearchInputStateWithUrl();
     },
-    [pathname, fetchingTagList, getFolders]
+    [pathname, fetchingTagList]
   );
 
   useEffect(
