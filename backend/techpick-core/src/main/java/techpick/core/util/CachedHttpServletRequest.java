@@ -43,7 +43,15 @@ public class CachedHttpServletRequest extends HttpServletRequestWrapper {
 
 	public CachedHttpServletRequest(HttpServletRequest request) throws IOException {
 		super(request);
-		cachedBody = readBodyFromRequest(request);
+
+		// multipart file 요청이면 body 를 읽지 않음
+		if (isMultipartRequest(request)) {
+			cachedBody = "";
+		} else {
+			cachedBody = readBodyFromRequest(request);
+			infoMap.put("requestBody", cachedBody);
+		}
+
 		// 추가로 로깅하려는 내용은 여기에 추가해주세요
 		infoMap.put("requestURI", request.getRequestURI());
 		infoMap.put("method", request.getMethod());
@@ -51,11 +59,18 @@ public class CachedHttpServletRequest extends HttpServletRequestWrapper {
 		infoMap.put("requestTime", LocalDateTime.now().toString());
 		Map<String, String> cookieMap = new HashMap<>();
 		for (Cookie cookie : request.getCookies()) {
-			cookieMap.put(cookie.getName(), cookie.getValue());
+			// JSESSIONID 와 access_token 은 로깅하지 않음
+			if (!cookie.getName().equals("JSESSIONID") && !cookie.getName().equals("access_token")) {
+				cookieMap.put(cookie.getName(), cookie.getValue());
+			}
 		}
 		if (!cookieMap.isEmpty()) {
 			infoMap.put("cookies", cookieMap);
 		}
+	}
+
+	private boolean isMultipartRequest(HttpServletRequest request) {
+		return request.getContentType() != null && request.getContentType().toLowerCase().startsWith("multipart/");
 	}
 
 	private String readBodyFromRequest(HttpServletRequest request) throws IOException {
