@@ -29,7 +29,7 @@ export const fontWeightVariants = styleVariants({
 export type fontWeightVariantKeyTypes = keyof typeof fontWeightVariants;
 
 export const textStyle = style({
-  color: colorVars.color.font,
+  color: colorVars.text,
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
 });

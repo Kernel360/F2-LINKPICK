@@ -69,6 +69,9 @@ export const buttonBackgroundVariants = styleVariants({
   warning: {
     backgroundColor: colorVars.orange8,
   },
+  danger: {
+    backgroundColor: colorVars.red8,
+  },
 });
 
 export type buttonBackgroundVariantKeyTypes =
@@ -77,6 +80,7 @@ export type buttonBackgroundVariantKeyTypes =
 export const buttonStyle = style({
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'center',
   gap: '4px',
   cursor: 'pointer',
   borderRadius: '4px',
@@ -98,6 +102,14 @@ export const buttonStyle = style({
 
     '&[data-variant="warning"]:hover, &[data-variant="warning"]:focus': {
       backgroundColor: colorVars.orange10,
+    },
+
+    '&[data-variant="danger"]:hover, &[data-variant="danger"]:focus': {
+      backgroundColor: colorVars.red10,
+    },
+
+    '&[data-variant="secondary"]:hover, &[data-variant="secondary"]:focus': {
+      backgroundColor: colorVars.heavySecondary,
     },
   },
 });

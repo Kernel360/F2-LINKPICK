@@ -17,7 +17,7 @@ export function ShowDeleteTagDialogButton({
   };
 
   return (
-    <Button onClick={showDeleteTagDialog} size="xs" background="warning" wide>
+    <Button onClick={showDeleteTagDialog} size="xs" background="danger" wide>
       삭제
     </Button>
   );

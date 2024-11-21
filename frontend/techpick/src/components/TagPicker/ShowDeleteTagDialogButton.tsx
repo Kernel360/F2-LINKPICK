@@ -20,7 +20,7 @@ export function ShowDeleteTagDialogButton({
     <Button
       onClick={showDeleteTagDialog}
       size="xs"
-      background="warning"
+      background="danger"
       color="black"
       wide
     >

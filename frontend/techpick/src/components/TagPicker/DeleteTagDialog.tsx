@@ -56,7 +56,14 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
       <Dialog.Portal container={portalContainer}>
         <Dialog.Overlay className={dialogOverlayStyle} />
         <Dialog.Content className={dialogContentStyle}>
-          <Text>이 태그를 삭제하시겠습니까?</Text>
+          <Text size="sm" weight="regular">
+            이 태그를 삭제하시겠습니까?
+          </Text>
+
+          {/* <p style={{ fontSize: '14px' }}>
+            {' '}
+            dasdsadsa 이 태그를 삭제하시겠습니까?
+          </p> */}
 
           <VisuallyHidden.Root>
             <Dialog.Title>이 태그를 삭제하시겠습니까?</Dialog.Title>
@@ -70,7 +77,8 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
               onClick={DeleteTagByClick}
               onKeyDown={DeleteTagByEnterKey}
               size="xs"
-              background="warning"
+              background="danger"
+              color="white"
               wide
             >
               삭제
@@ -82,6 +90,8 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
                 onClick={closeDialog}
                 onKeyDown={closeDialogByEnterKey}
                 size="xs"
+                background="secondary"
+                color="white"
                 wide
               >
                 취소

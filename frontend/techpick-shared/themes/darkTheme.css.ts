@@ -120,6 +120,7 @@ export const darkTheme = createTheme(colorVars, {
   background: '#000',
   point: '#F4661E',
   softPoint: '#FBC6AC',
+  heavySecondary: '#2E2E2E',
 
   ...bronzeDark,
   ...goldDark,
