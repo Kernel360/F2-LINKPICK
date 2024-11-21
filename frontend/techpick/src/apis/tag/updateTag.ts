@@ -1,20 +1,15 @@
-import { apiClient } from '@/apis';
+import { apiClient } from '../apiClient';
+import { API_URLS } from '../apiConstants';
 import { UpdateTagRequestType, UpdateTagResponseType } from '@/types';
 
-// const findTargetTag = (
-//   tagList: UpdateTagResponseType,
-//   updateTag: TagUpdateType
-// ) => {
-//   const targetTag = tagList.filter((tag) => tag.tagId === updateTag.tagId);
-//   return targetTag;
-// };
-
 export const updateTag = async (updateTag: UpdateTagRequestType) => {
-  const response = await apiClient.put<UpdateTagResponseType>('tag', {
-    json: [updateTag],
-  });
+  const response = await apiClient.put<UpdateTagResponseType>(
+    API_URLS.UPDATE_TAGS,
+    {
+      json: [updateTag],
+    }
+  );
   const updatedTag = await response.json();
-  //const updatedTag = findTargetTag(totalTagList, updateTag);
 
   return updatedTag;
 };

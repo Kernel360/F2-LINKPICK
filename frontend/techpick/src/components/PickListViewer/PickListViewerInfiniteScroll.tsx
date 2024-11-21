@@ -4,11 +4,11 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 import { colorVars } from 'techpick-shared';
-import { PickRecord } from '@/components/PickListViewer/PickRecord';
 import {
   pickRecordListLayoutInlineStyle,
   RECORD_HEIGHT,
 } from '@/components/PickListViewer/pickRecordListLayout.css';
+import { PickSearchRecord } from '@/components/PickListViewer/PickSearchRecord';
 import { usePickStore } from '@/stores';
 import { PickListType } from '@/types';
 
@@ -44,7 +44,7 @@ export function PickListViewerInfiniteScroll(
     return (
       <div style={style}>
         {isItemLoaded(index) ? (
-          <PickRecord pickInfo={props.pickList[index]} />
+          <PickSearchRecord pickInfo={props.pickList[index]} />
         ) : (
           <BarLoader color={colorVars.gray3} />
         )}

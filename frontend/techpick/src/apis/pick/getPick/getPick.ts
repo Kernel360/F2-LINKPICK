@@ -1,12 +1,10 @@
 import { HTTPError } from 'ky';
 import { apiClient, returnErrorFromHTTPError } from '@/apis';
-import type { GetPickResponseType } from '../pickApi.type';
+import type { PickInfoType } from '@/types';
 
-export const getPick = async (pickId: number): Promise<GetPickResponseType> => {
+export const getPick = async (pickId: number): Promise<PickInfoType> => {
   try {
-    const response = await apiClient.get<GetPickResponseType>(
-      `picks/${pickId}`
-    );
+    const response = await apiClient.get<PickInfoType>(`picks/${pickId}`);
     const data = await response.json();
 
     return data;

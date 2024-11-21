@@ -8,11 +8,11 @@ export const pageContainerLayout = style({
 });
 
 export const ListViewerLayout = style({
-  display: 'flex',
-  flexDirection: 'column',
   width: '100%',
   height: '100vh',
   padding: space['32'],
+  flexShrink: 1,
+  minWidth: 0,
 
   '@media': {
     'screen and (min-width: 1440px)': {

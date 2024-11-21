@@ -1,11 +1,11 @@
 import { style, styleVariants } from '@vanilla-extract/css';
-import { colorVars, space } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 
 export const ListLayoutHeightVariants = styleVariants({
   fixed: {
     overflow: 'hidden',
     minHeight: '30px',
-    maxHeight: '60px',
+    maxHeight: '58px',
   },
   flexible: {
     overflow: 'visible',
@@ -19,8 +19,6 @@ export type ListLayoutHeightVariantKeyTypes =
 export const SelectedTagListLayoutFocusStyleVariant = styleVariants({
   focus: {
     border: `1px solid ${colorVars.color.inputBorderFocus}`,
-    borderTopLeftRadius: '4px',
-    borderTopRightRadius: '4px',
   },
   none: {},
 });
@@ -30,7 +28,9 @@ export type SelectedTagListLayoutFocusStyleVarianKeyTypes =
 
 export const SelectedTagListLayoutStyle = style({
   display: 'flex',
-  alignItems: 'center',
-  gap: space['4'],
+  gap: '4px',
   flexWrap: 'wrap',
+  padding: '4px',
+  width: '288px',
+  overflowY: 'scroll',
 });

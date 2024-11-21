@@ -1,5 +1,9 @@
 import { PropsWithChildren, Suspense } from 'react';
-import { FolderTree, FolderAndPickDndContextProvider } from '@/components';
+import {
+  FolderTree,
+  FolderAndPickDndContextProvider,
+  PickRecordHeader,
+} from '@/components';
 import { CurrentPathIndicator } from '@/components/FolderPathIndicator/CurrentPathIndicator';
 import { SearchWidget } from '@/components/SearchWidget/SearchWidget';
 import {
@@ -26,6 +30,7 @@ export default function FolderLayout({ children }: PropsWithChildren) {
               </Suspense>
             </div>
           </div>
+          <PickRecordHeader />
           {children}
         </div>
       </FolderAndPickDndContextProvider>
