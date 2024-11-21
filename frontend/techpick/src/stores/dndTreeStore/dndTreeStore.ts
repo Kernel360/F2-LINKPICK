@@ -294,21 +294,13 @@ export const useTreeStore = create<TreeState & TreeAction>()(
        * @description 나중에 dfs로 휴지통으로 픽들 이동.
        */
       moveFolderToRecycleBin: async ({ deleteFolderId }) => {
-        let parentFolderId = UNKNOWN_FOLDER_ID;
-        let prevChildFolderList: ChildFolderListType = [];
-        /**
-         * @description - 나중에 dfs로 휴지통으로 픽들 이동
-         */
-        // let recycleBinFolderId = UNKNOWN_FOLDER_ID;
+        const parentFolderId = get().treeDataMap[deleteFolderId].parentFolderId;
+        const prevChildFolderList =
+          get().treeDataMap[deleteFolderId].childFolderIdOrderedList;
 
         set((state) => {
-          parentFolderId = state.treeDataMap[deleteFolderId].parentFolderId;
-          const childFolderList =
-            state.treeDataMap[parentFolderId].childFolderIdOrderedList;
           state.treeDataMap[parentFolderId].childFolderIdOrderedList =
-            childFolderList.filter((childId) => childId !== deleteFolderId);
-
-          prevChildFolderList = [...childFolderList];
+            prevChildFolderList.filter((childId) => childId !== deleteFolderId);
         });
 
         // set((state) => {
@@ -320,10 +312,12 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         try {
           await deleteFolder([deleteFolderId]);
         } catch {
-          set((state) => {
-            state.treeDataMap[parentFolderId].childFolderIdOrderedList =
-              prevChildFolderList;
-          });
+          console.log('error catch!!!');
+
+          // set((state) => {
+          //   state.treeDataMap[parentFolderId].childFolderIdOrderedList =
+          //     prevChildFolderList;
+          // });
         }
       },
       selectSingleFolder: (folderId) => {
