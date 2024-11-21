@@ -12,4 +12,6 @@ public interface PickRepository extends JpaRepository<Pick, Long> {
 	Optional<Pick> findByUserIdAndLinkUrl(Long userId, String url);
 
 	Optional<Pick> findByUserAndLink(User user, Link link);
+
+	boolean existsByUserIdAndLink(Long userId, Link link);
 }

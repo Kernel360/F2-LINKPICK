@@ -79,6 +79,11 @@ public class PickDataHandler {
 		return pickTagRepository.findAllByPickId(pickId);
 	}
 
+	@Transactional(readOnly = true)
+	public boolean existsByUserIdAndLink(Long userId, Link link) {
+		return pickRepository.existsByUserIdAndLink(userId, link);
+	}
+
 	@Transactional
 	public Pick savePick(PickCommand.Create command) throws ApiPickException {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
