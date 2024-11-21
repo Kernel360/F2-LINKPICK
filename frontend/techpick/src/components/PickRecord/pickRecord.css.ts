@@ -4,17 +4,18 @@ import { colorVars, typography } from 'techpick-shared';
 export const pickRecordLayoutStyle = style({
   position: 'relative',
   display: 'flex',
+  alignItems: 'center',
   width: 'fit-content',
   minHeight: '60px',
   height: 'fit-content',
-  alignItems: 'center',
+  borderBottom: '1px solid black',
 });
 
 export const pickImageStyle = style({
   position: 'relative',
-  width: '48px',
-  height: '48px',
-  objectFit: 'cover',
+  width: '96px',
+  aspectRatio: '1280 / 630',
+  // objectFit: 'cover',
   borderRadius: '2px',
 });
 
