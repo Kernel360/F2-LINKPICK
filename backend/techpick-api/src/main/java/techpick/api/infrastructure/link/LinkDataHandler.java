@@ -23,6 +23,11 @@ public class LinkDataHandler {
 		return linkRepository.findByUrl(url).orElseThrow(ApiLinkException::LINK_NOT_FOUND);
 	}
 
+	@Transactional(readOnly = true)
+	public Optional<Link> getOptionalLink(String url) {
+		return linkRepository.findByUrl(url);
+	}
+
 	@Transactional
 	public Link saveLink(LinkInfo info) {
 		Optional<Link> link = linkRepository.findByUrl(info.url());
@@ -31,5 +36,15 @@ public class LinkDataHandler {
 			return link.get();
 		}
 		return linkRepository.save(linkMapper.of(info));
+	}
+
+	@Transactional
+	public Link saveLink(Link link) {
+		return linkRepository.save(link);
+	}
+
+	@Transactional(readOnly = true)
+	public boolean existsByUrl(String url) {
+		return linkRepository.existsByUrl(url);
 	}
 }
