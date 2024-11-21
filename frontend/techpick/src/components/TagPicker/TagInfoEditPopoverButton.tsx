@@ -1,7 +1,7 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { useFloating, shift } from '@floating-ui/react';
+import { RefObject, useRef, useState } from 'react';
+import { useFloating, shift, FloatingPortal } from '@floating-ui/react';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import DOMPurify from 'dompurify';
 import { useTagStore } from '@/stores';
@@ -17,6 +17,7 @@ import type { TagType } from '@/types';
 
 export function TagInfoEditPopoverButton({
   tag,
+  floatingPortalRootRef,
 }: TagInfoEditPopoverButtonProps) {
   const tagNameInputRef = useRef<HTMLInputElement | null>(null);
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
@@ -24,6 +25,7 @@ export function TagInfoEditPopoverButton({
 
   const { refs, floatingStyles } = useFloating({
     open: isPopoverOpen,
+    strategy: 'absolute',
     middleware: [shift({ padding: 4 })],
   });
 
@@ -84,13 +86,14 @@ export function TagInfoEditPopoverButton({
         }}
       />
       {isPopoverOpen && (
-        <>
+        <FloatingPortal root={floatingPortalRootRef}>
           <PopoverOverlay
             onClick={(e) => {
               closePopover();
               e.stopPropagation();
             }}
           />
+
           <form
             onSubmit={handleSubmit}
             className={tagInfoEditFormLayout}
@@ -114,7 +117,7 @@ export function TagInfoEditPopoverButton({
               </button>
             </VisuallyHidden.Root>
           </form>
-        </>
+        </FloatingPortal>
       )}
     </>
   );
@@ -122,4 +125,5 @@ export function TagInfoEditPopoverButton({
 
 interface TagInfoEditPopoverButtonProps {
   tag: TagType;
+  floatingPortalRootRef: RefObject<HTMLDivElement>;
 }

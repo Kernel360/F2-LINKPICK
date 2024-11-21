@@ -50,6 +50,8 @@ export function TagAutocompleteDialog({
     ],
   });
 
+  const tagAutocompleteDialogRef = useRef<HTMLDivElement>(null);
+
   const { tagList, fetchingTagState, createTag } = useTagStore();
   const { updatePickInfo } = usePickStore();
   const { isDarkMode } = useThemeStore();
@@ -119,6 +121,7 @@ export function TagAutocompleteDialog({
       container={container?.current ?? undefined}
       className={tagDialogPortalLayout}
       filter={filterCommandItems}
+      ref={tagAutocompleteDialogRef}
     >
       {/**선택한 태그 리스트 */}
       <div ref={refs.setReference}>
@@ -146,10 +149,11 @@ export function TagAutocompleteDialog({
         </SelectedTagListLayout>
       </div>
       {/**전체 태그 리스트 */}
+
       <Command.List
         className={tagListStyle}
         ref={refs.setFloating}
-        style={floatingStyles}
+        style={{ ...floatingStyles }}
       >
         {fetchingTagState.isPending && (
           <Command.Loading className={tagListLoadingStyle}>
@@ -171,7 +175,10 @@ export function TagAutocompleteDialog({
             keywords={[tag.name]}
           >
             <SelectedTagItem key={tag.id} tag={tag} />
-            <TagInfoEditPopoverButton tag={tag} />
+            <TagInfoEditPopoverButton
+              tag={tag}
+              floatingPortalRootRef={tagAutocompleteDialogRef}
+            />
           </Command.Item>
         ))}
 
