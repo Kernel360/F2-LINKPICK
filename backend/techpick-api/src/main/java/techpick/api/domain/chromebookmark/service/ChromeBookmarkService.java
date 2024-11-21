@@ -70,7 +70,7 @@ public class ChromeBookmarkService {
 
 		return new ChromeImportResult(ogTagUpdateUrls, alreadyExistBookmarks);
 	}
-	
+
 	private void validateFolderAccess(Long userId, Folder folder) {
 		if (!folder.getUser().getId().equals(userId)) {
 			throw ApiFolderException.FOLDER_ACCESS_DENIED();
@@ -119,9 +119,9 @@ public class ChromeBookmarkService {
 			pickDataHandler.savePick(mapper.toPickCreateCommand(userId, folder.getId(), bookmark));
 		}
 		for (ChromeFolder childFolder : chromeFolder.getChildFolderList()) {
-			// 부모폴더를 root 폴더로 지정
-			// 이후 n-depth 지원하면 현재 코드 주석처리하고 주석처리된 코드 사용
-			// DFS(userId, childFolder, folder, alreadyExistBookmarks, ogTagUpdateUrls);
+			// // n-depth 로 저장
+			// searchImportData(userId, childFolder, folder, alreadyExistBookmarks, ogTagUpdateUrls);
+			// 1-depth 로 저장
 			searchImportData(userId, childFolder, parentFolder, alreadyExistBookmarks, ogTagUpdateUrls);
 		}
 		// 자식폴더 전부 순회했는데, 빈 폴더이면 삭제
