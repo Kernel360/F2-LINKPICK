@@ -91,6 +91,7 @@ export function PickDraggableRecord({
       {...attributes}
       {...listeners}
       style={{ width: 'fit-content', ...style }}
+      data-pick-draggable={true} // 해당 data는 focus를 바꾸는 동작과 연관이 있습니다.
     >
       <div
         className={`${isSelected ? selectedDragItemStyle : ''} ${isActiveDragging ? isActiveDraggingItemStyle : ''}`}

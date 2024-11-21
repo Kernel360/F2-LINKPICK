@@ -7,6 +7,10 @@ import { PickContextMenu } from '@/components/PickContextMenu';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
 import { ROUTES } from '@/constants';
+import {
+  useResetPickFocusOnOutsideClick,
+  useClearSelectedPickIdsOnMount,
+} from '@/hooks';
 import { usePickStore, useTreeStore } from '@/stores';
 
 export default function FolderDetailPage() {
@@ -17,6 +21,8 @@ export default function FolderDetailPage() {
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
   const folderId = Number(stringFolderId);
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
+  useResetPickFocusOnOutsideClick();
+  useClearSelectedPickIdsOnMount();
 
   useEffect(
     function selectFolderId() {
@@ -64,6 +70,7 @@ export default function FolderDetailPage() {
             basicFolderMap={basicFolderMap}
             pickInfo={pickInfo}
             key={pickInfo.id}
+            data-pick-draggable={true}
           >
             <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
           </PickContextMenu>

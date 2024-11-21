@@ -4,6 +4,10 @@ import { useEffect } from 'react';
 import { PickContextMenu } from '@/components/PickContextMenu';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
+import {
+  useClearSelectedPickIdsOnMount,
+  useResetPickFocusOnOutsideClick,
+} from '@/hooks';
 import { usePickStore, useTreeStore } from '@/stores';
 
 export default function RecycleBinFolderPage() {
@@ -11,6 +15,8 @@ export default function RecycleBinFolderPage() {
     usePickStore();
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
+  useResetPickFocusOnOutsideClick();
+  useClearSelectedPickIdsOnMount();
 
   useEffect(
     function selectRecycleBinFolderId() {

@@ -50,9 +50,14 @@ export function PickContextMenu({
         return;
       }}
     >
-      <ContextMenu.Trigger>{children}</ContextMenu.Trigger>
+      <ContextMenu.Trigger data-pick-draggable={true}>
+        {children}
+      </ContextMenu.Trigger>
       <ContextMenu.Portal container={portalContainer}>
-        <ContextMenu.Content className={contextMenuContentLayout}>
+        <ContextMenu.Content
+          className={contextMenuContentLayout}
+          data-pick-draggable={true}
+        >
           {isRecycleBinFolder ? (
             <ContextMenu.Item
               onSelect={() => {
