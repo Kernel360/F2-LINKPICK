@@ -9,7 +9,6 @@ export const pickRecordLayoutStyle = style({
   minHeight: '60px',
   height: 'fit-content',
   border: '1px solid black',
-  borderTop: 'none',
   background: colorVars.gold3,
 });
 

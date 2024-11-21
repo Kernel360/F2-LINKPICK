@@ -1,11 +1,11 @@
-import { Inter } from 'next/font/google';
+import { Noto_Sans_KR } from 'next/font/google';
 import { PORTAL_CONTAINER_ID } from '@/constants';
 import { ToastProvider, ThemeProvider } from '@/providers';
 import { QueryProvider } from '@/providers/QueryProvider';
 import type { Metadata } from 'next';
 import '@/styles/reset.css';
 
-const inter = Inter({ subsets: ['latin'] });
+const notoSansKR = Noto_Sans_KR({ weight: 'variable', subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Techpick',
   description: 'quick save, view anywhere',
@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className}`}>
+      <body className={`${notoSansKR.className}`}>
         <ToastProvider>
           <ThemeProvider>
             <QueryProvider>

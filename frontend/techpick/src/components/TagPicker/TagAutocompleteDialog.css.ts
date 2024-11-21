@@ -54,7 +54,7 @@ export const tagListItemStyle = style({
   // 선택된 상태일 때
   selectors: {
     '&[data-selected="true"]': {
-      backgroundColor: colorVars.softPoint,
+      backgroundColor: colorVars.gold4,
     },
     '&[data-disabled="true"]': {
       display: 'none',

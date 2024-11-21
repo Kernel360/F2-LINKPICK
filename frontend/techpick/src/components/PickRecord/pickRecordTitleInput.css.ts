@@ -7,7 +7,7 @@ export const pickTitleInputStyle = style({
   minHeight: '40px',
   height: 'fit-content',
   resize: 'none',
-  fontSize: typography.fontSize['lg'],
+  fontSize: typography.fontSize['md'],
   fontWeight: typography.fontWeights['light'],
   fontFamily: 'inherit',
   boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',

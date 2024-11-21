@@ -5,5 +5,6 @@ export const selectedTagLayoutStyle = style({
   alignItems: 'center',
   maxWidth: `264px`,
   height: '20px',
+  margin: 0,
   borderRadius: '4px',
 });

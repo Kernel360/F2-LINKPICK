@@ -25,7 +25,7 @@ export const pickEmptyImageStyle = style({
 });
 
 export const pickTitleSectionStyle = style({
-  fontSize: typography.fontSize['lg'],
+  fontSize: typography.fontSize['md'],
   fontWeight: typography.fontWeights['light'],
   height: '40px',
   lineHeight: '20px',

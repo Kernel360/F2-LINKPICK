@@ -11,24 +11,24 @@ export function PickRecordHeader() {
   return (
     <div className={pickRecordHeaderLayoutStyle}>
       <PickImageColumnLayout>
-        <p>Image</p>
+        <div style={{ lineHeight: '22px' }}>Image</div>
       </PickImageColumnLayout>
 
       <Separator />
 
       <PickTitleColumnLayout>
-        <div style={{ width: '520px' }}>Title</div>
+        <div style={{ lineHeight: '22px' }}>Title</div>
       </PickTitleColumnLayout>
 
       <Separator />
       <PickTagColumnLayout>
-        <div style={{ width: '320px' }}>Tags</div>
+        <div style={{ lineHeight: '22px' }}>Tags</div>
       </PickTagColumnLayout>
 
       <Separator />
 
       <PickDateColumnLayout>
-        <div>date</div>
+        <div style={{ lineHeight: '22px' }}>date</div>
       </PickDateColumnLayout>
     </div>
   );
