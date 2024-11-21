@@ -119,7 +119,7 @@ public class ChromeBookmarkService {
 			pickDataHandler.savePick(mapper.toPickCreateCommand(userId, folder.getId(), bookmark));
 		}
 		for (ChromeFolder childFolder : chromeFolder.getChildFolderList()) {
-			// // n-depth 로 저장
+			// n-depth 로 저장
 			// searchImportData(userId, childFolder, folder, alreadyExistBookmarks, ogTagUpdateUrls);
 			// 1-depth 로 저장
 			searchImportData(userId, childFolder, parentFolder, alreadyExistBookmarks, ogTagUpdateUrls);
