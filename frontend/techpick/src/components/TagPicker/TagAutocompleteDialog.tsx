@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { flip, useFloating } from '@floating-ui/react';
 import { Command } from 'cmdk';
 import { BarLoader } from 'react-spinners';
 import { colorVars } from 'techpick-shared';
@@ -41,6 +42,13 @@ export function TagAutocompleteDialog({
   const isCreateFetchPendingRef = useRef<boolean>(false);
   const randomNumber = useRef<number>(getRandomInt());
   const tagIdOrderedList = selectedTagList.map((tag) => tag.id);
+  const { refs, floatingStyles } = useFloating({
+    middleware: [
+      flip({
+        fallbackAxisSideDirection: 'start',
+      }),
+    ],
+  });
 
   const { tagList, fetchingTagState, createTag } = useTagStore();
   const { updatePickInfo } = usePickStore();
@@ -113,28 +121,33 @@ export function TagAutocompleteDialog({
       filter={filterCommandItems}
     >
       {/**선택한 태그 리스트 */}
-      <SelectedTagListLayout ref={selectedTagListRef} focusStyle="focus">
-        {selectedTagList.map((tag) => (
-          <SelectedTagItem key={tag.id} tag={tag}>
-            <DeselectTagButton
-              tag={tag}
-              onClick={focusTagInput}
-              pickInfo={pickInfo}
-              selectedTagList={selectedTagList}
-            />
-          </SelectedTagItem>
-        ))}
+      <div ref={refs.setReference}>
+        <SelectedTagListLayout ref={selectedTagListRef} focusStyle="focus">
+          {selectedTagList.map((tag) => (
+            <SelectedTagItem key={tag.id} tag={tag}>
+              <DeselectTagButton
+                tag={tag}
+                onClick={focusTagInput}
+                pickInfo={pickInfo}
+                selectedTagList={selectedTagList}
+              />
+            </SelectedTagItem>
+          ))}
 
-        <Command.Input
-          className={commandInputStyle}
-          ref={tagInputRef}
-          value={tagInputValue}
-          onValueChange={setTagInputValue}
-        />
-      </SelectedTagListLayout>
-
+          <Command.Input
+            className={commandInputStyle}
+            ref={tagInputRef}
+            value={tagInputValue}
+            onValueChange={setTagInputValue}
+          />
+        </SelectedTagListLayout>
+      </div>
       {/**전체 태그 리스트 */}
-      <Command.List className={tagListStyle}>
+      <Command.List
+        className={tagListStyle}
+        ref={refs.setFloating}
+        style={floatingStyles}
+      >
         {fetchingTagState.isPending && (
           <Command.Loading className={tagListLoadingStyle}>
             <BarLoader color={colorVars.color.font} />

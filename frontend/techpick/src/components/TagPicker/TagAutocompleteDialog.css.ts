@@ -25,13 +25,14 @@ export const commandInputStyle = style({
 });
 
 export const tagListStyle = style({
-  maxHeight: '90px',
+  maxHeight: '150px',
   border: `1px solid black`,
-  borderTop: 'none',
   overflowY: 'auto',
   '::-webkit-scrollbar': {
     display: 'none',
   },
+  backgroundColor: colorVars.lightGray,
+  boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',
 });
 
 export const tagListLoadingStyle = style({
