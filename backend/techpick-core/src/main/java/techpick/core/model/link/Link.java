@@ -34,11 +34,12 @@ public class Link {
 	@Column(name = "url", nullable = false, columnDefinition = "VARCHAR(600)", unique = true)
 	private String url;
 
-	// title이 한글 200자 이상인 경우가 있어 500으로 변경
-	@Column(name = "title", columnDefinition = "VARCHAR(500)")
+	// title이 한글 200자 이상인 경우가 있어 text타입으로 변경
+	@Column(name = "title", columnDefinition = "TEXT")
 	private String title;
 
-	@Column(name = "description", columnDefinition = "VARCHAR(600)")
+	// description이 한글 300자 이상인 경우가 있어 text타입으로 변경
+	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 
 	@Column(name = "imageUrl", columnDefinition = "VARCHAR(600)")
