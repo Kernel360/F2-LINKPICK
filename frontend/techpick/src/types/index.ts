@@ -11,3 +11,4 @@ export type { UpdatePickRequestType } from './UpdatePickRequestType';
 export type { PickViewItemComponentProps } from './PickViewItemComponentProps';
 export type { PickViewDraggableItemComponentProps } from './PickViewDraggableItemComponentProps';
 export type { PickViewDraggableItemListLayoutComponentProps } from './PickViewDraggableItemListLayoutComponentProps';
+export type { PickDeleteRequestType } from './PickDeleteRequestType';
