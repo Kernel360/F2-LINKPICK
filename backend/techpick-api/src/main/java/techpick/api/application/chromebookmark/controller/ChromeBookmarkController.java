@@ -88,16 +88,16 @@ public class ChromeBookmarkController {
 		@ApiResponse(responseCode = "200", description = "다운로드 성공"),
 		@ApiResponse(responseCode = "500", description = "파일 형식 및 파싱 오류")
 	})
-	public ResponseEntity<List<String>> importBookmark(@RequestParam("file")
+	public ResponseEntity<List<String>> importBookmark(@LoginUserId Long userId, @RequestParam("file")
 	@Parameter(required = true) MultipartFile file) throws
 		InterruptedException, IOException {
 		String html = new String(file.getBytes(), StandardCharsets.UTF_8);
-		ChromeImportResult result = chromeBookmarkService.importChromeBookmarks(1L, html);
+		ChromeImportResult result = chromeBookmarkService.importChromeBookmarks(userId, html);
 
 		// og 태그의 경우 정적 크롤링이 필요해, 최초 등록시에는 og 태그를 모두 빈스트링("")으로 등록하고,
 		// 이후 비동기적으로 업데이트 진행
-		int maxThreadPollSize = 5;
-		ExecutorService executor = Executors.newFixedThreadPool(maxThreadPollSize);
+		int maxThreadPoolSize = 5;
+		ExecutorService executor = Executors.newFixedThreadPool(maxThreadPoolSize);
 		for (String url : result.ogTagUpdateUrls()) {
 			CompletableFuture.runAsync(() -> linkService.updateOgTag(url), executor)
 				.orTimeout(60, TimeUnit.SECONDS);
