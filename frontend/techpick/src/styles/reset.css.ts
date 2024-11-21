@@ -85,4 +85,6 @@ globalStyle('hr', {
 
 globalStyle('*', {
   outline: 'none',
+  fontFamily: 'inherit',
+  fontWeight: 'inherit',
 });
