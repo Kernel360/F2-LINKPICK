@@ -296,7 +296,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
       moveFolderToRecycleBin: async ({ deleteFolderId }) => {
         const parentFolderId = get().treeDataMap[deleteFolderId].parentFolderId;
         const prevChildFolderList =
-          get().treeDataMap[deleteFolderId].childFolderIdOrderedList;
+          get().treeDataMap[parentFolderId].childFolderIdOrderedList;
 
         set((state) => {
           state.treeDataMap[parentFolderId].childFolderIdOrderedList =
