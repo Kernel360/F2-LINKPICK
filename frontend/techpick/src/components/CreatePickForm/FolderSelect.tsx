@@ -16,6 +16,7 @@ import {
   folderSelectContentStyle,
   selectItemStyle,
   selectTextStyle,
+  folderSelectViewport,
 } from './FolderSelect.css';
 import { FolderType } from '@/types';
 
@@ -69,7 +70,9 @@ export const FolderSelect = forwardRef<HTMLButtonElement, FolderSelectProps>(
         </Select.Trigger>
 
         <Select.Portal container={portalContainerElement}>
-          <Select.Content className={folderSelectContentStyle}>
+          <Select.Content
+            className={`${folderSelectContentStyle} ${folderSelectViewport}`}
+          >
             <Select.Viewport>
               {folderInfoList.map((folderInfo) => (
                 <Select.Item

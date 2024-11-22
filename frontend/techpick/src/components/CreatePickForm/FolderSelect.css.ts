@@ -46,6 +46,10 @@ export const folderSelectContentStyle = style({
   },
 });
 
+export const folderSelectViewport = style({
+  zIndex: '500',
+});
+
 export const selectItemStyle = style({
   display: 'flex',
   alignItems: 'center',
