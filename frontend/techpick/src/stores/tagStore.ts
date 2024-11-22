@@ -1,8 +1,7 @@
-import { HTTPError } from 'ky';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { handleHTTPError } from '@/apis';
 import { getTagList, createTag, deleteTag, updateTag } from '@/apis/tag';
+import { hasIndex } from '@/utils';
 import type {
   TagType,
   CreateTagRequestType,
@@ -20,12 +19,14 @@ type TagState = {
 };
 
 type TagAction = {
-  fetchingTagList: () => Promise<void>;
+  replaceSelectedTagList: (tagList: TagType[]) => void;
   selectTag: (tag: TagType) => void;
   deselectTag: (tagId: TagType['id']) => void;
+  updateSelectedTagList: (tag: TagType) => void;
+  fetchingTagList: () => Promise<void>;
   createTag: (tagData: CreateTagRequestType) => Promise<TagType | undefined>;
   deleteTag: (tagId: TagType['id']) => Promise<void>;
-  updateTag: (updatedTag: UpdateTagRequestType) => Promise<void>;
+  updateTag: (updatedTagInfo: UpdateTagRequestType) => Promise<void>;
   /**
    * TODO: 익스텐션과 앱이 중복되는 Store를 가지고 있는데 이 부분 해결 필요.
    * @author 김민규
@@ -46,35 +47,12 @@ export const useTagStore = create<TagState & TagAction>()(
   immer((set, get) => ({
     ...initialState,
 
-    fetchingTagList: async () => {
-      try {
-        set((state) => {
-          state.fetchingTagState.isPending = true;
-        });
+    replaceSelectedTagList: (tagList) =>
+      set((state) => {
+        state.selectedTagList = tagList;
+      }),
 
-        const remoteTagList = await getTagList();
-
-        set((state) => {
-          state.tagList = [...remoteTagList];
-          state.fetchingTagState.isPending = false;
-        });
-      } catch (error) {
-        if (error instanceof HTTPError) {
-          set((state) => {
-            state.fetchingTagState.isPending = false;
-            state.fetchingTagState.isError = true;
-          });
-
-          if (error instanceof HTTPError) {
-            await handleHTTPError(error);
-          }
-        }
-      }
-
-      return;
-    },
-
-    selectTag: (tag: TagType) =>
+    selectTag: (tag) =>
       set((state) => {
         const exist = state.selectedTagList.some((t) => t.id === tag.id);
 
@@ -89,9 +67,47 @@ export const useTagStore = create<TagState & TagAction>()(
     deselectTag: (tagId) =>
       set((state) => {
         state.selectedTagList = state.selectedTagList.filter(
-          (t) => t.id !== tagId
+          (tag) => tag.id !== tagId
         );
       }),
+
+    updateSelectedTagList: (updatedTag) => {
+      set((state) => {
+        const index = state.selectedTagList.findIndex(
+          (tag) => tag.id === updatedTag.id
+        );
+
+        if (!hasIndex(index)) {
+          return;
+        }
+
+        state.selectedTagList[index] = {
+          ...updatedTag,
+        };
+      });
+    },
+
+    fetchingTagList: async () => {
+      try {
+        set((state) => {
+          state.fetchingTagState.isPending = true;
+        });
+
+        const remoteTagList = await getTagList();
+
+        set((state) => {
+          state.tagList = [...remoteTagList];
+          state.fetchingTagState.isPending = false;
+        });
+      } catch {
+        set((state) => {
+          state.fetchingTagState.isPending = false;
+          state.fetchingTagState.isError = true;
+        });
+      }
+
+      return;
+    },
 
     createTag: async (tagData) => {
       try {
@@ -102,81 +118,84 @@ export const useTagStore = create<TagState & TagAction>()(
         });
 
         return newTag;
-      } catch (error) {
-        if (error instanceof HTTPError) {
-          await handleHTTPError(error);
-        }
+      } catch {
+        /* empty */
       }
     },
 
     deleteTag: async (tagId: number) => {
-      let temporalDeleteTargetTag: TagType | undefined;
-      let deleteTargetTagIndex = -1;
+      const deleteTargetTagIndex = get().tagList.findIndex(
+        (tag) => tag.id === tagId
+      );
+      const deleteTargetSelectedIndex = get().selectedTagList.findIndex(
+        (tag) => tag.id === tagId
+      );
+
+      if (!hasIndex(deleteTargetTagIndex)) {
+        return;
+      }
+
+      const deleteTagInfo = get().tagList[deleteTargetTagIndex];
+
+      set((state) => {
+        state.tagList.splice(deleteTargetTagIndex, 1);
+
+        if (hasIndex(deleteTargetSelectedIndex)) {
+          state.selectedTagList.splice(deleteTargetSelectedIndex, 1);
+        }
+      });
 
       try {
+        await deleteTag({ id: tagId });
+      } catch {
         set((state) => {
-          deleteTargetTagIndex = state.tagList.findIndex(
-            (tag) => tag.id === tagId
-          );
+          state.tagList.splice(deleteTargetTagIndex, 0, deleteTagInfo);
 
-          if (deleteTargetTagIndex !== -1) {
-            temporalDeleteTargetTag = {
-              ...state.tagList[deleteTargetTagIndex],
-            };
-            state.tagList.splice(deleteTargetTagIndex, 1);
+          if (hasIndex(deleteTargetSelectedIndex)) {
+            state.selectedTagList.splice(
+              deleteTargetSelectedIndex,
+              0,
+              deleteTagInfo
+            );
           }
         });
-
-        await deleteTag(tagId);
-      } catch (error) {
-        set((state) => {
-          if (!temporalDeleteTargetTag) {
-            return;
-          }
-
-          state.tagList.splice(
-            deleteTargetTagIndex,
-            0,
-            temporalDeleteTargetTag
-          );
-        });
-
-        if (error instanceof HTTPError) {
-          await handleHTTPError(error);
-        }
       }
     },
 
-    updateTag: async (updatedTag) => {
-      let previousTag: TagType | undefined;
+    updateTag: async (updateTagInfo) => {
+      const updateTagIndexInTagList = get().tagList.findIndex(
+        (tag) => tag.id === updateTagInfo.id
+      );
+      const updateTagIndexInSelectedTagList = get().selectedTagList.findIndex(
+        (tag) => tag.id === updateTagInfo.id
+      );
+
+      if (!hasIndex(updateTagIndexInTagList)) {
+        return;
+      }
+
+      const previousTagInfo = get().tagList[updateTagIndexInTagList];
 
       try {
         set((state) => {
-          const index = state.tagList.findIndex(
-            (tag) => tag.id === updatedTag.id
-          );
+          state.tagList[updateTagIndexInTagList] = updateTagInfo;
 
-          if (index !== -1) {
-            previousTag = { ...state.tagList[index] };
-
-            state.tagList[index] = updatedTag;
+          if (hasIndex(updateTagIndexInSelectedTagList)) {
+            state.selectedTagList[updateTagIndexInSelectedTagList] =
+              updateTagInfo;
           }
         });
 
-        await updateTag(updatedTag);
-      } catch (error) {
+        await updateTag(updateTagInfo);
+      } catch {
         set((state) => {
-          if (previousTag) {
-            const index = state.tagList.findIndex(
-              (tag) => tag.id === previousTag?.id
-            );
-            state.tagList[index] = previousTag;
+          state.tagList[updateTagIndexInTagList] = previousTagInfo;
+
+          if (hasIndex(updateTagIndexInSelectedTagList)) {
+            state.selectedTagList[updateTagIndexInSelectedTagList] =
+              previousTagInfo;
           }
         });
-
-        if (error instanceof HTTPError) {
-          await handleHTTPError(error);
-        }
       }
     },
     findTagByName: (name) => get().tagList.filter((tag) => tag.name === name),
