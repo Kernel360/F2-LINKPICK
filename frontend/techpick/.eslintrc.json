@@ -5,6 +5,7 @@
     "plugin:storybook/recommended",
     "plugin:storybook/recommended",
     "plugin:react/recommended",
+    "plugin:import/recommended",
     "next/core-web-vitals",
     "prettier"
   ],
@@ -15,6 +16,48 @@
         "varsIgnorePattern": "^_",
         "argsIgnorePattern": "^_"
       }
-    ]
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling", "index"],
+          "type"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "next/**",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "@/types",
+            "group": "type",
+            "position": "after"
+          },
+          {
+            "pattern": "@/schema",
+            "group": "type",
+            "position": "after"
+          },
+          {
+            "pattern": "@/**",
+            "group": "internal"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "newlines-between": "never",
+        "alphabetize": { "order": "asc", "caseInsensitive": true }
+      }
+    ],
+    "import/no-unresolved": "off"
   }
 }

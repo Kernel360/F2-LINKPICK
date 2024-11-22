@@ -1,4 +1,4 @@
-import { globalStyle } from '@vanilla-extract/css';
+import { globalStyle, globalFontFace } from '@vanilla-extract/css';
 
 globalStyle('*', {
   boxSizing: 'border-box',
@@ -66,4 +66,21 @@ globalStyle('blockquote:before, blockquote:after, q:before, q:after', {
 globalStyle('table', {
   borderCollapse: 'collapse',
   borderSpacing: 0,
+});
+
+globalStyle('a', {
+  textDecoration: 'none',
+  color: 'inherit',
+});
+
+export const notoSansKR = 'notoSansKR';
+
+globalFontFace(notoSansKR, {
+  src: 'url("./../assets/NotoSansKR-Regular.ttf") format("truetype")',
+  fontWeight: 'normal',
+  fontStyle: 'normal',
+});
+
+globalStyle('body', {
+  fontFamily: notoSansKR,
 });

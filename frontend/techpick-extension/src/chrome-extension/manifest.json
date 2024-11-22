@@ -1,10 +1,23 @@
 {
   "manifest_version": 3,
   "name": "TechPick Extension",
-  "description": "TechPick Extension description",
-  "version": "0.1",
+  "description": "태그와 함께 북마크하세요. 저장하고 수집한 뒤에 나중에 techpick에서 저장된 북마크를 확인해보세요!",
+  "version": "0.2",
+  "icons": {
+    "16": "./pick16.png",
+    "32": "./pick32.png",
+    "48": "./pick48.png",
+    "128": "./pick128.png"
+  },
 
-  "permissions": ["tabs", "activeTab", "scripting", "cookies"],
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "scripting",
+    "cookies",
+    "storage",
+    "contextMenus"
+  ],
   "background": {
     "service_worker": "background.js",
     "type": "module"

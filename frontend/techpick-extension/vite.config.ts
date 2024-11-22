@@ -5,6 +5,7 @@ import { PluginOption } from 'vite';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import fs from 'fs';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 function updateManifestPlugin(mode: string): PluginOption {
   const env = loadEnv(mode, process.cwd());
@@ -69,6 +70,14 @@ export default defineConfig(({ mode }) => {
       vanillaExtractPlugin(),
       tsconfigPaths(),
       updateManifestPlugin(mode),
+      viteStaticCopy({
+        targets: [
+          {
+            src: 'src/chrome-extension/*.png',
+            dest: '.',
+          },
+        ],
+      }),
     ],
   };
 });
