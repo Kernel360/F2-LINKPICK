@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+}
+
+group = 'kernel360'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(":techpick-core")
+
+    // Spring Retry 의존성 추가
+    implementation 'org.springframework.retry:spring-retry'
+
+    // spring security and oauth client
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+
+    // jsoup
+    // https://mvnrepository.com/artifact/org.jsoup/jsoup
+    implementation 'org.jsoup:jsoup:1.18.1'
+
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+}
+
+tasks.named('test') {
+    enabled = false
+}
+
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
+}
