@@ -1,5 +1,0 @@
-rootProject.name = 'backend'
-include 'techpick-batch'
-include 'techpick-core'
-include 'techpick-api'
-
