@@ -19,9 +19,5 @@ export type CreateTagResponseType = Concrete<
 export type UpdateTagRequestType =
   components['schemas']['techpick.api.application.tag.dto.TagApiRequest$Update'];
 
-export type UpdateTagResponseType = Concrete<
-  components['schemas']['techpick.api.application.tag.dto.TagApiResponse$Create']
->;
-
 export type DeleteTagRequestType =
   components['schemas']['techpick.api.application.tag.dto.TagApiRequest$Delete'];
