@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group = 'kernel360'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(":techpick-core")
+
+    implementation 'org.springframework.retry:spring-retry'
+}
+
+tasks.named('test') {
+    enabled = false
+}
+
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
+}
