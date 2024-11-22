@@ -3,7 +3,7 @@ name: Tech-pick Api-Module CI/CD
 on:
   push:
     branches:
-      - 'release' # 배포 대상 브랜치
+      - 'production-deploy' # 배포 대상 브랜치
     paths:
       - 'backend/techpick-core/**'
       - 'backend/techpick-api/**'
