@@ -55,6 +55,17 @@ public class TagDataHandler {
 		return tagList;
 	}
 
+	@Transactional(readOnly = true)
+	public List<Tag> getTagListPreservingOrder(List<Long> tagOrderList) {
+		List<Tag> tagList = tagRepository.findAllById(tagOrderList);
+		// 조회리스트에 존재하지 않는 태그id가 존재하면 예외 발생
+		if (tagList.size() != tagOrderList.size()) {
+			throw ApiTagException.TAG_NOT_FOUND();
+		}
+		tagList.sort(Comparator.comparing(tag -> tagOrderList.indexOf(tag.getId())));
+		return tagList;
+	}
+
 	@Transactional
 	public Tag saveTag(Long userId, TagCommand.Create command) {
 		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
