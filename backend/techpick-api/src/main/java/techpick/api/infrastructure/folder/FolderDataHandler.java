@@ -74,7 +74,7 @@ public class FolderDataHandler {
 	@Transactional
 	public Folder saveFolder(FolderCommand.Create command) {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
-		Folder parentFolder = folderRepository.findById(command.parentFolderId())
+		Folder parentFolder = folderRepository.findByIdForUpdate(command.parentFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 		Folder folder = folderRepository.save(Folder.createEmptyGeneralFolder(user, parentFolder, command.name()));
@@ -93,7 +93,7 @@ public class FolderDataHandler {
 
 	@Transactional
 	public List<Long> moveFolderWithinParent(FolderCommand.Move command) {
-		Folder parentFolder = folderRepository.findById(command.parentFolderId())
+		Folder parentFolder = folderRepository.findByIdForUpdate(command.parentFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 		parentFolder.updateChildFolderIdOrderedList(command.idList(), command.orderIdx());
@@ -102,13 +102,13 @@ public class FolderDataHandler {
 
 	@Transactional
 	public List<Long> moveFolderToDifferentParent(FolderCommand.Move command) {
-		Folder folder = folderRepository.findById(command.idList().get(0))
+		Folder folder = folderRepository.findByIdForUpdate(command.idList().get(0))
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 		Folder oldParent = folder.getParentFolder();
 		oldParent.getChildFolderIdOrderedList().removeAll(command.idList());
 
-		Folder newParent = folderRepository.findById(command.destinationFolderId())
+		Folder newParent = folderRepository.findByIdForUpdate(command.destinationFolderId())
 			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 		newParent.addChildFolderIdOrderedList(command.idList(), command.orderIdx());
 
@@ -126,7 +126,7 @@ public class FolderDataHandler {
 		List<Folder> deleteList = new ArrayList<>();
 
 		for (Long id : command.idList()) {
-			Folder folder = folderRepository.findById(id)
+			Folder folder = folderRepository.findByIdForUpdate(id)
 				.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 			Folder parentFolder = folder.getParentFolder();
