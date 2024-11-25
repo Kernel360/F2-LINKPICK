@@ -72,7 +72,17 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
       <Separator />
 
       <PickTitleColumnLayout>
-        {isUpdateTitle ? (
+        <div
+          className={pickTitleSectionStyle}
+          onDoubleClick={(event) => {
+            setCurrentUpdatePickId(pickInfo.id);
+            event.stopPropagation();
+          }}
+          role="button"
+        >
+          {pick.title}
+        </div>
+        {isUpdateTitle && (
           <PickRecordTitleInput
             initialValue={pick.title}
             onSubmit={(newTitle) => {
@@ -86,17 +96,6 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
               setCurrentPickIdToNull();
             }}
           />
-        ) : (
-          <div
-            className={pickTitleSectionStyle}
-            onDoubleClick={(event) => {
-              setCurrentUpdatePickId(pickInfo.id);
-              event.stopPropagation();
-            }}
-            role="button"
-          >
-            {pick.title}
-          </div>
         )}
       </PickTitleColumnLayout>
 
