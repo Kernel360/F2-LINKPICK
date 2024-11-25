@@ -57,8 +57,14 @@ public class CachedHttpServletRequest extends HttpServletRequestWrapper {
 		infoMap.put("method", request.getMethod());
 		infoMap.put("requestBody", cachedBody);
 		infoMap.put("requestTime", LocalDateTime.now().toString());
+		if (request.getCookies() != null) {
+			putCookies(request.getCookies());
+		}
+	}
+
+	private void putCookies(Cookie[] cookies) {
 		Map<String, String> cookieMap = new HashMap<>();
-		for (Cookie cookie : request.getCookies()) {
+		for (Cookie cookie : cookies) {
 			// JSESSIONID 와 access_token 은 로깅하지 않음
 			if (!cookie.getName().equals("JSESSIONID") && !cookie.getName().equals("access_token")) {
 				cookieMap.put(cookie.getName(), cookie.getValue());
