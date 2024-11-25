@@ -21,7 +21,11 @@ export function PickDraggableRecord({
     setSelectedPickIdList,
     isDragging,
   } = usePickStore();
-  const { setCurrentPickIdToNull } = useUpdatePickStore();
+  const {
+    setCurrentUpdateTitlePickIdToNull,
+    currentUpdateTitlePickId,
+    currentUpdateTagPickId,
+  } = useUpdatePickStore();
   const { id: pickId, parentFolderId } = pickInfo;
   const isSelected = selectedPickIdList.includes(pickId);
   const {
@@ -38,6 +42,9 @@ export function PickDraggableRecord({
       type: 'pick',
       parentFolderId: parentFolderId,
     },
+    disabled:
+      currentUpdateTitlePickId === pickInfo.id ||
+      currentUpdateTagPickId === pickInfo.id,
   });
   const pickElementId = `pickId-${pickId}`;
 
@@ -74,7 +81,7 @@ export function PickDraggableRecord({
       return;
     }
 
-    setCurrentPickIdToNull();
+    setCurrentUpdateTitlePickIdToNull();
     selectSinglePick(pickId);
   };
 
