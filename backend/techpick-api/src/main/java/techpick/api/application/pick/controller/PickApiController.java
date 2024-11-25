@@ -66,7 +66,7 @@ public class PickApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	public ResponseEntity<PickSliceResponse<PickApiResponse.Pick>> searchPick(
+	public ResponseEntity<PickSliceResponse<PickApiResponse.Pick>> searchPickPagination(
 		@LoginUserId Long userId,
 		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> folderIdList,
 		@Parameter(description = "검색 토큰 목록", example = "리액트, 쿼리, 서버") @RequestParam(required = false, defaultValue = "") List<String> searchTokenList,
@@ -85,7 +85,7 @@ public class PickApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	public ResponseEntity<List<PickApiResponse.Pick>> searchPickWithoutPagination(
+	public ResponseEntity<List<PickApiResponse.Pick>> searchPick(
 		@LoginUserId Long userId,
 		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> folderIdList,
 		@Parameter(description = "검색 토큰 목록", example = "리액트, 쿼리, 서버") @RequestParam(required = false, defaultValue = "") List<String> searchTokenList,
