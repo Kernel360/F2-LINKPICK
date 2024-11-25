@@ -7,11 +7,11 @@ import lombok.Builder;
 public class SharedFolderResult {
 
 	@Builder
-	public static record Folder(UUID uuid, String jsonData) {
+	public record Folder(UUID uuid, String jsonData) {
 	}
 
 	@Builder
-	public static record List(UUID uuid) {
+	public record List(UUID uuid) {
 
 	}
 

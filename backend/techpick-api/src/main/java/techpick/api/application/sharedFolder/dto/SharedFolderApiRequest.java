@@ -6,6 +6,6 @@ import jakarta.validation.constraints.NotNull;
 
 public class SharedFolderApiRequest {
 
-	public static record Create(@NotNull String name, List<Long> folderIdList) {
+	public record Create(@NotNull String name, List<Long> folderIdList) {
 	}
 }
