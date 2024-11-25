@@ -30,7 +30,7 @@ public class PickSearchService {
 	private final TagDataHandler tagDataHandler;
 
 	@Transactional(readOnly = true)
-	public Slice<PickResult.Pick> searchPick(PickCommand.Search command) {
+	public Slice<PickResult.Pick> searchPickPagination(PickCommand.SearchPagination command) {
 		List<Long> folderIdList = command.folderIdList();
 		List<Long> tagIdList = command.tagIdList();
 
@@ -47,9 +47,30 @@ public class PickSearchService {
 			}
 		}
 
-		return pickQuery.searchPick(command.userId(), folderIdList,
+		return pickQuery.searchPickPagination(command.userId(), folderIdList,
 			command.searchTokenList(), command.tagIdList(),
 			command.cursor(), command.size());
+	}
+
+	@Transactional(readOnly = true)
+	public List<PickResult.Pick> searchPick(PickCommand.Search command) {
+		List<Long> folderIdList = command.folderIdList();
+		List<Long> tagIdList = command.tagIdList();
+
+		if (ObjectUtils.isNotEmpty(folderIdList)) {
+			for (Long folderId : folderIdList) {
+				validateFolderAccess(command.userId(), folderId);
+				validateFolderRootSearch(folderId);
+			}
+		}
+
+		if (ObjectUtils.isNotEmpty(tagIdList)) {
+			for (Long tagId : tagIdList) {
+				validateTagAccess(command.userId(), tagId);
+			}
+		}
+
+		return pickQuery.searchPick(command.userId(), folderIdList, command.searchTokenList(), command.tagIdList());
 	}
 
 	private void validateFolderAccess(Long userId, Long folderId) {
