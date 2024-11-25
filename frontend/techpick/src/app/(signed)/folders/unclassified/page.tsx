@@ -8,6 +8,7 @@ import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
 import {
   useClearSelectedPickIdsOnMount,
+  useFetchTagList,
   useResetPickFocusOnOutsideClick,
 } from '@/hooks';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
@@ -20,6 +21,7 @@ export default function UnclassifiedFolderPage() {
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
+  useFetchTagList();
 
   useEffect(
     function selectUnclassifiedFolderId() {

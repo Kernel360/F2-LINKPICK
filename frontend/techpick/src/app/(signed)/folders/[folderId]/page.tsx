@@ -11,6 +11,7 @@ import { ROUTES } from '@/constants';
 import {
   useResetPickFocusOnOutsideClick,
   useClearSelectedPickIdsOnMount,
+  useFetchTagList,
 } from '@/hooks';
 import { usePickStore, useTreeStore } from '@/stores';
 
@@ -24,6 +25,7 @@ export default function FolderDetailPage() {
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
+  useFetchTagList();
 
   useEffect(
     function selectFolderId() {

@@ -8,6 +8,7 @@ import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
 import {
   useClearSelectedPickIdsOnMount,
+  useFetchTagList,
   useResetPickFocusOnOutsideClick,
 } from '@/hooks';
 import { usePickStore, useTreeStore } from '@/stores';
@@ -19,6 +20,7 @@ export default function RecycleBinFolderPage() {
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
+  useFetchTagList();
 
   useEffect(
     function selectRecycleBinFolderId() {
