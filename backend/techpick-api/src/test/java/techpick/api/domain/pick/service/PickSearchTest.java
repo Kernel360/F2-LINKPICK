@@ -69,7 +69,7 @@ class PickSearchTest {
 	@MethodSource("provideSearchTestCases")
 	void parameterizedSearchTest(TestCase testCase) {
 		// given
-		PickCommand.Search search = new PickCommand.Search(
+		PickCommand.SearchPagination search = new PickCommand.SearchPagination(
 			user1.getId(),
 			testCase.folderIdList,
 			testCase.searchTokenList,
@@ -79,7 +79,7 @@ class PickSearchTest {
 		);
 
 		// when
-		Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
+		Slice<PickResult.Pick> pickList = pickSearchService.searchPickPagination(search);
 
 		// then
 		assertThat(pickList).isNotNull();
@@ -150,7 +150,7 @@ class PickSearchTest {
 		@MethodSource("provideTestCases")
 		void parameterizedTitleSearchTest(TestCase testCase) {
 			// given
-			PickCommand.Search search = new PickCommand.Search(
+			PickCommand.SearchPagination search = new PickCommand.SearchPagination(
 				user1.getId(),
 				testCase.folderIdList,
 				testCase.searchTokenList,
@@ -160,7 +160,7 @@ class PickSearchTest {
 			);
 
 			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
+			Slice<PickResult.Pick> pickList = pickSearchService.searchPickPagination(search);
 
 			// then
 			assertThat(pickList).isNotNull();
@@ -190,11 +190,11 @@ class PickSearchTest {
 			List<String> searchTokenList = null;
 			List<Long> tagIdList = null;
 
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
+			PickCommand.SearchPagination search = new PickCommand.SearchPagination(user1.getId(), folderIdList, searchTokenList, tagIdList,
 				0L, 30);
 
 			// when, then
-			assertThatThrownBy(() -> pickSearchService.searchPick(search))
+			assertThatThrownBy(() -> pickSearchService.searchPickPagination(search))
 				.isInstanceOf(ApiFolderException.class)
 				.hasMessageStartingWith(ApiFolderException.ROOT_FOLDER_SEARCH_NOT_ALLOWED().getMessage());
 		}
@@ -203,7 +203,7 @@ class PickSearchTest {
 		@MethodSource("provideFolderSearchTestCases")
 		void parameterizedFolderSearchTest(TestCase testCase) {
 			// given
-			PickCommand.Search search = new PickCommand.Search(
+			PickCommand.SearchPagination search = new PickCommand.SearchPagination(
 				user1.getId(),
 				testCase.folderIdList,
 				testCase.searchTokenList,
@@ -213,7 +213,7 @@ class PickSearchTest {
 			);
 
 			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
+			Slice<PickResult.Pick> pickList = pickSearchService.searchPickPagination(search);
 
 			// then
 			assertThat(pickList).isNotNull();
@@ -246,7 +246,7 @@ class PickSearchTest {
 		@MethodSource("provideTagSearchTestCases")
 		void parameterizedTagSearchTest(TestCase testCase) {
 			// given
-			PickCommand.Search search = new PickCommand.Search(
+			PickCommand.SearchPagination search = new PickCommand.SearchPagination(
 				user1.getId(),
 				testCase.folderIdList,
 				testCase.searchTokenList,
@@ -256,7 +256,7 @@ class PickSearchTest {
 			);
 
 			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
+			Slice<PickResult.Pick> pickList = pickSearchService.searchPickPagination(search);
 
 			// then
 			assertThat(pickList).isNotNull();
@@ -295,11 +295,11 @@ class PickSearchTest {
 			List<String> searchTokenList = null;
 			List<Long> tagIdList = null;
 
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
+			PickCommand.SearchPagination search = new PickCommand.SearchPagination(user1.getId(), folderIdList, searchTokenList, tagIdList,
 				0L, 30);
 
 			// when, then
-			assertThatThrownBy(() -> pickSearchService.searchPick(search))
+			assertThatThrownBy(() -> pickSearchService.searchPickPagination(search))
 				.isInstanceOf(ApiFolderException.class)
 				.hasMessageStartingWith(ApiFolderException.FOLDER_NOT_FOUND().getMessage());
 		}
@@ -312,11 +312,11 @@ class PickSearchTest {
 			List<String> searchTokenList = List.of("검색결과가없음");
 			List<Long> tagIdList = null;
 
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
+			PickCommand.SearchPagination search = new PickCommand.SearchPagination(user1.getId(), folderIdList, searchTokenList, tagIdList,
 				0L, 30);
 
 			// when
-			Slice<PickResult.Pick> pickList = pickSearchService.searchPick(search);
+			Slice<PickResult.Pick> pickList = pickSearchService.searchPickPagination(search);
 
 			// then
 			assertThat(pickList).isNotNull();
@@ -331,11 +331,11 @@ class PickSearchTest {
 			List<String> searchTokenList = List.of("검색결과가없음");
 			List<Long> tagIdList = List.of(999L);
 
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
+			PickCommand.SearchPagination search = new PickCommand.SearchPagination(user1.getId(), folderIdList, searchTokenList, tagIdList,
 				0L, 30);
 
 			// when, then
-			assertThatThrownBy(() -> pickSearchService.searchPick(search))
+			assertThatThrownBy(() -> pickSearchService.searchPickPagination(search))
 				.isInstanceOf(ApiTagException.class)
 				.hasMessageStartingWith(ApiTagException.TAG_NOT_FOUND().getMessage());
 		}
@@ -348,11 +348,11 @@ class PickSearchTest {
 			List<String> searchTokenList = null;
 			List<Long> tagIdList = null;
 
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
+			PickCommand.SearchPagination search = new PickCommand.SearchPagination(user1.getId(), folderIdList, searchTokenList, tagIdList,
 				0L, 30);
 
 			// when, then
-			assertThatThrownBy(() -> pickSearchService.searchPick(search))
+			assertThatThrownBy(() -> pickSearchService.searchPickPagination(search))
 				.isInstanceOf(ApiFolderException.class)
 				.hasMessageStartingWith(ApiFolderException.FOLDER_ACCESS_DENIED().getMessage());
 		}
@@ -365,11 +365,11 @@ class PickSearchTest {
 			List<String> searchTokenList = null;
 			List<Long> tagIdList = List.of(tag4.getId());
 
-			PickCommand.Search search = new PickCommand.Search(user1.getId(), folderIdList, searchTokenList, tagIdList,
+			PickCommand.SearchPagination search = new PickCommand.SearchPagination(user1.getId(), folderIdList, searchTokenList, tagIdList,
 				0L, 30);
 
 			// when, then
-			assertThatThrownBy(() -> pickSearchService.searchPick(search))
+			assertThatThrownBy(() -> pickSearchService.searchPickPagination(search))
 				.isInstanceOf(ApiTagException.class)
 				.hasMessageStartingWith(ApiTagException.UNAUTHORIZED_TAG_ACCESS().getMessage());
 		}
