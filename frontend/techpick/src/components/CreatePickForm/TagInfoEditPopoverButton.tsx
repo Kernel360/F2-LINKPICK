@@ -9,8 +9,8 @@ import {
   tagInfoEditFormLayout,
   tagInputStyle,
 } from './TagInfoEditPopoverButton.css';
-import { PopoverOverlay } from '../TagPicker/PopoverOverlay';
-import { PopoverTriggerButton } from '../TagPicker/PopoverTriggerButton';
+import { PopoverOverlay } from '../PickTagPicker/PopoverOverlay';
+import { PopoverTriggerButton } from '../PickTagPicker/PopoverTriggerButton';
 import type { TagType } from '@/types';
 
 export function TagInfoEditPopoverButton({

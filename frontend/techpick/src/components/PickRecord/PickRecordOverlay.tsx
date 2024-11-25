@@ -20,7 +20,7 @@ import { PickRecordTitleInput } from './PickRecordTitleInput';
 import { PickTagColumnLayout } from './PickTagColumnLayout';
 import { PickTitleColumnLayout } from './PickTitleColumnLayout';
 import { Separator } from './Separator';
-import { TagPicker } from '../TagPicker';
+import { PickTagPicker } from '../PickTagPicker';
 import { PickViewItemComponentProps, TagType } from '@/types';
 
 export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
@@ -95,7 +95,7 @@ export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
       <Separator />
 
       <PickTagColumnLayout>
-        <TagPicker
+        <PickTagPicker
           pickInfo={pickInfo}
           selectedTagList={filteredSelectedTagList}
         />

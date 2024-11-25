@@ -21,7 +21,7 @@ import { PickRecordTitleInput } from './PickRecordTitleInput';
 import { PickTagColumnLayout } from './PickTagColumnLayout';
 import { PickTitleColumnLayout } from './PickTitleColumnLayout';
 import { Separator } from './Separator';
-import { TagPicker } from '../TagPicker';
+import { PickTagPicker } from '../PickTagPicker';
 import { PickViewItemComponentProps, TagType } from '@/types';
 
 export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
@@ -89,7 +89,7 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
         ) : (
           <div
             className={pickTitleSectionStyle}
-            onClick={(event) => {
+            onDoubleClick={(event) => {
               setCurrentUpdatePickId(pickInfo.id);
               event.stopPropagation();
             }}
@@ -103,7 +103,7 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
       <Separator />
 
       <PickTagColumnLayout>
-        <TagPicker
+        <PickTagPicker
           pickInfo={pickInfo}
           selectedTagList={filteredSelectedTagList}
         />

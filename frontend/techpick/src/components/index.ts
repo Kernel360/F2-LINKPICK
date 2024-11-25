@@ -4,7 +4,11 @@ export { SelectedTagListLayout } from './SelectedTagListLayout/SelectedTagListLa
 export { ShowDeleteTagDialogButton } from './ShowDeleteTagDialogButton';
 export { ToggleThemeButton } from './ToggleThemeButton';
 export { FeaturedSection } from './FeaturedSection/FeaturedSection';
-export { TagPicker, DeleteTagDialog, DeselectTagButton } from './TagPicker';
+export {
+  PickTagPicker,
+  DeleteTagDialog,
+  DeselectTagButton,
+} from './PickTagPicker';
 export { FolderTree } from './FolderTree';
 export { PickListViewer, DraggablePickListViewer } from './PickListViewer';
 export { FolderAndPickDndContextProvider } from './FolderAndPickDndContextProvider';

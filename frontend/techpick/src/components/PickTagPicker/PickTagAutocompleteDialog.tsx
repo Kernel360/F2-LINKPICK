@@ -18,23 +18,23 @@ import {
   tagCreateTextStyle,
   tagListStyle,
   tagListLoadingStyle,
-} from './TagAutocompleteDialog.css';
+} from './pickTagAutocompleteDialog.css';
 import {
   filterCommandItems,
   CREATABLE_TAG_KEYWORD,
   getRandomInt,
-} from './TagAutocompleteDialog.lib';
+} from './PickTagAutocompleteDialog.lib';
 import { TagInfoEditPopoverButton } from './TagInfoEditPopoverButton';
 import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
 import { PickInfoType, TagType } from '@/types';
 
-export function TagAutocompleteDialog({
+export function PickTagAutocompleteDialog({
   open,
   onOpenChange,
   container,
   pickInfo,
   selectedTagList,
-}: TagSelectionDialogProps) {
+}: PickTagAutocompleteDialogProps) {
   const [tagInputValue, setTagInputValue] = useState('');
   const [canCreateTag, setCanCreateTag] = useState(false);
   const tagInputRef = useRef<HTMLInputElement | null>(null);
@@ -212,7 +212,7 @@ export function TagAutocompleteDialog({
   );
 }
 
-interface TagSelectionDialogProps {
+interface PickTagAutocompleteDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   container?: React.RefObject<HTMLElement>;

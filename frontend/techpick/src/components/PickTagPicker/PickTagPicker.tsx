@@ -2,17 +2,17 @@
 
 import { forwardRef, useRef, useState } from 'react';
 import { SelectedTagItem } from '../SelectedTagItem';
-import { TagAutocompleteDialog } from './TagAutocompleteDialog';
+import { PickTagAutocompleteDialog } from './PickTagAutocompleteDialog';
 import {
   tagPickerLayout,
   tagDialogTriggerLayout,
   tagPickerPlaceholderStyle,
-} from './TagPicker.css';
+} from './pickTagPicker.css';
 import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
 import { PickInfoType, TagType } from '@/types';
 
-export const TagPicker = forwardRef<HTMLDivElement, TagPickerProps>(
-  function TagPickerWithRef({ pickInfo, selectedTagList }, tabFocusRef) {
+export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
+  function PickTagPickerWithRef({ pickInfo, selectedTagList }, tabFocusRef) {
     const [open, setOpen] = useState(false);
     const tagInputContainerRef = useRef<HTMLDivElement>(null);
 
@@ -47,7 +47,7 @@ export const TagPicker = forwardRef<HTMLDivElement, TagPickerProps>(
           </SelectedTagListLayout>
         </div>
 
-        <TagAutocompleteDialog
+        <PickTagAutocompleteDialog
           open={open}
           onOpenChange={setOpen}
           container={tagInputContainerRef}
@@ -59,7 +59,7 @@ export const TagPicker = forwardRef<HTMLDivElement, TagPickerProps>(
   }
 );
 
-interface TagPickerProps {
+interface PickTagPickerProps {
   pickInfo: PickInfoType;
   selectedTagList: TagType[];
 }
