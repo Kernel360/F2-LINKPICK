@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react';
 import { folderTreeHeaderTitleLayout } from '@/components/FolderTree/folderTreeHeader.css';
-import { Search } from '@/components/Search/Search';
 import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { FolderTreeHeader } from './FolderTreeHeader';
@@ -25,7 +24,6 @@ export function FolderTree() {
   return (
     <HorizontalResizableContainer>
       <div className={treeLayout}>
-        <Search />
         <FolderTreeHeader />
         <div className={folderTreeHeaderTitleLayout}>
           <h1>내 폴더</h1>

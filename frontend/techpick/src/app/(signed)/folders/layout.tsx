@@ -1,7 +1,6 @@
 import { PropsWithChildren, Suspense } from 'react';
 import { MessageCircleWarning as MessageCircleWarningIcon } from 'lucide-react';
 import { FolderTree, FolderAndPickDndContextProvider } from '@/components';
-import { CreatePickPopover } from '@/components/CreatePickPopover/CreatePickPopover';
 import { CurrentPathIndicator } from '@/components/FolderPathIndicator/CurrentPathIndicator';
 import {
   pageContainerLayout,
@@ -23,7 +22,6 @@ export default function FolderLayout({ children }: PropsWithChildren) {
               <Suspense>
                 <CurrentPathIndicator />
               </Suspense>
-              <CreatePickPopover />
             </div>
             <div className={ListViewerHeaderBodyLayout}></div>
           </div>
