@@ -152,6 +152,10 @@ public class Folder extends BaseEntity {
 		childPickIdOrderedList.remove(pickId);
 	}
 
+	public void removeChildFolderIdOrdered(Long folderId) {
+		childFolderIdOrderedList.remove(folderId);
+	}
+
 	@Builder
 	private Folder(
 		String name,

@@ -130,7 +130,7 @@ public class FolderDataHandler {
 				.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 			Folder parentFolder = folder.getParentFolder();
-			parentFolder.getChildFolderIdOrderedList().remove(folder.getId());
+			parentFolder.removeChildFolderIdOrdered(folder.getId());
 
 			deleteList.add(folder);
 		}
