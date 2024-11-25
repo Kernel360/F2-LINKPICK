@@ -32,7 +32,7 @@ export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
       <div ref={tagInputContainerRef} className={tagPickerLayout}>
         <div
           className={tagDialogTriggerLayout}
-          onClick={openDialog}
+          onDoubleClick={openDialog}
           onKeyDown={onEnterKeyDown}
           tabIndex={0}
           ref={tabFocusRef}
