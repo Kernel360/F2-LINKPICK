@@ -24,8 +24,9 @@ public interface PickApiMapper {
 
 	PickCommand.ReadList toReadListCommand(Long userId, List<Long> folderIdList);
 
-	PickCommand.Search toSearchCommand(Long userId, List<Long> folderIdList, List<String> searchTokenList,
-		List<Long> tagIdList, Long cursor, int size);
+	PickCommand.Search toSearchCommand(Long userId, PickApiRequest.Search request);
+
+	PickCommand.SearchPagination toSearchPaginationCommand(Long userId, PickApiRequest.SearchPagination request);
 
 	PickCommand.Create toCreateCommand(Long userId, PickApiRequest.Create request);
 

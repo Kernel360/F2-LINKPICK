@@ -13,6 +13,10 @@ public class PickCommand {
 	}
 
 	public record Search(Long userId, List<Long> folderIdList, List<String> searchTokenList,
+						 List<Long> tagIdList) {
+	}
+
+	public record SearchPagination(Long userId, List<Long> folderIdList, List<String> searchTokenList,
 						 List<Long> tagIdList, Long cursor, int size) {
 	}
 

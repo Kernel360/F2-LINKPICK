@@ -3,10 +3,12 @@ package techpick.api.application.pick.controller;
 import java.util.List;
 import java.util.Objects;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,22 +64,36 @@ public class PickApiController {
 	}
 
 	@GetMapping("/search")
-	@Operation(summary = "픽 리스트 검색", description = "해당 폴더에 내에 있는 픽 리스트 검색")
+	@Operation(summary = "픽 리스트 검색(페이지네이션)", description = "페이지네이션 처리 된 픽 리스트 검색")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	public ResponseEntity<PickSliceResponse<PickApiResponse.Pick>> searchPick(
+	public ResponseEntity<PickSliceResponse<PickApiResponse.Pick>> searchPickPagination(
 		@LoginUserId Long userId,
-		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> folderIdList,
-		@Parameter(description = "검색 토큰 목록", example = "리액트, 쿼리, 서버") @RequestParam(required = false, defaultValue = "") List<String> searchTokenList,
-		@Parameter(description = "검색 태그 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> tagIdList,
-		@Parameter(description = "픽 시작 id 조회", example = "0") @RequestParam(required = false, defaultValue = "0") Long cursor,
-		@Parameter(description = "한 페이지에 가져올 픽 개수", example = "20") @RequestParam(required = false, defaultValue = "20") int size
+		@ParameterObject @ModelAttribute PickApiRequest.SearchPagination request
 	) {
-		Slice<PickResult.Pick> pickResultList = pickSearchService.searchPick(
-			pickApiMapper.toSearchCommand(userId, folderIdList, searchTokenList, tagIdList, cursor, size));
+		Slice<PickResult.Pick> pickResultList = pickSearchService.searchPickPagination(
+			pickApiMapper.toSearchPaginationCommand(userId, request));
 
 		return ResponseEntity.ok(new PickSliceResponse<>(pickApiMapper.toSliceApiResponse(pickResultList)));
+	}
+
+	@GetMapping("/search/all")
+	@Operation(summary = "픽 리스트 검색", description = "페이지네이션 처리 되지 않은 픽 리스트 검색")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "조회 성공")
+	})
+	public ResponseEntity<List<PickApiResponse.Pick>> searchPick(
+		@LoginUserId Long userId,
+		@ParameterObject @ModelAttribute PickApiRequest.Search request
+	) {
+		List<PickResult.Pick> pickList = pickSearchService.searchPick(
+			pickApiMapper.toSearchCommand(userId, request));
+
+		List<PickApiResponse.Pick> pickResponseList = pickList.stream()
+			.map(pickApiMapper::toApiResponse)
+			.toList();
+		return ResponseEntity.ok(pickResponseList);
 	}
 
 	@GetMapping("/link")

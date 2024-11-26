@@ -68,8 +68,25 @@ public class PickQuery {
 			.fetch();
 	}
 
+	public List<PickResult.Pick> searchPick(Long userId, List<Long> folderIdList, List<String> searchTokenList,
+		List<Long> tagIdList) {
+
+		return jpaQueryFactory
+			.select(pickResultFields()) // dto로 반환
+			.from(pick)
+			.leftJoin(pickTag).on(pick.id.eq(pickTag.pick.id))
+			.where(
+				userEqCondition(userId), // 본인 pick 조회
+				folderIdCondition(folderIdList), // 폴더에 해당 하는 pick 조회
+				searchTokenListCondition(searchTokenList), // 제목 검색 조건
+				tagIdListCondition(tagIdList) // 태그 검색 조건
+			)
+			.distinct()
+			.fetch();
+	}
+
 	// TODO: 본인 픽이 아닌 다른 사람의 픽도 검색하고 싶다면 userId 부분 제거
-	public Slice<PickResult.Pick> searchPick(Long userId, List<Long> folderIdList, List<String> searchTokenList,
+	public Slice<PickResult.Pick> searchPickPagination(Long userId, List<Long> folderIdList, List<String> searchTokenList,
 		List<Long> tagIdList, Long cursor, int size) {
 
 		List<PickResult.Pick> pickList = jpaQueryFactory
