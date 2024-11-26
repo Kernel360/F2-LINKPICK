@@ -66,7 +66,10 @@ export function PickTagAutocompleteDialog({
 
   const focusTagInput = () => {
     tagInputRef.current?.focus();
-    tagInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    tagInputRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+    });
   };
 
   const clearTagInputValue = () => {
