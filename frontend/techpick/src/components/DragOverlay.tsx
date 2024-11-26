@@ -4,17 +4,26 @@ import { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { DragOverlay as DndKitDragOverlay } from '@dnd-kit/core';
 import { usePickStore, useTreeStore } from '@/stores';
-import { pickDragOverlayStyle } from './dragOverlay.css';
+import {
+  dragCount,
+  pickDragOverlayStyle,
+  stackedItem,
+  stackedOverlay,
+} from './dragOverlay.css';
 import { PickRecordOverlay } from './PickRecord/PickRecordOverlay';
 
 export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   const { isDragging: isFolderDragging, draggingFolderInfo } = useTreeStore();
-  const { isDragging: isPickDragging, draggingPickInfo } = usePickStore();
+  const {
+    isDragging: isPickDragging,
+    draggingPickInfo,
+    selectedPickIdList,
+  } = usePickStore();
   const [mousePosition, setMousePosition] = useState({ x: -1, y: -1 });
   const overlayStyle: CSSProperties = {
     top: `${mousePosition.y}px`,
     left: `${mousePosition.x}px`,
-    transform: 'translate3d(0, 0, 0)', // translate3d를 none으로 설정
+    transform: 'scale(0.7) translate3d(0, 0, 0)', // translate3d를 none으로 설정
     pointerEvents: 'none', // 오버레이가 마우스 이벤트를 방해하지 않도록 설정
   };
 
@@ -72,9 +81,28 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   }
 
   if (isPickDragging && draggingPickInfo) {
+    const shadowElements = Array.from(
+      { length: selectedPickIdList.length - 1 },
+      (_, index) => (
+        <div
+          key={index}
+          className={stackedItem}
+          style={{
+            transform: `translate(${(index + 1) * 4}px, ${(index + 1) * 4}px)`,
+            opacity: 0.8,
+            zIndex: -index - 1,
+          }}
+        />
+      )
+    );
+
     return (
       <DndKitDragOverlay style={overlayStyle}>
-        <PickRecordOverlay pickInfo={draggingPickInfo}></PickRecordOverlay>
+        <div className={stackedOverlay}>
+          <PickRecordOverlay pickInfo={draggingPickInfo} />
+          {shadowElements}
+          <div className={dragCount}>{selectedPickIdList.length}</div>
+        </div>
       </DndKitDragOverlay>
     );
   }
