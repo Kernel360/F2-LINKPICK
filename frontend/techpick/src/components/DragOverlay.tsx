@@ -6,9 +6,9 @@ import { usePickStore, useTreeStore } from '@/stores';
 import {
   dragCount,
   pickDragOverlayStyle,
-  stackedItem,
   stackedOverlay,
 } from './dragOverlay.css';
+import { PickDragOverlayShadowList } from './PickDragOverlayShadowList';
 import { PickRecordOverlay } from './PickRecord/PickRecordOverlay';
 
 export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
@@ -21,26 +21,11 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   const { overlayStyle } = useGetDragOverStyle({ elementClickPosition });
 
   if (isPickDragging && draggingPickInfo) {
-    const shadowElements = Array.from(
-      { length: selectedPickIdList.length - 1 },
-      (_, index) => (
-        <div
-          key={index}
-          className={stackedItem}
-          style={{
-            transform: `translate(${(index + 1) * 4}px, ${(index + 1) * 4}px)`,
-            opacity: 0.8,
-            zIndex: -index - 1,
-          }}
-        />
-      )
-    );
-
     return (
       <DndKitDragOverlay style={overlayStyle}>
         <div className={stackedOverlay}>
           <PickRecordOverlay pickInfo={draggingPickInfo} />
-          {shadowElements}
+          <PickDragOverlayShadowList count={selectedPickIdList.length} />
           <div className={dragCount}>{selectedPickIdList.length}</div>
         </div>
       </DndKitDragOverlay>
