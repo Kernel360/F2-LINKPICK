@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: techpick-collector
+  output:
+    ansi:
+      enabled: always
+  sql:
+    init:
+      mode: never # schema.sql 실행시 always 키고 실행하시면 됩니다. option: never, always
+
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
+#    open-in-view: false
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: local
+  data:
+    mongodb:
+      uri: ${DOCKER_MONGO_URL}
+      database: ${DOCKER_MONGO_DATABASE}
+      username: ${DOCKER_MONGO_USERNAME}
+      password: ${DOCKER_MONGO_PASSWORD}
+#  jpa:
+#    properties:
+#      hibernate:
+#        format_sql: false
+#        show_sql: true
+#    hibernate:
+#      ddl-auto: create
+#  datasource:
+#    url:
+#    username:
+#    password:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+
