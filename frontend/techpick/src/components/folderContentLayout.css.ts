@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { sizes } from 'techpick-shared';
+import { sizes, space } from 'techpick-shared';
 
 export const folderContentLayoutStyle = style({
   width: '100%',
@@ -8,6 +8,7 @@ export const folderContentLayoutStyle = style({
   minWidth: 0,
   position: 'relative',
   overflowY: 'scroll',
+  padding: space['24'],
 
   '@media': {
     'screen and (min-width: 1440px)': {
