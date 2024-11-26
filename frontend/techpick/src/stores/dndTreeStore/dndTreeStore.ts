@@ -10,7 +10,7 @@ import {
   createFolder,
 } from '@/apis/folder';
 import getObjectEntries from '@/components/Search/util/getObjectEntries';
-import { UNKNOWN_FOLDER_ID } from '@/constants';
+import { ROUTES, UNKNOWN_FOLDER_ID } from '@/constants';
 import { isFolderDraggableObject, reorderSortableIdList } from '@/utils';
 import { changeParentFolderId } from './utils/changeParentFolderId';
 import { moveFolderToDifferentParent } from './utils/moveFolderToDifferentParent';
@@ -47,6 +47,18 @@ type TreeAction = {
   getFolderInfoByFolderId: (folderId: number) => FolderType | null;
   getFolders: () => Promise<void>;
   getBasicFolders: () => Promise<void>;
+  getChildFolderListByParentFolderId: (
+    parentId: UniqueIdentifier
+  ) => FolderType[];
+  /**
+   * @author 김민규
+   * @description 미리 로딩한 나의 폴더 리스트를 반환
+   * */
+  getFolderList: () => FolderType[];
+  getFolderInfoByPathname: (pathname: string) => FolderType | null;
+  getAncestorFolderListFromLeaf: (
+    leaf: FolderType | null | undefined
+  ) => FolderType[];
   moveFolder: ({
     from,
     to,
@@ -67,20 +79,12 @@ type TreeAction = {
   setDraggingFolderInfo: (
     draggingFolderInfo: FolderType | null | undefined
   ) => void;
-  getChildFolderListByParentFolderId: (
-    parentId: UniqueIdentifier
-  ) => FolderType[];
   /**
    * @author 김민규
    * @description 미리 로딩한 나의 폴더 리스트 에서 찾는다.
    * @return {FolderType[]} 찾지 못한 경우 빈 배열 반환
    * */
   findFolderByName: (name: string) => FolderType[];
-  /**
-   * @author 김민규
-   * @description 미리 로딩한 나의 폴더 리스트를 반환
-   * */
-  getFolderList: () => FolderType[];
 };
 
 const initialState: TreeState = {
@@ -213,6 +217,49 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         } catch (error) {
           console.log('getBasicFolderMap error', error);
         }
+      },
+      getFolderInfoByPathname: (pathname) => {
+        const basicFolderMap = get().basicFolderMap;
+
+        if (!basicFolderMap) {
+          return null;
+        }
+
+        switch (pathname) {
+          case ROUTES.FOLDERS_UNCLASSIFIED:
+            return basicFolderMap['UNCLASSIFIED'];
+          case ROUTES.FOLDERS_RECYCLE_BIN:
+            return basicFolderMap.RECYCLE_BIN;
+          case ROUTES.FOLDERS_ROOT:
+            return basicFolderMap.ROOT;
+          default: {
+            // '/folders/unclassified' or /folders/recycle-bin | /folders/folderId'
+            //  => 'unclassified' | 'recycle-bin' |folderId
+            const path = pathname.split('/').slice(2).join('');
+            return get().getFolderInfoByFolderId(Number(path));
+          }
+        }
+
+        return null;
+      },
+      getAncestorFolderListFromLeaf: (leaf) => {
+        if (!leaf) {
+          return [];
+        }
+
+        const folderList = [leaf];
+        let parentFolderInfo = get().getFolderInfoByFolderId(
+          leaf.parentFolderId
+        );
+
+        while (parentFolderInfo) {
+          folderList.push(parentFolderInfo);
+          parentFolderInfo = get().getFolderInfoByFolderId(
+            parentFolderInfo.parentFolderId
+          );
+        }
+
+        return folderList.reverse();
       },
       moveFolder: async ({ from, to, selectedFolderList }) => {
         const fromData = from.data.current;
