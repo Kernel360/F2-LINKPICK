@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import type { PropsWithChildren } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
+import { isEqual } from 'es-toolkit';
 import { Trash2 as TrashIcon, CircleX as CircleXIcon } from 'lucide-react';
 import { usePickStore, useTreeStore } from '@/stores';
 import { getPortalContainer } from '@/utils';
@@ -87,7 +88,15 @@ const PickContextMenu = memo(
     );
   },
   (prevProps, nextProps) => {
-    return prevProps.pickInfo.id === nextProps.pickInfo.id;
+    const isEqualPickId = prevProps.pickInfo.id === nextProps.pickInfo.id;
+    const isEqualPickTitle =
+      prevProps.pickInfo.title === nextProps.pickInfo.title;
+    const isEqualSelectedTagList = isEqual(
+      prevProps.pickInfo.tagIdOrderedList,
+      nextProps.pickInfo.tagIdOrderedList
+    );
+
+    return isEqualPickId && isEqualPickTitle && isEqualSelectedTagList;
   }
 );
 
