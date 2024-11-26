@@ -8,8 +8,8 @@ export const pickRecordLayoutStyle = style({
   width: '1044px',
   minHeight: '60px',
   height: 'fit-content',
-  border: '1px solid black',
-  borderTop: 'none',
+  borderBottom: '1px solid ',
+  borderColor: colorVars.gold7,
 });
 
 export const pickImageStyle = style({
