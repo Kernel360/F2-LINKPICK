@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { PickRecordHeader } from '@/components';
+import { FolderContentHeader } from '@/components/FolderContentHeader/FolderContentHeader';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { PickContentLayout } from '@/components/PickContentLayout';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
@@ -54,6 +55,7 @@ export default function RecycleBinFolderPage() {
 
   return (
     <FolderContentLayout>
+      <FolderContentHeader />
       <PickContentLayout>
         <PickRecordHeader />
         <PickDraggableListLayout

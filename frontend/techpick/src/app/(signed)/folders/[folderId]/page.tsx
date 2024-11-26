@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { PickRecordHeader } from '@/components';
-import { FolderContentHeader } from '@/components/FolderContentHeader';
+import { FolderContentHeader } from '@/components/FolderContentHeader/FolderContentHeader';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { PickContentLayout } from '@/components/PickContentLayout';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
