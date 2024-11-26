@@ -51,8 +51,8 @@ export const [commonThemeClass, commonTheme] = createTheme({
       xl: '1.25rem',
       /** @description 2x large = 24px */
       '2xl': '1.5rem',
-      /** @description 3x large = 30px */
-      '3xl': '1.875rem',
+      /** @description 3x large = 32px */
+      '3xl': '2rem',
       /** @description 4x large = 36px */
       '4xl': '2.25rem',
       /** @description 5x large = 48px */
