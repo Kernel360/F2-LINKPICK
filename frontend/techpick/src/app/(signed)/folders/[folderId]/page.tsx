@@ -3,6 +3,8 @@
 import { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { PickRecordHeader } from '@/components';
+import { FolderContentHeader } from '@/components/FolderContentHeader';
+import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { PickContentLayout } from '@/components/PickContentLayout';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
@@ -65,13 +67,18 @@ export default function FolderDetailPage() {
   const pickList = getOrderedPickListByFolderId(folderId);
 
   return (
-    <PickContentLayout>
-      <PickRecordHeader />
-      <PickDraggableListLayout folderId={folderId} viewType="record">
-        {pickList.map((pickInfo) => {
-          return <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />;
-        })}
-      </PickDraggableListLayout>
-    </PickContentLayout>
+    <FolderContentLayout>
+      <FolderContentHeader />
+      <PickContentLayout>
+        <PickRecordHeader />
+        <PickDraggableListLayout folderId={folderId} viewType="record">
+          {pickList.map((pickInfo) => {
+            return (
+              <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
+            );
+          })}
+        </PickDraggableListLayout>
+      </PickContentLayout>
+    </FolderContentLayout>
   );
 }

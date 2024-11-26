@@ -31,5 +31,12 @@ export default function RootFolderPage() {
     return <div>loading...</div>;
   }
 
-  return <div>{/*  TODO: 여기에 설명서, 홈 화면을 처음에 그려줍니다. */}</div>;
+  {
+    /*  TODO: 여기에 설명서, 홈 화면을 처음에 그려줍니다. */
+  }
+  return (
+    <div style={{ marginLeft: '36px' }}>
+      <h1>잠시만 기다려 주세요. 준비중입니다!</h1>
+    </div>
+  );
 }
