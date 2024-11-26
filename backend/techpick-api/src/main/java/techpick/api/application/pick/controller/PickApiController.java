@@ -3,10 +3,12 @@ package techpick.api.application.pick.controller;
 import java.util.List;
 import java.util.Objects;
 
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,14 +70,10 @@ public class PickApiController {
 	})
 	public ResponseEntity<PickSliceResponse<PickApiResponse.Pick>> searchPickPagination(
 		@LoginUserId Long userId,
-		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> folderIdList,
-		@Parameter(description = "검색 토큰 목록", example = "리액트, 쿼리, 서버") @RequestParam(required = false, defaultValue = "") List<String> searchTokenList,
-		@Parameter(description = "검색 태그 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> tagIdList,
-		@Parameter(description = "픽 시작 id 조회", example = "0") @RequestParam(required = false, defaultValue = "0") Long cursor,
-		@Parameter(description = "한 페이지에 가져올 픽 개수", example = "20") @RequestParam(required = false, defaultValue = "20") int size
+		@ParameterObject @ModelAttribute PickApiRequest.SearchPagination request
 	) {
 		Slice<PickResult.Pick> pickResultList = pickSearchService.searchPickPagination(
-			pickApiMapper.toSearchPaginationCommand(userId, folderIdList, searchTokenList, tagIdList, cursor, size));
+			pickApiMapper.toSearchPaginationCommand(userId, request));
 
 		return ResponseEntity.ok(new PickSliceResponse<>(pickApiMapper.toSliceApiResponse(pickResultList)));
 	}
@@ -87,12 +85,10 @@ public class PickApiController {
 	})
 	public ResponseEntity<List<PickApiResponse.Pick>> searchPick(
 		@LoginUserId Long userId,
-		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> folderIdList,
-		@Parameter(description = "검색 토큰 목록", example = "리액트, 쿼리, 서버") @RequestParam(required = false, defaultValue = "") List<String> searchTokenList,
-		@Parameter(description = "검색 태그 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> tagIdList
+		@ParameterObject @ModelAttribute PickApiRequest.Search request
 	) {
 		List<PickResult.Pick> pickList = pickSearchService.searchPick(
-			pickApiMapper.toSearchCommand(userId, folderIdList, searchTokenList, tagIdList));
+			pickApiMapper.toSearchCommand(userId, request));
 
 		List<PickApiResponse.Pick> pickResponseList = pickList.stream()
 			.map(pickApiMapper::toApiResponse)
