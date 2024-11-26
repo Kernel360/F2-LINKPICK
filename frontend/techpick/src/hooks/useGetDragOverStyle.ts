@@ -5,19 +5,25 @@ import { usePickStore, useTreeStore } from '@/stores';
 export function useGetDragOverStyle({
   elementClickPosition,
   scale = 0.7,
-}: useGetDragOverStyleProps) {
+}: UseGetDragOverStyleProps) {
   const { isDragging: isFolderDragging } = useTreeStore();
   const { isDragging: isPickDragging } = usePickStore();
-  const [mousePosition, setMousePosition] = useState(elementClickPosition);
+  const [mousePosition, setMousePosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
-  const overlayStyle: CSSProperties = {
-    top: `${mousePosition.y}px`,
-    left: `${mousePosition.x}px`,
-    transformOrigin: 'top left',
-    transform: `scale(${scale}) translate3d(0, 0, 0)`, // translate3d를 none으로 설정
-    pointerEvents: 'none', // 오버레이가 마우스 이벤트를 방해하지 않도록 설정
-  };
-
+  const overlayStyle: CSSProperties = mousePosition
+    ? {
+        top: `${mousePosition.y}px`,
+        left: `${mousePosition.x}px`,
+        transformOrigin: 'top left',
+        transform: `scale(${scale}) translate3d(0, 0, 0)`,
+        pointerEvents: 'none',
+      }
+    : {
+        visibility: 'hidden', // Hide the overlay until we have a valid position
+      };
   useEffect(
     function trackingMousePointer() {
       const handleMouseMove = (event: MouseEvent | TouchEvent) => {
@@ -33,8 +39,6 @@ export function useGetDragOverStyle({
           event instanceof MouseEvent
             ? event.clientY
             : event.touches[0].clientY;
-
-        const scale = 0.7; // 스케일 비율
 
         const adjustedX = clientX - elementClickPosition.x * scale; // 스케일 적용
         const adjustedY = clientY - elementClickPosition.y * scale; // 스케일 적용
@@ -69,13 +73,14 @@ export function useGetDragOverStyle({
       elementClickPosition.y,
       isFolderDragging,
       isPickDragging,
+      scale,
     ]
   );
 
   return { overlayStyle };
 }
 
-interface useGetDragOverStyleProps {
+interface UseGetDragOverStyleProps {
   elementClickPosition: {
     x: number;
     y: number;
