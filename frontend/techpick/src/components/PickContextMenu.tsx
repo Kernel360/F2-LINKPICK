@@ -3,22 +3,25 @@
 import type { PropsWithChildren } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { Trash2 as TrashIcon, CircleX as CircleXIcon } from 'lucide-react';
-import { usePickStore } from '@/stores';
+import { usePickStore, useTreeStore } from '@/stores';
 import { getPortalContainer } from '@/utils';
 import {
   contextMenuContentLayout,
   contextMenuItemStyle,
 } from './pickContextMenu.css';
-import { BasicFolderMap, PickInfoType } from '@/types';
+import { PickInfoType } from '@/types';
 
 export function PickContextMenu({
-  basicFolderMap,
   pickInfo,
   children,
 }: PropsWithChildren<PickContextMenuProps>) {
   const portalContainer = getPortalContainer();
-  const isRecycleBinFolder =
-    basicFolderMap['RECYCLE_BIN'].id === pickInfo.parentFolderId;
+  const { basicFolderMap } = useTreeStore();
+
+  const recycleBinFolderId = basicFolderMap
+    ? basicFolderMap['RECYCLE_BIN'].id
+    : -1;
+  const isRecycleBinFolder = recycleBinFolderId === pickInfo.parentFolderId;
   const {
     selectedPickIdList,
     setSelectedPickIdList,
@@ -62,7 +65,7 @@ export function PickContextMenu({
             <ContextMenu.Item
               onSelect={() => {
                 deleteSelectedPicks({
-                  recycleBinFolderId: basicFolderMap['RECYCLE_BIN'].id,
+                  recycleBinFolderId,
                 });
               }}
               className={contextMenuItemStyle}
@@ -75,7 +78,7 @@ export function PickContextMenu({
               onSelect={() => {
                 moveSelectedPicksToRecycleBinFolder({
                   picksParentFolderId: pickInfo.parentFolderId,
-                  recycleBinFolderId: basicFolderMap['RECYCLE_BIN'].id,
+                  recycleBinFolderId,
                 });
               }}
               className={contextMenuItemStyle}
@@ -91,6 +94,5 @@ export function PickContextMenu({
 }
 
 interface PickContextMenuProps {
-  basicFolderMap: BasicFolderMap;
   pickInfo: PickInfoType;
 }

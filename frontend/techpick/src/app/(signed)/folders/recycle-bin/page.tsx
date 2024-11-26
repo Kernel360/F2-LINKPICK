@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { PickRecordHeader } from '@/components';
 import { PickContentLayout } from '@/components/PickContentLayout';
-import { PickContextMenu } from '@/components/PickContextMenu';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
 import {
@@ -60,15 +59,7 @@ export default function RecycleBinFolderPage() {
         viewType="record"
       >
         {pickList.map((pickInfo) => {
-          return (
-            <PickContextMenu
-              basicFolderMap={basicFolderMap}
-              pickInfo={pickInfo}
-              key={pickInfo.id}
-            >
-              <PickDraggableRecord pickInfo={pickInfo} />
-            </PickContextMenu>
-          );
+          return <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />;
         })}
       </PickDraggableListLayout>
     </PickContentLayout>

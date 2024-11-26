@@ -8,6 +8,7 @@ import {
   selectedDragItemStyle,
 } from './pickDraggableRecord.css';
 import { PickRecord } from './PickRecord';
+import { PickContextMenu } from '../PickContextMenu';
 import { PickViewDraggableItemComponentProps } from '@/types';
 
 export function PickDraggableRecord({
@@ -105,7 +106,9 @@ export function PickDraggableRecord({
         onClick={(event) => handleClick(pickId, event)}
         id={pickElementId}
       >
-        <PickRecord pickInfo={pickInfo} />
+        <PickContextMenu pickInfo={pickInfo}>
+          <PickRecord pickInfo={pickInfo} />
+        </PickContextMenu>
       </div>
     </div>
   );
