@@ -40,7 +40,7 @@ public class SharedFolderService {
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Transactional
-	public SharedFolderResult.Folder createSharedFolder(SharedFolderCommand.Create command) throws
+	public SharedFolderResult.Create createSharedFolder(SharedFolderCommand.Create command) throws
 		JsonProcessingException {
 		LocalDateTime now = LocalDateTime.now();
 		// 공유할 폴더들을 하나로 묶기 위한 가상의 최상위 폴더를 생성
@@ -57,8 +57,8 @@ public class SharedFolderService {
 		}
 
 		String jsonData = objectMapper.writeValueAsString(root);
-
-		return sharedFolderMapper.toResultFolder(sharedFolderDataHandler.save(command.userId(), jsonData, now));
+		var saved = sharedFolderDataHandler.save(command.userId(), jsonData, now);
+		return sharedFolderMapper.toCreateResult(saved.getId(), root);
 	}
 
 	@Transactional(readOnly = true)
