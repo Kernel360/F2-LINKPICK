@@ -19,6 +19,7 @@ export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
     const { setCurrentUpdateTagPickId } = useUpdatePickStore();
     const { refs, floatingStyles } = useFloating({
       strategy: 'fixed',
+      placement: 'bottom-start',
 
       placement: 'bottom-start',
 
@@ -45,13 +46,8 @@ export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
 
     return (
       <div>
+        <div ref={refs.setReference} />
         <div className={tagPickerLayout}>
-          <div
-            ref={refs.setReference}
-            style={{
-              pointerEvents: 'none',
-            }}
-          />
           <div
             className={tagDialogTriggerLayout}
             onDoubleClick={openDialog}
