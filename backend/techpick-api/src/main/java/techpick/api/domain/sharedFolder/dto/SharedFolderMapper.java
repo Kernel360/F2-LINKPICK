@@ -1,6 +1,7 @@
 package techpick.api.domain.sharedFolder.dto;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -54,5 +55,9 @@ public class SharedFolderMapper {
 		return SharedFolderResult.List.builder()
 			.uuid(sharedFolder.getId())
 			.build();
+	}
+
+	public SharedFolderResult.Create toCreateResult(UUID uuid, FolderNode folderNode) {
+		return SharedFolderResult.Create.builder().uuid(uuid).folderNode(folderNode).build();
 	}
 }

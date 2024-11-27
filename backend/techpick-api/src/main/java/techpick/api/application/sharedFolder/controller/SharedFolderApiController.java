@@ -40,7 +40,7 @@ public class SharedFolderApiController {
 		@ApiResponse(responseCode = "200", description = "공유폴더 생성 성공"),
 		@ApiResponse(responseCode = "403", description = "자신의 폴더만 공유할 수 있습니다.")
 	})
-	public ResponseEntity<SharedFolderResult.Folder> createSharedFolder(@LoginUserId Long userId,
+	public ResponseEntity<SharedFolderResult.Create> createSharedFolder(@LoginUserId Long userId,
 		@Valid @RequestBody SharedFolderApiRequest.Create request) throws
 		JsonProcessingException {
 		var result = sharedFolderService.createSharedFolder(
