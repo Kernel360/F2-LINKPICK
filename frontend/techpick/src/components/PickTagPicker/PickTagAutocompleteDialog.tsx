@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { flip, useFloating } from '@floating-ui/react';
+import type { CSSProperties } from 'react';
 import { DialogTitle, Description } from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Command } from 'cmdk';
@@ -38,9 +38,10 @@ import { PickInfoType, TagType } from '@/types';
 export function PickTagAutocompleteDialog({
   open,
   onOpenChange,
-  container,
   pickInfo,
   selectedTagList,
+  floatingStyles,
+  setFloating,
 }: PickTagAutocompleteDialogProps) {
   const [tagInputValue, setTagInputValue] = useState('');
   const [canCreateTag, setCanCreateTag] = useState(false);
@@ -49,16 +50,7 @@ export function PickTagAutocompleteDialog({
   const isCreateFetchPendingRef = useRef<boolean>(false);
   const randomNumber = useRef<number>(getRandomInt());
   const tagIdOrderedList = selectedTagList.map((tag) => tag.id);
-  const { refs, floatingStyles, update } = useFloating({
-    middleware: [
-      flip({
-        fallbackAxisSideDirection: 'start',
-      }),
-    ],
-  });
-
   const tagAutocompleteDialogRef = useRef<HTMLDivElement>(null);
-
   const { tagList, fetchingTagState, createTag } = useTagStore();
   const { updatePickInfo } = usePickStore();
   const { isDarkMode } = useThemeStore();
@@ -82,7 +74,7 @@ export function PickTagAutocompleteDialog({
     }
 
     const newTagIdOrderedList = [...tagIdOrderedList, tag.id];
-    update();
+
     focusTagInput();
     clearTagInputValue();
     updatePickInfo(pickInfo.parentFolderId, {
@@ -135,10 +127,10 @@ export function PickTagAutocompleteDialog({
 
         onOpenChange(open);
       }}
-      container={container?.current ?? undefined}
       className={tagDialogPortalLayout}
       filter={filterCommandItems}
-      ref={tagAutocompleteDialogRef}
+      style={{ ...floatingStyles }}
+      ref={setFloating}
     >
       <VisuallyHidden.Root>
         <DialogTitle>tag autocomplete</DialogTitle>
@@ -146,37 +138,30 @@ export function PickTagAutocompleteDialog({
       </VisuallyHidden.Root>
 
       {/**선택한 태그 리스트 */}
-      <div ref={refs.setReference}>
-        <SelectedTagListLayout ref={selectedTagListRef} focusStyle="focus">
-          {selectedTagList.map((tag) => (
-            <SelectedTagItem key={tag.id} tag={tag}>
-              <DeselectTagButton
-                tag={tag}
-                onClick={() => {
-                  focusTagInput();
-                  update();
-                }}
-                pickInfo={pickInfo}
-                selectedTagList={selectedTagList}
-              />
-            </SelectedTagItem>
-          ))}
+      <SelectedTagListLayout ref={selectedTagListRef} focusStyle="focus">
+        {selectedTagList.map((tag) => (
+          <SelectedTagItem key={tag.id} tag={tag}>
+            <DeselectTagButton
+              tag={tag}
+              onClick={() => {
+                focusTagInput();
+              }}
+              pickInfo={pickInfo}
+              selectedTagList={selectedTagList}
+            />
+          </SelectedTagItem>
+        ))}
 
-          <Command.Input
-            className={commandInputStyle}
-            ref={tagInputRef}
-            value={tagInputValue}
-            onValueChange={setTagInputValue}
-          />
-        </SelectedTagListLayout>
-      </div>
+        <Command.Input
+          className={commandInputStyle}
+          ref={tagInputRef}
+          value={tagInputValue}
+          onValueChange={setTagInputValue}
+        />
+      </SelectedTagListLayout>
       {/**전체 태그 리스트 */}
 
-      <Command.List
-        className={tagListStyle}
-        ref={refs.setFloating}
-        style={{ ...floatingStyles }}
-      >
+      <Command.List className={tagListStyle}>
         {fetchingTagState.isPending && (
           <Command.Loading className={tagListLoadingStyle}>
             <BarLoader color={colorVars.color.font} />
@@ -230,6 +215,7 @@ export function PickTagAutocompleteDialog({
 
       {/**DeleteTagDialog를 닫고도 Command.Dialog가 켜져있기위해서 Command.Dialog 내부에 있어야합니다.*/}
       <DeleteTagDialog />
+      <div ref={tagAutocompleteDialogRef}></div>
     </Command.Dialog>
   );
 }
@@ -237,7 +223,9 @@ export function PickTagAutocompleteDialog({
 interface PickTagAutocompleteDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  container?: React.RefObject<HTMLElement>;
   pickInfo: PickInfoType;
   selectedTagList: TagType[];
+  setFloating: ((node: HTMLElement | null) => void) &
+    ((node: HTMLElement | null) => void);
+  floatingStyles: CSSProperties;
 }

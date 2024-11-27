@@ -1,6 +1,7 @@
 'use client';
 
-import { forwardRef, useRef, useState } from 'react';
+import { forwardRef, useState } from 'react';
+import { autoUpdate, shift, useFloating } from '@floating-ui/react';
 import { useUpdatePickStore } from '@/stores';
 import { SelectedTagItem } from '../SelectedTagItem';
 import { PickTagAutocompleteDialog } from './PickTagAutocompleteDialog';
@@ -15,8 +16,17 @@ import { PickInfoType, TagType } from '@/types';
 export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
   function PickTagPickerWithRef({ pickInfo, selectedTagList }, tabFocusRef) {
     const [open, setOpen] = useState(false);
-    const tagInputContainerRef = useRef<HTMLDivElement>(null);
     const { setCurrentUpdateTagPickId } = useUpdatePickStore();
+    const { refs, floatingStyles } = useFloating({
+      strategy: 'fixed',
+
+      whileElementsMounted: autoUpdate,
+      middleware: [
+        shift({
+          crossAxis: true,
+        }),
+      ],
+    });
 
     const openDialog = () => {
       setOpen(true);
@@ -32,31 +42,40 @@ export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
     };
 
     return (
-      <div ref={tagInputContainerRef} className={tagPickerLayout}>
-        <div
-          className={tagDialogTriggerLayout}
-          onDoubleClick={openDialog}
-          onKeyDown={onEnterKeyDown}
-          tabIndex={0}
-          ref={tabFocusRef}
-        >
-          {selectedTagList.length === 0 && (
-            <p className={tagPickerPlaceholderStyle}>태그를 넣어주세요</p>
-          )}
-          <SelectedTagListLayout>
-            {selectedTagList.map((tag) => (
-              <SelectedTagItem key={tag.name} tag={tag} />
-            ))}
-          </SelectedTagListLayout>
-        </div>
+      <div>
+        <div className={tagPickerLayout}>
+          <div
+            ref={refs.setReference}
+            style={{
+              pointerEvents: 'none',
+            }}
+          />
+          <div
+            className={tagDialogTriggerLayout}
+            onDoubleClick={openDialog}
+            onKeyDown={onEnterKeyDown}
+            tabIndex={0}
+            ref={tabFocusRef}
+          >
+            {selectedTagList.length === 0 && (
+              <p className={tagPickerPlaceholderStyle}>태그를 넣어주세요</p>
+            )}
+            <SelectedTagListLayout>
+              {selectedTagList.map((tag) => (
+                <SelectedTagItem key={tag.name} tag={tag} />
+              ))}
+            </SelectedTagListLayout>
+          </div>
 
-        <PickTagAutocompleteDialog
-          open={open}
-          onOpenChange={setOpen}
-          container={tagInputContainerRef}
-          pickInfo={pickInfo}
-          selectedTagList={selectedTagList}
-        />
+          <PickTagAutocompleteDialog
+            open={open}
+            onOpenChange={setOpen}
+            pickInfo={pickInfo}
+            selectedTagList={selectedTagList}
+            setFloating={refs.setFloating}
+            floatingStyles={floatingStyles}
+          />
+        </div>
       </div>
     );
   }

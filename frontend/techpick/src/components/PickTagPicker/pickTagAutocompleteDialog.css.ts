@@ -4,8 +4,6 @@ import { colorVars, fontSize } from 'techpick-shared';
 const { color } = colorVars;
 
 export const tagDialogPortalLayout = style({
-  position: 'absolute',
-  top: '0',
   zIndex: '1',
   backgroundColor: colorVars.lightGray,
   boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',
