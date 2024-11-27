@@ -9,5 +9,4 @@ export const pickRecordHeaderLayoutStyle = style({
   borderTop: '1px solid ',
   borderBottom: '0.5px solid ',
   borderColor: colorVars.gold7,
-  marginTop: '24px',
 });
