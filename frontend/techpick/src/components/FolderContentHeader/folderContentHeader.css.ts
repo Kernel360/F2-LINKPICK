@@ -9,3 +9,8 @@ export const legacyFolderContentHeaderStyle = style({
   justifyContent: 'space-between',
   transition: '0.3s ease',
 });
+
+export const folderContentHeaderStyle = style({
+  width: '100%',
+  overflow: 'hidden',
+});

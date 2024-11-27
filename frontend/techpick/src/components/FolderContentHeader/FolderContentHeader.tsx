@@ -5,6 +5,7 @@ import { useTreeStore } from '@/stores';
 import { CurrentFolderNameSection } from './CurrentFolderNameSection';
 import { CurrentPathIndicator } from './CurrentPathIndicator';
 import { Gap } from '../Gap';
+import { folderContentHeaderStyle } from './folderContentHeader.css';
 
 export function FolderContentHeader() {
   const pathname = usePathname();
@@ -12,7 +13,7 @@ export function FolderContentHeader() {
   const folderInfo = getFolderInfoByPathname(pathname);
 
   return (
-    <div>
+    <div className={folderContentHeaderStyle}>
       <CurrentFolderNameSection folderInfo={folderInfo} />
       {folderInfo?.folderType === 'GENERAL' && (
         <Gap verticalSize="gap8">
