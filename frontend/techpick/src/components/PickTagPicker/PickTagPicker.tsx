@@ -20,6 +20,8 @@ export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
     const { refs, floatingStyles } = useFloating({
       strategy: 'fixed',
 
+      placement: 'bottom-start',
+
       whileElementsMounted: autoUpdate,
       middleware: [
         shift({
