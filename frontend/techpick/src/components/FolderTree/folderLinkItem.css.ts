@@ -6,10 +6,10 @@ export const folderInfoItemStyle = style({
   alignItems: 'center',
   gap: space['8'],
   minWidth: sizes['6xs'],
-  minHeight: '32px',
+  minHeight: '40px',
   padding: '8px 12px',
   borderRadius: '4px',
-  backgroundColor: colorVars.backgroundNeutral,
+
   cursor: 'grab',
   transition: 'background-color 0.2s',
   selectors: {
@@ -43,4 +43,5 @@ export const folderTextStyle = style({
   overflow: 'hidden',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
+  height: '24px',
 });
