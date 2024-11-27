@@ -8,9 +8,7 @@ import { Gap } from '../Gap';
 
 export function FolderContentHeader() {
   const pathname = usePathname();
-  const getFolderInfoByPathname = useTreeStore(
-    (state) => state.getFolderInfoByPathname
-  );
+  const { getFolderInfoByPathname } = useTreeStore();
   const folderInfo = getFolderInfoByPathname(pathname);
 
   return (
