@@ -21,8 +21,6 @@ export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
       strategy: 'fixed',
       placement: 'bottom-start',
 
-      placement: 'bottom-start',
-
       whileElementsMounted: autoUpdate,
       middleware: [
         shift({
