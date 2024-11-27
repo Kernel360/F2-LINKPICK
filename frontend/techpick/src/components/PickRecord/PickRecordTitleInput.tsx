@@ -1,9 +1,11 @@
-'use client';
-
 import { useCallback, useEffect, useRef } from 'react';
 import type { KeyboardEvent } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
 import { isEmptyString } from '@/utils';
-import { pickTitleInputStyle } from './pickRecordTitleInput.css';
+import {
+  pickTitleInputStyle,
+  pickRecordTitleInputLayoutStyle,
+} from './pickRecordTitleInput.css';
 
 export function PickRecordTitleInput({
   onSubmit,
@@ -54,21 +56,30 @@ export function PickRecordTitleInput({
   );
 
   useEffect(
-    function initializeFolderInput() {
+    function initializePickRecordTitleInput() {
       if (textAreaRef.current) {
         textAreaRef.current.value = initialValue;
 
-        // 타이밍 이슈 탓으로 인해 setTimeout 사용
-        setTimeout(() => textAreaRef.current?.focus(), 0);
+        textAreaRef.current?.focus();
+        // 커서를 텍스트의 끝으로 이동
+        textAreaRef.current?.setSelectionRange(
+          initialValue.length,
+          initialValue.length
+        );
       }
     },
     [initialValue]
   );
 
   return (
-    <div ref={containerRef} onClick={(e) => e.stopPropagation()}>
-      <textarea
+    <div
+      ref={containerRef}
+      onClick={(e) => e.stopPropagation()}
+      className={pickRecordTitleInputLayoutStyle}
+    >
+      <TextareaAutosize
         ref={textAreaRef}
+        defaultValue={initialValue}
         onKeyDown={onKeyDown}
         className={pickTitleInputStyle}
       />

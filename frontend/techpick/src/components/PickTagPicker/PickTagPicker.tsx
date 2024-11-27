@@ -1,6 +1,7 @@
 'use client';
 
 import { forwardRef, useRef, useState } from 'react';
+import { useUpdatePickStore } from '@/stores';
 import { SelectedTagItem } from '../SelectedTagItem';
 import { PickTagAutocompleteDialog } from './PickTagAutocompleteDialog';
 import {
@@ -15,9 +16,11 @@ export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
   function PickTagPickerWithRef({ pickInfo, selectedTagList }, tabFocusRef) {
     const [open, setOpen] = useState(false);
     const tagInputContainerRef = useRef<HTMLDivElement>(null);
+    const { setCurrentUpdateTagPickId } = useUpdatePickStore();
 
     const openDialog = () => {
       setOpen(true);
+      setCurrentUpdateTagPickId(pickInfo.id);
     };
 
     const onEnterKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {

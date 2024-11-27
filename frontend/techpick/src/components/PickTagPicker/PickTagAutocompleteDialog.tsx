@@ -2,10 +2,17 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { flip, useFloating } from '@floating-ui/react';
+import { DialogTitle, Description } from '@radix-ui/react-dialog';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Command } from 'cmdk';
 import { BarLoader } from 'react-spinners';
 import { colorVars } from 'techpick-shared';
-import { useThemeStore, useTagStore, usePickStore } from '@/stores';
+import {
+  useThemeStore,
+  useTagStore,
+  usePickStore,
+  useUpdatePickStore,
+} from '@/stores';
 import { notifyError, numberToRandomColor } from '@/utils';
 import { DeleteTagDialog } from './DeleteTagDialog';
 import { DeselectTagButton } from './DeselectTagButton';
@@ -55,6 +62,7 @@ export function PickTagAutocompleteDialog({
   const { tagList, fetchingTagState, createTag } = useTagStore();
   const { updatePickInfo } = usePickStore();
   const { isDarkMode } = useThemeStore();
+  const { setCurrentUpdateTagPickIdToNull } = useUpdatePickStore();
 
   const focusTagInput = () => {
     tagInputRef.current?.focus();
@@ -117,12 +125,23 @@ export function PickTagAutocompleteDialog({
   return (
     <Command.Dialog
       open={open}
-      onOpenChange={onOpenChange}
+      onOpenChange={(open) => {
+        if (!open) {
+          setCurrentUpdateTagPickIdToNull();
+        }
+
+        onOpenChange(open);
+      }}
       container={container?.current ?? undefined}
       className={tagDialogPortalLayout}
       filter={filterCommandItems}
       ref={tagAutocompleteDialogRef}
     >
+      <VisuallyHidden.Root>
+        <DialogTitle>tag autocomplete</DialogTitle>
+        <Description>select tag</Description>
+      </VisuallyHidden.Root>
+
       {/**선택한 태그 리스트 */}
       <div ref={refs.setReference}>
         <SelectedTagListLayout ref={selectedTagListRef} focusStyle="focus">
