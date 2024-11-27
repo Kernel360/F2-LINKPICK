@@ -2,13 +2,23 @@ import { style } from '@vanilla-extract/css';
 import { fontWeights, fontSize } from 'techpick-shared';
 
 export const currentFolderNameSectionStyle = style({
-  display: 'flex',
+  display: 'inline-flex',
   alignItems: 'end',
   gap: 8,
+  flex: '0 0 100%',
+  maxWidth: '100%',
+  minWidth: 0, // 추가
+});
+
+export const folderOpenIconStyle = style({
+  flexShrink: '0',
 });
 
 export const folderNameStyle = style({
-  display: 'inline',
+  display: 'inline-block',
   fontWeight: fontWeights['medium'],
   fontSize: fontSize['3xl'],
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
 });

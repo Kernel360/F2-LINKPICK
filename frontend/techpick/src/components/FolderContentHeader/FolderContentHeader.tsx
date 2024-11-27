@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation';
 import { useTreeStore } from '@/stores';
 import { CurrentFolderNameSection } from './CurrentFolderNameSection';
 import { CurrentPathIndicator } from './CurrentPathIndicator';
-import { folderContentHeaderStyle } from './folderContentHeader.css';
+import { Gap } from '../Gap';
 
 export function FolderContentHeader() {
   const pathname = usePathname();
@@ -14,10 +14,12 @@ export function FolderContentHeader() {
   const folderInfo = getFolderInfoByPathname(pathname);
 
   return (
-    <div className={folderContentHeaderStyle}>
+    <div>
       <CurrentFolderNameSection folderInfo={folderInfo} />
       {folderInfo?.folderType === 'GENERAL' && (
-        <CurrentPathIndicator folderInfo={folderInfo} />
+        <Gap verticalSize="gap8">
+          <CurrentPathIndicator folderInfo={folderInfo} />
+        </Gap>
       )}
     </div>
   );

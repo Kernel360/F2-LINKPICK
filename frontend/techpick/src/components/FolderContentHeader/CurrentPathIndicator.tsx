@@ -10,6 +10,11 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from './Breadcrumb';
+import {
+  breadcrumbItemLayout,
+  breadcrumbLinkStyle,
+  breadcrumbItemStyle,
+} from './currentPathIndicator.css';
 import type { FolderType } from '@/types';
 
 export function CurrentPathIndicator({
@@ -26,16 +31,13 @@ export function CurrentPathIndicator({
         <BreadcrumbList>
           {ancestorFolderList.map((folderInfo, index) => {
             return (
-              <div
-                key={folderInfo.id}
-                style={{ display: 'flex', alignItems: 'center' }}
-              >
+              <div key={folderInfo.id} className={breadcrumbItemLayout}>
                 {index !== 0 && <BreadcrumbSeparator />}
-                <BreadcrumbItem>
+                <BreadcrumbItem className={breadcrumbItemStyle}>
                   {folderInfo.folderType === 'ROOT' ? (
                     '내 폴더'
                   ) : (
-                    <BreadcrumbLink asChild>
+                    <BreadcrumbLink className={breadcrumbLinkStyle} asChild>
                       <Link href={getFolderLinkByType(folderInfo)}>
                         {folderInfo.name}
                       </Link>
