@@ -21,10 +21,6 @@ export const pickImageStyle = style({
   borderRadius: '2px',
 });
 
-export const pickEmptyImageStyle = style({
-  border: '1px solid black',
-});
-
 export const pickTitleSectionStyle = style({
   fontSize: typography.fontSize['md'],
   fontWeight: typography.fontWeights['light'],

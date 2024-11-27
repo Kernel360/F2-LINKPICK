@@ -11,7 +11,6 @@ import { PickImageColumnLayout } from './PickImageColumnLayout';
 import {
   pickRecordLayoutStyle,
   pickImageStyle,
-  pickEmptyImageStyle,
   pickTitleSectionStyle,
   dateTextStyle,
   externalLinkIconStyle,
@@ -56,10 +55,10 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
     >
       <PickImageColumnLayout>
         <div className={pickImageStyle}>
-          {link.imageUrl ? (
+          {link.imageUrl && link.imageUrl !== '' ? (
             <Image src={link.imageUrl} alt="" fill sizes="96px" />
           ) : (
-            <div className={pickEmptyImageStyle} />
+            <Image src={'/image/default_image.svg'} alt="" fill sizes="96px" />
           )}
         </div>
       </PickImageColumnLayout>
