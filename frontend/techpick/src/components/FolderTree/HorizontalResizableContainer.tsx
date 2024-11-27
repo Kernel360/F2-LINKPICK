@@ -3,10 +3,7 @@
 import { useEffect, useState } from 'react';
 import type { PropsWithChildren } from 'react';
 import { Resizable } from 're-resizable';
-import {
-  horizontalResizingContainerLayout,
-  resizeHandleStyle,
-} from '@/components/FolderTree/tree.css';
+import { horizontalResizingContainerLayout } from '@/components/FolderTree/tree.css';
 export function HorizontalResizableContainer({ children }: PropsWithChildren) {
   const [minWidth, setMinWidth] = useState('192px');
   const MAX_WIDTH = '600px';
@@ -26,10 +23,6 @@ export function HorizontalResizableContainer({ children }: PropsWithChildren) {
     };
   }, []);
 
-  const Handle = () => (
-    <div className={resizeHandleStyle}>{/*<ArrowRightIcon />*/}</div>
-  );
-
   return (
     <Resizable
       className={horizontalResizingContainerLayout}
@@ -42,9 +35,6 @@ export function HorizontalResizableContainer({ children }: PropsWithChildren) {
         bottomRight: false,
         topLeft: false,
         topRight: false,
-      }}
-      handleComponent={{
-        right: <Handle />,
       }}
       minWidth={minWidth}
       maxWidth={MAX_WIDTH}

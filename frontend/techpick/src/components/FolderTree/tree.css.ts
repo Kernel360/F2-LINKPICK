@@ -1,9 +1,7 @@
 import { style } from '@vanilla-extract/css';
 import { colorVars, sizes } from 'techpick-shared';
 
-export const horizontalResizingContainerLayout = style({
-  transition: 'width 0.2s', // Resizing에 애니메이션 적용
-});
+export const horizontalResizingContainerLayout = style({});
 
 export const resizeHandleStyle = style({
   backgroundColor: colorVars.backgroundNeutral,
@@ -22,7 +20,7 @@ export const treeLayout = style({
   padding: '12px 0 12px 12px',
   overflowY: 'scroll',
   backgroundColor: colorVars.backgroundNeutral,
-  // backgroundColor: colorVars.secondary,
+
   '@media': {
     'screen and (min-width: 1440px)': {
       minWidth: sizes['3xs'],
