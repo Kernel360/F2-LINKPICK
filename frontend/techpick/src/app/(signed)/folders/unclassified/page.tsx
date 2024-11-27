@@ -2,6 +2,7 @@
 
 import { useEffect } from 'react';
 import { PickRecordHeader } from '@/components';
+import { EmptyPickRecordImage } from '@/components/EmptyPickRecordImage';
 import { FolderContentHeader } from '@/components/FolderContentHeader/FolderContentHeader';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { PickContentLayout } from '@/components/PickContentLayout';
@@ -59,16 +60,22 @@ export default function UnclassifiedFolderPage() {
       <FolderContentHeader />
       <PickContentLayout>
         <PickRecordHeader />
-        <PickDraggableListLayout
-          folderId={basicFolderMap['UNCLASSIFIED'].id}
-          viewType="record"
-        >
-          {pickList.map((pickInfo) => {
-            return (
-              <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
-            );
-          })}
-        </PickDraggableListLayout>
+        {pickList.length === 0 ? (
+          <EmptyPickRecordImage />
+        ) : (
+          <>
+            <PickDraggableListLayout
+              folderId={basicFolderMap['UNCLASSIFIED'].id}
+              viewType="record"
+            >
+              {pickList.map((pickInfo) => {
+                return (
+                  <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
+                );
+              })}
+            </PickDraggableListLayout>
+          </>
+        )}
       </PickContentLayout>
     </FolderContentLayout>
   );

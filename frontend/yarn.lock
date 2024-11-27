@@ -10960,6 +10960,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lottie-web@npm:^5.12.2":
+  version: 5.12.2
+  resolution: "lottie-web@npm:5.12.2"
+  checksum: 10c0/0aeaf631b10a76afd025df70c2a1486543530708e07a316946c08e55891dac483ffbaf2bf3648ae0b9c54c733118a0a086fd150aa76f7848606214c67ad72c30
+  languageName: node
+  linkType: hard
+
 "loupe@npm:^3.1.0, loupe@npm:^3.1.1, loupe@npm:^3.1.2":
   version: 3.1.2
   resolution: "loupe@npm:3.1.2"
@@ -14111,6 +14118,7 @@ __metadata:
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
     ky: "npm:^1.7.2"
+    lottie-web: "npm:^5.12.2"
     lucide-react: "npm:^0.447.0"
     mini-css-extract-plugin: "npm:^2.9.1"
     next: "npm:14.2.9"

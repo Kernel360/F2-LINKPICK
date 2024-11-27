@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { colorVars } from 'techpick-shared';
 
 export const folderContentLayoutStyle = style({
   width: '100%',
@@ -7,4 +8,5 @@ export const folderContentLayoutStyle = style({
   minWidth: 0,
   position: 'relative',
   overflowY: 'scroll',
+  backgroundColor: colorVars.gold2,
 });
