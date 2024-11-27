@@ -25,7 +25,8 @@ export const commandInputStyle = style({
 export const tagListStyle = style({
   minWidth: '288px',
   maxHeight: '150px',
-  border: `1px solid black`,
+  border: `1px solid ${colorVars.gold8}`,
+  borderTop: `0.5px solid ${colorVars.gold8}`,
   overflowY: 'auto',
 
   '::-webkit-scrollbar': {
