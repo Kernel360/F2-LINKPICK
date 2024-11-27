@@ -14,12 +14,14 @@ export function FolderContentHeader() {
 
   return (
     <div className={folderContentHeaderStyle}>
-      <CurrentFolderNameSection folderInfo={folderInfo} />
-      {folderInfo?.folderType === 'GENERAL' && (
-        <Gap verticalSize="gap8">
-          <CurrentPathIndicator folderInfo={folderInfo} />
-        </Gap>
-      )}
+      <Gap verticalSize="gap32" horizontalSize="gap32">
+        <CurrentFolderNameSection folderInfo={folderInfo} />
+        {folderInfo?.folderType === 'GENERAL' && (
+          <Gap verticalSize="gap8">
+            <CurrentPathIndicator folderInfo={folderInfo} />
+          </Gap>
+        )}
+      </Gap>
     </div>
   );
 }

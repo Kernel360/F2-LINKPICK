@@ -3,7 +3,7 @@ import { fontWeights, fontSize } from 'techpick-shared';
 
 export const currentFolderNameSectionStyle = style({
   display: 'inline-flex',
-  alignItems: 'end',
+  alignItems: 'center',
   gap: 8,
   flex: '0 0 100%',
   maxWidth: '100%',
@@ -18,6 +18,7 @@ export const folderNameStyle = style({
   display: 'inline-block',
   fontWeight: fontWeights['medium'],
   fontSize: fontSize['3xl'],
+  height: '40px',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
   overflow: 'hidden',

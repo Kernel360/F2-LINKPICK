@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { colorVars } from 'techpick-shared';
 
 export const legacyFolderContentHeaderStyle = style({
   display: 'flex',
@@ -13,4 +14,7 @@ export const legacyFolderContentHeaderStyle = style({
 export const folderContentHeaderStyle = style({
   width: '100%',
   overflow: 'hidden',
+  borderBottom: '1px solid',
+  backgroundColor: colorVars.gold2,
+  borderColor: colorVars.gold6,
 });
