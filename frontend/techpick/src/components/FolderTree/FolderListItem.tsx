@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
 import { shareFolder } from '@/apis/folder/shareFolder';
 import { ROUTES } from '@/constants';
+import { useShareDialogOpen } from '@/hooks/useShareDialogOpen';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { isSelectionActive } from '@/utils';
 import { FolderContextMenu } from './FolderContextMenu';
@@ -15,6 +16,7 @@ import {
   getSelectedFolderRange,
   isSameParentFolder,
 } from './folderListItem.util';
+import ShareFolderDialog from './ShareFolderDialog';
 import type { FolderMapType } from '@/types';
 
 export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
@@ -31,6 +33,8 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     moveFolderToRecycleBin,
     selectSingleFolder,
   } = useTreeStore();
+  const { isDialogOpen, uuid, handleDialogOpen, handleDialogClose } =
+    useShareDialogOpen();
   const [isUpdate, setIsUpdate] = useState(false);
   const isSelected = selectedFolderList.includes(id);
   const isHover = id === hoverFolderId;
@@ -60,6 +64,14 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     setIsUpdate(false);
   };
 
+  const handleShareFolder = async () => {
+    const response = await shareFolder({
+      name,
+      folderIdList: [id],
+    });
+    handleDialogOpen(response.uuid);
+  };
+
   if (isUpdate) {
     return (
       <FolderInput
@@ -73,36 +85,36 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
   }
 
   return (
-    <FolderContextMenu
-      showRenameInput={() => {
-        setIsUpdate(true);
-      }}
-      deleteFolder={() => {
-        moveFolderToRecycleBin({ deleteFolderId: id });
+    <>
+      <FolderContextMenu
+        showRenameInput={() => {
+          setIsUpdate(true);
+        }}
+        deleteFolder={() => {
+          moveFolderToRecycleBin({ deleteFolderId: id });
 
-        if (Number(urlFolderId) === id) {
-          router.push(ROUTES.FOLDERS_UNCLASSIFIED);
-        }
-      }}
-      shareFolder={() =>
-        shareFolder({
-          name,
-          folderIdList: [id],
-        })
-      }
-      onShow={() => {
-        selectSingleFolder(id);
-      }}
-    >
-      <FolderLinkItem
-        href={ROUTES.FOLDER_DETAIL(id)}
-        isSelected={isSelected}
-        isHovered={isHover}
-        icon={isSelected ? FolderOpenIcon : FolderClosedIcon}
-        name={name}
-        onClick={(event) => handleClick(id, event)}
-      />
-    </FolderContextMenu>
+          if (Number(urlFolderId) === id) {
+            router.push(ROUTES.FOLDERS_UNCLASSIFIED);
+          }
+        }}
+        shareFolder={handleShareFolder}
+        onShow={() => {
+          selectSingleFolder(id);
+        }}
+      >
+        <FolderLinkItem
+          href={ROUTES.FOLDER_DETAIL(id)}
+          isSelected={isSelected}
+          isHovered={isHover}
+          icon={isSelected ? FolderOpenIcon : FolderClosedIcon}
+          name={name}
+          onClick={(event) => handleClick(id, event)}
+        />
+      </FolderContextMenu>
+      {isDialogOpen && (
+        <ShareFolderDialog onClose={handleDialogClose} uuid={uuid} />
+      )}
+    </>
   );
 };
 
