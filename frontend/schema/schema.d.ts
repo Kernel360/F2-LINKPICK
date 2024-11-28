@@ -260,6 +260,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/shared": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["shareFolderList"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -495,7 +511,28 @@ export interface components {
              *     ] */
             idList: number[];
         };
+        "techpick.api.application.sharedFolder.dto.SharedFolderApiRequest$Create": {
+            name: string;
+            folderIdList?: number[];
+        };
+        //'techpick.api.domain.sharedFolder.dto.FolderNode': {
+        //  folderId: number;
+        //  name: string;
+        //  //  eslint-disable-next-line  @typescript-eslint/no-explicit-any
+        //  folders: any;
+        //  //  eslint-disable-next-line  @typescript-eslint/no-explicit-any
+        //  picks: any;
+        //  //  eslint-disable-next-line  @typescript-eslint/no-explicit-any
+        //  createdAt: any;
+        //};
+        "techpick.api.domain.sharedFolder.dto.SharedFolderResult$Create": {
+            uuid: string;
+            //  eslint-disable-next-line  @typescript-eslint/no-explicit-any
+            folderNode: any;
+            //folderNode	: components['schemas']['techpick.api.domain.sharedFolder.dto.FolderNode']
+        };
     };
+
     responses: never;
     parameters: never;
     requestBodies: never;
@@ -1133,4 +1170,47 @@ export interface operations {
             };
         };
     };
+    shareFolderList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    /** @description 공유할 폴더 이름 */
+                    name: string;
+                    /**
+                     * @description 공유할 폴더 ID 목록
+                     * @example [0]
+                     */
+                    folderIdList: number[];
+                };
+            };
+        };
+        responses: {
+            /** @description 공유 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["techpick.api.domain.sharedFolder.dto.SharedFolderResult$Create"];
+                };
+            };
+            /** @description 본인의 폴더만 공유할 수 있습니다. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["techpick.api.domain.sharedFolder.dto.SharedFolderResult$Create"];
+                };
+            };
+        };
+    };
 }
+
+//더블쿼터, 들여쓰기 4탭 마지막에 저장할 때 변경해서 저장하기

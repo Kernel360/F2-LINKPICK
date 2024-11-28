@@ -9,6 +9,7 @@ import {
   updateFolder,
   createFolder,
 } from '@/apis/folder';
+import { shareFolder } from '@/apis/folder/shareFolder';
 import getObjectEntries from '@/components/Search/util/getObjectEntries';
 import { UNKNOWN_FOLDER_ID } from '@/constants';
 import { isFolderDraggableObject, reorderSortableIdList } from '@/utils';
@@ -21,6 +22,7 @@ import type {
   SelectedFolderListType,
   BasicFolderMap,
   ChildFolderListType,
+  ShareFolderRequestType,
 } from '@/types';
 
 type TreeState = {
@@ -81,6 +83,7 @@ type TreeAction = {
    * @description 미리 로딩한 나의 폴더 리스트를 반환
    * */
   getFolderList: () => FolderType[];
+  shareFolderById: (shareFolderId: number) => void;
 };
 
 const initialState: TreeState = {
@@ -399,6 +402,19 @@ export const useTreeStore = create<TreeState & TreeAction>()(
       getFolderList: () => {
         const map = get().treeDataMap;
         return Array.from(getObjectEntries(map).map((entry) => entry[1]));
+      },
+      shareFolderById: async (shareFolderId: number) => {
+        const shareFolderName = get().treeDataMap[shareFolderId].name;
+        const shareFolderRequest: ShareFolderRequestType = {
+          name: shareFolderName,
+          folderIdList: [shareFolderId],
+        };
+
+        try {
+          await shareFolder(shareFolderRequest);
+        } catch {
+          console.error('shared folder error');
+        }
       },
     }))
   )

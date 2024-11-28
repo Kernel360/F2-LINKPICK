@@ -29,6 +29,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     updateFolderName,
     moveFolderToRecycleBin,
     selectSingleFolder,
+    shareFolderById,
   } = useTreeStore();
   const [isUpdate, setIsUpdate] = useState(false);
   const isSelected = selectedFolderList.includes(id);
@@ -83,6 +84,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
           router.push(ROUTES.FOLDERS_UNCLASSIFIED);
         }
       }}
+      shareFolderById={() => shareFolderById(id)}
       onShow={() => {
         selectSingleFolder(id);
       }}
