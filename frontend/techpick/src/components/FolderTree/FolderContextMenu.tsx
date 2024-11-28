@@ -2,7 +2,7 @@
 
 import type { PropsWithChildren } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import { FolderPen, FolderX } from 'lucide-react';
+import { FolderPen, FolderX, ScreenShare } from 'lucide-react';
 import { getPortalContainer } from '@/utils';
 import {
   contextMenuContentLayout,
@@ -43,6 +43,13 @@ export function FolderContextMenu({
           >
             <FolderX />
             <p>휴지통으로 이동</p>
+          </ContextMenu.Item>
+          <ContextMenu.Item
+            className={contextMenuItemStyle}
+            onSelect={() => {}}
+          >
+            <ScreenShare />
+            <p>공유하기</p>
           </ContextMenu.Item>
         </ContextMenu.Content>
       </ContextMenu.Portal>
