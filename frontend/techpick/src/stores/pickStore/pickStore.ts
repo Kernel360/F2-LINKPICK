@@ -10,73 +10,18 @@ import {
 } from '@/apis/pick';
 import { getPickListByQueryParam } from '@/apis/pick/getPicks';
 import { isPickDraggableObject, reorderSortableIdList } from '@/utils';
-import type { Active, Over } from '@dnd-kit/core';
 import type {
-  PickRecordType,
+  DeleteSelectedPicksPayload,
+  PickAction,
+  PickState,
+} from './pickStore.type';
+import type {
   PickInfoType,
   PickRecordValueType,
-  SelectedPickIdListType,
-  PickDraggableObjectType,
-  PickToFolderDroppableObjectType,
   SearchPicksResponseType,
-  UpdatePickRequestType,
 } from '@/types';
 
 enableMapSet();
-
-type PickState = {
-  searchResult: SearchPicksResponseType;
-  pickRecord: PickRecordType;
-  focusPickId: number | null;
-  selectedPickIdList: SelectedPickIdListType;
-  isDragging: boolean;
-  draggingPickInfo: PickInfoType | null | undefined;
-};
-
-type PickAction = {
-  fetchPickDataByFolderId: (folderId: number) => Promise<void>;
-  getOrderedPickIdListByFolderId: (folderId: number) => number[];
-  getOrderedPickListByFolderId: (folderId: number) => PickInfoType[];
-  getPickInfoByFolderIdAndPickId: (
-    folderId: number,
-    pickId: number
-  ) => PickInfoType | null | undefined;
-  hasPickRecordValue: (
-    pickRecordValue: PickRecordValueType | undefined
-  ) => pickRecordValue is PickRecordValueType;
-  movePicksToEqualFolder: (movePickPayload: MovePickPayload) => Promise<void>;
-  movePicksToDifferentFolder: (
-    movePickPayload: movePicksToDifferentFolder
-  ) => Promise<void>;
-  moveSelectedPicksToRecycleBinFolder: (
-    payload: MoveSelectedPicksToRecycleBinFolderPayload
-  ) => Promise<void>;
-  deleteSelectedPicks: (
-    deleteSelectedPicksPayload: DeleteSelectedPicksPayload
-  ) => Promise<void>;
-  setSelectedPickIdList: (
-    newSelectedPickIdList: SelectedPickIdListType
-  ) => void;
-  selectSinglePick: (pickId: number) => void;
-  setIsDragging: (isDragging: boolean) => void;
-  setFocusedPickId: (focusedPickId: number) => void;
-  setDraggingPickInfo: (
-    draggingPickInfo: PickInfoType | null | undefined
-  ) => void;
-  /**
-   * queryParam을 통으로 검색에 사용합니다. (search 패널)
-   */
-  searchPicksByQueryParam: (
-    param: string,
-    cursor?: number | string,
-    size?: number
-  ) => Promise<void>;
-  getSearchResult: () => SearchPicksResponseType;
-  updatePickInfo: (
-    pickParentFolderId: number,
-    pickInfo: UpdatePickRequestType
-  ) => Promise<void>;
-};
 
 const initialState: PickState = {
   searchResult: { lastCursor: 0, hasNext: true } as SearchPicksResponseType,
@@ -92,6 +37,12 @@ export const usePickStore = create<PickState & PickAction>()(
     immer((set, get) => ({
       ...initialState,
       fetchPickDataByFolderId: async (folderId) => {
+        // pickRecord[folderId]
+
+        // isLoading true
+
+        // isError
+
         try {
           const { pickInfoRecord, pickIdOrderedList } =
             await getPicksByFolderId(folderId);
@@ -102,8 +53,8 @@ export const usePickStore = create<PickState & PickAction>()(
               pickInfoRecord,
             };
           });
-        } catch (error) {
-          console.log('fetchPickDataByFolderId error', error);
+        } catch {
+          /* empty */
         }
       },
       getOrderedPickIdListByFolderId: (folderId) => {
@@ -595,23 +546,3 @@ export const usePickStore = create<PickState & PickAction>()(
     }))
   )
 );
-
-type MovePickPayload = {
-  folderId: number;
-  from: Active;
-  to: Over;
-};
-
-type movePicksToDifferentFolder = {
-  from: PickDraggableObjectType;
-  to: PickToFolderDroppableObjectType;
-};
-
-type MoveSelectedPicksToRecycleBinFolderPayload = {
-  picksParentFolderId: number;
-  recycleBinFolderId: number;
-};
-
-type DeleteSelectedPicksPayload = {
-  recycleBinFolderId: number;
-};
