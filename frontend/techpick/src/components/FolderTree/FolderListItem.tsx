@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import * as Dialog from '@radix-ui/react-dialog';
 import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
@@ -14,12 +14,10 @@ import {
   getSelectedFolderRange,
   isSameParentFolder,
 } from './folderListItem.util';
+import { MoveFolderToRecycleBinDialog } from './MoveFolderToRecycleBinDialog';
 import type { FolderMapType } from '@/types';
 
 export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
-  const router = useRouter();
-
-  const { folderId: urlFolderId } = useParams<{ folderId: string }>();
   const {
     treeDataMap,
     selectedFolderList,
@@ -27,7 +25,6 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     focusFolderId,
     hoverFolderId,
     updateFolderName,
-    moveFolderToRecycleBin,
     selectSingleFolder,
   } = useTreeStore();
   const [isUpdate, setIsUpdate] = useState(false);
@@ -72,30 +69,26 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
   }
 
   return (
-    <FolderContextMenu
-      showRenameInput={() => {
-        setIsUpdate(true);
-      }}
-      deleteFolder={() => {
-        moveFolderToRecycleBin({ deleteFolderId: id });
-
-        if (Number(urlFolderId) === id) {
-          router.push(ROUTES.FOLDERS_UNCLASSIFIED);
-        }
-      }}
-      onShow={() => {
-        selectSingleFolder(id);
-      }}
-    >
-      <FolderLinkItem
-        href={ROUTES.FOLDER_DETAIL(id)}
-        isSelected={isSelected}
-        isHovered={isHover}
-        icon={isSelected ? FolderOpenIcon : FolderClosedIcon}
-        name={name}
-        onClick={(event) => handleClick(id, event)}
-      />
-    </FolderContextMenu>
+    <Dialog.Root>
+      <FolderContextMenu
+        showRenameInput={() => {
+          setIsUpdate(true);
+        }}
+        onShow={() => {
+          selectSingleFolder(id);
+        }}
+      >
+        <FolderLinkItem
+          href={ROUTES.FOLDER_DETAIL(id)}
+          isSelected={isSelected}
+          isHovered={isHover}
+          icon={isSelected ? FolderOpenIcon : FolderClosedIcon}
+          name={name}
+          onClick={(event) => handleClick(id, event)}
+        />
+      </FolderContextMenu>
+      <MoveFolderToRecycleBinDialog deleteFolderId={id} />
+    </Dialog.Root>
   );
 };
 
