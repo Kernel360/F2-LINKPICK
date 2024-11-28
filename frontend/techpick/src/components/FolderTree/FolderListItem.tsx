@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { MouseEvent } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
+import { shareFolder } from '@/apis/folder/shareFolder';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { isSelectionActive } from '@/utils';
@@ -29,7 +30,6 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     updateFolderName,
     moveFolderToRecycleBin,
     selectSingleFolder,
-    shareFolderById,
   } = useTreeStore();
   const [isUpdate, setIsUpdate] = useState(false);
   const isSelected = selectedFolderList.includes(id);
@@ -84,7 +84,12 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
           router.push(ROUTES.FOLDERS_UNCLASSIFIED);
         }
       }}
-      shareFolderById={() => shareFolderById(id)}
+      shareFolder={() =>
+        shareFolder({
+          name,
+          folderIdList: [id],
+        })
+      }
       onShow={() => {
         selectSingleFolder(id);
       }}

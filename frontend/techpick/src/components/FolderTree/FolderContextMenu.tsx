@@ -12,7 +12,7 @@ import {
 export function FolderContextMenu({
   showRenameInput,
   deleteFolder,
-  shareFolderById,
+  shareFolder,
   onShow = () => {},
   children,
 }: PropsWithChildren<FolderContextMenuProps>) {
@@ -47,7 +47,7 @@ export function FolderContextMenu({
           </ContextMenu.Item>
           <ContextMenu.Item
             className={contextMenuItemStyle}
-            onSelect={shareFolderById}
+            onSelect={shareFolder}
           >
             <ScreenShare />
             <p>공유하기</p>
@@ -61,6 +61,6 @@ export function FolderContextMenu({
 interface FolderContextMenuProps {
   showRenameInput: () => void;
   deleteFolder: () => void;
-  shareFolderById: () => void;
+  shareFolder: () => void;
   onShow?: () => void;
 }
