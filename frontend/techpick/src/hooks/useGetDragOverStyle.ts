@@ -77,6 +77,12 @@ export function useGetDragOverStyle({
     ]
   );
 
+  useEffect(() => {
+    if (!isFolderDragging && !isPickDragging) {
+      setMousePosition(null);
+    }
+  }, [isFolderDragging, isPickDragging]);
+
   return { overlayStyle };
 }
 
