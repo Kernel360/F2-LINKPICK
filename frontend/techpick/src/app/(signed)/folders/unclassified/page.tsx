@@ -22,6 +22,7 @@ export default function UnclassifiedFolderPage() {
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
   const { isLoading, data } = useFetchPickRecordByFolderId({
     folderId: basicFolderMap?.UNCLASSIFIED.id,
+    alwaysFetch: true,
   });
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
@@ -38,7 +39,7 @@ export default function UnclassifiedFolderPage() {
     [basicFolderMap, selectSingleFolder]
   );
 
-  if (!basicFolderMap || isLoading) {
+  if (!basicFolderMap || (isLoading && !data)) {
     return <div>loading...</div>;
   }
 

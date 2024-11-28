@@ -27,6 +27,7 @@ export default function FolderDetailPage() {
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
   const { isLoading, data } = useFetchPickRecordByFolderId({
     folderId: folderId,
+    alwaysFetch: true,
   });
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
@@ -52,7 +53,7 @@ export default function FolderDetailPage() {
     return true;
   };
 
-  if (!basicFolderMap || isLoading) {
+  if (!basicFolderMap || (isLoading && !data)) {
     return <div>loading...</div>;
   }
 

@@ -39,7 +39,7 @@ export default function RecycleBinFolderPage() {
     [basicFolderMap, selectSingleFolder]
   );
 
-  if (!basicFolderMap || isLoading) {
+  if (!basicFolderMap || (isLoading && !data)) {
     return <div>loading...</div>;
   }
 
