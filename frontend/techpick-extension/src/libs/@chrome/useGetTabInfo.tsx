@@ -1,5 +1,10 @@
+import {
+  GET_TAB_HTML_TEXT_FROM_WORKER_PORT_NAME,
+  REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE,
+} from '@/constants';
+import type { TabInfoFromWorkerMessageType } from '@/types';
+import { extractOpenGraphMetadata } from '@/utils';
 import { useEffect, useState } from 'react';
-import { fetchFaviconAndDescription } from './useGetTabInfo.lib';
 
 interface TabInfo {
   title: string;
@@ -17,43 +22,30 @@ export function useGetTabInfo() {
   });
 
   useEffect(() => {
-    const getTabInfo = async () => {
-      // 현재 탭 정보 가져오기
-      const tabs = await chrome.tabs.query({
-        active: true,
-        currentWindow: true,
+    const getTabInfoFromWorker = () => {
+      const port = chrome.runtime.connect({
+        name: GET_TAB_HTML_TEXT_FROM_WORKER_PORT_NAME,
       });
-      const tab = tabs[0];
 
-      setTabInfo((prev) => ({
-        ...prev,
-        title: tab.title ?? '',
-        url: tab.url ?? '',
-      }));
+      port.postMessage(REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE);
 
-      // http가 아닌 다른 URL(ex: chrome)은 권한이 없어서 확장 프로그램에서 에러가 날 수 있습니다.
-      if (tab.url && !tab.url.startsWith('http')) {
-        return;
-      }
+      port.onMessage.addListener((msg: TabInfoFromWorkerMessageType) => {
+        const { ogImage, ogDescription } = extractOpenGraphMetadata(
+          msg.htmlText
+        );
 
-      if (!tab.id) {
-        return;
-      }
+        setTabInfo({
+          title: msg.title,
+          url: msg.url,
+          ogImage: ogImage ? ogImage : '',
+          ogDescription: ogDescription ? ogDescription : '',
+        });
 
-      const result = await fetchFaviconAndDescription(tab.id);
-
-      if (!result) {
-        return;
-      }
-
-      setTabInfo((prev) => ({
-        ...prev,
-        ogDescription: result.ogDescription,
-        ogImage: result.ogImage,
-      }));
+        port.disconnect();
+      });
     };
 
-    getTabInfo();
+    getTabInfoFromWorker();
   }, []);
 
   return tabInfo;

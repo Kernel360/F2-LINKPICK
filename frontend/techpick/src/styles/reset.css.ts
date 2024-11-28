@@ -3,6 +3,7 @@ import { globalStyle } from '@vanilla-extract/css';
 globalStyle('*', {
   boxSizing: 'border-box',
   backgroundColor: 'transparent',
+  userSelect: 'none',
 });
 
 globalStyle('*::-webkit-scrollbar', {

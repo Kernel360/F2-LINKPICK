@@ -22,7 +22,7 @@ export function PickDndListItem({ pickInfo }: PickViewDnDItemComponentProps) {
     setSelectedPickIdList,
     isDragging,
   } = usePickStore();
-  const { setCurrentPickIdToNull } = useUpdatePickStore();
+  const { setCurrentUpdateTitlePickIdToNull } = useUpdatePickStore();
   const { id: pickId, parentFolderId } = pickInfo;
   const isSelected = selectedPickIdList.includes(pickId);
   const {
@@ -75,7 +75,7 @@ export function PickDndListItem({ pickInfo }: PickViewDnDItemComponentProps) {
       return;
     }
 
-    setCurrentPickIdToNull();
+    setCurrentUpdateTitlePickIdToNull();
     selectSinglePick(pickId);
   };
 

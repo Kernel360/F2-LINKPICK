@@ -2,29 +2,43 @@ import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
 type UpdatePickState = {
-  currentUpdatePickId: number | null;
+  currentUpdateTitlePickId: number | null;
+  currentUpdateTagPickId: number | null;
 };
 
 type UpdatePickAction = {
-  setCurrentUpdatePickId: (nextUpdatePickId: number | null) => void;
-  setCurrentPickIdToNull: () => void;
+  setCurrentUpdateTitlePickId: (nextUpdateTitlePickId: number | null) => void;
+  setCurrentUpdateTitlePickIdToNull: () => void;
+  setCurrentUpdateTagPickId: (nextUpdateTagPickId: number | null) => void;
+  setCurrentUpdateTagPickIdToNull: () => void;
 };
 
 const initialState: UpdatePickState = {
-  currentUpdatePickId: null,
+  currentUpdateTitlePickId: null,
+  currentUpdateTagPickId: null,
 };
 
 export const useUpdatePickStore = create<UpdatePickState & UpdatePickAction>()(
   immer((set) => ({
     ...initialState,
-    setCurrentUpdatePickId: (nextUpdatePickId) => {
+    setCurrentUpdateTitlePickId: (nextUpdateTitlePickId) => {
       set((state) => {
-        state.currentUpdatePickId = nextUpdatePickId;
+        state.currentUpdateTitlePickId = nextUpdateTitlePickId;
       });
     },
-    setCurrentPickIdToNull: () => {
+    setCurrentUpdateTitlePickIdToNull: () => {
       set((state) => {
-        state.currentUpdatePickId = null;
+        state.currentUpdateTitlePickId = null;
+      });
+    },
+    setCurrentUpdateTagPickId: (nextUpdateTagPickId) => {
+      set((state) => {
+        state.currentUpdateTagPickId = nextUpdateTagPickId;
+      });
+    },
+    setCurrentUpdateTagPickIdToNull: () => {
+      set((state) => {
+        state.currentUpdateTagPickId = null;
       });
     },
   }))

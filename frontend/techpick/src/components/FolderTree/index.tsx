@@ -7,7 +7,7 @@ import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { FolderTreeHeader } from './FolderTreeHeader';
 import { HorizontalResizableContainer } from './HorizontalResizableContainer';
 import { ShowCreateFolderInputButton } from './ShowCreateFolderInputButton';
-import { treeLayout } from './tree.css';
+import { treeLayout, treeNodeLayoutStyle } from './tree.css';
 import { TreeNode } from './TreeNode';
 
 export function FolderTree() {
@@ -25,13 +25,16 @@ export function FolderTree() {
     <HorizontalResizableContainer>
       <div className={treeLayout}>
         <FolderTreeHeader />
+
         <div className={folderTreeHeaderTitleLayout}>
           <h1>내 폴더</h1>
           {isCreateFolderMode && (
             <ShowCreateFolderInputButton newFolderParentId={rootFolderId} />
           )}
         </div>
-        {<TreeNode id={rootFolderId} depth={0} />}
+        <div className={treeNodeLayoutStyle}>
+          {<TreeNode id={rootFolderId} depth={0} />}
+        </div>
       </div>
     </HorizontalResizableContainer>
   );

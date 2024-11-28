@@ -2,6 +2,7 @@ import type { CSSProperties, PropsWithChildren } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { activeDraggingFolderStyle } from './folderDraggable.css';
 
 export const FolderDraggable = ({
   id,
@@ -40,7 +41,8 @@ export const FolderDraggable = ({
         ref={setNodeRef}
         {...attributes}
         {...listeners}
-        style={{ border: '1px solid black', ...style }}
+        style={style}
+        className={activeDraggingFolderStyle}
       ></div>
     );
   }

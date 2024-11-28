@@ -8,6 +8,7 @@ import {
   selectedDragItemStyle,
 } from './pickDraggableRecord.css';
 import { PickRecord } from './PickRecord';
+import { PickContextMenu } from '../PickContextMenu';
 import { PickViewDraggableItemComponentProps } from '@/types';
 
 export function PickDraggableRecord({
@@ -21,7 +22,11 @@ export function PickDraggableRecord({
     setSelectedPickIdList,
     isDragging,
   } = usePickStore();
-  const { setCurrentPickIdToNull } = useUpdatePickStore();
+  const {
+    setCurrentUpdateTitlePickIdToNull,
+    currentUpdateTitlePickId,
+    currentUpdateTagPickId,
+  } = useUpdatePickStore();
   const { id: pickId, parentFolderId } = pickInfo;
   const isSelected = selectedPickIdList.includes(pickId);
   const {
@@ -38,6 +43,9 @@ export function PickDraggableRecord({
       type: 'pick',
       parentFolderId: parentFolderId,
     },
+    disabled:
+      currentUpdateTitlePickId === pickInfo.id ||
+      currentUpdateTagPickId === pickInfo.id,
   });
   const pickElementId = `pickId-${pickId}`;
 
@@ -74,7 +82,7 @@ export function PickDraggableRecord({
       return;
     }
 
-    setCurrentPickIdToNull();
+    setCurrentUpdateTitlePickIdToNull();
     selectSinglePick(pickId);
   };
 
@@ -98,7 +106,9 @@ export function PickDraggableRecord({
         onClick={(event) => handleClick(pickId, event)}
         id={pickElementId}
       >
-        <PickRecord pickInfo={pickInfo} />
+        <PickContextMenu pickInfo={pickInfo}>
+          <PickRecord pickInfo={pickInfo} />
+        </PickContextMenu>
       </div>
     </div>
   );

@@ -29,8 +29,6 @@ export function PickTitleInput({
   useEffect(
     function detectOutsideClick() {
       const handleClickOutside = (event: MouseEvent) => {
-        console.log('handleClickOutside work!');
-
         if (
           containerRef.current &&
           !containerRef.current.contains(event.target as Node)

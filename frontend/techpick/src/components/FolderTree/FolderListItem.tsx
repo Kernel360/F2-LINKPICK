@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import * as Dialog from '@radix-ui/react-dialog';
 import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
 import { shareFolder } from '@/apis/folder/shareFolder';
 import { ROUTES } from '@/constants';
@@ -17,12 +17,10 @@ import {
   isSameParentFolder,
 } from './folderListItem.util';
 import ShareFolderDialog from './ShareFolderDialog';
+import { MoveFolderToRecycleBinDialog } from './MoveFolderToRecycleBinDialog';
 import type { FolderMapType } from '@/types';
 
 export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
-  const router = useRouter();
-
-  const { folderId: urlFolderId } = useParams<{ folderId: string }>();
   const {
     treeDataMap,
     selectedFolderList,
@@ -30,7 +28,6 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     focusFolderId,
     hoverFolderId,
     updateFolderName,
-    moveFolderToRecycleBin,
     selectSingleFolder,
   } = useTreeStore();
   const { isDialogOpen, uuid, handleDialogOpen, handleDialogClose } =
@@ -85,17 +82,10 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
   }
 
   return (
-    <>
+    <Dialog.Root>
       <FolderContextMenu
         showRenameInput={() => {
           setIsUpdate(true);
-        }}
-        deleteFolder={() => {
-          moveFolderToRecycleBin({ deleteFolderId: id });
-
-          if (Number(urlFolderId) === id) {
-            router.push(ROUTES.FOLDERS_UNCLASSIFIED);
-          }
         }}
         shareFolder={handleShareFolder}
         onShow={() => {
@@ -114,7 +104,8 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
       {isDialogOpen && (
         <ShareFolderDialog onClose={handleDialogClose} uuid={uuid} />
       )}
-    </>
+      <MoveFolderToRecycleBinDialog deleteFolderId={id} />
+    </Dialog.Root>
   );
 };
 

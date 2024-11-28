@@ -4,8 +4,6 @@ import { colorVars, fontSize } from 'techpick-shared';
 const { color } = colorVars;
 
 export const tagDialogPortalLayout = style({
-  position: 'absolute',
-  top: '0',
   zIndex: '1',
   backgroundColor: colorVars.lightGray,
   boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',
@@ -27,7 +25,8 @@ export const commandInputStyle = style({
 export const tagListStyle = style({
   minWidth: '288px',
   maxHeight: '150px',
-  border: `1px solid black`,
+  border: `1px solid ${colorVars.gold8}`,
+  borderTop: `0.5px solid ${colorVars.gold8}`,
   overflowY: 'auto',
 
   '::-webkit-scrollbar': {

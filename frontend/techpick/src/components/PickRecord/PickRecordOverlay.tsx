@@ -10,7 +10,6 @@ import { PickImageColumnLayout } from './PickImageColumnLayout';
 import {
   pickRecordLayoutStyle,
   pickImageStyle,
-  pickEmptyImageStyle,
   pickTitleSectionStyle,
   dateTextStyle,
   externalLinkIconStyle,
@@ -30,12 +29,12 @@ export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
   const { updatePickInfo } = usePickStore();
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
   const {
-    currentUpdatePickId,
-    setCurrentPickIdToNull,
-    setCurrentUpdatePickId,
+    currentUpdateTitlePickId,
+    setCurrentUpdateTitlePickId,
+    setCurrentUpdateTitlePickIdToNull,
   } = useUpdatePickStore();
 
-  const isUpdateTitle = currentUpdatePickId === pickInfo.id;
+  const isUpdateTitle = currentUpdateTitlePickId === pickInfo.id;
 
   const filteredSelectedTagList: TagType[] = [];
 
@@ -53,7 +52,7 @@ export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
           {link.imageUrl ? (
             <Image src={link.imageUrl} alt="" fill />
           ) : (
-            <div className={pickEmptyImageStyle} />
+            <Image src={'/image/default_image.svg'} alt="" fill sizes="96px" />
           )}
         </div>
       </PickImageColumnLayout>
@@ -72,17 +71,17 @@ export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
                 ...pickInfo,
                 title: newTitle,
               });
-              setCurrentPickIdToNull();
+              setCurrentUpdateTitlePickIdToNull();
             }}
             onClickOutSide={() => {
-              setCurrentPickIdToNull();
+              setCurrentUpdateTitlePickIdToNull();
             }}
           />
         ) : (
           <div
             className={pickTitleSectionStyle}
             onClick={(event) => {
-              setCurrentUpdatePickId(pickInfo.id);
+              setCurrentUpdateTitlePickId(pickInfo.id);
               event.stopPropagation();
             }}
             role="button"

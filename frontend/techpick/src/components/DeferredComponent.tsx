@@ -2,13 +2,16 @@
 
 import { PropsWithChildren, useEffect, useState } from 'react';
 
-export function DeferredComponent({ children }: PropsWithChildren) {
+export function DeferredComponent({
+  children,
+  deferredMillisecond = 150,
+}: PropsWithChildren<DeferredComponentProps>) {
   const [isDeferred, setIsDeferred] = useState(false);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setIsDeferred(true);
-    }, 150);
+    }, deferredMillisecond);
     return () => clearTimeout(timeoutId);
   }, []);
 
@@ -17,4 +20,8 @@ export function DeferredComponent({ children }: PropsWithChildren) {
   }
 
   return <>{children}</>;
+}
+
+interface DeferredComponentProps {
+  deferredMillisecond?: number;
 }
