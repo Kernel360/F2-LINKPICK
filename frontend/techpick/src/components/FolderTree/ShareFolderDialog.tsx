@@ -15,6 +15,7 @@ export default function ShareFolderDialog({
     setshowPopover(true);
     setTimeout(() => setshowPopover(false), 2000);
   };
+  const shareFolderLink = `${window.location.origin}/share/${uuid}`;
 
   return (
     <DialogPrimitive.Root open={true}>
@@ -52,9 +53,9 @@ export default function ShareFolderDialog({
               className={styles.sharedFolderLink}
               onMouseDown={(event) => event.stopPropagation()}
               id="shared-folder-link"
-              title={`${window.location.origin}/folder/${uuid}`}
+              title={shareFolderLink}
             >
-              {`${window.location.origin}/folder/${uuid}`}
+              {shareFolderLink}
             </div>
             <Popover open={showPopover}>
               <PopoverTrigger asChild>
