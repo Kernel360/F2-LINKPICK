@@ -87,29 +87,7 @@ export const usePickStore = create<PickState & PickAction>()(
 
         return pickIdOrderedList;
       },
-      getOrderedPickListByFolderId: (folderId: number) => {
-        const pickRecordValue = get().pickRecord[`${folderId}`];
 
-        if (
-          !get().hasPickRecordValue(pickRecordValue?.data) ||
-          !pickRecordValue.data
-        ) {
-          return [];
-        }
-
-        const { pickIdOrderedList, pickInfoRecord } = pickRecordValue.data;
-        const pickOrderedList: PickInfoType[] = [];
-
-        for (const pickId of pickIdOrderedList) {
-          const pickInfo = pickInfoRecord[`${pickId}`];
-
-          if (pickInfo) {
-            pickOrderedList.push(pickInfo);
-          }
-        }
-
-        return pickOrderedList;
-      },
       getPickInfoByFolderIdAndPickId: (folderId, pickId) => {
         const pickRecordValue = get().pickRecord[`${folderId}`];
 

@@ -22,7 +22,6 @@ export type PickState = {
 export type PickAction = {
   fetchPickDataByFolderId: (folderId: number) => Promise<void>;
   getOrderedPickIdListByFolderId: (folderId: number) => number[];
-  getOrderedPickListByFolderId: (folderId: number) => PickInfoType[];
   getPickInfoByFolderIdAndPickId: (
     folderId: number,
     pickId: number
