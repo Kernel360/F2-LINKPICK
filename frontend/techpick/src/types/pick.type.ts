@@ -1,3 +1,4 @@
+import type { FetchRequestType } from './FetchRequestType';
 import type { Concrete } from './util.type';
 import type { components } from '@/schema';
 
@@ -6,10 +7,15 @@ export type PickInfoType = Concrete<
 >;
 
 export type PickInfoRecordType = {
-  [pickId: string]: PickInfoType | undefined;
+  [pickId: string]: PickInfoType | null | undefined;
 };
 
 export type PickIdOrderedListType = number[];
+
+export type PickSelectionResult = {
+  pickIdOrderedList: PickIdOrderedListType;
+  pickInfoRecord: PickInfoRecordType;
+};
 
 export type PickRecordValueType = {
   pickIdOrderedList: PickIdOrderedListType;
@@ -17,7 +23,7 @@ export type PickRecordValueType = {
 };
 
 export type PickRecordType = {
-  [folderId: string]: PickRecordValueType | undefined;
+  [folderId: string]: FetchRequestType<PickRecordValueType> | undefined;
 };
 
 export type PickListType = PickInfoType[];

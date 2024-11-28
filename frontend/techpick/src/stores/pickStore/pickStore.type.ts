@@ -28,7 +28,7 @@ export type PickAction = {
     pickId: number
   ) => PickInfoType | null | undefined;
   hasPickRecordValue: (
-    pickRecordValue: PickRecordValueType | undefined
+    pickRecordValue: PickRecordValueType | undefined | null
   ) => pickRecordValue is PickRecordValueType;
   movePicksToEqualFolder: (movePickPayload: MovePickPayload) => Promise<void>;
   movePicksToDifferentFolder: (
@@ -49,6 +49,7 @@ export type PickAction = {
   setDraggingPickInfo: (
     draggingPickInfo: PickInfoType | null | undefined
   ) => void;
+
   /**
    * queryParam을 통으로 검색에 사용합니다. (search 패널)
    */
