@@ -14,3 +14,4 @@ export { isShallowEqualValue } from './isShallowEqualValue';
 export { getSelectedPickRange } from './getSelectedPickRange';
 export { numberToRandomColor } from './numberToRandomColor';
 export { getFolderLinkByType } from './getFolderLinkByType';
+export { getOrderedPickListByFolderId } from './getOrderedPickListByFolderId';
