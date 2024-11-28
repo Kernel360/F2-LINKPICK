@@ -14,17 +14,20 @@ import {
   useResetPickFocusOnOutsideClick,
   useClearSelectedPickIdsOnMount,
   useFetchTagList,
+  useFetchPickRecordByFolderId,
 } from '@/hooks';
-import { usePickStore, useTreeStore } from '@/stores';
+import { useTreeStore } from '@/stores';
+import { getOrderedPickListByFolderId } from '@/utils';
 
 export default function FolderDetailPage() {
   const router = useRouter();
   const { folderId: stringFolderId } = useParams<{ folderId: string }>();
-  const { fetchPickDataByFolderId, getOrderedPickListByFolderId } =
-    usePickStore();
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
   const folderId = Number(stringFolderId);
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
+  const { isLoading, data } = useFetchPickRecordByFolderId({
+    folderId: folderId,
+  });
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
   useFetchTagList();
@@ -41,18 +44,6 @@ export default function FolderDetailPage() {
     [folderId, router, selectSingleFolder]
   );
 
-  useEffect(
-    function loadPickDataByFolderIdFromRemote() {
-      if (!isFolderIdValid(folderId)) {
-        router.replace(ROUTES.UNCLASSIFIED_FOLDER);
-        return;
-      }
-
-      fetchPickDataByFolderId(folderId);
-    },
-    [fetchPickDataByFolderId, folderId, router]
-  );
-
   const isFolderIdValid = (folderId: number) => {
     if (Number.isNaN(folderId)) {
       return false;
@@ -61,11 +52,11 @@ export default function FolderDetailPage() {
     return true;
   };
 
-  if (!basicFolderMap) {
+  if (!basicFolderMap || isLoading) {
     return <div>loading...</div>;
   }
 
-  const pickList = getOrderedPickListByFolderId(folderId);
+  const pickList = getOrderedPickListByFolderId(data);
 
   return (
     <FolderContentLayout>

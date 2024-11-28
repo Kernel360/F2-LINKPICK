@@ -12,15 +12,17 @@ import {
   useClearSelectedPickIdsOnMount,
   useFetchTagList,
   useResetPickFocusOnOutsideClick,
+  useFetchPickRecordByFolderId,
 } from '@/hooks';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { getOrderedPickListByFolderId } from '@/utils';
 
 export default function UnclassifiedFolderPage() {
-  const { fetchPickDataByFolderId, getOrderedPickListByFolderId } =
-    usePickStore();
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
+  const { isLoading, data } = useFetchPickRecordByFolderId({
+    folderId: basicFolderMap?.UNCLASSIFIED.id,
+  });
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
   useFetchTagList();
@@ -36,24 +38,11 @@ export default function UnclassifiedFolderPage() {
     [basicFolderMap, selectSingleFolder]
   );
 
-  useEffect(
-    function loadPickDataFromRemote() {
-      if (!basicFolderMap) {
-        return;
-      }
-
-      fetchPickDataByFolderId(basicFolderMap['UNCLASSIFIED'].id);
-    },
-    [basicFolderMap, fetchPickDataByFolderId]
-  );
-
-  if (!basicFolderMap) {
+  if (!basicFolderMap || isLoading) {
     return <div>loading...</div>;
   }
 
-  const pickList = getOrderedPickListByFolderId(
-    basicFolderMap['UNCLASSIFIED'].id
-  );
+  const pickList = getOrderedPickListByFolderId(data);
 
   return (
     <FolderContentLayout>
