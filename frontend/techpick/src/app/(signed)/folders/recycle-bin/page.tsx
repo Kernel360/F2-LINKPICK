@@ -5,6 +5,7 @@ import { PickRecordHeader } from '@/components';
 import { EmptyPickRecordImage } from '@/components/EmptyPickRecordImage';
 import { FolderContentHeader } from '@/components/FolderContentHeader/FolderContentHeader';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
+import { FolderLoadingPage } from '@/components/FolderLoadingPage';
 import { PickContentLayout } from '@/components/PickContentLayout';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
@@ -40,7 +41,7 @@ export default function RecycleBinFolderPage() {
   );
 
   if (!basicFolderMap || (isLoading && !data)) {
-    return <div>loading...</div>;
+    return <FolderLoadingPage />;
   }
 
   const pickList = getOrderedPickListByFolderId(data);
