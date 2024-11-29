@@ -27,7 +27,7 @@ public class SharedFolder extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "folder_id", nullable = false, unique = true)
     private Folder folder;
 
