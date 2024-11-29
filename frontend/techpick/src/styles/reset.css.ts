@@ -48,7 +48,7 @@ globalStyle(
 );
 
 globalStyle('body', {
-  lineHeight: 1,
+  lineHeight: 1.5,
   fontSize: '16px',
 });
 
