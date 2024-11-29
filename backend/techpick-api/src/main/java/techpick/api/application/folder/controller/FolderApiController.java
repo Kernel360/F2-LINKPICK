@@ -35,7 +35,6 @@ public class FolderApiController {
 
     private final FolderService folderService;
     private final SharedFolderService sharedFolderService;
-    private final FolderApiMapper mapper;
     private final FolderApiMapper folderApiMapper;
 
     @GetMapping
@@ -79,9 +78,9 @@ public class FolderApiController {
     })
     public ResponseEntity<FolderApiResponse> createFolder(@LoginUserId Long userId,
         @Valid @RequestBody FolderApiRequest.Create request) {
-        return ResponseEntity.ok(
-            mapper.toApiResponse(folderService.saveFolder(mapper.toCreateCommand(userId, request)))
-        );
+        var result = folderService.saveFolder(folderApiMapper.toCreateCommand(userId, request));
+        var response = folderApiMapper.toApiResponse(result);
+        return ResponseEntity.ok(response);
     }
 
     @PatchMapping
@@ -93,7 +92,8 @@ public class FolderApiController {
     })
     public ResponseEntity<Void> updateFolder(@LoginUserId Long userId,
         @Valid @RequestBody FolderApiRequest.Update request) {
-        folderService.updateFolder(mapper.toUpdateCommand(userId, request));
+        var command = folderApiMapper.toUpdateCommand(userId, request);
+        folderService.updateFolder(command);
         return ResponseEntity.noContent().build();
     }
 
@@ -108,7 +108,8 @@ public class FolderApiController {
     })
     public ResponseEntity<Void> moveFolder(@LoginUserId Long userId,
         @Valid @RequestBody FolderApiRequest.Move request) {
-        folderService.moveFolder(mapper.toMoveCommand(userId, request));
+        var command = folderApiMapper.toMoveCommand(userId, request);
+        folderService.moveFolder(command);
         return ResponseEntity.noContent().build();
     }
 
@@ -121,7 +122,8 @@ public class FolderApiController {
     })
     public ResponseEntity<Void> deleteFolder(@LoginUserId Long userId,
         @Valid @RequestBody FolderApiRequest.Delete request) {
-        folderService.deleteFolder(mapper.toDeleteCommand(userId, request));
+        var command = folderApiMapper.toDeleteCommand(userId, request);
+        folderService.deleteFolder(command);
         return ResponseEntity.noContent().build();
     }
 
@@ -132,6 +134,6 @@ public class FolderApiController {
         String accessToken = sharedFolderService
             .findAccessTokenByFolderId(folder.id())
             .orElse(null);
-        return mapper.toApiResponse(folder, accessToken);
+        return folderApiMapper.toApiResponse(folder, accessToken);
     }
 }
