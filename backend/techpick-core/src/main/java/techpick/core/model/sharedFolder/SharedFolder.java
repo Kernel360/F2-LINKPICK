@@ -11,39 +11,38 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import techpick.core.model.common.BaseEntity;
+import techpick.core.model.folder.Folder;
 import techpick.core.model.user.User;
 
 @Table(name = "sharedFolder")
 @Entity
 @Getter
 @NoArgsConstructor
-public class SharedFolder {
+public class SharedFolder extends BaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.UUID)
-	private UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-	@Column(columnDefinition = "json", nullable = false)
-	private String jsonData;
+    @OneToOne
+    @JoinColumn(name = "folder_id", nullable = false, unique = true)
+    private Folder folder;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
-	private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-	// 공유폴더의 생성 시간이 jsonData 에도 포함되어야해서 생성자로 주입 받는 방식으로 사용
-	@Column
-	private LocalDateTime createdAt;
+    private SharedFolder(User user, Folder folder) {
+        this.user = user;
+        this.folder = folder;
+    }
 
-	private SharedFolder(User user, String jsonData, LocalDateTime createdAt) {
-		this.user = user;
-		this.jsonData = jsonData;
-		this.createdAt = createdAt;
-	}
-
-	public static SharedFolder createSharedFolder(User user, String jsonData, LocalDateTime createdAt) {
-		return new SharedFolder(user, jsonData, createdAt);
-	}
+    public static SharedFolder createSharedFolder(User user, Folder folder) {
+        return new SharedFolder(user, folder);
+    }
 }
