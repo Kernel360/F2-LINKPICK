@@ -5,6 +5,7 @@ const API_ENDPOINTS = {
   PICKS: 'picks',
   TAGS: 'tags',
   LINKS: 'links',
+  LOGOUT: 'logout',
 };
 
 export const API_URLS = {
@@ -35,4 +36,5 @@ export const API_URLS = {
   GET_TAGS: `${API_ENDPOINTS.TAGS}`,
   GET_PICK_BY_URL: (url: string) => `${API_ENDPOINTS.PICKS}/link?link=${url}`,
   GET_LINK_OG_DATA: (url: string) => `${API_ENDPOINTS.LINKS}?url=${url}`,
+  POST_LOGOUT: `${API_ENDPOINTS.LOGOUT}`,
 };
