@@ -111,8 +111,11 @@ public class FolderService {
         }
     }
 
+    // TODO: 리팩토링 필요
     @Transactional
     public void deleteFolder(FolderCommand.Delete command) {
+        // 먼저 공유 부터 해제
+        command.idList().forEach(sharedFolderDataHandler::deleteBySourceFolderId);
         // 휴지통으로 이동되어야할 픽 리스트
         List<Long> targetPickIdList = new ArrayList<>();
         // 삭제할 폴더 리스트
