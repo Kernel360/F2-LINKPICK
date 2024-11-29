@@ -16,8 +16,8 @@ import {
   getSelectedFolderRange,
   isSameParentFolder,
 } from './folderListItem.util';
-import ShareFolderDialog from './ShareFolderDialog';
 import { MoveFolderToRecycleBinDialog } from './MoveFolderToRecycleBinDialog';
+import ShareFolderDialog from './ShareFolderDialog';
 import type { FolderMapType } from '@/types';
 
 export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
