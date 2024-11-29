@@ -47,5 +47,5 @@ export const dragOverStyle = style({
 
 export const treeNodeLayoutStyle = style({
   overflowY: 'scroll',
-  height: 'calc(100vh - 254px)',
+  height: 'calc(100vh - 324px)',
 });
