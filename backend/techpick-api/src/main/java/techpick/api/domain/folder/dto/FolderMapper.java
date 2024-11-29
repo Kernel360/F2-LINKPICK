@@ -6,7 +6,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import techpick.core.model.folder.Folder;
-import techpick.core.model.user.User;
 
 @Mapper(
     componentModel = "spring",
