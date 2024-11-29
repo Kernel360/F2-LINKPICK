@@ -31,7 +31,7 @@ export function useFetchPickRecordByFolderId({
       isFetchedRef.current = true;
       queryFunction(folderId);
     }
-  }, [queryFunction, folderId, pickRecord]);
+  }, [queryFunction, folderId, pickRecord, alwaysFetch]);
 
   if (typeof folderId !== 'number') {
     return {

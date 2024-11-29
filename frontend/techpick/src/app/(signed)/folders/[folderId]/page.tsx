@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, notFound, redirect } from 'next/navigation';
 import { PickRecordHeader } from '@/components';
 import { EmptyPickRecordImage } from '@/components/EmptyPickRecordImage';
 import { FolderContentHeader } from '@/components/FolderContentHeader/FolderContentHeader';
@@ -26,7 +26,7 @@ export default function FolderDetailPage() {
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
   const folderId = Number(stringFolderId);
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
-  const { isLoading, data } = useFetchPickRecordByFolderId({
+  const { isLoading, data, isError } = useFetchPickRecordByFolderId({
     folderId: folderId,
     alwaysFetch: true,
   });
@@ -37,8 +37,7 @@ export default function FolderDetailPage() {
   useEffect(
     function selectFolderId() {
       if (!isFolderIdValid(folderId)) {
-        router.replace(ROUTES.UNCLASSIFIED_FOLDER);
-        return;
+        notFound();
       }
 
       selectSingleFolder(Number(folderId));
@@ -56,6 +55,10 @@ export default function FolderDetailPage() {
 
   if (!basicFolderMap || (isLoading && !data)) {
     return <FolderLoadingPage />;
+  }
+
+  if (isError) {
+    redirect(ROUTES.HOME);
   }
 
   const pickList = getOrderedPickListByFolderId(data);
