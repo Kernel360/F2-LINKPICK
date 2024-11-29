@@ -35,12 +35,22 @@ public class SharedFolderDataHandler {
         return sharedFolderRepository.findById(uuid).orElseThrow(ApiSharedFolderException::SHARED_FOLDER_NOT_FOUND);
     }
 
+    public SharedFolder getByFolderId(Long folderId) {
+        return sharedFolderRepository
+            .findByFolderId(folderId)
+            .orElseThrow(ApiSharedFolderException::SHARED_FOLDER_NOT_FOUND);
+    }
+
+    public boolean isSharedFolder(Long folderId) {
+        return sharedFolderRepository.findByFolderId(folderId).isPresent();
+    }
+
     public List<SharedFolder> getByUserId(Long userId) {
         return sharedFolderRepository.findByUserId(userId);
     }
 
-    public void deleteByUUID(UUID uuid) {
-        sharedFolderRepository.deleteById(uuid);
+    public void deleteBySourceFolderId(Long sourceFolderId) {
+        sharedFolderRepository.deleteByFolderId(sourceFolderId);
     }
 
     public Optional<UUID> findUUIDBySourceFolderId(Long sourceFolderId) {

@@ -2,8 +2,6 @@ package techpick.api.domain.sharedFolder.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -31,7 +29,8 @@ public class SharedFolderResult {
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         List<SharedPickInfo> pickList,
-        Map<UUID, SharedTagInfo> tagIdMap
+        @Schema(description = "해당 폴더 내에서 사용된 모든 태그들 정보. tagIdxList의 각 값을 index로 사용하세요.", example = "[0, 5, 2, 3]")
+        List<SharedTagInfo> tagList
     ) {
     }
 
@@ -41,7 +40,8 @@ public class SharedFolderResult {
         @Schema(example = "자바 레코드 참고 블로그 1")
         String title,
         LinkInfo linkInfo,
-        List<UUID> usedTagKeyList, // pick에 설정된 태그 키
+        @Schema(description = "tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.", example = "[0, 5, 2, 3]")
+        List<Integer> tagIdxList,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
     ) {
