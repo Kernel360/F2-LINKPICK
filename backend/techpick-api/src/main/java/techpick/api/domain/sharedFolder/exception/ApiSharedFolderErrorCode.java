@@ -16,8 +16,11 @@ public enum ApiSharedFolderErrorCode implements ApiErrorCode {
         ("SF-001", HttpStatus.UNAUTHORIZED, "잘못된 SharedFolder 접근, 다른 사용자의 SharedFolder에 접근",
             ErrorLevel.SHOULD_NOT_HAPPEN()),
     FOLDER_CANT_BE_SHARED
-        ("SF-002", HttpStatus.UNAUTHORIZED, "공유되어선 안되는 폴더가 공유되고 있습니다!",
+        ("SF-002", HttpStatus.UNAUTHORIZED, "해당 폴더는 공유될 수 없는 폴더입니다!",
             ErrorLevel.MUST_NEVER_HAPPEN()),
+    FOLDER_ALREADY_SHARED
+        ("SF-003", HttpStatus.CONFLICT, "이미 공유된 폴더는 다시 공유 상태가 될 수 없습니다.",
+            ErrorLevel.SHOULD_NOT_HAPPEN()),
     ;
 
     private final String code;

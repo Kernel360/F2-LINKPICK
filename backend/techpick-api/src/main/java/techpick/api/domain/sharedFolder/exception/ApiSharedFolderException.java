@@ -20,4 +20,8 @@ public class ApiSharedFolderException extends ApiException {
     public static ApiSharedFolderException FOLDER_CANNOT_BE_SHARED() {
         return new ApiSharedFolderException(ApiSharedFolderErrorCode.FOLDER_CANT_BE_SHARED);
     }
+
+    public static ApiSharedFolderException FOLDER_ALREADY_SHARED() {
+        return new ApiSharedFolderException(ApiSharedFolderErrorCode.FOLDER_ALREADY_SHARED);
+    }
 }
