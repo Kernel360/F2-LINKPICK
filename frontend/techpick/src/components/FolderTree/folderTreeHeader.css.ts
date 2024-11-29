@@ -5,7 +5,6 @@ export const folderTreeHeaderLayout = style({
   position: 'sticky',
   top: 0,
   minWidth: sizes['6xs'],
-  paddingTop: '12px',
   backgroundColor: colorVars.sand2,
 });
 

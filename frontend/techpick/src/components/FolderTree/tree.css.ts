@@ -15,7 +15,7 @@ export const resizeHandleStyle = style({
 export const treeLayout = style({
   height: '100vh',
   padding: '12px',
-  paddingTop: '0',
+  paddingTop: '24px',
   backgroundColor: colorVars.sand2,
 
   '@media': {

@@ -43,5 +43,5 @@ export const folderTextStyle = style({
   overflow: 'hidden',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
-  height: '24px',
+  height: '28px',
 });

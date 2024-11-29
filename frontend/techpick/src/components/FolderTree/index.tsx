@@ -9,6 +9,7 @@ import { HorizontalResizableContainer } from './HorizontalResizableContainer';
 import { ShowCreateFolderInputButton } from './ShowCreateFolderInputButton';
 import { treeLayout, treeNodeLayoutStyle } from './tree.css';
 import { TreeNode } from './TreeNode';
+import { UserMenuBar } from './UserMenuBar';
 
 export function FolderTree() {
   const { newFolderParentId } = useCreateFolderInputStore();
@@ -24,6 +25,7 @@ export function FolderTree() {
   return (
     <HorizontalResizableContainer>
       <div className={treeLayout}>
+        <UserMenuBar />
         <FolderTreeHeader />
 
         <div className={folderTreeHeaderTitleLayout}>
