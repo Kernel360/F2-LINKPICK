@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
-import * as Dialog from '@radix-ui/react-dialog';
 import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
 import { shareFolder } from '@/apis/folder/shareFolder';
 import { ROUTES } from '@/constants';
@@ -35,6 +34,8 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
   const [isUpdate, setIsUpdate] = useState(false);
   const isSelected = selectedFolderList.includes(id);
   const isHover = id === hoverFolderId;
+  const [isRemoveFolderDialogOpen, setIsRemoveFolderDialogOpen] =
+    useState(false);
 
   const handleShiftSelect = (id: number, treeDataMap: FolderMapType) => {
     if (!focusFolderId || !isSameParentFolder(id, focusFolderId, treeDataMap)) {
@@ -82,7 +83,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
   }
 
   return (
-    <Dialog.Root>
+    <>
       <FolderContextMenu
         showRenameInput={() => {
           setIsUpdate(true);
@@ -90,6 +91,9 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
         shareFolder={handleShareFolder}
         onShow={() => {
           selectSingleFolder(id);
+        }}
+        onClickRemoveFolder={() => {
+          setIsRemoveFolderDialogOpen(true);
         }}
       >
         <FolderLinkItem
@@ -104,8 +108,12 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
       {isDialogOpen && (
         <ShareFolderDialog onClose={handleDialogClose} uuid={uuid} />
       )}
-      <MoveFolderToRecycleBinDialog deleteFolderId={id} />
-    </Dialog.Root>
+      <MoveFolderToRecycleBinDialog
+        deleteFolderId={id}
+        isOpen={isRemoveFolderDialogOpen}
+        onOpenChange={setIsRemoveFolderDialogOpen}
+      />
+    </>
   );
 };
 
