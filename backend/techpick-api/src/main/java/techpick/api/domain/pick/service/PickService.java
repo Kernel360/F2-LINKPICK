@@ -148,7 +148,8 @@ public class PickService {
 	}
 
 	private void validateRootAccess(Long parentFolderId) {
-		if (Objects.isNull(parentFolderId)) {
+		Folder parentFolder = folderDataHandler.getFolder(parentFolderId);
+		if (Objects.isNull(parentFolder.getId()) || parentFolder.getFolderType() == FolderType.ROOT) {
 			throw ApiPickException.PICK_UNAUTHORIZED_ROOT_ACCESS();
 		}
 	}
