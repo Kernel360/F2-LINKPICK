@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Operation;
+import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
@@ -28,7 +31,9 @@ public class SwaggerConfig {
 			.components(new Components()
 				.addSecuritySchemes("basicAuth", securityScheme())
 			)
-			.servers(List.of(getServer()));
+			.servers(List.of(getServer()))
+			.paths(getAuthPaths())
+			;
 	}
 
 	private Info apiInfo() {
@@ -51,5 +56,21 @@ public class SwaggerConfig {
 
 	private Server getServer() {
 		return new Server().url(properties.getBaseUrl());
+	}
+
+	private Paths getAuthPaths() {
+		List<String> authTags = List.of("Authorization");
+		var naverLogin = new PathItem().get(new Operation().summary("네이버 소셜 로그인").tags(authTags));
+		var kakaoLogin = new PathItem().get(new Operation().summary("카카오 소셜 로그인").tags(authTags));
+		var googleLogin = new PathItem().get(new Operation().summary("구글 소셜 로그인").tags(authTags));
+		var logout = new PathItem().get(
+			new Operation().summary("로그아웃").description("techPickLogin, access_token 쿠키를 삭제합니다.").tags(authTags));
+
+		return new Paths()
+			.addPathItem("/api/login/naver", naverLogin)
+			.addPathItem("/api/login/kakao", kakaoLogin)
+			.addPathItem("/api/login/google", googleLogin)
+			.addPathItem("/api/login/logout", logout)
+			;
 	}
 }
