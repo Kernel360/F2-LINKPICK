@@ -12,7 +12,7 @@ export default async function middleware(req: NextRequest) {
   const isAuthenticated = !!req.cookies.get('access_token');
 
   const unauthenticatedOnlyPaths = ['/login'];
-  const authenticatedOnlyPaths = ['/folders', '/'];
+  const authenticatedOnlyPaths = ['/folders', '/', '/mypage'];
 
   const isUnauthenticatedOnlyPath = unauthenticatedOnlyPaths.includes(pathname);
   const isAuthenticatedOnlyPath = authenticatedOnlyPaths.some((path) =>
