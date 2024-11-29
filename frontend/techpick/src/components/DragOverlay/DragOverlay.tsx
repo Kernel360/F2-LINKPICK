@@ -4,9 +4,9 @@ import { DragOverlay as DndKitDragOverlay } from '@dnd-kit/core';
 import { useGetDragOverStyle } from '@/hooks';
 import { usePickStore, useTreeStore } from '@/stores';
 import { dragCountStyle, stackedOverlayStyle } from './dragOverlay.css';
-import { FolderItemOverlay } from './FolderTree/FolderItemOverlay';
+import { FolderItemOverlay } from './FolderItemOverlay';
 import { PickDragOverlayShadowList } from './PickDragOverlayShadowList';
-import { PickRecordOverlay } from './PickRecord/PickRecordOverlay';
+import { PickRecordOverlay } from './PickRecordOverlay';
 
 export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   const { isDragging: isFolderDragging, draggingFolderInfo } = useTreeStore();

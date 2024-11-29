@@ -5,8 +5,6 @@ import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
 import { useOpenUrlInNewTab } from '@/hooks';
 import { usePickStore, useTagStore, useUpdatePickStore } from '@/stores';
 import { formatDateString } from '@/utils';
-import { PickDateColumnLayout } from './PickDateColumnLayout';
-import { PickImageColumnLayout } from './PickImageColumnLayout';
 import {
   pickRecordLayoutStyle,
   pickImageStyle,
@@ -15,10 +13,12 @@ import {
   externalLinkIconStyle,
   linkLayoutStyle,
 } from './pickRecordOverlay.css';
-import { PickRecordTitleInput } from './PickRecordTitleInput';
-import { PickTagColumnLayout } from './PickTagColumnLayout';
-import { PickTitleColumnLayout } from './PickTitleColumnLayout';
-import { Separator } from './Separator';
+import { PickDateColumnLayout } from '../PickRecord/PickDateColumnLayout';
+import { PickImageColumnLayout } from '../PickRecord/PickImageColumnLayout';
+import { PickRecordTitleInput } from '../PickRecord/PickRecordTitleInput';
+import { PickTagColumnLayout } from '../PickRecord/PickTagColumnLayout';
+import { PickTitleColumnLayout } from '../PickRecord/PickTitleColumnLayout';
+import { Separator } from '../PickRecord/Separator';
 import { PickTagPicker } from '../PickTagPicker';
 import { PickViewItemComponentProps, TagType } from '@/types';
 
