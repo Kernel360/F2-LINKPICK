@@ -12,23 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import techpick.api.application.folder.controller.FolderApiConstant;
 import techpick.api.application.sharedFolder.dto.SharedFolderApiMapper;
-import techpick.api.application.sharedFolder.dto.SharedFolderApiRequest;
 import techpick.api.application.sharedFolder.dto.SharedFolderApiResponse;
-import techpick.api.domain.pick.service.PickService;
-import techpick.api.domain.sharedFolder.dto.SharedFolderCommand;
-import techpick.api.domain.sharedFolder.dto.SharedFolderResult;
 import techpick.api.domain.sharedFolder.service.SharedFolderService;
 import techpick.security.annotation.LoginUserId;
 
@@ -48,23 +39,10 @@ public class SharedFolderApiController {
     })
     public ResponseEntity<SharedFolderApiResponse.Create> createSharedFolder(
         @LoginUserId Long userId,
-        @Valid @RequestBody SharedFolderApiRequest.Create request
+        @Valid @RequestBody Long folderId
     ) {
-        var command = sharedFolderApiMapper.toCreateCommand(userId, request);
-        var result = sharedFolderService.createSharedFolder(command);
+        var result = sharedFolderService.createSharedFolder(userId, folderId);
         var response = sharedFolderApiMapper.toCreateResponse(result);
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping("/{uuid}")
-    @Operation(summary = "공유 폴더 조회", description = "UUID를 통해 공유된 폴더에 접근할 수 있습니다.")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "공유 폴더 조회 성공"),
-        @ApiResponse(responseCode = "404", description = "올바르지 않은 UUID", content = @Content),
-    })
-    public ResponseEntity<SharedFolderApiResponse.ReadFolderFull> getSharedFolderWithFullInfo(@PathVariable UUID uuid) {
-        var result = sharedFolderService.getSharedFolderInfo(uuid);
-        var response = sharedFolderApiMapper.toReadFolderFullResponse(result);
         return ResponseEntity.ok(response);
     }
 
@@ -80,14 +58,33 @@ public class SharedFolderApiController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{uuid}")
-    @Operation(summary = "공유 폴더 삭제", description = "공유폴더의 공유를 취소합니다.")
+    @DeleteMapping("/{sourceFolderId}")
+    @Operation(summary = "폴더 공유 취소", description = "공유된 폴더를 비공개로 변경 합니다.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "공유폴더 삭제 성공"),
+        @ApiResponse(responseCode = "200", description = "폴더 비공개화 성공"),
         @ApiResponse(responseCode = "403", description = "자신의 공유 폴더만 삭제 할 수 있습니다.")
     })
-    public ResponseEntity<Void> deleteSharedFolder(@LoginUserId Long userId, @PathVariable UUID uuid) {
-        sharedFolderService.deleteSharedFolder(new SharedFolderCommand.Delete(userId, uuid));
+    public ResponseEntity<Void> deleteSharedFolder(
+        @LoginUserId Long userId, @PathVariable Long sourceFolderId
+    ) {
+        sharedFolderService.deleteSharedFolder(userId, sourceFolderId);
         return ResponseEntity.noContent().build();
+    }
+
+    /** ----------------------------------------------------
+     * NOTE: 아래 메서드는 Public API 입니다.
+     */
+    @GetMapping("/{uuid}")
+    @Operation(summary = "공유 폴더 조회", description = "UUID를 통해 공유된 폴더에 접근할 수 있습니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "공유 폴더 조회 성공"),
+        @ApiResponse(responseCode = "404", description = "올바르지 않은 UUID", content = @Content),
+    })
+    public ResponseEntity<SharedFolderApiResponse.ReadFolderFull> getSharedFolderWithFullInfo(
+        @PathVariable UUID uuid
+    ) {
+        var result = sharedFolderService.getSharedFolderInfo(uuid);
+        var response = sharedFolderApiMapper.toReadFolderFullResponse(result);
+        return ResponseEntity.ok(response);
     }
 }

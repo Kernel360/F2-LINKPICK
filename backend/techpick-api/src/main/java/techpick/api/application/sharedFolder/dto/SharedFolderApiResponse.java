@@ -26,14 +26,17 @@ public class SharedFolderApiResponse {
      */
     public record ReadFolderPartial(
         @Schema(description = "원본 폴더의 이름", example = "리액트 모음집")
+        Long sourceFolderId,
+
+        @Schema(description = "원본 폴더의 이름", example = "리액트 모음집")
         @NotBlank(message = "{folder.name.notBlank}")
-        String folderName,
+        String sourceFolderName,
 
         @Schema(description = "원본 폴더의 생성 시점", example = "2024-11-29T06:03:49.182Z")
-        LocalDateTime createdAt,
+        LocalDateTime sourceFolderCreatedAt,
 
         @Schema(description = "원본 폴더의 마지막 업데이트 시점", example = "2024-11-29T06:03:49.182Z")
-        LocalDateTime updatedAt,
+        LocalDateTime sourceFolderUpdatedAt,
 
         @Schema(description = "{shared.accessToken.description}", example = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d")
         @NotNull(message = "{shared.accessToken.notNull}")
@@ -58,20 +61,20 @@ public class SharedFolderApiResponse {
         LocalDateTime updatedAt,
 
         @Schema(
-            description = "사용된 pick의 key 리스트. key는 tagIdMap에서 조회할 수 있습니다."
+            description = "폴더 내 pick 리스트"
         )
         List<SharedFolderResult.SharedPickInfo> pickList,
 
         @Schema(
-            description = "해당 폴더 내에서 사용된 모든 태그 정보와 대응하는 key 쌍",
+            description = "해당 폴더 내에서 사용된 모든 태그 정보가 담길 배열. tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.",
             example = """
-                {
-                    "eedb9e2b-7faf-43f7-a199-ba3ba6732691" : { "name": "리액트", "colorNumber": "2" },
-                    "06566296-ee25-4c1d-81e7-3f320fecf2a1" : { "name": "CSS", "colorNumber": "8" },
-                }
+                    [
+                        { "name": "리액트", "colorNumber": "2" },
+                        { "name": "CSS", "colorNumber": "8" }
+                    ]
                 """
         )
-        Map<UUID, SharedFolderResult.SharedTagInfo> tagIdMap
+        List<SharedFolderResult.SharedTagInfo> tagList
     ) {
     }
 }

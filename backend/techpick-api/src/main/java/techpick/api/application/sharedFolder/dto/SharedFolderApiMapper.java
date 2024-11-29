@@ -9,7 +9,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
-import techpick.api.domain.sharedFolder.dto.SharedFolderCommand;
 import techpick.api.domain.sharedFolder.dto.SharedFolderResult;
 
 @Mapper(
@@ -19,16 +18,15 @@ import techpick.api.domain.sharedFolder.dto.SharedFolderResult;
 )
 public interface SharedFolderApiMapper {
 
-    SharedFolderCommand.Create toCreateCommand(Long userId, SharedFolderApiRequest.Create request);
-
     // 공유 폴더 생성
     SharedFolderApiResponse.Create toCreateResponse(SharedFolderResult.Create result);
 
     // 내 공유된 폴더 목록 획득
     @Named("singlePartialReadMapping")
-    @Mapping(source = "sourceFolder.createdAt", target = "createdAt")
-    @Mapping(source = "sourceFolder.updatedAt", target = "updatedAt")
-    @Mapping(source = "sourceFolder.name", target = "folderName")
+    @Mapping(source = "sourceFolder.createdAt", target = "sourceFolderCreatedAt")
+    @Mapping(source = "sourceFolder.updatedAt", target = "sourceFolderUpdatedAt")
+    @Mapping(source = "sourceFolder.name", target = "sourceFolderName")
+    @Mapping(source = "sourceFolder.id", target = "sourceFolderId")
     SharedFolderApiResponse.ReadFolderPartial toReadResponse(SharedFolderResult.Read result);
 
     @IterableMapping(qualifiedByName = "singlePartialReadMapping")
