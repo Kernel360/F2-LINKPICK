@@ -5,9 +5,15 @@ import java.util.UUID;
 
 public class SharedFolderCommand {
 
-	public record Create(Long userId, String name, List<Long> folderIdList) {
-	}
+    public record Create(
+        Long userId,
+        Long folderId
+    ) {
+    }
 
-	public record Delete(Long userId, UUID uuid) {
-	}
+    public record Delete(
+        Long userId,
+        UUID uuid
+    ) {
+    }
 }
