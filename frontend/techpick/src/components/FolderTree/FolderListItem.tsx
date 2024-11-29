@@ -9,6 +9,7 @@ import { useShareDialogOpen } from '@/hooks/useShareDialogOpen';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { isSelectionActive } from '@/utils';
 import { FolderContextMenu } from './FolderContextMenu';
+import { FolderDraggable } from './FolderDraggable';
 import { FolderInput } from './FolderInput';
 import { FolderLinkItem } from './FolderLinkItem';
 import {
@@ -96,14 +97,16 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
           setIsRemoveFolderDialogOpen(true);
         }}
       >
-        <FolderLinkItem
-          href={ROUTES.FOLDER_DETAIL(id)}
-          isSelected={isSelected}
-          isHovered={isHover}
-          icon={isSelected ? FolderOpenIcon : FolderClosedIcon}
-          name={name}
-          onClick={(event) => handleClick(id, event)}
-        />
+        <FolderDraggable id={id}>
+          <FolderLinkItem
+            href={ROUTES.FOLDER_DETAIL(id)}
+            isSelected={isSelected}
+            isHovered={isHover}
+            icon={isSelected ? FolderOpenIcon : FolderClosedIcon}
+            name={name}
+            onClick={(event) => handleClick(id, event)}
+          />
+        </FolderDraggable>
       </FolderContextMenu>
       {isDialogOpen && (
         <ShareFolderDialog onClose={handleDialogClose} uuid={uuid} />

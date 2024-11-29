@@ -3,7 +3,6 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { FolderDraggable } from '@/components/FolderTree/FolderDraggable';
 import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { FolderInput } from './FolderInput';
@@ -64,9 +63,11 @@ export function TreeNode({ id }: TreeNodeProps) {
       >
         {curTreeNodeChildList.map((treeData) => {
           return (
-            <FolderDraggable id={treeData.id} key={treeData.id}>
-              <FolderListItem id={treeData.id} name={treeData.name} />
-            </FolderDraggable>
+            <FolderListItem
+              id={treeData.id}
+              name={treeData.name}
+              key={treeData.id}
+            />
           );
         })}
       </SortableContext>
