@@ -5,6 +5,7 @@ import type { MouseEvent } from 'react';
 import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
 import { shareFolder } from '@/apis/folder/shareFolder';
 import { ROUTES } from '@/constants';
+import { useDisclosure } from '@/hooks';
 import { useShareDialogOpen } from '@/hooks/useShareDialogOpen';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { isSelectionActive } from '@/utils';
@@ -35,8 +36,11 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
   const [isUpdate, setIsUpdate] = useState(false);
   const isSelected = selectedFolderList.includes(id);
   const isHover = id === hoverFolderId;
-  const [isRemoveFolderDialogOpen, setIsRemoveFolderDialogOpen] =
-    useState(false);
+  const {
+    isOpen: isOpenRemoveDialog,
+    onOpen: onOpenRemoveDialog,
+    onClose: onCloseRemoveDialog,
+  } = useDisclosure();
 
   const handleShiftSelect = (id: number, treeDataMap: FolderMapType) => {
     if (!focusFolderId || !isSameParentFolder(id, focusFolderId, treeDataMap)) {
@@ -93,9 +97,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
         onShow={() => {
           selectSingleFolder(id);
         }}
-        onClickRemoveFolder={() => {
-          setIsRemoveFolderDialogOpen(true);
-        }}
+        onClickRemoveFolder={onOpenRemoveDialog}
       >
         <FolderDraggable id={id}>
           <FolderLinkItem
@@ -113,8 +115,8 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
       )}
       <MoveFolderToRecycleBinDialog
         deleteFolderId={id}
-        isOpen={isRemoveFolderDialogOpen}
-        onOpenChange={setIsRemoveFolderDialogOpen}
+        isOpen={isOpenRemoveDialog}
+        onOpenChange={onCloseRemoveDialog}
       />
     </>
   );
