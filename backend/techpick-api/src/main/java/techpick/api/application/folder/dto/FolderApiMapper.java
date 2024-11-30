@@ -22,8 +22,8 @@ public interface FolderApiMapper {
 
     FolderCommand.Delete toDeleteCommand(Long userId, FolderApiRequest.Delete request);
 
-    @Mapping(target = "accessToken", expression = "java(null)")
+    @Mapping(target = "folderAccessToken", expression = "java(null)")
     FolderApiResponse toApiResponse(FolderResult result);
 
-    FolderApiResponse toApiResponse(FolderResult result, String accessToken);
+    FolderApiResponse toApiResponse(FolderResult result, String folderAccessToken);
 }

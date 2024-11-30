@@ -11,14 +11,14 @@ import techpick.api.domain.link.dto.LinkInfo;
 public class SharedFolderResult {
 
     public record Create(
-        String accessToken
+        String folderAccessToken
     ) {
     }
 
     // TODO: 추후 공유자의 정보까지 DTO에 담아주는게 좋겠다.
     public record Read(
         FolderResult sourceFolder,
-        String accessToken
+        String folderAccessToken
     ) {
     }
 

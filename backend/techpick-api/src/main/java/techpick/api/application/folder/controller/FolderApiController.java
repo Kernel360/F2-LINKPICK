@@ -51,7 +51,7 @@ public class FolderApiController {
     public ResponseEntity<List<FolderApiResponse>> getAllRootFolderList(@LoginUserId Long userId) {
         return ResponseEntity.ok(
             folderService.getAllRootFolderList(userId).stream()
-                         .map(this::toApiResponseWithAccessToken)
+                         .map(this::toApiResponseWithFolderAccessToken)
                          .toList()
         );
     }
@@ -130,10 +130,10 @@ public class FolderApiController {
     // ----------------------------------------------------------------
     // internal helper method
 
-    private FolderApiResponse toApiResponseWithAccessToken(FolderResult folder) {
-        String accessToken = sharedFolderService
-            .findAccessTokenByFolderId(folder.id())
+    private FolderApiResponse toApiResponseWithFolderAccessToken(FolderResult folder) {
+        String folderAccessToken = sharedFolderService
+            .findFolderAccessTokenByFolderId(folder.id())
             .orElse(null);
-        return folderApiMapper.toApiResponse(folder, accessToken);
+        return folderApiMapper.toApiResponse(folder, folderAccessToken);
     }
 }

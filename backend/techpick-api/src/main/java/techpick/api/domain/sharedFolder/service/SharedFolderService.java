@@ -77,7 +77,7 @@ public class SharedFolderService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<String> findAccessTokenByFolderId(Long folderId) {
+    public Optional<String> findFolderAccessTokenByFolderId(Long folderId) {
         return sharedFolderDataHandler.findUUIDBySourceFolderId(folderId).map(UUID::toString);
     }
 

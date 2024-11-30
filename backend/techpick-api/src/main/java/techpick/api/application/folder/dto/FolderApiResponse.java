@@ -27,6 +27,6 @@ public record FolderApiResponse(
             비공개 폴더일 경우 null을 반환.
             공유된 폴더일 경우 조회용 UUID 토큰을 반환.
         """)
-    String accessToken
+    String folderAccessToken
 ) {
 }

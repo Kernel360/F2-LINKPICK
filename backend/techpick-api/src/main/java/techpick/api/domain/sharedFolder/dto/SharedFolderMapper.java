@@ -21,11 +21,11 @@ import techpick.core.model.tag.Tag;
 )
 public interface SharedFolderMapper {
 
-    @Mapping(expression = "java(sharedFolder.getId().toString())", target = "accessToken")
+    @Mapping(expression = "java(sharedFolder.getId().toString())", target = "folderAccessToken")
     SharedFolderResult.Create toCreateResult(SharedFolder sharedFolder);
 
     @Mapping(source = "folder", target = "sourceFolder")
-    @Mapping(expression = "java(sharedFolder.getId().toString())", target = "accessToken")
+    @Mapping(expression = "java(sharedFolder.getId().toString())", target = "folderAccessToken")
     SharedFolderResult.Read toReadResult(SharedFolder sharedFolder);
 
     SharedFolderResult.SharedTagInfo toSharedTagInfo(Tag tag);

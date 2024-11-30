@@ -13,9 +13,10 @@ import techpick.api.domain.sharedFolder.dto.SharedFolderResult;
 public class SharedFolderApiResponse {
 
     public record Create(
-        @Schema(description = "{shared.accessToken.description}", example = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d")
-        @NotNull(message = "{shared.accessToken.notNull}")
-        String accessToken
+        @Schema(description = "{shared.folderAccessToken.description}", example = "9b1deb4d-3b7d-4bad-9bdd"
+            + "-2b0d7b3dcb6d")
+        @NotNull(message = "{shared.folderAccessToken.notNull}")
+        String folderAccessToken
     ) {
     }
 
@@ -38,9 +39,10 @@ public class SharedFolderApiResponse {
         @Schema(description = "원본 폴더의 마지막 업데이트 시점", example = "2024-11-29T06:03:49.182Z")
         LocalDateTime sourceFolderUpdatedAt,
 
-        @Schema(description = "{shared.accessToken.description}", example = "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d")
-        @NotNull(message = "{shared.accessToken.notNull}")
-        String accessToken
+        @Schema(description = "{shared.folderAccessToken.description}", example = "9b1deb4d-3b7d-4bad-9bdd"
+            + "-2b0d7b3dcb6d")
+        @NotNull(message = "{shared.folderAccessToken.notNull}")
+        String folderAccessToken
     ) {
     }
 

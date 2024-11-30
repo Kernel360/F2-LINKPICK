@@ -12,7 +12,7 @@ public class FolderApiConstant {
                 "childFolderIdOrderedList": [4]
                 "createdAt": 2007-12-03T10:15:3
                 "updatedAt": 2007-12-03T10:15:3
-                "accessToken": null
+                "folderAccessToken": null
             },
             {
                 "id": 4,
@@ -22,7 +22,7 @@ public class FolderApiConstant {
                 "childFolderIdOrderedList": []
                 "createdAt": 2007-12-03T10:15:3
                 "updatedAt": 2007-12-03T10:15:3
-                "accessToken": 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
+                "folderAccessToken": 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
             }
         ]
         """;
