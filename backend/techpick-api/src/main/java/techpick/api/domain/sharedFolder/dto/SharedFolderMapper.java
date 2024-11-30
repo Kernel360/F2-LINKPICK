@@ -1,63 +1,32 @@
 package techpick.api.domain.sharedFolder.dto;
 
-import java.util.ArrayList;
-import java.util.UUID;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
-import org.springframework.stereotype.Component;
-
+import techpick.api.application.sharedFolder.dto.SharedFolderApiResponse;
+import techpick.api.domain.folder.dto.FolderMapper;
+import techpick.api.domain.folder.dto.FolderResult;
 import techpick.core.model.folder.Folder;
-import techpick.core.model.link.Link;
 import techpick.core.model.pick.Pick;
 import techpick.core.model.sharedFolder.SharedFolder;
 import techpick.core.model.tag.Tag;
 
-@Component
-public class SharedFolderMapper {
+@Mapper(
+    componentModel = "spring",
+    injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+    unmappedTargetPolicy = ReportingPolicy.ERROR,
+    uses = FolderMapper.class
+)
+public interface SharedFolderMapper {
 
-	public FolderNode toFolderNode(Folder folder) {
-		return FolderNode.builder()
-			.folderId(folder.getId())
-			.name(folder.getName())
-			.folders(new ArrayList<>())
-			.picks(new ArrayList<>())
-			.createdAt(folder.getCreatedAt().toString())
-			.build();
-	}
+    @Mapping(expression = "java(sharedFolder.getId().toString())", target = "folderAccessToken")
+    SharedFolderResult.Create toCreateResult(SharedFolder sharedFolder);
 
-	public PickNode toPickNode(Pick pick) {
-		Link link = pick.getLink();
-		return PickNode.builder()
-			.pickId(pick.getId())
-			.title(pick.getTitle())
-			.url(link.getUrl())
-			.imageUrl(link.getImageUrl())
-			.parentFolderId(pick.getParentFolder().getId())
-			.tags(new ArrayList<>())
-			.createdAt(pick.getCreatedAt().toString())
-			.build();
-	}
+    @Mapping(source = "folder", target = "sourceFolder")
+    @Mapping(expression = "java(sharedFolder.getId().toString())", target = "folderAccessToken")
+    SharedFolderResult.Read toReadResult(SharedFolder sharedFolder);
 
-	public TagNode toTagNode(Tag tag) {
-		return TagNode.builder()
-			.name(tag.getName())
-			.colorNumber(tag.getColorNumber())
-			.build();
-	}
-
-	public SharedFolderResult.Folder toResultFolder(SharedFolder sharedFolder) {
-		return SharedFolderResult.Folder.builder()
-			.uuid(sharedFolder.getId())
-			.jsonData(sharedFolder.getJsonData())
-			.build();
-	}
-
-	public SharedFolderResult.List toResultList(SharedFolder sharedFolder) {
-		return SharedFolderResult.List.builder()
-			.uuid(sharedFolder.getId())
-			.build();
-	}
-
-	public SharedFolderResult.Create toCreateResult(UUID uuid, FolderNode folderNode) {
-		return SharedFolderResult.Create.builder().uuid(uuid).folderNode(folderNode).build();
-	}
+    SharedFolderResult.SharedTagInfo toSharedTagInfo(Tag tag);
 }

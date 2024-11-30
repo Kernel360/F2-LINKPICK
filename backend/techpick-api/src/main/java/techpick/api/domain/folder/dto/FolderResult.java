@@ -6,14 +6,13 @@ import java.util.List;
 import techpick.core.model.folder.FolderType;
 
 public record FolderResult(
-	Long id,
-	String name,
-	FolderType folderType,
-	Long parentFolderId,
-	Long userId,
-	List<Long> childFolderIdOrderedList,
-	List<Long> childPickIdOrderedList,
-	LocalDateTime createdAt,
-	LocalDateTime updatedAt
+    Long id,
+    String name,
+    FolderType folderType,
+    Long parentFolderId,
+    List<Long> childFolderIdOrderedList,
+    List<Long> childPickIdOrderedList,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
 ) {
 }
