@@ -1,3 +1,6 @@
+server:
+  port: 8081
+
 spring:
   application:
     name: techpick-collector
@@ -13,7 +16,6 @@ spring:
 #      hibernate:
 #        dialect: org.hibernate.dialect.MySQL8Dialect
 #    open-in-view: false
-
 ---
 
 spring:
@@ -22,10 +24,18 @@ spring:
       on-profile: local
   data:
     mongodb:
-      uri: ${DOCKER_MONGO_URL}
+      uri: mongodb://${DOCKER_MONGO_USERNAME}:${DOCKER_MONGO_PASSWORD}@${LOCAL_MONGO_URL}/${DOCKER_MONGO_DATABASE}?authSource=${DOCKER_MONGO_AUTH}
       database: ${DOCKER_MONGO_DATABASE}
       username: ${DOCKER_MONGO_USERNAME}
       password: ${DOCKER_MONGO_PASSWORD}
+
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
+
 #  jpa:
 #    properties:
 #      hibernate:

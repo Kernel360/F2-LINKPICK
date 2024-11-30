@@ -29,6 +29,22 @@ services:
     networks:
       - techpick-network
 
+  techpick-mongo:
+    image: mongo
+    container_name: techpick-mongo
+    ports:
+      - "27017:27017"
+    env_file:
+      - .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DOCKER_MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${DOCKER_MONGO_PASSWORD}
+    volumes:
+      - .data/mongo:/data/db
+    command: [ "--bind_ip", "0.0.0.0" ]
+    networks:
+      - techpick-network
+
   techpick-api:
     build:
       context: ./techpick-api
@@ -67,3 +83,14 @@ services:
     depends_on:
       - techpick-mysql
 
+  techpick-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: techpick-rabbitmq
+    hostname: techpick
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    ports:
+      - "15672:15672" # 관리 UI 포트
+      - "5672:5672" # AMQP 포트
