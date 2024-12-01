@@ -14,7 +14,11 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
 
-
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 
 #logging: # /* Transaction Logging */
 #  level:
@@ -32,7 +36,8 @@ spring:
         format_sql: false
         show_sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
+  #      ddl-auto: create
   datasource:
     url: ${LOCAL_MYSQL_URL}
     username: ${DOCKER_MYSQL_USERNAME}
