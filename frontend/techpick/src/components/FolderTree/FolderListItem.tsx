@@ -68,11 +68,8 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
   };
 
   const handleShareFolder = async () => {
-    const response = await shareFolder({
-      name,
-      folderIdList: [id],
-    });
-    handleDialogOpen(response.uuid);
+    const response = await shareFolder(id);
+    handleDialogOpen(response.folderAccessToken);
   };
 
   if (isUpdate) {

@@ -115,6 +115,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
             parentFolderId: parentFolderId,
             childFolderIdOrderedList: [],
             folderType: 'GENERAL',
+            folderAccessToken: null,
             updatedAt: new Date().toDateString(), // TODO: 급하게 했습니다.. 꼭 고칩시다...
             createdAt: new Date().toDateString(), // TODO: 급하게 했습니다.. 꼭 고칩시다...
           };

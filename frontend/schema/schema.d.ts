@@ -4,6 +4,113 @@
  */
 
 export interface paths {
+    "/api/login/naver": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 네이버 소셜 로그인 */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: never;
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/login/kakao": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 카카오 소셜 로그인 */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: never;
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/login/google": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** 구글 소셜 로그인 */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: never;
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/login/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 로그아웃
+         * @description techPickLogin, access_token 쿠키를 삭제합니다.
+         */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: never;
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/tags": {
         parameters: {
             query?: never;
@@ -34,6 +141,30 @@ export interface paths {
          * @description 사용자가 등록한 태그를 수정합니다.
          */
         patch: operations["updateTag"];
+        trace?: never;
+    };
+    "/api/shared": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 자신이 공유한 폴더 목록 조회
+         * @description 자신이 공유한 폴더 목록을 조회합니다.
+         */
+        get: operations["getUserSharedFolderList"];
+        put?: never;
+        /**
+         * 내 폴더를 공유 폴더로 등록
+         * @description 폴더를 공유 폴더로 등록하며, 공유된 폴더는 부여된 UUID를 통해 접근할 수 있습니다.
+         */
+        post: operations["createSharedFolder"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/picks": {
@@ -100,6 +231,26 @@ export interface paths {
         patch: operations["updateFolder"];
         trace?: never;
     };
+    "/api/chrome/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 크롬 북마크 업로드
+         * @description 내보내기한 크롬 북마크(.html)을 업로드 하여 일괄 추가합니다. 이미 등록된 url(중복 url)을 응답으로 보냅니다.
+         */
+        post: operations["importBookmark"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/tags/location": {
         parameters: {
             query?: never;
@@ -160,6 +311,26 @@ export interface paths {
         patch: operations["moveFolder"];
         trace?: never;
     };
+    "/api/shared/{uuid}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 공유 폴더 조회
+         * @description UUID를 통해 공유된 폴더에 접근할 수 있습니다.
+         */
+        get: operations["getSharedFolderWithFullInfo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/picks/{id}": {
         parameters: {
             query?: never;
@@ -188,8 +359,28 @@ export interface paths {
             cookie?: never;
         };
         /**
+         * 픽 리스트 검색(페이지네이션)
+         * @description 페이지네이션 처리 된 픽 리스트 검색
+         */
+        get: operations["searchPickPagination"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/picks/search/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
          * 픽 리스트 검색
-         * @description 해당 폴더에 내에 있는 픽 리스트 검색
+         * @description 페이지네이션 처리 되지 않은 픽 리스트 검색
          */
         get: operations["searchPick"];
         put?: never;
@@ -220,7 +411,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/folders/{id}/children": {
+    "/api/links": {
         parameters: {
             query?: never;
             header?: never;
@@ -228,10 +419,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 자식 폴더 리스트 조회
-         * @description 특정 폴더의 자식 폴더 리스트를 조회합니다.
+         * 해당 링크 og 데이터 조회
+         * @description 해당 링크의 og 태그 데이터를 스크래핑을 통해 가져옵니다.
          */
-        get: operations["getChildrenFolder"];
+        get: operations["getLinkData"];
         put?: never;
         post?: never;
         delete?: never;
@@ -260,7 +451,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/shared": {
+    "/api/chrome/{folderId}/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 특정 폴더 다운로드
+         * @description 사용자의 특정 폴더를 크롬 브라우저 북마크에 import 가능한 형태로 다운로드 받습니다.
+         */
+        get: operations["exportFolder"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/chrome/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 전체 폴더 다운로드
+         * @description 사용자의 특정 폴더를 크롬 브라우저 북마크에 import 가능한 형태로 다운로드 받습니다.
+         */
+        get: operations["exportUserFolder"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/shared/{sourceFolderId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -269,8 +500,12 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["shareFolderList"];
-        delete?: never;
+        post?: never;
+        /**
+         * 폴더 공유 취소
+         * @description 공유된 폴더를 비공개로 변경 합니다.
+         */
+        delete: operations["deleteSharedFolder"];
         options?: never;
         head?: never;
         patch?: never;
@@ -295,6 +530,13 @@ export interface components {
             name?: string;
             /** Format: int32 */
             colorNumber?: number;
+        };
+        "techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$Create": {
+            /**
+             * @description {shared.folderAccessToken.description}
+             * @example 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
+             */
+            folderAccessToken: string;
         };
         "techpick.api.application.pick.dto.PickApiRequest$Create": {
             /** @example Record란? */
@@ -367,6 +609,10 @@ export interface components {
             createdAt?: string;
             /** Format: date-time */
             updatedAt?: string;
+            /** @description     비공개 폴더일 경우 null을 반환.
+             *         공유된 폴더일 경우 조회용 UUID 토큰을 반환.
+             *      */
+            folderAccessToken?: string | null;
         };
         "techpick.api.application.tag.dto.TagApiRequest$Update": {
             /**
@@ -392,7 +638,7 @@ export interface components {
              * Format: int32
              * @example 1
              */
-            orderIdx: number;
+            orderIdx?: number;
         };
         "techpick.api.application.pick.dto.PickApiRequest$Update": {
             /**
@@ -474,6 +720,108 @@ export interface components {
             /** Format: int32 */
             colorNumber?: number;
         };
+        "techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderPartial": {
+            /**
+             * Format: int64
+             * @description 원본 폴더의 이름
+             */
+            sourceFolderId?: number;
+            /**
+             * @description 원본 폴더의 이름
+             * @example 리액트 모음집
+             */
+            sourceFolderName: string;
+            /**
+             * Format: date-time
+             * @description 원본 폴더의 생성 시점
+             * @example 2024-11-29T06:03:49.182Z
+             */
+            sourceFolderCreatedAt?: string;
+            /**
+             * Format: date-time
+             * @description 원본 폴더의 마지막 업데이트 시점
+             * @example 2024-11-29T06:03:49.182Z
+             */
+            sourceFolderUpdatedAt?: string;
+            /**
+             * @description {shared.folderAccessToken.description}
+             * @example 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
+             */
+            folderAccessToken: string;
+        };
+        "techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderFull": {
+            /**
+             * @description 원본 폴더의 이름
+             * @example 리액트 모음집
+             */
+            folderName: string;
+            /**
+             * Format: date-time
+             * @description 원본 폴더의 생성 시점
+             * @example 2024-11-29T06:03:49.182Z
+             */
+            createdAt?: string;
+            /**
+             * Format: date-time
+             * @description 원본 폴더의 마지막 업데이트 시점
+             * @example 2024-11-29T06:03:49.182Z
+             */
+            updatedAt?: string;
+            /** @description 폴더 내 pick 리스트 */
+            pickList?: components["schemas"]["techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo"][];
+            /**
+             * @description 해당 폴더 내에서 사용된 모든 태그 정보가 담길 배열. tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.
+             * @example [
+             *       {
+             *         "name": "리액트",
+             *         "colorNumber": "2"
+             *       },
+             *       {
+             *         "name": "CSS",
+             *         "colorNumber": "8"
+             *       }
+             *     ]
+             */
+            tagList?: components["schemas"]["techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo"][];
+        };
+        /** @description 폴더 내 pick 리스트 */
+        "techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo": {
+            /** @example 자바 레코드 참고 블로그 1 */
+            title?: string;
+            linkInfo?: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
+            /**
+             * @description tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.
+             * @example [
+             *       0,
+             *       5,
+             *       2,
+             *       3
+             *     ]
+             */
+            tagIdxList?: number[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
+        /**
+         * @description 해당 폴더 내에서 사용된 모든 태그 정보가 담길 배열. tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.
+         * @example [
+         *       {
+         *         "name": "리액트",
+         *         "colorNumber": "2"
+         *       },
+         *       {
+         *         "name": "CSS",
+         *         "colorNumber": "8"
+         *       }
+         *     ]
+         */
+        "techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo": {
+            name?: string;
+            /** Format: int32 */
+            colorNumber?: number;
+        };
         "techpick.api.application.pick.dto.PickApiResponse$FolderPickList": {
             /** Format: int64 */
             folderId?: number;
@@ -486,6 +834,11 @@ export interface components {
             /** Format: int32 */
             size?: number;
             hasNext?: boolean;
+        };
+        "techpick.api.application.link.dto.LinkApiResponse": {
+            title?: string;
+            description?: string;
+            imageUrl?: string;
         };
         "techpick.api.application.tag.dto.TagApiRequest$Delete": {
             /**
@@ -511,28 +864,7 @@ export interface components {
              *     ] */
             idList: number[];
         };
-        "techpick.api.application.sharedFolder.dto.SharedFolderApiRequest$Create": {
-            name: string;
-            folderIdList?: number[];
-        };
-        //'techpick.api.domain.sharedFolder.dto.FolderNode': {
-        //  folderId: number;
-        //  name: string;
-        //  //  eslint-disable-next-line  @typescript-eslint/no-explicit-any
-        //  folders: any;
-        //  //  eslint-disable-next-line  @typescript-eslint/no-explicit-any
-        //  picks: any;
-        //  //  eslint-disable-next-line  @typescript-eslint/no-explicit-any
-        //  createdAt: any;
-        //};
-        "techpick.api.domain.sharedFolder.dto.SharedFolderResult$Create": {
-            uuid: string;
-            //  eslint-disable-next-line  @typescript-eslint/no-explicit-any
-            folderNode: any;
-            //folderNode	: components['schemas']['techpick.api.domain.sharedFolder.dto.FolderNode']
-        };
     };
-
     responses: never;
     parameters: never;
     requestBodies: never;
@@ -654,6 +986,59 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    getUserSharedFolderList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 공유 폴더 목록 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderPartial"][];
+                };
+            };
+        };
+    };
+    createSharedFolder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": number;
+            };
+        };
+        responses: {
+            /** @description 공유 폴더 생성 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$Create"];
+                };
+            };
+            /** @description 자신의 폴더만 공유할 수 있습니다. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$Create"];
+                };
             };
         };
     };
@@ -910,6 +1295,42 @@ export interface operations {
             };
         };
     };
+    importBookmark: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description 다운로드 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string[];
+                };
+            };
+            /** @description 파일 형식 및 파싱 오류 */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string[];
+                };
+            };
+        };
+    };
     moveTag: {
         parameters: {
             query?: never;
@@ -1011,6 +1432,35 @@ export interface operations {
             };
         };
     };
+    getSharedFolderWithFullInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                uuid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 공유 폴더 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderFull"];
+                };
+            };
+            /** @description 올바르지 않은 UUID */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     getPick: {
         parameters: {
             query?: never;
@@ -1033,34 +1483,34 @@ export interface operations {
             };
         };
     };
-    searchPick: {
+    searchPickPagination: {
         parameters: {
             query?: {
                 /**
                  * @description 조회할 폴더 ID 목록
-                 * @example 1, 2, 3
+                 * @example 3, 4, 5
                  */
-                folderIdList?: number[];
+                folderIdList?: string;
                 /**
                  * @description 검색 토큰 목록
-                 * @example 리액트, 쿼리, 서버
+                 * @example Record, 스프링
                  */
-                searchTokenList?: string[];
+                searchTokenList?: string;
                 /**
                  * @description 검색 태그 ID 목록
                  * @example 1, 2, 3
                  */
-                tagIdList?: number[];
+                tagIdList?: string;
                 /**
                  * @description 픽 시작 id 조회
                  * @example 0
                  */
-                cursor?: number;
+                cursor?: string;
                 /**
                  * @description 한 페이지에 가져올 픽 개수
                  * @example 20
                  */
-                size?: number;
+                size?: string;
             };
             header?: never;
             path?: never;
@@ -1075,6 +1525,42 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["techpick.api.application.pick.dto.PickSliceResponseTechpick.api.application.pick.dto.PickApiResponse$Pick"];
+                };
+            };
+        };
+    };
+    searchPick: {
+        parameters: {
+            query?: {
+                /**
+                 * @description 조회할 폴더 ID 목록
+                 * @example 3, 4, 5
+                 */
+                folderIdList?: string;
+                /**
+                 * @description 검색 토큰 목록
+                 * @example Record, 스프링
+                 */
+                searchTokenList?: string;
+                /**
+                 * @description 검색 태그 ID 목록
+                 * @example 1, 2, 3
+                 */
+                tagIdList?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"][];
                 };
             };
         };
@@ -1110,13 +1596,14 @@ export interface operations {
             };
         };
     };
-    getChildrenFolder: {
+    getLinkData: {
         parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
+            query: {
+                /** @description og 태그 데이터 가져올 url */
+                url: string;
             };
+            header?: never;
+            path?: never;
             cookie?: never;
         };
         requestBody?: never;
@@ -1127,16 +1614,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.folder.dto.FolderApiResponse"][];
-                };
-            };
-            /** @description 본인 폴더만 조회할 수 있습니다. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["techpick.api.application.folder.dto.FolderApiResponse"][];
+                    "*/*": components["schemas"]["techpick.api.application.link.dto.LinkApiResponse"];
                 };
             };
         };
@@ -1170,47 +1648,82 @@ export interface operations {
             };
         };
     };
-    shareFolderList: {
+    exportFolder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                folderId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 다운로드 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
+                };
+            };
+            /** @description 본인 폴더만 다운로드할 수 있습니다. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
+                };
+            };
+        };
+    };
+    exportUserFolder: {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": {
-                    /** @description 공유할 폴더 이름 */
-                    name: string;
-                    /**
-                     * @description 공유할 폴더 ID 목록
-                     * @example [0]
-                     */
-                    folderIdList: number[];
-                };
-            };
-        };
+        requestBody?: never;
         responses: {
-            /** @description 공유 성공 */
+            /** @description 다운로드 성공 */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.domain.sharedFolder.dto.SharedFolderResult$Create"];
-                };
-            };
-            /** @description 본인의 폴더만 공유할 수 있습니다. */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["techpick.api.domain.sharedFolder.dto.SharedFolderResult$Create"];
+                    "*/*": string;
                 };
             };
         };
     };
+    deleteSharedFolder: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                sourceFolderId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 폴더 비공개화 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description 자신의 공유 폴더만 삭제 할 수 있습니다. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
 }
-
-//더블쿼터, 들여쓰기 4탭 마지막에 저장할 때 변경해서 저장하기
