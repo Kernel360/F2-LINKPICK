@@ -22,6 +22,13 @@ jobs:
           echo "NEXT_PUBLIC_DOMAIN=${{ secrets.FRONT_NEXT_PUBLIC_DOMAIN }}" >> .env.production
           echo "NEXT_PUBLIC_REDIRECT_URL=${{secrets.FRONT_NEXT_PUBLIC_REDIRECT_URL}}" >> .env.production
 
+      - # .env.sentry-build-plugin 설정
+        name: Create .env.sentry-build-plugin
+        run: |
+          cd ./frontend/techpick
+          touch .env.sentry-build-plugin
+          echo "SENTRY_AUTH_TOKEN=${{secrets.FRONT_SENTRY_AUTH_TOKEN}}" >> .env.sentry-build-plugin
+
       - # Docker image 빌드
         name: Build docker image
         run: |
