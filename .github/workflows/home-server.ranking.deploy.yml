@@ -87,8 +87,7 @@ jobs:
             echo "RABBITMQ_PASSWORD"=${{ secrets.RABBITMQ_PASSWORD }} >> .env
             echo "RABBITMQ_COOKIE"=${{ secrets.RABBITMQ_ERLANG_COOKIE }} >> .env
             
-            docker-compose stop techpick.${{ env.server-name }}
-            docker-compose rm -f techpick.${{ env.server-name }}
+            docker-compose down
             docker-compose up -d
 
             # ****************************************************************
@@ -102,8 +101,8 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
           status: ${{ job.status }}
-          title: 'BATCH SERVER DEPLOY'
-          description: 'BATCH 서버 배포가 완료되었습니다.'
+          title: 'RANKING SERVER DEPLOY'
+          description: 'RANKING 서버 배포가 완료되었습니다.'
           color: 0xff91a4
           url: 'https://github.com/sarisia/actions-status-discord'
           username: GitHub Actions
