@@ -12,8 +12,8 @@ import techpick.core.rabbitmq.EventType;
  * 아래 클래스에 묶어주었습니다.
  *
  * Class for Custom Annotations
- * - Use with TPA prefix
- *   ex. @TPA.{annotation}
+ * - Use with Techpick prefix
+ *   ex. @TechpickAnnotation.{SendEvent}
  */
 public class TechpickAnnotation {
 

@@ -27,7 +27,7 @@ public class LinkService {
 
     @Transactional(readOnly = true)
     public LinkResult getLinkInfo(String url) {
-        Link link = linkDataHandler.getOptionalLink(url).orElseThrow(ApiLinkException::LINK_NOT_FOUND);
+        Link link = linkDataHandler.getLink(url);
         return linkMapper.toLinkResult(link);
     }
 
