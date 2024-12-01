@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import techpick.api.application.link.dto.LinkApiResponse;
 import techpick.api.domain.link.dto.LinkMapper;
 import techpick.api.domain.link.dto.LinkResult;
 import techpick.api.domain.link.exception.ApiLinkException;
@@ -66,9 +65,8 @@ public class LinkService {
             link.updateMetadata(title, description, imageUrl);
             return linkMapper.toLinkResult(linkDataHandler.saveLink(link));
         } catch (Exception e) {
-            log.info("url : {} 의 og tag 추출에 실패했습니다.", url);
+            throw ApiLinkException.LINK_OG_TAG_UPDATE_FAILURE();
         }
-        return linkMapper.toLinkResult(link);
     }
 
     private Connection.Response getJsoupResponse(String url) throws IOException {
