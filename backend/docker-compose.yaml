@@ -9,6 +9,9 @@ networks:
 
 services:
   techpick-mysql:
+    # **********************************
+    #          MYSQL RDB
+    # **********************************
     image: mysql:8.0
     container_name: techpick-mysql
     ports:
@@ -20,8 +23,8 @@ services:
       - MYSQL_DATABASE=${DOCKER_MYSQL_DATABASE}
       - TZ=Asia/Seoul
     volumes:
-      - ./data/develop/mysql-data:/var/lib/mysql
-      - ./data/develop/mysql-files:/var/lib/mysql-files/develop
+      - ./data/mysql-data:/var/lib/mysql
+      - ./data/mysql-files:/var/lib/mysql-files/develop
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
@@ -30,6 +33,9 @@ services:
       - techpick-network
 
   techpick-mongo:
+    # **********************************
+    #          MONGO NoSQL DB
+    # **********************************
     image: mongo
     container_name: techpick-mongo
     ports:
@@ -40,12 +46,15 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${DOCKER_MONGO_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${DOCKER_MONGO_PASSWORD}
     volumes:
-      - .data/mongo:/data/db
+      - ./data/mongo:/data/db
     command: [ "--bind_ip", "0.0.0.0" ]
     networks:
       - techpick-network
 
   techpick-api:
+    # **********************************
+    #          TECHPICK API SERVER
+    # **********************************
     build:
       context: ./techpick-api
       dockerfile: Dockerfile
@@ -66,6 +75,9 @@ services:
       - techpick-mysql
 
   techpick-batch:
+    # **********************************
+    #       TECHPICK BATCH SERVER
+    # **********************************
     build:
       context: ./techpick-batch
       dockerfile: Dockerfile
@@ -84,6 +96,9 @@ services:
       - techpick-mysql
 
   techpick-rabbitmq:
+    # **********************************
+    #       TECHPICK MESSAGE QUEUE
+    # **********************************
     image: rabbitmq:3-management
     container_name: techpick-rabbitmq
     hostname: techpick
