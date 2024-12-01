@@ -1,5 +1,4 @@
-# 로컬에서 techpick-api와 동시에 켜야 할 경우
-# 아래 주석을 해제하세요
+# 로컬에서 techpick-api와 동시에 켜야 할 경우 아래 주석을 해제하세요
 #server:
 #  port: 8082
 
@@ -12,14 +11,7 @@ spring:
   sql:
     init:
       mode: never # schema.sql 실행시 always 키고 실행하시면 됩니다. option: never, always
-
-#  jpa:
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQL8Dialect
-#    open-in-view: false
 ---
-
 spring:
   config:
     activate:
@@ -30,24 +22,22 @@ spring:
       database: ${DOCKER_MONGO_DATABASE}
       username: ${DOCKER_MONGO_USERNAME}
       password: ${DOCKER_MONGO_PASSWORD}
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  data:
+    mongodb:
+      uri: mongodb://${DOCKER_MONGO_USERNAME}:${DOCKER_MONGO_PASSWORD}@${DOCKER_MONGO_URL}/${DOCKER_MONGO_DATABASE}?authSource=${DOCKER_MONGO_AUTH}
+      database: ${DOCKER_MONGO_DATABASE}
+      username: ${DOCKER_MONGO_USERNAME}
+      password: ${DOCKER_MONGO_PASSWORD}
+---
 
+spring:
   rabbitmq:
     host: ${RABBITMQ_HOST}
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
-
-
-#  jpa:
-#    properties:
-#      hibernate:
-#        format_sql: false
-#        show_sql: true
-#    hibernate:
-#      ddl-auto: create
-#  datasource:
-#    url:
-#    username:
-#    password:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-
