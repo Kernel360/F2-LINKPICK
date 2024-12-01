@@ -66,7 +66,7 @@ jobs:
             echo "docker - pulling..."
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/techpick:${{ env.server-name }}-${{ github.sha }}
             echo "docker - changing image name and tag ..."
-            docker tag ${{ secrets.DOCKERHUB_USERNAME }}/techpick:${{ env.server-name }}-${{ github.sha }} techpick:${{ env.api-server-name }}-staging
+            docker tag ${{ secrets.DOCKERHUB_USERNAME }}/techpick:${{ env.server-name }}-${{ github.sha }} techpick:${{ env.server-name }}-staging
 
             # ****************************************************************
             echo "create .env file with github repository's ENV setting ..."
