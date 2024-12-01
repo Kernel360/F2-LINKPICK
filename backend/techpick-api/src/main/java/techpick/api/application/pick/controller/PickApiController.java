@@ -25,17 +25,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import techpick.api.application.link.event.SendLinkEventToMessageQueue;
 import techpick.api.application.pick.dto.PickApiMapper;
 import techpick.api.application.pick.dto.PickApiRequest;
 import techpick.api.application.pick.dto.PickApiResponse;
 import techpick.api.application.pick.dto.PickSliceResponse;
-import techpick.api.application.pick.event.SendPickEventToMessageQueue;
 import techpick.api.domain.pick.dto.PickResult;
 import techpick.api.domain.pick.exception.ApiPickException;
 import techpick.api.domain.pick.service.PickSearchService;
 import techpick.api.domain.pick.service.PickService;
-import techpick.event.ActionType;
 import techpick.security.annotation.LoginUserId;
 
 @Slf4j
@@ -130,7 +127,6 @@ public class PickApiController {
         @ApiResponse(responseCode = "401", description = "잘못된 태그 접근"),
         @ApiResponse(responseCode = "403", description = "접근할 수 없는 폴더")
     })
-    @SendPickEventToMessageQueue(actionType = ActionType.CREATE)
     public ResponseEntity<PickApiResponse.Pick> savePick(@LoginUserId Long userId,
         @Valid @RequestBody PickApiRequest.Create request) {
         if (!Objects.isNull(request.title()) && 200 < request.title().length()) {
@@ -175,7 +171,6 @@ public class PickApiController {
         @ApiResponse(responseCode = "406", description = "휴지통이 아닌 폴더에서 픽 삭제 불가"),
         @ApiResponse(responseCode = "500", description = "미확인 서버 에러 혹은 존재하지 않는 픽 삭제")
     })
-    @SendLinkEventToMessageQueue(actionType = ActionType.READ)
     public ResponseEntity<Void> deletePick(@LoginUserId Long userId,
         @Valid @RequestBody PickApiRequest.Delete request) {
         pickService.deletePick(pickApiMapper.toDeleteCommand(userId, request));
