@@ -8,6 +8,6 @@ WORKDIR /app
 
 COPY ${JAR_FILE} /app/techpick-batch.jar
 
-EXPOSE 8081
+EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "-Duser.timezone=Asia/Seoul", "/app/techpick-batch.jar"]

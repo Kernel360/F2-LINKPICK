@@ -5,15 +5,16 @@
 
 networks:
   techpick-network:
+    name: techpick-network
     driver: bridge
 
 services:
   techpick-mysql:
-    # **********************************
-    #          MYSQL RDB
-    # **********************************
+    # **************************************
+    #   API, BATCH 서버가 이용하는 MYSQL 운영 DB
+    # **************************************
     image: mysql:8.0
-    container_name: techpick-mysql
+    container_name: techpick.infra.service-db
     ports:
       - "3306:3306"
     env_file:
@@ -32,12 +33,12 @@ services:
     networks:
       - techpick-network
 
-  techpick-mongo:
-    # **********************************
-    #          MONGO NoSQL DB
-    # **********************************
+  techpick-ranking-mongo:
+    # ***********************************
+    #    NoSQL DB for Ranking Module
+    # ***********************************
     image: mongo
-    container_name: techpick-mongo
+    container_name: techpick.server.ranking.service-db
     ports:
       - "27017:27017"
     env_file:
@@ -58,7 +59,7 @@ services:
     build:
       context: ./techpick-api
       dockerfile: Dockerfile
-    container_name: techpick-api
+    container_name: techpick.server.api
     ports:
       - "8080:8080"
     env_file:
@@ -81,7 +82,7 @@ services:
     build:
       context: ./techpick-batch
       dockerfile: Dockerfile
-    container_name: techpick-batch
+    container_name: techpick.server.batch
     env_file:
       - .env
     environment:
@@ -100,7 +101,7 @@ services:
     #       TECHPICK MESSAGE QUEUE
     # **********************************
     image: rabbitmq:3-management
-    container_name: techpick-rabbitmq
+    container_name: techpick.infra.message-queue
     hostname: techpick
     environment:
       - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
