@@ -5,12 +5,16 @@
 
 networks:
   techpick-network:
+    name: techpick-network
     driver: bridge
 
 services:
   techpick-mysql:
+    # **************************************
+    #   API, BATCH 서버가 이용하는 MYSQL 운영 DB
+    # **************************************
     image: mysql:8.0
-    container_name: techpick-mysql
+    container_name: techpick.infra.service-db
     ports:
       - "3306:3306"
     env_file:
@@ -20,8 +24,8 @@ services:
       - MYSQL_DATABASE=${DOCKER_MYSQL_DATABASE}
       - TZ=Asia/Seoul
     volumes:
-      - ./data/develop/mysql-data:/var/lib/mysql
-      - ./data/develop/mysql-files:/var/lib/mysql-files/develop
+      - ./data/mysql-data:/var/lib/mysql
+      - ./data/mysql-files:/var/lib/mysql-files/develop
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
@@ -29,9 +33,12 @@ services:
     networks:
       - techpick-network
 
-  techpick-mongo:
+  techpick-ranking-mongo:
+    # ***********************************
+    #    NoSQL DB for Ranking Module
+    # ***********************************
     image: mongo
-    container_name: techpick-mongo
+    container_name: techpick.server.ranking.service-db
     ports:
       - "27017:27017"
     env_file:
@@ -40,16 +47,19 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${DOCKER_MONGO_USERNAME}
       - MONGO_INITDB_ROOT_PASSWORD=${DOCKER_MONGO_PASSWORD}
     volumes:
-      - .data/mongo:/data/db
+      - ./data/mongo:/data/db
     command: [ "--bind_ip", "0.0.0.0" ]
     networks:
       - techpick-network
 
   techpick-api:
+    # **********************************
+    #          TECHPICK API SERVER
+    # **********************************
     build:
       context: ./techpick-api
       dockerfile: Dockerfile
-    container_name: techpick-api
+    container_name: techpick.server.api
     ports:
       - "8080:8080"
     env_file:
@@ -66,10 +76,13 @@ services:
       - techpick-mysql
 
   techpick-batch:
+    # **********************************
+    #       TECHPICK BATCH SERVER
+    # **********************************
     build:
       context: ./techpick-batch
       dockerfile: Dockerfile
-    container_name: techpick-batch
+    container_name: techpick.server.batch
     env_file:
       - .env
     environment:
@@ -84,8 +97,11 @@ services:
       - techpick-mysql
 
   techpick-rabbitmq:
+    # **********************************
+    #       TECHPICK MESSAGE QUEUE
+    # **********************************
     image: rabbitmq:3-management
-    container_name: techpick-rabbitmq
+    container_name: techpick.infra.message-queue
     hostname: techpick
     environment:
       - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}

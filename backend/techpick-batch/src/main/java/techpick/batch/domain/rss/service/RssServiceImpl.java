@@ -23,7 +23,7 @@ import techpick.batch.domain.rss.dto.RssMapper;
 import techpick.batch.domain.rss.dto.RssRawFeed;
 import techpick.batch.domain.rss.exception.ApiRssException;
 import techpick.batch.infrastructure.rss.RssAdaptor;
-import techpick.core.annotation.MeasureTime;
+import techpick.core.annotation.TechpickAnnotation;
 import techpick.core.model.rss.RssBlog;
 import techpick.core.model.rss.RssFeed;
 
@@ -32,71 +32,71 @@ import techpick.core.model.rss.RssFeed;
 @RequiredArgsConstructor
 public class RssServiceImpl implements RssService {
 
-	private final RestTemplate restTemplate;
-	private final RssAdaptor rssAdaptor;
-	private final RssMapper rssMapper;
+    private final RestTemplate restTemplate;
+    private final RssAdaptor rssAdaptor;
+    private final RssMapper rssMapper;
 
-	@Override
-	@Transactional
-	public RssBlogResult saveRssBlog(RssBlogCommand.Create command) {
-		return rssMapper.toRssResult(rssAdaptor.saveRssBlog(command));
-	}
+    @Override
+    @Transactional
+    public RssBlogResult saveRssBlog(RssBlogCommand.Create command) {
+        return rssMapper.toRssResult(rssAdaptor.saveRssBlog(command));
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<RssBlogResult> getAllRssBlog() {
-		return rssAdaptor.getAllRssBlog().stream()
-			.map(rssMapper::toRssResult)
-			.toList();
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public List<RssBlogResult> getAllRssBlog() {
+        return rssAdaptor.getAllRssBlog().stream()
+                         .map(rssMapper::toRssResult)
+                         .toList();
+    }
 
-	// 매일 새벽 3시에 수집
-	@Scheduled(cron = "0 0 3 * * *")
-	@MeasureTime
-	public void rssCrawling() {
-		ExecutorService executorService = Executors.newFixedThreadPool(5);
-		for (var blog : rssAdaptor.getAllRssBlog()) {
-			executorService.submit(() -> getAndSaveNewRssData(blog));
-		}
-		executorService.shutdown();
-	}
+    // 매일 새벽 3시에 수집
+    @Scheduled(cron = "0 0 3 * * *")
+    @TechpickAnnotation.MeasureTime
+    public void rssCrawling() {
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        for (var blog : rssAdaptor.getAllRssBlog()) {
+            executorService.submit(() -> getAndSaveNewRssData(blog));
+        }
+        executorService.shutdown();
+    }
 
-	private void getAndSaveNewRssData(RssBlog blog) {
-		var itemList = getRssItem(blog);
-		if (itemList.isPresent()) {
-			List<RssFeed> feedList = itemList.get()
-				.stream()
-				.map(item -> rssMapper.toRssFeed(blog, item))
-				.toList();
-			// feedList가 ImmutableList기 때문에 ArrayList에 새로 넣어줌..
-			rssAdaptor.saveAllDistinctRssFeed(blog, new ArrayList<>(feedList));
-		}
-	}
+    private void getAndSaveNewRssData(RssBlog blog) {
+        var itemList = getRssItem(blog);
+        if (itemList.isPresent()) {
+            List<RssFeed> feedList = itemList.get()
+                                             .stream()
+                                             .map(item -> rssMapper.toRssFeed(blog, item))
+                                             .toList();
+            // feedList가 ImmutableList기 때문에 ArrayList에 새로 넣어줌..
+            rssAdaptor.saveAllDistinctRssFeed(blog, new ArrayList<>(feedList));
+        }
+    }
 
-	private Optional<List<RssRawFeed.Item>> getRssItem(RssBlog blog) {
-		try {
-			return Optional.of(apiCallWithRetry(blog.getUrl(), RssRawFeed.class).getChannel().getItem());
-		} catch (RestClientException e) {
-			log.error("url : {}, error message : {}, error code : {}", blog.getUrl(), e.getMessage(),
-				ApiRssException.RSS_NOT_FOUND().getApiErrorCode());
-			return Optional.empty();
-		}
-	}
+    private Optional<List<RssRawFeed.Item>> getRssItem(RssBlog blog) {
+        try {
+            return Optional.of(apiCallWithRetry(blog.getUrl(), RssRawFeed.class).getChannel().getItem());
+        } catch (RestClientException e) {
+            log.error("url : {}, error message : {}, error code : {}", blog.getUrl(), e.getMessage(),
+                ApiRssException.RSS_NOT_FOUND().getApiErrorCode());
+            return Optional.empty();
+        }
+    }
 
-	private <T> T apiCallWithRetry(String path, Class<T> clazz) {
-		final int MAX_ATTEMPTS = 3;
-		final int RETRY_INTERVAL = 200;
+    private <T> T apiCallWithRetry(String path, Class<T> clazz) {
+        final int MAX_ATTEMPTS = 3;
+        final int RETRY_INTERVAL = 200;
 
-		RetryTemplate retryTemplate = new RetryTemplate();
+        RetryTemplate retryTemplate = new RetryTemplate();
 
-		SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy();
-		retryPolicy.setMaxAttempts(MAX_ATTEMPTS);
-		retryTemplate.setRetryPolicy(retryPolicy);
+        SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy();
+        retryPolicy.setMaxAttempts(MAX_ATTEMPTS);
+        retryTemplate.setRetryPolicy(retryPolicy);
 
-		FixedBackOffPolicy backOffPolicy = new FixedBackOffPolicy();
-		backOffPolicy.setBackOffPeriod(RETRY_INTERVAL);
-		retryTemplate.setBackOffPolicy(backOffPolicy);
+        FixedBackOffPolicy backOffPolicy = new FixedBackOffPolicy();
+        backOffPolicy.setBackOffPeriod(RETRY_INTERVAL);
+        retryTemplate.setBackOffPolicy(backOffPolicy);
 
-		return retryTemplate.execute(context -> restTemplate.getForObject(path, clazz));
-	}
+        return retryTemplate.execute(context -> restTemplate.getForObject(path, clazz));
+    }
 }
