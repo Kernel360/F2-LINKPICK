@@ -1,8 +1,13 @@
 'use client';
 
 import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { PickRecordHeader } from '@/components';
-import { EmptyPickRecordImage } from '@/components/EmptyPickRecordImage';
+const EmptyPickRecordImage = dynamic(() =>
+  import('@/components/EmptyPickRecordImage').then(
+    (mod) => mod.EmptyPickRecordImage
+  )
+);
 import { FolderContentHeader } from '@/components/FolderContentHeader/FolderContentHeader';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { FolderLoadingPage } from '@/components/FolderLoadingPage';
@@ -57,18 +62,16 @@ export default function RecycleBinFolderPage() {
             description="삭제하고 싶은 픽이 있다면 이곳으로 옮겨주세요!"
           />
         ) : (
-          <>
-            <PickDraggableListLayout
-              folderId={basicFolderMap['RECYCLE_BIN'].id}
-              viewType="record"
-            >
-              {pickList.map((pickInfo) => {
-                return (
-                  <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
-                );
-              })}
-            </PickDraggableListLayout>
-          </>
+          <PickDraggableListLayout
+            folderId={basicFolderMap['RECYCLE_BIN'].id}
+            viewType="record"
+          >
+            {pickList.map((pickInfo) => {
+              return (
+                <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
+              );
+            })}
+          </PickDraggableListLayout>
         )}
       </PickContentLayout>
     </FolderContentLayout>

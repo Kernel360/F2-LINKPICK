@@ -1,3 +1,5 @@
+'use client';
+
 import { memo } from 'react';
 import type { PropsWithChildren } from 'react';
 import * as ContextMenu from '@radix-ui/react-context-menu';

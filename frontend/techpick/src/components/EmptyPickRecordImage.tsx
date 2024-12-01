@@ -19,7 +19,7 @@ export function EmptyPickRecordImage({
   useEffect(() => {
     let anim: AnimationItem | null = null;
 
-    if (container.current) {
+    if (typeof window !== 'undefined' && container.current) {
       anim = lottie.loadAnimation({
         container: container.current,
         renderer: 'svg',

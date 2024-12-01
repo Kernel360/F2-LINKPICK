@@ -1,8 +1,13 @@
 'use client';
 
 import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { PickRecordHeader } from '@/components';
-import { EmptyPickRecordImage } from '@/components/EmptyPickRecordImage';
+const EmptyPickRecordImage = dynamic(() =>
+  import('@/components/EmptyPickRecordImage').then(
+    (mod) => mod.EmptyPickRecordImage
+  )
+);
 import { FolderContentHeader } from '@/components/FolderContentHeader/FolderContentHeader';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { FolderLoadingPage } from '@/components/FolderLoadingPage';

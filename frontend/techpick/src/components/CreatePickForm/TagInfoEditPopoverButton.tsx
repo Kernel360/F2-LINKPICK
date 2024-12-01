@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef, useState } from 'react';
 import { useFloating, shift } from '@floating-ui/react';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';

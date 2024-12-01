@@ -1,3 +1,5 @@
+'use client';
+
 import { CSSProperties } from 'react';
 import { useThemeStore } from '@/stores/themeStore';
 import { numberToRandomColor } from '@/utils';

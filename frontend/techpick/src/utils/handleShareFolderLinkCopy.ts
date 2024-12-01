@@ -1,3 +1,5 @@
+'use client';
+
 export const handleShareFolderLinkCopy = (handleShowPopver: () => void) => {
   const linkElement = document.getElementById(
     'shared-folder-link'

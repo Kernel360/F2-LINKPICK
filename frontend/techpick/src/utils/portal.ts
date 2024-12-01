@@ -1,3 +1,5 @@
+'ues client';
+
 import { PORTAL_CONTAINER_ID } from '@/constants';
 
 export const getPortalContainer = () => {
