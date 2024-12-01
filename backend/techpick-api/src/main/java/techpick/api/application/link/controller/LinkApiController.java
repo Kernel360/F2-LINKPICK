@@ -15,10 +15,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import techpick.api.application.link.dto.LinkApiMapper;
 import techpick.api.application.link.dto.LinkApiResponse;
-import techpick.api.application.link.event.SendLinkEventToMessageQueue;
-import techpick.api.domain.link.dto.LinkResult;
+import techpick.core.rabbitmq.EventType;
 import techpick.api.domain.link.service.LinkService;
-import techpick.event.ActionType;
+import techpick.core.annotation.TechpickAnnotation;
 import techpick.security.annotation.LoginUserId;
 
 @RestController
@@ -38,16 +37,19 @@ public class LinkApiController {
     public ResponseEntity<LinkApiResponse> getLinkData(
         @Parameter(description = "og 태그 데이터 가져올 url") @RequestParam String url
     ) {
-        LinkResult linkResult = linkService.getUpdateOgTag(url);
-        return ResponseEntity.ok(linkApiMapper.toLinkResult(linkResult));
+        var result = linkService.getUpdateOgTag(url);
+        var response = linkApiMapper.toLinkResult(result);
+        return ResponseEntity.ok(response);
     }
 
+    @TechpickAnnotation.SendEvent(type = EventType.READ)
     @PostMapping("/clicked")
     @Operation(summary = "링크 클릭 이벤트 수집", description = "서버에게 사용자가 링크를 클릭했음을 알립니다")
-    @SendLinkEventToMessageQueue(actionType = ActionType.READ)
     public ResponseEntity<LinkApiResponse> traceLinkAccess(
         @Parameter(description = "조회되는 url") @RequestParam String url, @LoginUserId Long userId
     ) {
-        return ResponseEntity.ok(linkApiMapper.toLinkResult(linkService.getLinkInfo(url)));
+        var result = linkService.getLinkInfo(url);
+        var response = linkApiMapper.toLinkResult(result);
+        return ResponseEntity.ok(response);
     }
 }
