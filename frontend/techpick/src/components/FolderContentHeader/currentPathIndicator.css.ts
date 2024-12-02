@@ -4,6 +4,8 @@ export const breadcrumbItemLayout = style({
   display: 'inline-flex',
   alignItems: 'center',
   overflow: 'hidden',
+  fontSize: '14px',
+  height: '24px',
 });
 
 export const breadcrumbItemStyle = style({
@@ -16,4 +18,7 @@ export const breadcrumbLinkStyle = style({
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
   overflow: 'hidden',
+  height: '20px',
+  lineHeight: '20px',
+  padding: 0,
 });
