@@ -1,8 +1,11 @@
 # 로컬에서 techpick-api와 동시에 켜야 할 경우 아래 주석을 해제하세요
-#server:
-#  port: 8082
+server:
+  port: 8082
 
 spring:
+  profiles:
+    include:
+      - core
   application:
     name: techpick-ranking
   output:
@@ -26,7 +29,7 @@ spring:
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: dev, prod
   data:
     mongodb:
       uri: mongodb://${DOCKER_MONGO_USERNAME}:${DOCKER_MONGO_PASSWORD}@${DOCKER_MONGO_URL}/${DOCKER_MONGO_DATABASE}?authSource=${DOCKER_MONGO_AUTH}
@@ -35,9 +38,3 @@ spring:
       password: ${DOCKER_MONGO_PASSWORD}
 ---
 
-spring:
-  rabbitmq:
-    host: ${RABBITMQ_HOST}
-    port: ${RABBITMQ_PORT}
-    username: ${RABBITMQ_USERNAME}
-    password: ${RABBITMQ_PASSWORD}

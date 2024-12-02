@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: techpick-server
   output:
     ansi:
       enabled: always
@@ -13,12 +11,6 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
-
-  rabbitmq:
-    host: ${RABBITMQ_HOST}
-    port: ${RABBITMQ_PORT}
-    username: ${RABBITMQ_USERNAME}
-    password: ${RABBITMQ_PASSWORD}
 
 #logging: # /* Transaction Logging */
 #  level:
@@ -43,6 +35,11 @@ spring:
     username: ${DOCKER_MYSQL_USERNAME}
     password: ${DOCKER_MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  rabbitmq:
+    host: ${LOCAL_RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 
 ---
 
@@ -62,6 +59,11 @@ spring:
     username: ${DOCKER_MYSQL_USERNAME}
     password: ${DOCKER_MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 
 ---
 
@@ -81,5 +83,9 @@ spring:
     username: ${DOCKER_MYSQL_USERNAME}
     password: ${DOCKER_MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
 ---

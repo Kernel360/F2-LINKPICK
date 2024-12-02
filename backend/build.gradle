@@ -48,7 +48,6 @@ subprojects {
         // RabbitMQ
         implementation 'org.springframework.boot:spring-boot-starter-amqp'
         implementation 'org.springframework.amqp:spring-amqp:3.2.0'
-        implementation 'com.rabbitmq:amqp-client:5.23.0'
 
         // lombok annotation
         compileOnly 'org.projectlombok:lombok'

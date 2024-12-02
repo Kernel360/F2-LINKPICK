@@ -2,6 +2,10 @@
 
 <configuration scan="true" scanPeriod="60 seconds">
 
+    <root level="debug">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
     <!-- ``````````````````````` CONVERSION RULE SETTING ```````````````````````````` -->
 
     <!-- 콘솔 출력 색상 적용 (참고: https://oingdaddy.tistory.com/257)   -->
