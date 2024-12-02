@@ -1,10 +1,24 @@
-import { style } from '@vanilla-extract/css';
+import { keyframes, style } from '@vanilla-extract/css';
+import { colorVars } from 'techpick-shared';
+
+const contentShow = keyframes({
+  from: {
+    opacity: '0',
+    transform: 'translate(-50%, -48%) scale(0.96)',
+  },
+  to: {
+    opacity: '1',
+    transform: 'translate(-50%, -50%) scale(1)',
+  },
+});
 
 /* --------------- Dialog --------------- */
 export const dialogOverlay = style({
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
   position: 'fixed',
-  inset: 0,
+  inset: '0',
+  animation: ' overlayShow 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+  backgroundColor: colorVars.sand8,
+  opacity: 0.5,
 });
 
 export const dialogContent = style({
@@ -12,29 +26,37 @@ export const dialogContent = style({
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  backgroundColor: 'white',
-  padding: '32px 24px',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  // width: '320px',
+  // height: '160px',
+  gap: '12px',
   borderRadius: '8px',
-  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+  boxShadow: `
+    hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+    hsl(206 22% 7% / 20%) 0px 10px 20px -15px
+  `,
+  padding: '16px',
+  backgroundColor: colorVars.gold4,
+  animation: `${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
 });
 
 export const dialogTitle = style({
-  fontWeight: 'bold',
-  fontSize: '1.5rem',
+  fontWeight: 'normal',
+  fontSize: '16px',
 });
 
 export const dialogDescription = style({
-  fontSize: '1rem',
+  fontSize: '14px',
   color: 'gray',
-  marginTop: '1rem',
-  marginBottom: '1rem',
   display: 'inline-flex',
   alignItems: 'center',
 });
 
 /* --------------- myLinkPage Link --------------- */
 export const myLinkPageLinkText = style({
-  color: '#0070f3',
+  color: colorVars.primary,
   textDecoration: 'none',
   display: 'inline-flex',
   alignItems: 'center',

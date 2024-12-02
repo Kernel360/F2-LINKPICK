@@ -33,7 +33,7 @@ export default function ShareFolderDialog({
           <DialogPrimitive.Description className={styles.dialogDescription}>
             <Link href={`/share/${uuid}`} className={styles.myLinkPageLinkText}>
               <span className={styles.linkContent}>
-                <Settings className={styles.icon} />
+                <Settings className={styles.icon} size={14} />
                 내설정
               </span>
             </Link>
