@@ -6,9 +6,10 @@ export const folderInfoItemStyle = style({
   alignItems: 'center',
   gap: space['8'],
   minWidth: sizes['6xs'],
-  minHeight: '40px',
+  height: '36px',
   padding: '8px 12px',
   borderRadius: '4px',
+  fontSize: typography.fontSize['sm'],
 
   cursor: 'grab',
   transition: 'background-color 0.2s',
@@ -22,7 +23,6 @@ export const folderInfoItemStyle = style({
       backgroundColor: colorVars.gold4,
     },
   },
-  fontSize: typography.fontSize['lg'],
 });
 
 export const selectedDragItemStyle = style({
@@ -35,7 +35,7 @@ export const dragOverItemStyle = style({
 });
 
 export const FolderIconStyle = style({
-  width: '20px',
+  width: '16px',
   flexShrink: 0,
 });
 
@@ -43,5 +43,5 @@ export const folderTextStyle = style({
   overflow: 'hidden',
   whiteSpace: 'nowrap',
   textOverflow: 'ellipsis',
-  height: '28px',
+  height: '100%',
 });

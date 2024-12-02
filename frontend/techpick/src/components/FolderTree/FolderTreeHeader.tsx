@@ -25,9 +25,6 @@ export function FolderTreeHeader() {
     basicFolderMap && focusFolderId === basicFolderMap['ROOT'].id
   );
 
-  const isRootFolderHover =
-    (basicFolderMap && basicFolderMap['ROOT'].id === hoverFolderId) ?? false;
-
   const isUnclassifiedFolderHover =
     (basicFolderMap && basicFolderMap['UNCLASSIFIED'].id === hoverFolderId) ??
     false;
@@ -49,7 +46,6 @@ export function FolderTreeHeader() {
             name="내 컬렉션"
             icon={ArchiveIcon}
             isSelected={isRootSelected}
-            isHovered={isRootFolderHover}
           />
 
           <PickToFolderDropZone folderId={basicFolderMap['UNCLASSIFIED'].id}>

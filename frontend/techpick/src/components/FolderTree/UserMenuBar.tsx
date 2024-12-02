@@ -11,11 +11,11 @@ export function UserMenuBar() {
   return (
     <div className={userMenuBarLayoutStyle}>
       <Link href={ROUTES.MY_PAGE} className={myPageLinkStyle}>
-        <CircleUserRoundIcon size={24} />
+        <CircleUserRoundIcon size={20} />
       </Link>
 
       <button className={searchButtonStyle}>
-        <SearchIcon size={24} />
+        <SearchIcon size={20} />
       </button>
     </div>
   );

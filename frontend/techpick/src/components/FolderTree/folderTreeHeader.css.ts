@@ -15,8 +15,7 @@ export const dividerStyle = style({
 export const folderTreeHeaderTitleLayout = style({
   fontWeight: typography.fontWeights['semibold'],
   color: colorVars.gray9,
-  fontSize: '20px',
-  margin: '24px 8px 12px 12px',
+  margin: '12px 8px 12px 12px',
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
