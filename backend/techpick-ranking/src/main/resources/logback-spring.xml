@@ -82,6 +82,9 @@
     <!-- "additivity=false"를 하면 해당 <logger>에서만 로깅 되고, 다른 곳으로 전달 되지 않는다.
         (ref: https://mkyong.com/logging/logback-duplicate-log-messages/) -->
 
+    <logger name="root" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
     <!-- (1) 프로젝트 전체 로그 설정  -->
     <logger name="techpick.ranking" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
