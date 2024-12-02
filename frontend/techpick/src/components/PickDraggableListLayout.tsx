@@ -1,3 +1,4 @@
+import { pickDraggableListLayoutStyle } from './pickDraggableListLayout.css';
 import { PickListSortableContextProvider } from './PickListSortableContextProvider';
 import { PickViewDraggableItemListLayoutComponentProps } from '@/types';
 
@@ -7,10 +8,8 @@ export function PickDraggableListLayout({
   children,
 }: PickViewDraggableItemListLayoutComponentProps) {
   return (
-    <div style={{ width: 'fit-content' }}>
-      <PickListSortableContextProvider folderId={folderId} viewType={viewType}>
-        {children}
-      </PickListSortableContextProvider>
-    </div>
+    <PickListSortableContextProvider folderId={folderId} viewType={viewType}>
+      <div className={pickDraggableListLayoutStyle}>{children}</div>
+    </PickListSortableContextProvider>
   );
 }

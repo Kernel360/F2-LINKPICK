@@ -5,7 +5,7 @@ import type { PropsWithChildren } from 'react';
 import { DndContext, pointerWithin } from '@dnd-kit/core';
 import { useGetDndContextSensor } from '@/hooks';
 import { DndMonitorContext } from './DndMonitorContext';
-import { DargOverlay } from './DragOverlay';
+import { DargOverlay } from './DragOverlay/DragOverlay';
 
 /**
  * @description pick과 folder에서 drag & drop을 이용할 시에 콘텐스트로 감싸줘야합니다.

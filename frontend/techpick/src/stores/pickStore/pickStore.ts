@@ -10,73 +10,18 @@ import {
 } from '@/apis/pick';
 import { getPickListByQueryParam } from '@/apis/pick/getPicks';
 import { isPickDraggableObject, reorderSortableIdList } from '@/utils';
-import type { Active, Over } from '@dnd-kit/core';
 import type {
-  PickRecordType,
+  DeleteSelectedPicksPayload,
+  PickAction,
+  PickState,
+} from './pickStore.type';
+import type {
   PickInfoType,
   PickRecordValueType,
-  SelectedPickIdListType,
-  PickDraggableObjectType,
-  PickToFolderDroppableObjectType,
   SearchPicksResponseType,
-  UpdatePickRequestType,
 } from '@/types';
 
 enableMapSet();
-
-type PickState = {
-  searchResult: SearchPicksResponseType;
-  pickRecord: PickRecordType;
-  focusPickId: number | null;
-  selectedPickIdList: SelectedPickIdListType;
-  isDragging: boolean;
-  draggingPickInfo: PickInfoType | null | undefined;
-};
-
-type PickAction = {
-  fetchPickDataByFolderId: (folderId: number) => Promise<void>;
-  getOrderedPickIdListByFolderId: (folderId: number) => number[];
-  getOrderedPickListByFolderId: (folderId: number) => PickInfoType[];
-  getPickInfoByFolderIdAndPickId: (
-    folderId: number,
-    pickId: number
-  ) => PickInfoType | null | undefined;
-  hasPickRecordValue: (
-    pickRecordValue: PickRecordValueType | undefined
-  ) => pickRecordValue is PickRecordValueType;
-  movePicksToEqualFolder: (movePickPayload: MovePickPayload) => Promise<void>;
-  movePicksToDifferentFolder: (
-    movePickPayload: movePicksToDifferentFolder
-  ) => Promise<void>;
-  moveSelectedPicksToRecycleBinFolder: (
-    payload: MoveSelectedPicksToRecycleBinFolderPayload
-  ) => Promise<void>;
-  deleteSelectedPicks: (
-    deleteSelectedPicksPayload: DeleteSelectedPicksPayload
-  ) => Promise<void>;
-  setSelectedPickIdList: (
-    newSelectedPickIdList: SelectedPickIdListType
-  ) => void;
-  selectSinglePick: (pickId: number) => void;
-  setIsDragging: (isDragging: boolean) => void;
-  setFocusedPickId: (focusedPickId: number) => void;
-  setDraggingPickInfo: (
-    draggingPickInfo: PickInfoType | null | undefined
-  ) => void;
-  /**
-   * queryParam을 통으로 검색에 사용합니다. (search 패널)
-   */
-  searchPicksByQueryParam: (
-    param: string,
-    cursor?: number | string,
-    size?: number
-  ) => Promise<void>;
-  getSearchResult: () => SearchPicksResponseType;
-  updatePickInfo: (
-    pickParentFolderId: number,
-    pickInfo: UpdatePickRequestType
-  ) => Promise<void>;
-};
 
 const initialState: PickState = {
   searchResult: { lastCursor: 0, hasNext: true } as SearchPicksResponseType,
@@ -92,58 +37,68 @@ export const usePickStore = create<PickState & PickAction>()(
     immer((set, get) => ({
       ...initialState,
       fetchPickDataByFolderId: async (folderId) => {
+        set((state) => {
+          if (!state.pickRecord[folderId]) {
+            state.pickRecord[folderId] = {
+              data: null,
+              isError: false,
+              isLoading: false,
+              error: 'null',
+            };
+          }
+
+          state.pickRecord[folderId].isLoading = true;
+        });
+
         try {
           const { pickInfoRecord, pickIdOrderedList } =
             await getPicksByFolderId(folderId);
 
           set((state) => {
             state.pickRecord[folderId] = {
-              pickIdOrderedList,
-              pickInfoRecord,
+              isLoading: false,
+              isError: false,
+              error: null,
+              data: { pickIdOrderedList, pickInfoRecord },
             };
           });
-        } catch (error) {
-          console.log('fetchPickDataByFolderId error', error);
+        } catch {
+          set((state) => {
+            state.pickRecord[folderId] = {
+              isLoading: false,
+              isError: true,
+              error: `fetchPickDataByFolderId ${folderId} error`,
+              data: null,
+            };
+          });
         }
       },
       getOrderedPickIdListByFolderId: (folderId) => {
         const pickRecordValue = get().pickRecord[`${folderId}`];
 
-        if (!get().hasPickRecordValue(pickRecordValue)) {
+        if (
+          !get().hasPickRecordValue(pickRecordValue?.data) ||
+          !pickRecordValue.data
+        ) {
           return [];
         }
-        const { pickIdOrderedList } = pickRecordValue;
+
+        const { pickIdOrderedList } = pickRecordValue.data;
 
         return pickIdOrderedList;
       },
-      getOrderedPickListByFolderId: (folderId: number) => {
-        const pickRecordValue = get().pickRecord[`${folderId}`];
 
-        if (!get().hasPickRecordValue(pickRecordValue)) {
-          return [];
-        }
-
-        const { pickIdOrderedList, pickInfoRecord } = pickRecordValue;
-        const pickOrderedList: PickInfoType[] = [];
-
-        for (const pickId of pickIdOrderedList) {
-          const pickInfo = pickInfoRecord[`${pickId}`];
-
-          if (pickInfo) {
-            pickOrderedList.push(pickInfo);
-          }
-        }
-
-        return pickOrderedList;
-      },
       getPickInfoByFolderIdAndPickId: (folderId, pickId) => {
         const pickRecordValue = get().pickRecord[`${folderId}`];
 
-        if (!get().hasPickRecordValue(pickRecordValue)) {
+        if (
+          !get().hasPickRecordValue(pickRecordValue?.data) ||
+          !pickRecordValue.data
+        ) {
           return null;
         }
 
-        const { pickIdOrderedList, pickInfoRecord } = pickRecordValue;
+        const { pickIdOrderedList, pickInfoRecord } = pickRecordValue.data;
 
         if (!pickIdOrderedList.includes(pickId)) {
           return null;
@@ -173,25 +128,29 @@ export const usePickStore = create<PickState & PickAction>()(
         const folderId = fromData.sortable.containerId;
         const pickRecordValue = get().pickRecord[folderId];
 
-        if (!get().hasPickRecordValue(pickRecordValue)) {
+        if (
+          !get().hasPickRecordValue(pickRecordValue?.data) ||
+          !pickRecordValue.data
+        ) {
           return;
         }
 
-        const prevPickIdOrderedList = pickRecordValue.pickIdOrderedList;
+        const prevPickIdOrderedList = pickRecordValue.data.pickIdOrderedList;
         const fromId = from.id;
         const toId = to.id;
 
         set((state) => {
-          if (!state.pickRecord[folderId]) {
+          if (!state.pickRecord[folderId]?.data) {
             return;
           }
 
-          state.pickRecord[folderId].pickIdOrderedList = reorderSortableIdList({
-            sortableIdList: prevPickIdOrderedList,
-            fromId,
-            toId,
-            selectedFolderList: state.selectedPickIdList,
-          });
+          state.pickRecord[folderId].data.pickIdOrderedList =
+            reorderSortableIdList({
+              sortableIdList: prevPickIdOrderedList,
+              fromId,
+              toId,
+              selectedFolderList: state.selectedPickIdList,
+            });
         });
 
         try {
@@ -204,11 +163,14 @@ export const usePickStore = create<PickState & PickAction>()(
           set((state) => {
             const curPickRecordValue = state.pickRecord[`${folderId}`];
 
-            if (!get().hasPickRecordValue(curPickRecordValue)) {
+            if (
+              !get().hasPickRecordValue(curPickRecordValue?.data) ||
+              !curPickRecordValue.data
+            ) {
               return;
             }
 
-            curPickRecordValue.pickIdOrderedList = prevPickIdOrderedList;
+            curPickRecordValue.data.pickIdOrderedList = prevPickIdOrderedList;
             state.pickRecord[`${folderId}`] = curPickRecordValue;
           });
         }
@@ -220,24 +182,32 @@ export const usePickStore = create<PickState & PickAction>()(
         const currentPickRecordValue = get().pickRecord[currentFolderId];
         let nextPickRecordValue = get().pickRecord[nextFolderId];
 
-        if (!get().hasPickRecordValue(currentPickRecordValue)) {
+        if (
+          !get().hasPickRecordValue(currentPickRecordValue?.data) ||
+          !currentPickRecordValue.data
+        ) {
           return;
         }
 
         /**
          * @description 다음 들어갈 곳에 값이 없으면 만들어줘야한다.
          */
-        if (!get().hasPickRecordValue(nextPickRecordValue)) {
+        if (
+          !get().hasPickRecordValue(nextPickRecordValue?.data) ||
+          !nextPickRecordValue.data
+        ) {
           set((state) => {
             state.pickRecord[nextFolderId] = {
-              pickIdOrderedList: [],
-              pickInfoRecord: {},
+              data: { pickIdOrderedList: [], pickInfoRecord: {} },
+              isLoading: false,
+              isError: false,
+              error: null,
             };
           });
           nextPickRecordValue = get().pickRecord[currentFolderId];
         }
 
-        if (!nextPickRecordValue) {
+        if (!nextPickRecordValue?.data) {
           return;
         }
 
@@ -248,7 +218,7 @@ export const usePickStore = create<PickState & PickAction>()(
         const {
           pickInfoRecord: prevCurrentPickInfoRecord,
           pickIdOrderedList: prevCurrentPickIdOrderedList,
-        } = currentPickRecordValue;
+        } = currentPickRecordValue.data;
 
         // 선택된 정보 가져오기.
         for (const selectedPickId of selectedPickIdList) {
@@ -266,21 +236,24 @@ export const usePickStore = create<PickState & PickAction>()(
         const {
           pickIdOrderedList: prevNextPickIdOrderedList,
           pickInfoRecord: prevNextPickInfoRecord,
-        } = nextPickRecordValue;
+        } = nextPickRecordValue.data;
 
         // 값 추가하기.
         set((state) => {
-          if (!get().hasPickRecordValue(state.pickRecord[nextFolderId])) {
+          if (
+            !get().hasPickRecordValue(state.pickRecord[nextFolderId]?.data) ||
+            !state.pickRecord[nextFolderId].data
+          ) {
             return;
           }
 
           for (const selectedPickInfo of selectedPickInfoList) {
-            state.pickRecord[nextFolderId].pickInfoRecord[
+            state.pickRecord[nextFolderId].data.pickInfoRecord[
               `${selectedPickInfo.id}`
             ] = selectedPickInfo;
           }
 
-          state.pickRecord[nextFolderId].pickIdOrderedList.splice(
+          state.pickRecord[nextFolderId].data.pickIdOrderedList.splice(
             0,
             0,
             ...selectedPickIdList
@@ -289,17 +262,22 @@ export const usePickStore = create<PickState & PickAction>()(
 
         // 현재 폴더에서 삭제.
         set((state) => {
-          if (!get().hasPickRecordValue(state.pickRecord[currentFolderId])) {
+          if (
+            !get().hasPickRecordValue(
+              state.pickRecord[currentFolderId]?.data
+            ) ||
+            !state.pickRecord[currentFolderId].data
+          ) {
             return;
           }
 
           for (const selectedPickInfo of selectedPickInfoList) {
-            state.pickRecord[currentFolderId].pickInfoRecord[
+            state.pickRecord[currentFolderId].data.pickInfoRecord[
               `${selectedPickInfo.id}`
             ] = undefined;
           }
 
-          state.pickRecord[currentFolderId].pickIdOrderedList =
+          state.pickRecord[currentFolderId].data.pickIdOrderedList =
             prevCurrentPickIdOrderedList.filter(
               (pickId) => !selectedPickIdList.includes(pickId)
             );
@@ -314,24 +292,24 @@ export const usePickStore = create<PickState & PickAction>()(
         } catch {
           // 현재 폴더에서 이전 상태로 원복
           set((state) => {
-            if (!state.pickRecord[currentFolderId]) {
+            if (!state.pickRecord[currentFolderId]?.data) {
               return;
             }
-            state.pickRecord[currentFolderId].pickIdOrderedList =
+            state.pickRecord[currentFolderId].data.pickIdOrderedList =
               prevCurrentPickIdOrderedList;
-            state.pickRecord[currentFolderId].pickInfoRecord =
+            state.pickRecord[currentFolderId].data.pickInfoRecord =
               prevCurrentPickInfoRecord;
           });
 
           // 이동한 폴더를 이전 상태로 원복
           set((state) => {
-            if (!state.pickRecord[nextFolderId]) {
+            if (!state.pickRecord[nextFolderId]?.data) {
               return;
             }
 
-            state.pickRecord[nextFolderId].pickIdOrderedList =
+            state.pickRecord[nextFolderId].data.pickIdOrderedList =
               prevNextPickIdOrderedList;
-            state.pickRecord[nextFolderId].pickInfoRecord =
+            state.pickRecord[nextFolderId].data.pickInfoRecord =
               prevNextPickInfoRecord;
           });
         }
@@ -344,24 +322,32 @@ export const usePickStore = create<PickState & PickAction>()(
         const currentPickRecordValue = get().pickRecord[currentFolderId];
         let nextPickRecordValue = get().pickRecord[nextFolderId];
 
-        if (!get().hasPickRecordValue(currentPickRecordValue)) {
+        if (
+          !get().hasPickRecordValue(currentPickRecordValue?.data) ||
+          !currentPickRecordValue.data
+        ) {
           return;
         }
 
         /**
          * @description 다음 들어갈 곳에 값이 없으면 만들어줘야한다.
          */
-        if (!get().hasPickRecordValue(nextPickRecordValue)) {
+        if (
+          !get().hasPickRecordValue(nextPickRecordValue?.data) ||
+          !nextPickRecordValue.data
+        ) {
           set((state) => {
             state.pickRecord[nextFolderId] = {
-              pickIdOrderedList: [],
-              pickInfoRecord: {},
+              isLoading: false,
+              isError: false,
+              error: null,
+              data: { pickIdOrderedList: [], pickInfoRecord: {} },
             };
           });
           nextPickRecordValue = get().pickRecord[currentFolderId];
         }
 
-        if (!nextPickRecordValue) {
+        if (!nextPickRecordValue?.data) {
           return;
         }
 
@@ -372,7 +358,7 @@ export const usePickStore = create<PickState & PickAction>()(
         const {
           pickInfoRecord: prevCurrentPickInfoRecord,
           pickIdOrderedList: prevCurrentPickIdOrderedList,
-        } = currentPickRecordValue;
+        } = currentPickRecordValue.data;
 
         // 선택된 정보 가져오기.
         for (const selectedPickId of selectedPickIdList) {
@@ -390,21 +376,24 @@ export const usePickStore = create<PickState & PickAction>()(
         const {
           pickIdOrderedList: prevNextPickIdOrderedList,
           pickInfoRecord: prevNextPickInfoRecord,
-        } = nextPickRecordValue;
+        } = nextPickRecordValue.data;
 
         // 값 추가하기.
         set((state) => {
-          if (!get().hasPickRecordValue(state.pickRecord[nextFolderId])) {
+          if (
+            !get().hasPickRecordValue(state.pickRecord[nextFolderId]?.data) ||
+            !state.pickRecord[nextFolderId].data
+          ) {
             return;
           }
 
           for (const selectedPickInfo of selectedPickInfoList) {
-            state.pickRecord[nextFolderId].pickInfoRecord[
+            state.pickRecord[nextFolderId].data.pickInfoRecord[
               `${selectedPickInfo.id}`
             ] = selectedPickInfo;
           }
 
-          state.pickRecord[nextFolderId].pickIdOrderedList.splice(
+          state.pickRecord[nextFolderId].data.pickIdOrderedList.splice(
             0,
             0,
             ...selectedPickIdList
@@ -413,17 +402,22 @@ export const usePickStore = create<PickState & PickAction>()(
 
         // 현재 폴더에서 삭제.
         set((state) => {
-          if (!get().hasPickRecordValue(state.pickRecord[currentFolderId])) {
+          if (
+            !get().hasPickRecordValue(
+              state.pickRecord[currentFolderId]?.data
+            ) ||
+            !state.pickRecord[currentFolderId].data
+          ) {
             return;
           }
 
           for (const selectedPickInfo of selectedPickInfoList) {
-            state.pickRecord[currentFolderId].pickInfoRecord[
+            state.pickRecord[currentFolderId].data.pickInfoRecord[
               `${selectedPickInfo.id}`
             ] = undefined;
           }
 
-          state.pickRecord[currentFolderId].pickIdOrderedList =
+          state.pickRecord[currentFolderId].data.pickIdOrderedList =
             prevCurrentPickIdOrderedList.filter(
               (pickId) => !selectedPickIdList.includes(pickId)
             );
@@ -437,24 +431,24 @@ export const usePickStore = create<PickState & PickAction>()(
         } catch {
           // 현재 폴더에서 이전 상태로 원복
           set((state) => {
-            if (!state.pickRecord[currentFolderId]) {
+            if (!state.pickRecord[currentFolderId]?.data) {
               return;
             }
-            state.pickRecord[currentFolderId].pickIdOrderedList =
+            state.pickRecord[currentFolderId].data.pickIdOrderedList =
               prevCurrentPickIdOrderedList;
-            state.pickRecord[currentFolderId].pickInfoRecord =
+            state.pickRecord[currentFolderId].data.pickInfoRecord =
               prevCurrentPickInfoRecord;
           });
 
           // 이동한 폴더를 이전 상태로 원복
           set((state) => {
-            if (!state.pickRecord[nextFolderId]) {
+            if (!state.pickRecord[nextFolderId]?.data) {
               return;
             }
 
-            state.pickRecord[nextFolderId].pickIdOrderedList =
+            state.pickRecord[nextFolderId].data.pickIdOrderedList =
               prevNextPickIdOrderedList;
-            state.pickRecord[nextFolderId].pickInfoRecord =
+            state.pickRecord[nextFolderId].data.pickInfoRecord =
               prevNextPickInfoRecord;
           });
         }
@@ -465,7 +459,10 @@ export const usePickStore = create<PickState & PickAction>()(
         const recycleBinFolderPickRecord = get().pickRecord[recycleBinFolderId];
         const selectedPickIdList = get().selectedPickIdList;
 
-        if (!get().hasPickRecordValue(recycleBinFolderPickRecord)) {
+        if (
+          !get().hasPickRecordValue(recycleBinFolderPickRecord?.data) ||
+          recycleBinFolderPickRecord.data
+        ) {
           return;
         }
 
@@ -473,17 +470,23 @@ export const usePickStore = create<PickState & PickAction>()(
 
         // 미리 삭제.
         set((state) => {
-          if (!get().hasPickRecordValue(state.pickRecord[recycleBinFolderId])) {
+          if (
+            !get().hasPickRecordValue(
+              state.pickRecord[recycleBinFolderId]?.data
+            ) ||
+            !state.pickRecord[recycleBinFolderId].data
+          ) {
             return;
           }
 
           for (const selectedId of selectedPickIdList) {
-            state.pickRecord[recycleBinFolderId].pickInfoRecord[selectedId] =
-              undefined;
+            state.pickRecord[recycleBinFolderId].data.pickInfoRecord[
+              selectedId
+            ] = undefined;
           }
 
-          state.pickRecord[recycleBinFolderId].pickIdOrderedList =
-            state.pickRecord[recycleBinFolderId].pickIdOrderedList.filter(
+          state.pickRecord[recycleBinFolderId].data.pickIdOrderedList =
+            state.pickRecord[recycleBinFolderId].data.pickIdOrderedList.filter(
               (pickId) => !selectedPickIdList.includes(pickId)
             );
         });
@@ -518,13 +521,11 @@ export const usePickStore = create<PickState & PickAction>()(
           state.focusPickId = focusedPickId;
         });
       },
-
       setDraggingPickInfo: (draggingPickInfo) => {
         set((state) => {
           state.draggingPickInfo = draggingPickInfo;
         });
       },
-
       searchPicksByQueryParam: async (
         param: string,
         cursor?: number | string,
@@ -551,11 +552,14 @@ export const usePickStore = create<PickState & PickAction>()(
 
         const pickRecordValue = get().pickRecord[pickParentFolderId];
 
-        if (!get().hasPickRecordValue(pickRecordValue)) {
+        if (
+          !get().hasPickRecordValue(pickRecordValue?.data) ||
+          !pickRecordValue.data
+        ) {
           return;
         }
 
-        const { pickInfoRecord } = pickRecordValue;
+        const { pickInfoRecord } = pickRecordValue.data;
 
         if (!pickInfoRecord[pickId]) {
           return;
@@ -570,11 +574,11 @@ export const usePickStore = create<PickState & PickAction>()(
 
         // 미리 업데이트
         set((state) => {
-          if (!state.pickRecord[pickParentFolderId]) {
+          if (!state.pickRecord[pickParentFolderId]?.data) {
             return;
           }
 
-          const { pickInfoRecord } = state.pickRecord[pickParentFolderId];
+          const { pickInfoRecord } = state.pickRecord[pickParentFolderId].data;
           pickInfoRecord[pickId] = newPickInfo;
         });
 
@@ -583,11 +587,12 @@ export const usePickStore = create<PickState & PickAction>()(
         } catch {
           // 실패하면 원복하기.
           set((state) => {
-            if (!state.pickRecord[pickParentFolderId]) {
+            if (!state.pickRecord[pickParentFolderId]?.data) {
               return;
             }
 
-            const { pickInfoRecord } = state.pickRecord[pickParentFolderId];
+            const { pickInfoRecord } =
+              state.pickRecord[pickParentFolderId].data;
             pickInfoRecord[pickId] = prevPickInfo;
           });
         }
@@ -595,23 +600,3 @@ export const usePickStore = create<PickState & PickAction>()(
     }))
   )
 );
-
-type MovePickPayload = {
-  folderId: number;
-  from: Active;
-  to: Over;
-};
-
-type movePicksToDifferentFolder = {
-  from: PickDraggableObjectType;
-  to: PickToFolderDroppableObjectType;
-};
-
-type MoveSelectedPicksToRecycleBinFolderPayload = {
-  picksParentFolderId: number;
-  recycleBinFolderId: number;
-};
-
-type DeleteSelectedPicksPayload = {
-  recycleBinFolderId: number;
-};

@@ -2,24 +2,26 @@
 
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
-import { useParams, useRouter } from 'next/navigation';
 import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
+import { shareFolder } from '@/apis/folder/shareFolder';
 import { ROUTES } from '@/constants';
+import { useDisclosure } from '@/hooks';
+import { useShareDialogOpen } from '@/hooks/useShareDialogOpen';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { isSelectionActive } from '@/utils';
 import { FolderContextMenu } from './FolderContextMenu';
+import { FolderDraggable } from './FolderDraggable';
 import { FolderInput } from './FolderInput';
 import { FolderLinkItem } from './FolderLinkItem';
 import {
   getSelectedFolderRange,
   isSameParentFolder,
 } from './folderListItem.util';
+import { MoveFolderToRecycleBinDialog } from './MoveFolderToRecycleBinDialog';
+import ShareFolderDialog from './ShareFolderDialog';
 import type { FolderMapType } from '@/types';
 
 export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
-  const router = useRouter();
-
-  const { folderId: urlFolderId } = useParams<{ folderId: string }>();
   const {
     treeDataMap,
     selectedFolderList,
@@ -27,12 +29,18 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     focusFolderId,
     hoverFolderId,
     updateFolderName,
-    moveFolderToRecycleBin,
     selectSingleFolder,
   } = useTreeStore();
+  const { isDialogOpen, uuid, handleDialogOpen, handleDialogClose } =
+    useShareDialogOpen();
   const [isUpdate, setIsUpdate] = useState(false);
   const isSelected = selectedFolderList.includes(id);
   const isHover = id === hoverFolderId;
+  const {
+    isOpen: isOpenRemoveDialog,
+    onOpen: onOpenRemoveDialog,
+    onClose: onCloseRemoveDialog,
+  } = useDisclosure();
 
   const handleShiftSelect = (id: number, treeDataMap: FolderMapType) => {
     if (!focusFolderId || !isSameParentFolder(id, focusFolderId, treeDataMap)) {
@@ -59,6 +67,11 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     setIsUpdate(false);
   };
 
+  const handleShareFolder = async () => {
+    const response = await shareFolder(id);
+    handleDialogOpen(response.folderAccessToken);
+  };
+
   if (isUpdate) {
     return (
       <FolderInput
@@ -72,30 +85,37 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
   }
 
   return (
-    <FolderContextMenu
-      showRenameInput={() => {
-        setIsUpdate(true);
-      }}
-      deleteFolder={() => {
-        moveFolderToRecycleBin({ deleteFolderId: id });
-
-        if (Number(urlFolderId) === id) {
-          router.push(ROUTES.FOLDERS_UNCLASSIFIED);
-        }
-      }}
-      onShow={() => {
-        selectSingleFolder(id);
-      }}
-    >
-      <FolderLinkItem
-        href={ROUTES.FOLDER_DETAIL(id)}
-        isSelected={isSelected}
-        isHovered={isHover}
-        icon={isSelected ? FolderOpenIcon : FolderClosedIcon}
-        name={name}
-        onClick={(event) => handleClick(id, event)}
+    <>
+      <FolderContextMenu
+        showRenameInput={() => {
+          setIsUpdate(true);
+        }}
+        shareFolder={handleShareFolder}
+        onShow={() => {
+          selectSingleFolder(id);
+        }}
+        onClickRemoveFolder={onOpenRemoveDialog}
+      >
+        <FolderDraggable id={id}>
+          <FolderLinkItem
+            href={ROUTES.FOLDER_DETAIL(id)}
+            isSelected={isSelected}
+            isHovered={isHover}
+            icon={isSelected ? FolderOpenIcon : FolderClosedIcon}
+            name={name}
+            onClick={(event) => handleClick(id, event)}
+          />
+        </FolderDraggable>
+      </FolderContextMenu>
+      {isDialogOpen && (
+        <ShareFolderDialog onClose={handleDialogClose} uuid={uuid} />
+      )}
+      <MoveFolderToRecycleBinDialog
+        deleteFolderId={id}
+        isOpen={isOpenRemoveDialog}
+        onOpenChange={onCloseRemoveDialog}
       />
-    </FolderContextMenu>
+    </>
   );
 };
 

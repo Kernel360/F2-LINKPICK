@@ -1,24 +1,35 @@
 'use client';
 
 import { useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { PickRecordHeader } from '@/components';
+const EmptyPickRecordImage = dynamic(() =>
+  import('@/components/EmptyPickRecordImage').then(
+    (mod) => mod.EmptyPickRecordImage
+  )
+);
+import { FolderContentHeader } from '@/components/FolderContentHeader/FolderContentHeader';
+import { FolderContentLayout } from '@/components/FolderContentLayout';
+import { FolderLoadingPage } from '@/components/FolderLoadingPage';
 import { PickContentLayout } from '@/components/PickContentLayout';
-import { PickContextMenu } from '@/components/PickContextMenu';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
 import {
   useClearSelectedPickIdsOnMount,
   useFetchTagList,
   useResetPickFocusOnOutsideClick,
+  useFetchPickRecordByFolderId,
 } from '@/hooks';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { getOrderedPickListByFolderId } from '@/utils';
 
 export default function UnclassifiedFolderPage() {
-  const { fetchPickDataByFolderId, getOrderedPickListByFolderId } =
-    usePickStore();
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
+  const { isLoading, data } = useFetchPickRecordByFolderId({
+    folderId: basicFolderMap?.UNCLASSIFIED.id,
+    alwaysFetch: true,
+  });
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
   useFetchTagList();
@@ -34,44 +45,34 @@ export default function UnclassifiedFolderPage() {
     [basicFolderMap, selectSingleFolder]
   );
 
-  useEffect(
-    function loadPickDataFromRemote() {
-      if (!basicFolderMap) {
-        return;
-      }
-
-      fetchPickDataByFolderId(basicFolderMap['UNCLASSIFIED'].id);
-    },
-    [basicFolderMap, fetchPickDataByFolderId]
-  );
-
-  if (!basicFolderMap) {
-    return <div>loading...</div>;
+  if (!basicFolderMap || (isLoading && !data)) {
+    return <FolderLoadingPage />;
   }
 
-  const pickList = getOrderedPickListByFolderId(
-    basicFolderMap['UNCLASSIFIED'].id
-  );
+  const pickList = getOrderedPickListByFolderId(data);
 
   return (
-    <PickContentLayout>
-      <PickRecordHeader />
-      <PickDraggableListLayout
-        folderId={basicFolderMap['UNCLASSIFIED'].id}
-        viewType="record"
-      >
-        {pickList.map((pickInfo) => {
-          return (
-            <PickContextMenu
-              basicFolderMap={basicFolderMap}
-              pickInfo={pickInfo}
-              key={pickInfo.id}
+    <FolderContentLayout>
+      <FolderContentHeader />
+      <PickContentLayout>
+        <PickRecordHeader />
+        {pickList.length === 0 ? (
+          <EmptyPickRecordImage />
+        ) : (
+          <>
+            <PickDraggableListLayout
+              folderId={basicFolderMap['UNCLASSIFIED'].id}
+              viewType="record"
             >
-              <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
-            </PickContextMenu>
-          );
-        })}
-      </PickDraggableListLayout>
-    </PickContentLayout>
+              {pickList.map((pickInfo) => {
+                return (
+                  <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
+                );
+              })}
+            </PickDraggableListLayout>
+          </>
+        )}
+      </PickContentLayout>
+    </FolderContentLayout>
   );
 }

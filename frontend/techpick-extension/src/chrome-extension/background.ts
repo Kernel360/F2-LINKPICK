@@ -5,6 +5,8 @@ import {
   DARK_THEME_STATE,
   THEME_STATE_LOCALHOST_KEY,
   CHANGE_THEME_STATE_TO_LOCALHOST_PORT_NAME,
+  GET_TAB_HTML_TEXT_FROM_WORKER_PORT_NAME,
+  REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE,
 } from '@/constants';
 
 /**
@@ -66,4 +68,63 @@ chrome.contextMenus.onClicked.addListener((info) => {
     // 특정 링크로 이동
     chrome.tabs.create({ url: 'https://app.techpick.org' });
   }
+});
+
+let currentTabHtml = '';
+
+/**
+ * @description 탭이 업데이트될 때마다 탭의 정보를 가져옵니다.
+ */
+chrome.tabs.onUpdated.addListener(async (_tabId, changeInfo, tab) => {
+  if (
+    changeInfo.status === 'complete' &&
+    tab.url &&
+    tab.url.startsWith('http')
+  ) {
+    try {
+      const response = await fetch(tab.url);
+      currentTabHtml = await response.text();
+    } catch {
+      currentTabHtml = '';
+    }
+  }
+});
+
+/**
+ * @description 탭이 바뀔 때마다 탭의 html을 가져옵니다.
+ */
+chrome.tabs.onActivated.addListener(async (activeInfo) => {
+  const tab = await chrome.tabs.get(activeInfo.tabId);
+  if (tab.url && tab.url.startsWith('http')) {
+    try {
+      const response = await fetch(tab.url);
+      currentTabHtml = await response.text();
+    } catch {
+      currentTabHtml = '';
+    }
+  } else {
+    currentTabHtml = '';
+  }
+});
+
+/**
+ * @description 메세지를 받고 tab의 정보를 반환합니다.
+ */
+chrome.runtime.onConnect.addListener(function getHtmlText(port) {
+  if (port.name !== GET_TAB_HTML_TEXT_FROM_WORKER_PORT_NAME) {
+    return;
+  }
+
+  port.onMessage.addListener(function (message) {
+    if (message === REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE) {
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        const activeTab = tabs[0];
+        port.postMessage({
+          htmlText: currentTabHtml,
+          url: activeTab.url,
+          title: activeTab.title,
+        });
+      });
+    }
+  });
 });

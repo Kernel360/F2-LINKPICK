@@ -1,3 +1,5 @@
+'use client';
+
 import type { PropsWithChildren } from 'react';
 import { useDroppable } from '@dnd-kit/core';
 

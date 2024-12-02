@@ -1,10 +1,13 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import { DraggablePickListViewer, PickRecordHeader } from '@/components';
+import { useParams, useRouter, notFound, redirect } from 'next/navigation';
+import { PickRecordHeader } from '@/components';
+import { EmptyPickRecordImage } from '@/components/EmptyPickRecordImage';
+import { FolderContentHeader } from '@/components/FolderContentHeader/FolderContentHeader';
+import { FolderContentLayout } from '@/components/FolderContentLayout';
+import { FolderLoadingPage } from '@/components/FolderLoadingPage';
 import { PickContentLayout } from '@/components/PickContentLayout';
-import { PickContextMenu } from '@/components/PickContextMenu';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
 import { ROUTES } from '@/constants';
@@ -12,17 +15,21 @@ import {
   useResetPickFocusOnOutsideClick,
   useClearSelectedPickIdsOnMount,
   useFetchTagList,
+  useFetchPickRecordByFolderId,
 } from '@/hooks';
-import { usePickStore, useTreeStore } from '@/stores';
+import { useTreeStore } from '@/stores';
+import { getOrderedPickListByFolderId } from '@/utils';
 
 export default function FolderDetailPage() {
   const router = useRouter();
   const { folderId: stringFolderId } = useParams<{ folderId: string }>();
-  const { fetchPickDataByFolderId, getOrderedPickListByFolderId } =
-    usePickStore();
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
   const folderId = Number(stringFolderId);
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
+  const { isLoading, data, isError } = useFetchPickRecordByFolderId({
+    folderId: folderId,
+    alwaysFetch: true,
+  });
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
   useFetchTagList();
@@ -30,25 +37,12 @@ export default function FolderDetailPage() {
   useEffect(
     function selectFolderId() {
       if (!isFolderIdValid(folderId)) {
-        router.replace(ROUTES.UNCLASSIFIED_FOLDER);
-        return;
+        notFound();
       }
 
       selectSingleFolder(Number(folderId));
     },
     [folderId, router, selectSingleFolder]
-  );
-
-  useEffect(
-    function loadPickDataByFolderIdFromRemote() {
-      if (!isFolderIdValid(folderId)) {
-        router.replace(ROUTES.UNCLASSIFIED_FOLDER);
-        return;
-      }
-
-      fetchPickDataByFolderId(folderId);
-    },
-    [fetchPickDataByFolderId, folderId, router]
   );
 
   const isFolderIdValid = (folderId: number) => {
@@ -59,36 +53,35 @@ export default function FolderDetailPage() {
     return true;
   };
 
-  if (!basicFolderMap) {
-    return <div>loading...</div>;
+  if (!basicFolderMap || (isLoading && !data)) {
+    return <FolderLoadingPage />;
   }
 
-  const pickList = getOrderedPickListByFolderId(folderId);
+  if (isError) {
+    redirect(ROUTES.HOME);
+  }
+
+  const pickList = getOrderedPickListByFolderId(data);
 
   return (
-    <PickContentLayout>
-      <PickRecordHeader />
-      <PickDraggableListLayout folderId={folderId} viewType="record">
-        {pickList.map((pickInfo) => {
-          return (
-            <PickContextMenu
-              basicFolderMap={basicFolderMap}
-              pickInfo={pickInfo}
-              key={pickInfo.id}
-              data-pick-draggable={true}
-            >
-              <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
-            </PickContextMenu>
-          );
-        })}
-      </PickDraggableListLayout>
-    </PickContentLayout>
-  );
-
-  return (
-    <DraggablePickListViewer
-      pickList={getOrderedPickListByFolderId(folderId)}
-      folderId={folderId}
-    />
+    <FolderContentLayout>
+      <FolderContentHeader />
+      <PickContentLayout>
+        <PickRecordHeader />
+        {pickList.length === 0 ? (
+          <EmptyPickRecordImage />
+        ) : (
+          <>
+            <PickDraggableListLayout folderId={folderId} viewType="record">
+              {pickList.map((pickInfo) => {
+                return (
+                  <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
+                );
+              })}
+            </PickDraggableListLayout>
+          </>
+        )}
+      </PickContentLayout>
+    </FolderContentLayout>
   );
 }

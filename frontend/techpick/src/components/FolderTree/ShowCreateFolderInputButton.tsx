@@ -1,3 +1,5 @@
+'use client';
+
 import { Plus } from 'lucide-react';
 import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
 import { buttonStyle } from './showCreateFolderInputButton.css';

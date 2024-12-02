@@ -8,7 +8,9 @@ export const pickRecordLayoutStyle = style({
   width: '1044px',
   minHeight: '60px',
   height: 'fit-content',
-  border: '1px solid black',
+  borderTop: '0.5px solid',
+  borderBottom: '0.5px solid',
+  borderColor: colorVars.gold7,
   background: colorVars.gold3,
 });
 
@@ -18,10 +20,6 @@ export const pickImageStyle = style({
   aspectRatio: '1280 / 630',
   // objectFit: 'cover',
   borderRadius: '2px',
-});
-
-export const pickEmptyImageStyle = style({
-  border: '1px solid black',
 });
 
 export const pickTitleSectionStyle = style({

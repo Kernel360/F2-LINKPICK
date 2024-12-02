@@ -6,7 +6,10 @@ import { usePickStore } from '@/stores';
 export function useClearSelectedPickIdsOnMount() {
   const { setSelectedPickIdList } = usePickStore();
 
-  useEffect(function clearSelectedPickIdsOnMount() {
-    setSelectedPickIdList([]);
-  }, []);
+  useEffect(
+    function clearSelectedPickIdsOnMount() {
+      setSelectedPickIdList([]);
+    },
+    [setSelectedPickIdList]
+  );
 }

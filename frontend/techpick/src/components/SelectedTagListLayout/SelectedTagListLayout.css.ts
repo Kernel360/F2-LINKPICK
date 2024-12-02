@@ -18,7 +18,8 @@ export type ListLayoutHeightVariantKeyTypes =
 
 export const SelectedTagListLayoutFocusStyleVariant = styleVariants({
   focus: {
-    border: `1px solid ${colorVars.color.inputBorderFocus}`,
+    border: `1px solid ${colorVars.gold8}`,
+    borderBottom: `0.5px solid ${colorVars.gold8}`,
   },
   none: {},
 });

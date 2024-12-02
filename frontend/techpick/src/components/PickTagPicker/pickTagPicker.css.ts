@@ -1,8 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
 
-const { color } = colorVars;
-
 export const tagPickerLayout = style({
   position: 'relative',
 });
@@ -26,11 +24,4 @@ export const tagDialogTriggerLayout = style({
   width: '288px',
   border: '1px solid transparent',
   transition: 'border 0.3s ease',
-
-  ':focus': {
-    border: `1px solid ${color.inputBorderFocus}`,
-    outline: 'none',
-    backgroundColor: colorVars.lightGray,
-    boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',
-  },
 });

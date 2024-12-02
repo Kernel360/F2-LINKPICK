@@ -11,7 +11,6 @@ import { PickImageColumnLayout } from './PickImageColumnLayout';
 import {
   pickRecordLayoutStyle,
   pickImageStyle,
-  pickEmptyImageStyle,
   pickTitleSectionStyle,
   dateTextStyle,
   externalLinkIconStyle,
@@ -31,12 +30,12 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
   const { updatePickInfo } = usePickStore();
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
   const {
-    currentUpdatePickId,
-    setCurrentPickIdToNull,
-    setCurrentUpdatePickId,
+    currentUpdateTitlePickId,
+    setCurrentUpdateTitlePickId,
+    setCurrentUpdateTitlePickIdToNull,
   } = useUpdatePickStore();
   const [isHovered, setIsHovered] = useState(false);
-  const isUpdateTitle = currentUpdatePickId === pickInfo.id;
+  const isUpdateTitle = currentUpdateTitlePickId === pickInfo.id;
   const { isDragging } = usePickStore();
 
   const filteredSelectedTagList: TagType[] = [];
@@ -56,10 +55,10 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
     >
       <PickImageColumnLayout>
         <div className={pickImageStyle}>
-          {link.imageUrl ? (
-            <Image src={link.imageUrl} alt="" fill />
+          {link.imageUrl && link.imageUrl !== '' ? (
+            <Image src={link.imageUrl} alt="" fill sizes="96px" />
           ) : (
-            <div className={pickEmptyImageStyle} />
+            <Image src={'/image/default_image.svg'} alt="" fill sizes="96px" />
           )}
         </div>
       </PickImageColumnLayout>
@@ -72,7 +71,17 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
       <Separator />
 
       <PickTitleColumnLayout>
-        {isUpdateTitle ? (
+        <div
+          className={pickTitleSectionStyle}
+          onDoubleClick={(event) => {
+            setCurrentUpdateTitlePickId(pickInfo.id);
+            event.stopPropagation();
+          }}
+          role="button"
+        >
+          {pick.title}
+        </div>
+        {isUpdateTitle && (
           <PickRecordTitleInput
             initialValue={pick.title}
             onSubmit={(newTitle) => {
@@ -80,23 +89,12 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
                 ...pickInfo,
                 title: newTitle,
               });
-              setCurrentPickIdToNull();
+              setCurrentUpdateTitlePickIdToNull();
             }}
             onClickOutSide={() => {
-              setCurrentPickIdToNull();
+              setCurrentUpdateTitlePickIdToNull();
             }}
           />
-        ) : (
-          <div
-            className={pickTitleSectionStyle}
-            onDoubleClick={(event) => {
-              setCurrentUpdatePickId(pickInfo.id);
-              event.stopPropagation();
-            }}
-            role="button"
-          >
-            {pick.title}
-          </div>
         )}
       </PickTitleColumnLayout>
 

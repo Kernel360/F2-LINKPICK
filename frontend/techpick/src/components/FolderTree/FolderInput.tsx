@@ -1,3 +1,5 @@
+'use client';
+
 import { useCallback, useEffect, useRef } from 'react';
 import type { KeyboardEvent } from 'react';
 import { FolderPlus } from 'lucide-react';

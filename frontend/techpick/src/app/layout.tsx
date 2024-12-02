@@ -21,16 +21,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${notoSansKR.className}`}>
+      <ThemeProvider classname={`${notoSansKR.className}`}>
         <ToastProvider>
-          <ThemeProvider>
-            <QueryProvider>
-              {children}
-              <div id={PORTAL_CONTAINER_ID} />
-            </QueryProvider>
-          </ThemeProvider>
+          <QueryProvider>
+            {children}
+            <div id={PORTAL_CONTAINER_ID} />
+          </QueryProvider>
         </ToastProvider>
-      </body>
+      </ThemeProvider>
     </html>
   );
 }

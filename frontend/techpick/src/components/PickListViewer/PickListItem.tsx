@@ -26,11 +26,11 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
   const { updatePickInfo } = usePickStore();
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
   const {
-    currentUpdatePickId,
-    setCurrentPickIdToNull,
-    setCurrentUpdatePickId,
+    currentUpdateTitlePickId,
+    setCurrentUpdateTitlePickIdToNull,
+    setCurrentUpdateTitlePickId,
   } = useUpdatePickStore();
-  const isUpdateTitle = currentUpdatePickId === pickInfo.id;
+  const isUpdateTitle = currentUpdateTitlePickId === pickInfo.id;
 
   return (
     <div className={pickListItemLayoutStyle}>
@@ -50,17 +50,17 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
                 ...pickInfo,
                 title: newTitle,
               });
-              setCurrentPickIdToNull();
+              setCurrentUpdateTitlePickIdToNull();
             }}
             onClickOutSide={() => {
-              setCurrentPickIdToNull();
+              setCurrentUpdateTitlePickIdToNull();
             }}
           />
         ) : (
           <div
             className={pickTitleSectionStyle}
             onClick={(event) => {
-              setCurrentUpdatePickId(pickInfo.id);
+              setCurrentUpdateTitlePickId(pickInfo.id);
               event.stopPropagation();
             }}
             role="button"

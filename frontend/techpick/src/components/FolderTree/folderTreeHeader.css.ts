@@ -5,7 +5,7 @@ export const folderTreeHeaderLayout = style({
   position: 'sticky',
   top: 0,
   minWidth: sizes['6xs'],
-  backgroundColor: colorVars.backgroundNeutral,
+  backgroundColor: colorVars.sand2,
 });
 
 export const dividerStyle = style({

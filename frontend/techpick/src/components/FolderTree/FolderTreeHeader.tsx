@@ -72,7 +72,6 @@ export function FolderTreeHeader() {
           </PickToFolderDropZone>
         </div>
       )}
-      {/*<hr className={dividerStyle} />*/}
     </div>
   );
 }

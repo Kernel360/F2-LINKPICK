@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import ky, { HTTPError } from 'ky';
 import { notifyError } from '@/utils';
 import { ERROR_MESSAGE_JSON, returnErrorFromHTTPError } from './error';
@@ -11,6 +12,11 @@ export const apiClient = ky.create({
       async (httpError) => {
         if (httpError instanceof HTTPError) {
           const error = await returnErrorFromHTTPError(httpError);
+          Sentry.setContext('api_call', {
+            url: httpError.request.url,
+            method: httpError.request.method,
+          });
+          Sentry.captureException(error);
           const parsedErrorMessage = error.message.split(' ');
           const errorCode = parsedErrorMessage.shift();
 

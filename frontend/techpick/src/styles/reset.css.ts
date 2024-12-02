@@ -3,6 +3,7 @@ import { globalStyle } from '@vanilla-extract/css';
 globalStyle('*', {
   boxSizing: 'border-box',
   backgroundColor: 'transparent',
+  userSelect: 'none',
 });
 
 globalStyle('*::-webkit-scrollbar', {
@@ -47,7 +48,7 @@ globalStyle(
 );
 
 globalStyle('body', {
-  lineHeight: 1,
+  lineHeight: 1.5,
   fontSize: '16px',
 });
 

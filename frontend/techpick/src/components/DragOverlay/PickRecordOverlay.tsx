@@ -5,21 +5,20 @@ import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
 import { useOpenUrlInNewTab } from '@/hooks';
 import { usePickStore, useTagStore, useUpdatePickStore } from '@/stores';
 import { formatDateString } from '@/utils';
-import { PickDateColumnLayout } from './PickDateColumnLayout';
-import { PickImageColumnLayout } from './PickImageColumnLayout';
 import {
   pickRecordLayoutStyle,
   pickImageStyle,
-  pickEmptyImageStyle,
   pickTitleSectionStyle,
   dateTextStyle,
   externalLinkIconStyle,
   linkLayoutStyle,
 } from './pickRecordOverlay.css';
-import { PickRecordTitleInput } from './PickRecordTitleInput';
-import { PickTagColumnLayout } from './PickTagColumnLayout';
-import { PickTitleColumnLayout } from './PickTitleColumnLayout';
-import { Separator } from './Separator';
+import { PickDateColumnLayout } from '../PickRecord/PickDateColumnLayout';
+import { PickImageColumnLayout } from '../PickRecord/PickImageColumnLayout';
+import { PickRecordTitleInput } from '../PickRecord/PickRecordTitleInput';
+import { PickTagColumnLayout } from '../PickRecord/PickTagColumnLayout';
+import { PickTitleColumnLayout } from '../PickRecord/PickTitleColumnLayout';
+import { Separator } from '../PickRecord/Separator';
 import { PickTagPicker } from '../PickTagPicker';
 import { PickViewItemComponentProps, TagType } from '@/types';
 
@@ -30,12 +29,12 @@ export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
   const { updatePickInfo } = usePickStore();
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
   const {
-    currentUpdatePickId,
-    setCurrentPickIdToNull,
-    setCurrentUpdatePickId,
+    currentUpdateTitlePickId,
+    setCurrentUpdateTitlePickId,
+    setCurrentUpdateTitlePickIdToNull,
   } = useUpdatePickStore();
 
-  const isUpdateTitle = currentUpdatePickId === pickInfo.id;
+  const isUpdateTitle = currentUpdateTitlePickId === pickInfo.id;
 
   const filteredSelectedTagList: TagType[] = [];
 
@@ -53,7 +52,7 @@ export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
           {link.imageUrl ? (
             <Image src={link.imageUrl} alt="" fill />
           ) : (
-            <div className={pickEmptyImageStyle} />
+            <Image src={'/image/default_image.svg'} alt="" fill sizes="96px" />
           )}
         </div>
       </PickImageColumnLayout>
@@ -72,17 +71,17 @@ export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
                 ...pickInfo,
                 title: newTitle,
               });
-              setCurrentPickIdToNull();
+              setCurrentUpdateTitlePickIdToNull();
             }}
             onClickOutSide={() => {
-              setCurrentPickIdToNull();
+              setCurrentUpdateTitlePickIdToNull();
             }}
           />
         ) : (
           <div
             className={pickTitleSectionStyle}
             onClick={(event) => {
-              setCurrentUpdatePickId(pickInfo.id);
+              setCurrentUpdateTitlePickId(pickInfo.id);
               event.stopPropagation();
             }}
             role="button"
