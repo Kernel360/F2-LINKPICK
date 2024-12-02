@@ -17,12 +17,11 @@ export const pickImageStyle = style({
   position: 'relative',
   width: '96px',
   aspectRatio: '1280 / 630',
-  // objectFit: 'cover',
   borderRadius: '2px',
 });
 
 export const pickTitleSectionStyle = style({
-  fontSize: typography.fontSize['md'],
+  fontSize: typography.fontSize['sm'],
   fontWeight: typography.fontWeights['light'],
   height: '40px',
   lineHeight: '20px',
