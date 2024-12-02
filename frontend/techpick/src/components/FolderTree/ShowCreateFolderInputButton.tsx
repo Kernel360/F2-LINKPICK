@@ -15,7 +15,7 @@ export function ShowCreateFolderInputButton({
 
   return (
     <button onClick={onClick} className={buttonStyle}>
-      <Plus size={24} />
+      <Plus size={20} />
     </button>
   );
 }

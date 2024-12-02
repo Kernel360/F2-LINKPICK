@@ -62,7 +62,7 @@ export function FolderInput({
   return (
     <div ref={containerRef} className={folderInputLayout}>
       <label htmlFor="folderInput" className={labelStyle}>
-        <FolderPlus size={24} />
+        <FolderPlus size={16} />
       </label>
       <input
         id="folderInput"

@@ -8,6 +8,7 @@ export const folderInputLayout = style({
   minWidth: sizes['6xs'],
   maxWidth: sizes['full'],
   padding: space['8'],
+  paddingLeft: '12px',
 });
 
 export const labelStyle = style({
@@ -23,6 +24,6 @@ export const inputStyle = style({
   borderBottom: '1px solid',
   borderColor: colorVars.primary,
   padding: '0',
-  fontSize: fontSize['md'],
+  fontSize: fontSize['sm'],
   width: '0px',
 });
