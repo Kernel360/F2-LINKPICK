@@ -67,7 +67,7 @@ const PickContextMenu = memo(
                 }}
                 className={contextMenuItemStyle}
               >
-                <CircleXIcon />
+                <CircleXIcon size={16} />
                 <p>삭제</p>
               </ContextMenu.Item>
             ) : (
@@ -80,7 +80,7 @@ const PickContextMenu = memo(
                 }}
                 className={contextMenuItemStyle}
               >
-                <TrashIcon />
+                <TrashIcon size={16} />
                 <p>휴지통으로 이동</p>
               </ContextMenu.Item>
             )}
