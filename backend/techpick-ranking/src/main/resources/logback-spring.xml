@@ -2,6 +2,10 @@
 
 <configuration scan="true" scanPeriod="60 seconds">
 
+    <root level="debug">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
     <!-- ``````````````````````` CONVERSION RULE SETTING ```````````````````````````` -->
 
     <!-- 콘솔 출력 색상 적용 (참고: https://oingdaddy.tistory.com/257)   -->
@@ -72,7 +76,7 @@
         (ref: https://mkyong.com/logging/logback-duplicate-log-messages/) -->
 
     <!-- (1) 프로젝트 전체 로그 설정  -->
-    <logger name="techpick.ranking" level="info" additivity="false">
+    <logger name="techpick.ranking" level="debug" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>

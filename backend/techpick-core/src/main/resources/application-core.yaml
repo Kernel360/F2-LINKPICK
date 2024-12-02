@@ -15,7 +15,7 @@ spring:
     open-in-view: false
 
   rabbitmq:
-    host: ${RABBITMQ_HOST}
+    host: ${LOCAL_RABBITMQ_HOST}
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}

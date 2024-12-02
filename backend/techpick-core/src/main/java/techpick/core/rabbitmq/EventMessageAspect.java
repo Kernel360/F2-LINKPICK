@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import techpick.core.annotation.TechpickAnnotation;
 
 /**
@@ -16,6 +17,7 @@ import techpick.core.annotation.TechpickAnnotation;
  * 컨트롤러의 반환 값을 이용해서 이벤트를 생성하고 전송하는 AOP
  * sendEvent 어노테이션의 type parameter를 함께 설정합니다.
  */
+@Slf4j
 @Aspect
 @Component
 @RequiredArgsConstructor
@@ -31,9 +33,8 @@ public class EventMessageAspect {
     ) {
         var responseBody = response.getBody();
         if (Objects.isNull(responseBody)) {
-            throw new EventProcessingError(
-                String.format("%s : ResponseBody가 null이여서 이벤트로 변환할 수 없습니다.", jp.getSignature())
-            );
+            log.error("{} : ResponseBody가 null이여서 이벤트로 변환할 수 없습니다.", jp.getSignature());
+            return;
         }
         eventSender.sendEvent(responseBody.toEvent(sendEvent.type()/* 생성/조회/삭제/수정 */));
     }

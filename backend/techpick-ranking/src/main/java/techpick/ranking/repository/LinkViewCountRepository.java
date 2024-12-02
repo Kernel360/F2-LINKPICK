@@ -3,8 +3,10 @@ package techpick.ranking.repository;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import techpick.ranking.entity.PickPick;
+import techpick.ranking.entity.LinkViewCount;
 
 @Repository
-public interface PickPickRepository extends MongoRepository<PickPick, String> {
+public interface LinkViewCountRepository extends MongoRepository<LinkViewCount, String> {
+
+
 }
