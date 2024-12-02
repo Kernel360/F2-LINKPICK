@@ -5,6 +5,7 @@ on:
     branches:
       - 'backend-v2' # 배포 대상 브랜치
     paths:
+      - '.github/workflow/home-server.batch.deploy.yml'
       - 'backend/techpick-core/**'
       - 'backend/techpick-batch/**'
   workflow_dispatch:
