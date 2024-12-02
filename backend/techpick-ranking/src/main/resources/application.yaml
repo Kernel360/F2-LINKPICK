@@ -1,13 +1,17 @@
-# 로컬에서 techpick-api와 동시에 켜야 할 경우 아래 주석을 해제하세요
-server:
-  port: 8082
-
+logging:
+  level:
+    org:
+      springframework:
+        data:
+          mongodb:
+            core:
+              MongoTemplate: DEBUG # MongoDB Query Logging
 spring:
   profiles:
     include:
       - core
   application:
-    name: techpick-ranking
+    name: 'techpick.service.ranking'
   output:
     ansi:
       enabled: always
@@ -25,16 +29,32 @@ spring:
       database: ${DOCKER_MONGO_DATABASE}
       username: ${DOCKER_MONGO_USERNAME}
       password: ${DOCKER_MONGO_PASSWORD}
+server:
+  port: 8082
 ---
 spring:
   config:
     activate:
-      on-profile: dev, prod
+      on-profile: dev
   data:
     mongodb:
       uri: mongodb://${DOCKER_MONGO_USERNAME}:${DOCKER_MONGO_PASSWORD}@${DOCKER_MONGO_URL}/${DOCKER_MONGO_DATABASE}?authSource=${DOCKER_MONGO_AUTH}
       database: ${DOCKER_MONGO_DATABASE}
       username: ${DOCKER_MONGO_USERNAME}
       password: ${DOCKER_MONGO_PASSWORD}
+server:
+  port: 8080
 ---
-
+spring:
+  config:
+    activate:
+      on-profile: prod
+  data:
+    mongodb:
+      uri: mongodb://${DOCKER_MONGO_USERNAME}:${DOCKER_MONGO_PASSWORD}@${DOCKER_MONGO_URL}/${DOCKER_MONGO_DATABASE}?authSource=${DOCKER_MONGO_AUTH}
+      database: ${DOCKER_MONGO_DATABASE}
+      username: ${DOCKER_MONGO_USERNAME}
+      password: ${DOCKER_MONGO_PASSWORD}
+server:
+  port: 8080
+---

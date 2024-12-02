@@ -1,4 +1,28 @@
+---
 spring:
   profiles:
     include:
       - core
+  application:
+    name: 'techpick.server.batch'
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+server:
+  port: 8081
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+server:
+  port: 8080
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+server:
+  port: 8080
