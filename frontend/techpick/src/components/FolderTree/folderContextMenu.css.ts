@@ -5,24 +5,24 @@ export const contextMenuContentLayout = style({
   width: sizes['min'],
   height: sizes['min'],
   border: '1px solid',
-  borderColor: colorVars.borderNeutral,
+  borderColor: colorVars.gold7,
   borderRadius: borderRadius['base'],
-  backgroundColor: colorVars.backgroundBase,
+  backgroundColor: colorVars.gold3,
 });
 
 export const contextMenuItemStyle = style({
   display: 'flex',
   alignItems: 'center',
-  gap: space['8'],
+  gap: space['4'],
   width: sizes['6xs'],
-  height: sizes['12xs'],
+  height: '28px',
   borderRadius: borderRadius['base'],
   padding: space['8'],
   cursor: 'pointer',
+  fontSize: '14px',
 
   selectors: {
     '&[data-highlighted]': {
-      outline: colorVars.primaryFaded,
       backgroundColor: colorVars.primary,
     },
   },
