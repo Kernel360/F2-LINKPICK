@@ -75,6 +75,13 @@ jobs:
             cd /home/project/techpick/${{ env.server-name }}
             rm -rf .env
             touch .env
+
+            # !!!!!!!! 아래 MYSQL 환경 변수는 techpick-core의 엔티티 의존으로 인해 반드시 필요함. 안그러면 컨테이너 실행이 안된다;;;
+            # 날 잡고 core를 한번 손봐야 할 것 같다...
+            echo "DOCKER_MYSQL_USERNAME=${{ secrets.DOCKER_MYSQL_USERNAME }}" >> .env
+            echo "DOCKER_MYSQL_PASSWORD=${{ secrets.DOCKER_MYSQL_PASSWORD }}" >> .env
+            echo "DOCKER_MYSQL_DATABASE=${{ secrets.DOCKER_MYSQL_DATABASE }}_${{ env.database-version }}" >> .env
+            echo "DOCKER_MYSQL_URL=jdbc:mysql://techpick.infra.service-db/${{ secrets.DOCKER_MYSQL_DATABASE }}_${{ env.database-version }}?createDatabaseIfNotExist=true" >> .env
             
             echo "DOCKER_MONGO_AUTH=${{ secrets.DOCKER_MONGO_AUTH }}" >> .env
             echo "DOCKER_MONGO_USERNAME=${{ secrets.DOCKER_MONGO_USERNAME }}" >> .env
