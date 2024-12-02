@@ -6,16 +6,16 @@ export const folderItemOverlay = style({
   alignItems: 'center',
   gap: space['8'],
   minWidth: sizes['6xs'],
-  minHeight: '40px',
+  height: '36px',
   padding: '8px 12px',
   borderRadius: '4px',
   backgroundColor: colorVars.gold4,
-  fontSize: fontSize['lg'],
+  fontSize: fontSize['sm'],
   color: colorVars.point,
 });
 
 export const FolderIconStyle = style({
-  width: '20px',
+  width: '16px',
   flexShrink: 0,
 });
 
