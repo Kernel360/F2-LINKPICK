@@ -2,6 +2,8 @@ spring:
   profiles:
     include:
       - core
+  application:
+    name: techpick-api
 
 springdoc:
   swagger-ui:

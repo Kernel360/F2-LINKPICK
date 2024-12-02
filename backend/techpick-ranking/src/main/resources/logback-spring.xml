@@ -76,7 +76,7 @@
         (ref: https://mkyong.com/logging/logback-duplicate-log-messages/) -->
 
     <!-- (1) 프로젝트 전체 로그 설정  -->
-    <logger name="techpick.ranking" level="debug" additivity="false">
+    <logger name="techpick.ranking" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>

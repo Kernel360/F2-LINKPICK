@@ -24,6 +24,9 @@ public class RabbitmqConfig {
         public static final String Q1 = "queue.event-q1";
     }
 
+    @Value("${spring.application.name}")
+    private String appName;
+
     @Value("${spring.rabbitmq.host}")
     private String host;
 
@@ -67,6 +70,7 @@ public class RabbitmqConfig {
     @Bean
     ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+        connectionFactory.setConnectionNameStrategy(cn -> appName + "-" + cn);
         connectionFactory.setHost(host);
         connectionFactory.setPort(port);
         connectionFactory.setUsername(username);

@@ -25,28 +25,16 @@ spring:
       database: ${DOCKER_MONGO_DATABASE}
       username: ${DOCKER_MONGO_USERNAME}
       password: ${DOCKER_MONGO_PASSWORD}
-
-  rabbitmq:
-    host: ${LOCAL_RABBITMQ_HOST}
-    port: ${RABBITMQ_PORT}
-    username: ${RABBITMQ_USERNAME}
-    password: ${RABBITMQ_PASSWORD}
 ---
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: dev, prod
   data:
     mongodb:
       uri: mongodb://${DOCKER_MONGO_USERNAME}:${DOCKER_MONGO_PASSWORD}@${DOCKER_MONGO_URL}/${DOCKER_MONGO_DATABASE}?authSource=${DOCKER_MONGO_AUTH}
       database: ${DOCKER_MONGO_DATABASE}
       username: ${DOCKER_MONGO_USERNAME}
       password: ${DOCKER_MONGO_PASSWORD}
-
-  rabbitmq:
-    host: ${RABBITMQ_HOST}
-    port: ${RABBITMQ_PORT}
-    username: ${RABBITMQ_USERNAME}
-    password: ${RABBITMQ_PASSWORD}
 ---
 
