@@ -83,7 +83,7 @@
         (ref: https://mkyong.com/logging/logback-duplicate-log-messages/) -->
 
     <!-- (1) 프로젝트 전체 로그 설정  -->
-    <logger name="techpick.api" level="info" additivity="false">
+    <logger name="techpick.batch" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>
@@ -91,8 +91,8 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>
-
     <logger name="p6spy" level="info" additivity="false">
+        <appender-ref ref="CONSOLE"/>
         <appender-ref ref="SQL-LOG-FILE"/>
     </logger>
 

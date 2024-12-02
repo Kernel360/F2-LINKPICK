@@ -33,6 +33,21 @@ services:
     networks:
       - techpick-network
 
+  techpick-rabbitmq:
+    # **********************************
+    #       TECHPICK MESSAGE QUEUE
+    # **********************************
+    image: rabbitmq:3-management
+    container_name: techpick.infra.message-queue
+    hostname: techpick
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    ports:
+      - "15672:15672" # 관리 UI 포트
+      - "5672:5672" # AMQP 포트
+
   techpick-ranking-mongo:
     # ***********************************
     #    NoSQL DB for Ranking Module
@@ -60,16 +75,14 @@ services:
       context: ./techpick-api
       dockerfile: Dockerfile
     container_name: techpick.server.api
+    volumes:
+      - ./logs/batch:/app/logs
     ports:
       - "8080:8080"
     env_file:
       - .env
     environment:
-      - LOCAL_MYSQL_URL=${DOCKER_MYSQL_URL}
-      - DOCKER_MYSQL_USERNAME=${DOCKER_MYSQL_USERNAME}
-      - DOCKER_MYSQL_PASSWORD=${DOCKER_MYSQL_PASSWORD}
-      - TZ=Asia/Seoul
-      - SPRING_PROFILES_ACTIVE=local
+      - SPRING_PROFILES_ACTIVE=dev
     networks:
       - techpick-network
     depends_on:
@@ -83,30 +96,36 @@ services:
       context: ./techpick-batch
       dockerfile: Dockerfile
     container_name: techpick.server.batch
+    volumes:
+      - ./logs/batch:/app/logs
+    ports:
+      - "8081:8080"
     env_file:
       - .env
     environment:
-      - LOCAL_MYSQL_URL=${DOCKER_MYSQL_URL}
-      - DOCKER_MYSQL_USERNAME=${DOCKER_MYSQL_USERNAME}
-      - DOCKER_MYSQL_PASSWORD=${DOCKER_MYSQL_PASSWORD}
-      - TZ=Asia/Seoul
-      - SPRING_PROFILES_ACTIVE=local
+      - SPRING_PROFILES_ACTIVE=dev
     networks:
       - techpick-network
     depends_on:
       - techpick-mysql
 
-  techpick-rabbitmq:
+  techpick-ranking:
     # **********************************
-    #       TECHPICK MESSAGE QUEUE
+    #       TECHPICK RANKING SERVER
     # **********************************
-    image: rabbitmq:3-management
-    container_name: techpick.infra.message-queue
-    hostname: techpick
-    environment:
-      - RABBITMQ_ERLANG_COOKIE=${RABBITMQ_ERLANG_COOKIE}
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USERNAME}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    build:
+      context: ./techpick-ranking
+      dockerfile: Dockerfile
+    container_name: techpick.server.ranking
+    volumes:
+      - ./logs/ranking:/app/logs
     ports:
-      - "15672:15672" # 관리 UI 포트
-      - "5672:5672" # AMQP 포트
+      - "8082:8080"
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    networks:
+      - techpick-network
+    depends_on:
+      - techpick-ranking-mongo

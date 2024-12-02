@@ -2,10 +2,6 @@
 
 <configuration scan="true" scanPeriod="60 seconds">
 
-    <root level="debug">
-        <appender-ref ref="CONSOLE"/>
-    </root>
-
     <!-- ``````````````````````` CONVERSION RULE SETTING ```````````````````````````` -->
 
     <!-- 콘솔 출력 색상 적용 (참고: https://oingdaddy.tistory.com/257)   -->
@@ -41,15 +37,26 @@
                 <maxFileSize>100MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <fileNamePattern>${LOG_PATH}/${DATE_DIR}/application.%i.log</fileNamePattern>
-            <!-- total size of all archive files, if total size > 20GB, it will delete old archived file -->
-            <totalSizeCap>20GB</totalSizeCap>
-            <!-- 60 days to keep -->
-            <maxHistory>60</maxHistory>
+            <fileNamePattern>${LOG_PATH}/${DATE_DIR}/application.%i.log</fileNamePattern>
+            <!--            &lt;!&ndash; total size of all archive files, if total size > 20GB, it will delete old archived file &ndash;&gt;-->
+            <!--            <totalSizeCap>20GB</totalSizeCap>-->
+            <!--            &lt;!&ndash; 60 days to keep &ndash;&gt;-->
+            <!--            <maxHistory>60</maxHistory>-->
         </rollingPolicy>
         <!-- 로그를 남길 패턴 설정 -->
         <encoder>
             <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35}[%line] - %msg%n</pattern>
         </encoder>
+    </appender>
+
+    <appender name="local-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/batch/badminton-batch.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <layout>
+            <pattern>[%thread] [%date] [%level] [%logger{10}] [%file:%line] - %msg%n</pattern>
+        </layout>
     </appender>
 
     <appender name="SQL-LOG-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -80,9 +87,10 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>
-    <!--    <logger name="p6spy" level="info" additivity="false">-->
-    <!--        <appender-ref ref="SQL-LOG-FILE"/>-->
-    <!--    </logger>-->
+    <logger name="techpick.core" level="info" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="APP-LOG-FILE"/>
+    </logger>
 
 
 </configuration>
