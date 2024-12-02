@@ -86,8 +86,7 @@ jobs:
             echo "RABBITMQ_PASSWORD"=${{ secrets.RABBITMQ_PASSWORD }} >> .env
             echo "RABBITMQ_COOKIE"=${{ secrets.RABBITMQ_ERLANG_COOKIE }} >> .env
             
-            docker-compose stop techpick.${{ env.server-name }}
-            docker-compose rm -f techpick.${{ env.server-name }}
+            docker-compose down
             docker-compose up -d
 
             # ****************************************************************

@@ -96,8 +96,7 @@ jobs:
             echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" >> .env
             echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> .env
             
-            docker-compose stop techpick.${{ env.server-name }}
-            docker-compose rm -f techpick.${{ env.server-name }}
+            docker-compose down
             docker-compose up -d
 
             # ****************************************************************
