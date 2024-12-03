@@ -74,6 +74,12 @@ public class SharedFolderApiController {
     /** ----------------------------------------------------
      * NOTE: 아래 메서드는 Public API 입니다.
      */
+
+    /**
+     * @author minkyeu kim
+     * 조회 성능을 추적하고 개선할 필요가 있는 API 입니다.
+     * - MeasureTime 으로 시간 측청중
+     */
     @GetMapping("/{uuid}")
     @Operation(summary = "공유 폴더 조회", description = "UUID를 통해 공유된 폴더에 접근할 수 있습니다.")
     @ApiResponses(value = {
