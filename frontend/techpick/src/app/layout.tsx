@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: 'Techpick',
   description: 'quick save, view anywhere',
   icons: {
-    icon: './favicon.ico',
+    icon: '/favicon.ico',
   },
 };
 //
