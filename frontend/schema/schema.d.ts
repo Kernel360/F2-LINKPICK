@@ -199,6 +199,26 @@ export interface paths {
         patch: operations["updatePick"];
         trace?: never;
     };
+    "/api/links/clicked": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 링크 클릭 이벤트 수집
+         * @description 서버에게 사용자가 링크를 클릭했음을 알립니다
+         */
+        post: operations["traceLinkAccess"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/folders": {
         parameters: {
             query?: never;
@@ -584,6 +604,12 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
+        "techpick.api.application.link.dto.LinkApiResponse": {
+            url?: string;
+            title?: string;
+            description?: string;
+            imageUrl?: string;
+        };
         "techpick.api.application.folder.dto.FolderApiRequest$Create": {
             /** @example backend */
             name: string;
@@ -834,11 +860,6 @@ export interface components {
             /** Format: int32 */
             size?: number;
             hasNext?: boolean;
-        };
-        "techpick.api.application.link.dto.LinkApiResponse": {
-            title?: string;
-            description?: string;
-            imageUrl?: string;
         };
         "techpick.api.application.tag.dto.TagApiRequest$Delete": {
             /**
@@ -1166,6 +1187,29 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
+                };
+            };
+        };
+    };
+    traceLinkAccess: {
+        parameters: {
+            query: {
+                /** @description 조회되는 url */
+                url: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["techpick.api.application.link.dto.LinkApiResponse"];
                 };
             };
         };
