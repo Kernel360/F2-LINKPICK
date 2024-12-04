@@ -17,27 +17,28 @@ import techpick.core.rabbitmq.EventType;
  */
 public class TechpickAnnotation {
 
-    /**
-     * @author minkyeu kim
-     * Produce Event to Message Queue
-     */
-    @Target(ElementType.METHOD)
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface SendEvent {
-        /**
-         * (필수값) 이벤트의 행위 정보입니다.
-         * 생성 / 조회 / 삭제 / 수정 중 1가지가 반드시 명시되어야 합니다.
-         */
-        EventType type();
-    }
+	/**
+	 * @author minkyeu kim
+	 * Produce Event to Message Queue
+	 */
+	@Target(ElementType.METHOD)
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface SendEvent {
+		/**
+		 * (필수값) 이벤트의 행위 정보입니다.
+		 * 생성 / 조회 / 삭제 / 수정 중 1가지가 반드시 명시되어야 합니다.
+		 */
+		EventType type();
+	}
 
-    /**
-     * @author suhyeong park
-     * 함수 진입 / 종료 시간을 측정해 로그를 남깁니다.
-     */
-    @Target(ElementType.METHOD)
-    @Retention(RetentionPolicy.RUNTIME)
-    public @interface MeasureTime {
-    }
+	/**
+	 * @author suhyeong park
+	 * 함수 진입 / 종료 시간을 측정해 로그를 남깁니다.
+	 */
+	@Target(ElementType.METHOD)
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface MeasureTime {
+	}
+
 }
 

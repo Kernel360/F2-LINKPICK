@@ -134,7 +134,9 @@ class TagServiceTest {
 		}
 
 		User savedUser = userDataHandler.getUser(user.getId());
-		savedUser.updateTagOrderList(tagIdList);
+		for (Long tagId : tagIdList) {
+			savedUser.updateTagOrderList(tagId, 0);
+		}
 
 		Long targetId = expectedOrderList.get(0);
 		int targetIdx = 3;

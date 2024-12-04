@@ -29,11 +29,6 @@ public class ApiExceptionHandler {
 		return ApiErrorResponse.UNKNOWN_SERVER_ERROR();
 	}
 
-	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ApiErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception, requestHolder.getRequest());
-		return ApiErrorResponse.VALIDATION_ERROR(exception.getBindingResult().getFieldError().getDefaultMessage());
-	}
 
 	/**
 	 * ApiException 을 공통 Response 형태로 변환 합니다.
@@ -44,6 +39,15 @@ public class ApiExceptionHandler {
 		exception.handleErrorByLevel(requestHolder.getRequest());
 
 		return ApiErrorResponse.of(exception.getApiErrorCode());
+	}
+
+	/**
+	 * Validation 관련 예외
+	 */
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public ApiErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception, requestHolder.getRequest());
+		return ApiErrorResponse.VALIDATION_ERROR(exception.getBindingResult().getFieldError().getDefaultMessage());
 	}
 
 	// Json 파싱 과정 중 에러가 났을때 처리하는 handler
