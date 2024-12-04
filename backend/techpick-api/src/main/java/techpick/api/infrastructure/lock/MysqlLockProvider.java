@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import techpick.api.infrastructure.lock.util.LockException;
 
 @Slf4j
 @Component
@@ -24,8 +25,6 @@ public class MysqlLockProvider implements LockProvider {
 		Boolean result = jdbcTemplate.queryForObject(sql, Boolean.class, lockKey, timeout / 1000);
 		return Boolean.TRUE.equals(result); // null인 경우 false 반환
 	}
-
-	// TODO: Exception 종류 변경
 
 	/**
 	 * 락을 해제하는 메서드

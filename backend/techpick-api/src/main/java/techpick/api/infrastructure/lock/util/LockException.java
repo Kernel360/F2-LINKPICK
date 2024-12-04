@@ -1,4 +1,4 @@
-package techpick.api.infrastructure.lock;
+package techpick.api.infrastructure.lock.util;
 
 public class LockException extends RuntimeException {
 

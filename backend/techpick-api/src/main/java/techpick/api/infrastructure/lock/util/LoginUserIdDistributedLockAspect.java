@@ -1,16 +1,13 @@
-package techpick.api.infrastructure.lock;
+package techpick.api.infrastructure.lock.util;
 
-import java.lang.reflect.Field;
-
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import techpick.core.annotation.TechpickAnnotation;
+import techpick.api.annotation.LoginUserIdDistributedLock;
+import techpick.api.infrastructure.lock.LockProvider;
 import techpick.security.annotation.LoginUserId;
 
 @Aspect
@@ -20,7 +17,6 @@ public class LoginUserIdDistributedLockAspect {
 
 	private final LockProvider lockProvider;
 
-	// TODO: @LoginUserId를 이용하면 userId를 받아올 수 있지 않을까?
 	@Around("@annotation(loginUserIdDistributedLock)")
 	public Object handleDistributedLock(ProceedingJoinPoint joinPoint,
 		LoginUserIdDistributedLock loginUserIdDistributedLock, @LoginUserId Long userId) throws Throwable {

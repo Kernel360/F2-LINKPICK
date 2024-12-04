@@ -18,7 +18,7 @@ import techpick.api.domain.folder.dto.FolderMapper;
 import techpick.api.domain.folder.dto.FolderResult;
 import techpick.api.domain.folder.exception.ApiFolderException;
 import techpick.api.infrastructure.folder.FolderDataHandler;
-import techpick.api.infrastructure.lock.LoginUserIdDistributedLock;
+import techpick.api.annotation.LoginUserIdDistributedLock;
 import techpick.api.infrastructure.pick.PickDataHandler;
 import techpick.api.infrastructure.sharedFolder.SharedFolderDataHandler;
 import techpick.core.model.folder.Folder;
