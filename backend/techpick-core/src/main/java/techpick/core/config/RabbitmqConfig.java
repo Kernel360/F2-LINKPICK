@@ -1,4 +1,4 @@
-package techpick.core.rabbitmq;
+package techpick.core.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
