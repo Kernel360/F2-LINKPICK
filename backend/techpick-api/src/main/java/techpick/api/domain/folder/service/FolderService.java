@@ -21,6 +21,7 @@ import techpick.api.domain.sharedFolder.exception.ApiSharedFolderException;
 import techpick.api.infrastructure.folder.FolderDataHandler;
 import techpick.api.infrastructure.pick.PickDataHandler;
 import techpick.api.infrastructure.sharedFolder.SharedFolderDataHandler;
+import techpick.core.annotation.TechpickAnnotation;
 import techpick.core.model.folder.Folder;
 import techpick.core.model.folder.FolderType;
 
@@ -112,6 +113,7 @@ public class FolderService {
     }
 
     // TODO: 리팩토링 필요
+    @TechpickAnnotation.DistributedLock(key = "DELETE_FOLDER")
     @Transactional
     public void deleteFolder(FolderCommand.Delete command) {
         // 먼저 공유 부터 해제

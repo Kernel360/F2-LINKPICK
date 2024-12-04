@@ -39,5 +39,16 @@ public class TechpickAnnotation {
     @Retention(RetentionPolicy.RUNTIME)
     public @interface MeasureTime {
     }
+
+    /**
+     * @author sangwon
+     * 분산 락을 걸어서 동시성 문제를 제어합니다.
+     */
+    @Target(ElementType.METHOD)
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface DistributedLock {
+        String key();
+        long timeout() default 3000;
+    }
 }
 
