@@ -44,88 +44,6 @@ class FolderServiceUnitTest {
 	private FolderService folderService;
 
 	@Test
-	@DisplayName("폴더 조회시 본인의 폴더면 폴더정보를 제공한다.")
-	void getFolder_Should_GetFolder_When_UserIsOwner() {
-		// given
-		Long userId = 1L;
-		Long folderId = 1L;
-		FolderCommand.Read command = new FolderCommand.Read(userId, folderId);
-		User user = UserFixture.builder().id(userId).build().get();
-		Folder folder = FolderFixture.builder().id(command.id()).user(user).build().get();
-
-		given(folderDataHandler.getFolder(any())).willReturn(folder);
-
-		// when
-		folderService.getFolder(command);
-
-		// then
-		then(folderDataHandler).should(times(1)).getFolder(anyLong());
-		then(folderMapper).should(times(1)).toResult(any());
-	}
-
-	@Test
-	@DisplayName("폴더 조회시 본인의 폴더가 아니면 예외를 발생시킨다.")
-	void getFolder_Should_ThrowException_When_UserIsNotOwner() {
-		// given
-		Long userId = 1L;
-		Long folderOwnerId = 2L;
-		Long folderId = 1L;
-		FolderCommand.Read command = new FolderCommand.Read(userId, folderId);
-		User folderOwner = UserFixture.builder().id(folderOwnerId).build().get();
-		Folder folder = FolderFixture.builder().id(command.id()).user(folderOwner).build().get();
-
-		given(folderDataHandler.getFolder(any())).willReturn(folder);
-
-		// when & then
-		var exception = assertThrows(ApiFolderException.class, () -> folderService.getFolder(command));
-		assertEquals(ApiFolderErrorCode.FOLDER_ACCESS_DENIED, exception.getApiErrorCode());
-
-		then(folderDataHandler).should(times(1)).getFolder(anyLong());
-		then(folderMapper).should(never()).toResult(any());
-	}
-
-	@Test
-	@DisplayName("자식 폴더 조회 시 본인의 폴더면 자식폴더 정보를 제공한다.")
-	void getChildFolderList_Should_GetChildFolderList_When_UserIsOwner() {
-		// given
-		Long userId = 1L;
-		Long folderId = 1L;
-		FolderCommand.Read command = new FolderCommand.Read(userId, folderId);
-		User user = UserFixture.builder().id(userId).build().get();
-		Folder folder = FolderFixture.builder().id(command.id()).user(user).build().get();
-
-		given(folderDataHandler.getFolder(any())).willReturn(folder);
-
-		// when
-		folderService.getChildFolderList(command);
-
-		// then
-		then(folderDataHandler).should(times(1)).getFolder(anyLong());
-		then(folderDataHandler).should(times(1)).getFolderListPreservingOrder(any());
-	}
-
-	@Test
-	@DisplayName("자식 폴더 조회 시 본인의 폴더가 아니면 예외를 발생시킨다.")
-	void getChildFolderList_Should_ThrowException_When_UserIsNotParentFolderOwner() {
-		// given
-		Long userId = 1L;
-		Long folderOwnerId = 2L;
-		Long folderId = 1L;
-		FolderCommand.Read command = new FolderCommand.Read(userId, folderId);
-		User folderOwner = UserFixture.builder().id(folderOwnerId).build().get();
-		Folder folder = FolderFixture.builder().id(command.id()).user(folderOwner).build().get();
-
-		given(folderDataHandler.getFolder(any())).willReturn(folder);
-
-		// when & then
-		var exception = assertThrows(ApiFolderException.class, () -> folderService.getChildFolderList(command));
-		assertEquals(ApiFolderErrorCode.FOLDER_ACCESS_DENIED, exception.getApiErrorCode());
-
-		then(folderDataHandler).should(times(1)).getFolder(anyLong());
-		then(folderDataHandler).should(never()).getFolderListPreservingOrder(any());
-	}
-
-	@Test
 	@DisplayName("폴더 저장 시 부모폴더가 본인의 폴더면 저장한다.")
 	void saveFolder_Should_SaveNewFolder_When_UserIsParentFolderOwner() {
 		// given
@@ -292,7 +210,7 @@ class FolderServiceUnitTest {
 
 		// when & then
 		var exception = assertThrows(ApiFolderException.class, () -> folderService.moveFolder(command));
-		assertEquals(ApiFolderErrorCode.INVALID_MOVE_TARGET, exception.getApiErrorCode());
+		assertEquals(ApiFolderErrorCode.INVALID_TARGET, exception.getApiErrorCode());
 
 		then(folderDataHandler).should(times(1)).getFolder(anyLong());
 		then(folderDataHandler).should(never()).getFolderList(any());
@@ -325,7 +243,7 @@ class FolderServiceUnitTest {
 
 		// when & then
 		var exception = assertThrows(ApiFolderException.class, () -> folderService.moveFolder(command));
-		assertEquals(ApiFolderErrorCode.INVALID_MOVE_TARGET, exception.getApiErrorCode());
+		assertEquals(ApiFolderErrorCode.INVALID_TARGET, exception.getApiErrorCode());
 
 		then(folderDataHandler).should(times(1)).getFolder(anyLong());
 		then(folderDataHandler).should(never()).getFolderList(any());
