@@ -5,6 +5,8 @@ spring:
       - security
   config:
     import: file:../.env[.properties]
+  application:
+    name: "test"
 springdoc:
   swagger-ui:
     disable-swagger-default-url: true

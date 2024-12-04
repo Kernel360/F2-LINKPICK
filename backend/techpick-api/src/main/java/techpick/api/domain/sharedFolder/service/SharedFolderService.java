@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import techpick.api.domain.folder.exception.ApiFolderException;
 import techpick.api.domain.link.dto.LinkMapper;
 import techpick.api.domain.sharedFolder.dto.SharedFolderMapper;
@@ -20,11 +21,13 @@ import techpick.api.infrastructure.folder.FolderDataHandler;
 import techpick.api.infrastructure.pick.PickDataHandler;
 import techpick.api.infrastructure.sharedFolder.SharedFolderDataHandler;
 import techpick.api.infrastructure.tag.TagDataHandler;
+import techpick.core.annotation.TechpickAnnotation;
 import techpick.core.model.folder.Folder;
 import techpick.core.model.folder.FolderType;
 import techpick.core.model.pick.Pick;
 import techpick.core.model.sharedFolder.SharedFolder;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SharedFolderService {
@@ -61,6 +64,7 @@ public class SharedFolderService {
      *     pick에 설정된 태그는 [ "foo", "hi", "bar" ] 이다.
      */
     @Transactional(readOnly = true)
+    @TechpickAnnotation.MeasureTime
     public SharedFolderResult.SharedFolderInfo getSharedFolderInfo(UUID uuid) {
         var sourceFolder = sharedFolderDataHandler.getByUUID(uuid).getFolder();
         var pickList = pickDataHandler.getPickList(sourceFolder.getChildPickIdOrderedList());
