@@ -10,8 +10,9 @@ import {
 } from './folderContextMenu.css';
 
 export function FolderContextMenu({
+  shareText,
   showRenameInput,
-  shareFolder,
+  onClickShareFolder,
   onShow = () => {},
   onClickRemoveFolder,
   children,
@@ -48,10 +49,10 @@ export function FolderContextMenu({
           </ContextMenu.Item>
           <ContextMenu.Item
             className={contextMenuItemStyle}
-            onSelect={shareFolder}
+            onSelect={onClickShareFolder}
           >
             <ScreenShare />
-            <p>공유하기</p>
+            <p>{shareText}</p>
           </ContextMenu.Item>
         </ContextMenu.Content>
       </ContextMenu.Portal>
@@ -60,8 +61,9 @@ export function FolderContextMenu({
 }
 
 interface FolderContextMenuProps {
+  shareText: string;
   showRenameInput: () => void;
-  shareFolder: () => void;
+  onClickShareFolder: () => void;
   onShow?: () => void;
   onClickRemoveFolder: () => void;
 }

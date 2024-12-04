@@ -10,9 +10,9 @@ export const myPageLayoutStyle = style({
 
 export const buttonSectionLayout = style({
   display: 'flex',
-  justifyContent: 'center',
+  justifyContent: 'flex-end',
   alignItems: 'center',
-  height: '100%',
+  padding: '8px',
 });
 
 export const logoutButtonStyle = style({

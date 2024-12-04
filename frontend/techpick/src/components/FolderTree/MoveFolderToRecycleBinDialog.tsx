@@ -10,6 +10,7 @@ import {
   moveRecycleBinConfirmButtonStyle,
   moveRecycleBinDialogCloseButton,
   moveRecycleBinDialogDescriptionStyle,
+  moveRecycleBinDialogShareFolderWarningDescriptionStyle,
   moveRecycleBinDialogTitleStyle,
   moveRecycleBinOverlayStyle,
   moveRecycleDialogContent,
@@ -25,9 +26,15 @@ export function MoveFolderToRecycleBinDialog({
   const moveFolderToRecycleBin = useTreeStore(
     (state) => state.moveFolderToRecycleBin
   );
+  const { checkIsShareFolder, setShareFolder } = useTreeStore();
 
   const moveRecycleBinAndRedirect = () => {
-    moveFolderToRecycleBin({ deleteFolderId });
+    if (checkIsShareFolder(deleteFolderId)) {
+      setShareFolder(deleteFolderId, '');
+      moveFolderToRecycleBin({ deleteFolderId });
+    } else {
+      moveFolderToRecycleBin({ deleteFolderId });
+    }
 
     if (Number(urlFolderId) === deleteFolderId) {
       router.push(ROUTES.FOLDERS_UNCLASSIFIED);
@@ -43,6 +50,18 @@ export function MoveFolderToRecycleBinDialog({
             <Dialog.Title className={moveRecycleBinDialogTitleStyle}>
               폴더를 휴지통으로 이동하시겠습니다?
             </Dialog.Title>
+
+            {checkIsShareFolder(deleteFolderId) && (
+              <Dialog.Description
+                className={
+                  moveRecycleBinDialogShareFolderWarningDescriptionStyle
+                }
+              >
+                현재 공개중인 폴더입니다.
+                <br />
+                공유 폴더가 해제되며, 외부에서 더이상 접근할 수 없습니다.
+              </Dialog.Description>
+            )}
 
             <Dialog.Description
               className={moveRecycleBinDialogDescriptionStyle}

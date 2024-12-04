@@ -34,6 +34,7 @@ type TreeState = {
   draggingFolderInfo: FolderType | null | undefined;
   basicFolderMap: BasicFolderMap | null;
   rootFolderId: number;
+  isShareFolder: boolean;
 };
 
 type TreeAction = {
@@ -85,6 +86,8 @@ type TreeAction = {
    * @return {FolderType[]} 찾지 못한 경우 빈 배열 반환
    * */
   findFolderByName: (name: string) => FolderType[];
+  checkIsShareFolder: (folderId: number) => boolean;
+  setShareFolder: (folderId: number, folderAccessToken: string | null) => void;
 };
 
 const initialState: TreeState = {
@@ -98,6 +101,7 @@ const initialState: TreeState = {
   isDragging: false,
   basicFolderMap: null,
   draggingFolderInfo: null,
+  isShareFolder: false,
 };
 
 export const useTreeStore = create<TreeState & TreeAction>()(
@@ -447,6 +451,21 @@ export const useTreeStore = create<TreeState & TreeAction>()(
       getFolderList: () => {
         const map = get().treeDataMap;
         return Array.from(getObjectEntries(map).map((entry) => entry[1]));
+      },
+      /**
+       * @description 공유 폴더인지 확인하는 함수입니다.
+       * @param folderId
+       * @return {boolean} 공유 폴더인 경우 true, 아닌 경우 false를 반환합니다.
+       * */
+      checkIsShareFolder: (folderId) => {
+        return get().getFolderInfoByFolderId(folderId)?.folderAccessToken
+          ? true
+          : false;
+      },
+      setShareFolder: (folderId, folderAccessToken) => {
+        set((state) => {
+          state.treeDataMap[folderId].folderAccessToken = folderAccessToken;
+        });
       },
     }))
   )

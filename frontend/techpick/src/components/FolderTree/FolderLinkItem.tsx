@@ -7,6 +7,7 @@ import {
   FolderIconStyle,
   dragOverItemStyle,
   folderTextStyle,
+  sharedTextStyle,
 } from './folderLinkItem.css';
 
 export function FolderLinkItem({
@@ -14,6 +15,7 @@ export function FolderLinkItem({
   href,
   isSelected,
   isHovered = false,
+  isShared,
   onClick = () => {},
   icon: IconComponent = Folder,
 }: FolderListItemProps) {
@@ -25,6 +27,7 @@ export function FolderLinkItem({
       >
         <IconComponent className={FolderIconStyle} />
         <p className={folderTextStyle}>{name}</p>
+        {isShared && <p className={sharedTextStyle}>공개중</p>}
       </div>
     </Link>
   );
@@ -35,6 +38,7 @@ interface FolderListItemProps {
   href: string;
   isSelected?: boolean;
   isHovered?: boolean;
+  isShared?: boolean;
   onClick?: (event: MouseEvent<HTMLDivElement>) => void;
   icon?: ElementType;
 }
