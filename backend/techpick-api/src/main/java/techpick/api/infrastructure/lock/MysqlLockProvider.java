@@ -1,4 +1,4 @@
-package techpick.core.util;
+package techpick.api.infrastructure.lock;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -20,12 +20,13 @@ public class MysqlLockProvider implements LockProvider {
 	public boolean acquireLock(String key, long timeout, Long userId) {
 		String sql = "SELECT GET_LOCK(?, ?)";
 		String lockKey = key + "_" + userId;
-		log.info("lockKey : {}", lockKey);
+		log.debug("lockKey : {}", lockKey);
 		Boolean result = jdbcTemplate.queryForObject(sql, Boolean.class, lockKey, timeout / 1000);
 		return Boolean.TRUE.equals(result); // null인 경우 false 반환
 	}
 
 	// TODO: Exception 종류 변경
+
 	/**
 	 * 락을 해제하는 메서드
 	 */
@@ -35,7 +36,7 @@ public class MysqlLockProvider implements LockProvider {
 		String lockKey = key + "_" + userId;
 		Boolean result = jdbcTemplate.queryForObject(sql, Boolean.class, lockKey);
 		if (!Boolean.TRUE.equals(result)) {
-			throw new RuntimeException("락 해제 실패 : " + lockKey);
+			throw new LockException("락 해제 실패 : " + lockKey);
 		}
 	}
 }

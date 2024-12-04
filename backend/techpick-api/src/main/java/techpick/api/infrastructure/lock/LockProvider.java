@@ -1,4 +1,4 @@
-package techpick.core.util;
+package techpick.api.infrastructure.lock;
 
 /**
  * @author sangwon
