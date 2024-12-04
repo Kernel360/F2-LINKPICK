@@ -9,6 +9,7 @@ export default function useFetchShareFolderById() {
   const [shareFolderList, setShareFolderList] =
     useState<ShareFolderReadFolderFullResponseType | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchShareFolderData = async () => {
@@ -18,7 +19,7 @@ export default function useFetchShareFolderById() {
           const data = await getShareFolderById(uuid);
           setShareFolderList(data);
         } catch {
-          /* empty */
+          setIsError(true);
         } finally {
           setIsLoading(false);
         }
@@ -31,5 +32,6 @@ export default function useFetchShareFolderById() {
   return {
     shareFolderList,
     isLoading,
+    isError,
   };
 }

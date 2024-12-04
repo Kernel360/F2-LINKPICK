@@ -28,7 +28,16 @@ const EmptyPickRecordImage = dynamic(
 );
 
 export default function Page() {
-  const { shareFolderList, isLoading } = useFetchShareFolderById();
+  const { shareFolderList, isLoading, isError } = useFetchShareFolderById();
+
+  if (isError) {
+    return (
+      <EmptyPickRecordImage
+        title="삭제된 폴더입니다."
+        description="삭제되거나 접근할 수 없는 폴더입니다."
+      />
+    );
+  }
 
   if (isLoading || !shareFolderList) {
     return <FolderLoadingPage />;
