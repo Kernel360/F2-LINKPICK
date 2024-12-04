@@ -5,18 +5,19 @@ import java.util.List;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class FolderApiRequest {
 
 	public record Create(
-		@Schema(example = "backend") @NotBlank(message = "{folder.name.notBlank}") String name,
+		@Schema(example = "backend") @NotBlank(message = "{folder.name.notBlank}") @Size(max = 100, message = "{folder.name.maxSize}") String name,
 		@Schema(example = "3") @NotNull(message = "{parentFolderId.notNull}") Long parentFolderId
 	) {
 	}
 
 	public record Update(
 		@Schema(example = "3") @NotNull(message = "{id.notNull}") Long id,
-		@Schema(example = "SpringBoot") @NotBlank(message = "{folder.name.notBlank}") String name
+		@Schema(example = "SpringBoot") @NotBlank(message = "{folder.name.notBlank}") @Size(max = 100, message = "{folder.name.maxSize}") String name
 	) {
 	}
 
