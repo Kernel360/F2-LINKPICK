@@ -7,19 +7,22 @@ export const tagInfoEditFormLayout = style({
   flexDirection: 'column',
   gap: '8px',
   zIndex: '3',
+  border: '1px solid',
+  borderColor: colorVars.gold8,
   borderRadius: '4px',
   padding: '8px',
-  backgroundColor: colorVars.color.background,
-  boxShadow:
-    'rgba(15, 15, 15, 0.1) 0px 0px 0px 1px, rgba(15, 15, 15, 0.2) 0px 3px 6px, rgba(15, 15, 15, 0.4) 0px 9px 24px',
+  backgroundColor: colorVars.gold4,
+  boxShadow: `
+  hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
+  hsl(206 22% 7% / 20%) 0px 10px 20px -15px
+`,
 });
 
 export const tagInputStyle = style({
   outline: 'none',
   margin: 0,
-  border: `1px solid ${colorVars.color.font}`,
-  color: colorVars.color.font,
-  fontSize: fontSize['md'],
+  border: `1px solid ${colorVars.gold8}`,
+  fontSize: fontSize['sm'],
 });
 
 export const popoverOverlayStyle = style({

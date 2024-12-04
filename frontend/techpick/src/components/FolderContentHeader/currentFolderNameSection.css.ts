@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { fontWeights, fontSize } from 'techpick-shared';
+import { fontWeights } from 'techpick-shared';
 
 export const currentFolderNameSectionStyle = style({
   display: 'inline-flex',
@@ -17,9 +17,9 @@ export const folderOpenIconStyle = style({
 export const folderNameStyle = style({
   display: 'inline-block',
   fontWeight: fontWeights['medium'],
-  fontSize: fontSize['3xl'],
-  height: '48px',
-  lineHeight: '48px',
+  height: '28px',
+  lineHeight: '24px',
+  fontSize: '24px',
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
   overflow: 'hidden',

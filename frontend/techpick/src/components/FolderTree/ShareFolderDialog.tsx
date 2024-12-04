@@ -31,7 +31,7 @@ export default function ShareFolderDialog({
           <DialogPrimitive.Description className={styles.dialogDescription}>
             <Link href={`/mypage`} className={styles.myLinkPageLinkText}>
               <span className={styles.linkContent} onClick={onOpenChange}>
-                <Settings className={styles.icon} />
+                <Settings className={styles.icon} size={14} />
                 내설정
               </span>
             </Link>

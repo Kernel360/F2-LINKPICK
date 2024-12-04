@@ -5,12 +5,12 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { usePickStore, useUpdatePickStore } from '@/stores';
 import { getSelectedPickRange, isSelectionActive } from '@/utils';
+import { PickContextMenu } from './PickContextMenu';
 import {
   isActiveDraggingItemStyle,
   selectedDragItemStyle,
 } from './pickDraggableRecord.css';
 import { PickRecord } from './PickRecord';
-import { PickContextMenu } from '../PickContextMenu';
 import { PickViewDraggableItemComponentProps } from '@/types';
 
 export function PickDraggableRecord({

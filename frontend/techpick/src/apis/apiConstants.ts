@@ -7,6 +7,7 @@ const API_ENDPOINTS = {
   LINKS: 'links',
   SHARED: 'shared',
   LOGOUT: 'logout',
+  CLICKED: 'clicked',
 };
 
 export const API_URLS = {
@@ -42,4 +43,6 @@ export const API_URLS = {
   DELETE_SHARED_FOLER_BY_FOLDER_ID: (sourceFolderId: number) =>
     `${API_ENDPOINTS.SHARED}/${sourceFolderId}`,
   POST_LOGOUT: `${API_ENDPOINTS.LOGOUT}`,
+  POST_CLICKED_LINK_URL: (url: string) =>
+    `${API_ENDPOINTS.LINKS}/${API_ENDPOINTS.CLICKED}?url=${url}`,
 };

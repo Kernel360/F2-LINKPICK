@@ -3,13 +3,17 @@
 import { useRef, memo, KeyboardEvent, MouseEvent } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import { Button } from '@/components/Button/Button';
 import { PORTAL_CONTAINER_ID } from '@/constants';
 import { useTagStore, useDeleteTagDialogStore } from '@/stores';
 import { Text } from '@/ui/Text/Text';
 import { getElementById } from '@/utils';
 import { Gap } from '../Gap';
-import { dialogContentStyle, dialogOverlayStyle } from './DeleteTagDialog.css';
+import {
+  dialogContentStyle,
+  dialogOverlayStyle,
+  deleteTagButtonStyle,
+  deleteTagCancelButtonStyle,
+} from './DeleteTagDialog.css';
 
 export const DeleteTagDialog = memo(function DeleteTagDialog() {
   const cancelButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -56,14 +60,9 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
       <Dialog.Portal container={portalContainer}>
         <Dialog.Overlay className={dialogOverlayStyle} />
         <Dialog.Content className={dialogContentStyle}>
-          <Text size="sm" weight="regular">
+          <Text size="sm" weight="light">
             이 태그를 삭제하시겠습니까?
           </Text>
-
-          {/* <p style={{ fontSize: '14px' }}>
-            {' '}
-            dasdsadsa 이 태그를 삭제하시겠습니까?
-          </p> */}
 
           <VisuallyHidden.Root>
             <Dialog.Title>이 태그를 삭제하시겠습니까?</Dialog.Title>
@@ -73,29 +72,24 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
           </VisuallyHidden.Root>
 
           <div>
-            <Button
+            <button
               onClick={DeleteTagByClick}
               onKeyDown={DeleteTagByEnterKey}
-              size="xs"
-              background="danger"
-              color="white"
-              wide
+              className={deleteTagButtonStyle}
             >
               삭제
-            </Button>
+            </button>
+
             <Gap verticalSize="gap4" />
             <Dialog.Close asChild>
-              <Button
+              <button
                 ref={cancelButtonRef}
                 onClick={closeDialog}
                 onKeyDown={closeDialogByEnterKey}
-                size="xs"
-                background="secondary"
-                color="white"
-                wide
+                className={deleteTagCancelButtonStyle}
               >
                 취소
-              </Button>
+              </button>
             </Dialog.Close>
           </div>
         </Dialog.Content>

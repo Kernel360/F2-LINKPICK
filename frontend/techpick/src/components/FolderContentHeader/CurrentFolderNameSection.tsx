@@ -13,7 +13,7 @@ export function CurrentFolderNameSection({
 }: CurrentFolderNameSectionProps) {
   return (
     <div className={currentFolderNameSectionStyle}>
-      <FolderOpenIcon size={28} className={folderOpenIconStyle} />
+      <FolderOpenIcon size={24} className={folderOpenIconStyle} />
       <h1 className={folderNameStyle}>
         {folderInfo ? folderInfo.name : 'loading...'}
       </h1>

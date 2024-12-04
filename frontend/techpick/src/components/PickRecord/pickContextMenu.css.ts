@@ -5,9 +5,9 @@ export const contextMenuContentLayout = style({
   width: sizes['min'],
   height: sizes['min'],
   border: '1px solid',
-  borderColor: colorVars.borderNeutral,
+  borderColor: colorVars.gold8,
   borderRadius: borderRadius['base'],
-  backgroundColor: colorVars.backgroundBase,
+  backgroundColor: colorVars.gold5,
 });
 
 export const contextMenuItemStyle = style({
@@ -16,7 +16,6 @@ export const contextMenuItemStyle = style({
   gap: space['8'],
   width: sizes['6xs'],
   height: sizes['12xs'],
-  borderRadius: borderRadius['base'],
   padding: space['8'],
   cursor: 'pointer',
 

@@ -36,7 +36,7 @@ export function FolderContextMenu({
             onSelect={showRenameInput}
             className={contextMenuItemStyle}
           >
-            <FolderPen />
+            <FolderPen size={16} />
             <p>폴더명 변경</p>
           </ContextMenu.Item>
 
@@ -44,14 +44,14 @@ export function FolderContextMenu({
             className={contextMenuItemStyle}
             onSelect={onClickRemoveFolder}
           >
-            <FolderX />
+            <FolderX size={16} />
             <p>휴지통으로 이동</p>
           </ContextMenu.Item>
           <ContextMenu.Item
             className={contextMenuItemStyle}
             onSelect={onClickShareFolder}
           >
-            <ScreenShare />
+            <ScreenShare size={16} />
             <p>{shareText}</p>
           </ContextMenu.Item>
         </ContextMenu.Content>

@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colorVars, sizes } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 
 export const horizontalResizingContainerLayout = style({
   backgroundColor: colorVars.sand2,
@@ -14,15 +14,9 @@ export const resizeHandleStyle = style({
 
 export const treeLayout = style({
   height: '100vh',
-  padding: '12px',
-  paddingTop: '24px',
+  padding: '4px',
+  paddingTop: '16px',
   backgroundColor: colorVars.sand2,
-
-  '@media': {
-    'screen and (min-width: 1440px)': {
-      minWidth: sizes['3xs'],
-    },
-  },
 });
 
 export const dragOverStyle = style({
@@ -47,5 +41,5 @@ export const dragOverStyle = style({
 
 export const treeNodeLayoutStyle = style({
   overflowY: 'scroll',
-  height: 'calc(100vh - 324px)',
+  height: 'calc(100vh - 256px)',
 });

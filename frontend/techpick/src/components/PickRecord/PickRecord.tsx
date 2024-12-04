@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
+import { postClickedLinkUrl } from '@/apis/eventLog';
 import { useOpenUrlInNewTab } from '@/hooks';
 import { usePickStore, useTagStore, useUpdatePickStore } from '@/stores';
 import { formatDateString } from '@/utils';
@@ -47,6 +48,15 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
     }
   });
 
+  const onClickLink = async () => {
+    try {
+      openUrlInNewTab();
+      await postClickedLinkUrl(link.url);
+    } catch {
+      /*empty */
+    }
+  };
+
   return (
     <div
       className={pickRecordLayoutStyle}
@@ -63,7 +73,7 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
         </div>
       </PickImageColumnLayout>
       {isHovered && !isDragging && (
-        <div className={linkLayoutStyle} onClick={openUrlInNewTab}>
+        <div className={linkLayoutStyle} onClick={onClickLink}>
           <ExternalLinkIcon className={externalLinkIconStyle} strokeWidth={2} />
         </div>
       )}

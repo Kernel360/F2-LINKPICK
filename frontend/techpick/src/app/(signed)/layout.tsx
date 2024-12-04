@@ -1,9 +1,9 @@
-import { PropsWithChildren } from 'react';
-import { FolderTree, FolderAndPickDndContextProvider } from '@/components';
+import type { PropsWithChildren } from 'react';
+import { FolderAndPickDndContextProvider, FolderTree } from '@/components';
 import { QnAFloatingLink } from '@/components/QnAFloatingLink';
 import { pageContainerLayout } from './layout.css';
 
-export default function FolderLayout({ children }: PropsWithChildren) {
+export default function SignedLayout({ children }: PropsWithChildren) {
   return (
     <div className={pageContainerLayout}>
       <FolderAndPickDndContextProvider>
