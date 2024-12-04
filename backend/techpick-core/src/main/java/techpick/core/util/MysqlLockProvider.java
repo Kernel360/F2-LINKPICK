@@ -25,6 +25,7 @@ public class MysqlLockProvider implements LockProvider {
 		return Boolean.TRUE.equals(result); // null인 경우 false 반환
 	}
 
+	// TODO: Exception 종류 변경
 	/**
 	 * 락을 해제하는 메서드
 	 */

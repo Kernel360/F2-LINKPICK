@@ -19,6 +19,7 @@ public class DistributedLockAspect {
 
 	private final LockProvider lockProvider;
 
+	// TODO: Exception 종류 변경
 	@Around("@annotation(distributedLock)")
 	public Object handleDistributedLock(ProceedingJoinPoint joinPoint, TechpickAnnotation.DistributedLock distributedLock) throws Throwable {
 		String key = distributedLock.key();
@@ -36,6 +37,11 @@ public class DistributedLockAspect {
 		}
 	}
 
+	// TODO: Exception 종류 변경
+	/**
+	 * @author sangwon
+	 * 리플렉션을 통해 메서드 파라미터에 있는 userId를 가져온다.
+	 */
 	private Long getUserIdFromArgs(JoinPoint joinPoint) {
 		Object[] args = joinPoint.getArgs();
 		MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
