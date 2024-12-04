@@ -9,13 +9,22 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import techpick.core.model.tag.Tag;
 
-@Table(name = "pick_tag")
+@Table(
+	name = "pick_tag",
+	uniqueConstraints = {
+		@UniqueConstraint(
+			name = "UC_PICK_TAG",
+			columnNames = {"pick_id", "tag_id"}
+		)
+	}
+)
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -36,10 +45,7 @@ public class PickTag {
 	@JoinColumn(name = "tag_id", nullable = false)
 	private Tag tag;
 
-	@Version
-	private Integer version;
 	// TODO: 엔티티 사용자가 정적 팩토리 메소드로 필요한 함수를 구현 하세요
-
 	private PickTag(Pick pick, Tag tag) {
 		this.pick = pick;
 		this.tag = tag;
