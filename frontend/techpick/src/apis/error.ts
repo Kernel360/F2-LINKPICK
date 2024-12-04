@@ -16,7 +16,7 @@ export const returnErrorFromHTTPError = async (
   const errorData = await error.response.json<ApiErrorBody>();
 
   if (errorData) {
-    return new Error(`${errorData.message}`);
+    return new Error(`${errorData.code} ${errorData.message}`);
   }
 
   return new Error(`알 수 없는 에러: ${error.response.statusText}`);
