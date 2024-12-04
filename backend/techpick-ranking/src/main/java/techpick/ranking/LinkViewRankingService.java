@@ -1,20 +1,17 @@
 package techpick.ranking;
 
 import java.time.LocalDate;
-import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.data.domain.Limit;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import techpick.core.rabbitmq.Event;
-import techpick.core.rabbitmq.RabbitmqConfig;
+import techpick.core.config.RabbitmqConfig;
 
 @Slf4j
 @Service
