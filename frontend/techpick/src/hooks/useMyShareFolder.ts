@@ -3,7 +3,7 @@ import { deleteMyShareFolder } from '@/apis/folder/deleteShareFolder';
 import { getMySharedFolders } from '@/apis/folder/getMySharedFolders';
 import { useTreeStore } from '@/stores';
 import { notifySuccess, notifyError } from '@/utils';
-import { ShareFolderReadFolderPartialResponseType } from '@/types';
+import { GetMyShareFolderResponseType } from '@/types';
 
 export function useMyShareFolder() {
   /**
@@ -11,7 +11,7 @@ export function useMyShareFolder() {
    */
   const { checkIsShareFolder, setShareFolder, treeDataMap } = useTreeStore();
   const [myShareFolders, setMyShareFolders] = useState<
-    ShareFolderReadFolderPartialResponseType[]
+    GetMyShareFolderResponseType[]
   >([]);
 
   useEffect(() => {

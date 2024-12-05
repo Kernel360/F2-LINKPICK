@@ -7,10 +7,10 @@ export type ShareFolderResponseType = Concrete<
   components['schemas']['techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$Create']
 >;
 
-export type ShareFolderReadFolderFullResponseType = Concrete<
+export type GetShareFolderListResponseType = Concrete<
   components['schemas']['techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderFull']
 >;
 
-export type ShareFolderReadFolderPartialResponseType = Concrete<
+export type GetMyShareFolderResponseType = Concrete<
   components['schemas']['techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderPartial']
 >;

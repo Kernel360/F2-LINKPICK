@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { getShareFolderById } from '@/apis/folder/getShareFolderById';
-import { ShareFolderReadFolderFullResponseType } from '@/types';
+import { GetShareFolderListResponseType } from '@/types';
 
 export default function useFetchShareFolderById() {
   const params = useParams();
   const uuid = params.uuid as string;
   const [shareFolderList, setShareFolderList] =
-    useState<ShareFolderReadFolderFullResponseType | null>(null);
+    useState<GetShareFolderListResponseType | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 

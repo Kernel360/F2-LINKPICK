@@ -1,13 +1,13 @@
 import { HTTPError } from 'ky';
 import { apiClient, returnErrorFromHTTPError } from '@/apis';
 import { API_URLS } from '../apiConstants';
-import { ShareFolderReadFolderPartialResponseType } from '@/types';
+import { GetMyShareFolderResponseType } from '@/types';
 
 export const getMySharedFolders = async () => {
   try {
-    const response = await apiClient.get<
-      ShareFolderReadFolderPartialResponseType[]
-    >(API_URLS.SHARE_FOLDER);
+    const response = await apiClient.get<GetMyShareFolderResponseType[]>(
+      API_URLS.SHARE_FOLDER
+    );
     const data = await response.json();
     return data;
   } catch (httpError) {

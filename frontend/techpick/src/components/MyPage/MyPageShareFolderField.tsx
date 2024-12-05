@@ -1,5 +1,5 @@
 import * as styles from './myPageShareFolderField.css';
-import { ShareFolderReadFolderPartialResponseType } from '@/types';
+import { GetMyShareFolderResponseType } from '@/types';
 
 export function MyPageShareFolderField({
   folderInfo,
@@ -28,6 +28,6 @@ export function MyPageShareFolderField({
 }
 
 interface MyPageShareFolderFieldProps {
-  folderInfo: ShareFolderReadFolderPartialResponseType;
+  folderInfo: GetMyShareFolderResponseType;
   handleDeleteMyShareFolder: (sourceFolderId: number) => void;
 }
