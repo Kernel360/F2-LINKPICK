@@ -53,7 +53,7 @@ public class PickDataHandler {
 	@Transactional(readOnly = true)
 	public Pick getPickUrl(Long userId, String url) {
 		return pickRepository.findByUserIdAndLinkUrl(userId, url)
-							 .orElseThrow(ApiPickException::PICK_NOT_FOUND);
+			.orElseThrow(ApiPickException::PICK_NOT_FOUND);
 	}
 
 	@Transactional(readOnly = true)
@@ -91,30 +91,30 @@ public class PickDataHandler {
 	public Pick savePick(PickCommand.Create command) throws ApiPickException {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
 		Folder folder = folderRepository.findById(command.parentFolderId())
-										.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 		Link link = linkRepository.findByUrl(command.linkInfo().url())
-								  .map(existLink -> {
-									  existLink.updateMetadata(command.linkInfo().title(),
-										  command.linkInfo().description(),
-										  command.linkInfo().imageUrl());
-									  return existLink;
-								  })
-								  .orElseGet(() -> linkRepository.save(linkMapper.of(command.linkInfo())));
+			.map(existLink -> {
+				existLink.updateMetadata(command.linkInfo().title(),
+					command.linkInfo().description(),
+					command.linkInfo().imageUrl());
+				return existLink;
+			})
+			.orElseGet(() -> linkRepository.save(linkMapper.of(command.linkInfo())));
 
 		// 픽 존재 여부 검증
 		pickRepository.findByUserAndLink(user, link)
-					  .ifPresent((__) -> {
-						  throw ApiPickException.PICK_MUST_BE_UNIQUE_FOR_A_URL();
-					  });
+			.ifPresent((__) -> {
+				throw ApiPickException.PICK_MUST_BE_UNIQUE_FOR_A_URL();
+			});
 
 		Pick savedPick = pickRepository.save(pickMapper.toEntity(command, user, folder, link));
 		Folder parentFolder = savedPick.getParentFolder();
 		attachPickToParentFolder(savedPick, parentFolder);
 
 		List<PickTag> pickTagList = tagRepository.findAllById(command.tagIdOrderedList())
-												 .stream()
-												 .map(tag -> PickTag.of(savedPick, tag))
-												 .toList();
+			.stream()
+			.map(tag -> PickTag.of(savedPick, tag))
+			.toList();
 		pickTagRepository.saveAll(pickTagList);
 
 		return savedPick;
@@ -132,7 +132,7 @@ public class PickDataHandler {
 		if (command.parentFolderId() != null) {
 			Folder parentFolder = pick.getParentFolder();
 			Folder destinationFolder = folderRepository.findById(command.parentFolderId())
-													   .orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+				.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 			detachPickFromParentFolder(pick, parentFolder);
 			attachPickToParentFolder(pick, destinationFolder);
@@ -148,7 +148,7 @@ public class PickDataHandler {
 	public void movePickToCurrentFolder(PickCommand.Move command) {
 		List<Long> pickIdList = command.idList();
 		Folder folder = folderRepository.findById(command.destinationFolderId())
-										.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 		movePickListToDestinationFolder(pickIdList, folder, command.orderIdx());
 	}
 
@@ -156,7 +156,7 @@ public class PickDataHandler {
 	public void movePickToOtherFolder(PickCommand.Move command) {
 		List<Long> pickIdList = command.idList();
 		Folder destinationFolder = folderRepository.findById(command.destinationFolderId())
-												   .orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+			.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 
 		List<Pick> pickList = pickRepository.findAllById(pickIdList);
 		pickList.forEach(pick -> {
@@ -194,7 +194,7 @@ public class PickDataHandler {
 	@Transactional
 	public void attachTagToPickTag(Pick pick, Long tagId) {
 		Tag tag = tagRepository.findById(tagId)
-							   .orElseThrow(ApiTagException::TAG_NOT_FOUND);
+			.orElseThrow(ApiTagException::TAG_NOT_FOUND);
 		PickTag pickTag = PickTag.of(pick, tag);
 		pickTagRepository.save(pickTag);
 	}
@@ -202,7 +202,7 @@ public class PickDataHandler {
 	@Transactional
 	public void detachTagFromPickTag(Pick pick, Long tagId) {
 		pickTagRepository.findByPickAndTagId(pick, tagId)
-						 .ifPresent(pickTagRepository::delete);
+			.ifPresent(pickTagRepository::delete);
 	}
 
 	// 부모 폴더의 픽 리스트에 추가
@@ -227,25 +227,16 @@ public class PickDataHandler {
 
 	private void updateNewTagIdList(Pick pick, List<Long> newTagOrderList) {
 		// 1. 기존 태그와 새로운 태그를 비교하여 없어진 태그를 PickTag 테이블에서 제거
-		log.info("---------- (1) {}", pick.getTagIdOrderedList().toString());
 		pick.getTagIdOrderedList().stream()
-			.filter(tagId -> {
-				return !newTagOrderList.contains(tagId);
-			})
+			.filter(tagId -> !newTagOrderList.contains(tagId))
 			.forEach(tagId -> detachTagFromPickTag(pick, tagId));
 
 		// 2. 새로운 태그 중 기존에 없는 태그를 PickTag 테이블에 추가
 		newTagOrderList.stream()
-					   .filter(tagId -> {
-						   log.info("---------- (2) {}", pick.getTagIdOrderedList().toString());
-						   return !pick.getTagIdOrderedList().contains(tagId);
-					   })
-					   .forEach(tagId -> attachTagToPickTag(pick, tagId));
-
-		log.info("---------- (3) {}", pick.getTagIdOrderedList().toString());
+			.filter(tagId -> !pick.getTagIdOrderedList().contains(tagId))
+			.forEach(tagId -> attachTagToPickTag(pick, tagId));
 
 		pick.updateTagOrderList(newTagOrderList);
-		log.info("---------- (4) {}", pick.getTagIdOrderedList().toString());
 	}
 
 }
