@@ -65,4 +65,11 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+# 운영서버에서는 p6spy 로깅을 사용하지 않음
+# @Profile 로 처리했었지만, logback 때문인지 제대로 적용되지 않아 yaml 에 추가
+# by psh
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
 ---
