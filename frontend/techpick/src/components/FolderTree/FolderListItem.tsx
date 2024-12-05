@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { MouseEvent } from 'react';
-import { FolderClosedIcon, FolderOpenIcon } from 'lucide-react';
+import { FolderClosedIcon, FolderOpenIcon, FolderUp } from 'lucide-react';
 import { ROUTES } from '@/constants';
 import { useDisclosure } from '@/hooks';
 import useHandleRequestShareFolder from '@/hooks/useHandleRequestShareFolder';
@@ -39,7 +39,6 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     onOpen: onOpenRemoveDialog,
     onClose: onCloseRemoveDialog,
   } = useDisclosure();
-
   const {
     uuid,
     isShareFolder,
@@ -47,6 +46,13 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     onCloseShareDialog,
     handleOpenShareDialog,
   } = useHandleRequestShareFolder(id);
+
+  let folderIcon = FolderClosedIcon;
+  if (isSelected && !isShareFolder) {
+    folderIcon = FolderOpenIcon;
+  } else if (isShareFolder) {
+    folderIcon = FolderUp;
+  }
 
   const handleShiftSelect = (id: number, treeDataMap: FolderMapType) => {
     if (!focusFolderId || !isSameParentFolder(id, focusFolderId, treeDataMap)) {
@@ -103,8 +109,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
             href={ROUTES.FOLDER_DETAIL(id)}
             isSelected={isSelected}
             isHovered={isHover}
-            isShared={isShareFolder}
-            icon={isSelected ? FolderOpenIcon : FolderClosedIcon}
+            icon={folderIcon}
             name={name}
             onClick={(event) => handleClick(id, event)}
           />

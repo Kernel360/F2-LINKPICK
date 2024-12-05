@@ -45,13 +45,3 @@ export const folderTextStyle = style({
   textOverflow: 'ellipsis',
   height: '100%',
 });
-
-export const sharedTextStyle = style({
-  display: 'flex',
-  marginLeft: 'auto',
-  marginRight: '0',
-  fontSize: '8px',
-  fontWeight: 'bold',
-  color: colorVars.primary,
-  alignSelf: 'flex-start',
-});
