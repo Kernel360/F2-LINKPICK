@@ -4,7 +4,8 @@ import { useTreeStore } from '@/stores';
 import { notifySuccess, notifyError } from '@/utils';
 
 export function useMyShareFolder() {
-  const { checkIsShareFolder, setShareFolder, treeDataMap } = useTreeStore();
+  const { checkIsShareFolder, updateFolderAccessTokenByFolderId, treeDataMap } =
+    useTreeStore();
 
   const myShareFolders = useMemo(() => {
     const folders = Object.values(treeDataMap);
@@ -24,7 +25,7 @@ export function useMyShareFolder() {
     const deleteSuccess = await deleteMyShareFolder(sourceFolderId);
     if (deleteSuccess) {
       notifySuccess('공유 폴더가 삭제되었습니다.');
-      setShareFolder(sourceFolderId, null);
+      updateFolderAccessTokenByFolderId(sourceFolderId, null);
     } else {
       notifyError('공유 폴더 삭제에 실패했습니다.');
     }

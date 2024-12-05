@@ -26,11 +26,12 @@ export function MoveFolderToRecycleBinDialog({
   const moveFolderToRecycleBin = useTreeStore(
     (state) => state.moveFolderToRecycleBin
   );
-  const { checkIsShareFolder, setShareFolder } = useTreeStore();
+  const { checkIsShareFolder, updateFolderAccessTokenByFolderId } =
+    useTreeStore();
 
   const moveRecycleBinAndRedirect = () => {
     if (checkIsShareFolder(deleteFolderId)) {
-      setShareFolder(deleteFolderId, '');
+      updateFolderAccessTokenByFolderId(deleteFolderId, '');
       moveFolderToRecycleBin({ deleteFolderId });
     } else {
       moveFolderToRecycleBin({ deleteFolderId });

@@ -6,7 +6,8 @@ import { notifySuccess } from '@/utils';
 import { useDisclosure } from './useDisclosure';
 
 export default function useHandleRequestShareFolder(folderId: number) {
-  const { checkIsShareFolder, setShareFolder } = useTreeStore();
+  const { checkIsShareFolder, updateFolderAccessTokenByFolderId } =
+    useTreeStore();
   const {
     isOpen: isOpenShareDialog,
     onOpen: onOpenShareDialog,
@@ -26,7 +27,7 @@ export default function useHandleRequestShareFolder(folderId: number) {
      * @question 상태를 일치시키기 위해 사용했는데 전체적으로 리팩토링이 필요할 거 같습니다..
      * 리뷰 부탁드립니다.
      */
-    setShareFolder(folderId, response.folderAccessToken);
+    updateFolderAccessTokenByFolderId(folderId, response.folderAccessToken);
 
     return () => {
       setUuid('');
@@ -43,7 +44,7 @@ export default function useHandleRequestShareFolder(folderId: number) {
      * @question 상태를 일치시키기 위해 사용했는데 전체적으로 리팩토링이 필요할 거 같습니다..
      * 리뷰 부탁드립니다.
      */
-    setShareFolder(folderId, null);
+    updateFolderAccessTokenByFolderId(folderId, null);
   }
   return {
     uuid,

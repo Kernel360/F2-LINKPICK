@@ -87,7 +87,10 @@ type TreeAction = {
    * */
   findFolderByName: (name: string) => FolderType[];
   checkIsShareFolder: (folderId: number) => boolean;
-  setShareFolder: (folderId: number, folderAccessToken: string | null) => void;
+  updateFolderAccessTokenByFolderId: (
+    folderId: number,
+    folderAccessToken: string | null
+  ) => void;
 };
 
 const initialState: TreeState = {
@@ -462,7 +465,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           ? true
           : false;
       },
-      setShareFolder: (folderId, folderAccessToken) => {
+      updateFolderAccessTokenByFolderId: (folderId, folderAccessToken) => {
         set((state) => {
           state.treeDataMap[folderId].folderAccessToken = folderAccessToken;
         });
