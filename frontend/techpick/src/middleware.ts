@@ -11,7 +11,7 @@ export default async function middleware(req: NextRequest) {
 
   const isAuthenticated = !!req.cookies.get('access_token');
 
-  const unauthenticatedOnlyPaths = ['/login'];
+  const unauthenticatedOnlyPaths = ['/login', '/share'];
   const authenticatedOnlyPaths = ['/folders', '/', '/mypage'];
 
   const isUnauthenticatedOnlyPath = unauthenticatedOnlyPaths.includes(pathname);
@@ -23,7 +23,11 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/', req.url));
   }
 
-  if (isAuthenticatedOnlyPath && !isAuthenticated) {
+  if (
+    isAuthenticatedOnlyPath &&
+    !isAuthenticated &&
+    !pathname.startsWith('/share/')
+  ) {
     if (pathname !== '/login') {
       return NextResponse.redirect(new URL('/login', req.url));
     }
