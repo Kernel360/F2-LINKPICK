@@ -44,7 +44,8 @@
         </rollingPolicy>
         <!-- 로그를 남길 패턴 설정 -->
         <encoder>
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35}[%line] - %msg%n</pattern>
+            <pattern>[%X{requestId}][%d{yyyy-MM-dd HH:mm:ss}:%-3relative] %-5level %logger{35} - %msg%n
+            </pattern>
         </encoder>
     </appender>
 
@@ -63,12 +64,16 @@
         </rollingPolicy>
         <!-- 로그를 남길 패턴 설정 -->
         <encoder>
-            <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35}[%line] - %msg%n</pattern>
+            <pattern>[%X{requestId}][%d{yyyy-MM-dd HH:mm:ss}:%-3relative] %-5level %logger{35} - %msg%n
+            </pattern>
         </encoder>
     </appender>
 
     <!-- ``````````````````````` LOGGER SETTING ```````````````````````````` -->
     <!-- (1) 프로젝트 전체 로그 설정  -->
+    <!--    <logger name="root" level="debug" additivity="false">-->
+    <!--        <appender-ref ref="CONSOLE"/>-->
+    <!--    </logger>-->
     <logger name="techpick.api" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>

@@ -48,17 +48,7 @@
             <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35}[%line] - %msg%n</pattern>
         </encoder>
     </appender>
-
-    <appender name="local-log" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>logs/batch/badminton-batch.%d{yyyy-MM-dd}.log</fileNamePattern>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-        <layout>
-            <pattern>[%thread] [%date] [%level] [%logger{10}] [%file:%line] - %msg%n</pattern>
-        </layout>
-    </appender>
-
+    
     <appender name="SQL-LOG-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <!-- 로그 파일을 일자, 크기 별로 생성 설정 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">

@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.Locale;
 
 import org.hibernate.engine.jdbc.internal.FormatStyle;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.p6spy.engine.common.ConnectionInformation;
@@ -18,7 +17,6 @@ import com.p6spy.engine.spy.appender.MessageFormattingStrategy;
 /**
  * Jdbc가 DB Connection을 얻은 이후에 로깅 포맷을 P6SpyOptions가 가로채도록 하는 Bean입니다.
  */
-@Profile({"default", "local", "dev"}) // WARN: Do not use in production mode.
 @Component
 public class P6SpySqlLoggerConfig extends JdbcEventListener implements MessageFormattingStrategy {
 
