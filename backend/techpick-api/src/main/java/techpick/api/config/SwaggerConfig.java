@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Operation;
@@ -16,6 +18,9 @@ import io.swagger.v3.oas.models.servers.Server;
 import techpick.security.config.SecurityProperties;
 
 @Configuration
+@OpenAPIDefinition(
+	security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "techPickLogin")}
+)
 public class SwaggerConfig {
 
 	private final SecurityProperties properties;
@@ -29,7 +34,8 @@ public class SwaggerConfig {
 		return new OpenAPI()
 			.info(apiInfo())
 			.components(new Components()
-				.addSecuritySchemes("basicAuth", securityScheme())
+				.addSecuritySchemes("accessToken", accessTokenScheme())
+				.addSecuritySchemes("techPickLogin", techPickLoginScheme())
 			)
 			.servers(List.of(getServer()))
 			.paths(getAuthPaths())
@@ -47,10 +53,17 @@ public class SwaggerConfig {
 	 * Swagger Security 설정 추가
 	 *  Authentication 방식을 OpenAPI 에 추가
 	 */
-	private SecurityScheme securityScheme() {
+	private SecurityScheme accessTokenScheme() {
 		return new SecurityScheme()
 			.type(SecurityScheme.Type.APIKEY)
 			.name("access_token")
+			.in(SecurityScheme.In.COOKIE);
+	}
+
+	private SecurityScheme techPickLoginScheme() {
+		return new SecurityScheme()
+			.type(SecurityScheme.Type.APIKEY)
+			.name("techPickLogin")
 			.in(SecurityScheme.In.COOKIE);
 	}
 
