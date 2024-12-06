@@ -23,7 +23,6 @@ import techpick.ranking.infra.PickViewCountRepository;
 public class PickRankingService {
 
 	private final PickViewCountRepository pickViewCountRepository;
-	private final MongoTemplate template;
 
 	public List<PickViewCount> getLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
 		if (startDate == null || endDate == null)
