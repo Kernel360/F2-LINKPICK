@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import techpick.core.rabbitmq.EventType;
+import techpick.core.event.events.EventType;
 
 /**
  * 스프링 어노테이션과 우리의 커스텀 어노테이션을 구분하기 쉽게 하고자

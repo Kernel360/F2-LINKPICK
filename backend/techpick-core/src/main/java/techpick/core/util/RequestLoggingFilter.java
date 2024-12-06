@@ -1,4 +1,4 @@
-package techpick.security.filter;
+package techpick.core.util;
 
 import java.io.IOException;
 
@@ -10,8 +10,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import techpick.core.util.CachedHttpServletRequest;
-import techpick.core.util.RequestHolder;
 
 @Component
 @RequiredArgsConstructor
