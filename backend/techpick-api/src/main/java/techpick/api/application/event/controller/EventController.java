@@ -34,8 +34,7 @@ public class EventController {
 	@SecurityRequirement(name = "access-token")
 	@Operation(
 		summary = "사용자의 북마크 생성 이벤트 수집",
-		description = "[로그인 필요] 서버에게 사용자 자신의 북마크 생성을 알립니다.",
-		security = {@SecurityRequirement(name = "access-token")}
+		description = "[로그인 필요] 서버에게 사용자 자신의 북마크 생성을 알립니다."
 	)
 	public ResponseEntity<Void> bookmarkCreate(
 		@Parameter(description = "생성된 북마크의 대상 링크 url") @RequestParam String url,
@@ -53,8 +52,7 @@ public class EventController {
 	@PostMapping("/pick/view")
 	@Operation(
 		summary = "사용자 자신의 북마크 조회 이벤트 수집",
-		description = "[로그인 필요] 서버에게 사용자 자신의 북마크 조회를 알립니다.",
-		security = {@SecurityRequirement(name = "access-token")}
+		description = "[로그인 필요] 서버에게 사용자 자신의 북마크 조회를 알립니다."
 	)
 	public ResponseEntity<Void> bookmarkView(
 		@Parameter(description = "조회되는 북마크의 링크 url") @RequestParam String url,
@@ -72,8 +70,7 @@ public class EventController {
 	@PostMapping("/shared/read")
 	@Operation(
 		summary = "공개 폴더의 북마크 조회 이벤트 수집",
-		description = "서버에게 공개 폴더의 어떤 북마크가 조회됬는지 알립니다.",
-		security = {/* PUBLIC API */}
+		description = "서버에게 공개 폴더의 어떤 북마크가 조회됬는지 알립니다."
 	)
 	public ResponseEntity<Void> sharedFolderLinkView(
 		@Parameter(description = "조회된 링크 url") @RequestParam String url,
