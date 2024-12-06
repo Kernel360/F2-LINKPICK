@@ -14,3 +14,4 @@ export type { PickViewDraggableItemComponentProps } from './PickViewDraggableIte
 export type { PickViewDraggableItemListLayoutComponentProps } from './PickViewDraggableItemListLayoutComponentProps';
 export type { PickDeleteRequestType } from './PickDeleteRequestType';
 export type { PostClickedLinkUrlResponseType } from './PostClickedLinkUrlResponseType';
+export type { SearchSelectOption } from './SearchSelectOption';
