@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,8 +33,11 @@ public class RankingController {
 		@ApiResponse(responseCode = "404", description = "유효하지 않는 날짜입니다.")
 	})
 	public ResponseEntity<?> getLinkRank(
+		@Parameter(description = "범위 시작 날짜 (결과에 포함됩니다)", example = "2024-12-08")
 		@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_begin,
+		@Parameter(description = "범위 종료 날짜 (결과에 포함됩니다)", example = "2024-12-10")
 		@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_end,
+		@Parameter(description = "랭킹 개수, 명시 안할 경우 5개를 반환", example = "10")
 		@RequestParam(required = false, defaultValue = "5") Integer limit
 	) {
 		var result = pickRankingService.getLinksOrderByViewCount(date_begin, date_end, limit);
