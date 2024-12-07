@@ -27,7 +27,7 @@ public class RankingController {
 
 	private final PickRankingService pickRankingService;
 
-	@GetMapping("/link_view")
+	@GetMapping("/link/view")
 	@Operation(summary = "링크 조회수 기반 Top N{:limit}개 조회", description = "조회수가 높은 순부터 N{:limit} 개를 반환합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회수 랭킹 획득 성공"),
