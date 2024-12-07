@@ -38,9 +38,10 @@ public class EventController {
 	)
 	public ResponseEntity<Void> bookmarkCreate(
 		@Parameter(description = "생성된 북마크의 대상 링크 url") @RequestParam String url,
+		@Parameter(description = "조회되는 픽의 id") @RequestParam Long pickId,
 		@LoginUserId Long userId
 	) {
-		eventMessenger.send(new PickCreateEvent(userId, url));
+		eventMessenger.send(new PickCreateEvent(userId, pickId, url));
 		return ResponseEntity.noContent().build();
 	}
 
@@ -51,14 +52,15 @@ public class EventController {
 	 */
 	@PostMapping("/pick/view")
 	@Operation(
-		summary = "사용자 자신의 북마크 조회 이벤트 수집",
+		summary = "사용자 자신의 픽 조회 이벤트 수집",
 		description = "[로그인 필요] 서버에게 사용자 자신의 북마크 조회를 알립니다."
 	)
 	public ResponseEntity<Void> bookmarkView(
-		@Parameter(description = "조회되는 북마크의 링크 url") @RequestParam String url,
+		@Parameter(description = "조회되는 픽의 링크 url") @RequestParam String url,
+		@Parameter(description = "조회되는 픽의 id") @RequestParam Long pickId,
 		@LoginUserId Long userId
 	) {
-		eventMessenger.send(new PickViewEvent(userId, url));
+		eventMessenger.send(new PickViewEvent(userId, pickId, url));
 		return ResponseEntity.noContent().build();
 	}
 

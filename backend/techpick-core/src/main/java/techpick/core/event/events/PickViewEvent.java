@@ -9,23 +9,15 @@ import lombok.Getter;
 @Getter
 public class PickViewEvent extends Event {
 
-	// 사용자 정보
 	private final Long userId;
 
-	// 북마크 대상 url
+	private final Long pickId;
+
 	private final String url;
 
-	public PickViewEvent(Long userId, String url) {
-		super(EventType.USER_PICK_VIEW);
+	public PickViewEvent(Long userId, Long pickId, String url) {
 		this.userId = userId;
+		this.pickId = pickId;
 		this.url = url;
-	}
-
-	@Override
-	public String toString() {
-		return "PickViewEvent{" +
-			"userId=" + userId +
-			", url='" + url + '\'' +
-			'}';
 	}
 }
