@@ -30,7 +30,12 @@ public class RabbitMqEventListener {
 	 * */
 	@RabbitHandler
 	public void pickCreateEvent(PickCreateEvent event) {
-		log.info("픽 생성 이벤트 : {}", event.toString());
+		var date = event.getTime().toLocalDate();
+		var url = event.getUrl();
+		var pickId = event.getPickId();
+		var userId = event.getUserId();
+		log.info("픽 생성 이벤트 : url={}, pickId={}, userId={}", url, pickId, userId);
+
 		// TODO: 여기에 집계 로직 구현
 	}
 
@@ -40,10 +45,14 @@ public class RabbitMqEventListener {
 	 * */
 	@RabbitHandler
 	public void pickViewEvent(PickViewEvent event) {
-		log.info("픽 조회 이벤트: {}", event.toString());
-		var INITIAL_COUNT = 0L;
+		Long INITIAL_COUNT = 0L;
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
+		var pickId = event.getPickId();
+		var userId = event.getUserId();
+		log.info("픽 조회 이벤트 : url={}, pickId={}, userId={}", url, pickId, userId);
+
+		// 링크에 대한 날별 집게
 		var linkViewCount = pickViewCountRepository
 			.findLinkViewCountByDateAndUrl(date, url)
 			.orElseGet(() -> new PickViewCount(date, url, INITIAL_COUNT))
@@ -57,7 +66,10 @@ public class RabbitMqEventListener {
 	 * */
 	@RabbitHandler
 	public void sharedFolderViewEvent(SharedFolderLinkViewEvent event) {
-		log.info("공개 폴더 픽 조회 이벤트 : {}", event.toString());
+		var date = event.getTime().toLocalDate();
+		var url = event.getUrl();
+		var folderAccessToken = event.getFolderAccessToken();
+		log.info("공개 폴더 픽 조회 이벤트 : url={}, folder={}", url, folderAccessToken);
 		// TODO: 여기에 집계 로직 구현
 	}
 
