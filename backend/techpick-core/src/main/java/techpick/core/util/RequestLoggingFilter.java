@@ -1,4 +1,4 @@
-package techpick.security.filter;
+package techpick.core.util;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -12,8 +12,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import techpick.core.util.CachedHttpServletRequest;
-import techpick.core.util.RequestHolder;
 
 /**
  * 요청을 로깅하기 위한 Filter<br>
