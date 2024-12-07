@@ -31,7 +31,6 @@ public class EventController {
 	 * 내가 나의 북마크를 클릭했을 때 프론트엔드가 보내는 이벤트
 	 */
 	@PostMapping("/pick/create")
-	@SecurityRequirement(name = "access-token")
 	@Operation(
 		summary = "사용자의 북마크 생성 이벤트 수집",
 		description = "[로그인 필요] 서버에게 사용자 자신의 북마크 생성을 알립니다."
