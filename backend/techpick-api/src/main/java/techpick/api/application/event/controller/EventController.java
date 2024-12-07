@@ -41,7 +41,7 @@ public class EventController {
 		@LoginUserId Long userId
 	) {
 		eventMessenger.send(new PickCreateEvent(userId, url));
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class EventController {
 		@LoginUserId Long userId
 	) {
 		eventMessenger.send(new PickViewEvent(userId, url));
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 
 	/**
@@ -77,6 +77,6 @@ public class EventController {
 		@Parameter(description = "조회된 공개 폴더 접근용 토큰") @RequestParam String folderAccessToken
 	) {
 		eventMessenger.send(new SharedFolderLinkViewEvent(url, folderAccessToken));
-		return ResponseEntity.ok().build();
+		return ResponseEntity.noContent().build();
 	}
 }
