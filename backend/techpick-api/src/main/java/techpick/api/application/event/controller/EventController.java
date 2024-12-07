@@ -68,7 +68,7 @@ public class EventController {
 	 * [공개 api]
 	 * 공유된 폴더에서 링크를 클릭했을 때 프론트엔드가 보내는 이벤트
 	 */
-	@PostMapping("/shared/read")
+	@PostMapping("/shared/view")
 	@Operation(
 		summary = "공개 폴더의 북마크 조회 이벤트 수집",
 		description = "서버에게 공개 폴더의 어떤 북마크가 조회됬는지 알립니다."
