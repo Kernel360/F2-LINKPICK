@@ -35,6 +35,6 @@ public abstract class ErrorLevel {
 	public abstract void handleError(ApiException exception, CachedHttpServletRequest request);
 
 	public final void handleError(Exception exception, CachedHttpServletRequest request) {
-		log.error("{}\n{}\n{}", exception.getMessage(), exception, request.toString());
+		log.error("{}\n{}\n{}", exception.getMessage(), exception, request);
 	}
 }

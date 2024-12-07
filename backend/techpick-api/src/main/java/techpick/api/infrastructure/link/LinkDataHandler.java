@@ -24,6 +24,11 @@ public class LinkDataHandler {
 	}
 
 	@Transactional(readOnly = true)
+	public Link getLink(Long linkId) {
+		return linkRepository.findById(linkId).orElseThrow(ApiLinkException::LINK_NOT_FOUND);
+	}
+
+	@Transactional(readOnly = true)
 	public Optional<Link> getOptionalLink(String url) {
 		return linkRepository.findByUrl(url);
 	}

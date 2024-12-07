@@ -31,4 +31,9 @@ public class ApiErrorResponse extends ResponseEntity<ApiErrorBody> {
 	public static ApiErrorResponse INVALID_JSON_ERROR() {
 		return new ApiErrorResponse("INVALID JSON ERROR", "올바르지 않은 Json 형식입니다.", HttpStatus.BAD_REQUEST);
 	}
+
+	public static ApiErrorResponse INVALID_REQUEST_PARAMETER() {
+		return new ApiErrorResponse("INVALID REQUEST PARAMETER", "올바르지 않은 Request Parameter 형식입니다.",
+			HttpStatus.BAD_REQUEST);
+	}
 }

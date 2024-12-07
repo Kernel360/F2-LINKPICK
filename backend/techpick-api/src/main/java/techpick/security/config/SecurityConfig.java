@@ -49,8 +49,8 @@ public class SecurityConfig {
 			.formLogin(AbstractHttpConfigurer::disable)
 			.logout(config -> {
 				config.logoutUrl("/api/logout")
-					.addLogoutHandler(techPickLogoutHandler)
-					.logoutSuccessHandler(techPickLogoutHandler);
+					  .addLogoutHandler(techPickLogoutHandler)
+					  .logoutSuccessHandler(techPickLogoutHandler);
 			})
 			.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			// TokenAuthenticationFilter 를 UsernamePasswordAuthenticationFilter 앞에 추가
@@ -58,6 +58,7 @@ public class SecurityConfig {
 			.authorizeHttpRequests(
 				authRequest -> authRequest
 					.requestMatchers(HttpMethod.GET, "/api/shared/{uuid}").permitAll()
+					.requestMatchers(HttpMethod.GET, "/api/event/shared/**").permitAll() // 이벤트는 shared의 경우 검증 X
 					.requestMatchers("/api-docs/**").permitAll()
 					.requestMatchers("/swagger-ui/**").permitAll()
 					.requestMatchers("/api/login/**").permitAll()
