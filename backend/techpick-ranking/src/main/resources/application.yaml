@@ -5,7 +5,7 @@ logging:
         data:
           mongodb:
             core:
-              MongoTemplate: DEBUG # MongoDB Query Logging
+#              MongoTemplate: DEBUG # MongoDB Query Logging
 spring:
   profiles:
     include:

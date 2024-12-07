@@ -31,6 +31,9 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+server-url: # 테크픽 서버간 통신을 위한 주소
+  api-server: http://localhost:8080/api # 운영 api 서버
+  ranking-server: http://localhost:8082/api # 랭킹 서버
 ---
 spring:
   config:
@@ -48,6 +51,9 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+server-url: # 테크픽 서버간 통신을 위한 주소
+  api-server: http://techpick.server.api/api # 운영 api 서버 (컨테이너)
+  ranking-server: http://techpick.server.ranking/api # 랭킹 서버 (컨테이너)
 ---
 spring:
   config:
@@ -65,6 +71,9 @@ spring:
     port: ${RABBITMQ_PORT}
     username: ${RABBITMQ_USERNAME}
     password: ${RABBITMQ_PASSWORD}
+server-url: # 테크픽 서버간 통신을 위한 주소
+  api-server: http://techpick.server.api/api # 운영 api 서버 (컨테이너)
+  ranking-server: http://techpick.server.ranking/api # 랭킹 서버 (컨테이너)
 # 운영서버에서는 p6spy 로깅을 사용하지 않음
 # @Profile 로 처리했었지만, logback 때문인지 제대로 적용되지 않아 yaml 에 추가
 # by psh
