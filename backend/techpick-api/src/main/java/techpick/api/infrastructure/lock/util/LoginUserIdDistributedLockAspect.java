@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import techpick.api.annotation.LoginUserIdDistributedLock;
-import techpick.api.infrastructure.lock.LockService;
+import techpick.api.infrastructure.lock.LockProvider;
 
 @Order(1)
 @Aspect
@@ -20,7 +20,7 @@ import techpick.api.infrastructure.lock.LockService;
 @RequiredArgsConstructor
 public class LoginUserIdDistributedLockAspect {
 
-	private final LockService lockService;
+	private final LockProvider lockProvider;
 
 	@Around("@annotation(loginUserIdDistributedLock)")
 	public Object handleDistributedLock(ProceedingJoinPoint joinPoint,
@@ -29,12 +29,12 @@ public class LoginUserIdDistributedLockAspect {
 		long timeout = loginUserIdDistributedLock.timeout();
 		Long userId = getUserIdFromArgs(joinPoint);
 
-		lockService.acquireLock(key, timeout, userId);
+		lockProvider.acquireLock(key, timeout, userId);
 
 		try {
 			return joinPoint.proceed();
 		} finally {
-			lockService.releaseLock(key, userId);
+			lockProvider.releaseLock(key, userId);
 		}
 	}
 
