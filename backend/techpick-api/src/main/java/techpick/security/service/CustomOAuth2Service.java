@@ -13,10 +13,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import techpick.core.model.folder.Folder;
-import techpick.core.model.folder.FolderRepository;
-import techpick.core.model.user.User;
-import techpick.core.model.user.UserRepository;
+import techpick.api.domain.user.service.UserService;
 import techpick.security.config.OAuth2AttributeConfigProvider;
 import techpick.security.model.OAuth2UserInfo;
 
@@ -25,25 +22,16 @@ import techpick.security.model.OAuth2UserInfo;
 @Slf4j
 public class CustomOAuth2Service extends DefaultOAuth2UserService {
 
-	private final UserRepository userRepository;
-	private final FolderRepository folderRepository;
 	private final OAuth2AttributeConfigProvider configProvider;
+	private final UserService userService;
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 		String provider = userRequest.getClientRegistration().getRegistrationId();
 		var oAuth2User = super.loadUser(userRequest);
 		Map<String, Object> attributes = getAttributes(oAuth2User, provider);
-
 		OAuth2UserInfo oAuth2UserInfo = new OAuth2UserInfo(provider, attributes);
-		if (!userRepository.existsBySocialProviderId(oAuth2UserInfo.getName())) {
-			User user = User.createSocialUser(
-				oAuth2UserInfo.getProvider(),
-				oAuth2UserInfo.getName(),
-				oAuth2UserInfo.getEmail()
-			);
-			createBasicFolder(userRepository.save(user));
-		}
+		userService.createUser(oAuth2UserInfo);
 		return oAuth2UserInfo;
 	}
 
@@ -75,11 +63,5 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
 		}
 		// TODO: ApiUserException 으로 리팩토링 예정
 		throw new IllegalArgumentException("Attribute of " + targetKey + " is not found");
-	}
-
-	private void createBasicFolder(User user) {
-		folderRepository.save(Folder.createEmptyRootFolder(user));
-		folderRepository.save(Folder.createEmptyRecycleBinFolder(user));
-		folderRepository.save(Folder.createEmptyUnclassifiedFolder(user));
 	}
 }
