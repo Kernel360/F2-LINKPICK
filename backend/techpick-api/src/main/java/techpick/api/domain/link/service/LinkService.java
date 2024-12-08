@@ -15,6 +15,8 @@ import techpick.api.domain.link.dto.LinkMapper;
 import techpick.api.domain.link.dto.LinkResult;
 import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.api.infrastructure.link.LinkDataHandler;
+import techpick.api.lib.opengraph.Metadata;
+import techpick.api.lib.opengraph.OpenGraph;
 import techpick.core.model.link.Link;
 
 @Service
@@ -35,18 +37,15 @@ public class LinkService {
 	public void updateOgTag(String url) {
 		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
 		try {
-			String html = getJsoupResponse(url).body();
-
-			Document document = Jsoup.parse(html);
-
-			String title = getTitle(document);
-			String description = getMetaContent(document, "og:description");
-			String imageUrl = correctImageUrl(url, getMetaContent(document, "og:image"));
-
-			link.updateMetadata(title, description, imageUrl);
+			var openGraph = new OpenGraph(url);
+			link.updateMetadata(
+				openGraph.getTag(Metadata.TITLE).orElse(""),
+				openGraph.getTag(Metadata.DESCRIPTION).orElse(""),
+				correctImageUrl(url, openGraph.getTag(Metadata.IMAGE).orElse(""))
+			);
 			linkDataHandler.saveLink(link);
 		} catch (Exception e) {
-			log.info("url : {} 의 og tag 추출에 실패했습니다.", url);
+			log.info("url : {} 의 og tag 추출에 실패했습니다.", url, e);
 		}
 	}
 
@@ -54,15 +53,12 @@ public class LinkService {
 	public LinkResult getUpdateOgTag(String url) {
 		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
 		try {
-			String html = getJsoupResponse(url).body();
-
-			Document document = Jsoup.parse(html);
-
-			String title = getTitle(document);
-			String description = getMetaContent(document, "og:description");
-			String imageUrl = correctImageUrl(url, getMetaContent(document, "og:image"));
-
-			link.updateMetadata(title, description, imageUrl);
+			var openGraph = new OpenGraph(url);
+			link.updateMetadata(
+				openGraph.getTag(Metadata.TITLE).orElse(""),
+				openGraph.getTag(Metadata.DESCRIPTION).orElse(""),
+				correctImageUrl(url, openGraph.getTag(Metadata.IMAGE).orElse(""))
+			);
 			return linkMapper.toLinkResult(linkDataHandler.saveLink(link));
 		} catch (Exception e) {
 			throw ApiLinkException.LINK_OG_TAG_UPDATE_FAILURE();
