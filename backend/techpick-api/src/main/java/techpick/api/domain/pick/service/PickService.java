@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import techpick.api.annotation.LoginUserIdDistributedLock;
 import techpick.api.domain.folder.exception.ApiFolderException;
 import techpick.api.domain.pick.dto.PickCommand;
 import techpick.api.domain.pick.dto.PickMapper;
@@ -69,6 +70,7 @@ public class PickService {
 			.toList();
 	}
 
+	@LoginUserIdDistributedLock
 	@Transactional
 	public PickResult.Pick saveNewPick(PickCommand.Create command) {
 		validateRootAccess(command.parentFolderId());
@@ -78,6 +80,7 @@ public class PickService {
 		return pickMapper.toPickResult(pickDataHandler.savePick(command));
 	}
 
+	@LoginUserIdDistributedLock
 	@Transactional
 	public PickResult.Pick updatePick(PickCommand.Update command) {
 		validatePickAccess(command.userId(), command.id());
@@ -86,6 +89,7 @@ public class PickService {
 		return pickMapper.toPickResult(pickDataHandler.updatePick(command));
 	}
 
+	@LoginUserIdDistributedLock
 	@Transactional
 	public void movePick(PickCommand.Move command) {
 		validateRootAccess(command.destinationFolderId());
@@ -101,6 +105,7 @@ public class PickService {
 		pickDataHandler.movePickToCurrentFolder(command);
 	}
 
+	@LoginUserIdDistributedLock
 	@Transactional
 	public void deletePick(PickCommand.Delete command) {
 		List<Pick> pickList = pickDataHandler.getPickList(command.idList());

@@ -65,6 +65,7 @@ public class FolderService {
 	/**
 	 * 생성하려는 폴더가 미분류폴더, 휴지통이 아닌지 검증합니다.
 	 * */
+	@LoginUserIdDistributedLock
 	@Transactional
 	public FolderResult saveFolder(FolderCommand.Create command) {
 		Folder parentFolder = folderDataHandler.getFolder(command.parentFolderId());
