@@ -1,4 +1,4 @@
-package techpick.ranking.infra;
+package techpick.ranking.infra.pick;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -8,11 +8,11 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PickViewCountRepository extends MongoRepository<PickViewCount, String> {
+public interface PickCreateCountRepository extends MongoRepository<PickCreateCount, String> {
 
-	Optional<PickViewCount> findLinkViewCountByDateAndUrl(LocalDate date, String url);
+	Optional<PickCreateCount> findPickCreateCountByDateAndUrl(LocalDate date, String url);
 
-	List<PickViewCount> findByDateBetween(
+	List<PickCreateCount> findByDateBetween(
 		LocalDate startDate,
 		LocalDate endDate
 	);
