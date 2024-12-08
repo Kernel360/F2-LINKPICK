@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import techpick.api.domain.link.dto.LinkInfo;
 import techpick.api.domain.link.dto.LinkMapper;
-import techpick.api.domain.link.dto.LinkResult;
 import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.api.infrastructure.link.LinkDataHandler;
 import techpick.core.model.link.Link;
@@ -26,9 +26,9 @@ public class LinkService {
 	private final LinkMapper linkMapper;
 
 	@Transactional(readOnly = true)
-	public LinkResult getLinkInfo(String url) {
+	public LinkInfo getLinkInfo(String url) {
 		Link link = linkDataHandler.getLink(url);
-		return linkMapper.toLinkResult(link);
+		return linkMapper.of(link);
 	}
 
 	@Transactional
@@ -51,7 +51,7 @@ public class LinkService {
 	}
 
 	@Transactional
-	public LinkResult getUpdateOgTag(String url) {
+	public LinkInfo saveLinkAndUpdateOgTag(String url) {
 		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
 		try {
 			String html = getJsoupResponse(url).body();
@@ -63,7 +63,7 @@ public class LinkService {
 			String imageUrl = correctImageUrl(url, getMetaContent(document, "og:image"));
 
 			link.updateMetadata(title, description, imageUrl);
-			return linkMapper.toLinkResult(linkDataHandler.saveLink(link));
+			return linkMapper.toLinkInfo(linkDataHandler.saveLink(link));
 		} catch (Exception e) {
 			throw ApiLinkException.LINK_OG_TAG_UPDATE_FAILURE();
 		}
