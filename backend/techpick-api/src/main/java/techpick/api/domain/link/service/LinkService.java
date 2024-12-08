@@ -1,11 +1,5 @@
 package techpick.api.domain.link.service;
 
-import java.io.IOException;
-
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +13,9 @@ import techpick.api.lib.opengraph.Metadata;
 import techpick.api.lib.opengraph.OpenGraph;
 import techpick.core.model.link.Link;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class LinkService {
 
 	private final LinkDataHandler linkDataHandler;
