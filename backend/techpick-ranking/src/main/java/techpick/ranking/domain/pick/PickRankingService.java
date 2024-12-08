@@ -10,11 +10,12 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import techpick.core.annotation.TechpickAnnotation;
-import techpick.core.dto.LinkInfoWithViewCount;
+import techpick.core.dto.UrlWithCount;
 import techpick.ranking.exeption.ApiRankException;
-import techpick.ranking.infra.PickViewCount;
-import techpick.ranking.infra.PickViewCountRepository;
+import techpick.ranking.infra.pick.PickCreateCountRepository;
+import techpick.ranking.infra.pick.PickViewCountRepository;
 import techpick.core.util.MapUtil;
+import techpick.ranking.infra.pick.UrlCount;
 
 @Slf4j
 @Service
@@ -22,6 +23,7 @@ import techpick.core.util.MapUtil;
 public class PickRankingService {
 
 	private final PickViewCountRepository pickViewCountRepository;
+	private final PickCreateCountRepository pickCreateCountRepository;
 
 	/**
 	 * @author minkyeu kim
@@ -34,25 +36,45 @@ public class PickRankingService {
 	 *         API 호출은 일별, 월별, 연별을 나눠서 호출하도록 변경하면 해결 가능.
 	 */
 	@TechpickAnnotation.MeasureTime
-	public List<LinkInfoWithViewCount> getLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
+	public List<UrlWithCount> getLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
+		assertDateIsValid(startDate, endDate);
+		var pickViewCountList = pickViewCountRepository.findByDateBetween(
+			startDate.minusDays(1), endDate.plusDays(1)
+		);
+		return MapUtil.sortByValue(toUrlCountPair(pickViewCountList), MapUtil.SortBy.DESCENDING)
+					  .entrySet().stream()
+					  .map(v -> new UrlWithCount(v.getKey(), v.getValue()))
+					  .limit(limit)
+					  .toList();
+	}
+
+	/**
+	 * @author minkyeu kim
+	 *       링크가 픽된 횟수에 대한 순위표 반환
+	 */
+	@TechpickAnnotation.MeasureTime
+	public List<UrlWithCount> getLinksOrderByPickedCount(LocalDate startDate, LocalDate endDate, int limit) {
+		assertDateIsValid(startDate, endDate);
+		var pickCreateCountList = pickCreateCountRepository.findByDateBetween(
+			startDate.minusDays(1), endDate.plusDays(1)
+		);
+		return MapUtil.sortByValue(toUrlCountPair(pickCreateCountList), MapUtil.SortBy.DESCENDING)
+					  .entrySet().stream()
+					  .map(v -> new UrlWithCount(v.getKey(), v.getValue()))
+					  .limit(limit)
+					  .toList();
+	}
+
+	private void assertDateIsValid(LocalDate startDate, LocalDate endDate) {
 		if (startDate == null || endDate == null)
 			throw ApiRankException.INVALID_DATE_RANGE();
 		if (startDate.isAfter(endDate))
 			throw ApiRankException.INVALID_DATE_RANGE();
 		if (startDate.isAfter(LocalDate.now()))
 			throw ApiRankException.INVALID_DATE_RANGE();
-
-		var pickViewCountList = pickViewCountRepository.findByDateBetween(
-			startDate.minusDays(1), endDate.plusDays(1)
-		);
-		return MapUtil.sortByValue(toUrlCountPair(pickViewCountList), MapUtil.SortBy.DESCENDING)
-					  .entrySet().stream()
-					  .map(v -> new LinkInfoWithViewCount(v.getKey(), v.getValue()))
-					  .limit(limit)
-					  .toList();
 	}
 
-	private Map<String, Long> toUrlCountPair(List<PickViewCount> list) {
+	private <T extends UrlCount> Map<String, Long> toUrlCountPair(List<T> list) {
 		Map<String, Long> tmp = new HashMap<>();
 		for (var pickView : list) {
 			var url = pickView.getUrl();
