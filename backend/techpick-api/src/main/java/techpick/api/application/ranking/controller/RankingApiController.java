@@ -39,7 +39,7 @@ public class RankingApiController {
 	})
 	public ResponseEntity<RankingByViewCount> getSuggestionByViewCount(
 	) {
-		var LIMIT = 10;
+		Integer LIMIT = 10;
 		var currentDay = LocalDate.now();
 		var before1Day = currentDay.minusDays(1);
 		var before7Days = currentDay.minusDays(7);
