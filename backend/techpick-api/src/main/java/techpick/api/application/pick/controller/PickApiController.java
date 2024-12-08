@@ -33,6 +33,8 @@ import techpick.api.domain.pick.dto.PickResult;
 import techpick.api.domain.pick.exception.ApiPickException;
 import techpick.api.domain.pick.service.PickSearchService;
 import techpick.api.domain.pick.service.PickService;
+import techpick.core.event.EventMessenger;
+import techpick.core.event.events.PickCreateEvent;
 import techpick.security.annotation.LoginUserId;
 
 @Slf4j
@@ -45,6 +47,7 @@ public class PickApiController {
 	private final PickService pickService;
 	private final PickApiMapper pickApiMapper;
 	private final PickSearchService pickSearchService;
+	private final EventMessenger eventMessenger;
 
 	@GetMapping
 	@Operation(summary = "폴더 리스트 내 픽 리스트 조회", description = "해당 폴더 리스트 각각의 픽 리스트를 조회합니다.")
@@ -60,8 +63,8 @@ public class PickApiController {
 
 		return ResponseEntity.ok(
 			folderPickList.stream()
-				.map(pickApiMapper::toApiFolderPickList)
-				.toList());
+						  .map(pickApiMapper::toApiFolderPickList)
+						  .toList());
 	}
 
 	@GetMapping("/search")
@@ -71,11 +74,15 @@ public class PickApiController {
 	})
 	public ResponseEntity<PickSliceResponse<PickApiResponse.Pick>> searchPickPagination(
 		@LoginUserId Long userId,
-		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> folderIdList,
-		@Parameter(description = "검색 토큰 목록", example = "리액트, 쿼리, 서버") @RequestParam(required = false, defaultValue = "") List<String> searchTokenList,
-		@Parameter(description = "검색 태그 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue = "") List<Long> tagIdList,
+		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue =
+			"") List<Long> folderIdList,
+		@Parameter(description = "검색 토큰 목록", example = "리액트, 쿼리, 서버") @RequestParam(required = false, defaultValue =
+			"") List<String> searchTokenList,
+		@Parameter(description = "검색 태그 ID 목록", example = "1, 2, 3") @RequestParam(required = false,
+			defaultValue = "") List<Long> tagIdList,
 		@Parameter(description = "픽 시작 id 조회", example = "0") @RequestParam(required = false, defaultValue = "0") Long cursor,
-		@Parameter(description = "한 페이지에 가져올 픽 개수", example = "20") @RequestParam(required = false, defaultValue = "20") int size
+		@Parameter(description = "한 페이지에 가져올 픽 개수", example = "20") @RequestParam(required = false, defaultValue = "20"
+		) int size
 	) {
 		Slice<PickResult.Pick> pickResultList = pickSearchService.searchPickPagination(
 			pickApiMapper.toSearchPaginationCommand(userId, folderIdList, searchTokenList, tagIdList, cursor, size));
@@ -96,8 +103,8 @@ public class PickApiController {
 			pickApiMapper.toSearchCommand(userId, request));
 
 		List<PickApiResponse.Pick> pickResponseList = pickList.stream()
-			.map(pickApiMapper::toApiResponse)
-			.toList();
+															  .map(pickApiMapper::toApiResponse)
+															  .toList();
 		return ResponseEntity.ok(pickResponseList);
 	}
 
@@ -125,7 +132,7 @@ public class PickApiController {
 	}
 
 	@PostMapping
-	@Operation(summary = "픽 생성", description = "픽을 생성합니다.")
+	@Operation(summary = "픽 생성", description = "픽을 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계 됩니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
 		@ApiResponse(responseCode = "401", description = "잘못된 태그 접근"),
@@ -136,9 +143,12 @@ public class PickApiController {
 		if (!Objects.isNull(request.title()) && 200 < request.title().length()) {
 			throw ApiPickException.PICK_TITLE_TOO_LONG();
 		}
-
-		return ResponseEntity.ok(
-			pickApiMapper.toApiResponse(pickService.saveNewPick(pickApiMapper.toCreateCommand(userId, request))));
+		var command = pickApiMapper.toCreateCommand(userId, request);
+		var result = pickService.saveNewPick(command);
+		var event = new PickCreateEvent(userId, result.id(), result.linkInfo().url());
+		eventMessenger.send(event);
+		var response = pickApiMapper.toApiResponse(result);
+		return ResponseEntity.ok(response);
 	}
 
 	@PatchMapping

@@ -32,8 +32,16 @@ public class RankingApiController {
 	 * 주별, 일별 조회 수를 기반 으로 추천 한다.
 	 * - 조회수 기반 집계
 	 */
-	@GetMapping("/view")
-	@Operation(summary = "기간 별 인기 링크 Top 10", description = "기간 별 인기 조회수 글을 10개씩 획득 합니다.")
+	@GetMapping("/ranking")
+	@Operation(
+		summary = "인기 픽 Top 10",
+		description = """
+				각 주제 별로 인기 조회수 글을 10개씩 획득 합니다.
+				1. 오늘 하루에 대한 실시간 링크 조회수 랭킹
+				2. 지난 7일 동안 링크 조회수 랭킹
+				3. 지난 한달간 픽된 (=북마크된) 링크 랭킹
+			"""
+	)
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
@@ -43,10 +51,16 @@ public class RankingApiController {
 		var currentDay = LocalDate.now();
 		var before1Day = currentDay.minusDays(1);
 		var before7Days = currentDay.minusDays(7);
+		var before30Days = currentDay.minusDays(30);
 
-		var dailyRanking = rankingRepository.getLinkRanking(currentDay, currentDay, LIMIT).getBody();
-		var weeklyRanking = rankingRepository.getLinkRanking(before7Days, before1Day, LIMIT).getBody();
-		var response = new RankingByViewCount(dailyRanking, weeklyRanking);
+		var dailyViewRanking =
+			rankingRepository.getLinkRankingByViewCount(currentDay, currentDay, LIMIT).getBody();
+		var past7DaysViewRanking =
+			rankingRepository.getLinkRankingByViewCount(before7Days, before1Day, LIMIT).getBody();
+		var past30DaysPickRanking =
+			rankingRepository.getLinkRankingByPickedCount(before30Days, before1Day, LIMIT).getBody();
+
+		var response = new RankingByViewCount(dailyViewRanking, past7DaysViewRanking, past30DaysPickRanking);
 		return ResponseEntity.ok(response);
 	}
 }

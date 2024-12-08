@@ -30,25 +30,6 @@ public class EventController {
 	 * [사용자 인증 정보가 필요한 api]
 	 * 내가 나의 북마크를 클릭했을 때 프론트엔드가 보내는 이벤트
 	 */
-	@PostMapping("/pick/create")
-	@Operation(
-		summary = "사용자의 북마크 생성 이벤트 수집",
-		description = "[로그인 필요] 서버에게 사용자 자신의 북마크 생성을 알립니다."
-	)
-	public ResponseEntity<Void> bookmarkCreate(
-		@Parameter(description = "생성된 북마크의 대상 링크 url") @RequestParam String url,
-		@Parameter(description = "조회되는 픽의 id") @RequestParam Long pickId,
-		@LoginUserId Long userId
-	) {
-		eventMessenger.send(new PickCreateEvent(userId, pickId, url));
-		return ResponseEntity.noContent().build();
-	}
-
-	/**
-	 * @author minkyeu kim
-	 * [사용자 인증 정보가 필요한 api]
-	 * 내가 나의 북마크를 클릭했을 때 프론트엔드가 보내는 이벤트
-	 */
 	@PostMapping("/pick/view")
 	@Operation(
 		summary = "사용자 자신의 픽 조회 이벤트 수집",
@@ -71,7 +52,7 @@ public class EventController {
 	@PostMapping("/shared/view")
 	@Operation(
 		summary = "공개 폴더의 북마크 조회 이벤트 수집",
-		description = "서버에게 공개 폴더의 어떤 북마크가 조회됬는지 알립니다."
+		description = "[인증 불필요] 서버에게 공개 폴더의 어떤 북마크가 조회됬는지 알립니다."
 	)
 	public ResponseEntity<Void> sharedFolderLinkView(
 		@Parameter(description = "조회된 링크 url") @RequestParam String url,
