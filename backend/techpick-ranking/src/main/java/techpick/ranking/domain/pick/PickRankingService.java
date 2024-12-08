@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import techpick.core.annotation.TechpickAnnotation;
+import techpick.core.dto.LinkInfoWithViewCount;
 import techpick.ranking.exeption.ApiRankException;
 import techpick.ranking.infra.PickViewCount;
 import techpick.ranking.infra.PickViewCountRepository;
@@ -33,7 +34,7 @@ public class PickRankingService {
 	 *         API 호출은 일별, 월별, 연별을 나눠서 호출하도록 변경하면 해결 가능.
 	 */
 	@TechpickAnnotation.MeasureTime
-	public List<PickViewRankingResult> getLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
+	public List<LinkInfoWithViewCount> getLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
 		if (startDate == null || endDate == null)
 			throw ApiRankException.INVALID_DATE_RANGE();
 		if (startDate.isAfter(endDate))
@@ -46,7 +47,8 @@ public class PickRankingService {
 		);
 		return MapUtil.sortByValue(toUrlCountPair(pickViewCountList), MapUtil.SortBy.DESCENDING)
 					  .entrySet().stream()
-					  .map(v -> new PickViewRankingResult(v.getKey(), v.getValue()))
+					  .map(v -> new LinkInfoWithViewCount(v.getKey(), v.getValue()))
+					  .limit(limit)
 					  .toList();
 	}
 
