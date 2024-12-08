@@ -25,4 +25,9 @@ public class PickApiResponse {
 	) {
 	}
 
+	public record PickExists(
+		Boolean exist,
+		PickApiResponse.Pick pick
+	) {
+	}
 }

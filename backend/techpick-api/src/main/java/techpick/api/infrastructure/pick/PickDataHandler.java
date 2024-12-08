@@ -2,10 +2,8 @@ package techpick.api.infrastructure.pick;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +52,11 @@ public class PickDataHandler {
 	public Pick getPickUrl(Long userId, String url) {
 		return pickRepository.findByUserIdAndLinkUrl(userId, url)
 							 .orElseThrow(ApiPickException::PICK_NOT_FOUND);
+	}
+
+	@Transactional(readOnly = true)
+	public Optional<Pick> findPickUrl(Long userId, String url) {
+		return pickRepository.findByUserIdAndLinkUrl(userId, url);
 	}
 
 	@Transactional(readOnly = true)
