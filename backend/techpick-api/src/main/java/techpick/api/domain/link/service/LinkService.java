@@ -11,6 +11,7 @@ import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.api.infrastructure.link.LinkDataHandler;
 import techpick.api.lib.opengraph.Metadata;
 import techpick.api.lib.opengraph.OpenGraph;
+import techpick.api.lib.opengraph.OpenGraphException;
 import techpick.core.model.link.Link;
 
 @Slf4j
@@ -25,13 +26,8 @@ public class LinkService {
 	public void updateOgTag(String url) {
 		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
 		try {
-			var openGraph = new OpenGraph(url);
-			link.updateMetadata(
-				openGraph.getTag(Metadata.TITLE).orElse(""),
-				openGraph.getTag(Metadata.DESCRIPTION).orElse(""),
-				correctImageUrl(url, openGraph.getTag(Metadata.IMAGE).orElse(""))
-			);
-			linkDataHandler.saveLink(link);
+			var updatedLink = updateOpengraph(url, link);
+			linkDataHandler.saveLink(updatedLink);
 		} catch (Exception e) {
 			log.info("url : {} 의 og tag 추출에 실패했습니다.", url, e);
 		}
@@ -41,16 +37,21 @@ public class LinkService {
 	public LinkResult getUpdateOgTag(String url) {
 		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
 		try {
-			var openGraph = new OpenGraph(url);
-			link.updateMetadata(
-				openGraph.getTag(Metadata.TITLE).orElse(""),
-				openGraph.getTag(Metadata.DESCRIPTION).orElse(""),
-				correctImageUrl(url, openGraph.getTag(Metadata.IMAGE).orElse(""))
-			);
-			return linkMapper.toLinkResult(linkDataHandler.saveLink(link));
+			var updatedLink = updateOpengraph(url, link);
+			return linkMapper.toLinkResult(linkDataHandler.saveLink(updatedLink));
 		} catch (Exception e) {
 			throw ApiLinkException.LINK_OG_TAG_UPDATE_FAILURE();
 		}
+	}
+
+	private Link updateOpengraph(String url, Link link) throws OpenGraphException {
+		var openGraph = new OpenGraph(url);
+		link.updateMetadata(
+			openGraph.getTag(Metadata.TITLE).orElse(""),
+			openGraph.getTag(Metadata.DESCRIPTION).orElse(""),
+			correctImageUrl(url, openGraph.getTag(Metadata.IMAGE).orElse(""))
+		);
+		return link;
 	}
 
 	/**
