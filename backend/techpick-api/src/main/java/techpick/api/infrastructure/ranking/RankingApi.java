@@ -15,7 +15,7 @@ import techpick.core.dto.UrlWithCount;
  * 랭킹 서버와 통신하기 위한 Http Interface. <br>
  * 형식은 techpick-api 모듈의 컨트롤러와 일치합니다.
  */
-public interface RankingRepository {
+public interface RankingApi {
 
 	/**
 	 * 조회수 기반 링크 랭킹

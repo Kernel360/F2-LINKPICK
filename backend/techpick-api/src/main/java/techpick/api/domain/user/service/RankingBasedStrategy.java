@@ -14,7 +14,7 @@ import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.api.domain.link.service.LinkService;
 import techpick.api.domain.pick.dto.PickCommand;
 import techpick.api.domain.pick.service.PickService;
-import techpick.api.infrastructure.ranking.RankingRepository;
+import techpick.api.infrastructure.ranking.RankingApi;
 import techpick.core.dto.UrlWithCount;
 import techpick.core.model.folder.Folder;
 import techpick.core.model.folder.FolderRepository;
@@ -32,7 +32,7 @@ public class RankingBasedStrategy implements InitialFolderStrategy {
 	private static final Integer LOAD_LIMIT = 15;
 
 	private final FolderRepository folderRepository;
-	private final RankingRepository rankingRepository;
+	private final RankingApi rankingApi;
 	private final PickService pickService;
 	private final LinkService linkService;
 
@@ -42,7 +42,7 @@ public class RankingBasedStrategy implements InitialFolderStrategy {
 		var currentDay = LocalDate.now();
 		var before1Day = currentDay.minusDays(1);
 		var before30Days = currentDay.minusDays(30);
-		var monthlyRanking = rankingRepository
+		var monthlyRanking = rankingApi
 			.getUrlRankingByViewCount(before30Days, before1Day, LOAD_LIMIT)
 			.getBody();
 		savePickFromRankingList(user.getId(), monthlyRanking, monthlyFolder.getId());

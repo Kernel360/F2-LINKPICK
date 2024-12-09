@@ -20,7 +20,7 @@ import techpick.api.application.ranking.dto.LinkInfoWithViewCount;
 import techpick.api.application.ranking.dto.RankingApiMapper;
 import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.api.domain.link.service.LinkService;
-import techpick.api.infrastructure.ranking.RankingRepository;
+import techpick.api.infrastructure.ranking.RankingApi;
 import techpick.api.application.ranking.dto.RankingByViewCount;
 import techpick.core.dto.UrlWithCount;
 
@@ -34,7 +34,7 @@ import techpick.core.dto.UrlWithCount;
 @Tag(name = "추천/소개 API", description = "링크, 픽 등에 대한 소개")
 public class RankingApiController {
 
-	private final RankingRepository rankingRepository;
+	private final RankingApi rankingApi;
 	private final RankingApiMapper rankingApiMapper;
 	private final LinkService linkService;
 
@@ -64,14 +64,14 @@ public class RankingApiController {
 		var before30Days = currentDay.minusDays(30);
 
 		var dailyViewRanking = // 오늘 + 어제
-			mapToLinkInfoRanking(rankingRepository.getUrlRankingByViewCount(before1Day, currentDay, LIMIT).getBody());
+			mapToLinkInfoRanking(rankingApi.getUrlRankingByViewCount(before1Day, currentDay, LIMIT).getBody());
 
 		var past7DaysViewRanking = // 일주일 전 ~ 어제
-			mapToLinkInfoRanking(rankingRepository.getUrlRankingByViewCount(before7Days, before1Day, LIMIT).getBody());
+			mapToLinkInfoRanking(rankingApi.getUrlRankingByViewCount(before7Days, before1Day, LIMIT).getBody());
 
 		var past30DaysPickRanking = // 한달 전 ~ 어제
 			mapToLinkInfoRanking(
-				rankingRepository.getUrlRankingByPickedCount(before30Days, before1Day, LIMIT).getBody());
+				rankingApi.getUrlRankingByPickedCount(before30Days, before1Day, LIMIT).getBody());
 
 		var response = new RankingByViewCount(dailyViewRanking, past7DaysViewRanking, past30DaysPickRanking);
 		return ResponseEntity.ok(response);

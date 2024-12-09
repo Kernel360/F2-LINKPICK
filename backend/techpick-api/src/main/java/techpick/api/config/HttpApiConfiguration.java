@@ -7,7 +7,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
-import techpick.api.infrastructure.ranking.RankingRepository;
+import techpick.api.infrastructure.ranking.RankingApi;
 
 /**
  * 외부 서버와 통신하는 것을 Http Interface 방식으로 사용하기 위한 설정. <br>
@@ -20,10 +20,10 @@ public class HttpApiConfiguration {
 	private String rankingServerUrl;
 
 	@Bean
-	public RankingRepository rankingApi() {
+	public RankingApi rankingApi() {
 		var restClient = RestClient.create(rankingServerUrl);
 		var adapter = RestClientAdapter.create(restClient);
 		var proxy = HttpServiceProxyFactory.builderFor(adapter).build();
-		return proxy.createClient(RankingRepository.class);
+		return proxy.createClient(RankingApi.class);
 	}
 }
