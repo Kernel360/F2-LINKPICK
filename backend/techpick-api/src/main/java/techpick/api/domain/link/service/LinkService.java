@@ -5,13 +5,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import techpick.api.domain.link.dto.LinkInfo;
 import techpick.api.domain.link.dto.LinkMapper;
-import techpick.api.domain.link.dto.LinkResult;
 import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.api.infrastructure.link.LinkDataHandler;
-import techpick.api.lib.opengraph.Metadata;
-import techpick.api.lib.opengraph.OpenGraph;
-import techpick.api.lib.opengraph.OpenGraphException;
+import techpick.core.lib.opengraph.Metadata;
+import techpick.core.lib.opengraph.OpenGraph;
+import techpick.core.lib.opengraph.OpenGraphException;
 import techpick.core.model.link.Link;
 
 @Slf4j
@@ -21,6 +21,12 @@ public class LinkService {
 
 	private final LinkDataHandler linkDataHandler;
 	private final LinkMapper linkMapper;
+
+	@Transactional(readOnly = true)
+	public LinkInfo getLinkInfo(String url) {
+		Link link = linkDataHandler.getLink(url);
+		return linkMapper.of(link);
+	}
 
 	@Transactional
 	public void updateOgTag(String url) {
@@ -34,11 +40,11 @@ public class LinkService {
 	}
 
 	@Transactional
-	public LinkResult getUpdateOgTag(String url) {
+	public LinkInfo saveLinkAndUpdateOgTag(String url) {
 		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
 		try {
 			var updatedLink = updateOpengraph(url, link);
-			return linkMapper.toLinkResult(linkDataHandler.saveLink(updatedLink));
+			return linkMapper.toLinkInfo(linkDataHandler.saveLink(updatedLink));
 		} catch (Exception e) {
 			throw ApiLinkException.LINK_OG_TAG_UPDATE_FAILURE();
 		}

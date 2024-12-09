@@ -33,8 +33,8 @@ public class LinkApiController {
 	public ResponseEntity<LinkApiResponse> getLinkData(
 		@Parameter(description = "og 태그 데이터 가져올 url") @RequestParam String url
 	) {
-		var result = linkService.getUpdateOgTag(url);
-		var response = linkApiMapper.toLinkResult(result);
+		var result = linkService.saveLinkAndUpdateOgTag(url);
+		var response = linkApiMapper.toLinkResponse(result);
 		return ResponseEntity.ok(response);
 	}
 }

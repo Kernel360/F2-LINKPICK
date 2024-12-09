@@ -22,5 +22,5 @@ public interface LinkMapper {
 
 	LinkInfo of(Link link);
 
-	LinkResult toLinkResult(Link link);
+	LinkInfo toLinkInfo(Link link);
 }

@@ -1,4 +1,4 @@
-package techpick.api.lib.opengraph;
+package techpick.core.lib.opengraph;
 
 import java.io.IOException;
 import java.net.URI;
