@@ -4,6 +4,7 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { SearchIcon, FilterIcon, Loader } from 'lucide-react';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import FilterToggleContainer from './FilterToggleContainer';
+import HoverCard from './HoverCard';
 import * as styles from './searchDialog.css';
 import { SearchInfiniteScrollList } from './SearchInfiniteScrollList';
 import SearchInput from './SearchInput';
@@ -35,7 +36,10 @@ export default function SearchDialog({
             </button>
           </div>
           <FilterToggleContainer isVisible={filterVisible} />
-          <SearchInfiniteScrollList />
+          <div className={styles.searchListContainer}>
+            <SearchInfiniteScrollList />
+            <HoverCard />
+          </div>
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>

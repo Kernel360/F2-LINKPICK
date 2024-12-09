@@ -20,7 +20,7 @@ export function UserMenuBar() {
   } = useDisclosure();
 
   useEffect(() => {
-    searchPicksByQueryParam(''); // 클린업으로 빼야할지 고민 동작 보고 수정
+    searchPicksByQueryParam();
   }, []);
 
   return (

@@ -159,6 +159,18 @@ export const useTreeStore = create<TreeState & TreeAction>()(
             state.treeDataMap[parentFolderId].childFolderIdOrderedList =
               prevChildIdOrderedList;
           });
+        } finally {
+          set((state) => {
+            const newTreeDataMap: FolderMapType = {};
+
+            for (const [key, value] of Object.entries(state.treeDataMap)) {
+              if (0 < Number(key)) {
+                newTreeDataMap[key] = value;
+              }
+            }
+
+            state.treeDataMap = newTreeDataMap;
+          });
         }
       },
       readFolder: () => {},
@@ -194,7 +206,6 @@ export const useTreeStore = create<TreeState & TreeAction>()(
         if (!treeDataMap) {
           return null;
         }
-
         const folderInfo = treeDataMap[folderId];
 
         if (!folderInfo) {
@@ -208,7 +219,11 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           const folderMap = await getFolders();
 
           set((state) => {
-            state.treeDataMap = folderMap;
+            for (const [_key, value] of Object.entries(folderMap)) {
+              state.treeDataMap[value.id] = value;
+            }
+
+            // state.treeDataMap = folderMap;
           });
         } catch (error) {
           console.log('getFolderMap error', error);
@@ -221,11 +236,18 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           set((state) => {
             state.basicFolderMap = basicFolderMap;
             state.rootFolderId = basicFolderMap['ROOT'].id;
+
+            for (const [_key, value] of Object.entries(basicFolderMap)) {
+              if (value.folderType !== 'ROOT') {
+                state.treeDataMap[value.id] = value;
+              }
+            }
           });
         } catch (error) {
           console.log('getBasicFolderMap error', error);
         }
       },
+
       getFolderInfoByPathname: (pathname) => {
         const basicFolderMap = get().basicFolderMap;
 
@@ -451,9 +473,15 @@ export const useTreeStore = create<TreeState & TreeAction>()(
           .filter(([_, folder]) => folder.name === name)
           .map((entity) => entity[1]);
       },
-      getFolderList: () => {
+      getFolderList: (): FolderType[] => {
         const map = get().treeDataMap;
-        return Array.from(getObjectEntries(map).map((entry) => entry[1]));
+
+        return Object.values(map).reduce<FolderType[]>((acc, folder) => {
+          if (folder.id !== undefined && folder.id >= 0) {
+            acc.push(folder);
+          }
+          return acc;
+        }, []);
       },
       /**
        * @description 공유 폴더인지 확인하는 함수입니다.

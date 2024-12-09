@@ -1,3 +1,5 @@
+import { SearchQueryParam } from '@/types/search';
+
 const API_ENDPOINTS = {
   FOLDERS: 'folders',
   LOCATION: 'location',
@@ -21,12 +23,15 @@ export const API_URLS = {
     `${API_ENDPOINTS.PICKS}?folderIdList=${folderId}`,
   DELETE_PICKS: API_ENDPOINTS.PICKS,
   SEARCH_PICKS_BY_QUERY_PARAM: (
-    queryParam: string,
+    queryParam: SearchQueryParam,
     cursor?: number | string,
     size?: number
   ) =>
     API_ENDPOINTS.PICKS +
-    `/search?${queryParam}` +
+    `/search?` +
+    `${queryParam.searchTokenList ? `searchTokenList=${queryParam.searchTokenList}` : ''}` +
+    `${queryParam.tagIdList ? `&tagIdList=${queryParam.tagIdList}` : ''}` +
+    `${queryParam.folderIdList ? `&folderIdList=${queryParam.folderIdList}` : ''}` +
     `${cursor ? '&cursor=' + cursor : ''}` +
     `${size ? '&size=' + size : ''}`,
   MOVE_PICKS: `${API_ENDPOINTS.PICKS}/${API_ENDPOINTS.LOCATION}`,

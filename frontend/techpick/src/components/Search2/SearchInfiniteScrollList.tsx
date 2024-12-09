@@ -3,12 +3,8 @@ import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 import { useSearchPickStore } from '@/stores/searchPickStore';
-
-/**
- *
- * @TODO 렌더만 되는지 확인하려고 만든 컴포넌트
- * 실제로 windowing이 되는지 모름
- */
+import * as styles from './searchInfiniteScrollList.css';
+import SearchItemRenderer from './SearchItemRenderer';
 
 export function SearchInfiniteScrollList() {
   const {
@@ -16,8 +12,8 @@ export function SearchInfiniteScrollList() {
     hasNext,
     isLoading,
     searchPicksByQueryParam,
+    loadMoreSearchPicks,
     lastCursor,
-    size,
     searchQuery,
     searchTag,
     searchFolder,
@@ -28,48 +24,19 @@ export function SearchInfiniteScrollList() {
       await searchPicksByQueryParam();
     };
 
-    fetchInitialData();
-  }, [searchQuery, searchTag, searchFolder, searchPicksByQueryParam]);
+    if (!searchResultList.length) fetchInitialData();
+  }, [searchQuery, searchTag, searchFolder, searchResultList]);
 
-  const loadMoreItems = useCallback(
-    async (startIndex: number, stopIndex: number) => {
-      if (hasNext && !isLoading) {
-        const cursor = lastCursor;
-        const fetchSize = size || stopIndex - startIndex + 1;
-        await searchPicksByQueryParam(cursor, fetchSize);
-      }
-    },
-    [searchPicksByQueryParam, hasNext, isLoading, lastCursor, size]
-  );
+  const loadMoreItems = useCallback(async () => {
+    loadMoreSearchPicks();
+  }, [searchPicksByQueryParam, hasNext, isLoading, lastCursor]);
 
   const isItemLoaded = (index: number) => {
-    return !!searchResultList[index];
-  };
-
-  type ItemRendererProps = {
-    index: number;
-    style: React.CSSProperties;
-  };
-
-  const ItemRenderer = ({ index, style }: ItemRendererProps) => {
-    const item = searchResultList[index];
-    if (!item) {
-      return (
-        <div style={style} className="loading-item">
-          Loading...
-        </div>
-      );
-    }
-
-    return (
-      <div style={style} className="list-item">
-        {item.title}
-      </div>
-    );
+    return !hasNext || index < searchResultList.length;
   };
 
   return (
-    <div style={{ height: '100%', width: '100%' }}>
+    <div className={styles.searchListContainer}>
       <AutoSizer>
         {({ height, width }) => (
           <InfiniteLoader
@@ -78,19 +45,24 @@ export function SearchInfiniteScrollList() {
               hasNext ? searchResultList.length + 1 : searchResultList.length
             }
             loadMoreItems={loadMoreItems}
+            threshold={5}
           >
             {({ onItemsRendered, ref }) => (
               <List
                 height={height}
                 width={width}
                 itemCount={searchResultList.length}
-                itemSize={50}
+                itemSize={60}
                 onItemsRendered={onItemsRendered}
                 ref={ref}
                 itemData={searchResultList}
               >
                 {({ index, style }) => (
-                  <ItemRenderer index={index} style={style} />
+                  <SearchItemRenderer
+                    index={index}
+                    item={searchResultList[index]}
+                    style={style}
+                  />
                 )}
               </List>
             )}

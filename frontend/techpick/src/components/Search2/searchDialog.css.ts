@@ -1,4 +1,5 @@
 import { style } from '@vanilla-extract/css';
+import { colorVars } from 'techpick-shared';
 
 export const dialogOverlay = style({
   backgroundColor: 'rgba(0, 0, 0, 0.4)',
@@ -10,13 +11,22 @@ export const dialogContent = style({
   background: 'white',
   borderRadius: '8px',
   padding: '16px',
-  width: '400px',
-  height: '500px',
-  margin: 'auto',
+  width: '100%',
+  minWidth: '300px',
+  maxWidth: '800px',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
   position: 'fixed',
+});
+
+export const searchListContainer = style({
+  display: 'flex',
+  flexDirection: 'row',
+  height: 'auto',
+  margin: 'auto',
+  justifyContent: 'space-between',
+  gap: '16px',
 });
 
 export const searchBar = style({
@@ -24,6 +34,7 @@ export const searchBar = style({
   alignItems: 'center',
   gap: '8px',
   marginBottom: '16px',
+  borderBottom: `1px solid ${colorVars.gray4}`,
 });
 
 export const searchIcon = style({
@@ -33,8 +44,6 @@ export const searchIcon = style({
 export const searchInput = style({
   flexGrow: 1,
   padding: '8px',
-  border: '1px solid #ccc',
-  borderRadius: '4px',
   fontSize: '14px',
 });
 
@@ -46,7 +55,6 @@ export const filterButton = style({
 
 export const filterContainer = style({
   display: 'flex',
-  justifyContent: 'space-between',
   gap: '16px',
   marginBottom: '16px',
 });

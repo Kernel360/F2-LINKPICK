@@ -39,7 +39,11 @@ export function CurrentPathIndicator({
                   ) : (
                     <BreadcrumbLink className={breadcrumbLinkStyle} asChild>
                       <Link href={getFolderLinkByType(folderInfo)}>
-                        {folderInfo.name}
+                        {folderInfo.folderType === 'RECYCLE_BIN'
+                          ? '휴지통'
+                          : folderInfo.folderType === 'UNCLASSIFIED'
+                            ? '미분류'
+                            : folderInfo.name}
                       </Link>
                     </BreadcrumbLink>
                   )}

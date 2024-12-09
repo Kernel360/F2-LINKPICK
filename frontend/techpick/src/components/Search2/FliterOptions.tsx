@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
+import customSelectStyles from './customSelectStyles';
 import { SearchSelectOption } from '@/types';
 
 type MultiValue<Option> = readonly Option[];
@@ -21,12 +22,13 @@ export default function FilterOptions({
 
   return (
     <div>
-      <label>{title}</label>
       <Select
+        placeholder={title}
         isMulti
         options={options}
         closeMenuOnSelect={false}
         onChange={onChange}
+        styles={customSelectStyles}
       />
     </div>
   );

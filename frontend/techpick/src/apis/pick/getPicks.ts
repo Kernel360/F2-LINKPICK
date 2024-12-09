@@ -1,5 +1,6 @@
 import { HTTPError } from 'ky';
 import { apiClient, returnErrorFromHTTPError } from '@/apis';
+import { SearchQueryParam } from '@/types/search';
 import { API_URLS } from '../apiConstants';
 import type {
   GetPicksResponseType,
@@ -15,12 +16,13 @@ export const getPicksByFolderId = async (folderId: number) => {
 };
 
 export const getPickListByQueryParam = async (
-  queryParam: string,
+  queryParam: SearchQueryParam,
   cursor?: number | string,
   size?: number
 ): Promise<SearchPicksResponseType> => {
   try {
     const URL = API_URLS.SEARCH_PICKS_BY_QUERY_PARAM(queryParam, cursor, size);
+    console.log('URL: ', URL);
     const response = await apiClient.get<SearchPicksResponseType>(URL);
     const data = await response.json();
 

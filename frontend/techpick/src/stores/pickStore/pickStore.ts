@@ -532,7 +532,16 @@ export const usePickStore = create<PickState & PickAction>()(
         size?: number
       ) => {
         try {
-          const result = await getPickListByQueryParam(param, cursor, size);
+          const searchParams = {
+            searchTokenList: '',
+            tagIdList: '',
+            folderIdList: '',
+          };
+          const result = await getPickListByQueryParam(
+            searchParams,
+            cursor,
+            size
+          );
           set((state) => {
             state.searchResult = result;
           });
