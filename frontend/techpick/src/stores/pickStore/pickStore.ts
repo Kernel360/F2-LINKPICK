@@ -459,10 +459,7 @@ export const usePickStore = create<PickState & PickAction>()(
         const recycleBinFolderPickRecord = get().pickRecord[recycleBinFolderId];
         const selectedPickIdList = get().selectedPickIdList;
 
-        if (
-          !get().hasPickRecordValue(recycleBinFolderPickRecord?.data) ||
-          recycleBinFolderPickRecord.data
-        ) {
+        if (!get().hasPickRecordValue(recycleBinFolderPickRecord?.data)) {
           return;
         }
 
