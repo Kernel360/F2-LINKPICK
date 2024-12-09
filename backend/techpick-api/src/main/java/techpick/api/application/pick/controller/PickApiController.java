@@ -54,16 +54,16 @@ public class PickApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 리스트 조회 성공")
 	})
-	public ResponseEntity<List<PickApiResponse.FolderPickList>> getFolderChildPickList(
+	public ResponseEntity<List<PickApiResponse.FolderPickListWithViewCount>> getFolderChildPickList(
 		@LoginUserId Long userId,
 		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue =
 			"") List<Long> folderIdList) {
-		List<PickResult.FolderPickList> folderPickList = pickService.getFolderListChildPickList(
-			pickApiMapper.toReadListCommand(userId, folderIdList));
-
+		var folderPickList = pickService.getFolderListChildPickList(
+			pickApiMapper.toReadListCommand(userId, folderIdList)
+		);
 		return ResponseEntity.ok(
 			folderPickList.stream()
-						  .map(pickApiMapper::toApiFolderPickList)
+						  .map(pickApiMapper::toApiFolderPickListWithViewCount)
 						  .toList());
 	}
 
@@ -151,8 +151,15 @@ public class PickApiController {
 		return ResponseEntity.ok(response);
 	}
 
+	@Deprecated
 	@GetMapping("/{id}")
-	@Operation(summary = "픽 상세 조회", description = "픽을 상세 조회합니다.")
+	@Operation(
+		summary = "[Deprecated] 픽 상세 조회",
+		description = """
+				현재 사용되지 않는 api 입니다.
+				추후 코드 제거 예정입니다.
+			"""
+	)
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 상세 조회 성공")
 	})
