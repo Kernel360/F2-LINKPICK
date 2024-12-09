@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import techpick.api.domain.link.dto.LinkInfo;
+import techpick.api.domain.link.service.LinkService;
 import techpick.core.event.EventMessenger;
-import techpick.core.event.events.PickCreateEvent;
 import techpick.core.event.events.PickViewEvent;
 import techpick.core.event.events.SharedFolderLinkViewEvent;
 import techpick.security.annotation.LoginUserId;
@@ -24,6 +24,7 @@ import techpick.security.annotation.LoginUserId;
 public class EventController {
 
 	private final EventMessenger eventMessenger;
+	private final LinkService linkService;
 
 	/**
 	 * @author minkyeu kim
@@ -54,11 +55,12 @@ public class EventController {
 		summary = "공개 폴더의 북마크 조회 이벤트 수집",
 		description = "[인증 불필요] 서버에게 공개 폴더의 어떤 북마크가 조회됬는지 알립니다."
 	)
-	public ResponseEntity<Void> sharedFolderLinkView(
+	public ResponseEntity<LinkInfo> sharedFolderLinkView(
 		@Parameter(description = "조회된 링크 url") @RequestParam String url,
 		@Parameter(description = "조회된 공개 폴더 접근용 토큰") @RequestParam String folderAccessToken
 	) {
+		var linkInfo = linkService.getLinkInfo(url); // 서버에 링크 엔티티가 존재해야 이벤트 전송 가능
 		eventMessenger.send(new SharedFolderLinkViewEvent(url, folderAccessToken));
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.ok(linkInfo);
 	}
 }
