@@ -1,6 +1,9 @@
 package techpick.api.application.ranking.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +16,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import techpick.api.application.ranking.dto.LinkInfoWithViewCount;
+import techpick.api.application.ranking.dto.RankingApiMapper;
+import techpick.api.domain.link.exception.ApiLinkException;
+import techpick.api.domain.link.service.LinkService;
 import techpick.api.infrastructure.ranking.RankingRepository;
 import techpick.api.application.ranking.dto.RankingByViewCount;
+import techpick.core.dto.UrlWithCount;
 
 /**
  * techpick-ranking 서버로 부터 데이터를 받아와 뿌려준다.
@@ -27,6 +35,8 @@ import techpick.api.application.ranking.dto.RankingByViewCount;
 public class RankingApiController {
 
 	private final RankingRepository rankingRepository;
+	private final RankingApiMapper rankingApiMapper;
+	private final LinkService linkService;
 
 	/**
 	 * 주별, 일별 조회 수를 기반 으로 추천 한다.
@@ -54,13 +64,33 @@ public class RankingApiController {
 		var before30Days = currentDay.minusDays(30);
 
 		var dailyViewRanking = // 오늘 + 어제
-			rankingRepository.getLinkRankingByViewCount(before1Day, currentDay, LIMIT).getBody();
+			mapToLinkInfoRanking(rankingRepository.getUrlRankingByViewCount(before1Day, currentDay, LIMIT).getBody());
+
 		var past7DaysViewRanking = // 일주일 전 ~ 어제
-			rankingRepository.getLinkRankingByViewCount(before7Days, before1Day, LIMIT).getBody();
+			mapToLinkInfoRanking(rankingRepository.getUrlRankingByViewCount(before7Days, before1Day, LIMIT).getBody());
+
 		var past30DaysPickRanking = // 한달 전 ~ 어제
-			rankingRepository.getLinkRankingByPickedCount(before30Days, before1Day, LIMIT).getBody();
+			mapToLinkInfoRanking(
+				rankingRepository.getUrlRankingByPickedCount(before30Days, before1Day, LIMIT).getBody());
 
 		var response = new RankingByViewCount(dailyViewRanking, past7DaysViewRanking, past30DaysPickRanking);
 		return ResponseEntity.ok(response);
+	}
+
+	private List<LinkInfoWithViewCount> mapToLinkInfoRanking(List<UrlWithCount> urlWithCountList) {
+		if (Objects.isNull(urlWithCountList)) {
+			return List.of(/* empty list */);
+		}
+		var result = new ArrayList<LinkInfoWithViewCount>();
+		for (UrlWithCount urlWithCount : urlWithCountList) {
+			try {
+				var linkInfo = linkService.getLinkInfo(urlWithCount.url());
+				var rankingInfo = rankingApiMapper.toRankingWithLinkInfo(urlWithCount, linkInfo);
+				result.add(rankingInfo);
+			} catch (ApiLinkException exception) {
+				log.error("[랭킹 획득 - 서버에 저장되지 않은 링크가 랭킹에 포함되어 있습니다! ={}", urlWithCount.url(), exception);
+			}
+		}
+		return result;
 	}
 }
