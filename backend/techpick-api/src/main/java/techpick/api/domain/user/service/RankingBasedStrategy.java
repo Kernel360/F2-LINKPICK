@@ -30,7 +30,7 @@ public class RankingBasedStrategy implements InitialFolderStrategy {
 
 	public static final String QUALIFIER = "ranking";
 
-	private static final String MONTHLY_FOLDER_NAME = "monthly";
+	private static final String MONTHLY_FOLDER_NAME = "시작하기";
 	private static final Integer LOAD_LIMIT = 15;
 
 	private final FolderRepository folderRepository;
