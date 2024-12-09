@@ -2,6 +2,7 @@ package techpick.api.domain.pick.service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,11 @@ public class PickService {
 		return pickMapper.toPickResult(pick);
 	}
 
+	@Transactional(readOnly = true)
+	public Optional<PickResult.Pick> findPickUrl(Long userId, String url) {
+		return pickDataHandler.findPickUrl(userId, url).map(pickMapper::toPickResult);
+	}
+
 	// 폴더 내에 있는 픽 리스트 조회
 	// 구현은 해두었지만, 추후 사용되지 않을 때 삭제 예정
 	@Transactional(readOnly = true)
@@ -57,17 +63,17 @@ public class PickService {
 		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickIdOrderedList());
 
 		return pickList.stream()
-			.map(pickMapper::toPickResult)
-			.toList();
+					   .map(pickMapper::toPickResult)
+					   .toList();
 	}
 
 	// 폴더 리스트가 넘어오면, 각 폴더 내부에 있는 픽 리스트 조회
 	@Transactional(readOnly = true)
 	public List<PickResult.FolderPickList> getFolderListChildPickList(PickCommand.ReadList command) {
 		return command.folderIdList().stream()
-			.peek(folderId -> validateFolderAccess(command.userId(), folderId))  // 폴더 접근 유효성 검사
-			.map(this::getFolderChildPickResultList)
-			.toList();
+					  .peek(folderId -> validateFolderAccess(command.userId(), folderId))  // 폴더 접근 유효성 검사
+					  .map(this::getFolderChildPickResultList)
+					  .toList();
 	}
 
 	@LoginUserIdDistributedLock
@@ -126,8 +132,8 @@ public class PickService {
 		Folder folder = folderDataHandler.getFolder(folderId);
 		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickIdOrderedList());
 		List<PickResult.Pick> pickResultList = pickList.stream()
-			.map(pickMapper::toPickResult)
-			.toList();
+													   .map(pickMapper::toPickResult)
+													   .toList();
 		return pickMapper.toPickResultList(folderId, pickResultList);
 	}
 
