@@ -7,11 +7,9 @@ import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import techpick.api.domain.link.dto.LinkMapper;
 import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.api.domain.link.service.LinkService;
 import techpick.api.domain.pick.dto.PickCommand;
@@ -45,7 +43,7 @@ public class RankingBasedStrategy implements InitialFolderStrategy {
 		var before1Day = currentDay.minusDays(1);
 		var before30Days = currentDay.minusDays(30);
 		var monthlyRanking = rankingRepository
-			.getLinkRankingByViewCount(before30Days, before1Day, LOAD_LIMIT)
+			.getUrlRankingByViewCount(before30Days, before1Day, LOAD_LIMIT)
 			.getBody();
 		savePickFromRankingList(user.getId(), monthlyRanking, monthlyFolder.getId());
 	}
