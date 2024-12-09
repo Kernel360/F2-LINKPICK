@@ -1,4 +1,4 @@
-package techpick.api.lib.opengraph;
+package techpick.core.lib.opengraph;
 
 /**
  * @author minkyeu kim

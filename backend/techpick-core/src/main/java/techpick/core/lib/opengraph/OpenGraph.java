@@ -1,4 +1,4 @@
-package techpick.api.lib.opengraph;
+package techpick.core.lib.opengraph;
 
 import java.net.URI;
 import java.net.URISyntaxException;

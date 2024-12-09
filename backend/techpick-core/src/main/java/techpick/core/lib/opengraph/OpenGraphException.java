@@ -1,4 +1,4 @@
-package techpick.api.lib.opengraph;
+package techpick.core.lib.opengraph;
 
 public class OpenGraphException extends Exception {
 	public OpenGraphException(String message) {
