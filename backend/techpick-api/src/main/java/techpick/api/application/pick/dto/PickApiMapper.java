@@ -37,6 +37,8 @@ public interface PickApiMapper {
 
 	PickCommand.Delete toDeleteCommand(Long userId, PickApiRequest.Delete request);
 
+	PickApiResponse.PickWithViewCount toApiResponseWithPickViewCount(PickResult.PickWithViewCount pickResult);
+
 	PickApiResponse.Pick toApiResponse(PickResult.Pick pickResult);
 
 	@Mapping(target = "pickList", source = "pickList", qualifiedByName = "mapPickList")
@@ -45,14 +47,26 @@ public interface PickApiMapper {
 	@Named("mapPickList")
 	default List<PickApiResponse.Pick> mapPickList(List<PickResult.Pick> pickList) {
 		return pickList.stream()
-			.map(this::toApiResponse)
-			.toList();
+					   .map(this::toApiResponse)
+					   .toList();
+	}
+
+	@Mapping(target = "pickList", source = "pickList", qualifiedByName = "mapPickListWithViewCount")
+	PickApiResponse.FolderPickListWithViewCount toApiFolderPickListWithViewCount(
+		PickResult.FolderPickWithViewCountList folderPickList);
+
+	@Named("mapPickListWithViewCount")
+	default List<PickApiResponse.PickWithViewCount> mapPickListWithViewCount(
+		List<PickResult.PickWithViewCount> pickList) {
+		return pickList.stream()
+					   .map(this::toApiResponseWithPickViewCount)
+					   .toList();
 	}
 
 	default Slice<PickApiResponse.Pick> toSliceApiResponse(Slice<PickResult.Pick> source) {
 		List<PickApiResponse.Pick> convertedContent = source.getContent().stream()
-			.map(this::toApiResponse)
-			.toList();
+															.map(this::toApiResponse)
+															.toList();
 		return new SliceImpl<>(convertedContent, source.getPageable(), source.hasNext());
 	}
 }

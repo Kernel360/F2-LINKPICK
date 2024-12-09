@@ -1,8 +1,12 @@
 package techpick.api.domain.link.dto;
 
+import java.util.List;
+
 import org.mapstruct.InjectionStrategy;
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
 import techpick.core.model.link.Link;
@@ -22,5 +26,9 @@ public interface LinkMapper {
 
 	LinkInfo of(Link link);
 
+	@Named("E2R")
 	LinkInfo toLinkInfo(Link link);
+
+	@IterableMapping(qualifiedByName = "E2R")
+	List<LinkInfo> toLinkInfoList(List<Link> links);
 }

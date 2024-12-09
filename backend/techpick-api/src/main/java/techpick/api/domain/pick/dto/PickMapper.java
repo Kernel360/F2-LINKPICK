@@ -10,6 +10,7 @@ import org.mapstruct.ReportingPolicy;
 import techpick.core.model.folder.Folder;
 import techpick.core.model.link.Link;
 import techpick.core.model.pick.Pick;
+import techpick.core.model.pick.PickRepository;
 import techpick.core.model.user.User;
 
 @Mapper(
@@ -23,9 +24,12 @@ public interface PickMapper {
 	@Mapping(source = "pick.parentFolder.id", target = "parentFolderId")
 	PickResult.Pick toPickResult(Pick pick);
 
+	PickResult.PickWithViewCount toPickResultWithViewCount(PickResult.Pick pickResult, Boolean isHot,
+		Long weeklyViewCount);
+
 	@Mapping(source = "folderId", target = "folderId")
 	@Mapping(source = "pick", target = "pickList")
-	PickResult.FolderPickList toPickResultList(Long folderId, List<PickResult.Pick> pick);
+	PickResult.FolderPickWithViewCountList toPickResultList(Long folderId, List<PickResult.PickWithViewCount> pick);
 
 	@Mapping(source = "command.title", target = "title")
 	@Mapping(source = "parentFolder", target = "parentFolder")

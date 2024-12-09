@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import techpick.api.domain.link.dto.LinkInfo;
-import techpick.api.domain.link.dto.LinkMapper;
 import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.core.model.link.Link;
 import techpick.core.model.link.LinkRepository;
@@ -16,7 +14,6 @@ import techpick.core.model.link.LinkRepository;
 @RequiredArgsConstructor
 public class LinkDataHandler {
 	private final LinkRepository linkRepository;
-	private final LinkMapper linkMapper;
 
 	@Transactional(readOnly = true)
 	public Link getLink(String url) {
@@ -24,23 +21,8 @@ public class LinkDataHandler {
 	}
 
 	@Transactional(readOnly = true)
-	public Link getLink(Long linkId) {
-		return linkRepository.findById(linkId).orElseThrow(ApiLinkException::LINK_NOT_FOUND);
-	}
-
-	@Transactional(readOnly = true)
 	public Optional<Link> getOptionalLink(String url) {
 		return linkRepository.findByUrl(url);
-	}
-
-	@Transactional
-	public Link saveLink(LinkInfo info) {
-		Optional<Link> link = linkRepository.findByUrl(info.url());
-		if (link.isPresent()) {
-			link.get().updateMetadata(info.title(), info.description(), info.imageUrl());
-			return link.get();
-		}
-		return linkRepository.save(linkMapper.of(info));
 	}
 
 	@Transactional

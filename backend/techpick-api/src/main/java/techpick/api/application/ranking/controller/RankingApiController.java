@@ -1,6 +1,5 @@
 package techpick.api.application.ranking.controller;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -16,12 +15,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import techpick.api.application.ranking.dto.LinkInfoWithViewCount;
+import techpick.api.application.ranking.dto.LinkInfoWithCount;
 import techpick.api.application.ranking.dto.RankingApiMapper;
+import techpick.api.application.ranking.dto.RankingResponse;
 import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.api.domain.link.service.LinkService;
-import techpick.api.infrastructure.ranking.RankingApi;
-import techpick.api.application.ranking.dto.RankingByViewCount;
+import techpick.api.domain.ranking.service.RankingService;
 import techpick.core.dto.UrlWithCount;
 
 /**
@@ -34,9 +33,9 @@ import techpick.core.dto.UrlWithCount;
 @Tag(name = "추천/소개 API", description = "링크, 픽 등에 대한 소개")
 public class RankingApiController {
 
-	private final RankingApi rankingApi;
 	private final RankingApiMapper rankingApiMapper;
 	private final LinkService linkService;
+	private final RankingService rankingService;
 
 	/**
 	 * 주별, 일별 조회 수를 기반 으로 추천 한다.
@@ -55,34 +54,27 @@ public class RankingApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	public ResponseEntity<RankingByViewCount> getSuggestionByViewCount(
+	public ResponseEntity<RankingResponse> getSuggestionByViewCount(
 	) {
-		Integer LIMIT = 10;
-		var currentDay = LocalDate.now();
-		var before1Day = currentDay.minusDays(1);
-		var before7Days = currentDay.minusDays(7);
-		var before30Days = currentDay.minusDays(30);
-
-		var dailyViewRanking = // 오늘 + 어제
-			mapToLinkInfoRanking(rankingApi.getUrlRankingByViewCount(before1Day, currentDay, LIMIT).getBody());
-
-		var past7DaysViewRanking = // 일주일 전 ~ 어제
-			mapToLinkInfoRanking(rankingApi.getUrlRankingByViewCount(before7Days, before1Day, LIMIT).getBody());
-
-		var past30DaysPickRanking = // 한달 전 ~ 어제
-			mapToLinkInfoRanking(
-				rankingApi.getUrlRankingByPickedCount(before30Days, before1Day, LIMIT).getBody());
-
-		var response = new RankingByViewCount(dailyViewRanking, past7DaysViewRanking, past30DaysPickRanking);
+		int LIMIT = 10;
+		var result = rankingService.getUrlRanking(LIMIT);
+		var response = new RankingResponse(
+			urlToLinkInfo(result.dailyUrlViewRanking()),
+			urlToLinkInfo(result.weeklyUrlViewRanking()),
+			urlToLinkInfo(result.monthlyUrlPickRanking())
+		);
 		return ResponseEntity.ok(response);
 	}
 
-	private List<LinkInfoWithViewCount> mapToLinkInfoRanking(List<UrlWithCount> urlWithCountList) {
-		if (Objects.isNull(urlWithCountList)) {
+	/**
+	 * Url만 명시된 랭킹을 Og-Data가 포함된 랭킹 정보로 변환
+	 */
+	private List<LinkInfoWithCount> urlToLinkInfo(List<UrlWithCount> urlRanking) {
+		if (Objects.isNull(urlRanking)) {
 			return List.of(/* empty list */);
 		}
-		var result = new ArrayList<LinkInfoWithViewCount>();
-		for (UrlWithCount urlWithCount : urlWithCountList) {
+		var result = new ArrayList<LinkInfoWithCount>();
+		for (UrlWithCount urlWithCount : urlRanking) {
 			try {
 				var linkInfo = linkService.getLinkInfo(urlWithCount.url());
 				var rankingInfo = rankingApiMapper.toRankingWithLinkInfo(urlWithCount, linkInfo);

@@ -16,5 +16,5 @@ import techpick.core.dto.UrlWithCount;
 public interface RankingApiMapper {
 
 	@Mapping(target = "url", source = "urlWithCount.url")
-	LinkInfoWithViewCount toRankingWithLinkInfo(UrlWithCount urlWithCount, LinkInfo linkInfo);
+	LinkInfoWithCount toRankingWithLinkInfo(UrlWithCount urlWithCount, LinkInfo linkInfo);
 }
