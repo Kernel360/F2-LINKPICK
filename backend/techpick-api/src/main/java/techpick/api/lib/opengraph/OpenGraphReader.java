@@ -19,6 +19,7 @@ import org.jsoup.select.Elements;
  * 현재 구현은 Jsoup으로 Head, Body 등 전체 페이지를 파싱합니다.
  * 최적화를 고려한다면 <Head></Head> 부분만 input stream으로 읽어서
  * 필요한 부분만 파싱 하는 방식으로 개선이 필요합니다.
+ * TODO: 추후 HttpClient 말고 RestClient로 리팩토링
  */
 public class OpenGraphReader {
 
