@@ -108,8 +108,19 @@ public class PickApiController {
 		return ResponseEntity.ok(pickResponseList);
 	}
 
+	/**
+	 * @deprecated
+	 * 현재 익스텐션에서만 사용되며, 추후 없어질 예정입니다.
+	 */
+	@Deprecated
 	@GetMapping("/link")
-	@Operation(summary = "링크 픽 여부 조회", description = "해당 링크를 픽한 적이 있는지 확인합니다.")
+	@Operation(
+		summary = "[Deprecated] 링크 픽 여부 조회",
+		description = """
+				해당 링크를 픽한 적이 있는지 확인합니다.
+				픽이 존재하지 않음을 4XX로 판단하는 것이 프론트엔드에서 처리하기 까다로워
+				Deprecated 처리하였습니다.
+			""")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 여부 조회 성공"),
 		@ApiResponse(responseCode = "404", description = "해당 링크에 대해 픽이 되어 있지 않습니다.")
@@ -117,6 +128,27 @@ public class PickApiController {
 	public ResponseEntity<PickApiResponse.Pick> getPickUrl(@LoginUserId Long userId,
 		@RequestParam String link) {
 		return ResponseEntity.ok(pickApiMapper.toApiResponse(pickService.getPickUrl(userId, link)));
+	}
+
+	/**
+	 * @author minkyeu kim
+	 * 프론트엔드에서 4XX를 픽 없음으로 판단하는 로직이 불편하기 때문에
+	 * Boolean으로 픽이 있다 없다를 판단하도록 변경합니다.
+	 * 익스텐션은 구글 심사 때문에 기존 getLinkDataXXX를 이용하고, 추후 getLinkDataV2 로 교체할 예정
+	 */
+	@GetMapping("/link-v2")
+	@Operation(summary = "링크 픽 여부 조회", description = "해당 링크를 픽한 적이 있는지 확인합니다.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "픽 여부 조회 성공"),
+	})
+	public ResponseEntity<PickApiResponse.PickExists> doesUserHasPickWithGivenUrl(
+		@LoginUserId Long userId, @RequestParam String link
+	) {
+		var response = pickService.findPickUrl(userId, link)
+								  .map(pickApiMapper::toApiResponse)
+								  .map(pick -> new PickApiResponse.PickExists(true, pick))
+								  .orElseGet(() -> new PickApiResponse.PickExists(false, null));
+		return ResponseEntity.ok(response);
 	}
 
 	@GetMapping("/{id}")

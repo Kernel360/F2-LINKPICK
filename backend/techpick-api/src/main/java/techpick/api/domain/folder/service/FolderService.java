@@ -65,6 +65,7 @@ public class FolderService {
 	/**
 	 * 생성하려는 폴더가 미분류폴더, 휴지통이 아닌지 검증합니다.
 	 * */
+	@LoginUserIdDistributedLock
 	@Transactional
 	public FolderResult saveFolder(FolderCommand.Create command) {
 		Folder parentFolder = folderDataHandler.getFolder(command.parentFolderId());
@@ -89,6 +90,7 @@ public class FolderService {
 	 * 현재 폴더들의 부모가 같은지 검증합니다.
 	 * 이동하려는 폴더가 미분류폴더, 휴지통이 아닌지 검증합니다.
 	 * */
+	@LoginUserIdDistributedLock
 	@Transactional
 	public void moveFolder(FolderCommand.Move command) {
 		Folder destinationFolder = folderDataHandler.getFolder(command.destinationFolderId());
@@ -109,8 +111,7 @@ public class FolderService {
 		}
 	}
 
-	// TODO: 리팩토링 필요
-	@LoginUserIdDistributedLock(key = "DELETE_FOLDER")
+	@LoginUserIdDistributedLock
 	@Transactional
 	public void deleteFolder(FolderCommand.Delete command) {
 		// 먼저 공유 부터 해제
