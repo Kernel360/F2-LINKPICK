@@ -59,16 +59,13 @@ public class RankingBasedStrategy implements InitialFolderStrategy {
 		}
 		for (UrlWithCount rank : rankingList) {
 			try {
-				var linkInfo = linkService.saveLinkAndUpdateOgTag(rank.url());
-				var command = new PickCommand.Create(userId, linkInfo.title(), new ArrayList<>(), destinationFolderId,
-					linkInfo);
+				var linkInfo = linkService.getLinkInfo(rank.url());
+				var command = new PickCommand.Create(
+					userId, linkInfo.title(), new ArrayList<>(), destinationFolderId, linkInfo
+				);
 				pickService.saveNewPick(command);
 			} catch (ApiLinkException exception) {
-				/**
-				 * TODO: 순위 집계는 반드시 유효한 링크만 반환되어야 한다.
-				 *       따라서 랭킹 서비스에서 검증 추가 필요
-				 */
-				log.error("초기 폴더 설정 - 링크 OG 태그 파싱 오류 발생 : url={}", rank.url(), exception);
+				log.error("[회원 가입 - 초기 북마크 설정] 서버에 저장되지 않은 링크 입니다! ={}", rank.url(), exception);
 			}
 		}
 	}

@@ -9,9 +9,9 @@ import techpick.api.domain.link.dto.LinkInfo;
 import techpick.api.domain.link.dto.LinkMapper;
 import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.api.infrastructure.link.LinkDataHandler;
-import techpick.api.lib.opengraph.Metadata;
-import techpick.api.lib.opengraph.OpenGraph;
-import techpick.api.lib.opengraph.OpenGraphException;
+import techpick.core.lib.opengraph.Metadata;
+import techpick.core.lib.opengraph.OpenGraph;
+import techpick.core.lib.opengraph.OpenGraphException;
 import techpick.core.model.link.Link;
 
 @Slf4j
