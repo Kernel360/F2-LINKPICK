@@ -159,6 +159,18 @@ export const useTreeStore = create<TreeState & TreeAction>()(
             state.treeDataMap[parentFolderId].childFolderIdOrderedList =
               prevChildIdOrderedList;
           });
+        } finally {
+          set((state) => {
+            const newTreeDataMap: FolderMapType = {};
+
+            for (const [key, value] of Object.entries(state.treeDataMap)) {
+              if (0 < Number(key)) {
+                newTreeDataMap[key] = value;
+              }
+            }
+
+            state.treeDataMap = newTreeDataMap;
+          });
         }
       },
       readFolder: () => {},
