@@ -17,13 +17,14 @@ export function useFetchPickRecordByFolderId({
 
   const queryFunction = useCallback(
     async (folderId: number) => {
+      console.log('queryFunction work!');
       await fetchPickDataByFolderId(folderId);
     },
     [fetchPickDataByFolderId]
   );
 
   useEffect(() => {
-    if (!(typeof folderId === 'number')) {
+    if (!(typeof folderId === 'number') || Number.isNaN(folderId)) {
       return;
     }
 
