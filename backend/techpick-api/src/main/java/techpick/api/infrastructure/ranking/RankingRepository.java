@@ -21,7 +21,7 @@ public interface RankingRepository {
 	 * 조회수 기반 링크 랭킹
 	 */
 	@GetExchange("/ranking/link/view")
-	ResponseEntity<List<UrlWithCount>> getLinkRankingByViewCount(
+	ResponseEntity<List<UrlWithCount>> getUrlRankingByViewCount(
 		@RequestParam("date_begin") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateBegin,
 		@RequestParam("date_end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateEnd,
 		@RequestParam(required = false, defaultValue = "5") Integer limit
@@ -31,7 +31,7 @@ public interface RankingRepository {
 	 * 픽된 횟수 기반 링크 랭킹
 	 */
 	@GetExchange("/ranking/link/picked")
-	ResponseEntity<List<UrlWithCount>> getLinkRankingByPickedCount(
+	ResponseEntity<List<UrlWithCount>> getUrlRankingByPickedCount(
 		@RequestParam("date_begin") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateBegin,
 		@RequestParam("date_end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dateEnd,
 		@RequestParam(required = false, defaultValue = "5") Integer limit
