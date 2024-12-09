@@ -53,11 +53,11 @@ public class RankingApiController {
 		var before7Days = currentDay.minusDays(7);
 		var before30Days = currentDay.minusDays(30);
 
-		var dailyViewRanking =
-			rankingRepository.getLinkRankingByViewCount(currentDay, currentDay, LIMIT).getBody();
-		var past7DaysViewRanking =
+		var dailyViewRanking = // 오늘 + 어제
+			rankingRepository.getLinkRankingByViewCount(before1Day, currentDay, LIMIT).getBody();
+		var past7DaysViewRanking = // 일주일 전 ~ 어제
 			rankingRepository.getLinkRankingByViewCount(before7Days, before1Day, LIMIT).getBody();
-		var past30DaysPickRanking =
+		var past30DaysPickRanking = // 한달 전 ~ 어제
 			rankingRepository.getLinkRankingByPickedCount(before30Days, before1Day, LIMIT).getBody();
 
 		var response = new RankingByViewCount(dailyViewRanking, past7DaysViewRanking, past30DaysPickRanking);
