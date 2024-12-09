@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import techpick.api.annotation.LoginUserIdDistributedLock;
 import techpick.api.domain.tag.dto.TagCommand;
 import techpick.api.domain.tag.dto.TagMapper;
 import techpick.api.domain.tag.dto.TagResult;
@@ -33,6 +34,7 @@ public class TagService {
 			.map(tagMapper::toResult).toList();
 	}
 
+	@LoginUserIdDistributedLock
 	@Transactional
 	public TagResult saveTag(TagCommand.Create command) {
 		validateDuplicateTagName(command.userId(), command.name());
@@ -49,6 +51,7 @@ public class TagService {
 		return tagMapper.toResult(tagDataHandler.updateTag(command));
 	}
 
+	@LoginUserIdDistributedLock
 	@Transactional
 	public void moveUserTag(TagCommand.Move command) {
 		Tag tag = tagDataHandler.getTag(command.id());
@@ -58,6 +61,7 @@ public class TagService {
 		tagDataHandler.moveTag(command.userId(), command);
 	}
 
+	@LoginUserIdDistributedLock
 	@Transactional
 	public void deleteTag(TagCommand.Delete command) {
 		Tag tag = tagDataHandler.getTag(command.id());
