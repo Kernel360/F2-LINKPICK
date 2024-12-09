@@ -90,11 +90,11 @@ public class ChromeBookmarkService {
 		List<Pick> childPickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickIdOrderedList());
 		for (Pick pick : childPickList) {
 			sb.append("<DT>")
-				.append("<A HREF=\"")
-				.append(pick.getLink().getUrl())
-				.append("\">")
-				.append(pick.getTitle())
-				.append("</A>\n");
+			  .append("<A HREF=\"")
+			  .append(pick.getLink().getUrl())
+			  .append("\">")
+			  .append(pick.getTitle())
+			  .append("</A>\n");
 		}
 		sb.append("</DL>\n");
 		return sb;

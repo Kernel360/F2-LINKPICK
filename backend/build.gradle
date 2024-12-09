@@ -80,6 +80,9 @@ subprojects {
         // https://mvnrepository.com/artifact/org.mockito/mockito-core
         testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.14.2'
 
+        // jsoup
+        // https://mvnrepository.com/artifact/org.jsoup/jsoup
+        implementation 'org.jsoup:jsoup:1.18.3'
     }
 
     tasks.named('test') {
