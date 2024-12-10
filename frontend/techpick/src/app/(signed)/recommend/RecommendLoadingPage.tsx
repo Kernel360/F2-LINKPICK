@@ -4,7 +4,7 @@ import { PickContentLayout } from '@/components/PickContentLayout';
 export function RecommendLoadingPage() {
   return (
     <FolderContentLayout>
-      <PickContentLayout></PickContentLayout>
+      <PickContentLayout />
     </FolderContentLayout>
   );
 }

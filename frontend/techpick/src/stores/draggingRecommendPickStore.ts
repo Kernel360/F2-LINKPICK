@@ -1,17 +1,17 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import type {
-  RecommendPickState,
-  RecommendPickAction,
-} from './recommendPickStore.type';
+  DraggingRecommendPickState,
+  DraggingRecommendPickAction,
+} from './draggingRecommendPickStore.type';
 
-const initialState: RecommendPickState = {
+const initialState: DraggingRecommendPickState = {
   isDragging: false,
   draggingRecommendPickInfo: null,
 };
 
-export const useRecommendPickStore = create<
-  RecommendPickState & RecommendPickAction
+export const useDraggingRecommendPickStore = create<
+  DraggingRecommendPickState & DraggingRecommendPickAction
 >()(
   immer((set) => ({
     ...initialState,

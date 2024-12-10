@@ -2,7 +2,11 @@
 
 import { useDndMonitor } from '@dnd-kit/core';
 import { createPick } from '@/apis/pick/createPick';
-import { usePickStore, useRecommendPickStore, useTreeStore } from '@/stores';
+import {
+  usePickStore,
+  useDraggingRecommendPickStore,
+  useTreeStore,
+} from '@/stores';
 import {
   isPickToFolderDroppableObject,
   isRecommendPickDraggableObject,
@@ -20,7 +24,8 @@ import type {
 export function useRecommendPickToFolderDndMonitor() {
   const { setHoverFolderId } = useTreeStore();
   const { insertPickInfo } = usePickStore();
-  const { setIsDragging, setDraggingPickInfo } = useRecommendPickStore();
+  const { setIsDragging, setDraggingPickInfo } =
+    useDraggingRecommendPickStore();
 
   const onDragStart = (event: DragStartEvent) => {
     const { active } = event;

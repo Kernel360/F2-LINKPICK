@@ -2,7 +2,11 @@
 
 import { DragOverlay as DndKitDragOverlay } from '@dnd-kit/core';
 import { useGetDragOverStyle } from '@/hooks';
-import { usePickStore, useRecommendPickStore, useTreeStore } from '@/stores';
+import {
+  usePickStore,
+  useDraggingRecommendPickStore,
+  useTreeStore,
+} from '@/stores';
 import { dragCountStyle, stackedOverlayStyle } from './dragOverlay.css';
 import { FolderItemOverlay } from './FolderItemOverlay';
 import { PickDragOverlayShadowList } from './PickDragOverlayShadowList';
@@ -17,7 +21,7 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
     selectedPickIdList,
   } = usePickStore();
   const { isDragging: isRecommendPickDragging, draggingRecommendPickInfo } =
-    useRecommendPickStore();
+    useDraggingRecommendPickStore();
   const { overlayStyle: pickOverlayStyle } = useGetDragOverStyle({
     elementClickPosition,
   });
