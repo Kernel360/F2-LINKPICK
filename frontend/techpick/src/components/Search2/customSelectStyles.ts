@@ -33,6 +33,9 @@ const customSelectStyles: StylesConfig<SearchSelectOption, true> = {
     ':active': {
       backgroundColor: `${colorVars.gold4}`,
     },
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   }),
   multiValue: (base: CSSObjectWithLabel) => ({
     ...base,
