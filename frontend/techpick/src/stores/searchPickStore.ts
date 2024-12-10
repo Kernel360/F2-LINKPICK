@@ -64,8 +64,8 @@ export const useSearchPickStore = create<
             state.lastCursor = result.lastCursor;
             state.hasNext = result.hasNext;
           });
-        } catch (error) {
-          console.log('fetchPickDataByFolderId error', error);
+        } catch {
+          /* error */
         } finally {
           set((state) => {
             state.isLoading = false;
@@ -98,8 +98,8 @@ export const useSearchPickStore = create<
               state.lastCursor = result.lastCursor;
               state.hasNext = result.hasNext;
             });
-          } catch (error) {
-            console.log('fetchPickDataByFolderId error', error);
+          } catch {
+            /* error */
           } finally {
             set((state) => {
               state.isLoading = false;
@@ -113,23 +113,27 @@ export const useSearchPickStore = create<
       loadMoreSearchPicks: async () => {
         const state = get();
         if (state.hasNext && !state.isLoading) {
-          const searchParams = {
-            searchTokenList: state.searchQuery,
-            tagIdList: state.searchTag,
-            folderIdList: state.searchFolder,
-          };
-          const result = await getPickListByQueryParam(
-            searchParams,
-            state.lastCursor,
-            SIZE
-          );
-          set((state) => {
-            state.searchResultList = state.searchResultList.concat(
-              result.content
+          try {
+            const searchParams = {
+              searchTokenList: state.searchQuery,
+              tagIdList: state.searchTag,
+              folderIdList: state.searchFolder,
+            };
+            const result = await getPickListByQueryParam(
+              searchParams,
+              state.lastCursor,
+              SIZE
             );
-            state.lastCursor = result.lastCursor;
-            state.hasNext = result.hasNext;
-          });
+            set((state) => {
+              state.searchResultList = state.searchResultList.concat(
+                result.content
+              );
+              state.lastCursor = result.lastCursor;
+              state.hasNext = result.hasNext;
+            });
+          } catch {
+            /* error */
+          }
         }
       },
       setSearchQuery: (query: string) =>
