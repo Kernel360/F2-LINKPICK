@@ -12,7 +12,7 @@ import {
 import SearchDialog from '../Search2/SearchDialog';
 
 export function UserMenuBar() {
-  const { searchPicksByQueryParam } = useSearchPickStore();
+  const { preFetchSearchPicks } = useSearchPickStore();
   const {
     isOpen: isSearchDialogOpen,
     onOpen: onSearchDialogOpen,
@@ -20,7 +20,7 @@ export function UserMenuBar() {
   } = useDisclosure();
 
   useEffect(() => {
-    searchPicksByQueryParam();
+    preFetchSearchPicks();
   }, []);
 
   return (

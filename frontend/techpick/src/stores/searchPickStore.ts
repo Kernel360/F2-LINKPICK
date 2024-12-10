@@ -16,9 +16,6 @@ const initialState = {
   isLoading: false,
   hoverPickIndex: 0,
 };
-{
-  /**어디서 클린업할지 생각해야됨 */
-}
 
 type SearchPickStoreState = {
   searchResultList: PickListType;
@@ -32,12 +29,14 @@ type SearchPickStoreState = {
 };
 
 type SearchPickStoreActions = {
+  preFetchSearchPicks: () => Promise<void>;
   searchPicksByQueryParam: () => Promise<void>;
   loadMoreSearchPicks: () => Promise<void>;
   setSearchQuery: (query: string) => void;
   setSearchTag: (tag: string) => void;
   setSearchFolder: (folder: string) => void;
   setHoverPickIndex: (id: number) => void;
+  reset: () => void;
 };
 
 export const useSearchPickStore = create<
@@ -46,8 +45,39 @@ export const useSearchPickStore = create<
   subscribeWithSelector(
     immer((set, get) => ({
       ...initialState,
+      /**
+       * @description 검색 다이얼로그창이 활성화 되기 전, 미리 데이터를 로드하는 함수
+       */
+      preFetchSearchPicks: async () => {
+        try {
+          set((state) => {
+            state.isLoading = true;
+          });
+          const searchParams = {
+            searchTokenList: '',
+            tagIdList: '',
+            folderIdList: '',
+          };
+          const result = await getPickListByQueryParam(searchParams, '', SIZE);
+          set((state) => {
+            state.searchResultList = result.content;
+            state.lastCursor = result.lastCursor;
+            state.hasNext = result.hasNext;
+          });
+        } catch (error) {
+          console.log('fetchPickDataByFolderId error', error);
+        } finally {
+          set((state) => {
+            state.isLoading = false;
+          });
+        }
+      },
+      /**
+       * @description 검색어, 태그, 폴더에 따라 픽을 검색하는 함수
+       */
       searchPicksByQueryParam: async () => {
         const state = get();
+
         if (state.hasNext && !state.isLoading) {
           try {
             set((state) => {
@@ -60,10 +90,9 @@ export const useSearchPickStore = create<
             };
             const result = await getPickListByQueryParam(
               searchParams,
-              state.lastCursor,
+              '',
               SIZE
             );
-
             set((state) => {
               state.searchResultList = result.content;
               state.lastCursor = result.lastCursor;
@@ -78,6 +107,9 @@ export const useSearchPickStore = create<
           }
         }
       },
+      /**
+       * @description infinite scroll 컴포넌트에서 픽을 추가로 검색하는 함수
+       */
       loadMoreSearchPicks: async () => {
         const state = get();
         if (state.hasNext && !state.isLoading) {
@@ -130,6 +162,10 @@ export const useSearchPickStore = create<
       setHoverPickIndex: (id: number) =>
         set((state) => {
           state.hoverPickIndex = id;
+        }),
+      reset: () =>
+        set((state) => {
+          Object.assign(state, initialState);
         }),
     }))
   )

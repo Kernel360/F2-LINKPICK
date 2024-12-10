@@ -15,13 +15,19 @@ export default function SearchDialog({
 }: SearchDialogProps) {
   const { isLoading } = useSearchPickStore();
   const [filterVisible, setFilterVisible] = useState(false);
-
+  const { preFetchSearchPicks, reset } = useSearchPickStore();
   const toggleFilter = () => {
     setFilterVisible(!filterVisible);
   };
 
+  const handleOnClose = async () => {
+    onOpenChange();
+    reset();
+    await preFetchSearchPicks();
+  };
+
   return (
-    <DialogPrimitive.Root open={isOpen} onOpenChange={onOpenChange}>
+    <DialogPrimitive.Root open={isOpen} onOpenChange={handleOnClose}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className={styles.dialogOverlay} />
         <DialogPrimitive.Content className={styles.dialogContent}>
@@ -37,7 +43,7 @@ export default function SearchDialog({
           </div>
           <FilterToggleContainer isVisible={filterVisible} />
           <div className={styles.searchListContainer}>
-            <SearchInfiniteScrollList onClose={onOpenChange} />
+            <SearchInfiniteScrollList onClose={handleOnClose} />
             <HoverCard />
           </div>
         </DialogPrimitive.Content>

@@ -2,6 +2,7 @@
 
 import { useDndMonitor } from '@dnd-kit/core';
 import { usePickStore, useTreeStore } from '@/stores';
+import { useSearchPickStore } from '@/stores/searchPickStore';
 import { isPickDraggableObject, isPickToFolderDroppableObject } from '@/utils';
 import type { DragEndEvent, DragOverEvent } from '@dnd-kit/core';
 
@@ -11,6 +12,7 @@ import type { DragEndEvent, DragOverEvent } from '@dnd-kit/core';
 export function usePickToFolderDndMonitor() {
   const { setHoverFolderId } = useTreeStore();
   const { movePicksToDifferentFolder } = usePickStore();
+  const { preFetchSearchPicks } = useSearchPickStore();
 
   const onDragOver = (event: DragOverEvent) => {
     const { active, over } = event;
@@ -30,7 +32,7 @@ export function usePickToFolderDndMonitor() {
     setHoverFolderId(currentHoverFolderId);
   };
 
-  const onDragEnd = (event: DragEndEvent) => {
+  const onDragEnd = async (event: DragEndEvent) => {
     setHoverFolderId(null);
 
     const { active, over } = event;
@@ -52,7 +54,8 @@ export function usePickToFolderDndMonitor() {
       return;
     }
 
-    movePicksToDifferentFolder({ from: activeObject, to: overObject });
+    await movePicksToDifferentFolder({ from: activeObject, to: overObject });
+    await preFetchSearchPicks();
   };
 
   useDndMonitor({

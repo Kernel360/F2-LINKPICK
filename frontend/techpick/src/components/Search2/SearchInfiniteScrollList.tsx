@@ -22,16 +22,12 @@ export function SearchInfiniteScrollList({
   } = useSearchPickStore();
 
   useEffect(() => {
-    const fetchInitialData = async () => {
-      await searchPicksByQueryParam();
-    };
-
-    if (!searchResultList.length) fetchInitialData();
+    if (!searchResultList.length) searchPicksByQueryParam();
   }, [searchQuery, searchTag, searchFolder, searchResultList]);
 
   const loadMoreItems = useCallback(async () => {
     loadMoreSearchPicks();
-  }, [searchPicksByQueryParam, hasNext, isLoading, lastCursor]);
+  }, [hasNext, isLoading, lastCursor]);
 
   const isItemLoaded = (index: number) => {
     return !hasNext || index < searchResultList.length;
