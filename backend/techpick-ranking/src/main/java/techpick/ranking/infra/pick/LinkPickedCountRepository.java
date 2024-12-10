@@ -8,11 +8,11 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PickCreateCountRepository extends MongoRepository<PickCreateCount, String> {
+public interface LinkPickedCountRepository extends MongoRepository<LinkPickedCount, String> {
 
-	Optional<PickCreateCount> findPickCreateCountByDateAndUrl(LocalDate date, String url);
+	Optional<LinkPickedCount> findLinkPickedCountByDateAndUrl(LocalDate date, String url);
 
-	List<PickCreateCount> findByDateBetween(
+	List<LinkPickedCount> findByDateBetween(
 		LocalDate startDate,
 		LocalDate endDate
 	);

@@ -19,6 +19,7 @@ import techpick.api.domain.link.service.LinkService;
 import techpick.core.event.EventMessenger;
 import techpick.core.event.events.PickViewEvent;
 import techpick.core.event.events.SharedFolderLinkViewEvent;
+import techpick.core.event.events.SuggestionViewEvent;
 import techpick.security.annotation.LoginUserId;
 
 @RestController
@@ -69,6 +70,27 @@ public class EventApiController {
 	) {
 		var linkInfo = linkService.getLinkInfo(request.url()); // 서버에 링크 엔티티가 존재해야 이벤트 전송 가능
 		eventMessenger.send(new SharedFolderLinkViewEvent(request.url(), request.folderAccessToken()));
+		return ResponseEntity.noContent().build();
+	}
+
+	/**
+	 * @author minkyeu kim
+	 * [공개 api]
+	 * 추천 페이지에서 사용자가 추천 카드를 클릭했을 때 프론트엔드가 보내는 이벤트
+	 */
+	@PostMapping("/suggestion/view")
+	@Operation(
+		summary = "추천 페이지 링크 조회 이벤트 수집",
+		description = "[인증 불필요] 서버에게 추천 페이지의 어떤 링크가 조회됬는지 알립니다."
+	)
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "전송 성공")
+	})
+	public ResponseEntity<Void> suggestionView(
+		@Valid @RequestBody EventApiRequest.SuggestionView request,
+		@LoginUserId Long userId
+	) {
+		eventMessenger.send(new SuggestionViewEvent(userId, request.url()));
 		return ResponseEntity.noContent().build();
 	}
 }

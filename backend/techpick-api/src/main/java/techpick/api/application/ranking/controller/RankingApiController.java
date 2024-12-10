@@ -3,6 +3,7 @@ package techpick.api.application.ranking.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,7 +68,8 @@ public class RankingApiController {
 	}
 
 	/**
-	 * Url만 명시된 랭킹을 Og-Data가 포함된 랭킹 정보로 변환
+	 * @author: minkyeu kim
+	 * Url만 명시된 랭킹을 Og-Data가 포함된 랭킹 정보로 변환한다.
 	 */
 	private List<LinkInfoWithCount> urlToLinkInfo(List<UrlWithCount> urlRanking) {
 		if (Objects.isNull(urlRanking)) {
@@ -76,13 +78,27 @@ public class RankingApiController {
 		var result = new ArrayList<LinkInfoWithCount>();
 		for (UrlWithCount urlWithCount : urlRanking) {
 			try {
-				var linkInfo = linkService.getLinkInfo(urlWithCount.url());
-				var rankingInfo = rankingApiMapper.toRankingWithLinkInfo(urlWithCount, linkInfo);
-				result.add(rankingInfo);
+				appendOgDataByUrl(urlWithCount).ifPresent(result::add);
 			} catch (ApiLinkException exception) {
 				log.error("[랭킹 획득 - 서버에 저장되지 않은 링크가 랭킹에 포함되어 있습니다! ={}", urlWithCount.url(), exception);
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * OG 태그 제목이 없으면 프론트엔드에서 빈 제목이 보여진다.
+	 * 프론트가 추천 리스트에서 제목이 없는 링크는 제외하면 되는데,
+	 * 현재 프론트가 바빠 바로 작업할 수 없어서, 임시로 백엔드에서 처리하게 되었다.
+	 *
+	 * 그러나 링크 자체에 대한 랭킹 데이터는 OG 태그 제목 여부와 관계 없어야 한다.
+	 * 따라서 이는 추후 프론트가 처리하도록 하는게 맞다.
+	 */
+	private Optional<LinkInfoWithCount> appendOgDataByUrl(UrlWithCount urlWithCount) {
+		var linkInfo = linkService.getLinkInfo(urlWithCount.url());
+		if (linkInfo.title().isBlank()) {
+			return Optional.empty();
+		}
+		return Optional.of(rankingApiMapper.toRankingWithLinkInfo(urlWithCount, linkInfo));
 	}
 }

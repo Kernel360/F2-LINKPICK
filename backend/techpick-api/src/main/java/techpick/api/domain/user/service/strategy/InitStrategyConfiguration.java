@@ -9,11 +9,15 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class InitStrategyConfiguration {
 
+	/**
+	 * 나중에 넣은게 위에 올라가기 때문에,
+	 * hot-contents 부터 먼저 넣어줘야 상단에 manual이 표시된다.
+	 */
 	@Bean
 	public List<ContentInitStrategy> contentInitStrategies(
-		@Qualifier("app-manual") ContentInitStrategy strategy1,
-		@Qualifier("hot-contents") ContentInitStrategy strategy2
+		@Qualifier("app-manual") ContentInitStrategy appManual,
+		@Qualifier("hot-contents") ContentInitStrategy hotContents
 	) {
-		return List.of(strategy1, strategy2);
+		return List.of(hotContents, appManual);
 	}
 }

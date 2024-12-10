@@ -12,8 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import techpick.core.annotation.TechpickAnnotation;
 import techpick.core.dto.UrlWithCount;
 import techpick.ranking.exeption.ApiRankException;
-import techpick.ranking.infra.pick.PickCreateCountRepository;
-import techpick.ranking.infra.pick.PickViewCountRepository;
+import techpick.ranking.infra.pick.LinkPickedCountRepository;
+import techpick.ranking.infra.pick.LinkViewCountRepository;
 import techpick.core.util.MapUtil;
 import techpick.ranking.infra.pick.UrlCount;
 
@@ -22,8 +22,8 @@ import techpick.ranking.infra.pick.UrlCount;
 @RequiredArgsConstructor
 public class PickRankingService {
 
-	private final PickViewCountRepository pickViewCountRepository;
-	private final PickCreateCountRepository pickCreateCountRepository;
+	private final LinkViewCountRepository linkViewCountRepository;
+	private final LinkPickedCountRepository linkPickedCountRepository;
 
 	/**
 	 * @author minkyeu kim
@@ -38,7 +38,7 @@ public class PickRankingService {
 	@TechpickAnnotation.MeasureTime
 	public List<UrlWithCount> getLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
 		assertDateIsValid(startDate, endDate);
-		var pickViewCountList = pickViewCountRepository.findByDateBetween(
+		var pickViewCountList = linkViewCountRepository.findByDateBetween(
 			startDate.minusDays(1), endDate.plusDays(1)
 		);
 		return MapUtil.sortByValue(toUrlCountPair(pickViewCountList), MapUtil.SortBy.DESCENDING)
@@ -55,7 +55,7 @@ public class PickRankingService {
 	@TechpickAnnotation.MeasureTime
 	public List<UrlWithCount> getLinksOrderByPickedCount(LocalDate startDate, LocalDate endDate, int limit) {
 		assertDateIsValid(startDate, endDate);
-		var pickCreateCountList = pickCreateCountRepository.findByDateBetween(
+		var pickCreateCountList = linkPickedCountRepository.findByDateBetween(
 			startDate.minusDays(1), endDate.plusDays(1)
 		);
 		return MapUtil.sortByValue(toUrlCountPair(pickCreateCountList), MapUtil.SortBy.DESCENDING)
