@@ -6,21 +6,29 @@ import {
   pickTitleStyle,
   pickImageStyle,
 } from './PickCarouselItem.css';
+import { RecommendPickType } from '@/types';
 
-export function PickCarouselItem() {
+export function PickCarouselItem({ recommendPick }: PickCarouselItemProps) {
+  const imageUrl =
+    recommendPick.imageUrl === ''
+      ? '/image/default_image.svg'
+      : recommendPick.imageUrl;
+
   return (
     <div className={pickCarouselItemStyle}>
       <Image
-        src={'/image/default_image.svg'}
+        src={imageUrl}
         alt=""
         className={pickImageStyle}
         width="250"
         height="131"
       />
 
-      <p className={pickTitleStyle}>
-        itletitletitletitletitletitletitletitletitletitletitletitlevtitledadsadsadsadadsad
-      </p>
+      <p className={pickTitleStyle}>{recommendPick.title}</p>
     </div>
   );
+}
+
+interface PickCarouselItemProps {
+  recommendPick: RecommendPickType;
 }

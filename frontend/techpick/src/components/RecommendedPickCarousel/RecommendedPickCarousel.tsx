@@ -10,8 +10,11 @@ import {
   chevronLeftIconStyle,
   chevronRightIconStyle,
 } from './RecommendedPickCarousel.css';
+import { RecommendPickType } from '@/types';
 
-export function RecommendedPickCarousel() {
+export function RecommendedPickCarousel({
+  recommendPickList,
+}: RecommendedPickCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     watchDrag: false,
     slidesToScroll: 2,
@@ -30,27 +33,38 @@ export function RecommendedPickCarousel() {
   }, [emblaApi]);
 
   return (
-    <div className={recommendedPickCarouselStyle}>
-      <div className="embla__viewport" ref={emblaRef}>
-        <div className={recommendedPickItemListStyle}>
-          <PickCarouselItem />
-          <PickCarouselItem />
-          <PickCarouselItem />
-          <PickCarouselItem />
-          <PickCarouselItem />
-          <PickCarouselItem />
-          <PickCarouselItem />
-          <PickCarouselItem />
-          <PickCarouselItem />
-          <PickCarouselItem />
+    <div
+      style={{ overflow: 'hidden', position: 'relative', padding: '0 20px' }}
+    >
+      <div className={recommendedPickCarouselStyle}>
+        <div className="embla__viewport" ref={emblaRef}>
+          <div className={recommendedPickItemListStyle}>
+            {recommendPickList.map((recommendPick) => {
+              return (
+                <PickCarouselItem
+                  key={recommendPick.url}
+                  recommendPick={recommendPick}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
-      <button onClick={scrollPrev} className={chevronLeftIconStyle}>
-        <ChevronLeftIcon />
-      </button>
-      <button onClick={scrollNext} className={chevronRightIconStyle}>
-        <ChevronRightIcon />
-      </button>
+      <ChevronLeftIcon
+        onClick={scrollPrev}
+        role="button"
+        className={chevronLeftIconStyle}
+      />
+
+      <ChevronRightIcon
+        onClick={scrollNext}
+        role="button"
+        className={chevronRightIconStyle}
+      />
     </div>
   );
+}
+
+interface RecommendedPickCarouselProps {
+  recommendPickList: RecommendPickType[];
 }

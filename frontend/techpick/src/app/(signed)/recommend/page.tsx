@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { getSuggestionRankingPicks } from '@/apis/getSuggestionRankingPicks';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { RecommendedPickCarousel } from '@/components/RecommendedPickCarousel/RecommendedPickCarousel';
 import {
@@ -18,12 +19,15 @@ import {
   recommendContentSectionStyle,
 } from './page.css';
 import { RecommendLoadingPage } from './RecommendLoadingPage';
+import { GetSuggestionRankingPicksResponseType } from '@/types';
 
 export default function RecommendPage() {
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
   const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
+  const [suggestionRankingPicks, setSuggestionRankingPicks] =
+    useState<GetSuggestionRankingPicksResponseType>();
 
   useEffect(
     function selectRootFolderId() {
@@ -36,7 +40,16 @@ export default function RecommendPage() {
     [basicFolderMap, selectSingleFolder]
   );
 
-  if (!basicFolderMap) {
+  useEffect(function loadSuggestionRankingPicks() {
+    const fetchSuggestionRankingPicks = async () => {
+      const data = await getSuggestionRankingPicks();
+      setSuggestionRankingPicks(data);
+    };
+
+    fetchSuggestionRankingPicks();
+  }, []);
+
+  if (!basicFolderMap || !suggestionRankingPicks) {
     return <RecommendLoadingPage />;
   }
 
@@ -44,6 +57,7 @@ export default function RecommendPage() {
     <FolderContentLayout>
       <div className={recommendSectionLayoutStyle}>
         <h1 className={recommendPageTitleStyle}>🔥HOT TREND!🔥</h1>
+
         <div className={recommendContentSectionStyle}>
           <div className={recommendedPickCarouselSectionStyle}>
             <div className={recommendedPickCarouselStyle}>
@@ -51,11 +65,15 @@ export default function RecommendPage() {
                 오늘 가장 <span className={pointTextStyle}>핫한</span> 픽
               </h2>
             </div>
-            <RecommendedPickCarousel />
+            <RecommendedPickCarousel
+              recommendPickList={suggestionRankingPicks.dailyViewRanking}
+            />
           </div>
 
           <div className={recommendedPickCarouselSectionStyle}>
-            <RecommendedPickCarousel />
+            <RecommendedPickCarousel
+              recommendPickList={suggestionRankingPicks.weeklyViewRanking}
+            />
             <div className={recommendedPickCarouselStyle}>
               <h2 className={recommendSectionDescription}>
                 🔥🔥이번 주 가장 많이 <span className={pointTextStyle}>본</span>{' '}
@@ -71,7 +89,9 @@ export default function RecommendPage() {
                 <span className={pointTextStyle}>저장한</span> 픽
               </h2>
             </div>
-            <RecommendedPickCarousel />
+            <RecommendedPickCarousel
+              recommendPickList={suggestionRankingPicks.monthlyPickRanking}
+            />
           </div>
         </div>
       </div>
