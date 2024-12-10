@@ -10,7 +10,7 @@ import {
 } from './pickCarouselCard.css';
 import { RecommendPickType } from '@/types';
 
-export function PickCarouselItem({ recommendPick }: PickCarouselItemProps) {
+export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
   const { openUrlInNewTab } = useOpenUrlInNewTab(recommendPick.url);
 
   return (
@@ -46,6 +46,6 @@ export function PickCarouselItem({ recommendPick }: PickCarouselItemProps) {
   );
 }
 
-interface PickCarouselItemProps {
+interface PickCarouselCardProps {
   recommendPick: RecommendPickType;
 }

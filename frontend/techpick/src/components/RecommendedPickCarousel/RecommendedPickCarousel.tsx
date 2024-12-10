@@ -3,7 +3,7 @@
 import { useCallback } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronRightIcon, ChevronLeftIcon } from 'lucide-react';
-import { PickCarouselItem } from './PickCarouselCard';
+import { PickCarouselCard } from './PickCarouselCard';
 import {
   recommendedPickCarouselStyle,
   recommendedPickItemListStyle,
@@ -11,10 +11,12 @@ import {
   chevronRightIconStyle,
   recommendedPickCarouselLayoutStyle,
 } from './RecommendedPickCarousel.css';
-import { RecommendPickType } from '@/types';
+import { RecommendPickDraggable } from './RecommendPickDraggable';
+import { RecommendPickCategoryType, RecommendPickType } from '@/types';
 
 export function RecommendedPickCarousel({
   recommendPickList,
+  recommendPickCategoryType,
 }: RecommendedPickCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel({
     watchDrag: false,
@@ -40,10 +42,13 @@ export function RecommendedPickCarousel({
           <div className={recommendedPickItemListStyle}>
             {recommendPickList.map((recommendPick) => {
               return (
-                <PickCarouselItem
+                <RecommendPickDraggable
                   key={recommendPick.url}
                   recommendPick={recommendPick}
-                />
+                  recommendPickCategoryType={recommendPickCategoryType}
+                >
+                  <PickCarouselCard recommendPick={recommendPick} />
+                </RecommendPickDraggable>
               );
             })}
           </div>
@@ -66,4 +71,5 @@ export function RecommendedPickCarousel({
 
 interface RecommendedPickCarouselProps {
   recommendPickList: RecommendPickType[];
+  recommendPickCategoryType: RecommendPickCategoryType;
 }
