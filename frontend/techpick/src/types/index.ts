@@ -15,4 +15,4 @@ export type { PickViewDraggableItemListLayoutComponentProps } from './PickViewDr
 export type { PickDeleteRequestType } from './PickDeleteRequestType';
 export type { PostUserPickViewEventLogRequestType } from './PostUserPickViewEventLogRequestType';
 export type { GetSuggestionRankingPicksResponseType } from './GetSuggestionRankingPicksResponseType';
-export type { PostSharedPickViewEventLog } from './PostSharedPickViewEventLog';
+export type { PostSharedPickViewEventLogRequestType } from './PostSharedPickViewEventLogRequestType';

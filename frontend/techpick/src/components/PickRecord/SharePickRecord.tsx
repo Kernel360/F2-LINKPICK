@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
+import { postSharedPickViewEventLog } from '@/apis/eventLog';
 import { useOpenUrlInNewTab } from '@/hooks';
 import { formatDateString } from '@/utils';
 import { PickDateColumnLayout } from './PickDateColumnLayout';
@@ -28,10 +29,26 @@ import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListL
 import { TagType } from '@/types';
 import { components } from '@/schema';
 
-export function SharePickRecord({ pickInfo, tagList }: SharePickRecordProps) {
+export function SharePickRecord({
+  pickInfo,
+  tagList,
+  folderAccessToken,
+}: SharePickRecordProps) {
   const link = pickInfo.linkInfo!;
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
   const [isHovered, setIsHovered] = useState(false);
+
+  const onClickLink = async () => {
+    try {
+      openUrlInNewTab();
+      await postSharedPickViewEventLog({
+        url: link.url,
+        folderAccessToken,
+      });
+    } catch {
+      /*empty */
+    }
+  };
 
   return (
     <div
@@ -49,7 +66,7 @@ export function SharePickRecord({ pickInfo, tagList }: SharePickRecordProps) {
         </div>
       </PickImageColumnLayout>
       {isHovered && (
-        <div className={linkLayoutStyle} onClick={openUrlInNewTab}>
+        <div className={linkLayoutStyle} onClick={onClickLink}>
           <ExternalLinkIcon className={externalLinkIconStyle} strokeWidth={2} />
         </div>
       )}
@@ -96,4 +113,5 @@ export function SharePickRecord({ pickInfo, tagList }: SharePickRecordProps) {
 interface SharePickRecordProps {
   pickInfo: components['schemas']['techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo'];
   tagList: components['schemas']['techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo'][];
+  folderAccessToken: string;
 }

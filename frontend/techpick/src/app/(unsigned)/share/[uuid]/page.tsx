@@ -2,6 +2,7 @@
 
 import React from 'react';
 import dynamic from 'next/dynamic';
+import { useParams } from 'next/navigation';
 import { FolderOpenIcon } from 'lucide-react';
 import { PickRecordHeader } from '@/components';
 import {
@@ -29,6 +30,7 @@ const EmptyPickRecordImage = dynamic(
 
 export default function Page() {
   const { shareFolderList, isLoading, isError } = useFetchShareFolderById();
+  const { uuid } = useParams<{ uuid: string }>();
 
   if (isError) {
     return (
@@ -68,6 +70,7 @@ export default function Page() {
                 key={pick.title}
                 pickInfo={pick}
                 tagList={shareFolderList.tagList!}
+                folderAccessToken={uuid}
               />
             );
           })
