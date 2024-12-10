@@ -16,7 +16,6 @@ import techpick.api.domain.pick.dto.PickCommand;
 import techpick.api.domain.pick.service.PickService;
 import techpick.api.infrastructure.ranking.RankingApi;
 import techpick.core.dto.UrlWithCount;
-import techpick.core.model.folder.Folder;
 import techpick.core.model.user.User;
 
 @Slf4j
@@ -32,14 +31,14 @@ public class RankingInitStrategy implements ContentInitStrategy {
 	private final LinkService linkService;
 
 	@Override
-	public void initContent(User user, Folder parentFolder) {
+	public void initContent(User user, Long folderId) {
 		var currentDay = LocalDate.now();
 		var before1Day = currentDay.minusDays(1);
 		var before30Days = currentDay.minusDays(30);
 		var monthlyRanking = rankingApi
 			.getUrlRankingByViewCount(before30Days, before1Day, LOAD_LIMIT)
 			.getBody();
-		savePickFromRankingList(user.getId(), monthlyRanking, parentFolder.getId());
+		savePickFromRankingList(user.getId(), monthlyRanking, folderId);
 	}
 
 	/**
@@ -55,6 +54,9 @@ public class RankingInitStrategy implements ContentInitStrategy {
 			var curr = reverseItr.previous();
 			try {
 				var linkInfo = linkService.getLinkInfo(curr.url());
+				if (linkInfo.title().isBlank()) {
+					continue;
+				}
 				var command = new PickCommand.Create(
 					userId, linkInfo.title(), new ArrayList<>(), destinationFolderId, linkInfo
 				);
