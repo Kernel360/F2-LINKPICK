@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useOpenUrlInNewTab } from '@/hooks';
 import {
   pickCarouselItemStyle,
   pickTitleStyle,
@@ -14,8 +15,10 @@ export function PickCarouselItem({ recommendPick }: PickCarouselItemProps) {
       ? '/image/default_image.svg'
       : recommendPick.imageUrl;
 
+  const { openUrlInNewTab } = useOpenUrlInNewTab(recommendPick.url);
+
   return (
-    <div className={pickCarouselItemStyle}>
+    <div className={pickCarouselItemStyle} onDoubleClick={openUrlInNewTab}>
       <Image
         src={imageUrl}
         alt=""
