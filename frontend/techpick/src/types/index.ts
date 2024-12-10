@@ -13,4 +13,6 @@ export type { PickViewItemComponentProps } from './PickViewItemComponentProps';
 export type { PickViewDraggableItemComponentProps } from './PickViewDraggableItemComponentProps';
 export type { PickViewDraggableItemListLayoutComponentProps } from './PickViewDraggableItemListLayoutComponentProps';
 export type { PickDeleteRequestType } from './PickDeleteRequestType';
-export type { PostClickedLinkUrlResponseType } from './PostClickedLinkUrlResponseType';
+export type { PostUserPickViewEventLogRequestType } from './PostUserPickViewEventLogRequestType';
+export type { GetSuggestionRankingPicksResponseType } from './GetSuggestionRankingPicksResponseType';
+export type { PostSharedPickViewEventLog } from './PostSharedPickViewEventLog';

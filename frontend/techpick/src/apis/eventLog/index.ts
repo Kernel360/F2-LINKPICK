@@ -1,1 +1,1 @@
-export { postClickedLinkUrl } from './postClickedLinkUrl';
+export { postUserPickViewEventLog } from './postUserPickViewEventLog';

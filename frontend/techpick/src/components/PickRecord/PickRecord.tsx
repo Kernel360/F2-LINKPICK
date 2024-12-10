@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
-import { postClickedLinkUrl } from '@/apis/eventLog';
+import { postUserPickViewEventLog } from '@/apis/eventLog';
 import { useOpenUrlInNewTab } from '@/hooks';
 import { usePickStore, useTagStore, useUpdatePickStore } from '@/stores';
 import { formatDateString } from '@/utils';
@@ -51,7 +51,7 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
   const onClickLink = async () => {
     try {
       openUrlInNewTab();
-      await postClickedLinkUrl(link.url);
+      await postUserPickViewEventLog({ url: link.url, pickId: pick.id });
     } catch {
       /*empty */
     }
