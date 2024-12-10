@@ -59,40 +59,46 @@ export default function RecommendPage() {
         <h1 className={recommendPageTitleStyle}>🔥HOT TREND!🔥</h1>
 
         <div className={recommendContentSectionStyle}>
-          <div className={recommendedPickCarouselSectionStyle}>
-            <div className={recommendedPickCarouselStyle}>
-              <h2 className={recommendSectionDescription}>
-                오늘 가장 <span className={pointTextStyle}>핫한</span> 픽
-              </h2>
+          {suggestionRankingPicks.dailyViewRanking.length !== 0 && (
+            <div className={recommendedPickCarouselSectionStyle}>
+              <div className={recommendedPickCarouselStyle}>
+                <h2 className={recommendSectionDescription}>
+                  오늘 가장 <span className={pointTextStyle}>핫한</span> 픽
+                </h2>
+              </div>
+              <RecommendedPickCarousel
+                recommendPickList={suggestionRankingPicks.dailyViewRanking}
+              />
             </div>
-            <RecommendedPickCarousel
-              recommendPickList={suggestionRankingPicks.dailyViewRanking}
-            />
-          </div>
+          )}
 
-          <div className={recommendedPickCarouselSectionStyle}>
-            <RecommendedPickCarousel
-              recommendPickList={suggestionRankingPicks.weeklyViewRanking}
-            />
-            <div className={recommendedPickCarouselStyle}>
-              <h2 className={recommendSectionDescription}>
-                🔥🔥이번 주 가장 많이 <span className={pointTextStyle}>본</span>{' '}
-                픽🔥🔥
-              </h2>
+          {suggestionRankingPicks.weeklyViewRanking.length !== 0 && (
+            <div className={recommendedPickCarouselSectionStyle}>
+              <RecommendedPickCarousel
+                recommendPickList={suggestionRankingPicks.weeklyViewRanking}
+              />
+              <div className={recommendedPickCarouselStyle}>
+                <h2 className={recommendSectionDescription}>
+                  🔥🔥이번 주 가장 많이
+                  <span className={pointTextStyle}>본</span> 픽🔥🔥
+                </h2>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className={recommendedPickCarouselSectionStyle}>
-            <div className={recommendedPickCarouselStyle}>
-              <h2 className={recommendSectionDescription}>
-                다른 사용자가 가장 많이{' '}
-                <span className={pointTextStyle}>저장한</span> 픽
-              </h2>
+          {suggestionRankingPicks.monthlyPickRanking.length !== 0 && (
+            <div className={recommendedPickCarouselSectionStyle}>
+              <div className={recommendedPickCarouselStyle}>
+                <h2 className={recommendSectionDescription}>
+                  다른 사용자가 가장 많이
+                  <span className={pointTextStyle}>저장한</span> 픽
+                </h2>
+              </div>
+              <RecommendedPickCarousel
+                recommendPickList={suggestionRankingPicks.monthlyPickRanking}
+              />
             </div>
-            <RecommendedPickCarousel
-              recommendPickList={suggestionRankingPicks.monthlyPickRanking}
-            />
-          </div>
+          )}
         </div>
       </div>
     </FolderContentLayout>
