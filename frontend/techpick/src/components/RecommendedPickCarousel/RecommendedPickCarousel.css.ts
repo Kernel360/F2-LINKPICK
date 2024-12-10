@@ -1,5 +1,4 @@
 import { style } from '@vanilla-extract/css';
-import { colorVars } from 'techpick-shared';
 
 export const recommendedPickCarouselStyle = style({
   position: 'relative',
@@ -16,19 +15,14 @@ export const chevronIconStyle = style({
   top: '40%',
   transform: 'translateY(-50%)',
   cursor: 'pointer',
-  width: '24px',
-  height: '24px',
-
-  ':hover': {
-    outline: '1px solid',
-    outlineColor: colorVars.slate5,
-    boxShadow: `0 2px 8px ${colorVars.slate7}`,
-  },
+  width: '20px',
+  height: '20px',
+  borderRadius: '50%',
 });
 
-export const chevronLeftIconStyle = style([chevronIconStyle, { left: '4px' }]);
+export const chevronLeftIconStyle = style([chevronIconStyle, { left: '0px' }]);
 
 export const chevronRightIconStyle = style([
   chevronIconStyle,
-  { right: '4px' },
+  { right: '0px' },
 ]);

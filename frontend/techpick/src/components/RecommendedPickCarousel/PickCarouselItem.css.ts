@@ -19,8 +19,8 @@ export const pickCarouselItemStyle = style({
 
 export const pickImageStyle = style({
   objectFit: 'cover',
-  borderTopLeftRadius: '4px',
-  borderTopRightRadius: '4px',
+  borderTopLeftRadius: '8px',
+  borderTopRightRadius: '8px',
 });
 
 export const pickTitleStyle = style({
