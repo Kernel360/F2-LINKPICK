@@ -33,4 +33,8 @@ public class ApiTagException extends ApiException {
 		return new ApiTagException(ApiTagErrorCode.TAG_INVALID_ORDER);
 	}
 
+	public static ApiTagException TAG_NAME_TOO_LONG() {
+		return new ApiTagException(ApiTagErrorCode.TAG_NAME_TOO_LONG);
+	}
+
 }
