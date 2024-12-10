@@ -42,16 +42,16 @@ public class PickQuery {
 		}
 
 		List<Long> pickIdList = folderIdList.stream()
-			.flatMap(folderId -> getChildPickIdOrderedList(folderId).stream())
-			.toList();
+											.flatMap(folderId -> getChildPickIdOrderedList(folderId).stream())
+											.toList();
 
 		if (pickIdList.isEmpty()) {
 			return List.of();
 		}
 
 		String orderListStr = pickIdList.stream()
-			.map(String::valueOf)
-			.collect(Collectors.joining(", "));
+										.map(String::valueOf)
+										.collect(Collectors.joining(", "));
 
 		Expression<Integer> orderByField = Expressions.template(Integer.class,
 			"FIELD({0}, " + orderListStr + ")", pick.id);
@@ -86,8 +86,10 @@ public class PickQuery {
 	}
 
 	// TODO: 본인 픽이 아닌 다른 사람의 픽도 검색하고 싶다면 userId 부분 제거
-	public Slice<PickResult.Pick> searchPickPagination(Long userId, List<Long> folderIdList, List<String> searchTokenList,
-		List<Long> tagIdList, Long cursor, int size) {
+	public Slice<PickResult.Pick> searchPickPagination(
+		Long userId, List<Long> folderIdList, List<String> searchTokenList,
+		List<Long> tagIdList, Long cursor, int size
+	) {
 
 		List<PickResult.Pick> pickList = jpaQueryFactory
 			.select(pickResultFields()) // dto로 반환
@@ -166,18 +168,19 @@ public class PickQuery {
 		}
 
 		return searchTokenList.stream()
-			.map(token -> {
-				StringTokenizer stringTokenizer = new StringTokenizer(token);
-				BooleanExpression combinedCondition = null;
-				while (stringTokenizer.hasMoreTokens()) {
-					String part = stringTokenizer.nextToken().toLowerCase();
-					BooleanExpression condition = pick.title.lower().like("%" + part + "%");
-					combinedCondition = (combinedCondition == null) ? condition : combinedCondition.and(condition);
-				}
-				return combinedCondition;
-			})
-			.reduce(BooleanExpression::and)
-			.orElse(null);
+							  .map(token -> {
+								  StringTokenizer stringTokenizer = new StringTokenizer(token);
+								  BooleanExpression combinedCondition = null;
+								  while (stringTokenizer.hasMoreTokens()) {
+									  String part = stringTokenizer.nextToken().toLowerCase();
+									  BooleanExpression condition = pick.title.lower().like("%" + part + "%");
+									  combinedCondition =
+										  (combinedCondition == null) ? condition : combinedCondition.and(condition);
+								  }
+								  return combinedCondition;
+							  })
+							  .reduce(BooleanExpression::and)
+							  .orElse(null);
 	}
 
 	private BooleanExpression tagIdListCondition(List<Long> tagIdList) {
@@ -189,7 +192,7 @@ public class PickQuery {
 			.selectFrom(pickTag)
 			.where(
 				pickTag.pick.id.eq(pick.id)
-					.and(pickTag.tag.id.in(tagIdList)))
+							   .and(pickTag.tag.id.in(tagIdList)))
 			.groupBy(pickTag.pick.id)
 			.having(pickTag.tag.id.count().eq((long)tagIdList.size()))
 			.exists();
