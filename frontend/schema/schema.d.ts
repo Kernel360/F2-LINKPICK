@@ -231,7 +231,7 @@ export interface paths {
         patch: operations["updateFolder"];
         trace?: never;
     };
-    "/api/event/shared/view": {
+    "/api/events/shared/view": {
         parameters: {
             query?: never;
             header?: never;
@@ -251,7 +251,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/event/pick/view": {
+    "/api/events/picks/view": {
         parameters: {
             query?: never;
             header?: never;
@@ -403,8 +403,11 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 픽 상세 조회
-         * @description 픽을 상세 조회합니다.
+         * [Deprecated] 픽 상세 조회
+         * @deprecated
+         * @description 	현재 사용되지 않는 api 입니다.
+         *     	추후 코드 제거 예정입니다.
+         *
          */
         get: operations["getPick"];
         put?: never;
@@ -702,6 +705,21 @@ export interface components {
              *      */
             folderAccessToken?: string | null;
         };
+        "techpick.api.application.event.dto.EventApiRequest$SharedBookmarkView": {
+            /** @description 조회된 링크 url */
+            url: string;
+            /** @description 조회된 공개 폴더 접근용 토큰 */
+            folderAccessToken: string;
+        };
+        "techpick.api.application.event.dto.EventApiRequest$BookmarkView": {
+            /** @description 조회된 링크 url */
+            url: string;
+            /**
+             * Format: int64
+             * @description 조회되는 픽의 id
+             */
+            pickId: number;
+        };
         "techpick.api.application.tag.dto.TagApiRequest$Update": {
             /**
              * Format: int64
@@ -809,7 +827,7 @@ export interface components {
             colorNumber?: number;
         };
         /** @description 지난 30일동안 링크가 픽된 횟수 Top 10 */
-        "techpick.api.application.ranking.dto.LinkInfoWithViewCount": {
+        "techpick.api.application.ranking.dto.LinkInfoWithCount": {
             url: string;
             title?: string;
             description?: string;
@@ -817,13 +835,13 @@ export interface components {
             /** Format: int64 */
             count?: number;
         };
-        "techpick.api.application.ranking.dto.RankingByViewCount": {
+        "techpick.api.application.ranking.dto.RankingResponse": {
             /** @description 오늘 하루 동안 인기 있는 링크 Top 10 */
-            dailyViewRanking?: components["schemas"]["techpick.api.application.ranking.dto.LinkInfoWithViewCount"][];
+            dailyViewRanking?: components["schemas"]["techpick.api.application.ranking.dto.LinkInfoWithCount"][];
             /** @description 지난 7일동안 링크 조회 수 Top 10 */
-            weeklyViewRanking?: components["schemas"]["techpick.api.application.ranking.dto.LinkInfoWithViewCount"][];
+            weeklyViewRanking?: components["schemas"]["techpick.api.application.ranking.dto.LinkInfoWithCount"][];
             /** @description 지난 30일동안 링크가 픽된 횟수 Top 10 */
-            monthlyPickRanking?: components["schemas"]["techpick.api.application.ranking.dto.LinkInfoWithViewCount"][];
+            monthlyPickRanking?: components["schemas"]["techpick.api.application.ranking.dto.LinkInfoWithCount"][];
         };
         "techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderPartial": {
             /**
@@ -927,10 +945,26 @@ export interface components {
             /** Format: int32 */
             colorNumber: number;
         };
-        "techpick.api.application.pick.dto.PickApiResponse$FolderPickList": {
+        "techpick.api.application.pick.dto.PickApiResponse$FolderPickListWithViewCount": {
             /** Format: int64 */
             folderId?: number;
-            pickList?: components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"][];
+            pickList?: components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$PickWithViewCount"][];
+        };
+        "techpick.api.application.pick.dto.PickApiResponse$PickWithViewCount": {
+            /** Format: int64 */
+            id?: number;
+            title?: string;
+            linkInfo?: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
+            /** Format: int64 */
+            parentFolderId?: number;
+            tagIdOrderedList?: number[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            isHot: boolean;
+            /** Format: int64 */
+            weeklyViewCount?: number;
         };
         "techpick.api.application.pick.dto.PickSliceResponseTechpick.api.application.pick.dto.PickApiResponse$Pick": {
             content?: components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"][];
@@ -941,7 +975,7 @@ export interface components {
             hasNext?: boolean;
         };
         "techpick.api.application.pick.dto.PickApiResponse$PickExists": {
-            exist?: boolean;
+            exist: boolean;
             pick?: components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
         };
         "techpick.api.application.link.dto.LinkApiResponse": {
@@ -1173,7 +1207,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$FolderPickList"][];
+                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$FolderPickListWithViewCount"][];
                 };
             };
         };
@@ -1407,44 +1441,40 @@ export interface operations {
     };
     sharedFolderLinkView: {
         parameters: {
-            query: {
-                /** @description 조회된 링크 url */
-                url: string;
-                /** @description 조회된 공개 폴더 접근용 토큰 */
-                folderAccessToken: string;
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["techpick.api.application.event.dto.EventApiRequest$SharedBookmarkView"];
+            };
+        };
         responses: {
-            /** @description OK */
+            /** @description 전송 성공 */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "*/*": components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
-                };
+                content?: never;
             };
         };
     };
     bookmarkView: {
         parameters: {
-            query: {
-                /** @description 조회되는 픽의 링크 url */
-                url: string;
-                /** @description 조회되는 픽의 id */
-                pickId: number;
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["techpick.api.application.event.dto.EventApiRequest$BookmarkView"];
+            };
+        };
         responses: {
-            /** @description OK */
+            /** @description 전송 성공 */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1605,7 +1635,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.ranking.dto.RankingByViewCount"];
+                    "*/*": components["schemas"]["techpick.api.application.ranking.dto.RankingResponse"];
                 };
             };
         };
