@@ -65,6 +65,11 @@ export function UpdatePickForm({
   const onSubmit = () => {
     const userModifiedTitle = titleInputRef.current?.value ?? '';
 
+    if (userModifiedTitle.trim() === '') {
+      notifyError('제목이 비어있는 상태로 수정할 수 없습니다.');
+      return;
+    }
+
     updatePick({
       id,
       title: DOMPurify.sanitize(userModifiedTitle.trim()),

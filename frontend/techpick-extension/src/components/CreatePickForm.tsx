@@ -54,6 +54,11 @@ export function CreatePickForm({
       return;
     }
 
+    if (userModifiedTitle.trim() === '') {
+      notifyError('제목이 비어있는 상태로 저장할 수 없습니다.');
+      return;
+    }
+
     createPick({
       title: DOMPurify.sanitize(userModifiedTitle.trim()),
       tagIdOrderedList: selectedTagList.map((tag) => tag.id),
