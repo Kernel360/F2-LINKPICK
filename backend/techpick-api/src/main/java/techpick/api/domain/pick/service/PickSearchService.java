@@ -1,6 +1,7 @@
 package techpick.api.domain.pick.service;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,25 +32,34 @@ public class PickSearchService {
 
 	@Transactional(readOnly = true)
 	public Slice<PickResult.Pick> searchPickPagination(PickCommand.SearchPagination command) {
-		List<Long> folderIdList = command.folderIdList();
-		List<Long> tagIdList = command.tagIdList();
 
+		List<Long> folderIdList = command.folderIdList();
 		if (ObjectUtils.isNotEmpty(folderIdList)) {
+			folderIdList.removeAll(Collections.singletonList(null));
 			for (Long folderId : folderIdList) {
 				validateFolderAccess(command.userId(), folderId);
 				validateFolderRootSearch(folderId);
 			}
 		}
 
+		List<Long> tagIdList = command.tagIdList();
 		if (ObjectUtils.isNotEmpty(tagIdList)) {
+			tagIdList.removeAll(Collections.singletonList(null));
 			for (Long tagId : tagIdList) {
 				validateTagAccess(command.userId(), tagId);
 			}
 		}
 
-		return pickQuery.searchPickPagination(command.userId(), folderIdList,
-			command.searchTokenList(), command.tagIdList(),
-			command.cursor(), command.size());
+		List<String> searchTokenList = command.searchTokenList();
+		if (ObjectUtils.isNotEmpty(searchTokenList)) {
+			searchTokenList.removeAll(Arrays.asList("", null));
+		}
+
+		return pickQuery.searchPickPagination(
+			command.userId(),
+			folderIdList, searchTokenList, tagIdList,
+			command.cursor(), command.size()
+		);
 	}
 
 	@Transactional(readOnly = true)

@@ -84,14 +84,21 @@ public class PickApiController {
 		@Parameter(description = "한 페이지에 가져올 픽 개수", example = "20") @RequestParam(required = false, defaultValue = "20"
 		) int size
 	) {
-		Slice<PickResult.Pick> pickResultList = pickSearchService.searchPickPagination(
-			pickApiMapper.toSearchPaginationCommand(userId, folderIdList, searchTokenList, tagIdList, cursor, size));
+		var command = pickApiMapper.toSearchPaginationCommand(
+			userId, folderIdList, searchTokenList, tagIdList, cursor, size
+		);
+
+		Slice<PickResult.Pick> pickResultList = pickSearchService.searchPickPagination(command);
 
 		return ResponseEntity.ok(new PickSliceResponse<>(pickApiMapper.toSliceApiResponse(pickResultList)));
 	}
 
+	/**
+	 *  현재 프론트엔드에서 미사용하는 API 입니다.
+	 */
+	@Deprecated
 	@GetMapping("/search/all")
-	@Operation(summary = "픽 리스트 검색", description = "페이지네이션 처리 되지 않은 픽 리스트 검색")
+	@Operation(summary = "[Deprecated] 픽 리스트 검색", description = "페이지네이션 처리 되지 않은 픽 리스트 검색")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
