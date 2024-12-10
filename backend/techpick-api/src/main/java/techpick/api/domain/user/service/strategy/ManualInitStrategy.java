@@ -33,11 +33,11 @@ public class ManualInitStrategy implements ContentInitStrategy {
 	);
 
 	@Override
-	public void initContent(User user, Folder parentFolder) {
+	public void initContent(User user, Long folderId) {
 		for (var url : MANUAL_URLS) {
 			var linkInfo = linkService.saveLinkAndUpdateOgTag(url);
 			var command = new PickCommand.Create(
-				user.getId(), linkInfo.title(), new ArrayList<>(), parentFolder.getId(), linkInfo
+				user.getId(), linkInfo.title(), new ArrayList<>(), folderId, linkInfo
 			);
 			pickService.saveNewPick(command);
 		}
