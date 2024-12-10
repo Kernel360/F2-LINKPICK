@@ -6,26 +6,40 @@ import {
   pickCarouselItemStyle,
   pickTitleStyle,
   pickImageStyle,
-} from './PickCarouselItem.css';
+  defaultImageStyle,
+} from './pickCarouselCard.css';
 import { RecommendPickType } from '@/types';
 
 export function PickCarouselItem({ recommendPick }: PickCarouselItemProps) {
-  const imageUrl =
-    recommendPick.imageUrl === ''
-      ? '/image/default_image.svg'
-      : recommendPick.imageUrl;
-
   const { openUrlInNewTab } = useOpenUrlInNewTab(recommendPick.url);
 
   return (
     <div className={pickCarouselItemStyle} onDoubleClick={openUrlInNewTab}>
-      <Image
-        src={imageUrl}
-        alt=""
-        className={pickImageStyle}
-        width="250"
-        height="131"
-      />
+      {recommendPick.imageUrl === '' ? (
+        <div className={defaultImageStyle}>
+          <Image
+            src={'/image/default_image.svg'}
+            alt=""
+            className={pickImageStyle}
+            width="80"
+            height="65"
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        </div>
+      ) : (
+        <Image
+          src={recommendPick.imageUrl}
+          alt=""
+          className={pickImageStyle}
+          width="250"
+          height="131"
+        />
+      )}
 
       <p className={pickTitleStyle}>{recommendPick.title}</p>
     </div>

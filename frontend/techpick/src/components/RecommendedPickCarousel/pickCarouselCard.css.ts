@@ -17,11 +17,17 @@ export const pickCarouselItemStyle = style({
   },
 });
 
-export const pickImageStyle = style({
-  objectFit: 'cover',
+export const imageStyle = style({
   borderTopLeftRadius: '8px',
   borderTopRightRadius: '8px',
 });
+
+export const pickImageStyle = style([
+  imageStyle,
+  {
+    objectFit: 'cover',
+  },
+]);
 
 export const pickTitleStyle = style({
   display: '-webkit-box',
@@ -35,3 +41,13 @@ export const pickTitleStyle = style({
   WebkitLineClamp: 2,
   WebkitBoxOrient: 'vertical',
 });
+
+export const defaultImageStyle = style([
+  imageStyle,
+  {
+    width: '250px',
+    height: '131px',
+    position: 'relative',
+    backgroundColor: colorVars.gold3,
+  },
+]);
