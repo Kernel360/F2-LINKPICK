@@ -3,12 +3,14 @@
 import type { CSSProperties, MouseEvent } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import useSearchElementId from '@/hooks/useSearchElementId';
 import { usePickStore, useUpdatePickStore } from '@/stores';
 import { getSelectedPickRange, isSelectionActive } from '@/utils';
 import { PickContextMenu } from './PickContextMenu';
 import {
   isActiveDraggingItemStyle,
   selectedDragItemStyle,
+  searchedItemStyle,
 } from './pickDraggableRecord.css';
 import { PickRecord } from './PickRecord';
 import { PickViewDraggableItemComponentProps } from '@/types';
@@ -29,6 +31,7 @@ export function PickDraggableRecord({
     currentUpdateTitlePickId,
     currentUpdateTagPickId,
   } = useUpdatePickStore();
+  const searchElementId = useSearchElementId();
   const { id: pickId, parentFolderId } = pickInfo;
   const isSelected = selectedPickIdList.includes(pickId);
   const {
@@ -97,6 +100,7 @@ export function PickDraggableRecord({
 
   return (
     <div
+      className={`${searchElementId === pickElementId ? searchedItemStyle : ''}`}
       ref={setNodeRef}
       {...attributes}
       {...listeners}

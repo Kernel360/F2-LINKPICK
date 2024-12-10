@@ -6,7 +6,9 @@ import { useSearchPickStore } from '@/stores/searchPickStore';
 import * as styles from './searchInfiniteScrollList.css';
 import SearchItemRenderer from './SearchItemRenderer';
 
-export function SearchInfiniteScrollList() {
+export function SearchInfiniteScrollList({
+  onClose,
+}: SearchInfiniteScrollListProps) {
   const {
     searchResultList,
     hasNext,
@@ -62,6 +64,7 @@ export function SearchInfiniteScrollList() {
                     index={index}
                     item={searchResultList[index]}
                     style={style}
+                    onClose={onClose}
                   />
                 )}
               </List>
@@ -71,4 +74,8 @@ export function SearchInfiniteScrollList() {
       </AutoSizer>
     </div>
   );
+}
+
+interface SearchInfiniteScrollListProps {
+  onClose: () => void;
 }

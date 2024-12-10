@@ -37,7 +37,7 @@ export default function SearchDialog({
           </div>
           <FilterToggleContainer isVisible={filterVisible} />
           <div className={styles.searchListContainer}>
-            <SearchInfiniteScrollList />
+            <SearchInfiniteScrollList onClose={onOpenChange} />
             <HoverCard />
           </div>
         </DialogPrimitive.Content>
