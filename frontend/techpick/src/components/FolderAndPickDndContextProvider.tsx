@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { PropsWithChildren } from 'react';
-import { DndContext, closestCenter } from '@dnd-kit/core';
+import { DndContext, pointerWithin } from '@dnd-kit/core';
 import { useGetDndContextSensor } from '@/hooks';
 import { DndMonitorContext } from './DndMonitorContext';
 import { DargOverlay } from './DragOverlay/DragOverlay';
@@ -22,7 +22,7 @@ export function FolderAndPickDndContextProvider({
   });
 
   return (
-    <DndContext sensors={sensors} collisionDetection={closestCenter}>
+    <DndContext sensors={sensors} collisionDetection={pointerWithin}>
       <DndMonitorContext>{children}</DndMonitorContext>
       <DargOverlay elementClickPosition={elementClickPosition} />
     </DndContext>
