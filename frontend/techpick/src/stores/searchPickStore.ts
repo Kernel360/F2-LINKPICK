@@ -102,24 +102,30 @@ export const useSearchPickStore = create<
       },
       setSearchQuery: (query: string) =>
         set((state) => {
-          state.searchQuery = query;
-          state.hasNext = true;
-          state.lastCursor = 0;
-          state.searchResultList = [];
+          if (state.searchQuery !== query) {
+            state.searchQuery = query;
+            state.hasNext = true;
+            state.lastCursor = 0;
+            state.searchResultList = [];
+          }
         }),
       setSearchTag: (tag: string) =>
         set((state) => {
-          state.searchTag = tag;
-          state.hasNext = true;
-          state.lastCursor = 0;
-          state.searchResultList = [];
+          if (state.searchTag !== tag) {
+            state.searchTag = tag;
+            state.hasNext = true;
+            state.lastCursor = 0;
+            state.searchResultList = [];
+          }
         }),
       setSearchFolder: (folder: string) =>
         set((state) => {
-          state.searchFolder = folder;
-          state.hasNext = true;
-          state.lastCursor = 0;
-          state.searchResultList = [];
+          if (state.searchFolder !== folder) {
+            state.searchFolder = folder;
+            state.hasNext = true;
+            state.lastCursor = 0;
+            state.searchResultList = [];
+          }
         }),
       setHoverPickIndex: (id: number) =>
         set((state) => {

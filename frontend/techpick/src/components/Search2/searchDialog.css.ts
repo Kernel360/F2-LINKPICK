@@ -54,9 +54,16 @@ export const filterButton = style({
 });
 
 export const filterContainer = style({
-  display: 'flex',
   gap: '16px',
   marginBottom: '16px',
+});
+
+export const showFilterContainer = style({
+  display: 'flex',
+});
+
+export const hideFilterContainer = style({
+  display: 'none',
 });
 
 export const filterGroup = style({

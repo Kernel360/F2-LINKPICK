@@ -4,6 +4,7 @@ import { useSearchPickStore } from '@/stores/searchPickStore';
 import { createSearchSelectOptions } from '@/utils';
 import FilterOptions from './FliterOptions';
 import * as styles from './searchDialog.css';
+
 export default function FilterToggleContainer({
   isVisible,
 }: FilterToggleContainerProps) {
@@ -25,10 +26,12 @@ export default function FilterToggleContainer({
     setSearchState(queryString.length === 0 ? '' : queryString.join(','));
   };
 
-  if (!isVisible) return null;
-
   return (
-    <div className={styles.filterContainer}>
+    <div
+      className={`${styles.filterContainer} ${
+        isVisible ? styles.showFilterContainer : styles.hideFilterContainer
+      }`}
+    >
       <FilterOptions
         title="폴더"
         options={folderOptions}

@@ -22,7 +22,6 @@ export const getPickListByQueryParam = async (
 ): Promise<SearchPicksResponseType> => {
   try {
     const URL = API_URLS.SEARCH_PICKS_BY_QUERY_PARAM(queryParam, cursor, size);
-    console.log('URL: ', URL);
     const response = await apiClient.get<SearchPicksResponseType>(URL);
     const data = await response.json();
 
