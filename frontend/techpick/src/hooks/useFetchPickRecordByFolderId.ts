@@ -17,7 +17,6 @@ export function useFetchPickRecordByFolderId({
 
   const queryFunction = useCallback(
     async (folderId: number) => {
-      console.log('queryFunction work!');
       await fetchPickDataByFolderId(folderId);
     },
     [fetchPickDataByFolderId]
