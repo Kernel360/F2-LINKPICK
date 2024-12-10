@@ -43,7 +43,7 @@ export function FolderTreeHeader() {
 
           <FolderLinkItem
             href={ROUTES.RECOMMEND}
-            name="내 컬렉션"
+            name="추천"
             icon={ArchiveIcon}
             isSelected={isRootSelected}
           />
