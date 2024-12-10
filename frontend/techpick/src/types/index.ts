@@ -17,3 +17,4 @@ export type { PostUserPickViewEventLogRequestType } from './PostUserPickViewEven
 export type { GetSuggestionRankingPicksResponseType } from './GetSuggestionRankingPicksResponseType';
 export type { PostSharedPickViewEventLogRequestType } from './PostSharedPickViewEventLogRequestType';
 export type { RecommendPickType } from './RecommendPickType';
+export type { RecommendPickCategoryType } from './RecommendPickCategoryType';

@@ -68,6 +68,7 @@ export default function RecommendPage() {
               </div>
               <RecommendedPickCarousel
                 recommendPickList={suggestionRankingPicks.dailyViewRanking}
+                recommendPickCategoryType="dailyViewRanking"
               />
             </div>
           )}
@@ -76,6 +77,7 @@ export default function RecommendPage() {
             <div className={recommendedPickCarouselSectionStyle}>
               <RecommendedPickCarousel
                 recommendPickList={suggestionRankingPicks.weeklyViewRanking}
+                recommendPickCategoryType="weeklyViewRanking"
               />
               <div className={recommendedPickCarouselStyle}>
                 <h2 className={recommendSectionDescription}>
@@ -96,6 +98,7 @@ export default function RecommendPage() {
               </div>
               <RecommendedPickCarousel
                 recommendPickList={suggestionRankingPicks.monthlyPickRanking}
+                recommendPickCategoryType="monthlyPickRanking"
               />
             </div>
           )}

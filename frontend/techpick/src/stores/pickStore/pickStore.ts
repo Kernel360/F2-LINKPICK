@@ -594,6 +594,54 @@ export const usePickStore = create<PickState & PickAction>()(
           });
         }
       },
+      insertPickInfo: (pickInfo, pickParentFolderId) => {
+        const pickRecordValue = get().pickRecord[pickParentFolderId];
+
+        if (
+          !get().hasPickRecordValue(pickRecordValue?.data) ||
+          !pickRecordValue.data
+        ) {
+          get().createInitialRecordValue(pickParentFolderId);
+        }
+
+        set((state) => {
+          if (
+            !state.hasPickRecordValue(
+              state.pickRecord[pickParentFolderId]?.data
+            )
+          ) {
+            return;
+          }
+
+          const prevPickIdOrderedList =
+            state.pickRecord[pickParentFolderId].data.pickIdOrderedList;
+
+          state.pickRecord[pickParentFolderId].data.pickIdOrderedList = [
+            pickInfo.id,
+            ...prevPickIdOrderedList,
+          ];
+          state.pickRecord[pickParentFolderId].data.pickInfoRecord[
+            pickInfo.id
+          ] = pickInfo;
+        });
+      },
+      createInitialRecordValue: (folderId) => {
+        const pickRecordValue = get().pickRecord[folderId];
+
+        if (
+          !get().hasPickRecordValue(pickRecordValue?.data) ||
+          !pickRecordValue.data
+        ) {
+          set((state) => {
+            state.pickRecord[folderId] = {
+              data: { pickIdOrderedList: [], pickInfoRecord: {} },
+              isLoading: false,
+              isError: false,
+              error: null,
+            };
+          });
+        }
+      },
     }))
   )
 );

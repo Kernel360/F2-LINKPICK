@@ -15,3 +15,4 @@ export { getSelectedPickRange } from './getSelectedPickRange';
 export { numberToRandomColor } from './numberToRandomColor';
 export { getFolderLinkByType } from './getFolderLinkByType';
 export { getOrderedPickListByFolderId } from './getOrderedPickListByFolderId';
+export { isRecommendPickDraggableObject } from './isRecommendPickDraggableObject';

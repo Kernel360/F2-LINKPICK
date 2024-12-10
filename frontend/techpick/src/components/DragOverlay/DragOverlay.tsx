@@ -2,11 +2,12 @@
 
 import { DragOverlay as DndKitDragOverlay } from '@dnd-kit/core';
 import { useGetDragOverStyle } from '@/hooks';
-import { usePickStore, useTreeStore } from '@/stores';
+import { usePickStore, useRecommendPickStore, useTreeStore } from '@/stores';
 import { dragCountStyle, stackedOverlayStyle } from './dragOverlay.css';
 import { FolderItemOverlay } from './FolderItemOverlay';
 import { PickDragOverlayShadowList } from './PickDragOverlayShadowList';
 import { PickRecordOverlay } from './PickRecordOverlay';
+import { PickCarouselCard } from '../RecommendedPickCarousel/PickCarouselCard';
 
 export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   const { isDragging: isFolderDragging, draggingFolderInfo } = useTreeStore();
@@ -15,6 +16,8 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
     draggingPickInfo,
     selectedPickIdList,
   } = usePickStore();
+  const { isDragging: isRecommendPickDragging, draggingRecommendPickInfo } =
+    useRecommendPickStore();
   const { overlayStyle: pickOverlayStyle } = useGetDragOverStyle({
     elementClickPosition,
   });
@@ -48,7 +51,13 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
     );
   }
 
-  return null;
+  if (isRecommendPickDragging && draggingRecommendPickInfo) {
+    return (
+      <DndKitDragOverlay>
+        <PickCarouselCard recommendPick={draggingRecommendPickInfo} />
+      </DndKitDragOverlay>
+    );
+  }
 }
 
 interface DargOverlayProps {

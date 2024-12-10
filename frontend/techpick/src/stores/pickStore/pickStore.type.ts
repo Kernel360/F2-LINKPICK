@@ -62,6 +62,8 @@ export type PickAction = {
     pickParentFolderId: number,
     pickInfo: UpdatePickRequestType
   ) => Promise<void>;
+  insertPickInfo: (pickInfo: PickInfoType, pickParentFolderId: number) => void;
+  createInitialRecordValue: (folderId: number) => void;
 };
 
 export type MovePickPayload = {
