@@ -1,5 +1,11 @@
 import { style } from '@vanilla-extract/css';
 
+export const recommendedPickCarouselLayoutStyle = style({
+  overflow: 'hidden',
+  position: 'relative',
+  padding: '0 20px',
+});
+
 export const recommendedPickCarouselStyle = style({
   position: 'relative',
   overflow: 'hidden',

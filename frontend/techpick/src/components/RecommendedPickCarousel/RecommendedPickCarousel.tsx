@@ -9,6 +9,7 @@ import {
   recommendedPickItemListStyle,
   chevronLeftIconStyle,
   chevronRightIconStyle,
+  recommendedPickCarouselLayoutStyle,
 } from './RecommendedPickCarousel.css';
 import { RecommendPickType } from '@/types';
 
@@ -33,11 +34,9 @@ export function RecommendedPickCarousel({
   }, [emblaApi]);
 
   return (
-    <div
-      style={{ overflow: 'hidden', position: 'relative', padding: '0 20px' }}
-    >
+    <div className={recommendedPickCarouselLayoutStyle}>
       <div className={recommendedPickCarouselStyle}>
-        <div className="embla__viewport" ref={emblaRef}>
+        <div ref={emblaRef}>
           <div className={recommendedPickItemListStyle}>
             {recommendPickList.map((recommendPick) => {
               return (
