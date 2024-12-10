@@ -43,21 +43,24 @@ public class RankingInitStrategy implements ContentInitStrategy {
 	}
 
 	/**
-	 * 링크 일부가 잘못되었어도, 가능한 링크에 대해서 폴더가 생성되도록 처리
+	 * 링크 일부가 잘못되었어도, 가능한 링크에 대해서 폴더가 생성되도록 처리.
+	 * 리스트를 역순으로 삽입해야 UI 상단에 랭킹이 높은 Pick이 표시된다.
 	 */
 	private void savePickFromRankingList(Long userId, List<UrlWithCount> rankingList, Long destinationFolderId) {
 		if (Objects.isNull(rankingList)) {
 			return;
 		}
-		for (UrlWithCount rank : rankingList) {
+		var reverseItr = rankingList.listIterator(rankingList.size());
+		while (reverseItr.hasPrevious()) {
+			var curr = reverseItr.previous();
 			try {
-				var linkInfo = linkService.getLinkInfo(rank.url());
+				var linkInfo = linkService.getLinkInfo(curr.url());
 				var command = new PickCommand.Create(
 					userId, linkInfo.title(), new ArrayList<>(), destinationFolderId, linkInfo
 				);
 				pickService.saveNewPick(command);
 			} catch (ApiLinkException exception) {
-				log.error("[회원 가입 - 초기 북마크 설정] 서버에 저장되지 않은 링크 입니다! ={}", rank.url(), exception);
+				log.error("[회원 가입 - 초기 북마크 설정] 서버에 저장되지 않은 링크 입니다! ={}", curr.url(), exception);
 			}
 		}
 	}
