@@ -21,7 +21,7 @@ public class PickBulkService {
 	public void saveBulkPick(Long userId, Long parentFolderId) {
 		List<PickCommand.Create> pickList = new ArrayList<>();
 		for (int i = 0; i < 10000; i++) {
-			LinkInfo linkInfo = new LinkInfo(String.valueOf(i), "링크 제목", "링크 설명", "링크 이미지 url", null);
+			LinkInfo linkInfo = new LinkInfo("test" + i, "링크 제목", "링크 설명", "", null);
 			PickCommand.Create command = new PickCommand.Create(userId, "테스트 제목", new ArrayList<>(),
 				parentFolderId, linkInfo);
 			pickList.add(command);
