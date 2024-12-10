@@ -35,13 +35,15 @@ export default function HoverCard() {
         <div className={styles.hoverDataCardContainer}>
           <span className={styles.hoverCardDate}>생성 일시</span>
           <span className={styles.hoverCardDate}>
-            {formatDateString(searchResultList[hoverPickIndex]?.createdAt)}
+            {searchResultList[hoverPickIndex] &&
+              formatDateString(searchResultList[hoverPickIndex].createdAt)}
           </span>
         </div>
         <div className={styles.hoverDataCardContainer}>
           <span className={styles.hoverCardDate}>최종 편집일</span>
           <span className={styles.hoverCardDate}>
-            {formatDateString(searchResultList[hoverPickIndex]?.updatedAt)}
+            {searchResultList[hoverPickIndex] &&
+              formatDateString(searchResultList[hoverPickIndex].updatedAt)}
           </span>
         </div>
       </div>
