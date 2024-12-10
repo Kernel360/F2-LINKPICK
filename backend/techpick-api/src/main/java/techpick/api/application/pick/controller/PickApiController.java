@@ -31,6 +31,7 @@ import techpick.api.application.pick.dto.PickApiResponse;
 import techpick.api.application.pick.dto.PickSliceResponse;
 import techpick.api.domain.pick.dto.PickResult;
 import techpick.api.domain.pick.exception.ApiPickException;
+import techpick.api.domain.pick.service.PickBulkService;
 import techpick.api.domain.pick.service.PickSearchService;
 import techpick.api.domain.pick.service.PickService;
 import techpick.core.event.EventMessenger;
@@ -47,6 +48,7 @@ public class PickApiController {
 	private final PickService pickService;
 	private final PickApiMapper pickApiMapper;
 	private final PickSearchService pickSearchService;
+	private final PickBulkService pickBulkService;
 	private final EventMessenger eventMessenger;
 
 	@GetMapping
@@ -235,5 +237,12 @@ public class PickApiController {
 		@Valid @RequestBody PickApiRequest.Delete request) {
 		pickService.deletePick(pickApiMapper.toDeleteCommand(userId, request));
 		return ResponseEntity.noContent().build();
+	}
+
+	@PostMapping("/bulk")
+	@Operation(summary = "픽 10000개 insert", description = "픽 10000개 insert - 1회만 가능합니다.")
+	public ResponseEntity<Void> bulkInsertPick(@LoginUserId Long userId, @RequestParam Long folderId) {
+		pickBulkService.saveBulkPick(userId, folderId);
+		return ResponseEntity.ok().build();
 	}
 }
