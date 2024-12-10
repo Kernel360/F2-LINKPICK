@@ -12,10 +12,11 @@ import techpick.core.config.RabbitmqConfig;
 import techpick.core.event.events.PickViewEvent;
 import techpick.core.event.events.PickCreateEvent;
 import techpick.core.event.events.SharedFolderLinkViewEvent;
-import techpick.ranking.infra.pick.PickCreateCount;
-import techpick.ranking.infra.pick.PickCreateCountRepository;
-import techpick.ranking.infra.pick.PickViewCount;
-import techpick.ranking.infra.pick.PickViewCountRepository;
+import techpick.core.event.events.SuggestionViewEvent;
+import techpick.ranking.infra.pick.LinkPickedCount;
+import techpick.ranking.infra.pick.LinkPickedCountRepository;
+import techpick.ranking.infra.pick.LinkViewCount;
+import techpick.ranking.infra.pick.LinkViewCountRepository;
 import techpick.ranking.infra.sharedFolder.SharedFolderPickViewCount;
 import techpick.ranking.infra.sharedFolder.SharedFolderPickViewCountRepository;
 
@@ -30,35 +31,31 @@ import techpick.ranking.infra.sharedFolder.SharedFolderPickViewCountRepository;
 @RabbitListener(queues = {RabbitmqConfig.QUEUE.Q1})
 public class RabbitMqEventListener {
 
-	private final PickCreateCountRepository pickCreateCountRepository;
-	private final PickViewCountRepository pickViewCountRepository;
+	private final LinkViewCountRepository linkViewCountRepository;
+	private final LinkPickedCountRepository linkPickedCountRepository;
 	private final SharedFolderPickViewCountRepository sharedFolderPickViewCountRepository;
 
 	/**
 	 * 사용자의 북마크 생성 이벤트 집계
-	 * TODO: 정상적인 생성인지 검증하는 로직 추가
 	 */
 	@RabbitHandler
 	public void pickCreateEvent(PickCreateEvent event) {
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
-		var pickId = event.getPickId();
-		var userId = event.getUserId();
-		log.info("픽 생성 이벤트 : url={}, pickId={}, userId={}", url, pickId, userId);
+		var pickId = event.getPickId(); // unused
+		var userId = event.getUserId(); // unused
 		updateLinkPickedCount(date, url);
 	}
 
 	/**
 	 * 사용자의 북마크 조회 이벤트 집계
-	 * TODO: 운영 DB에 있는 링크인지 검증하는 로직 추가
 	 */
 	@RabbitHandler
 	public void pickViewEvent(PickViewEvent event) {
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
-		var pickId = event.getPickId();
-		var userId = event.getUserId();
-		log.info("픽 조회 이벤트 : url={}, pickId={}, userId={}", url, pickId, userId);
+		var pickId = event.getPickId(); // unused
+		var userId = event.getUserId(); // unused
 		updateLinkViewCount(date, url);
 	}
 
@@ -66,15 +63,24 @@ public class RabbitMqEventListener {
 	 * 공개 폴더 이벤트 집계
 	 *  1. 공유 폴더별 링크(url)에 대한 날별 집계 - 마이페이지에서 폴더 공유자가 확인
 	 *  2. 공유 폴더의 픽 조회도 전체 링크 조회에 포함시켜 집계.
-	 * TODO: 정상적인 공개 폴더인지 검증하는 로직 추가
 	 */
 	@RabbitHandler
 	public void sharedFolderViewEvent(SharedFolderLinkViewEvent event) {
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
 		var folderAccessToken = event.getFolderAccessToken();
-		log.info("공개 폴더 픽 조회 이벤트 : url={}, folder={}", url, folderAccessToken);
 		updateSharedFolderViewCount(date, url, folderAccessToken);
+		updateLinkViewCount(date, url);
+	}
+
+	/**
+	 *  추천 페이지 에서 추천된 링크 클릭 이벤트 집계
+	 */
+	@RabbitHandler
+	public void suggestionViewEvent(SuggestionViewEvent event) {
+		var date = event.getTime().toLocalDate();
+		var url = event.getUrl();
+		var userId = event.getUserId(); // unused
 		updateLinkViewCount(date, url);
 	}
 
@@ -91,19 +97,19 @@ public class RabbitMqEventListener {
 	 * TODO: 다른 클래스나 서비스로 분리 리팩토링 진행
 	 */
 	private void updateLinkViewCount(LocalDate date, String url) {
-		var linkViewCount = pickViewCountRepository
+		var linkViewCount = linkViewCountRepository
 			.findLinkViewCountByDateAndUrl(date, url)
-			.orElseGet(() -> new PickViewCount(date, url));
+			.orElseGet(() -> new LinkViewCount(date, url));
 		linkViewCount.incrementCount();
-		pickViewCountRepository.save(linkViewCount);
+		linkViewCountRepository.save(linkViewCount);
 	}
 
 	private void updateLinkPickedCount(LocalDate date, String url) {
-		var linkPickedCount = pickCreateCountRepository
-			.findPickCreateCountByDateAndUrl(date, url)
-			.orElseGet(() -> new PickCreateCount(date, url));
+		var linkPickedCount = linkPickedCountRepository
+			.findLinkPickedCountByDateAndUrl(date, url)
+			.orElseGet(() -> new LinkPickedCount(date, url));
 		linkPickedCount.incrementCount();
-		pickCreateCountRepository.save(linkPickedCount);
+		linkPickedCountRepository.save(linkPickedCount);
 	}
 
 	private void updateSharedFolderViewCount(LocalDate date, String url, String folderAccessToken) {
