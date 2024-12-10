@@ -16,3 +16,4 @@ export { numberToRandomColor } from './numberToRandomColor';
 export { getFolderLinkByType } from './getFolderLinkByType';
 export { getOrderedPickListByFolderId } from './getOrderedPickListByFolderId';
 export { createSearchSelectOptions } from './createSearchSelectOptions';
+export { isRecommendPickDraggableObject } from './isRecommendPickDraggableObject';

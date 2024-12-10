@@ -260,7 +260,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
             return basicFolderMap['UNCLASSIFIED'];
           case ROUTES.FOLDERS_RECYCLE_BIN:
             return basicFolderMap.RECYCLE_BIN;
-          case ROUTES.FOLDERS_ROOT:
+          case ROUTES.RECOMMEND:
             return basicFolderMap.ROOT;
           default: {
             // '/folders/unclassified' or /folders/recycle-bin | /folders/folderId'

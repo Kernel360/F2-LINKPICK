@@ -3,7 +3,7 @@ export const ROUTES = {
   UNCLASSIFIED_FOLDER: '/folders',
   FOLDERS_UNCLASSIFIED: '/folders/unclassified',
   FOLDERS_RECYCLE_BIN: '/folders/recycle-bin',
-  FOLDERS_ROOT: '/folders/home',
+  RECOMMEND: '/recommend',
   FOLDER_DETAIL: (folderId: number) => `/folders/${folderId}`,
   SEARCH: '/folders/search',
   LOGIN: '/login',

@@ -10,3 +10,4 @@ export { useFetchTagList } from './useFetchTagList';
 export { useGetDragOverStyle } from './useGetDragOverStyle';
 export { useFetchPickRecordByFolderId } from './useFetchPickRecordByFolderId';
 export { useDisclosure } from './useDisclosure';
+export { useRecommendPickToFolderDndMonitor } from './useRecommendPickToFolderDndMonitor';

@@ -2,16 +2,15 @@ import { HTTPError } from 'ky';
 import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
 import { returnErrorFromHTTPError } from '../error';
-import type { PostClickedLinkUrlResponseType } from '@/types';
+import type { PostUserPickViewEventLogRequestType } from '@/types';
 
-export const postClickedLinkUrl = async (url: string) => {
+export const postUserPickViewEventLog = async (
+  requestInfo: PostUserPickViewEventLogRequestType
+) => {
   try {
-    const response = await apiClient.post<PostClickedLinkUrlResponseType>(
-      API_URLS.POST_CLICKED_LINK_URL(encodeURIComponent(url))
-    );
-    const data = await response.json();
-
-    return data;
+    await apiClient.post(API_URLS.POST_USER_PICK_VIEW_EVENT_LOG, {
+      json: requestInfo,
+    });
   } catch (httpError) {
     if (httpError instanceof HTTPError) {
       const error = await returnErrorFromHTTPError(httpError);

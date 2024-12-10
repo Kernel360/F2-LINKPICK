@@ -23,7 +23,7 @@ export function useFetchPickRecordByFolderId({
   );
 
   useEffect(() => {
-    if (!(typeof folderId === 'number')) {
+    if (!(typeof folderId === 'number') || Number.isNaN(folderId)) {
       return;
     }
 

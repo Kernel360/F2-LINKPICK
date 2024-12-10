@@ -182,7 +182,7 @@ export interface paths {
         put?: never;
         /**
          * 픽 생성
-         * @description 픽을 생성합니다.
+         * @description 픽을 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계 됩니다.
          */
         post: operations["savePick"];
         /**
@@ -197,26 +197,6 @@ export interface paths {
          * @description 픽 내용(제목, 메모)을 수정합니다.
          */
         patch: operations["updatePick"];
-        trace?: never;
-    };
-    "/api/links/clicked": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 링크 클릭 이벤트 수집
-         * @description 서버에게 사용자가 링크를 클릭했음을 알립니다
-         */
-        post: operations["traceLinkAccess"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
         trace?: never;
     };
     "/api/folders": {
@@ -249,6 +229,46 @@ export interface paths {
          * @description 사용자가 등록한 폴더를 수정합니다.
          */
         patch: operations["updateFolder"];
+        trace?: never;
+    };
+    "/api/events/shared/view": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 공개 폴더의 북마크 조회 이벤트 수집
+         * @description [인증 불필요] 서버에게 공개 폴더의 어떤 북마크가 조회됬는지 알립니다.
+         */
+        post: operations["sharedFolderLinkView"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/events/picks/view": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 사용자 자신의 픽 조회 이벤트 수집
+         * @description [로그인 필요] 서버에게 사용자 자신의 북마크 조회를 알립니다.
+         */
+        post: operations["bookmarkView"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/chrome/import": {
@@ -331,6 +351,30 @@ export interface paths {
         patch: operations["moveFolder"];
         trace?: never;
     };
+    "/api/suggestion/ranking": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 인기 픽 Top 10
+         * @description 	각 주제 별로 인기 조회수 글을 10개씩 획득 합니다.
+         *     	1. 오늘 하루에 대한 실시간 링크 조회수 랭킹
+         *     	2. 지난 7일 동안 링크 조회수 랭킹
+         *     	3. 지난 한달간 픽된 (=북마크된) 링크 랭킹
+         *
+         */
+        get: operations["getSuggestionByViewCount"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/shared/{uuid}": {
         parameters: {
             query?: never;
@@ -359,8 +403,11 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 픽 상세 조회
-         * @description 픽을 상세 조회합니다.
+         * [Deprecated] 픽 상세 조회
+         * @deprecated
+         * @description 	현재 사용되지 않는 api 입니다.
+         *     	추후 코드 제거 예정입니다.
+         *
          */
         get: operations["getPick"];
         put?: never;
@@ -419,10 +466,34 @@ export interface paths {
             cookie?: never;
         };
         /**
+         * [Deprecated] 링크 픽 여부 조회
+         * @deprecated
+         * @description 	해당 링크를 픽한 적이 있는지 확인합니다.
+         *     	픽이 존재하지 않음을 4XX로 판단하는 것이 프론트엔드에서 처리하기 까다로워
+         *     	Deprecated 처리하였습니다.
+         *
+         */
+        get: operations["getPickUrl"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/picks/link-v2": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
          * 링크 픽 여부 조회
          * @description 해당 링크를 픽한 적이 있는지 확인합니다.
          */
-        get: operations["getPickUrl"];
+        get: operations["doesUserHasPickWithGivenUrl"];
         put?: never;
         post?: never;
         delete?: never;
@@ -604,12 +675,6 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
-        "techpick.api.application.link.dto.LinkApiResponse": {
-            url?: string;
-            title?: string;
-            description?: string;
-            imageUrl?: string;
-        };
         "techpick.api.application.folder.dto.FolderApiRequest$Create": {
             /** @example backend */
             name: string;
@@ -639,6 +704,21 @@ export interface components {
              *         공유된 폴더일 경우 조회용 UUID 토큰을 반환.
              *      */
             folderAccessToken?: string | null;
+        };
+        "techpick.api.application.event.dto.EventApiRequest$SharedBookmarkView": {
+            /** @description 조회된 링크 url */
+            url: string;
+            /** @description 조회된 공개 폴더 접근용 토큰 */
+            folderAccessToken: string;
+        };
+        "techpick.api.application.event.dto.EventApiRequest$BookmarkView": {
+            /** @description 조회된 링크 url */
+            url: string;
+            /**
+             * Format: int64
+             * @description 조회되는 픽의 id
+             */
+            pickId: number;
         };
         "techpick.api.application.tag.dto.TagApiRequest$Update": {
             /**
@@ -746,12 +826,29 @@ export interface components {
             /** Format: int32 */
             colorNumber?: number;
         };
+        /** @description 지난 30일동안 링크가 픽된 횟수 Top 10 */
+        "techpick.api.application.ranking.dto.LinkInfoWithCount": {
+            url: string;
+            title?: string;
+            description?: string;
+            imageUrl?: string;
+            /** Format: int64 */
+            count?: number;
+        };
+        "techpick.api.application.ranking.dto.RankingResponse": {
+            /** @description 오늘 하루 동안 인기 있는 링크 Top 10 */
+            dailyViewRanking?: components["schemas"]["techpick.api.application.ranking.dto.LinkInfoWithCount"][];
+            /** @description 지난 7일동안 링크 조회 수 Top 10 */
+            weeklyViewRanking?: components["schemas"]["techpick.api.application.ranking.dto.LinkInfoWithCount"][];
+            /** @description 지난 30일동안 링크가 픽된 횟수 Top 10 */
+            monthlyPickRanking?: components["schemas"]["techpick.api.application.ranking.dto.LinkInfoWithCount"][];
+        };
         "techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderPartial": {
             /**
              * Format: int64
              * @description 원본 폴더의 이름
              */
-            sourceFolderId?: number;
+            sourceFolderId: number;
             /**
              * @description 원본 폴더의 이름
              * @example 리액트 모음집
@@ -762,13 +859,13 @@ export interface components {
              * @description 원본 폴더의 생성 시점
              * @example 2024-11-29T06:03:49.182Z
              */
-            sourceFolderCreatedAt?: string;
+            sourceFolderCreatedAt: string;
             /**
              * Format: date-time
              * @description 원본 폴더의 마지막 업데이트 시점
              * @example 2024-11-29T06:03:49.182Z
              */
-            sourceFolderUpdatedAt?: string;
+            sourceFolderUpdatedAt: string;
             /**
              * @description {shared.folderAccessToken.description}
              * @example 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
@@ -786,15 +883,15 @@ export interface components {
              * @description 원본 폴더의 생성 시점
              * @example 2024-11-29T06:03:49.182Z
              */
-            createdAt?: string;
+            createdAt: string;
             /**
              * Format: date-time
              * @description 원본 폴더의 마지막 업데이트 시점
              * @example 2024-11-29T06:03:49.182Z
              */
-            updatedAt?: string;
+            updatedAt: string;
             /** @description 폴더 내 pick 리스트 */
-            pickList?: components["schemas"]["techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo"][];
+            pickList: components["schemas"]["techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo"][];
             /**
              * @description 해당 폴더 내에서 사용된 모든 태그 정보가 담길 배열. tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.
              * @example [
@@ -808,13 +905,13 @@ export interface components {
              *       }
              *     ]
              */
-            tagList?: components["schemas"]["techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo"][];
+            tagList: components["schemas"]["techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo"][];
         };
         /** @description 폴더 내 pick 리스트 */
         "techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo": {
             /** @example 자바 레코드 참고 블로그 1 */
-            title?: string;
-            linkInfo?: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
+            title: string;
+            linkInfo: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
             /**
              * @description tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.
              * @example [
@@ -824,11 +921,11 @@ export interface components {
              *       3
              *     ]
              */
-            tagIdxList?: number[];
+            tagIdxList: number[];
             /** Format: date-time */
-            createdAt?: string;
+            createdAt: string;
             /** Format: date-time */
-            updatedAt?: string;
+            updatedAt: string;
         };
         /**
          * @description 해당 폴더 내에서 사용된 모든 태그 정보가 담길 배열. tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.
@@ -844,14 +941,30 @@ export interface components {
          *     ]
          */
         "techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo": {
-            name?: string;
+            name: string;
             /** Format: int32 */
-            colorNumber?: number;
+            colorNumber: number;
         };
-        "techpick.api.application.pick.dto.PickApiResponse$FolderPickList": {
+        "techpick.api.application.pick.dto.PickApiResponse$FolderPickListWithViewCount": {
             /** Format: int64 */
             folderId?: number;
-            pickList?: components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"][];
+            pickList?: components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$PickWithViewCount"][];
+        };
+        "techpick.api.application.pick.dto.PickApiResponse$PickWithViewCount": {
+            /** Format: int64 */
+            id?: number;
+            title?: string;
+            linkInfo?: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
+            /** Format: int64 */
+            parentFolderId?: number;
+            tagIdOrderedList?: number[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+            isHot: boolean;
+            /** Format: int64 */
+            weeklyViewCount?: number;
         };
         "techpick.api.application.pick.dto.PickSliceResponseTechpick.api.application.pick.dto.PickApiResponse$Pick": {
             content?: components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"][];
@@ -860,6 +973,16 @@ export interface components {
             /** Format: int32 */
             size?: number;
             hasNext?: boolean;
+        };
+        "techpick.api.application.pick.dto.PickApiResponse$PickExists": {
+            exist: boolean;
+            pick?: components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
+        };
+        "techpick.api.application.link.dto.LinkApiResponse": {
+            url?: string;
+            title?: string;
+            description?: string;
+            imageUrl?: string;
         };
         "techpick.api.application.tag.dto.TagApiRequest$Delete": {
             /**
@@ -1084,7 +1207,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$FolderPickList"][];
+                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$FolderPickListWithViewCount"][];
                 };
             };
         };
@@ -1187,29 +1310,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
-                };
-            };
-        };
-    };
-    traceLinkAccess: {
-        parameters: {
-            query: {
-                /** @description 조회되는 url */
-                url: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["techpick.api.application.link.dto.LinkApiResponse"];
                 };
             };
         };
@@ -1332,6 +1432,50 @@ export interface operations {
             };
             /** @description 본인 폴더만 수정할 수 있습니다. */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    sharedFolderLinkView: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["techpick.api.application.event.dto.EventApiRequest$SharedBookmarkView"];
+            };
+        };
+        responses: {
+            /** @description 전송 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    bookmarkView: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["techpick.api.application.event.dto.EventApiRequest$BookmarkView"];
+            };
+        };
+        responses: {
+            /** @description 전송 성공 */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1476,6 +1620,26 @@ export interface operations {
             };
         };
     };
+    getSuggestionByViewCount: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["techpick.api.application.ranking.dto.RankingResponse"];
+                };
+            };
+        };
+    };
     getSharedFolderWithFullInfo: {
         parameters: {
             query?: never;
@@ -1532,29 +1696,29 @@ export interface operations {
             query?: {
                 /**
                  * @description 조회할 폴더 ID 목록
-                 * @example 3, 4, 5
+                 * @example 1, 2, 3
                  */
-                folderIdList?: string;
+                folderIdList?: number[];
                 /**
                  * @description 검색 토큰 목록
-                 * @example Record, 스프링
+                 * @example 리액트, 쿼리, 서버
                  */
-                searchTokenList?: string;
+                searchTokenList?: string[];
                 /**
                  * @description 검색 태그 ID 목록
                  * @example 1, 2, 3
                  */
-                tagIdList?: string;
+                tagIdList?: number[];
                 /**
                  * @description 픽 시작 id 조회
                  * @example 0
                  */
-                cursor?: string;
+                cursor?: number;
                 /**
                  * @description 한 페이지에 가져올 픽 개수
                  * @example 20
                  */
-                size?: string;
+                size?: number;
             };
             header?: never;
             path?: never;
@@ -1636,6 +1800,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
+                };
+            };
+        };
+    };
+    doesUserHasPickWithGivenUrl: {
+        parameters: {
+            query: {
+                link: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 픽 여부 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$PickExists"];
                 };
             };
         };

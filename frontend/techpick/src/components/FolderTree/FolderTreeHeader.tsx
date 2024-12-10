@@ -21,9 +21,9 @@ export function FolderTreeHeader() {
     basicFolderMap && focusFolderId === basicFolderMap['RECYCLE_BIN'].id
   );
 
-  // const isRootSelected = !!(
-  //   basicFolderMap && focusFolderId === basicFolderMap['ROOT'].id
-  // );
+  const isRootSelected = !!(
+    basicFolderMap && focusFolderId === basicFolderMap['ROOT'].id
+  );
 
   const isUnclassifiedFolderHover =
     (basicFolderMap && basicFolderMap['UNCLASSIFIED'].id === hoverFolderId) ??
@@ -41,13 +41,12 @@ export function FolderTreeHeader() {
             <h1>정리함</h1>
           </div>
 
-          {/** 
           <FolderLinkItem
-            href={ROUTES.FOLDERS_ROOT}
-            name="내 컬렉션"
+            href={ROUTES.RECOMMEND}
+            name="추천"
             icon={ArchiveIcon}
             isSelected={isRootSelected}
-          />*/}
+          />
 
           <PickToFolderDropZone folderId={basicFolderMap['UNCLASSIFIED'].id}>
             <FolderLinkItem
