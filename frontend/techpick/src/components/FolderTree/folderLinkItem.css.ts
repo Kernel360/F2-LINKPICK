@@ -15,12 +15,7 @@ export const folderInfoItemStyle = style({
   transition: 'background-color 0.2s',
   selectors: {
     '&:hover': {
-      backgroundColor: colorVars.gold4,
-    },
-    '&:active': {
-      cursor: 'grabbing',
-      color: colorVars.primary,
-      backgroundColor: colorVars.gold4,
+      backgroundColor: colorVars.neutral,
     },
   },
 });
