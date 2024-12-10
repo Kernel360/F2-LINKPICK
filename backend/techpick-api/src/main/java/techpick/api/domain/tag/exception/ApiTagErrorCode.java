@@ -12,18 +12,16 @@ public enum ApiTagErrorCode implements ApiErrorCode {
 	 */
 	TAG_NOT_FOUND
 		("TG-000", HttpStatus.BAD_REQUEST, "존재하지 않는 태그", ErrorLevel.CAN_HAPPEN()),
-
 	TAG_ALREADY_EXIST
 		("TG-001", HttpStatus.BAD_REQUEST, "이미 존재하는 태그", ErrorLevel.CAN_HAPPEN()),
-
 	TAG_INVALID_NAME
 		("TG-002", HttpStatus.BAD_REQUEST, "유효하지 않은 태그 이름", ErrorLevel.CAN_HAPPEN()),
-
 	UNAUTHORIZED_TAG_ACCESS
 		("TG-003", HttpStatus.UNAUTHORIZED, "잘못된 태그 접근", ErrorLevel.SHOULD_NOT_HAPPEN()),
-
 	TAG_INVALID_ORDER
 		("TG-004", HttpStatus.BAD_REQUEST, "유효하지 않은 태그 순서", ErrorLevel.SHOULD_NOT_HAPPEN()),
+	TAG_NAME_TOO_LONG
+		("TG-005", HttpStatus.BAD_REQUEST, "태그 이름이 허용된 최대 길이를 초과했습니다", ErrorLevel.CAN_HAPPEN()),
 	;
 
 	// ------------------------------------------------------------

@@ -1,6 +1,7 @@
 package techpick.api.application.tag.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import techpick.api.application.tag.dto.TagApiMapper;
 import techpick.api.application.tag.dto.TagApiRequest;
 import techpick.api.application.tag.dto.TagApiResponse;
+import techpick.api.domain.tag.exception.ApiTagException;
 import techpick.api.domain.tag.service.TagService;
 import techpick.security.annotation.LoginUserId;
 
@@ -42,8 +44,8 @@ public class TagApiController {
 	public ResponseEntity<List<TagApiResponse.Read>> getAllUserTag(@LoginUserId Long userId) {
 		return ResponseEntity.ok(
 			tagService.getUserTagList(userId).stream()
-				.map(tagApiMapper::toReadResponse)
-				.toList()
+					  .map(tagApiMapper::toReadResponse)
+					  .toList()
 		);
 	}
 
@@ -55,6 +57,10 @@ public class TagApiController {
 	})
 	public ResponseEntity<TagApiResponse.Create> createTag(@LoginUserId Long userId,
 		@Valid @RequestBody TagApiRequest.Create request) {
+		if (!Objects.isNull(request.name()) && 200 < request.name().length()) {
+			throw ApiTagException.TAG_NAME_TOO_LONG();
+		}
+
 		return ResponseEntity.ok(
 			tagApiMapper.toCreateResponse(tagService.saveTag(tagApiMapper.toCreateCommand(userId, request))));
 	}
@@ -68,6 +74,10 @@ public class TagApiController {
 	})
 	public ResponseEntity<Void> updateTag(@LoginUserId Long userId,
 		@Valid @RequestBody TagApiRequest.Update request) {
+		if (!Objects.isNull(request.name()) && 200 < request.name().length()) {
+			throw ApiTagException.TAG_NAME_TOO_LONG();
+		}
+
 		tagService.updateTag(tagApiMapper.toUpdateCommand(userId, request));
 		return ResponseEntity.noContent().build();
 	}
