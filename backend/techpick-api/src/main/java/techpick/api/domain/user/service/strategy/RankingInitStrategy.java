@@ -1,4 +1,4 @@
-package techpick.api.domain.user.service;
+package techpick.api.domain.user.service.strategy;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,35 +17,29 @@ import techpick.api.domain.pick.service.PickService;
 import techpick.api.infrastructure.ranking.RankingApi;
 import techpick.core.dto.UrlWithCount;
 import techpick.core.model.folder.Folder;
-import techpick.core.model.folder.FolderRepository;
 import techpick.core.model.user.User;
 
 @Slf4j
 @Component
+@Qualifier("hot-contents")
 @RequiredArgsConstructor
-@Qualifier(RankingBasedStrategy.QUALIFIER)
-public class RankingBasedStrategy implements InitialFolderStrategy {
+public class RankingInitStrategy implements ContentInitStrategy {
 
-	public static final String QUALIFIER = "ranking";
-
-	private static final String MONTHLY_FOLDER_NAME = "시작하기";
 	private static final Integer LOAD_LIMIT = 15;
 
-	private final FolderRepository folderRepository;
 	private final RankingApi rankingApi;
 	private final PickService pickService;
 	private final LinkService linkService;
 
 	@Override
-	public void initFolder(User user, Folder root) {
-		var monthlyFolder = folderRepository.save(Folder.createEmptyGeneralFolder(user, root, MONTHLY_FOLDER_NAME));
+	public void initContent(User user, Folder parentFolder) {
 		var currentDay = LocalDate.now();
 		var before1Day = currentDay.minusDays(1);
 		var before30Days = currentDay.minusDays(30);
 		var monthlyRanking = rankingApi
 			.getUrlRankingByViewCount(before30Days, before1Day, LOAD_LIMIT)
 			.getBody();
-		savePickFromRankingList(user.getId(), monthlyRanking, monthlyFolder.getId());
+		savePickFromRankingList(user.getId(), monthlyRanking, parentFolder.getId());
 	}
 
 	/**
