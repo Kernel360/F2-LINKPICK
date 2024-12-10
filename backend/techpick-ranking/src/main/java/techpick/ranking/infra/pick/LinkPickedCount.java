@@ -12,12 +12,12 @@ import lombok.Getter;
  */
 @Document(collection = "link_picked_count")
 @Getter
-public class PickCreateCount extends UrlCount {
+public class LinkPickedCount extends UrlCount {
 
 	@Id
 	private String id;
 
-	public PickCreateCount(LocalDate date, String url) {
+	public LinkPickedCount(LocalDate date, String url) {
 		super(date, url);
 	}
 }
