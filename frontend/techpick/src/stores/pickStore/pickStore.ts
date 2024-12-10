@@ -248,9 +248,14 @@ export const usePickStore = create<PickState & PickAction>()(
           }
 
           for (const selectedPickInfo of selectedPickInfoList) {
+            const newSelectPickInfo = {
+              ...selectedPickInfo,
+              parentFolderId: nextFolderId,
+            };
+
             state.pickRecord[nextFolderId].data.pickInfoRecord[
               `${selectedPickInfo.id}`
-            ] = selectedPickInfo;
+            ] = newSelectPickInfo;
           }
 
           state.pickRecord[nextFolderId].data.pickIdOrderedList.splice(

@@ -97,8 +97,17 @@ const PickContextMenu = memo(
       prevProps.pickInfo.tagIdOrderedList,
       nextProps.pickInfo.tagIdOrderedList
     );
+    const isEqualParentFolderId = isEqual(
+      prevProps.pickInfo.parentFolderId,
+      nextProps.pickInfo.parentFolderId
+    );
 
-    return isEqualPickId && isEqualPickTitle && isEqualSelectedTagList;
+    return (
+      isEqualPickId &&
+      isEqualPickTitle &&
+      isEqualSelectedTagList &&
+      isEqualParentFolderId
+    );
   }
 );
 
