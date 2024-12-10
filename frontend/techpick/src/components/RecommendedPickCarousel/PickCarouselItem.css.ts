@@ -26,7 +26,7 @@ export const pickImageStyle = style({
 export const pickTitleStyle = style({
   display: '-webkit-box',
   width: '100%',
-  height: '44px',
+  height: '40px',
   padding: '2px',
   overflow: 'hidden',
   fontSize: '12px',
