@@ -55,7 +55,7 @@ export function CreatePickForm({
     }
 
     createPick({
-      title: DOMPurify.sanitize(userModifiedTitle),
+      title: DOMPurify.sanitize(userModifiedTitle.trim()),
       tagIdOrderedList: selectedTagList.map((tag) => tag.id),
       linkInfo: {
         title,

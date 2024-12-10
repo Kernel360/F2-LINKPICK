@@ -73,7 +73,7 @@ export function TagAutocompleteDialog({
       isCreateFetchPendingRef.current = true;
 
       const newTag = await createTag({
-        name: tagInputValue,
+        name: tagInputValue.trim(),
         colorNumber: randomNumber.current,
       });
       randomNumber.current = getRandomInt();

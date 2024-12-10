@@ -92,7 +92,7 @@ export function PickTagAutocompleteDialog({
       isCreateFetchPendingRef.current = true;
 
       const newTag = await createTag({
-        name: tagInputValue,
+        name: tagInputValue.trim(),
         colorNumber: randomNumber.current,
       });
       randomNumber.current = getRandomInt();

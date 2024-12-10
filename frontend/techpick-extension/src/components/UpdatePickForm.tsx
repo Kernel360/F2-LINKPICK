@@ -67,7 +67,7 @@ export function UpdatePickForm({
 
     updatePick({
       id,
-      title: DOMPurify.sanitize(userModifiedTitle),
+      title: DOMPurify.sanitize(userModifiedTitle.trim()),
       tagIdOrderedList: selectedTagList.map((tag) => tag.id),
       parentFolderId: Number(selectedFolderId),
     })
