@@ -22,6 +22,7 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   } = usePickStore();
   const { isDragging: isRecommendPickDragging, draggingRecommendPickInfo } =
     useDraggingRecommendPickStore();
+
   const { overlayStyle: pickOverlayStyle } = useGetDragOverStyle({
     elementClickPosition,
   });
