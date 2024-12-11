@@ -9,7 +9,7 @@ export const API_URLS = {
     return 'picks';
   },
   getPicksByLinkUrl: function (url: string) {
-    return `${this.getPicksUrl()}/link?link=${url}`;
+    return `${this.getPicksUrl()}/link-v2?link=${url}`;
   },
   getTagsUrl: function () {
     return 'tags';

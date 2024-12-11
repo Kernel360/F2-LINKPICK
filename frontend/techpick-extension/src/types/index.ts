@@ -16,3 +16,4 @@ export type { GetBasicFolderListType } from './GetBasicFolderListType';
 export type { GetRootFolderChildFoldersResponseType } from './GetRootFolderChildFoldersResponseType';
 export type { FolderType } from './FolderType';
 export type { TabInfoFromWorkerMessageType } from './TabInfoFromWorkerMessageType';
+export type { PickInfoType } from './PickInfoType';
