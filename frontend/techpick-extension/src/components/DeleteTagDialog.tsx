@@ -1,25 +1,23 @@
-import { useRef, memo, KeyboardEvent, MouseEvent } from 'react';
+import { memo, KeyboardEvent, MouseEvent, useRef } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import { Text, Button, Gap } from '@/libs/@components';
+import { Text, Gap } from '@/libs/@components';
 import { useTagStore, useDeleteTagDialogStore } from '@/stores';
-import { dialogContentStyle, dialogOverlayStyle } from './DeleteTagDialog.css';
+import {
+  deleteTagDialogButtonStyle,
+  deleteTagDialogCancelButtonStyle,
+  dialogContentStyle,
+  dialogOverlayStyle,
+} from './DeleteTagDialog.css';
 
 export const DeleteTagDialog = memo(function DeleteTagDialog() {
-  const cancelButtonRef = useRef<HTMLButtonElement | null>(null);
+  const deleteButtonRef = useRef<HTMLButtonElement>(null);
+  const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const { deleteTag } = useTagStore();
   const { deleteTagId, isOpen, setIsOpen } = useDeleteTagDialogStore();
 
   const closeDialog = () => {
     setIsOpen(false);
-  };
-
-  const closeDialogByEnterKey = (event: KeyboardEvent<HTMLButtonElement>) => {
-    event.stopPropagation();
-
-    if (event.key === 'Enter') {
-      closeDialog();
-    }
   };
 
   const handleDeleteTag = async () => {
@@ -37,11 +35,14 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
   };
 
   const DeleteTagByEnterKey = async (e: KeyboardEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-
     if (e.key === 'Enter') {
+      e.stopPropagation();
       await handleDeleteTag();
     }
+  };
+
+  const handleMouseEnter = (ref: React.RefObject<HTMLButtonElement>) => {
+    ref.current?.focus();
   };
 
   return (
@@ -59,27 +60,24 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
           </VisuallyHidden.Root>
 
           <div>
-            <Button
+            <button
               onClick={DeleteTagByClick}
               onKeyDown={DeleteTagByEnterKey}
-              size="xs"
-              background="warning"
-              wide
+              ref={deleteButtonRef}
+              onMouseEnter={() => handleMouseEnter(deleteButtonRef)}
+              className={deleteTagDialogButtonStyle}
             >
               삭제
-            </Button>
+            </button>
             <Gap verticalSize="gap4" />
-            <Dialog.Close asChild>
-              <Button
-                ref={cancelButtonRef}
-                onClick={closeDialog}
-                onKeyDown={closeDialogByEnterKey}
-                size="xs"
-                wide
-              >
-                취소
-              </Button>
-            </Dialog.Close>
+            <button
+              onClick={closeDialog}
+              ref={cancelButtonRef}
+              onMouseEnter={() => handleMouseEnter(cancelButtonRef)}
+              className={deleteTagDialogCancelButtonStyle}
+            >
+              취소
+            </button>
           </div>
         </Dialog.Content>
       </Dialog.Portal>

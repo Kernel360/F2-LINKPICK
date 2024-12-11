@@ -12,7 +12,7 @@ export const dialogContentStyle = style({
   flexDirection: 'column',
   justifyContent: 'center',
   gap: '8px',
-  minWidth: '216px',
+  minWidth: '224px',
   border: `1px solid ${colorVars.color.tagBorder}`,
   borderRadius: '4px',
   padding: '16px',
@@ -26,4 +26,46 @@ export const dialogOverlayStyle = style({
   backgroundColor: 'rgba(0,0,0,0.3)',
   position: 'fixed',
   inset: 0,
+});
+
+export const deleteTagDialogButtonStyle = style({
+  width: '100%',
+  border: '1px solid',
+  borderColor: colorVars.red8,
+  borderRadius: '4px',
+  padding: '2px 0',
+  transition: 'background-color 0.3s ease',
+  color: colorVars.red11,
+  cursor: 'pointer',
+  fontSize: '14px',
+
+  ':hover': {
+    backgroundColor: colorVars.red3,
+  },
+
+  ':focus': {
+    backgroundColor: colorVars.red3,
+    outline: 'none',
+  },
+});
+
+export const deleteTagDialogCancelButtonStyle = style({
+  width: '100%',
+  border: '1px solid',
+  borderColor: colorVars.sand8,
+  borderRadius: '4px',
+  padding: '2px 0',
+  color: colorVars.sand11,
+  cursor: 'pointer',
+  transition: 'background-color 0.3s ease',
+  fontSize: '14px',
+
+  ':hover': {
+    backgroundColor: colorVars.sand3,
+  },
+
+  ':focus': {
+    backgroundColor: colorVars.sand3,
+    outline: 'none',
+  },
 });
