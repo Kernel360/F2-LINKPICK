@@ -22,11 +22,13 @@ import techpick.api.domain.pick.exception.ApiPickException;
 import techpick.api.domain.ranking.service.RankingService;
 import techpick.api.domain.tag.exception.ApiTagException;
 import techpick.api.infrastructure.folder.FolderDataHandler;
+import techpick.api.infrastructure.link.LinkDataHandler;
 import techpick.api.infrastructure.pick.PickDataHandler;
 import techpick.api.infrastructure.tag.TagDataHandler;
 import techpick.core.dto.UrlWithCount;
 import techpick.core.model.folder.Folder;
 import techpick.core.model.folder.FolderType;
+import techpick.core.model.link.Link;
 import techpick.core.model.pick.Pick;
 import techpick.core.model.tag.Tag;
 
@@ -40,6 +42,13 @@ public class PickService {
 	private final PickMapper pickMapper;
 	private final FolderDataHandler folderDataHandler;
 	private final RankingService rankingService;
+	private final LinkDataHandler linkDataHandler;
+
+	@Transactional(readOnly = true)
+	public boolean existPickByUrl(Long userId, String url) {
+		Link link = linkDataHandler.getLink(url);
+		return pickDataHandler.existsByUserIdAndLink(userId, link);
+	}
 
 	@Transactional(readOnly = true)
 	public PickResult.Pick getPick(PickCommand.Read command) {
@@ -51,7 +60,6 @@ public class PickService {
 	@Transactional(readOnly = true)
 	public PickResult.Pick getPickUrl(Long userId, String url) {
 		Pick pick = pickDataHandler.getPickUrl(userId, url);
-		validatePickAccess(userId, pick.getId());
 		return pickMapper.toPickResult(pick);
 	}
 
@@ -69,17 +77,17 @@ public class PickService {
 		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickIdOrderedList());
 
 		return pickList.stream()
-					   .map(pickMapper::toPickResult)
-					   .toList();
+			.map(pickMapper::toPickResult)
+			.toList();
 	}
 
 	// 폴더 리스트가 넘어오면, 각 폴더 내부에 있는 픽 리스트 조회
 	@Transactional(readOnly = true)
 	public List<PickResult.FolderPickWithViewCountList> getFolderListChildPickList(PickCommand.ReadList command) {
 		return command.folderIdList().stream()
-					  .peek(folderId -> validateFolderAccess(command.userId(), folderId))  // 폴더 접근 유효성 검사
-					  .map(this::getFolderChildPickResultList)
-					  .toList();
+			.peek(folderId -> validateFolderAccess(command.userId(), folderId))  // 폴더 접근 유효성 검사
+			.map(this::getFolderChildPickResultList)
+			.toList();
 	}
 
 	@LoginUserIdDistributedLock
@@ -141,20 +149,20 @@ public class PickService {
 		// 여기서 pick 주간 인기 데이터 반환
 		Map<String, UrlWithCount> viewCountMap
 			= rankingService.getUrlRanking(10)
-							.weeklyUrlViewRanking().stream()
-							.collect(Collectors.toMap(UrlWithCount::url, Function.identity()));
+			.weeklyUrlViewRanking().stream()
+			.collect(Collectors.toMap(UrlWithCount::url, Function.identity()));
 
 		List<PickResult.PickWithViewCount> pickResultList
 			= pickList.stream()
-					  .map(pickMapper::toPickResult)
-					  .map(pickResult -> {
-						  var urlWithCount = viewCountMap.get(pickResult.linkInfo().url());
-						  if (Objects.isNull(urlWithCount)) {
-							  return pickMapper.toPickResultWithViewCount(pickResult, false, null);
-						  }
-						  return pickMapper.toPickResultWithViewCount(pickResult, true, urlWithCount.count());
-					  })
-					  .toList();
+			.map(pickMapper::toPickResult)
+			.map(pickResult -> {
+				var urlWithCount = viewCountMap.get(pickResult.linkInfo().url());
+				if (Objects.isNull(urlWithCount)) {
+					return pickMapper.toPickResultWithViewCount(pickResult, false, null);
+				}
+				return pickMapper.toPickResultWithViewCount(pickResult, true, urlWithCount.count());
+			})
+			.toList();
 		return pickMapper.toPickResultList(folderId, pickResultList);
 	}
 
