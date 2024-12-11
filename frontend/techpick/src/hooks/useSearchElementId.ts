@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 
 export default function useSearchElementId() {
   const searchElementId = useSearchParams().get('searchId');
+  const [isOccurClickEvent, setIsOccerClickEvent] = useState<boolean>(false);
 
   useEffect(() => {
     const handleSearchElementIdChange = () => {
@@ -17,5 +18,21 @@ export default function useSearchElementId() {
     handleSearchElementIdChange();
   }, [searchElementId]);
 
-  return searchElementId;
+  useEffect(() => {
+    const handleClick = () => {
+      setIsOccerClickEvent(true);
+    };
+
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+      setIsOccerClickEvent(false);
+    };
+  }, [searchElementId]);
+
+  return {
+    searchElementId,
+    isOccurClickEvent,
+  };
 }

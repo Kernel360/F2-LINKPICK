@@ -31,7 +31,7 @@ export function PickDraggableRecord({
     currentUpdateTitlePickId,
     currentUpdateTagPickId,
   } = useUpdatePickStore();
-  const searchElementId = useSearchElementId();
+  const { searchElementId, isOccurClickEvent } = useSearchElementId();
   const { id: pickId, parentFolderId } = pickInfo;
   const isSelected = selectedPickIdList.includes(pickId);
   const {
@@ -53,6 +53,8 @@ export function PickDraggableRecord({
       currentUpdateTagPickId === pickInfo.id,
   });
   const pickElementId = `pickId-${pickId}`;
+  const isSearchedPickHighlight =
+    searchElementId === pickElementId && !isOccurClickEvent;
 
   const style: CSSProperties = {
     transform: CSS.Transform.toString(transform),
@@ -100,7 +102,7 @@ export function PickDraggableRecord({
 
   return (
     <div
-      className={`${searchElementId === pickElementId ? searchedItemStyle : ''}`}
+      className={`${isSearchedPickHighlight ? searchedItemStyle : ''}`}
       ref={setNodeRef}
       {...attributes}
       {...listeners}
