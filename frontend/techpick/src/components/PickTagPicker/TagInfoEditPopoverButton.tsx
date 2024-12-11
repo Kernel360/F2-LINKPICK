@@ -1,15 +1,22 @@
 'use client';
 
 import { RefObject, useRef, useState } from 'react';
-import { useFloating, shift, FloatingPortal } from '@floating-ui/react';
+import {
+  useFloating,
+  shift,
+  FloatingPortal,
+  FloatingOverlay,
+  FloatingFocusManager,
+} from '@floating-ui/react';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import DOMPurify from 'dompurify';
 import { useTagStore } from '@/stores';
 import { notifyError, isEmptyString, isShallowEqualValue } from '@/utils';
-import { PopoverOverlay } from './PopoverOverlay';
 import { PopoverTriggerButton } from './PopoverTriggerButton';
 import { ShowDeleteTagDialogButton } from './ShowDeleteTagDialogButton';
 import {
+  floatingOverlayRefStyle,
+  floatingOverlayStyle,
   tagInfoEditFormLayout,
   tagInputStyle,
 } from './TagInfoEditPopoverButton.css';
@@ -23,11 +30,24 @@ export function TagInfoEditPopoverButton({
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
   const updateTag = useTagStore((state) => state.updateTag);
 
-  const { refs, floatingStyles } = useFloating({
+  const { refs, floatingStyles, context } = useFloating({
     open: isPopoverOpen,
     strategy: 'absolute',
     middleware: [shift({ padding: 4 })],
   });
+
+  const { refs: overlayRef, floatingStyles: overlayFloatingStyles } =
+    useFloating({
+      strategy: 'fixed',
+      placement: 'bottom-start',
+
+      middleware: [
+        shift({
+          crossAxis: true,
+          mainAxis: true,
+        }),
+      ],
+    });
 
   const closePopover = () => {
     setIsPopoverOpen(false);
@@ -86,38 +106,48 @@ export function TagInfoEditPopoverButton({
         }}
       />
       {isPopoverOpen && (
-        <FloatingPortal root={floatingPortalRootRef}>
-          <PopoverOverlay
+        <>
+          <div
+            ref={overlayRef.setReference}
+            className={floatingOverlayRefStyle}
+          />
+          <FloatingOverlay
+            ref={overlayRef.setFloating}
+            style={overlayFloatingStyles}
+            className={floatingOverlayStyle}
             onClick={(e) => {
               closePopover();
               e.stopPropagation();
             }}
           />
-
-          <form
-            onSubmit={handleSubmit}
-            className={tagInfoEditFormLayout}
-            ref={refs.setFloating}
-            style={floatingStyles}
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={(e) => e.stopPropagation()}
-          >
-            <input
-              type="text"
-              defaultValue={tag.name}
-              ref={tagNameInputRef}
-              autoFocus
-              onKeyDown={handleInputKeyDown}
-              className={tagInputStyle}
-            />
-            <ShowDeleteTagDialogButton tag={tag} onClick={closePopover} />
-            <VisuallyHidden.Root>
-              <button type="submit" aria-label="제출">
-                제출
-              </button>
-            </VisuallyHidden.Root>
-          </form>
-        </FloatingPortal>
+          <FloatingPortal root={floatingPortalRootRef} preserveTabOrder={false}>
+            <FloatingFocusManager context={context}>
+              <form
+                onSubmit={handleSubmit}
+                className={tagInfoEditFormLayout}
+                ref={refs.setFloating}
+                style={floatingStyles}
+                onClick={(e) => e.stopPropagation()}
+                onKeyDown={(e) => e.stopPropagation()}
+              >
+                <input
+                  type="text"
+                  defaultValue={tag.name}
+                  ref={tagNameInputRef}
+                  autoFocus
+                  onKeyDown={handleInputKeyDown}
+                  className={tagInputStyle}
+                />
+                <ShowDeleteTagDialogButton tag={tag} onClick={closePopover} />
+                <VisuallyHidden.Root>
+                  <button type="submit" aria-label="제출">
+                    제출
+                  </button>
+                </VisuallyHidden.Root>
+              </form>
+            </FloatingFocusManager>
+          </FloatingPortal>
+        </>
       )}
     </>
   );
