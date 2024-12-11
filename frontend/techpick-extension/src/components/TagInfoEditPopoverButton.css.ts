@@ -1,12 +1,11 @@
 import { style } from '@vanilla-extract/css';
-import { colorVars } from 'techpick-shared';
+import { colorVars, zIndex } from 'techpick-shared';
 
 export const tagInfoEditFormLayout = style({
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   gap: '8px',
-  zIndex: '3',
   borderRadius: '4px',
   padding: '8px',
   backgroundColor: colorVars.color.background,
@@ -16,16 +15,10 @@ export const tagInfoEditFormLayout = style({
 
 export const tagInputStyle = style({
   outline: 'none',
-  border: `1px solid ${colorVars.color.font}`,
-  color: colorVars.color.font,
+  border: `1px solid ${colorVars.text}`,
+  color: colorVars.text,
 });
 
-export const popoverOverlayStyle = style({
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  width: '100vw',
-  height: '100vh',
-  zIndex: 2,
-  backgroundColor: 'rgba(0, 0, 0, 0)',
+export const floatingOverlayStyle = style({
+  zIndex: zIndex.level2,
 });
