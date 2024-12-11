@@ -26,11 +26,22 @@ export const tagInputStyle = style({
 });
 
 export const popoverOverlayStyle = style({
-  position: 'fixed',
+  position: 'absolute',
   top: 0,
   left: 0,
   width: '100vw',
   height: '100vh',
-  zIndex: 2,
-  backgroundColor: 'rgba(0, 0, 0, 0)',
+  backgroundColor: 'red',
+  opacity: '0.3',
+  zIndex: 9999,
+});
+
+export const floatingOverlayRefStyle = style({
+  width: 0,
+  position: 'absolute',
+});
+
+export const floatingOverlayStyle = style({
+  width: '100vw',
+  height: '100vh',
 });

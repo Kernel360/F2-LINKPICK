@@ -25,6 +25,7 @@ export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
       middleware: [
         shift({
           crossAxis: true,
+          padding: 10,
         }),
       ],
     });

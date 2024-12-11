@@ -45,6 +45,11 @@ export const deleteTagButtonStyle = style({
   ':hover': {
     backgroundColor: colorVars.red3,
   },
+
+  ':focus': {
+    backgroundColor: colorVars.red3,
+    outline: 'none',
+  },
 });
 
 export const deleteTagCancelButtonStyle = style({
@@ -59,5 +64,10 @@ export const deleteTagCancelButtonStyle = style({
 
   ':hover': {
     backgroundColor: colorVars.sand3,
+  },
+
+  ':focus': {
+    backgroundColor: colorVars.sand3,
+    outline: 'none',
   },
 });

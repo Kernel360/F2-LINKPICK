@@ -13,4 +13,8 @@ export const deleteTagDialogButtonStyle = style({
   ':hover': {
     backgroundColor: colorVars.red3,
   },
+
+  ':focus': {
+    backgroundColor: colorVars.red3,
+  },
 });
