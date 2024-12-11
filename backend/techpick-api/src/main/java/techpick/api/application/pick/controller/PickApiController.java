@@ -213,17 +213,18 @@ public class PickApiController {
 	public ResponseEntity<PickApiResponse.CreateFromRecommend> savePickFromRecommend(@LoginUserId Long userId,
 		@Valid @RequestBody PickApiRequest.Create request) {
 		boolean existPick;
-		PickResult.Pick pickResult;
+		PickResult.Pick result;
 		if (pickService.existPickByUrl(userId, request.linkInfo().url())) {
 			existPick = true;
-			pickResult = pickService.getPickUrl(userId, request.linkInfo().url());
+			result = pickService.getPickUrl(userId, request.linkInfo().url());
 		} else {
 			existPick = false;
 			var command = pickApiMapper.toCreateCommand(userId, request);
-			pickResult = pickService.saveNewPick(command);
+			result = pickService.saveNewPick(command);
 		}
-		var folderResult = folderService.getFolder(userId, pickResult.parentFolderId());
-		return ResponseEntity.ok(new PickApiResponse.CreateFromRecommend(existPick, pickResult, folderResult));
+		var event = new PickCreateEvent(userId, result.id(), result.linkInfo().url());
+		eventMessenger.send(event);
+		return ResponseEntity.ok(new PickApiResponse.CreateFromRecommend(existPick, result));
 	}
 
 	@PatchMapping
