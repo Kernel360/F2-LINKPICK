@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import type { CSSProperties } from 'react';
-import { usePickStore, useTreeStore } from '@/stores';
 
 export function useGetDragOverStyle({
   elementClickPosition,
-  scale = 0.7,
+  scale = 1,
+  isDragging,
 }: UseGetDragOverStyleProps) {
-  const { isDragging: isFolderDragging } = useTreeStore();
-  const { isDragging: isPickDragging } = usePickStore();
   const [mousePosition, setMousePosition] = useState<{
     x: number;
     y: number;
@@ -27,7 +25,7 @@ export function useGetDragOverStyle({
   useEffect(
     function trackingMousePointer() {
       const handleMouseMove = (event: MouseEvent | TouchEvent) => {
-        if (!(isPickDragging || isFolderDragging)) {
+        if (!isDragging) {
           return;
         }
 
@@ -43,21 +41,10 @@ export function useGetDragOverStyle({
         const adjustedX = clientX - elementClickPosition.x * scale; // 스케일 적용
         const adjustedY = clientY - elementClickPosition.y * scale; // 스케일 적용
 
-        if (isPickDragging) {
-          setMousePosition({
-            x: adjustedX,
-            y: adjustedY,
-          });
-
-          return;
-        }
-
-        if (isFolderDragging) {
-          setMousePosition({
-            x: clientX - elementClickPosition.x,
-            y: clientY - elementClickPosition.y,
-          });
-        }
+        setMousePosition({
+          x: adjustedX,
+          y: adjustedY,
+        });
       };
 
       window.addEventListener('mousemove', handleMouseMove);
@@ -68,20 +55,14 @@ export function useGetDragOverStyle({
         window.removeEventListener('touchmove', handleMouseMove);
       };
     },
-    [
-      elementClickPosition.x,
-      elementClickPosition.y,
-      isFolderDragging,
-      isPickDragging,
-      scale,
-    ]
+    [elementClickPosition.x, elementClickPosition.y, scale, isDragging]
   );
 
   useEffect(() => {
-    if (!isFolderDragging && !isPickDragging) {
+    if (!isDragging) {
       setMousePosition(null);
     }
-  }, [isFolderDragging, isPickDragging]);
+  }, [isDragging]);
 
   return { overlayStyle };
 }
@@ -91,5 +72,6 @@ interface UseGetDragOverStyleProps {
     x: number;
     y: number;
   };
+  isDragging: boolean;
   scale?: number;
 }

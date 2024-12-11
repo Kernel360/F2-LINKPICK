@@ -25,10 +25,17 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
 
   const { overlayStyle: pickOverlayStyle } = useGetDragOverStyle({
     elementClickPosition,
+    isDragging: isPickDragging,
+    scale: 0.7,
   });
   const { overlayStyle: folderOverlayStyle } = useGetDragOverStyle({
     elementClickPosition,
-    scale: 1,
+    isDragging: isFolderDragging,
+  });
+  const { overlayStyle: recommendPickOverlayStyle } = useGetDragOverStyle({
+    elementClickPosition,
+    isDragging: isRecommendPickDragging,
+    scale: 0.4,
   });
   const selectedPickListCount = selectedPickIdList.length - 1;
 
@@ -58,7 +65,7 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
 
   if (isRecommendPickDragging && draggingRecommendPickInfo) {
     return (
-      <DndKitDragOverlay>
+      <DndKitDragOverlay style={recommendPickOverlayStyle}>
         <PickCarouselCard recommendPick={draggingRecommendPickInfo} />
       </DndKitDragOverlay>
     );

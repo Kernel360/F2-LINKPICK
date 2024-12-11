@@ -8,20 +8,27 @@ export function RecommendPickDraggable({
   recommendPickCategoryType,
   children,
 }: PropsWithChildren<RecommendPickDraggableProps>) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: `recommend-${recommendPickCategoryType}-${recommendPick.url}`,
-    data: {
-      ...recommendPick,
-      type: 'recommend',
-    },
-  });
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: `recommend-${recommendPickCategoryType}-${recommendPick.url}`,
+      data: {
+        ...recommendPick,
+        type: 'recommend',
+      },
+    });
 
   const style: CSSProperties = {
     transform: CSS.Transform.toString(transform),
   };
 
   return (
-    <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+    <div
+      id={`recommend-${recommendPickCategoryType}-${recommendPick.url}`}
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={isDragging ? { ...style, opacity: 0 } : {}}
+    >
       {children}
     </div>
   );

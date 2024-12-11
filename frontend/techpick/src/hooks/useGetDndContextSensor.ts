@@ -10,7 +10,8 @@ export function useGetDndContextSensor({
     while (
       targetElement &&
       !targetElement.id.includes('folder') &&
-      !targetElement.id.includes('pick')
+      !targetElement.id.includes('pick') &&
+      !targetElement.id.includes('recommend')
     ) {
       targetElement = targetElement.parentElement;
     }
