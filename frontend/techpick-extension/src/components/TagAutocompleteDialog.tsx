@@ -91,6 +91,14 @@ export function TagAutocompleteDialog({
     }
   };
 
+  useEffect(() => {
+    if (open) {
+      requestAnimationFrame(() => {
+        focusTagInput();
+      });
+    }
+  }, [open]);
+
   useEffect(
     function checkIsCreatableTag() {
       const isUnique = !tagList.some((tag) => tag.name === tagInputValue);
