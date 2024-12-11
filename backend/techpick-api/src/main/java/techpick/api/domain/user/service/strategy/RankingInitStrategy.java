@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import techpick.api.domain.link.dto.LinkInfo;
 import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.api.domain.link.service.LinkService;
 import techpick.api.domain.pick.dto.PickCommand;
@@ -24,7 +25,7 @@ import techpick.core.model.user.User;
 @RequiredArgsConstructor
 public class RankingInitStrategy implements ContentInitStrategy {
 
-	private static final Integer LOAD_LIMIT = 15;
+	private static final Integer LOAD_LIMIT = 5;
 
 	private final RankingApi rankingApi;
 	private final PickService pickService;
@@ -52,18 +53,20 @@ public class RankingInitStrategy implements ContentInitStrategy {
 		var reverseItr = rankingList.listIterator(rankingList.size());
 		while (reverseItr.hasPrevious()) {
 			var curr = reverseItr.previous();
+			LinkInfo linkInfo = null;
 			try {
-				var linkInfo = linkService.getLinkInfo(curr.url());
-				if (linkInfo.title().isBlank()) {
-					continue;
-				}
-				var command = new PickCommand.Create(
-					userId, linkInfo.title(), new ArrayList<>(), destinationFolderId, linkInfo
-				);
-				pickService.saveNewPick(command);
+				linkInfo = linkService.getLinkInfo(curr.url());
 			} catch (ApiLinkException exception) {
-				log.error("[회원 가입 - 초기 북마크 설정] 서버에 저장되지 않은 링크 입니다! ={}", curr.url(), exception);
+				// mongodb 에서 받은 link 가 db 에 존재하지 않으면 새로 추가함 by psh
+				linkInfo = linkService.saveLinkAndUpdateOgTag(curr.url());
 			}
+			if (linkInfo.title().isBlank()) {
+				continue;
+			}
+			var command = new PickCommand.Create(
+				userId, linkInfo.title(), new ArrayList<>(), destinationFolderId, linkInfo
+			);
+			pickService.saveNewPick(command);
 		}
 	}
 }
