@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
-import techpick.api.domain.folder.dto.FolderResult;
 import techpick.api.domain.link.dto.LinkInfo;
 import techpick.api.domain.pick.dto.PickResult;
 
@@ -56,8 +55,7 @@ public class PickApiResponse {
 
 	public record CreateFromRecommend(
 		boolean exist,
-		PickResult.Pick pick,
-		FolderResult parentFolder
+		PickResult.Pick pick
 	) {
 	}
 }
