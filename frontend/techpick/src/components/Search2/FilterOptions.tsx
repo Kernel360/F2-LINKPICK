@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import customSelectStyles from './customSelectStyles';
+import * as styles from './filterOptions.css';
 import { SearchSelectOption } from '@/types';
 
 type MultiValue<Option> = readonly Option[];
 
 export default function FilterOptions({
   title,
+  icon,
   options,
   updateSearchState,
 }: TagFilterOptionsProps) {
@@ -21,7 +23,8 @@ export default function FilterOptions({
   }
 
   return (
-    <div>
+    <div className={styles.filterOptionContainer}>
+      <div className={styles.icon}> {icon} </div>
       <Select
         placeholder={title}
         isMulti
@@ -36,6 +39,7 @@ export default function FilterOptions({
 
 interface TagFilterOptionsProps {
   title: string;
+  icon: React.ReactNode;
   options: SearchSelectOption[];
   updateSearchState: (queryString: number[]) => void;
 }

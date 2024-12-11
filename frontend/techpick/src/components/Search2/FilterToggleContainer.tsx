@@ -1,8 +1,9 @@
 import React from 'react';
+import { FolderIcon, Tags } from 'lucide-react';
 import { useTreeStore, useTagStore } from '@/stores';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import { createSearchSelectOptions } from '@/utils';
-import FilterOptions from './FliterOptions';
+import FilterOptions from './FilterOptions';
 import * as styles from './searchDialog.css';
 
 export default function FilterToggleContainer({
@@ -34,6 +35,7 @@ export default function FilterToggleContainer({
     >
       <FilterOptions
         title="폴더"
+        icon={<FolderIcon size={18} />}
         options={folderOptions}
         updateSearchState={(queryString: number[]) =>
           updateSearchState(queryString, setSearchFolder)
@@ -41,6 +43,7 @@ export default function FilterToggleContainer({
       />
       <FilterOptions
         title="태그"
+        icon={<Tags size={20} />}
         options={tagOptions}
         updateSearchState={(queryString: number[]) =>
           updateSearchState(queryString, setSearchTag)

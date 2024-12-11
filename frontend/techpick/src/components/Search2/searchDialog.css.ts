@@ -59,7 +59,7 @@ export const searchInput = style({
 
 export const filterContainer = style({
   gap: '16px',
-  marginBottom: '16px',
+  marginBottom: '8px',
 });
 
 export const showFilterContainer = style({
