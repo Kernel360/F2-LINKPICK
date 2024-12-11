@@ -13,12 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import techpick.api.annotation.LoginUserIdDistributedLock;
 import techpick.api.domain.folder.dto.FolderCommand;
 import techpick.api.domain.folder.dto.FolderMapper;
 import techpick.api.domain.folder.dto.FolderResult;
 import techpick.api.domain.folder.exception.ApiFolderException;
 import techpick.api.infrastructure.folder.FolderDataHandler;
-import techpick.api.annotation.LoginUserIdDistributedLock;
 import techpick.api.infrastructure.pick.PickDataHandler;
 import techpick.api.infrastructure.sharedFolder.SharedFolderDataHandler;
 import techpick.core.model.folder.Folder;
@@ -60,6 +60,13 @@ public class FolderService {
 		return basicFolders.stream()
 			.map(folderMapper::toResult)
 			.toList();
+	}
+
+	@Transactional(readOnly = true)
+	public FolderResult getFolder(Long userId, Long folderId) {
+		Folder folder = folderDataHandler.getFolder(folderId);
+		validateFolderAccess(userId, folder);
+		return folderMapper.toResult(folder);
 	}
 
 	/**
