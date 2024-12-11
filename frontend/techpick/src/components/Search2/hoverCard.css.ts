@@ -43,3 +43,9 @@ export const hoverCardDate = style({
   color: colorVars.gray10,
   fontSize: typography.fontSize.sm,
 });
+
+export const hoverCardImage = style({
+  objectFit: 'contain',
+  borderRadius: '8px',
+  backgroundColor: colorVars.gold2,
+});
