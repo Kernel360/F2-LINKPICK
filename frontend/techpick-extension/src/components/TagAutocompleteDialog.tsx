@@ -50,8 +50,13 @@ export function TagAutocompleteDialog({
   const { isDarkMode } = useThemeStore();
 
   const focusTagInput = () => {
-    tagInputRef.current?.focus();
-    tagInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (tagInputRef.current) {
+      tagInputRef.current.focus();
+      tagInputRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
   };
 
   const clearTagInputValue = () => {
@@ -60,8 +65,10 @@ export function TagAutocompleteDialog({
 
   const onSelectTag = (tag: TagType) => {
     selectTag(tag);
-    focusTagInput();
     clearTagInputValue();
+    requestAnimationFrame(() => {
+      focusTagInput();
+    });
   };
 
   const onSelectCreatableTag = async () => {
@@ -77,7 +84,10 @@ export function TagAutocompleteDialog({
         colorNumber: randomNumber.current,
       });
       randomNumber.current = getRandomInt();
-      onSelectTag(newTag!);
+
+      if (newTag) {
+        onSelectTag(newTag);
+      }
     } catch (error) {
       if (error instanceof Error) {
         notifyError(error.message);
