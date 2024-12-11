@@ -29,7 +29,10 @@ public class LoginUserIdDistributedLockAspect {
 		long timeout = loginUserIdDistributedLock.timeout();
 		Long userId = getUserIdFromArgs(joinPoint);
 
-		lockProvider.acquireLock(key, timeout, userId);
+		boolean lockCheck = lockProvider.acquireLock(key, timeout, userId);
+		if (!lockCheck) {
+			throw new LockException("락 설정 실패 : " + key);
+		}
 
 		try {
 			return joinPoint.proceed();

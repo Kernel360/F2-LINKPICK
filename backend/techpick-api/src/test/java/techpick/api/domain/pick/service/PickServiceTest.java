@@ -69,7 +69,8 @@ class PickServiceTest {
 	) {
 		// save test user
 		user = userRepository.save(
-			User.builder()
+			User
+				.builder()
 				.email("test@test.com")
 				.nickname("test")
 				.password("test")
@@ -87,9 +88,12 @@ class PickServiceTest {
 		general = folderRepository.save(Folder.createEmptyGeneralFolder(user, root, "React.js"));
 
 		// save tag
-		tag1 = tagRepository.save(Tag.builder().user(user).name("tag1").colorNumber(1).build());
-		tag2 = tagRepository.save(Tag.builder().user(user).name("tag2").colorNumber(1).build());
-		tag3 = tagRepository.save(Tag.builder().user(user).name("tag3").colorNumber(1).build());
+		tag1 = tagRepository.save(Tag
+			.builder().user(user).name("tag1").colorNumber(1).build());
+		tag2 = tagRepository.save(Tag
+			.builder().user(user).name("tag2").colorNumber(1).build());
+		tag3 = tagRepository.save(Tag
+			.builder().user(user).name("tag3").colorNumber(1).build());
 	}
 
 	@AfterEach
@@ -167,9 +171,10 @@ class PickServiceTest {
 			PickCommand.ReadList readListCommand = pickApiMapper.toReadListCommand(user.getId(), folderIdList);
 
 			// when
-			List<PickResult.FolderPickList> folderPickList = pickService.getFolderListChildPickList(readListCommand);
+			List<PickResult.FolderPickWithViewCountList> folderPickList = pickService.getFolderListChildPickList(
+				readListCommand);
 
-			for (PickResult.FolderPickList list : folderPickList) {
+			for (PickResult.FolderPickWithViewCountList list : folderPickList) {
 				log.info("list: {} ", list.toString());
 			}
 
@@ -293,7 +298,7 @@ class PickServiceTest {
 			// then
 			assertThat(updatePick.title()).isNotEqualTo(savePick.title()).isEqualTo(newTitle); // changed
 			assertThat(updatePick.tagIdOrderedList()).isNotEqualTo(savePick.tagIdOrderedList())
-				.isEqualTo(newTagOrder); // changed
+													 .isEqualTo(newTagOrder); // changed
 		}
 	}
 
