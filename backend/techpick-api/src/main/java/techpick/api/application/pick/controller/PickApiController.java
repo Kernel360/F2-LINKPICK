@@ -210,7 +210,7 @@ public class PickApiController {
 		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
 		@ApiResponse(responseCode = "403", description = "접근할 수 없는 폴더")
 	})
-	public ResponseEntity<?> savePickFromRecommend(@LoginUserId Long userId,
+	public ResponseEntity<PickApiResponse.CreateFromRecommend> savePickFromRecommend(@LoginUserId Long userId,
 		@Valid @RequestBody PickApiRequest.Create request) {
 		boolean existPick;
 		PickResult.Pick pickResult;
