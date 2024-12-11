@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.NonNull;
 import techpick.api.domain.link.dto.LinkInfo;
 import techpick.api.domain.pick.dto.PickResult;
 
@@ -51,6 +50,12 @@ public class PickApiResponse {
 	public record PickExists(
 		@NotNull Boolean exist,
 		PickApiResponse.Pick pick
+	) {
+	}
+
+	public record CreateFromRecommend(
+		boolean exist,
+		PickResult.Pick pick
 	) {
 	}
 }
