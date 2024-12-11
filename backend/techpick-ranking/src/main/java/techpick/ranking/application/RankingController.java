@@ -1,6 +1,7 @@
 package techpick.ranking.application;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,9 +17,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import techpick.ranking.domain.pick.PickRankingService;
 import techpick.core.dto.UrlWithCount;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/ranking")
@@ -41,7 +44,13 @@ public class RankingController {
 		@Parameter(description = "랭킹 개수, 명시 안할 경우 5개를 반환", example = "10")
 		@RequestParam(required = false, defaultValue = "5") Integer limit
 	) {
-		var result = pickRankingService.getLinksOrderByViewCount(date_begin, date_end, limit);
+		int days = Period.between(date_begin, date_end).getDays();
+		List<UrlWithCount> result;
+		if (days == 1) {
+			result = pickRankingService.getDailyLinksOrderByViewCount(date_begin, date_end, limit);
+		} else {
+			result = pickRankingService.getWeeklyLinksOrderByViewCount(date_begin, date_end, limit);
+		}
 		return ResponseEntity.ok(result);
 	}
 
