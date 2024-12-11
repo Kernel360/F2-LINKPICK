@@ -12,4 +12,24 @@ Sentry.init({
 
   // Setting this option to true will print useful information to the console while you're setting up Sentry.
   debug: false,
+
+  /**
+   * 에러가 발생할 때 즉시 녹화가 시작되어 지속되는 리플레이 샘플 속도입니다.
+   * 오류 전 최대 1분동안 이벤트를 기록합니다.
+   * 1.0 - 0 사이의 값을 사용합니다. (1.0 권장)
+   */
+  replaysOnErrorSampleRate: 1.0,
+
+  integrations: [
+    Sentry.replayIntegration({
+      /**
+       * 모튼 텍스트를 마스킹하지 않습니다.
+       */
+      maskAllText: false,
+      /**
+       * 모튼 미디어를 차단하지 않습니다.
+       */
+      blockAllMedia: false,
+    }),
+  ],
 });
