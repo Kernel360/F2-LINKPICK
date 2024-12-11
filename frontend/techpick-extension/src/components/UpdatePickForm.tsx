@@ -25,7 +25,6 @@ import { PUBLIC_DOMAIN } from '@/constants';
 export function UpdatePickForm({
   id,
   title,
-
   imageUrl,
   folderId,
   folderInfoList,

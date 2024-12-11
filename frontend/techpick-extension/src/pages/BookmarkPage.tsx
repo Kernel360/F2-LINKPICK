@@ -68,7 +68,7 @@ export function BookmarkPage() {
 
   useEffect(
     function onUpdatePickFormLoad() {
-      if (pickData && isInitialLoadRef.current) {
+      if (pickData && isInitialLoadRef.current && 0 < tagList.length) {
         isInitialLoadRef.current = false;
         const initialData = pickData?.tagIdOrderedList
           ? tagList.filter((tag) => pickData.tagIdOrderedList.includes(tag.id))
