@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { SearchIcon, FilterIcon, Loader } from 'lucide-react';
+import { FilterIcon } from 'lucide-react';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import FilterToggleContainer from './FilterToggleContainer';
 import HoverCard from './HoverCard';
@@ -13,7 +13,6 @@ export default function SearchDialog({
   isOpen,
   onOpenChange,
 }: SearchDialogProps) {
-  const { isLoading } = useSearchPickStore();
   const [filterVisible, setFilterVisible] = useState(false);
   const { preFetchSearchPicks, reset } = useSearchPickStore();
   const toggleFilter = () => {
@@ -35,9 +34,11 @@ export default function SearchDialog({
             <VisuallyHidden>Pick Search</VisuallyHidden>
           </DialogPrimitive.Title>
           <div className={styles.searchBar}>
-            {isLoading ? <Loader size={20} /> : <SearchIcon size={20} />}
             <SearchInput />
-            <button className={styles.filterButton} onClick={toggleFilter}>
+            <button
+              className={styles.iconButtonContainer}
+              onClick={toggleFilter}
+            >
               <FilterIcon size={20} />
             </button>
           </div>
