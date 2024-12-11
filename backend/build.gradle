@@ -83,6 +83,10 @@ subprojects {
         // jsoup
         // https://mvnrepository.com/artifact/org.jsoup/jsoup
         implementation 'org.jsoup:jsoup:1.18.3'
+
+        // spring caffeine cache
+        implementation 'org.springframework.boot:spring-boot-starter-cache'
+        implementation 'com.github.ben-manes.caffeine:caffeine'
     }
 
     tasks.named('test') {
