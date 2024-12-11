@@ -46,6 +46,7 @@ export const iconButtonContainer = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  color: colorVars.gray8,
   ':hover': {
     backgroundColor: colorVars.gray2,
   },

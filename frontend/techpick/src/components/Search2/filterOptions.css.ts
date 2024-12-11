@@ -10,5 +10,5 @@ export const filterOptionContainer = style({
 
 export const icon = style({
   display: 'flex',
-  color: colorVars.gray7,
+  color: colorVars.gray8,
 });
