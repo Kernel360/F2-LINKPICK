@@ -26,6 +26,7 @@ export function BookmarkPage() {
     (state) => state.replaceSelectedTagList
   );
   const tagList = useTagStore((state) => state.tagList);
+  const { fetchingTagList } = useTagStore();
   const isInitialLoadRef = useRef(true);
 
   useEffect(function onBookmarkPageLoad() {
@@ -78,6 +79,13 @@ export function BookmarkPage() {
       }
     },
     [pickData, replaceSelectedTagList, tagList]
+  );
+
+  useEffect(
+    function fetchTagList() {
+      fetchingTagList();
+    },
+    [fetchingTagList]
   );
 
   if (isGetPickInfoLoading || isFolderInfoListLoading) {

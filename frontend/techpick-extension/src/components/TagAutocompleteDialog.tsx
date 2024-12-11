@@ -39,14 +39,8 @@ export function TagAutocompleteDialog({
   const isCreateFetchPendingRef = useRef<boolean>(false);
   const randomNumber = useRef<number>(getRandomInt());
 
-  const {
-    tagList,
-    selectedTagList,
-    fetchingTagState,
-    selectTag,
-    fetchingTagList,
-    createTag,
-  } = useTagStore();
+  const { tagList, selectedTagList, fetchingTagState, selectTag, createTag } =
+    useTagStore();
   const { isDarkMode } = useThemeStore();
 
   const focusTagInput = () => {
@@ -96,13 +90,6 @@ export function TagAutocompleteDialog({
       isCreateFetchPendingRef.current = false;
     }
   };
-
-  useEffect(
-    function fetchTagList() {
-      fetchingTagList();
-    },
-    [fetchingTagList]
-  );
 
   useEffect(
     function checkIsCreatableTag() {
