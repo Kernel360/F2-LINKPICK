@@ -1,4 +1,4 @@
-package techpick.ranking.exeption;
+package techpick.ranking.exception;
 
 import techpick.core.exception.base.ApiErrorCode;
 import techpick.core.exception.base.ApiException;
