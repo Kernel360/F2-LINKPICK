@@ -24,13 +24,11 @@ export default async function middleware(req: NextRequest) {
   }
 
   if (
-    isAuthenticatedOnlyPath &&
+    (isAuthenticatedOnlyPath || pathname === '/') &&
     !isAuthenticated &&
-    !pathname.startsWith('/share/')
+    !isUnauthenticatedOnlyPath
   ) {
-    if (pathname !== '/login') {
-      return NextResponse.redirect(new URL('/login', req.url));
-    }
+    return NextResponse.redirect(new URL('/login', req.url));
   }
 
   if (isAuthenticated && pathname === '/') {
