@@ -84,3 +84,38 @@ globalFontFace(notoSansKR, {
 globalStyle('body', {
   fontFamily: notoSansKR,
 });
+
+// input, textarea, select 요소의 기본 스타일 제거
+globalStyle('input, textarea, select', {
+  appearance: 'none',
+  borderRadius: 0,
+});
+
+// focus 상태일 때 아웃라인 제거
+globalStyle('input:focus, textarea:focus, select:focus', {
+  outline: 'none',
+});
+
+// 버튼의 기본 스타일 제거
+globalStyle('button', {
+  background: 'none',
+  border: 'none',
+  padding: 0,
+  cursor: 'pointer',
+});
+
+// placeholder 스타일 지정
+globalStyle('::placeholder', {
+  color: '#6c757d',
+  opacity: 1,
+});
+
+// 스크롤바 숨기기 (WebKit 브라우저)
+globalStyle('::-webkit-scrollbar', {
+  display: 'none',
+});
+
+// 스크롤바 숨기기 (Firefox)
+globalStyle('html', {
+  scrollbarWidth: 'none',
+});
