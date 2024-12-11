@@ -32,25 +32,29 @@ export const searchListContainer = style({
 export const searchBar = style({
   display: 'flex',
   alignItems: 'center',
-  gap: '8px',
-  marginBottom: '16px',
+  paddingBottom: '4px',
+  marginBottom: '8px',
   borderBottom: `1px solid ${colorVars.gray4}`,
 });
 
-export const searchIcon = style({
-  color: '#aaa',
+export const iconButtonContainer = style({
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  padding: '8px',
+  borderRadius: '4px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  ':hover': {
+    backgroundColor: colorVars.gray2,
+  },
 });
 
 export const searchInput = style({
   flexGrow: 1,
   padding: '8px',
   fontSize: '14px',
-});
-
-export const filterButton = style({
-  background: 'none',
-  border: 'none',
-  cursor: 'pointer',
 });
 
 export const filterContainer = style({
