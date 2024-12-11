@@ -2,7 +2,7 @@ import DOMPurify from 'dompurify';
 import { notifyError, notifySuccess } from '@/libs/@toast';
 import { useChangeFocusUsingArrowKey } from '@/hooks';
 import { useTagStore } from '@/stores';
-import { FolderType, TagType } from '@/types';
+import { FolderType } from '@/types';
 import { updatePick } from '@/apis';
 import { TagPicker } from '@/components';
 import { ThumbnailImage } from './ThumbnailImage';
@@ -25,7 +25,7 @@ import { PUBLIC_DOMAIN } from '@/constants';
 export function UpdatePickForm({
   id,
   title,
-  tagList,
+
   imageUrl,
   folderId,
   folderInfoList,
@@ -34,7 +34,8 @@ export function UpdatePickForm({
   const tagPickerRef = useRef<HTMLDivElement>(null);
   const folderSelectRef = useRef<HTMLButtonElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
-  const { selectedTagList, replaceSelectedTagList } = useTagStore();
+  const { selectedTagList } = useTagStore();
+
   useChangeFocusUsingArrowKey([
     titleInputRef,
     tagPickerRef,
@@ -47,13 +48,6 @@ export function UpdatePickForm({
   );
   const [selectedFolderId, setSelectedFolderId] = useState(
     `${currentSelectedFolderInfo?.id ?? folderInfoList[0].id}`
-  );
-
-  useEffect(
-    function onUpdatePickFormLoad() {
-      replaceSelectedTagList(tagList);
-    },
-    [tagList, replaceSelectedTagList]
   );
 
   useEffect(() => {
@@ -136,7 +130,6 @@ export function UpdatePickForm({
 interface UpdatePickFormProps {
   id: number;
   title: string;
-  tagList: TagType[];
   imageUrl: string;
   folderId: number;
   folderInfoList: FolderType[];

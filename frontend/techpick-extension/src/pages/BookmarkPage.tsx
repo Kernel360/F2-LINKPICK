@@ -3,10 +3,10 @@ import { useGetTabInfo } from '@/libs/@chrome/useGetTabInfo';
 import { useHasPick } from '@/hooks';
 import { SkeltonPickForm, CreatePickForm, UpdatePickForm } from '@/components';
 import { bookmarkPageLayout } from './BookmarkPage.css';
-import { useTagStore } from '@/stores';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { FolderType } from '@/types';
 import { getBasicFolderList, getRootFolderChildFolders } from '@/apis';
+import { useTagStore } from '@/stores';
 
 export function BookmarkPage() {
   const {
@@ -20,15 +20,16 @@ export function BookmarkPage() {
     hasLink,
     data: pickData,
   } = useHasPick(url);
-  const tagList = useTagStore((state) => state.tagList);
-  const selectedTagInfoList = pickData
-    ? tagList.filter((tag) => pickData.tagIdOrderedList.includes(tag.id))
-    : [];
   const [isFolderInfoListLoading, setIsFolderInfoListLoading] = useState(true);
   const [folderInfoList, setFolderInfoList] = useState<FolderType[]>([]);
+  const replaceSelectedTagList = useTagStore(
+    (state) => state.replaceSelectedTagList
+  );
+  const tagList = useTagStore((state) => state.tagList);
+  const isInitialLoadRef = useRef(true);
 
   useEffect(function onBookmarkPageLoad() {
-    const getFolderInfoList = async () => {
+    const fetchFolderInfoList = async () => {
       const folderInfoList: FolderType[] = [];
 
       const basicFolders = await getBasicFolderList();
@@ -62,8 +63,22 @@ export function BookmarkPage() {
       setIsFolderInfoListLoading(false);
     };
 
-    getFolderInfoList();
+    fetchFolderInfoList();
   }, []);
+
+  useEffect(
+    function onUpdatePickFormLoad() {
+      if (pickData && isInitialLoadRef.current) {
+        isInitialLoadRef.current = false;
+        const initialData = pickData?.tagIdOrderedList
+          ? tagList.filter((tag) => pickData.tagIdOrderedList.includes(tag.id))
+          : [];
+
+        replaceSelectedTagList(initialData);
+      }
+    },
+    [pickData, replaceSelectedTagList, tagList]
+  );
 
   if (isGetPickInfoLoading || isFolderInfoListLoading) {
     return (
@@ -81,7 +96,6 @@ export function BookmarkPage() {
         <UpdatePickForm
           id={pickData.id}
           title={pickData.title}
-          tagList={selectedTagInfoList}
           imageUrl={imageUrl}
           folderId={pickData.parentFolderId}
           folderInfoList={folderInfoList}
