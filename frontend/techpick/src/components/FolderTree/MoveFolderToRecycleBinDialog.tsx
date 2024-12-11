@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import * as Dialog from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
@@ -28,6 +29,8 @@ export function MoveFolderToRecycleBinDialog({
   );
   const { checkIsShareFolder, updateFolderAccessTokenByFolderId } =
     useTreeStore();
+  const deleteButtonRef = useRef<HTMLButtonElement>(null);
+  const cancelButtonRef = useRef<HTMLButtonElement>(null);
 
   const moveRecycleBinAndRedirect = () => {
     if (checkIsShareFolder(deleteFolderId)) {
@@ -40,6 +43,10 @@ export function MoveFolderToRecycleBinDialog({
     if (Number(urlFolderId) === deleteFolderId) {
       router.push(ROUTES.FOLDERS_UNCLASSIFIED);
     }
+  };
+
+  const handleMouseEnter = (ref: React.RefObject<HTMLButtonElement>) => {
+    ref.current?.focus();
   };
 
   return (
@@ -72,7 +79,11 @@ export function MoveFolderToRecycleBinDialog({
           </div>
 
           <Dialog.Close asChild>
-            <button className={moveRecycleBinDialogCloseButton}>
+            <button
+              ref={deleteButtonRef}
+              onMouseEnter={() => handleMouseEnter(deleteButtonRef)}
+              className={moveRecycleBinDialogCloseButton}
+            >
               <XIcon size={12} />
             </button>
           </Dialog.Close>
@@ -82,13 +93,21 @@ export function MoveFolderToRecycleBinDialog({
               <button
                 className={moveRecycleBinConfirmButtonStyle}
                 onClick={moveRecycleBinAndRedirect}
+                ref={deleteButtonRef}
+                onMouseEnter={() => handleMouseEnter(deleteButtonRef)}
               >
                 이 폴더를 삭제합니다.
               </button>
             </Dialog.Close>
 
             <Dialog.Close asChild>
-              <button className={moveRecycleBinCancelButtonStyle}>취소</button>
+              <button
+                ref={cancelButtonRef}
+                onMouseEnter={() => handleMouseEnter(cancelButtonRef)}
+                className={moveRecycleBinCancelButtonStyle}
+              >
+                취소
+              </button>
             </Dialog.Close>
           </div>
         </Dialog.Content>

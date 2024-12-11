@@ -76,8 +76,10 @@ export const moveRecycleBinConfirmButtonStyle = style({
   color: colorVars.red11,
   cursor: 'pointer',
 
-  ':hover': {
-    backgroundColor: colorVars.red3,
+  selectors: {
+    '&:hover, &:focus': {
+      backgroundColor: colorVars.red3,
+    },
   },
 });
 
@@ -92,7 +94,9 @@ export const moveRecycleBinCancelButtonStyle = style({
   color: colorVars.sand11,
   cursor: 'pointer',
 
-  ':hover': {
-    backgroundColor: colorVars.sand3,
+  selectors: {
+    '&:hover, &:focus': {
+      backgroundColor: colorVars.sand3,
+    },
   },
 });
