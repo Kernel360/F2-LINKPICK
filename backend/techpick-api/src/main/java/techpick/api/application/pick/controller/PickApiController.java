@@ -29,6 +29,7 @@ import techpick.api.application.pick.dto.PickApiMapper;
 import techpick.api.application.pick.dto.PickApiRequest;
 import techpick.api.application.pick.dto.PickApiResponse;
 import techpick.api.application.pick.dto.PickSliceResponse;
+import techpick.api.domain.folder.service.FolderService;
 import techpick.api.domain.pick.dto.PickResult;
 import techpick.api.domain.pick.exception.ApiPickException;
 import techpick.api.domain.pick.service.PickBulkService;
@@ -50,6 +51,7 @@ public class PickApiController {
 	private final PickSearchService pickSearchService;
 	private final PickBulkService pickBulkService;
 	private final EventMessenger eventMessenger;
+	private final FolderService folderService;
 
 	@GetMapping
 	@Operation(summary = "폴더 리스트 내 픽 리스트 조회", description = "해당 폴더 리스트 각각의 픽 리스트를 조회합니다.")
@@ -65,8 +67,8 @@ public class PickApiController {
 		);
 		return ResponseEntity.ok(
 			folderPickList.stream()
-						  .map(pickApiMapper::toApiFolderPickListWithViewCount)
-						  .toList());
+				.map(pickApiMapper::toApiFolderPickListWithViewCount)
+				.toList());
 	}
 
 	@GetMapping("/search")
@@ -112,8 +114,8 @@ public class PickApiController {
 			pickApiMapper.toSearchCommand(userId, request));
 
 		List<PickApiResponse.Pick> pickResponseList = pickList.stream()
-															  .map(pickApiMapper::toApiResponse)
-															  .toList();
+			.map(pickApiMapper::toApiResponse)
+			.toList();
 		return ResponseEntity.ok(pickResponseList);
 	}
 
@@ -154,9 +156,9 @@ public class PickApiController {
 		@LoginUserId Long userId, @RequestParam String link
 	) {
 		var response = pickService.findPickUrl(userId, link)
-								  .map(pickApiMapper::toApiResponse)
-								  .map(pick -> new PickApiResponse.PickExists(true, pick))
-								  .orElseGet(() -> new PickApiResponse.PickExists(false, null));
+			.map(pickApiMapper::toApiResponse)
+			.map(pick -> new PickApiResponse.PickExists(true, pick))
+			.orElseGet(() -> new PickApiResponse.PickExists(false, null));
 		return ResponseEntity.ok(response);
 	}
 
@@ -197,6 +199,31 @@ public class PickApiController {
 		eventMessenger.send(event);
 		var response = pickApiMapper.toApiResponse(result);
 		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("/recommend")
+	@Operation(
+		summary = "추천 링크로 픽 생성",
+		description = "추천 링크로 픽을 생성합니다. 이미 픽으로 등록된 링크의 경우 기존 픽 정보를 응답으로 보냅니다."
+	)
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
+		@ApiResponse(responseCode = "403", description = "접근할 수 없는 폴더")
+	})
+	public ResponseEntity<?> savePickFromRecommend(@LoginUserId Long userId,
+		@Valid @RequestBody PickApiRequest.Create request) {
+		boolean existPick;
+		PickResult.Pick pickResult;
+		if (pickService.existPickByUrl(userId, request.linkInfo().url())) {
+			existPick = true;
+			pickResult = pickService.getPickUrl(userId, request.linkInfo().url());
+		} else {
+			existPick = false;
+			var command = pickApiMapper.toCreateCommand(userId, request);
+			pickResult = pickService.saveNewPick(command);
+		}
+		var folderResult = folderService.getFolder(userId, pickResult.parentFolderId());
+		return ResponseEntity.ok(new PickApiResponse.CreateFromRecommend(existPick, pickResult, folderResult));
 	}
 
 	@PatchMapping
