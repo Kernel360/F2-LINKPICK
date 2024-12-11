@@ -45,6 +45,8 @@ public class RankingInitStrategy implements ContentInitStrategy {
 	/**
 	 * 링크 일부가 잘못되었어도, 가능한 링크에 대해서 폴더가 생성되도록 처리.
 	 * 리스트를 역순으로 삽입해야 UI 상단에 랭킹이 높은 Pick이 표시된다.
+	 *
+	 * link 가 db 에 존재하지 않으면 새로 추가함 by psh
 	 */
 	private void savePickFromRankingList(Long userId, List<UrlWithCount> rankingList, Long destinationFolderId) {
 		if (Objects.isNull(rankingList)) {
@@ -57,7 +59,6 @@ public class RankingInitStrategy implements ContentInitStrategy {
 			try {
 				linkInfo = linkService.getLinkInfo(curr.url());
 			} catch (ApiLinkException exception) {
-				// mongodb 에서 받은 link 가 db 에 존재하지 않으면 새로 추가함 by psh
 				linkInfo = linkService.saveLinkAndUpdateOgTag(curr.url());
 			}
 			if (linkInfo.title().isBlank()) {

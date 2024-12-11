@@ -8,10 +8,11 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import techpick.api.domain.link.dto.LinkInfo;
+import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.api.domain.link.service.LinkService;
 import techpick.api.domain.pick.dto.PickCommand;
 import techpick.api.domain.pick.service.PickService;
-import techpick.core.model.folder.Folder;
 import techpick.core.model.user.User;
 
 @Slf4j
@@ -32,10 +33,18 @@ public class ManualInitStrategy implements ContentInitStrategy {
 		"https://positive-airboat-4de.notion.site/15841a7fba65809d89a6dceb89060f70?pvs=4"
 	);
 
+	/**
+	 * link 가 db 에 존재하지 않으면 새로 추가함 by psh
+	 */
 	@Override
 	public void initContent(User user, Long folderId) {
 		for (var url : MANUAL_URLS) {
-			var linkInfo = linkService.saveLinkAndUpdateOgTag(url);
+			LinkInfo linkInfo = null;
+			try {
+				linkInfo = linkService.getLinkInfo(url);
+			} catch (ApiLinkException exception) {
+				linkInfo = linkService.saveLinkAndUpdateOgTag(url);
+			}
 			var command = new PickCommand.Create(
 				user.getId(), linkInfo.title(), new ArrayList<>(), folderId, linkInfo
 			);
