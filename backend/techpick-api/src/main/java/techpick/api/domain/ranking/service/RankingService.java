@@ -28,7 +28,7 @@ public class RankingService {
 			rankingApi.getUrlRankingByViewCount(before7Days, before1Day, limit).getBody();
 
 		var past30DaysPickRanking = // 한달 전 ~ 어제
-			rankingApi.getUrlRankingByPickedCount(before30Days, before1Day, limit).getBody();
+			rankingApi.getUrlRankingByPickedCount(before30Days, currentDay, limit).getBody();
 
 		return new RankingResult(dailyViewRanking, past7DaysViewRanking, past30DaysPickRanking);
 	}
