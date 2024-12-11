@@ -2,11 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import { formatDateString } from '@/utils';
+import { checkImageUrlByUrl } from '@/utils/checkImageUrlByUrl';
 import * as styles from './hoverCard.css';
-
-function getImageUrl(url: string | undefined): string {
-  return url?.trim() || '/image/default_image.svg';
-}
 
 export default function HoverCard() {
   const { searchResultList, hoverPickIndex } = useSearchPickStore();
@@ -23,12 +20,13 @@ export default function HoverCard() {
             target="_blank"
           >
             <Image
-              src={getImageUrl(
+              src={checkImageUrlByUrl(
                 searchResultList[hoverPickIndex]?.linkInfo.imageUrl
               )}
               alt="link-image"
               height={200}
               width={200}
+              className={styles.hoverCardImage}
             />
           </a>
         </div>
