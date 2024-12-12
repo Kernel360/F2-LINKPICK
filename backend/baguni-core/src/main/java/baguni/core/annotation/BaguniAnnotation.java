@@ -1,0 +1,26 @@
+package baguni.core.annotation;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * 스프링 어노테이션과 우리의 커스텀 어노테이션을 구분하기 쉽게 하고자
+ * 아래 클래스에 묶어주었습니다.
+ *
+ * Class for Custom Annotations
+ * - Use with Baguni prefix
+ *   ex. @BaguniAnnotation.{SendEvent}
+ */
+public class BaguniAnnotation {
+	/**
+	 * @author suhyeong park
+	 * 함수 진입 / 종료 시간을 측정해 로그를 남깁니다.
+	 */
+	@Target(ElementType.METHOD)
+	@Retention(RetentionPolicy.RUNTIME)
+	public @interface MeasureTime {
+	}
+}
+

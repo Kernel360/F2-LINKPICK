@@ -1,4 +1,4 @@
-# techpick backend
+# baguni backend
 
 0. create .env file
 

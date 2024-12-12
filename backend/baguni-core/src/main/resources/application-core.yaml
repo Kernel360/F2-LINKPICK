@@ -1,0 +1,84 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+  sql:
+    init:
+      mode: never # schema.sql 실행시 always 키고 실행하시면 됩니다. option: never, always
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: ${DOCKER_LOCAL_MYSQL_URL}
+    username: ${DOCKER_MYSQL_USERNAME}
+    password: ${DOCKER_MYSQL_PASSWORD}
+  rabbitmq:
+    host: ${DOCKER_LOCAL_RABBITMQ_HOST}
+    port: ${DOCKER_RABBITMQ_PORT}
+    username: ${DOCKER_RABBITMQ_USERNAME}
+    password: ${DOCKER_RABBITMQ_PASSWORD}
+server-url: # 테크픽 서버간 통신을 위한 주소
+  api-server: http://localhost:8080/api # 운영 api 서버
+  ranking-server: http://localhost:8082/api # 랭킹 서버
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: ${DOCKER_DEV_MYSQL_URL}
+    username: ${DOCKER_MYSQL_USERNAME}
+    password: ${DOCKER_MYSQL_PASSWORD}
+  rabbitmq:
+    host: ${DOCKER_DEV_RABBITMQ_HOST}
+    port: ${DOCKER_RABBITMQ_PORT}
+    username: ${DOCKER_RABBITMQ_USERNAME}
+    password: ${DOCKER_RABBITMQ_PASSWORD}
+server-url: # 테크픽 서버간 통신을 위한 주소
+  api-server: http://baguni.${PROFILE_MODE}.server.api:8080/api # 운영 api 서버 (컨테이너)
+  ranking-server: http://baguni.${PROFILE_MODE}.server.ranking:8080/api # 랭킹 서버 (컨테이너)
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: ${DOCKER_PROD_MYSQL_URL}
+    username: ${DOCKER_MYSQL_USERNAME}
+    password: ${DOCKER_MYSQL_PASSWORD}
+  rabbitmq:
+    host: ${DOCKER_PROD_RABBITMQ_HOST}
+    port: ${DOCKER_RABBITMQ_PORT}
+    username: ${DOCKER_RABBITMQ_USERNAME}
+    password: ${DOCKER_RABBITMQ_PASSWORD}
+server-url: # 테크픽 서버간 통신을 위한 주소
+  api-server: http://baguni.${PROFILE_MODE}.server.api:8080/api # 운영 api 서버 (컨테이너)
+  ranking-server: http://baguni.${PROFILE_MODE}.server.ranking:8080/api # 랭킹 서버 (컨테이너)
+# 운영서버에서는 p6spy 로깅을 사용하지 않음
+# @Profile 로 처리했었지만, logback 때문인지 제대로 적용되지 않아 yaml 에 추가
+# by psh
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: false
+---
