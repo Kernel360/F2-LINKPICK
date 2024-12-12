@@ -1,12 +1,8 @@
 package techpick.core.model.user;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -24,8 +20,6 @@ import lombok.NoArgsConstructor;
 import techpick.core.model.common.BaseEntity;
 import techpick.core.util.OrderConverter;
 
-@SQLDelete(sql = "UPDATE user SET deleted_at = CURRENT_TIMESTAMP WHERE user.id=?")
-@SQLRestriction("deleted_at IS NULL")
 @Table(name = "user")
 @Entity
 @Getter
@@ -64,10 +58,6 @@ public class User extends BaseEntity /* implements UserDetails --> 시큐리티 
 	// 소셜 제공자 Id
 	@Column(name = "social_provider_id") // nullable
 	private String socialProviderId;
-
-	// Soft Delete - 삭제 시간
-	@Column(name = "deleted_at") // nullable
-	private LocalDateTime deletedAt;
 
 	// 유저의 tag id들을 공백으로 분리된 String으로 변환하여 db에 저장
 	// ex) [6,3,2,23,1] -> "6 3 2 23 1"
