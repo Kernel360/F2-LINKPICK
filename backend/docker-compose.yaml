@@ -7,8 +7,8 @@
 #*************************************************#
 
 networks:
-  baguni-network:
-    name: baguni-network
+  baguni-dev-network:
+    name: baguni-dev-network
     driver: bridge
 
 services:
@@ -35,7 +35,7 @@ services:
       - --skip-character-set-client-handshake # 클라이언트 character set 값을 보낼 때 서버에서 이를 무시하는 명령어, docker linux에서 locale 설정하지 않아 default 값인 latin1로 설정
       - --lower_case_table_names=1
     networks:
-      - baguni-network
+      - baguni-dev-network
 
   # **********************************
   #   BAGUNI MESSAGE QUEUE
@@ -52,7 +52,7 @@ services:
       - "25672:15672" # 관리 UI 포트
       - "35672:5672" # AMQP 포트
     networks:
-      - baguni-network
+      - baguni-dev-network
 
   # **********************************
   #        BAGUNI API SERVER
@@ -71,7 +71,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=${PROFILE_MODE}
     networks:
-      - baguni-network
+      - baguni-dev-network
     depends_on:
       - baguni-mysql
       - baguni-rabbitmq
@@ -93,7 +93,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=${PROFILE_MODE}
     networks:
-      - baguni-network
+      - baguni-dev-network
     depends_on:
       - baguni-mysql
 
@@ -117,7 +117,7 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=${PROFILE_MODE}
     networks:
-      - baguni-network
+      - baguni-dev-network
 
   baguni-ranking-db:
     build:
@@ -134,4 +134,4 @@ services:
       - ./data/mongo:/data/db
     command: [ "--bind_ip", "0.0.0.0" ]
     networks:
-      - baguni-network
+      - baguni-dev-network

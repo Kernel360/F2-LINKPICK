@@ -71,9 +71,9 @@
 
     <!-- ``````````````````````` LOGGER SETTING ```````````````````````````` -->
     <!-- (1) 프로젝트 전체 로그 설정  -->
-    <logger name="root" level="debug" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-    </logger>
+    <!--    <logger name="root" level="debug" additivity="false">-->
+    <!--        <appender-ref ref="CONSOLE"/>-->
+    <!--    </logger>-->
     <logger name="baguni.api" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
