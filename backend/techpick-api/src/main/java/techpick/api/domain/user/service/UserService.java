@@ -1,9 +1,11 @@
 package techpick.api.domain.user.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import techpick.api.domain.user.service.strategy.StarterFolderStrategy;
+import techpick.api.infrastructure.user.UserDataHandler;
 import techpick.core.annotation.TechpickAnnotation;
 import techpick.core.model.folder.Folder;
 import techpick.core.model.folder.FolderRepository;
@@ -15,6 +17,7 @@ import techpick.security.model.OAuth2UserInfo;
 @RequiredArgsConstructor
 public class UserService {
 
+	private final UserDataHandler userDataHandler;
 	private final UserRepository userRepository;
 	private final FolderRepository folderRepository;
 	private final StarterFolderStrategy folderStrategy;
@@ -44,6 +47,11 @@ public class UserService {
 			);
 			createBasicFolder(userRepository.save(user));
 		}
+	}
+
+	@Transactional
+	public void deleteUser(Long userId) {
+		userDataHandler.deleteUser(userId);
 	}
 
 	private void createBasicFolder(User user) {
