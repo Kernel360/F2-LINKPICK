@@ -3,6 +3,7 @@ import { useSearchParams } from 'next/navigation';
 
 export default function useSearchElementId() {
   const searchElementId = useSearchParams().get('searchId');
+  const dateId = useSearchParams().get('dateId');
   const [isOccurClickEvent, setIsOccerClickEvent] = useState<boolean>(false);
 
   useEffect(() => {
@@ -15,21 +16,18 @@ export default function useSearchElementId() {
       }
     };
 
-    handleSearchElementIdChange();
-  }, [searchElementId]);
-
-  useEffect(() => {
     const handleClick = () => {
       setIsOccerClickEvent(true);
     };
 
+    handleSearchElementIdChange();
     document.addEventListener('click', handleClick);
 
     return () => {
       document.removeEventListener('click', handleClick);
       setIsOccerClickEvent(false);
     };
-  }, [searchElementId]);
+  }, [searchElementId, dateId]);
 
   return {
     searchElementId,
