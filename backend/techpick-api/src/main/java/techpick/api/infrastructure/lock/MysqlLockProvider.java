@@ -32,7 +32,7 @@ public class MysqlLockProvider implements LockProvider {
 	@Override
 	public void releaseLock(String key, Long userId) {
 		String sql = "SELECT RELEASE_LOCK(?)";
-		String lockKey = key + "_" + userId;
+		String lockKey = userId + "";
 		Boolean result = jdbcTemplate.queryForObject(sql, Boolean.class, lockKey);
 		if (!Boolean.TRUE.equals(result)) {
 			throw new LockException("락 해제 실패 : " + lockKey);

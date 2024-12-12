@@ -31,7 +31,7 @@ public class LoginUserIdDistributedLockAspect {
 
 		boolean lockCheck = lockProvider.acquireLock(key, timeout, userId);
 		if (!lockCheck) {
-			throw new LockException("락 설정 실패 : " + key);
+			throw new LockException("락 설정 실패 : " + userId);
 		}
 
 		try {
