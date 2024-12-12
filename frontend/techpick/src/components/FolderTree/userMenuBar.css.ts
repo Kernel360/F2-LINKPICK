@@ -13,4 +13,7 @@ export const myPageLinkStyle = style({
 
 export const searchButtonStyle = style({
   height: '24px',
+  ':hover': {
+    cursor: 'pointer',
+  },
 });
