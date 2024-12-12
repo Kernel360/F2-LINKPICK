@@ -10,23 +10,20 @@ import {
 import SearchDialog from '../Search2/SearchDialog';
 
 export function UserMenuBar() {
-  const {
-    isOpen: isSearchDialogOpen,
-    onOpen: onSearchDialogOpen,
-    onClose: onSearchDialogClose,
-  } = useDisclosure();
+  const { isOpen: isSearchDialogOpen, onToggle: onSearchDialogToggle } =
+    useDisclosure();
 
   return (
     <div className={userMenuBarLayoutStyle}>
       <Link href={ROUTES.MY_PAGE} className={myPageLinkStyle}>
         <CircleUserRoundIcon size={20} />
       </Link>
-      <button className={searchButtonStyle} onClick={onSearchDialogOpen}>
+      <button className={searchButtonStyle} onClick={onSearchDialogToggle}>
         <SearchIcon size={20} />
       </button>
       <SearchDialog
         isOpen={isSearchDialogOpen}
-        onOpenChange={onSearchDialogClose}
+        onOpenChange={onSearchDialogToggle}
       />
     </div>
   );
