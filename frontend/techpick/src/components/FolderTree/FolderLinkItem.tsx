@@ -1,6 +1,9 @@
+'use client';
+
 import type { ElementType, MouseEvent } from 'react';
 import Link from 'next/link';
 import { Folder } from 'lucide-react';
+import { usePickStore } from '@/stores';
 import {
   folderInfoItemStyle,
   selectedDragItemStyle,
@@ -14,11 +17,16 @@ export function FolderLinkItem({
   href,
   isSelected,
   isHovered = false,
+  folderId,
   onClick = () => {},
   icon: IconComponent = Folder,
 }: FolderListItemProps) {
+  const isMovingDestinationFolderId = usePickStore(
+    (state) => state.isMovingDestinationFolderId
+  );
+
   return (
-    <Link href={href}>
+    <Link href={isMovingDestinationFolderId === folderId ? '#' : href}>
       <div
         className={`${folderInfoItemStyle}  ${isSelected ? selectedDragItemStyle : ''} ${isHovered ? dragOverItemStyle : ''}`}
         onClick={onClick}
@@ -36,5 +44,6 @@ interface FolderListItemProps {
   isSelected?: boolean;
   isHovered?: boolean;
   onClick?: (event: MouseEvent<HTMLDivElement>) => void;
+  folderId: number;
   icon?: ElementType;
 }

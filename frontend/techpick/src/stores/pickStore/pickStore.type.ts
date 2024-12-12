@@ -17,6 +17,7 @@ export type PickState = {
   selectedPickIdList: SelectedPickIdListType;
   isDragging: boolean;
   draggingPickInfo: PickInfoType | null | undefined;
+  isMovingDestinationFolderId: number | null | undefined;
 };
 
 export type PickAction = {
