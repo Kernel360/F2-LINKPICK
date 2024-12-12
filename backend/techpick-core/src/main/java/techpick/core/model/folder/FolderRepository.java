@@ -22,7 +22,7 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
 	Optional<Folder> findByIdForUpdate(Long id);
 
 	List<Folder> findByUserId(Long userId);
-	
+
 	List<Folder> findByParentFolderId(Long parentFolderId);
 
 	// TODO: QueryDSL 도입 후 리팩토링 필요
@@ -36,4 +36,6 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
 	// TODO: QueryDSL 도입 후 리팩토링 필요
 	@Query("SELECT f FROM Folder f WHERE f.user.id = :userId AND f.folderType = techpick.core.model.folder.FolderType.ROOT")
 	Folder findRootByUserId(@Param("userId") Long userId);
+
+	void deleteByUserId(Long userId);
 }

@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public interface SharedFolderRepository extends JpaRepository<SharedFolder, UUID> {
 
-    List<SharedFolder> findByUserId(Long userId);
+	List<SharedFolder> findByUserId(Long userId);
 
-    Optional<SharedFolder> findByFolderId(Long folderId);
+	Optional<SharedFolder> findByFolderId(Long folderId);
 
-    void deleteByFolderId(Long folderId);
+	void deleteByFolderId(Long folderId);
+
+	void deleteByUserId(Long userId);
 }
