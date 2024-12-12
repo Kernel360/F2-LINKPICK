@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { FilterIcon } from 'lucide-react';
@@ -19,10 +19,13 @@ export default function SearchDialog({
     setFilterVisible(!filterVisible);
   };
 
+  useEffect(function prefetching() {
+    preFetchSearchPicks();
+  }, []);
+
   const handleOnClose = async () => {
     onOpenChange();
     reset();
-    await preFetchSearchPicks();
   };
 
   return (

@@ -1,9 +1,7 @@
-import { useEffect } from 'react';
 import Link from 'next/link';
 import { CircleUserRoundIcon, SearchIcon } from 'lucide-react';
 import { ROUTES } from '@/constants';
 import { useDisclosure } from '@/hooks';
-import { useSearchPickStore } from '@/stores/searchPickStore';
 import {
   userMenuBarLayoutStyle,
   myPageLinkStyle,
@@ -12,16 +10,11 @@ import {
 import SearchDialog from '../Search2/SearchDialog';
 
 export function UserMenuBar() {
-  const { preFetchSearchPicks } = useSearchPickStore();
   const {
     isOpen: isSearchDialogOpen,
     onOpen: onSearchDialogOpen,
     onClose: onSearchDialogClose,
   } = useDisclosure();
-
-  useEffect(() => {
-    preFetchSearchPicks();
-  }, []);
 
   return (
     <div className={userMenuBarLayoutStyle}>
