@@ -60,24 +60,23 @@ jobs:
           username: root
           password: ${{ secrets.SSH_TEST_SERVER_KYEU_PASSWORD }}
           script: |
-            # ****************************************************************
             echo "login docker hub for private repository access ..."
-            # ****************************************************************
-            
             echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+            
             echo "docker - pulling..."
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }}
+            
             echo "docker - changing image name and tag ..."
-            docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }} ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-staging
-        
+            docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }} techpick:${{ env.server-name }}-staging
+            
+            echo "moving to project directory..."
             cd /home/project/baguni/develop
             
+            echo "restarting container..."
             docker compose down ${{ env.module-name }}
             docker compose up ${{ env.module-name }} -d
 
-            # ****************************************************************
             echo "docker - pruning images that passed 24h ..."
-            # ****************************************************************
             docker image prune -af --filter "until=24h"
 
       - name: Discord Webhook Notification
