@@ -67,7 +67,7 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }}
             
             echo "docker - changing image name and tag ..."
-            docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }} techpick:${{ env.server-name }}-staging
+            docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }} techpick:${{ env.module-name }}-staging
             
             echo "moving to project directory..."
             cd /home/project/baguni/develop
