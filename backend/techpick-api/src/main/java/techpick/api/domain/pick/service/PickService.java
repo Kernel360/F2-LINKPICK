@@ -83,6 +83,7 @@ public class PickService {
 	}
 
 	// 폴더 리스트가 넘어오면, 각 폴더 내부에 있는 픽 리스트 조회
+	@LoginUserIdDistributedLock
 	@Transactional(readOnly = true)
 	public List<PickResult.FolderPickWithViewCountList> getFolderListChildPickList(PickCommand.ReadList command) {
 		return command.folderIdList().stream()
