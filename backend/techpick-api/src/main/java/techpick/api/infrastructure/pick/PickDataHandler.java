@@ -129,7 +129,7 @@ public class PickDataHandler {
 	 */
 	@Transactional
 	public Pick updatePick(PickCommand.Update command) {
-		Pick pick = pickRepository.findByIdForUpdate(command.id()).orElseThrow(ApiPickException::PICK_NOT_FOUND);
+		Pick pick = pickRepository.findById(command.id()).orElseThrow(ApiPickException::PICK_NOT_FOUND);
 		pick.updateTitle(command.title());
 
 		if (command.parentFolderId() != null) {
