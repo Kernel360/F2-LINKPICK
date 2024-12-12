@@ -1,4 +1,4 @@
-package techpick.ranking.exeption;
+package techpick.ranking.exception;
 
 import org.springframework.http.HttpStatus;
 

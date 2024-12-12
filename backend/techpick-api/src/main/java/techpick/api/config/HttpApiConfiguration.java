@@ -45,8 +45,8 @@ public class HttpApiConfiguration {
 	@Bean
 	public ClientHttpRequestFactory clientHttpRequestFactory() {
 		ClientHttpRequestFactorySettings settings = ClientHttpRequestFactorySettings.DEFAULTS
-			.withConnectTimeout(Duration.ofMillis(500))
-			.withReadTimeout(Duration.ofMillis(500));
+			.withConnectTimeout(Duration.ofSeconds(2))
+			.withReadTimeout(Duration.ofSeconds(2));
 		return ClientHttpRequestFactories.get(settings);
 	}
 }

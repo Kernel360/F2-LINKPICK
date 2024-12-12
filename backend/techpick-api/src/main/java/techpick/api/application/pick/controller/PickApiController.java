@@ -51,7 +51,6 @@ public class PickApiController {
 	private final PickSearchService pickSearchService;
 	private final PickBulkService pickBulkService;
 	private final EventMessenger eventMessenger;
-	private final FolderService folderService;
 
 	@GetMapping
 	@Operation(summary = "폴더 리스트 내 픽 리스트 조회", description = "해당 폴더 리스트 각각의 픽 리스트를 조회합니다.")
