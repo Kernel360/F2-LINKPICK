@@ -20,7 +20,7 @@ public class MysqlLockProvider implements LockProvider {
 	@Override
 	public boolean acquireLock(String key, long timeout, Long userId) {
 		String sql = "SELECT GET_LOCK(?, ?)";
-		String lockKey = key + "_" + userId;
+		String lockKey = userId + "";
 		log.debug("lockKey : {}", lockKey);
 		Boolean result = jdbcTemplate.queryForObject(sql, Boolean.class, lockKey, timeout / 1000);
 		return Boolean.TRUE.equals(result); // null인 경우 false 반환
