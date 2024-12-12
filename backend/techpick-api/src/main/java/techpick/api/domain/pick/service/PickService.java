@@ -83,7 +83,7 @@ public class PickService {
 	}
 
 	// 폴더 리스트가 넘어오면, 각 폴더 내부에 있는 픽 리스트 조회
-	@Transactional(isolation = Isolation.READ_UNCOMMITTED, readOnly = true)
+	@Transactional(readOnly = true)
 	public List<PickResult.FolderPickWithViewCountList> getFolderListChildPickList(PickCommand.ReadList command) {
 		return command.folderIdList().stream()
 			.peek(folderId -> validateFolderAccess(command.userId(), folderId))  // 폴더 접근 유효성 검사
