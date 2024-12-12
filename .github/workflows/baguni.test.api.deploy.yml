@@ -1,4 +1,4 @@
-name: Baguni Api-Module CI/CD
+name: Baguni Test Api-Module CI/CD
 
 # *****************************************
 # NOTE: 추후 도커 허브 레포를 baguni로 변경할 예정
