@@ -1,0 +1,92 @@
+name: Baguni Api-Module CI/CD
+
+# *****************************************
+# NOTE: 추후 도커 허브 레포를 baguni로 변경할 예정
+# *****************************************
+
+on:
+  push:
+    branches:
+      - 'backend-v2-baguni' # 배포 대상 브랜치
+    paths:
+      - 'backend/baguni-core/**'
+      - 'backend/baguni-batch/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      docker-hub-repo: 'techpick' # TODO: change to baguni
+      module-name: 'baguni-batch'
+
+    steps:
+      # 저장소 Checkout
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # Gradle 실행 권한 부여
+      - name: Grant execute permission to gradlew
+        run: chmod +x ./backend/gradlew
+
+      # JDK 설치
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      # Spring boot application, Docker image 빌드
+      - name: Build and Deploy ${{ env.module-name }} Module
+        run: |
+          ./backend/gradlew -p backend/${{ env.module-name }} clean build -x test
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }} backend/${{ env.module-name }}
+
+      - # Docker hub 로그인
+        name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - # Docker hub 업로드
+        name: Publish to docker hub
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }}
+
+      - name: Deploy on Test-Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: minlife.me
+          port: 4242
+          username: root
+          password: ${{ secrets.SSH_TEST_SERVER_KYEU_PASSWORD }}
+          script: |
+            # ****************************************************************
+            echo "login docker hub for private repository access ..."
+            # ****************************************************************
+            
+            echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+            echo "docker - pulling..."
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }}
+            echo "docker - changing image name and tag ..."
+            docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }} baguni:${{ env.module-name }}-staging
+        
+            cd /home/project/baguni/develop
+            
+            docker compose down ${{ env.module-name }}
+            docker compose up ${{ env.module-name }} -d
+
+            # ****************************************************************
+            echo "docker - pruning images that passed 24h ..."
+            # ****************************************************************
+            docker image prune -af --filter "until=24h"
+
+      - name: Discord Webhook Notification
+        uses: sarisia/actions-status-discord@v1.14.7
+        if: always()
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          status: ${{ job.status }}
+          title: 'BATCH SERVER DEPLOY'
+          color: 0xff91a4
+          url: 'https://github.com/sarisia/actions-status-discord'
+          username: GitHub Actions
