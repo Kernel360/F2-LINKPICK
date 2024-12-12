@@ -22,6 +22,7 @@ import techpick.api.application.ranking.dto.RankingResponse;
 import techpick.api.domain.link.exception.ApiLinkException;
 import techpick.api.domain.link.service.LinkService;
 import techpick.api.domain.ranking.service.RankingService;
+import techpick.core.annotation.TechpickAnnotation;
 import techpick.core.dto.UrlWithCount;
 
 /**
@@ -42,6 +43,7 @@ public class RankingApiController {
 	 * 주별, 일별 조회 수를 기반 으로 추천 한다.
 	 * - 조회수 기반 집계
 	 */
+	@TechpickAnnotation.MeasureTime
 	@GetMapping("/ranking")
 	@Operation(
 		summary = "인기 픽 Top 10",

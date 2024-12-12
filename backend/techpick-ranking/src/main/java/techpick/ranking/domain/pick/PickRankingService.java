@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import techpick.core.annotation.TechpickAnnotation;
 import techpick.core.dto.UrlWithCount;
+import techpick.core.model.cache.CacheType;
 import techpick.ranking.exception.ApiRankException;
 import techpick.ranking.infra.pick.LinkPickedCountRepository;
 import techpick.ranking.infra.pick.LinkViewCountRepository;
@@ -35,8 +36,12 @@ public class PickRankingService {
 	 *     ---------------------------------------------
 	 *     Ex. 일별 집계, 월별 집계, 연별 집계 테이블을 나눠서 미리 연산.
 	 *         API 호출은 일별, 월별, 연별을 나눠서 호출하도록 변경하면 해결 가능.
+	 *
+	 *    @author sangwon
+	 * 		 		1시간마다 캐싱하도록 처리
+	 * 		 	    CacheType Enum 참고
 	 */
-	@Cacheable(cacheNames = "daily_link_rank")
+	@Cacheable(cacheNames = CacheType.CACHE_NAME.DAILY_LINK_RANK)
 	@TechpickAnnotation.MeasureTime
 	public List<UrlWithCount> getDailyLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
 		assertDateIsValid(startDate, endDate);
@@ -50,7 +55,12 @@ public class PickRankingService {
 			.toList();
 	}
 
-	@Cacheable(cacheNames = "weekly_link_rank")
+	/**
+	 * @author sangwon
+	 * 	 		24시간마다 캐싱하도록 처리
+	 * 	 	    CacheType Enum 참고
+	 */
+	@Cacheable(cacheNames = CacheType.CACHE_NAME.WEEKLY_LINK_RANK)
 	@TechpickAnnotation.MeasureTime
 	public List<UrlWithCount> getWeeklyLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
 		assertDateIsValid(startDate, endDate);
@@ -67,11 +77,13 @@ public class PickRankingService {
 	/**
 	 * @author minkyeu kim
 	 *       링크가 픽된 횟수에 대한 순위표 반환
-	 *       3시간마다 캐싱하도록 처리
-	 *       CacheType Enum 참고
-	 * https://techblog.uplus.co.kr/%EB%A1%9C%EC%BB%AC-%EC%BA%90%EC%8B%9C-%EC%84%A0%ED%83%9D%ED%95%98%EA%B8%B0-e394202d5c87
+	 *
+	 * @author sangwon
+	 * 		3시간마다 캐싱하도록 처리
+	 * 	    CacheType Enum 참고
+	 * 	    https://techblog.uplus.co.kr/%EB%A1%9C%EC%BB%AC-%EC%BA%90%EC%8B%9C-%EC%84%A0%ED%83%9D%ED%95%98%EA%B8%B0-e394202d5c87
 	 */
-	@Cacheable(cacheNames = "monthly_pick_rank")
+	@Cacheable(cacheNames = CacheType.CACHE_NAME.MONTHLY_PICK_RANK)
 	@TechpickAnnotation.MeasureTime
 	public List<UrlWithCount> getLinksOrderByPickedCount(LocalDate startDate, LocalDate endDate, int limit) {
 		assertDateIsValid(startDate, endDate);
