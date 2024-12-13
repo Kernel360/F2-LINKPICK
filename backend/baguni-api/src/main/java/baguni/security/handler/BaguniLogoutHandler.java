@@ -19,23 +19,24 @@ public class BaguniLogoutHandler implements LogoutHandler, LogoutSuccessHandler 
 	private final SecurityProperties properties;
 
 	@Override
-	public void logout(
-		HttpServletRequest request,
-		HttpServletResponse response,
-		Authentication authentication
-	) {
-		cookieUtil.deleteCookie(request, response, properties.ACCESS_TOKEN_KEY);
-		cookieUtil.deleteCookie(request, response, properties.LOGIN_FLAG_FOR_FRONTEND);
-		cookieUtil.deleteCookie(request, response, "JSESSIONID");
+	public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+		clearCookies(request, response);
 	}
 
 	@Override
-	public void onLogoutSuccess(
-		HttpServletRequest request,
-		HttpServletResponse response,
-		Authentication authentication
-	) {
-		// do not redirect
+	public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response,
+		Authentication authentication) {
 		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	/**
+	 * @author sangwon
+	 * 쿠키 삭제 메서드 분리 (공통으로 사용하기 위함)
+	 * 시큐리티, 쿠키를 제거해주고 싶은 컨트롤러에서 사용하기 위해 분리
+	 */
+	public void clearCookies(HttpServletRequest request, HttpServletResponse response) {
+		cookieUtil.deleteCookie(request, response, properties.ACCESS_TOKEN_KEY);
+		cookieUtil.deleteCookie(request, response, properties.LOGIN_FLAG_FOR_FRONTEND);
+		cookieUtil.deleteCookie(request, response, "JSESSIONID");
 	}
 }
