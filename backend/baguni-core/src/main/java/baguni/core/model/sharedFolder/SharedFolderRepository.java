@@ -15,4 +15,6 @@ public interface SharedFolderRepository extends JpaRepository<SharedFolder, UUID
 	Optional<SharedFolder> findByFolderId(Long folderId);
 
 	void deleteByFolderId(Long folderId);
+
+	void deleteByUserId(Long userId);
 }

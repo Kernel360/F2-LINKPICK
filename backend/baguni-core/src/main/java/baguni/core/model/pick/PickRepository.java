@@ -32,4 +32,7 @@ public interface PickRepository extends JpaRepository<Pick, Long> {
 
 	@Query("SELECT p from Pick p JOIN FETCH p.link WHERE p.id IN (:pickIdList)")
 	List<Pick> findAllById_JoinLink(List<Long> pickIdList);
+
+	@Query("SELECT p.id FROM Pick p WHERE p.user.id = :userId")
+	List<Long> findIdAllByUserId(Long userId);
 }

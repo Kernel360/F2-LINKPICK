@@ -39,4 +39,6 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
 	@Query("SELECT f FROM Folder f WHERE f.user.id = :userId AND f.folderType = baguni.core.model.folder.FolderType"
 		+ ".ROOT")
 	Folder findRootByUserId(@Param("userId") Long userId);
+
+	void deleteByUserId(Long userId);
 }
