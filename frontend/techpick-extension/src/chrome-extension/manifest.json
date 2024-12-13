@@ -9,7 +9,7 @@
     "48": "./pick48.png",
     "128": "./pick128.png"
   },
-
+  "homepage_url": "https://app.baguni.kr",
   "permissions": [
     "tabs",
     "activeTab",
