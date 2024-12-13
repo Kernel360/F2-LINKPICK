@@ -13,6 +13,14 @@ const customSelectStyles: StylesConfig<SearchSelectOption, true> = {
     borderRadius: '24px',
     minHeight: '24px',
     minWidth: '100px',
+    maxWidth:
+      window.innerWidth <= 320
+        ? '150px'
+        : window.innerWidth <= 480
+          ? '200px'
+          : window.innerWidth <= 768
+            ? '300px'
+            : '400px',
     fontSize: '12px',
     border: `1px solid ${colorVars.gray4}`,
     boxShadow: 'none',
