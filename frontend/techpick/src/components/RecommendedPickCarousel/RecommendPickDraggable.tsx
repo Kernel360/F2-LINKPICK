@@ -1,6 +1,7 @@
 import type { CSSProperties, PropsWithChildren } from 'react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
+import { draggableStyle } from './recommendPickDraggable.css';
 import { RecommendPickCategoryType, RecommendPickType } from '@/types';
 
 export function RecommendPickDraggable({
@@ -27,7 +28,8 @@ export function RecommendPickDraggable({
       ref={setNodeRef}
       {...attributes}
       {...listeners}
-      style={isDragging ? { ...style, opacity: 0 } : {}}
+      style={style}
+      className={isDragging ? draggableStyle : ''}
     >
       {children}
     </div>
