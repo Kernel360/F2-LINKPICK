@@ -3,7 +3,7 @@ import type { Concrete } from './util.type';
 import type { components } from '@/schema';
 
 export type PickInfoType = Concrete<
-  components['schemas']['techpick.api.application.pick.dto.PickApiResponse$Pick']
+  components['schemas']['baguni.api.application.pick.dto.PickApiResponse$Pick']
 >;
 
 export type PickInfoRecordType = {
@@ -44,18 +44,18 @@ export type OrderedPickIdListType = number[];
 export type SelectedPickIdListType = number[];
 
 export type MovePicksRequestType =
-  components['schemas']['techpick.api.application.pick.dto.PickApiRequest$Move'];
+  components['schemas']['baguni.api.application.pick.dto.PickApiRequest$Move'];
 
 type ConcreteType<Type> = {
   [Property in keyof Type]-?: Type[Property];
 };
 
 export type CreatePickRequestType = ConcreteType<
-  components['schemas']['techpick.api.application.pick.dto.PickApiRequest$Create']
+  components['schemas']['baguni.api.application.pick.dto.PickApiRequest$Create']
 >;
 
 export type GetPickByUrlResponseType = ConcreteType<
-  components['schemas']['techpick.api.application.pick.dto.PickApiResponse$Pick']
+  components['schemas']['baguni.api.application.pick.dto.PickApiResponse$Pick']
 >;
 
 export type GetLinkOgTagDataResponseType = {
@@ -65,5 +65,5 @@ export type GetLinkOgTagDataResponseType = {
 };
 
 export type CreatePickResponseType = ConcreteType<
-  components['schemas']['techpick.api.application.pick.dto.PickApiResponse$Pick']
+  components['schemas']['baguni.api.application.pick.dto.PickApiResponse$Pick']
 >;
