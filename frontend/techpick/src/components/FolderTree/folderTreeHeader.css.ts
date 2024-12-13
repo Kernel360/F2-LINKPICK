@@ -20,4 +20,5 @@ export const folderTreeHeaderTitleLayout = style({
   flexDirection: 'row',
   justifyContent: 'space-between',
   alignItems: 'center',
+  height: '30px',
 });
