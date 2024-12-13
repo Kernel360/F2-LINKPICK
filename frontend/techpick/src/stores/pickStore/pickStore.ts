@@ -30,6 +30,7 @@ const initialState: PickState = {
   selectedPickIdList: [],
   isDragging: false,
   draggingPickInfo: null,
+  isMovingDestinationFolderId: null,
 };
 
 export const usePickStore = create<PickState & PickAction>()(
@@ -211,6 +212,10 @@ export const usePickStore = create<PickState & PickAction>()(
           return;
         }
 
+        set((state) => {
+          state.isMovingDestinationFolderId = nextFolderId;
+        });
+
         // a. 다른 폴더에서 추가(0번째 인덕스)
         // 어떤 정보를 가져와야한다.
         const selectedPickIdList = get().selectedPickIdList;
@@ -316,6 +321,10 @@ export const usePickStore = create<PickState & PickAction>()(
               prevNextPickIdOrderedList;
             state.pickRecord[nextFolderId].data.pickInfoRecord =
               prevNextPickInfoRecord;
+          });
+        } finally {
+          set((state) => {
+            state.isMovingDestinationFolderId = null;
           });
         }
       },
@@ -528,6 +537,7 @@ export const usePickStore = create<PickState & PickAction>()(
           state.draggingPickInfo = draggingPickInfo;
         });
       },
+
       searchPicksByQueryParam: async (
         param: string,
         cursor?: number | string,

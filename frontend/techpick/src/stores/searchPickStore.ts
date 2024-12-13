@@ -84,7 +84,7 @@ export const useSearchPickStore = create<
               state.isLoading = true;
             });
             const searchParams = {
-              searchTokenList: state.searchQuery,
+              searchTokenList: encodeURIComponent(state.searchQuery),
               tagIdList: state.searchTag,
               folderIdList: state.searchFolder,
             };
@@ -115,7 +115,7 @@ export const useSearchPickStore = create<
         if (state.hasNext && !state.isLoading) {
           try {
             const searchParams = {
-              searchTokenList: state.searchQuery,
+              searchTokenList: encodeURIComponent(state.searchQuery),
               tagIdList: state.searchTag,
               folderIdList: state.searchFolder,
             };

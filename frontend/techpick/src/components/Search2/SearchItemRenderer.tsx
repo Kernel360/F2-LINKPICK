@@ -36,8 +36,13 @@ export default function SearchItemRenderer({
       case 'GENERAL':
         targetLocation = folderInfo?.id.toString();
     }
-
-    router.push(`/folders/${targetLocation}?searchId=pickId-${item.id}`);
+    /**
+     * @description
+     */
+    const date = new Date();
+    router.push(
+      `/folders/${targetLocation}?searchId=pickId-${item.id}&dateId=${date.getMilliseconds()}`
+    );
   };
 
   if (!item) {

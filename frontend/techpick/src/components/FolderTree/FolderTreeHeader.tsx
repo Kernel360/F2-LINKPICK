@@ -1,7 +1,7 @@
 'use client';
 
 import { Trash2Icon, ArchiveIcon } from 'lucide-react';
-import { ROUTES } from '@/constants';
+import { NON_EXIST_FOLDER_ID, ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { FolderLinkItem } from './FolderLinkItem';
 import {
@@ -46,6 +46,7 @@ export function FolderTreeHeader() {
             name="추천"
             icon={ArchiveIcon}
             isSelected={isRootSelected}
+            folderId={NON_EXIST_FOLDER_ID}
           />
 
           <PickToFolderDropZone folderId={basicFolderMap['UNCLASSIFIED'].id}>
@@ -55,6 +56,7 @@ export function FolderTreeHeader() {
               icon={ArchiveIcon}
               isSelected={isUnclassifiedSelected}
               isHovered={isUnclassifiedFolderHover}
+              folderId={basicFolderMap['UNCLASSIFIED'].id}
             />
           </PickToFolderDropZone>
           <PickToFolderDropZone folderId={basicFolderMap['RECYCLE_BIN'].id}>
@@ -64,6 +66,7 @@ export function FolderTreeHeader() {
               icon={Trash2Icon}
               isSelected={isRecycleBinSelected}
               isHovered={isRecycleBinFolderHover}
+              folderId={basicFolderMap['RECYCLE_BIN'].id}
             />
           </PickToFolderDropZone>
         </div>

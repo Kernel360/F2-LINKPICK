@@ -51,6 +51,11 @@ export const submitButtonStyle = style({
   height: 'auto',
   backgroundColor: colorVars.point,
   cursor: 'pointer',
+
+  ':focus': {
+    outline: '1px solid',
+    outlineColor: colorVars.orange10,
+  },
 });
 
 export const labelLayout = style({
@@ -73,6 +78,13 @@ export const footerStyle = style({
 });
 
 export const footerLinkStyle = style({
+  ':focus': {
+    outline: '1px solid',
+    outlineColor: colorVars.gold7,
+  },
+});
+
+export const footerLinkTextStyle = style({
   paddingRight: '4px',
   color: colorVars.gray9,
   fontSize: '12px',

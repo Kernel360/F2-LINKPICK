@@ -26,6 +26,7 @@ export function BookmarkPage() {
     (state) => state.replaceSelectedTagList
   );
   const tagList = useTagStore((state) => state.tagList);
+  const { fetchingTagList } = useTagStore();
   const isInitialLoadRef = useRef(true);
 
   useEffect(function onBookmarkPageLoad() {
@@ -68,7 +69,7 @@ export function BookmarkPage() {
 
   useEffect(
     function onUpdatePickFormLoad() {
-      if (pickData && isInitialLoadRef.current) {
+      if (pickData && isInitialLoadRef.current && 0 < tagList.length) {
         isInitialLoadRef.current = false;
         const initialData = pickData?.tagIdOrderedList
           ? tagList.filter((tag) => pickData.tagIdOrderedList.includes(tag.id))
@@ -78,6 +79,13 @@ export function BookmarkPage() {
       }
     },
     [pickData, replaceSelectedTagList, tagList]
+  );
+
+  useEffect(
+    function fetchTagList() {
+      fetchingTagList();
+    },
+    [fetchingTagList]
   );
 
   if (isGetPickInfoLoading || isFolderInfoListLoading) {
