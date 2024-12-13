@@ -17,7 +17,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      docker-hub-repo: 'techpick' # TODO: change to baguni
+      docker-hub-repo: 'baguni' # TODO: change to baguni
       module-name: 'baguni-api'
 
     steps:
@@ -68,6 +68,7 @@ jobs:
             
             echo "docker - changing image name and tag ..."
             docker tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }} techpick:${{ env.module-name }}-staging
+
             
             echo "moving to project directory..."
             cd /home/project/baguni/develop

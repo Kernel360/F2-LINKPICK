@@ -17,7 +17,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      docker-hub-repo: 'techpick' # TODO: change to baguni
+      docker-hub-repo: 'baguni' # TODO: change to baguni
       module-name: 'baguni-ranking'
 
     steps:

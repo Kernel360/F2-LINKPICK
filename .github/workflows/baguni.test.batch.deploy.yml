@@ -1,5 +1,6 @@
 name: Baguni Test Batch-Module CI/CD
 
+
 # *****************************************
 # NOTE: 추후 도커 허브 레포를 baguni로 변경할 예정
 # *****************************************
@@ -17,7 +18,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      docker-hub-repo: 'techpick' # TODO: change to baguni
+      docker-hub-repo: 'baguni' # TODO: change to baguni
       module-name: 'baguni-batch'
 
     steps:
