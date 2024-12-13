@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { getSuggestionRankingPicks } from '@/apis/getSuggestionRankingPicks';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { RecommendedPickCarousel } from '@/components/RecommendedPickCarousel/RecommendedPickCarousel';
+import { TutorialDialog } from '@/components/TutorialDialog';
 import {
   useClearSelectedPickIdsOnMount,
   useFetchTagList,
@@ -57,6 +58,8 @@ export default function RecommendPage() {
 
   return (
     <FolderContentLayout>
+      <TutorialDialog />
+
       <div className={recommendSectionLayoutStyle}>
         <h1 className={recommendPageTitleStyle}>🔥HOT TREND!🔥</h1>
 

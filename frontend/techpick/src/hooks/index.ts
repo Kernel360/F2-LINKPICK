@@ -11,3 +11,4 @@ export { useGetDragOverStyle } from './useGetDragOverStyle';
 export { useFetchPickRecordByFolderId } from './useFetchPickRecordByFolderId';
 export { useDisclosure } from './useDisclosure';
 export { useRecommendPickToFolderDndMonitor } from './useRecommendPickToFolderDndMonitor';
+export { useLocalStorage } from './useLocalStorage';

@@ -3,3 +3,4 @@ export const UNKNOWN_FOLDER_ID = -9999;
 export { ROUTES } from './route';
 export { COLOR_LIST } from './colorList';
 export { ERROR_MESSAGE_JSON } from './errorMessageJson';
+export { IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY } from './isTutorialSeenLocalStorageKey';
