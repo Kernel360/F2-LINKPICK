@@ -1,3 +1,3 @@
 import { components } from '@/schema';
 export type UpdateTagRequestType =
-  components['schemas']['techpick.api.application.tag.dto.TagApiRequest$Update'];
+  components['schemas']['baguni.api.application.tag.dto.TagApiRequest$Update'];

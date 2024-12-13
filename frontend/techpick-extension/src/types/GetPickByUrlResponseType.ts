@@ -5,7 +5,7 @@ export type GetPickByUrlResponseType =
   | {
       exist: true;
       pick: ConcreteType<
-        components['schemas']['techpick.api.application.pick.dto.PickApiResponse$Pick']
+        components['schemas']['baguni.api.application.pick.dto.PickApiResponse$Pick']
       >;
     }
   | {

@@ -1,4 +1,4 @@
 import { components } from '@/schema';
 
 export type UpdatePickRequestType =
-  components['schemas']['techpick.api.application.pick.dto.PickApiRequest$Update'];
+  components['schemas']['baguni.api.application.pick.dto.PickApiRequest$Update'];
