@@ -115,7 +115,7 @@ security:
   default-redirect-url: https://app.minlife.me
   base-url: https://v2.minlife.me
 server:
-  port: ${DOCKER_API_SERVER_PORT}
+  port: 8080
 ---
 spring:
   config:
@@ -142,5 +142,5 @@ springdoc: # 운영 환경에서 스웨거 접근 못하도록 막는 설정
   swagger-ui:
     enabled: false # false로 변경하면, swagger 접근 불가
 server:
-  port: ${DOCKER_API_SERVER_PORT}
+  port: 8080
 ---
