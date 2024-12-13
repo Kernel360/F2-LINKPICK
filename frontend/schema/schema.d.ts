@@ -667,7 +667,7 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        "techpick.api.application.tag.dto.TagApiRequest$Create": {
+        "baguni.api.application.tag.dto.TagApiRequest$Create": {
             /** @example SpringBoot */
             name: string;
             /**
@@ -676,21 +676,21 @@ export interface components {
              */
             colorNumber: number;
         };
-        "techpick.api.application.tag.dto.TagApiResponse$Create": {
+        "baguni.api.application.tag.dto.TagApiResponse$Create": {
             /** Format: int64 */
             id?: number;
             name?: string;
             /** Format: int32 */
             colorNumber?: number;
         };
-        "techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$Create": {
+        "baguni.api.application.sharedFolder.dto.SharedFolderApiResponse$Create": {
             /**
              * @description {shared.folderAccessToken.description}
              * @example 9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d
              */
             folderAccessToken: string;
         };
-        "techpick.api.application.pick.dto.PickApiRequest$Create": {
+        "baguni.api.application.pick.dto.PickApiRequest$Create": {
             /** @example Record란? */
             title?: string;
             /** @example [
@@ -706,9 +706,9 @@ export interface components {
              * @example 1
              */
             parentFolderId?: number;
-            linkInfo?: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
+            linkInfo?: components["schemas"]["baguni.api.domain.link.dto.LinkInfo"];
         };
-        "techpick.api.domain.link.dto.LinkInfo": {
+        "baguni.api.domain.link.dto.LinkInfo": {
             /** @example https://velog.io/@hyeok_1212/Java-Record-%EC%82%AC%EC%9A%A9%ED%95%98%EC%8B%9C%EB%82%98%EC%9A%94 */
             url: string;
             /** @example [Java] Record 사용하시나요? */
@@ -723,11 +723,11 @@ export interface components {
              */
             invalidatedAt?: string;
         };
-        "techpick.api.application.pick.dto.PickApiResponse$Pick": {
+        "baguni.api.application.pick.dto.PickApiResponse$Pick": {
             /** Format: int64 */
             id?: number;
             title?: string;
-            linkInfo?: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
+            linkInfo?: components["schemas"]["baguni.api.domain.link.dto.LinkInfo"];
             /** Format: int64 */
             parentFolderId?: number;
             tagIdOrderedList?: number[];
@@ -736,15 +736,15 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
-        "techpick.api.application.pick.dto.PickApiResponse$CreateFromRecommend": {
+        "baguni.api.application.pick.dto.PickApiResponse$CreateFromRecommend": {
             exist?: boolean;
-            pick?: components["schemas"]["techpick.api.domain.pick.dto.PickResult$Pick"];
+            pick?: components["schemas"]["baguni.api.domain.pick.dto.PickResult$Pick"];
         };
-        "techpick.api.domain.pick.dto.PickResult$Pick": {
+        "baguni.api.domain.pick.dto.PickResult$Pick": {
             /** Format: int64 */
             id?: number;
             title?: string;
-            linkInfo?: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
+            linkInfo?: components["schemas"]["baguni.api.domain.link.dto.LinkInfo"];
             /** Format: int64 */
             parentFolderId?: number;
             tagIdOrderedList?: number[];
@@ -753,7 +753,7 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
-        "techpick.api.application.folder.dto.FolderApiRequest$Create": {
+        "baguni.api.application.folder.dto.FolderApiRequest$Create": {
             /** @example backend */
             name: string;
             /**
@@ -762,7 +762,7 @@ export interface components {
              */
             parentFolderId: number;
         };
-        "techpick.api.application.folder.dto.FolderApiResponse": {
+        "baguni.api.application.folder.dto.FolderApiResponse": {
             /** Format: int64 */
             id?: number;
             name?: string;
@@ -783,17 +783,17 @@ export interface components {
              *      */
             folderAccessToken?: string | null;
         };
-        "techpick.api.application.event.dto.EventApiRequest$SuggestionView": {
+        "baguni.api.application.event.dto.EventApiRequest$SuggestionView": {
             /** @description 조회된 링크 url */
             url: string;
         };
-        "techpick.api.application.event.dto.EventApiRequest$SharedBookmarkView": {
+        "baguni.api.application.event.dto.EventApiRequest$SharedBookmarkView": {
             /** @description 조회된 링크 url */
             url: string;
             /** @description 조회된 공개 폴더 접근용 토큰 */
             folderAccessToken: string;
         };
-        "techpick.api.application.event.dto.EventApiRequest$BookmarkView": {
+        "baguni.api.application.event.dto.EventApiRequest$BookmarkView": {
             /** @description 조회된 링크 url */
             url: string;
             /**
@@ -802,7 +802,7 @@ export interface components {
              */
             pickId: number;
         };
-        "techpick.api.application.tag.dto.TagApiRequest$Update": {
+        "baguni.api.application.tag.dto.TagApiRequest$Update": {
             /**
              * Format: int64
              * @example 2
@@ -816,7 +816,7 @@ export interface components {
              */
             colorNumber: number;
         };
-        "techpick.api.application.tag.dto.TagApiRequest$Move": {
+        "baguni.api.application.tag.dto.TagApiRequest$Move": {
             /**
              * Format: int64
              * @example 3
@@ -828,7 +828,7 @@ export interface components {
              */
             orderIdx?: number;
         };
-        "techpick.api.application.pick.dto.PickApiRequest$Update": {
+        "baguni.api.application.pick.dto.PickApiRequest$Update": {
             /**
              * Format: int64
              * @example 1
@@ -849,7 +849,7 @@ export interface components {
              *     ] */
             tagIdOrderedList?: number[];
         };
-        "techpick.api.application.pick.dto.PickApiRequest$Move": {
+        "baguni.api.application.pick.dto.PickApiRequest$Move": {
             /** @example [
              *       1,
              *       2
@@ -866,7 +866,7 @@ export interface components {
              */
             orderIdx?: number;
         };
-        "techpick.api.application.folder.dto.FolderApiRequest$Update": {
+        "baguni.api.application.folder.dto.FolderApiRequest$Update": {
             /**
              * Format: int64
              * @example 3
@@ -875,7 +875,7 @@ export interface components {
             /** @example SpringBoot */
             name: string;
         };
-        "techpick.api.application.folder.dto.FolderApiRequest$Move": {
+        "baguni.api.application.folder.dto.FolderApiRequest$Move": {
             /** @example [
              *       12,
              *       11,
@@ -901,7 +901,7 @@ export interface components {
              */
             orderIdx?: number;
         };
-        "techpick.api.application.tag.dto.TagApiResponse$Read": {
+        "baguni.api.application.tag.dto.TagApiResponse$Read": {
             /** Format: int64 */
             id?: number;
             name?: string;
@@ -909,7 +909,7 @@ export interface components {
             colorNumber?: number;
         };
         /** @description 지난 30일동안 링크가 픽된 횟수 Top 10 */
-        "techpick.api.application.ranking.dto.LinkInfoWithCount": {
+        "baguni.api.application.ranking.dto.LinkInfoWithCount": {
             url: string;
             title?: string;
             description?: string;
@@ -917,15 +917,15 @@ export interface components {
             /** Format: int64 */
             count?: number;
         };
-        "techpick.api.application.ranking.dto.RankingResponse": {
+        "baguni.api.application.ranking.dto.RankingResponse": {
             /** @description 오늘 하루 동안 인기 있는 링크 Top 10 */
-            dailyViewRanking?: components["schemas"]["techpick.api.application.ranking.dto.LinkInfoWithCount"][];
+            dailyViewRanking?: components["schemas"]["baguni.api.application.ranking.dto.LinkInfoWithCount"][];
             /** @description 지난 7일동안 링크 조회 수 Top 10 */
-            weeklyViewRanking?: components["schemas"]["techpick.api.application.ranking.dto.LinkInfoWithCount"][];
+            weeklyViewRanking?: components["schemas"]["baguni.api.application.ranking.dto.LinkInfoWithCount"][];
             /** @description 지난 30일동안 링크가 픽된 횟수 Top 10 */
-            monthlyPickRanking?: components["schemas"]["techpick.api.application.ranking.dto.LinkInfoWithCount"][];
+            monthlyPickRanking?: components["schemas"]["baguni.api.application.ranking.dto.LinkInfoWithCount"][];
         };
-        "techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderPartial": {
+        "baguni.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderPartial": {
             /**
              * Format: int64
              * @description 원본 폴더의 이름
@@ -954,7 +954,7 @@ export interface components {
              */
             folderAccessToken: string;
         };
-        "techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderFull": {
+        "baguni.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderFull": {
             /**
              * @description 원본 폴더의 이름
              * @example 리액트 모음집
@@ -973,7 +973,7 @@ export interface components {
              */
             updatedAt: string;
             /** @description 폴더 내 pick 리스트 */
-            pickList: components["schemas"]["techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo"][];
+            pickList: components["schemas"]["baguni.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo"][];
             /**
              * @description 해당 폴더 내에서 사용된 모든 태그 정보가 담길 배열. tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.
              * @example [
@@ -987,13 +987,13 @@ export interface components {
              *       }
              *     ]
              */
-            tagList: components["schemas"]["techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo"][];
+            tagList: components["schemas"]["baguni.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo"][];
         };
         /** @description 폴더 내 pick 리스트 */
-        "techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo": {
+        "baguni.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo": {
             /** @example 자바 레코드 참고 블로그 1 */
             title: string;
-            linkInfo: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
+            linkInfo: components["schemas"]["baguni.api.domain.link.dto.LinkInfo"];
             /**
              * @description tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.
              * @example [
@@ -1022,21 +1022,21 @@ export interface components {
          *       }
          *     ]
          */
-        "techpick.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo": {
+        "baguni.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo": {
             name: string;
             /** Format: int32 */
             colorNumber: number;
         };
-        "techpick.api.application.pick.dto.PickApiResponse$FolderPickListWithViewCount": {
+        "baguni.api.application.pick.dto.PickApiResponse$FolderPickListWithViewCount": {
             /** Format: int64 */
             folderId?: number;
-            pickList?: components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$PickWithViewCount"][];
+            pickList?: components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$PickWithViewCount"][];
         };
-        "techpick.api.application.pick.dto.PickApiResponse$PickWithViewCount": {
+        "baguni.api.application.pick.dto.PickApiResponse$PickWithViewCount": {
             /** Format: int64 */
             id?: number;
             title?: string;
-            linkInfo?: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
+            linkInfo?: components["schemas"]["baguni.api.domain.link.dto.LinkInfo"];
             /** Format: int64 */
             parentFolderId?: number;
             tagIdOrderedList?: number[];
@@ -1048,38 +1048,38 @@ export interface components {
             /** Format: int64 */
             weeklyViewCount?: number;
         };
-        "techpick.api.application.pick.dto.PickSliceResponseTechpick.api.application.pick.dto.PickApiResponse$Pick": {
-            content?: components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"][];
+        "baguni.api.application.pick.dto.PickSliceResponseBaguni.api.application.pick.dto.PickApiResponse$Pick": {
+            content?: components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"][];
             /** Format: int64 */
             lastCursor?: number;
             /** Format: int32 */
             size?: number;
             hasNext?: boolean;
         };
-        "techpick.api.application.pick.dto.PickApiResponse$PickExists": {
+        "baguni.api.application.pick.dto.PickApiResponse$PickExists": {
             exist: boolean;
-            pick?: components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
+            pick?: components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
         };
-        "techpick.api.application.link.dto.LinkApiResponse": {
+        "baguni.api.application.link.dto.LinkApiResponse": {
             url?: string;
             title?: string;
             description?: string;
             imageUrl?: string;
         };
-        "techpick.api.application.tag.dto.TagApiRequest$Delete": {
+        "baguni.api.application.tag.dto.TagApiRequest$Delete": {
             /**
              * Format: int64
              * @example 4
              */
             id: number;
         };
-        "techpick.api.application.pick.dto.PickApiRequest$Delete": {
+        "baguni.api.application.pick.dto.PickApiRequest$Delete": {
             /** @example [
              *       1
              *     ] */
             idList: number[];
         };
-        "techpick.api.application.folder.dto.FolderApiRequest$Delete": {
+        "baguni.api.application.folder.dto.FolderApiRequest$Delete": {
             /** @example [
              *       12,
              *       11,
@@ -1114,7 +1114,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.tag.dto.TagApiResponse$Read"][];
+                    "*/*": components["schemas"]["baguni.api.application.tag.dto.TagApiResponse$Read"][];
                 };
             };
         };
@@ -1128,7 +1128,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.tag.dto.TagApiRequest$Create"];
+                "application/json": components["schemas"]["baguni.api.application.tag.dto.TagApiRequest$Create"];
             };
         };
         responses: {
@@ -1138,7 +1138,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.tag.dto.TagApiResponse$Create"];
+                    "*/*": components["schemas"]["baguni.api.application.tag.dto.TagApiResponse$Create"];
                 };
             };
             /** @description 중복된 태그 이름 */
@@ -1159,7 +1159,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.tag.dto.TagApiRequest$Delete"];
+                "application/json": components["schemas"]["baguni.api.application.tag.dto.TagApiRequest$Delete"];
             };
         };
         responses: {
@@ -1188,7 +1188,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.tag.dto.TagApiRequest$Update"];
+                "application/json": components["schemas"]["baguni.api.application.tag.dto.TagApiRequest$Update"];
             };
         };
         responses: {
@@ -1230,7 +1230,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderPartial"][];
+                    "*/*": components["schemas"]["baguni.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderPartial"][];
                 };
             };
         };
@@ -1254,7 +1254,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$Create"];
+                    "*/*": components["schemas"]["baguni.api.application.sharedFolder.dto.SharedFolderApiResponse$Create"];
                 };
             };
             /** @description 자신의 폴더만 공유할 수 있습니다. */
@@ -1263,7 +1263,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$Create"];
+                    "*/*": components["schemas"]["baguni.api.application.sharedFolder.dto.SharedFolderApiResponse$Create"];
                 };
             };
         };
@@ -1289,7 +1289,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$FolderPickListWithViewCount"][];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$FolderPickListWithViewCount"][];
                 };
             };
         };
@@ -1303,7 +1303,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.pick.dto.PickApiRequest$Create"];
+                "application/json": components["schemas"]["baguni.api.application.pick.dto.PickApiRequest$Create"];
             };
         };
         responses: {
@@ -1313,7 +1313,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
                 };
             };
             /** @description 잘못된 태그 접근 */
@@ -1322,7 +1322,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
                 };
             };
             /** @description 접근할 수 없는 폴더 */
@@ -1331,7 +1331,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
                 };
             };
         };
@@ -1345,7 +1345,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.pick.dto.PickApiRequest$Delete"];
+                "application/json": components["schemas"]["baguni.api.application.pick.dto.PickApiRequest$Delete"];
             };
         };
         responses: {
@@ -1381,7 +1381,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.pick.dto.PickApiRequest$Update"];
+                "application/json": components["schemas"]["baguni.api.application.pick.dto.PickApiRequest$Update"];
             };
         };
         responses: {
@@ -1391,7 +1391,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
                 };
             };
         };
@@ -1405,7 +1405,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.pick.dto.PickApiRequest$Create"];
+                "application/json": components["schemas"]["baguni.api.application.pick.dto.PickApiRequest$Create"];
             };
         };
         responses: {
@@ -1415,7 +1415,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$CreateFromRecommend"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$CreateFromRecommend"];
                 };
             };
             /** @description 접근할 수 없는 폴더 */
@@ -1424,7 +1424,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$CreateFromRecommend"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$CreateFromRecommend"];
                 };
             };
         };
@@ -1473,7 +1473,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.folder.dto.FolderApiResponse"][];
+                    "*/*": components["schemas"]["baguni.api.application.folder.dto.FolderApiResponse"][];
                 };
             };
         };
@@ -1487,7 +1487,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.folder.dto.FolderApiRequest$Create"];
+                "application/json": components["schemas"]["baguni.api.application.folder.dto.FolderApiRequest$Create"];
             };
         };
         responses: {
@@ -1497,7 +1497,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.folder.dto.FolderApiResponse"];
+                    "*/*": components["schemas"]["baguni.api.application.folder.dto.FolderApiResponse"];
                 };
             };
         };
@@ -1511,7 +1511,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.folder.dto.FolderApiRequest$Delete"];
+                "application/json": components["schemas"]["baguni.api.application.folder.dto.FolderApiRequest$Delete"];
             };
         };
         responses: {
@@ -1547,7 +1547,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.folder.dto.FolderApiRequest$Update"];
+                "application/json": components["schemas"]["baguni.api.application.folder.dto.FolderApiRequest$Update"];
             };
         };
         responses: {
@@ -1583,7 +1583,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.event.dto.EventApiRequest$SuggestionView"];
+                "application/json": components["schemas"]["baguni.api.application.event.dto.EventApiRequest$SuggestionView"];
             };
         };
         responses: {
@@ -1605,7 +1605,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.event.dto.EventApiRequest$SharedBookmarkView"];
+                "application/json": components["schemas"]["baguni.api.application.event.dto.EventApiRequest$SharedBookmarkView"];
             };
         };
         responses: {
@@ -1627,7 +1627,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.event.dto.EventApiRequest$BookmarkView"];
+                "application/json": components["schemas"]["baguni.api.application.event.dto.EventApiRequest$BookmarkView"];
             };
         };
         responses: {
@@ -1685,7 +1685,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.tag.dto.TagApiRequest$Move"];
+                "application/json": components["schemas"]["baguni.api.application.tag.dto.TagApiRequest$Move"];
             };
         };
         responses: {
@@ -1714,7 +1714,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.pick.dto.PickApiRequest$Move"];
+                "application/json": components["schemas"]["baguni.api.application.pick.dto.PickApiRequest$Move"];
             };
         };
         responses: {
@@ -1743,7 +1743,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["techpick.api.application.folder.dto.FolderApiRequest$Move"];
+                "application/json": components["schemas"]["baguni.api.application.folder.dto.FolderApiRequest$Move"];
             };
         };
         responses: {
@@ -1792,7 +1792,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.ranking.dto.RankingResponse"];
+                    "*/*": components["schemas"]["baguni.api.application.ranking.dto.RankingResponse"];
                 };
             };
         };
@@ -1814,7 +1814,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderFull"];
+                    "*/*": components["schemas"]["baguni.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderFull"];
                 };
             };
             /** @description 올바르지 않은 UUID */
@@ -1843,7 +1843,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
                 };
             };
         };
@@ -1889,7 +1889,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickSliceResponseTechpick.api.application.pick.dto.PickApiResponse$Pick"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickSliceResponseBaguni.api.application.pick.dto.PickApiResponse$Pick"];
                 };
             };
         };
@@ -1925,7 +1925,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"][];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"][];
                 };
             };
         };
@@ -1947,7 +1947,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
                 };
             };
             /** @description 해당 링크에 대해 픽이 되어 있지 않습니다. */
@@ -1956,7 +1956,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$Pick"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
                 };
             };
         };
@@ -1978,7 +1978,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$PickExists"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$PickExists"];
                 };
             };
         };
@@ -2001,7 +2001,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.link.dto.LinkApiResponse"];
+                    "*/*": components["schemas"]["baguni.api.application.link.dto.LinkApiResponse"];
                 };
             };
         };
@@ -2021,7 +2021,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.folder.dto.FolderApiResponse"][];
+                    "*/*": components["schemas"]["baguni.api.application.folder.dto.FolderApiResponse"][];
                 };
             };
             /** @description 본인 폴더만 조회할 수 있습니다. */
@@ -2030,7 +2030,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["techpick.api.application.folder.dto.FolderApiResponse"][];
+                    "*/*": components["schemas"]["baguni.api.application.folder.dto.FolderApiResponse"][];
                 };
             };
         };
