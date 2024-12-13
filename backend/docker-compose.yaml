@@ -64,8 +64,6 @@ services:
     container_name: baguni.${PROFILE_MODE}.server.api
     volumes:
       - ./logs/api:/app/logs
-    ports:
-      - ${DOCKER_API_SERVER_PORT}:8080
     env_file:
       - .env
     environment:
@@ -87,7 +85,7 @@ services:
     volumes:
       - ./logs/batch:/app/logs
     ports:
-      - ${DOCKER_BATCH_SERVER_PORT}:8080
+      - 8081:8080
     env_file:
       - .env
     environment:
@@ -111,7 +109,7 @@ services:
     volumes:
       - ./logs/ranking:/app/logs
     ports:
-      - ${DOCKER_RAKING_SERVER_PORT}:8080
+      - 8082:8080
     env_file:
       - .env
     environment:
