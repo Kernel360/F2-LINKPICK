@@ -16,7 +16,11 @@ export const treeLayout = style({
   height: '100vh',
   padding: '4px',
   paddingTop: '16px',
-  backgroundColor: colorVars.sand2,
+  backgroundColor: colorVars.gold3,
+  borderRight: `2px solid ${colorVars.gold4}`,
+  ':hover': {
+    borderRight: `2px solid ${colorVars.gold5}`,
+  },
 });
 
 export const dragOverStyle = style({

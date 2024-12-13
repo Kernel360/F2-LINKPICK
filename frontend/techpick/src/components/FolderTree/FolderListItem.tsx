@@ -112,6 +112,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
             icon={folderIcon}
             name={name}
             onClick={(event) => handleClick(id, event)}
+            folderId={id}
           />
         </FolderDraggable>
       </FolderContextMenu>

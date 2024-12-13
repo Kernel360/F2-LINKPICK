@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { FilterIcon } from 'lucide-react';
 import { useSearchPickStore } from '@/stores/searchPickStore';
+import { eventEmitter } from '@/utils/eventEmitter';
 import FilterToggleContainer from './FilterToggleContainer';
 import HoverCard from './HoverCard';
 import * as styles from './searchDialog.css';
@@ -19,10 +20,24 @@ export default function SearchDialog({
     setFilterVisible(!filterVisible);
   };
 
+  useEffect(function prefetching() {
+    preFetchSearchPicks();
+  }, []);
+
+  /**
+   * @description 이벤트를 구독하고, emit으로 발생시킨 이벤트를 받으면 상태를 변경합니다.
+   */
+  useEffect(() => {
+    eventEmitter.on('open-search-dialog', onOpenChange);
+
+    return () => {
+      eventEmitter.off('open-search-dialog', onOpenChange);
+    };
+  }, [isOpen]);
+
   const handleOnClose = async () => {
     onOpenChange();
     reset();
-    await preFetchSearchPicks();
   };
 
   return (

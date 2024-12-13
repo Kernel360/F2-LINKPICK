@@ -15,13 +15,13 @@ export const folderInfoItemStyle = style({
   transition: 'background-color 0.2s',
   selectors: {
     '&:hover': {
-      backgroundColor: colorVars.neutral,
+      backgroundColor: colorVars.gold4,
     },
   },
 });
 
 export const selectedDragItemStyle = style({
-  backgroundColor: colorVars.gold4,
+  backgroundColor: colorVars.gold5,
   color: colorVars.primary,
 });
 

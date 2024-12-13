@@ -16,6 +16,7 @@ import {
   footerStyle,
   footerTextStyle,
   footerLinkStyle,
+  footerLinkTextStyle,
 } from './CreatePickForm.css';
 import { useEffect, useRef, useState } from 'react';
 import { FolderSelect } from './FolderSelect';
@@ -25,7 +26,6 @@ import { PUBLIC_DOMAIN } from '@/constants';
 export function UpdatePickForm({
   id,
   title,
-
   imageUrl,
   folderId,
   folderInfoList,
@@ -108,8 +108,8 @@ export function UpdatePickForm({
         </div>
 
         <div className={footerStyle}>
-          <a href={PUBLIC_DOMAIN} target="_blank">
-            <p className={footerLinkStyle}>app.techpick.org</p>
+          <a href={PUBLIC_DOMAIN} className={footerLinkStyle} target="_blank">
+            <p className={footerLinkTextStyle}>app.techpick.org</p>
           </a>
           <p className={footerTextStyle}>수정하기</p>
         </div>

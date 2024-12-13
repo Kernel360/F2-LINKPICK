@@ -26,7 +26,7 @@ export function SearchInfiniteScrollList({
   }, [searchQuery, searchTag, searchFolder, searchResultList]);
 
   const loadMoreItems = useCallback(async () => {
-    loadMoreSearchPicks();
+    await loadMoreSearchPicks();
   }, [hasNext, isLoading, lastCursor]);
 
   const isItemLoaded = (index: number) => {

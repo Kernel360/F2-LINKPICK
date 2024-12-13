@@ -8,13 +8,6 @@ export const myPageLayoutStyle = style({
   backgroundColor: colorVars.gold2,
 });
 
-export const buttonSectionLayout = style({
-  display: 'flex',
-  justifyContent: 'flex-end',
-  alignItems: 'center',
-  padding: '8px',
-});
-
 export const logoutButtonStyle = style({
   width: '120px',
   height: '32px',
@@ -28,4 +21,27 @@ export const logoutButtonStyle = style({
   ':hover': {
     backgroundColor: colorVars.red3,
   },
+
+  ':focus': {
+    backgroundColor: colorVars.red3,
+  },
+});
+
+export const myPageContentContainerLayoutStyle = style({
+  display: 'flex',
+  alignItems: 'start',
+  justifyContent: 'space-between',
+});
+
+export const tutorialReplaySwitchLayoutStyle = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '8px',
+  padding: '16px 0',
+});
+
+export const tutorialReplaySwitchLabelStyle = style({
+  fontSize: '12px',
+  cursor: 'pointer',
+  flexShrink: 0,
 });

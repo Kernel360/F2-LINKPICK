@@ -199,6 +199,46 @@ export interface paths {
         patch: operations["updatePick"];
         trace?: never;
     };
+    "/api/picks/recommend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 추천 링크로 픽 생성
+         * @description 추천 링크로 픽을 생성합니다. 이미 픽으로 등록된 링크의 경우 기존 픽 정보를 응답으로 보냅니다.
+         */
+        post: operations["savePickFromRecommend"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/picks/bulk": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 픽 10000개 insert
+         * @description 픽 10000개 insert - 1회만 가능합니다.
+         */
+        post: operations["bulkInsertPick"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/folders": {
         parameters: {
             query?: never;
@@ -229,6 +269,26 @@ export interface paths {
          * @description 사용자가 등록한 폴더를 수정합니다.
          */
         patch: operations["updateFolder"];
+        trace?: never;
+    };
+    "/api/events/suggestion/view": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 추천 페이지 링크 조회 이벤트 수집
+         * @description [인증 불필요] 서버에게 추천 페이지의 어떤 링크가 조회됬는지 알립니다.
+         */
+        post: operations["suggestionView"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/events/shared/view": {
@@ -446,7 +506,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 픽 리스트 검색
+         * [Deprecated] 픽 리스트 검색
+         * @deprecated
          * @description 페이지네이션 처리 되지 않은 픽 리스트 검색
          */
         get: operations["searchPick"];
@@ -675,6 +736,23 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
+        "techpick.api.application.pick.dto.PickApiResponse$CreateFromRecommend": {
+            exist?: boolean;
+            pick?: components["schemas"]["techpick.api.domain.pick.dto.PickResult$Pick"];
+        };
+        "techpick.api.domain.pick.dto.PickResult$Pick": {
+            /** Format: int64 */
+            id?: number;
+            title?: string;
+            linkInfo?: components["schemas"]["techpick.api.domain.link.dto.LinkInfo"];
+            /** Format: int64 */
+            parentFolderId?: number;
+            tagIdOrderedList?: number[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
         "techpick.api.application.folder.dto.FolderApiRequest$Create": {
             /** @example backend */
             name: string;
@@ -704,6 +782,10 @@ export interface components {
              *         공유된 폴더일 경우 조회용 UUID 토큰을 반환.
              *      */
             folderAccessToken?: string | null;
+        };
+        "techpick.api.application.event.dto.EventApiRequest$SuggestionView": {
+            /** @description 조회된 링크 url */
+            url: string;
         };
         "techpick.api.application.event.dto.EventApiRequest$SharedBookmarkView": {
             /** @description 조회된 링크 url */
@@ -1314,6 +1396,59 @@ export interface operations {
             };
         };
     };
+    savePickFromRecommend: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["techpick.api.application.pick.dto.PickApiRequest$Create"];
+            };
+        };
+        responses: {
+            /** @description 픽 생성 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$CreateFromRecommend"];
+                };
+            };
+            /** @description 접근할 수 없는 폴더 */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["techpick.api.application.pick.dto.PickApiResponse$CreateFromRecommend"];
+                };
+            };
+        };
+    };
+    bulkInsertPick: {
+        parameters: {
+            query: {
+                folderId: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     getAllRootFolderList: {
         parameters: {
             query?: never;
@@ -1432,6 +1567,28 @@ export interface operations {
             };
             /** @description 본인 폴더만 수정할 수 있습니다. */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    suggestionView: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["techpick.api.application.event.dto.EventApiRequest$SuggestionView"];
+            };
+        };
+        responses: {
+            /** @description 전송 성공 */
+            200: {
                 headers: {
                     [name: string]: unknown;
                 };
