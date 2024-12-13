@@ -7,7 +7,7 @@ name: Baguni Test Client CI/CD
 on:
   push:
     branches:
-      - 'frontend-baguni' # Frontend 브랜치와 연결
+      - 'frontend' # Frontend 브랜치와 연결
   workflow_dispatch:
 
 jobs:
