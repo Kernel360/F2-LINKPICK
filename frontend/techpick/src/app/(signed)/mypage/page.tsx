@@ -1,10 +1,12 @@
 'use client';
 
+import { useEffect } from 'react';
 import { postLogout } from '@/apis/postLogout';
 import MyPageContentContainer from '@/components/MyPage/MyPageContentContainer';
 import MyPageShareFolderContent from '@/components/MyPage/MyPageShareFolderContent';
 import { TutorialReplaySwitch } from '@/components/TutorialReplaySwitch';
 import { ROUTES } from '@/constants';
+import { useTreeStore } from '@/stores';
 import {
   logoutButtonStyle,
   myPageContentContainerLayoutStyle,
@@ -14,6 +16,8 @@ import {
 } from './page.css';
 
 export default function MyPage() {
+  const setFocusFolderId = useTreeStore((state) => state.setFocusFolderId);
+
   const handleLogout = async () => {
     try {
       await postLogout();
@@ -22,6 +26,13 @@ export default function MyPage() {
       /* empty */
     }
   };
+
+  useEffect(
+    function clearFocusFolderId() {
+      setFocusFolderId(null);
+    },
+    [setFocusFolderId]
+  );
 
   return (
     <div className={myPageLayoutStyle}>

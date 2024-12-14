@@ -75,7 +75,7 @@ type TreeAction = {
   setFrom: (newFrom: Active) => void;
   setTo: (newTo: Over) => void;
   setIsDragging: (isDragging: boolean) => void;
-  setFocusFolderId: (newFolderId: number) => void;
+  setFocusFolderId: (newFolderId: number | null) => void;
   setHoverFolderId: (hoverFolderId: number | null | undefined) => void;
   setDraggingFolderInfo: (
     draggingFolderInfo: FolderType | null | undefined
