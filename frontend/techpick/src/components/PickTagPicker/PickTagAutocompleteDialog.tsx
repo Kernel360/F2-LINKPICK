@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, KeyboardEvent } from 'react';
 import { DialogTitle, Description } from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Command } from 'cmdk';
@@ -106,6 +106,18 @@ export function PickTagAutocompleteDialog({
     }
   };
 
+  const onBackspaceKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Backspace' && tagInputValue === '') {
+      const newTagIdOrderedList = [...tagIdOrderedList];
+      newTagIdOrderedList.pop();
+
+      updatePickInfo(pickInfo.parentFolderId, {
+        id: pickInfo.id,
+        tagIdOrderedList: newTagIdOrderedList,
+      });
+    }
+  };
+
   useEffect(
     function checkIsCreatableTag() {
       const isUnique = !tagList.some((tag) => tag.name === tagInputValue);
@@ -157,6 +169,7 @@ export function PickTagAutocompleteDialog({
           ref={tagInputRef}
           value={tagInputValue}
           onValueChange={setTagInputValue}
+          onKeyUp={onBackspaceKeyPress}
         />
       </SelectedTagListLayout>
       {/**전체 태그 리스트 */}
