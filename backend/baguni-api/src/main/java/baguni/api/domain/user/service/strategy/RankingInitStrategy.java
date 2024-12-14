@@ -36,10 +36,15 @@ public class RankingInitStrategy implements ContentInitStrategy {
 		var currentDay = LocalDate.now();
 		var before1Day = currentDay.minusDays(1);
 		var before30Days = currentDay.minusDays(30);
-		var monthlyRanking = rankingApi
-			.getUrlRankingByViewCount(before30Days, before1Day, LOAD_LIMIT)
-			.getBody();
-		savePickFromRankingList(user.getId(), monthlyRanking, folderId);
+
+		try {
+			var monthlyRanking = rankingApi
+				.getUrlRankingByViewCount(before30Days, before1Day, LOAD_LIMIT)
+				.getBody();
+			savePickFromRankingList(user.getId(), monthlyRanking, folderId);
+		} catch (Exception e) {
+			log.error("랭킹 정보를 이용한 사용자 폴더 초기화 실패.", e);
+		}
 	}
 
 	/**
