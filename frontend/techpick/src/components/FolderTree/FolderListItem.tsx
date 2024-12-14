@@ -71,7 +71,10 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     if (event.shiftKey && isSelectionActive(selectedFolderList.length)) {
       event.preventDefault();
       handleShiftSelect(id, treeDataMap);
+      return;
     }
+
+    setSelectedFolderList([id]);
   };
 
   const onUpdate = (newFolderName: string) => {
