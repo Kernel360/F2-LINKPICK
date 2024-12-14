@@ -1,6 +1,7 @@
 'use client';
 
 import { useMyShareFolder } from '@/hooks/useMyShareFolder';
+import { myPageShareFolderFieldListLayoutStyle } from './myPageShareFolderContent.css';
 import { MyPageShareFolderField } from './MyPageShareFolderField';
 import { MyPageShareFolderHeader } from './MyPageShareFolderHeader';
 
@@ -12,13 +13,15 @@ export default function MyPageShareFolderContent() {
   return (
     <div>
       <MyPageShareFolderHeader />
-      {myShareFolders.map((folderInfo) => (
-        <MyPageShareFolderField
-          key={folderInfo.sourceFolderId}
-          folderInfo={folderInfo}
-          handleDeleteMyShareFolder={handleDeleteMyShareFolder}
-        />
-      ))}
+      <div className={myPageShareFolderFieldListLayoutStyle}>
+        {myShareFolders.map((folderInfo) => (
+          <MyPageShareFolderField
+            key={folderInfo.sourceFolderId}
+            folderInfo={folderInfo}
+            handleDeleteMyShareFolder={handleDeleteMyShareFolder}
+          />
+        ))}
+      </div>
     </div>
   );
 }
