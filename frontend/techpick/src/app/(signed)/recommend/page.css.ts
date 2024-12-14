@@ -2,15 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
 
 export const recommendedPickCarouselSectionStyle = style({
-  display: 'flex',
-  gap: '32px',
-  width: '1000px',
-
-  '@media': {
-    'screen and (min-width: 1920px)': {
-      width: '1200px',
-    },
-  },
+  padding: '4px 0',
 });
 
 export const recommendedPickCarouselStyle = style({
@@ -18,7 +10,7 @@ export const recommendedPickCarouselStyle = style({
 });
 
 export const recommendSectionDescription = style({
-  fontSize: '14px',
+  fontSize: '16px',
 });
 
 export const pointTextStyle = style({
@@ -27,13 +19,13 @@ export const pointTextStyle = style({
 
 export const recommendSectionLayoutStyle = style({
   margin: 'auto',
-  padding: '32px',
+  padding: '20px',
   width: 'fit-content',
 });
 
 export const recommendPageTitleStyle = style({
   display: 'inline-block',
-  fontSize: '16px',
+  fontSize: '18px',
   fontWeight: '500',
 });
 

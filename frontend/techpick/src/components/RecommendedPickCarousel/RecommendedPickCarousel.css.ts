@@ -1,34 +1,45 @@
 import { style } from '@vanilla-extract/css';
+import { colorVars } from 'techpick-shared';
 
 export const recommendedPickCarouselLayoutStyle = style({
-  overflow: 'hidden',
   position: 'relative',
-  padding: '0 20px',
 });
 
 export const recommendedPickCarouselStyle = style({
   position: 'relative',
   overflow: 'hidden',
+  width: '1044px',
+
+  '@media': {
+    'screen and (min-width: 1920px)': {
+      width: '1572px',
+    },
+  },
 });
 
 export const recommendedPickItemListStyle = style({
   display: 'flex',
-  gap: '14px',
+  gap: '12px',
 });
 
 export const chevronIconStyle = style({
   position: 'absolute',
-  top: '40%',
+  top: '50%',
   transform: 'translateY(-50%)',
   cursor: 'pointer',
-  width: '20px',
-  height: '20px',
+  width: '40px',
+  height: '40px',
   borderRadius: '50%',
+  backgroundColor: colorVars.gold4,
+  opacity: 0.5,
 });
 
-export const chevronLeftIconStyle = style([chevronIconStyle, { left: '0px' }]);
+export const chevronLeftIconStyle = style([
+  chevronIconStyle,
+  { left: '-20px' },
+]);
 
 export const chevronRightIconStyle = style([
   chevronIconStyle,
-  { right: '0px' },
+  { right: '-20px' },
 ]);

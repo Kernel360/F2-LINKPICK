@@ -61,14 +61,15 @@ export default function RecommendPage() {
       <TutorialDialog />
 
       <div className={recommendSectionLayoutStyle}>
-        <h1 className={recommendPageTitleStyle}>🔥HOT TREND!🔥</h1>
+        <h1 className={recommendPageTitleStyle}>이런 글은 어떠세요?</h1>
 
         <div className={recommendContentSectionStyle}>
           {suggestionRankingPicks.dailyViewRanking.length !== 0 && (
             <div className={recommendedPickCarouselSectionStyle}>
               <div className={recommendedPickCarouselStyle}>
                 <h2 className={recommendSectionDescription}>
-                  오늘 가장 <span className={pointTextStyle}>핫한</span> 픽
+                  🔥 오늘 가장 <span className={pointTextStyle}>핫한</span> 픽
+                  🔥
                 </h2>
               </div>
               <RecommendedPickCarousel
@@ -80,16 +81,16 @@ export default function RecommendPage() {
 
           {suggestionRankingPicks.weeklyViewRanking.length !== 0 && (
             <div className={recommendedPickCarouselSectionStyle}>
+              <div className={recommendedPickCarouselStyle}>
+                <h2 className={recommendSectionDescription}>
+                  이번 주 가장 많이
+                  <span className={pointTextStyle}> 본</span> 픽 👀
+                </h2>
+              </div>
               <RecommendedPickCarousel
                 recommendPickList={suggestionRankingPicks.weeklyViewRanking}
                 recommendPickCategoryType="weeklyViewRanking"
               />
-              <div className={recommendedPickCarouselStyle}>
-                <h2 className={recommendSectionDescription}>
-                  🔥🔥이번 주 가장 많이
-                  <span className={pointTextStyle}>본</span> 픽🔥🔥
-                </h2>
-              </div>
             </div>
           )}
 
@@ -98,7 +99,7 @@ export default function RecommendPage() {
               <div className={recommendedPickCarouselStyle}>
                 <h2 className={recommendSectionDescription}>
                   다른 사용자가 가장 많이
-                  <span className={pointTextStyle}>저장한</span> 픽
+                  <span className={pointTextStyle}> 저장한</span> 픽 ⭐
                 </h2>
               </div>
               <RecommendedPickCarousel
