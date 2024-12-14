@@ -1,7 +1,9 @@
 package baguni.api.domain.user.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import baguni.api.infrastructure.user.UserDataHandler;
 import lombok.RequiredArgsConstructor;
 import baguni.api.domain.user.service.strategy.StarterFolderStrategy;
 import baguni.core.annotation.BaguniAnnotation;
@@ -15,6 +17,7 @@ import baguni.security.model.OAuth2UserInfo;
 @RequiredArgsConstructor
 public class UserService {
 
+	private final UserDataHandler userDataHandler;
 	private final UserRepository userRepository;
 	private final FolderRepository folderRepository;
 	private final StarterFolderStrategy folderStrategy;
@@ -44,6 +47,11 @@ public class UserService {
 			);
 			createBasicFolder(userRepository.save(user));
 		}
+	}
+
+	@Transactional
+	public void deleteUser(Long userId) {
+		userDataHandler.deleteUser(userId);
 	}
 
 	private void createBasicFolder(User user) {
