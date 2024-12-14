@@ -36,7 +36,7 @@ export function SkeltonPickForm() {
 
         <div className={footerStyle}>
           <a href={PUBLIC_DOMAIN} target="_blank">
-            <p className={footerTextStyle}>app.techpick.org</p>
+            <p className={footerTextStyle}>app.baguni.kr</p>
           </a>
         </div>
       </div>

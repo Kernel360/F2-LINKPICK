@@ -109,7 +109,7 @@ export function UpdatePickForm({
 
         <div className={footerStyle}>
           <a href={PUBLIC_DOMAIN} className={footerLinkStyle} target="_blank">
-            <p className={footerLinkTextStyle}>app.techpick.org</p>
+            <p className={footerLinkTextStyle}>app.baguni.kr</p>
           </a>
           <p className={footerTextStyle}>수정하기</p>
         </div>

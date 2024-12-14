@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import type { KeyboardEvent } from 'react';
 import { Command } from 'cmdk';
 import { BarLoader } from 'react-spinners';
 import { colorVars } from 'techpick-shared';
@@ -39,8 +40,14 @@ export function TagAutocompleteDialog({
   const isCreateFetchPendingRef = useRef<boolean>(false);
   const randomNumber = useRef<number>(getRandomInt());
 
-  const { tagList, selectedTagList, fetchingTagState, selectTag, createTag } =
-    useTagStore();
+  const {
+    tagList,
+    selectedTagList,
+    fetchingTagState,
+    selectTag,
+    createTag,
+    popSelectedTag,
+  } = useTagStore();
   const { isDarkMode } = useThemeStore();
 
   const focusTagInput = () => {
@@ -91,6 +98,12 @@ export function TagAutocompleteDialog({
     }
   };
 
+  const onBackspaceKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Backspace' && tagInputValue === '') {
+      popSelectedTag();
+    }
+  };
+
   useEffect(() => {
     if (open) {
       requestAnimationFrame(() => {
@@ -135,6 +148,7 @@ export function TagAutocompleteDialog({
           ref={tagInputRef}
           value={tagInputValue}
           onValueChange={setTagInputValue}
+          onKeyUp={onBackspaceKeyPress}
         />
       </SelectedTagListLayout>
 

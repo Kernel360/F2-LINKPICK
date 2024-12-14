@@ -38,6 +38,12 @@ export const useTagStore = create<TagState & TagAction>()(
         );
       }),
 
+    popSelectedTag: () => {
+      set((state) => {
+        state.selectedTagList.pop();
+      });
+    },
+
     updateSelectedTagList: (updatedTag) => {
       set((state) => {
         const index = state.selectedTagList.findIndex(

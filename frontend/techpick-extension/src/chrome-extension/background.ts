@@ -53,23 +53,6 @@ chrome.runtime.onConnect.addListener(function changeThemeState(port) {
   });
 });
 
-// 확장 프로그램 설치/업데이트 시 컨텍스트 메뉴 생성
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
-    id: 'open-techpick-link',
-    title: 'techpick 사이트로 이동',
-    contexts: ['action'], // 확장 프로그램 아이콘 우클릭 메뉴
-  });
-});
-
-// 컨텍스트 메뉴 클릭 이벤트 처리
-chrome.contextMenus.onClicked.addListener((info) => {
-  if (info.menuItemId === 'open-techpick-link') {
-    // 특정 링크로 이동
-    chrome.tabs.create({ url: 'https://app.techpick.org' });
-  }
-});
-
 let currentTabHtml = '';
 
 /**

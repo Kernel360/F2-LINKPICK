@@ -41,6 +41,13 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
     }
   };
 
+  const closeDialogByEnterKey = (e: KeyboardEvent<HTMLButtonElement>) => {
+    if (e.key === 'Enter') {
+      e.stopPropagation();
+      closeDialog();
+    }
+  };
+
   const handleMouseEnter = (ref: React.RefObject<HTMLButtonElement>) => {
     ref.current?.focus();
   };
@@ -72,6 +79,7 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
             <Gap verticalSize="gap4" />
             <button
               onClick={closeDialog}
+              onKeyDown={closeDialogByEnterKey}
               ref={cancelButtonRef}
               onMouseEnter={() => handleMouseEnter(cancelButtonRef)}
               className={deleteTagDialogCancelButtonStyle}
