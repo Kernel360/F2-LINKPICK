@@ -20,3 +20,4 @@ export type { PostSharedPickViewEventLogRequestType } from './PostSharedPickView
 export type { RecommendPickType } from './RecommendPickType';
 export type { RecommendPickCategoryType } from './RecommendPickCategoryType';
 export type { PostRecommendPickViewEventLogRequestType } from './PostRecommendPickViewEventLogRequestType';
+export type { UploadBookmarkResponseType } from './UploadBookmarkResponseType';
