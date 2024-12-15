@@ -14,7 +14,7 @@ export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
   const { openUrlInNewTab } = useOpenUrlInNewTab(recommendPick.url);
 
   return (
-    <div className={pickCarouselItemStyle} onDoubleClick={openUrlInNewTab}>
+    <div className={pickCarouselItemStyle} onClick={openUrlInNewTab}>
       {recommendPick.imageUrl === '' ? (
         <div className={defaultImageStyle}>
           <Image
