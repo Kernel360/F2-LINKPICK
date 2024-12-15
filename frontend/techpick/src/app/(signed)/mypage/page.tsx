@@ -17,6 +17,9 @@ import {
 
 export default function MyPage() {
   const setFocusFolderId = useTreeStore((state) => state.setFocusFolderId);
+  const setSelectedFolderList = useTreeStore(
+    (state) => state.setSelectedFolderList
+  );
 
   const handleLogout = async () => {
     try {
@@ -30,8 +33,9 @@ export default function MyPage() {
   useEffect(
     function clearFocusFolderId() {
       setFocusFolderId(null);
+      setSelectedFolderList([]);
     },
-    [setFocusFolderId]
+    [setFocusFolderId, setSelectedFolderList]
   );
 
   return (
