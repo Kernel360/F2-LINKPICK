@@ -6,6 +6,7 @@ import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { XIcon } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
 import { uploadBookmark } from '@/apis/bookmark';
+import { useTreeStore } from '@/stores';
 import { notifyError, notifySuccess } from '@/utils';
 import {
   importBookmarkDialogButtonStyle,
@@ -21,6 +22,7 @@ import {
 import type { DropzoneOptions } from 'react-dropzone';
 
 export function ImportBookmarkDialog() {
+  const getFolders = useTreeStore((state) => state.getFolders);
   const [file, setFile] = useState<HTMLFile | null>(null);
   const onDrop = useCallback<NonNullable<DropzoneOptions['onDrop']>>(
     (acceptedFiles) => {
@@ -54,6 +56,7 @@ export function ImportBookmarkDialog() {
     isUploadingFile.current = true;
     try {
       const response = await uploadBookmark(formData);
+      getFolders();
 
       if (0 < response.length) {
         notifySuccess(
@@ -73,7 +76,7 @@ export function ImportBookmarkDialog() {
     <Dialog.Root>
       <Dialog.Trigger asChild>
         <button className={importBookmarkDialogButtonStyle}>
-          북마크 붙여넣기
+          북마크 업로드
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>

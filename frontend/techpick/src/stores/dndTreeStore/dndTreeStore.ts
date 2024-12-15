@@ -222,8 +222,6 @@ export const useTreeStore = create<TreeState & TreeAction>()(
             for (const [_key, value] of Object.entries(folderMap)) {
               state.treeDataMap[value.id] = value;
             }
-
-            // state.treeDataMap = folderMap;
           });
         } catch (error) {
           console.log('getFolderMap error', error);
