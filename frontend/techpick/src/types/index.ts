@@ -19,3 +19,4 @@ export type { GetSuggestionRankingPicksResponseType } from './GetSuggestionRanki
 export type { PostSharedPickViewEventLogRequestType } from './PostSharedPickViewEventLogRequestType';
 export type { RecommendPickType } from './RecommendPickType';
 export type { RecommendPickCategoryType } from './RecommendPickCategoryType';
+export type { PostRecommendPickViewEventLogRequestType } from './PostRecommendPickViewEventLogRequestType';

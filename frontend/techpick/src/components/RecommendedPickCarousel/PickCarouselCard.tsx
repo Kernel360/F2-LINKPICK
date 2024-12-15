@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { postRecommendPickViewEventLog } from '@/apis/eventLog';
 import { useOpenUrlInNewTab } from '@/hooks';
 import {
   pickCarouselItemStyle,
@@ -13,8 +14,17 @@ import { RecommendPickType } from '@/types';
 export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
   const { openUrlInNewTab } = useOpenUrlInNewTab(recommendPick.url);
 
+  const onOpenLink = async () => {
+    try {
+      openUrlInNewTab();
+      await postRecommendPickViewEventLog({ url: recommendPick.url });
+    } catch {
+      /*empty */
+    }
+  };
+
   return (
-    <div className={pickCarouselItemStyle} onClick={openUrlInNewTab}>
+    <div className={pickCarouselItemStyle} onClick={onOpenLink}>
       {recommendPick.imageUrl === '' ? (
         <div className={defaultImageStyle}>
           <Image
