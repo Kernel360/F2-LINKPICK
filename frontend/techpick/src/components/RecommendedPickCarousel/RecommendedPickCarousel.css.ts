@@ -29,9 +29,11 @@ export const chevronIconStyle = style({
   cursor: 'pointer',
   width: '40px',
   height: '40px',
+  border: '1px solid',
+  borderColor: colorVars.gold7,
   borderRadius: '50%',
   backgroundColor: colorVars.gold4,
-  opacity: 0.5,
+  opacity: 0.7,
 });
 
 export const chevronLeftIconStyle = style([
