@@ -73,14 +73,12 @@ public class SwaggerConfig {
 
 	private Paths getAuthPaths() {
 		List<String> authTags = List.of("Authorization");
-		var naverLogin = new PathItem().get(new Operation().summary("네이버 소셜 로그인").tags(authTags));
 		var kakaoLogin = new PathItem().get(new Operation().summary("카카오 소셜 로그인").tags(authTags));
 		var googleLogin = new PathItem().get(new Operation().summary("구글 소셜 로그인").tags(authTags));
 		var logout = new PathItem().get(
 			new Operation().summary("로그아웃").description("techPickLogin, access_token 쿠키를 삭제합니다.").tags(authTags));
 
 		return new Paths()
-			.addPathItem("/api/login/naver", naverLogin)
 			.addPathItem("/api/login/kakao", kakaoLogin)
 			.addPathItem("/api/login/google", googleLogin)
 			.addPathItem("/api/login/logout", logout)
