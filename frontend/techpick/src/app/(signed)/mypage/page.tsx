@@ -2,12 +2,14 @@
 
 import { useEffect } from 'react';
 import { postLogout } from '@/apis/postLogout';
+import { ImportBookmarkDialog } from '@/components/ImportBookmarkDialog';
 import MyPageContentContainer from '@/components/MyPage/MyPageContentContainer';
 import MyPageShareFolderContent from '@/components/MyPage/MyPageShareFolderContent';
 import { TutorialReplaySwitch } from '@/components/TutorialReplaySwitch';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores';
 import {
+  buttonSectionStyle,
   logoutButtonStyle,
   myPageContentContainerLayoutStyle,
   myPageLayoutStyle,
@@ -42,8 +44,8 @@ export default function MyPage() {
     <div className={myPageLayoutStyle}>
       <div className={myPageContentContainerLayoutStyle}>
         <MyPageContentContainer title="내 계정">
-          <div style={{ display: 'flex' }}>
-            <div>내 계정 정보</div>
+          <div className={buttonSectionStyle}>
+            <ImportBookmarkDialog />
             <button className={logoutButtonStyle} onClick={handleLogout}>
               로그아웃
             </button>

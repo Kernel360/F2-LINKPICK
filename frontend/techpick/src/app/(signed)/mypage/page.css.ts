@@ -45,3 +45,8 @@ export const tutorialReplaySwitchLabelStyle = style({
   cursor: 'pointer',
   flexShrink: 0,
 });
+
+export const buttonSectionStyle = style({
+  display: 'flex',
+  gap: '16px',
+});
