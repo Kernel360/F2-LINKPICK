@@ -1,8 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import useEmblaCarousel from 'embla-carousel-react';
-import { debounce } from 'es-toolkit';
 import { ChevronRightIcon, ChevronLeftIcon } from 'lucide-react';
 import { PickCarouselCard } from './PickCarouselCard';
 import {
@@ -26,6 +25,7 @@ export function RecommendedPickCarousel({
   });
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -67,14 +67,22 @@ export function RecommendedPickCarousel({
   useEffect(
     function detectCarouselScrollEvent() {
       if (emblaApi) {
-        const onWheel = debounce((event: WheelEvent) => {
+        const onWheel = (event: WheelEvent) => {
           event.preventDefault();
-          if (event.deltaY > 0) {
-            scrollNext();
-          } else {
-            scrollPrev();
-          }
-        }, 100);
+          event.stopPropagation();
+
+          if (scrollTimeoutRef.current) return;
+
+          scrollTimeoutRef.current = setTimeout(() => {
+            if (event.deltaY > 0) {
+              scrollNext();
+            } else {
+              scrollPrev();
+            }
+
+            scrollTimeoutRef.current = null;
+          }, 200);
+        };
 
         const viewport = emblaApi.rootNode();
         viewport.addEventListener('wheel', onWheel, { passive: false });
