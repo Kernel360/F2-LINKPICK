@@ -2,7 +2,8 @@ import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
 
 export const recommendedPickCarouselSectionStyle = style({
-  padding: '4px 0',
+  paddingTop: '12px',
+  paddingBottom: '20px',
 });
 
 export const recommendedPickCarouselStyle = style({
@@ -10,7 +11,8 @@ export const recommendedPickCarouselStyle = style({
 });
 
 export const recommendSectionDescription = style({
-  fontSize: '16px',
+  fontSize: '20px',
+  fontWeight: '500',
 });
 
 export const pointTextStyle = style({
@@ -25,8 +27,14 @@ export const recommendSectionLayoutStyle = style({
 
 export const recommendPageTitleStyle = style({
   display: 'inline-block',
-  fontSize: '18px',
-  fontWeight: '500',
+  fontSize: '24px',
+  fontWeight: '700',
+});
+
+export const recommendPageDescriptionStyle = style({
+  paddingTop: '4px',
+  fontSize: '12px',
+  color: colorVars.sand11,
 });
 
 export const recommendContentSectionStyle = style({
