@@ -11,4 +11,9 @@ public class WarningErrorLevel extends ErrorLevel {
 	public void handleError(ApiException exception, CachedHttpServletRequest request) {
 		log.warn(exception.getMessage(), exception, request);
 	}
+
+	@Override
+	public void handleError(ApiException exception) {
+		log.warn(exception.getMessage(), exception);
+	}
 }
