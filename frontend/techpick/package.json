@@ -50,6 +50,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18",
+    "react-dropzone": "^14.3.5",
     "react-hot-toast": "^2.4.1",
     "react-select": "^5.8.3",
     "react-spinners": "^0.14.1",
