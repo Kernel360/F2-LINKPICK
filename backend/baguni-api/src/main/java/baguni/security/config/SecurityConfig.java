@@ -16,6 +16,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import baguni.security.handler.BaguniLoginFailureHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.security.filter.TokenAuthenticationFilter;
@@ -34,7 +35,8 @@ public class SecurityConfig {
 	private final CustomOAuth2Service customOAuth2Service;
 	private final OAuth2SuccessHandler oAuth2SuccessHandler;
 	private final TokenAuthenticationFilter tokenAuthenticationFilter;
-	private final BaguniLogoutHandler techPickLogoutHandler;
+	private final BaguniLogoutHandler logoutHandler;
+	private final BaguniLoginFailureHandler loginFailureHandler;
 	private final BaguniAuthorizationRequestRepository requestRepository;
 	private final SecurityProperties properties;
 
@@ -49,8 +51,8 @@ public class SecurityConfig {
 			.formLogin(AbstractHttpConfigurer::disable)
 			.logout(config -> {
 				config.logoutUrl("/api/logout")
-					  .addLogoutHandler(techPickLogoutHandler)
-					  .logoutSuccessHandler(techPickLogoutHandler);
+					  .addLogoutHandler(logoutHandler)
+					  .logoutSuccessHandler(logoutHandler);
 			})
 			.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			// TokenAuthenticationFilter 를 UsernamePasswordAuthenticationFilter 앞에 추가
@@ -78,6 +80,7 @@ public class SecurityConfig {
 					)
 					.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2Service))
 					.successHandler(oAuth2SuccessHandler)
+					.failureHandler(loginFailureHandler)
 			)
 		;
 		return http.build();
