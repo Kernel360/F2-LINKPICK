@@ -93,3 +93,9 @@ export const kakaoLoginContainer = style({
     border: `1px solid ${colorVars.primary}`,
   },
 });
+
+export const failedDescriptionTextStyle = style({
+  height: '28px',
+  fontSize: '12px',
+  color: colorVars.tomato11,
+});
