@@ -36,7 +36,6 @@ public class BaguniLogoutHandler implements LogoutHandler, LogoutSuccessHandler 
 	 */
 	public void clearCookies(HttpServletRequest request, HttpServletResponse response) {
 		cookieUtil.deleteCookie(request, response, properties.ACCESS_TOKEN_KEY);
-		cookieUtil.deleteCookie(request, response, properties.LOGIN_FLAG_FOR_FRONTEND);
 		cookieUtil.deleteCookie(request, response, "JSESSIONID");
 	}
 }
