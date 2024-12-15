@@ -1,7 +1,5 @@
 package baguni.api.domain.user.service.strategy;
 
-import java.util.List;
-
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -18,14 +16,24 @@ public class StarterFolderStrategy {
 
 	private static final String FOLDER_NAME = "시작하기";
 
-	private final FolderDataHandler folderService;
+	private final FolderDataHandler folderDataHandler;
 	private final RankingInitStrategy rankingInitStrategy;
 	private final ManualInitStrategy manualInitStrategy;
 
-	public void initFolder(User user, Folder parentFolder) {
-		var command = new FolderCommand.Create(user.getId(), FOLDER_NAME, parentFolder.getId());
-		var createdFolder = folderService.saveFolder(command);
-		rankingInitStrategy.initContent(user, createdFolder.getId());
-		manualInitStrategy.initContent(user, createdFolder.getId());
+	/**
+	 * @author minkyeu kim
+	 * 시작 폴더 생성에 실패해도, 회원 가입은 진행되야 한다.
+	 * 따라서 Transaction으로 처리하지 않음.
+	 */
+	public void initRootFolder(User user) {
+		var starterFolder = createStarterFolder(user);
+		rankingInitStrategy.initContent(user, starterFolder.getId());
+		manualInitStrategy.initContent(user, starterFolder.getId());
+	}
+
+	private Folder createStarterFolder(User user) {
+		var root = folderDataHandler.getRootFolder(user.getId());
+		var command = new FolderCommand.Create(user.getId(), FOLDER_NAME, root.getId());
+		return folderDataHandler.saveFolder(command);
 	}
 }
