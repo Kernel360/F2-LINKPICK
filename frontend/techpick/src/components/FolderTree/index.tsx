@@ -6,10 +6,11 @@ import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { FolderTreeHeader } from './FolderTreeHeader';
 import { HorizontalResizableContainer } from './HorizontalResizableContainer';
+import { MyPageLinkItem } from './MyPagLinkItem';
+import { SearchBar } from './SearchBar';
 import { ShowCreateFolderInputButton } from './ShowCreateFolderInputButton';
 import { treeLayout, treeNodeLayoutStyle } from './tree.css';
 import { TreeNode } from './TreeNode';
-import { UserMenuBar } from './UserMenuBar';
 
 export function FolderTree() {
   const { newFolderParentId } = useCreateFolderInputStore();
@@ -25,7 +26,7 @@ export function FolderTree() {
   return (
     <HorizontalResizableContainer>
       <div className={treeLayout}>
-        <UserMenuBar />
+        <SearchBar />
         <FolderTreeHeader />
 
         <div className={folderTreeHeaderTitleLayout}>
@@ -34,9 +35,11 @@ export function FolderTree() {
             <ShowCreateFolderInputButton newFolderParentId={rootFolderId} />
           )}
         </div>
+
         <div className={treeNodeLayoutStyle}>
           {<TreeNode id={rootFolderId} depth={0} />}
         </div>
+        <MyPageLinkItem />
       </div>
     </HorizontalResizableContainer>
   );
