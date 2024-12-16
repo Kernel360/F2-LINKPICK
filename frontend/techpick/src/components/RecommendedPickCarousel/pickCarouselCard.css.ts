@@ -29,6 +29,16 @@ export const pickImageStyle = style([
   },
 ]);
 
+export const defaultImageStyle = style([
+  pickImageStyle,
+  {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+  },
+]);
+
 export const pickTitleStyle = style({
   display: '-webkit-box',
   width: '100%',
@@ -44,7 +54,7 @@ export const pickTitleStyle = style({
   WebkitBoxOrient: 'vertical',
 });
 
-export const defaultImageStyle = style([
+export const defaultImageLayoutStyle = style([
   imageStyle,
   {
     width: '250px',

@@ -8,6 +8,7 @@ import {
   pickTitleStyle,
   pickImageStyle,
   defaultImageStyle,
+  defaultImageLayoutStyle,
 } from './pickCarouselCard.css';
 import { RecommendPickType } from '@/types';
 
@@ -26,23 +27,17 @@ export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
   return (
     <div className={pickCarouselItemStyle} onClick={onOpenLink}>
       {recommendPick.imageUrl === '' ? (
-        <div className={defaultImageStyle}>
+        <div className={defaultImageLayoutStyle}>
           <Image
             src={'/image/default_image.svg'}
             alt=""
-            className={pickImageStyle}
+            className={`${defaultImageStyle}`}
             width="80"
             height="65"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}
           />
         </div>
       ) : (
-        <Image
+        <img
           src={recommendPick.imageUrl}
           alt=""
           className={pickImageStyle}
