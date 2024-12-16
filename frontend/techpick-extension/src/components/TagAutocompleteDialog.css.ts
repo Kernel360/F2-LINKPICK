@@ -4,9 +4,20 @@ import { colorVars } from 'techpick-shared';
 
 const { color } = colorVars;
 
+export const overlayStyle = style({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '336px',
+  height: '244px',
+  backgroundColor: 'transparent',
+  pointerEvents: 'none',
+});
+
 export const tagDialogPortalLayout = style({
   position: 'absolute',
   top: '0',
+  left: 0,
   zIndex: '1',
   backgroundColor: colorVars.lightGray,
   boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',

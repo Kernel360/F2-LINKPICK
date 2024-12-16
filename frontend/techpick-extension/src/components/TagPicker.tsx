@@ -25,6 +25,7 @@ export const TagPicker = forwardRef<HTMLDivElement>(
       }
 
       openDialog();
+      e.preventDefault();
     };
 
     return (
