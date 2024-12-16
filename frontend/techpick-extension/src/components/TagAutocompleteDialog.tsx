@@ -101,7 +101,7 @@ export function TagAutocompleteDialog({
   };
 
   const onBackspaceKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Backspace' && tagInputValue === '') {
+    if (event.key === 'Backspace' && tagInputValue === '' && !event.shiftKey) {
       popSelectedTag();
     }
   };
@@ -114,16 +114,13 @@ export function TagAutocompleteDialog({
     }
   }, [open]);
 
-  useEffect(
-    function checkIsCreatableTag() {
-      const isUnique = !tagList.some((tag) => tag.name === tagInputValue);
-      const isNotInitialValue = tagInputValue.trim() !== '';
-      const isCreatable = isUnique && isNotInitialValue;
+  const checkIsCreatableTag = (value: string) => {
+    const isUnique = !tagList.some((tag) => tag.name === tagInputValue);
+    const isNotInitialValue = value.trim() !== '';
+    const isCreatable = isUnique && isNotInitialValue;
 
-      setCanCreateTag(isCreatable);
-    },
-    [tagInputValue, tagList]
-  );
+    setCanCreateTag(isCreatable);
+  };
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange} modal={false}>
@@ -154,7 +151,10 @@ export function TagAutocompleteDialog({
                 className={commandInputStyle}
                 ref={tagInputRef}
                 value={tagInputValue}
-                onValueChange={setTagInputValue}
+                onValueChange={(value) => {
+                  checkIsCreatableTag(value);
+                  setTagInputValue(value);
+                }}
                 onKeyUp={onBackspaceKeyPress}
               />
             </SelectedTagListLayout>
