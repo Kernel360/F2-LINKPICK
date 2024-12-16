@@ -27,8 +27,7 @@ spring:
     username: ${DOCKER_MYSQL_USERNAME}
     password: ${DOCKER_MYSQL_PASSWORD}
   rabbitmq:
-    host: ${DOCKER_LOCAL_RABBITMQ_HOST}
-    port: 5672
+    url: ${DOCKER_LOCAL_RABBITMQ_URL}
     username: ${DOCKER_RABBITMQ_USERNAME}
     password: ${DOCKER_RABBITMQ_PASSWORD}
 server-url: # 테크픽 서버간 통신을 위한 주소
@@ -47,8 +46,7 @@ spring:
     username: ${DOCKER_MYSQL_USERNAME}
     password: ${DOCKER_MYSQL_PASSWORD}
   rabbitmq:
-    host: ${DOCKER_DEV_RABBITMQ_HOST}
-    port: 5672
+    url: ${DOCKER_DEV_RABBITMQ_URL}
     username: ${DOCKER_RABBITMQ_USERNAME}
     password: ${DOCKER_RABBITMQ_PASSWORD}
 server-url: # 테크픽 서버간 통신을 위한 주소
@@ -67,8 +65,7 @@ spring:
     username: ${DOCKER_MYSQL_USERNAME}
     password: ${DOCKER_MYSQL_PASSWORD}
   rabbitmq:
-    host: ${DOCKER_PROD_RABBITMQ_HOST}
-    port: 5672
+    url: ${DOCKER_PROD_RABBITMQ_URL}
     username: ${DOCKER_RABBITMQ_USERNAME}
     password: ${DOCKER_RABBITMQ_PASSWORD}
 server-url: # 테크픽 서버간 통신을 위한 주소

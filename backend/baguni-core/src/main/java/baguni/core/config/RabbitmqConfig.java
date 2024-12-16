@@ -27,11 +27,8 @@ public class RabbitmqConfig {
 	@Value("${spring.application.name}")
 	private String appName;
 
-	@Value("${spring.rabbitmq.host}")
-	private String host;
-
-	@Value("${spring.rabbitmq.port}")
-	private int port;
+	@Value("${spring.rabbitmq.url}")
+	private String url;
 
 	@Value("${spring.rabbitmq.username}")
 	private String username;
@@ -70,11 +67,14 @@ public class RabbitmqConfig {
 	@Bean
 	ConnectionFactory connectionFactory() {
 		CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+		String amqpUri = new StringBuilder()
+			.append("amqp://")
+			.append(username).append(":").append(password)
+			.append("@").append(url)
+			.toString();
+
+		connectionFactory.setUri(amqpUri);
 		connectionFactory.setConnectionNameStrategy(cn -> appName + "-" + cn);
-		connectionFactory.setHost(host);
-		connectionFactory.setPort(port);
-		connectionFactory.setUsername(username);
-		connectionFactory.setPassword(password);
 		return connectionFactory;
 	}
 
