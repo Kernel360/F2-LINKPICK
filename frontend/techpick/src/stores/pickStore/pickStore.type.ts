@@ -1,5 +1,6 @@
 import type { Active, Over } from '@dnd-kit/core';
 import type {
+  CreatePickRequestType,
   PickDraggableObjectType,
   PickInfoType,
   PickRecordType,
@@ -65,6 +66,7 @@ export type PickAction = {
   ) => Promise<void>;
   insertPickInfo: (pickInfo: PickInfoType, pickParentFolderId: number) => void;
   createInitialRecordValue: (folderId: number) => void;
+  createPick: (pickInfo: CreatePickRequestType) => Promise<void>;
 };
 
 export type MovePickPayload = {

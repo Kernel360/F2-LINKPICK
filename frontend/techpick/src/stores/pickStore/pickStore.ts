@@ -7,6 +7,7 @@ import {
   movePicks,
   updatePick,
   deletePicks,
+  createPick,
 } from '@/apis/pick';
 import { getPickListByQueryParam } from '@/apis/pick/getPicks';
 import { isPickDraggableObject, reorderSortableIdList } from '@/utils';
@@ -664,6 +665,41 @@ export const usePickStore = create<PickState & PickAction>()(
               error: null,
             };
           });
+        }
+      },
+
+      createPick: async (pickInfo) => {
+        const { parentFolderId } = pickInfo;
+
+        // createPick 만들고 이동하기.
+        try {
+          const createdPickInfo = await createPick(pickInfo);
+          set((state) => {
+            if (!state.pickRecord[parentFolderId]?.data) {
+              state.pickRecord[parentFolderId] = {
+                data: { pickIdOrderedList: [], pickInfoRecord: {} },
+                isLoading: false,
+                isError: false,
+                error: null,
+              };
+            }
+
+            if (state.pickRecord[parentFolderId]?.data) {
+              const { pickIdOrderedList } =
+                state.pickRecord[parentFolderId].data;
+              const newPickIdOrderedList = [
+                createdPickInfo.id,
+                ...pickIdOrderedList,
+              ];
+              state.pickRecord[parentFolderId].data.pickInfoRecord[
+                createdPickInfo.id
+              ] = createdPickInfo;
+              state.pickRecord[parentFolderId].data.pickIdOrderedList =
+                newPickIdOrderedList;
+            }
+          });
+        } catch {
+          /* empty */
         }
       },
     }))
