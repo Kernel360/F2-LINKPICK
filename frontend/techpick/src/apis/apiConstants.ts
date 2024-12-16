@@ -46,7 +46,8 @@ export const API_URLS = {
   DELETE_TAGS: `${API_ENDPOINTS.TAGS}`,
   UPDATE_TAGS: `${API_ENDPOINTS.TAGS}`,
   GET_TAGS: `${API_ENDPOINTS.TAGS}`,
-  GET_PICK_BY_URL: (url: string) => `${API_ENDPOINTS.PICKS}/link?link=${url}`,
+  GET_PICK_BY_URL: (url: string) =>
+    `${API_ENDPOINTS.PICKS}/link-v2?link=${url}`,
   GET_LINK_OG_DATA: (url: string) => `${API_ENDPOINTS.LINKS}?url=${url}`,
   SHARE_FOLDER: API_ENDPOINTS.SHARED,
   GET_SHARED_FOLER_BY_UUID: (uuid: string) => `${API_ENDPOINTS.SHARED}/${uuid}`,

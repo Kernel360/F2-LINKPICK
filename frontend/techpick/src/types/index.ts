@@ -21,3 +21,4 @@ export type { RecommendPickType } from './RecommendPickType';
 export type { RecommendPickCategoryType } from './RecommendPickCategoryType';
 export type { PostRecommendPickViewEventLogRequestType } from './PostRecommendPickViewEventLogRequestType';
 export type { UploadBookmarkResponseType } from './UploadBookmarkResponseType';
+export type { GetPickByUrlResponseType } from './GetPickByUrlResponseType';
