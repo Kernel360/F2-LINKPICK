@@ -64,6 +64,8 @@ services:
     container_name: baguni.${PROFILE_MODE}.server.api
     volumes:
       - ./logs/api:/app/logs
+    ports:
+      - 8080:8080
     env_file:
       - .env
     environment:

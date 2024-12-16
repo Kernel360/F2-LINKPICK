@@ -21,7 +21,7 @@ spring:
       on-profile: local
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
   datasource:
     url: ${DOCKER_LOCAL_MYSQL_URL}
     username: ${DOCKER_MYSQL_USERNAME}
@@ -41,7 +41,7 @@ spring:
       on-profile: dev
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
   datasource:
     url: ${DOCKER_DEV_MYSQL_URL}
     username: ${DOCKER_MYSQL_USERNAME}

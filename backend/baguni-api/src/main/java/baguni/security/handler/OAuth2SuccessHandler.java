@@ -64,12 +64,5 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			cookieMaxAge,
 			true
 		);
-		cookieUtil.addCookie(
-			response,
-			properties.LOGIN_FLAG_FOR_FRONTEND,
-			"true",
-			cookieMaxAge,
-			false
-		);
 	}
 }

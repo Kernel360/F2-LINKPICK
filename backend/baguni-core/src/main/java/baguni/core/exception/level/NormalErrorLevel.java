@@ -9,6 +9,11 @@ public class NormalErrorLevel extends ErrorLevel {
 
 	@Override
 	public void handleError(ApiException exception, CachedHttpServletRequest request) {
-		log.error("{}\n{}\n{}", exception.getMessage(), exception, request.toString());
+		log.info(exception.getMessage(), exception, request.toString());
+	}
+
+	@Override
+	public void handleError(ApiException exception) {
+		log.info(exception.getMessage(), exception);
 	}
 }

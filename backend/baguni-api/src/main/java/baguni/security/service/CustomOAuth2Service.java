@@ -11,6 +11,9 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
+import baguni.api.domain.user.service.strategy.StarterFolderStrategy;
+import baguni.core.model.user.User;
+import baguni.security.exception.ApiOAuth2Exception;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.api.domain.user.service.UserService;
@@ -23,6 +26,7 @@ import baguni.security.model.OAuth2UserInfo;
 public class CustomOAuth2Service extends DefaultOAuth2UserService {
 
 	private final OAuth2AttributeConfigProvider configProvider;
+	private final StarterFolderStrategy starterFolderStrategy;
 	private final UserService userService;
 
 	@Override
@@ -31,7 +35,11 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
 		var oAuth2User = super.loadUser(userRequest);
 		Map<String, Object> attributes = getAttributes(oAuth2User, provider);
 		OAuth2UserInfo oAuth2UserInfo = new OAuth2UserInfo(provider, attributes);
-		userService.createUser(oAuth2UserInfo);
+
+		if (!userService.isUserExist(oAuth2UserInfo.getName())) {
+			User user = userService.createUser(oAuth2UserInfo);
+			starterFolderStrategy.initRootFolder(user);
+		}
 		return oAuth2UserInfo;
 	}
 
@@ -61,7 +69,6 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
 				}
 			}
 		}
-		// TODO: ApiUserException 으로 리팩토링 예정
-		throw new IllegalArgumentException("Attribute of " + targetKey + " is not found");
+		throw ApiOAuth2Exception.OAUTH_TOKEN_ATTRIBUTE_NOT_FOUND(targetKey);
 	}
 }

@@ -25,7 +25,6 @@ import baguni.security.util.JwtUtil;
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-	private final CookieUtil cookieUtil;
 	private final JwtUtil jwtUtil;
 	private final SecurityProperties properties;
 
@@ -40,9 +39,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		if (jwtUtil.isValidToken(token)) {
 			Authentication authentication = convertToAuthentication(token);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-		} else {
-			// 인증 실패시 techPickLogin 쿠키 삭제
-			cookieUtil.deleteCookie(request, response, properties.LOGIN_FLAG_FOR_FRONTEND);
 		}
 
 		filterChain.doFilter(request, response);

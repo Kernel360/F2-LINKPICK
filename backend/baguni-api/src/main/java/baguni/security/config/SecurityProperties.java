@@ -14,9 +14,11 @@ public class SecurityProperties {
 
 	public final String ACCESS_TOKEN_KEY = "access_token";
 
-	public final String LOGIN_FLAG_FOR_FRONTEND = "techPickLogin";
-
-	public final String OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY = "redirectUrl";
+	/**
+	 * 프론트엔드에서 넘겨준 리다이렉트 대상 주소.
+	 * 쿠키에 임시로 저장해두었다가, 로그인 성공 시 해당 값을 꺼내서 리다이렉트
+	 */
+	public final String OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY = "redirect_url";
 
 	private final List<String> corsPatterns;
 

@@ -11,4 +11,9 @@ public class FatalErrorLevel extends ErrorLevel {
 	public void handleError(ApiException exception, CachedHttpServletRequest request) {
 		log.error(exception.getMessage(), exception, request);
 	}
+
+	@Override
+	public void handleError(ApiException exception) {
+		log.error(exception.getMessage(), exception);
+	}
 }
