@@ -6,6 +6,7 @@ import type { TabInfoFromWorkerMessageType } from '@/types';
 import { extractOpenGraphMetadata } from '@/utils';
 import { useEffect, useState } from 'react';
 import { correctImageUrl } from './correctImageUrl';
+import { unescapeHTML } from './unescapeHTML';
 
 interface TabInfo {
   title: string;
@@ -35,7 +36,7 @@ export function useGetTabInfo() {
           msg.htmlText
         );
         setTabInfo({
-          title: msg.title,
+          title: unescapeHTML(msg.title),
           url: msg.url,
           ogImage: ogImage ? correctImageUrl(msg.url, ogImage) : '',
           ogDescription: ogDescription ? ogDescription : '',
