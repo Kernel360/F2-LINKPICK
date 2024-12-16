@@ -3,6 +3,7 @@ import { colorVars } from 'techpick-shared';
 
 export const popoverTriggerStyle = style({
   display: 'flex',
+  flexShrink: 0,
   gap: '4px',
   alignItems: 'center',
   fontSize: '12px',
