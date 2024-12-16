@@ -5,7 +5,12 @@ import { useTreeStore } from '@/stores';
 import { CurrentFolderNameSection } from './CurrentFolderNameSection';
 import { CurrentPathIndicator } from './CurrentPathIndicator';
 import { Gap } from '../Gap';
-import { folderContentHeaderStyle } from './folderContentHeader.css';
+import {
+  createPickPopoverButtonLayoutStyle,
+  folderContentHeaderLayoutStyle,
+  folderContentHeaderStyle,
+} from './folderContentHeader.css';
+import { CreatePickPopoverButton } from '../CreatePickPopover/CreatePickPopoverButton';
 
 export function FolderContentHeader() {
   const pathname = usePathname();
@@ -13,14 +18,23 @@ export function FolderContentHeader() {
   const folderInfo = getFolderInfoByPathname(pathname);
 
   return (
-    <div className={folderContentHeaderStyle}>
+    <div className={folderContentHeaderLayoutStyle}>
       <Gap verticalSize="gap16" horizontalSize="gap24">
-        <CurrentFolderNameSection folderInfo={folderInfo} />
-        {folderInfo?.folderType === 'GENERAL' && (
-          <Gap verticalSize="gap4">
-            <CurrentPathIndicator folderInfo={folderInfo} />
-          </Gap>
-        )}
+        <div className={folderContentHeaderStyle}>
+          <div>
+            <CurrentFolderNameSection folderInfo={folderInfo} />
+            {folderInfo?.folderType === 'GENERAL' && (
+              <Gap verticalSize="gap4">
+                <CurrentPathIndicator folderInfo={folderInfo} />
+              </Gap>
+            )}
+          </div>
+          <div className={createPickPopoverButtonLayoutStyle}>
+            {folderInfo?.folderType !== 'RECYCLE_BIN' && (
+              <CreatePickPopoverButton />
+            )}
+          </div>
+        </div>
       </Gap>
     </div>
   );
