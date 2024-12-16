@@ -67,6 +67,8 @@ export const plusIconStyle = style({
 });
 
 export const footerStyle = style({
+  position: 'absolute',
+  bottom: '12px',
   display: 'flex',
   justifyContent: 'space-between',
   marginTop: '8px',
