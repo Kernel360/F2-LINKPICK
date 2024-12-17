@@ -19,7 +19,7 @@ export function SearchBarDescription() {
 
   return (
     <span className={searchBarDescriptionStyle}>
-      {isClient ? (isMac ? 'press command + p' : 'control + k') : null}
+      {isClient ? (isMac ? 'press command + p' : 'press control + k') : null}
     </span>
   );
 }
