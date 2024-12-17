@@ -30,6 +30,7 @@ export function FolderContentHeader() {
               </Gap>
             )}
           </div>
+
           <div className={createPickPopoverButtonLayoutStyle}>
             {folderInfo?.folderType !== 'RECYCLE_BIN' && (
               <CreatePickPopoverButton />

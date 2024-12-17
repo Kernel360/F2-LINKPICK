@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { fontWeights } from 'techpick-shared';
+import { colorVars, fontWeights } from 'techpick-shared';
 
 export const currentFolderNameSectionStyle = style({
   display: 'inline-flex',
@@ -23,4 +23,11 @@ export const folderNameStyle = style({
   textOverflow: 'ellipsis',
   whiteSpace: 'nowrap',
   overflow: 'hidden',
+});
+
+export const folderSharedInfoTextStyle = style({
+  width: '80px',
+  fontSize: '12px',
+  fontWeight: '600',
+  color: colorVars.primary,
 });

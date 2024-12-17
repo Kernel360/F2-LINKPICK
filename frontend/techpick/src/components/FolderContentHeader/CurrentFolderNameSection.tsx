@@ -5,6 +5,7 @@ import {
   currentFolderNameSectionStyle,
   folderNameStyle,
   folderOpenIconStyle,
+  folderSharedInfoTextStyle,
 } from './currentFolderNameSection.css';
 import { FolderType } from '@/types';
 
@@ -17,6 +18,11 @@ export function CurrentFolderNameSection({
       <h1 className={folderNameStyle}>
         {folderInfo ? folderInfo.name : 'loading...'}
       </h1>
+      {folderInfo && folderInfo.folderAccessToken ? (
+        <div className={folderSharedInfoTextStyle}>
+          <div>(공유 중)</div>
+        </div>
+      ) : null}
     </div>
   );
 }
