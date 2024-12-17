@@ -26,6 +26,7 @@ export const folderNameStyle = style({
 });
 
 export const folderSharedInfoTextStyle = style({
+  flexShrink: '0',
   width: '80px',
   fontSize: '12px',
   fontWeight: '600',
