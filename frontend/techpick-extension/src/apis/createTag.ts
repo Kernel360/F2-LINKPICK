@@ -8,9 +8,7 @@ export const createTag = async (createTag: CreateTagRequestType) => {
   try {
     const response = await apiClient.post<CreateTagResponseType>(
       API_URLS.getTagsUrl(),
-      {
-        body: JSON.stringify(createTag),
-      }
+      { json: createTag }
     );
     const data = await response.json();
 

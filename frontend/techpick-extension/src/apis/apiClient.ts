@@ -3,13 +3,9 @@ import { notifyError } from '@/libs/@toast';
 import { returnErrorFromHTTPError } from '@/utils';
 import { ERROR_MESSAGE_JSON } from '@/constants';
 
-/**
- * @Todo api 주소와 query param을 따로 받을 수 있게 추가.
- */
 export const apiClient = ky.create({
   credentials: 'include',
   prefixUrl: import.meta.env.VITE_PUBLIC_API,
-  headers: { 'content-type': 'application/json' },
   hooks: {
     beforeError: [
       async (httpError) => {
