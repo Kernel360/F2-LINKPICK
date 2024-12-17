@@ -64,6 +64,7 @@ public class SecurityConfig {
 					.requestMatchers("/api-docs/**").permitAll()
 					.requestMatchers("/swagger-ui/**").permitAll()
 					.requestMatchers("/api/login/**").permitAll()
+					.requestMatchers("/api/links").permitAll()
 					.anyRequest().authenticated()
 			)
 			.oauth2Login(
