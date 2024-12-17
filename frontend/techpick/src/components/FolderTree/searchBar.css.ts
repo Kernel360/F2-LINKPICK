@@ -9,26 +9,21 @@ export const searchItemStyle = style({
   height: '36px',
   margin: '0 8px',
   marginBottom: '12px',
-  padding: '8px 12px',
+  border: '1px solid',
+  borderColor: colorVars.gold6,
   borderRadius: '4px',
-  backgroundColor: colorVars.sand5,
+  padding: '8px 12px',
   fontSize: fontSize['sm'],
+  color: colorVars.sand11,
   cursor: 'pointer',
   transition: 'background-color 0.2s',
   selectors: {
     '&:hover': {
-      backgroundColor: colorVars.sand6,
+      backgroundColor: colorVars.gold4,
     },
   },
 });
 
-export const searchButtonStyle = style({
-  height: '24px',
-  ':hover': {
-    cursor: 'pointer',
-  },
-});
-
-export const borderStyle = style({
-  border: '1px solid',
+export const searchBarDescriptionStyle = style({
+  fontSize: '12px',
 });

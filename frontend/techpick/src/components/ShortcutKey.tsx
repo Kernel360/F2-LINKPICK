@@ -1,6 +1,8 @@
 'use client';
 
 import { useCallback, useEffect } from 'react';
+import { OPEN_SEARCH_DIALOG_EVENT } from '@/constants';
+import { isMacOS } from '@/utils';
 import { eventEmitter } from '@/utils/eventEmitter';
 
 export default function ShortcutKey() {
@@ -9,9 +11,24 @@ export default function ShortcutKey() {
    * if문으로 추가하심 키를 추가하고 이벤트 이름을 생성하심 됩니다.
    */
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.metaKey && e.key === 'p') {
-      e.preventDefault();
-      eventEmitter.emit('open-search-dialog');
+    const isMac = isMacOS();
+    console.log('isMac', isMac);
+
+    if (isMac) {
+      if (e.metaKey && e.key === 'p') {
+        console.log('log meta p');
+
+        e.preventDefault();
+        eventEmitter.emit(OPEN_SEARCH_DIALOG_EVENT);
+      }
+    } else {
+      if (e.ctrlKey && e.key === 'p') {
+        e.preventDefault();
+        eventEmitter.emit(OPEN_SEARCH_DIALOG_EVENT);
+      } else if (e.ctrlKey && e.key === 'k') {
+        e.preventDefault();
+        eventEmitter.emit(OPEN_SEARCH_DIALOG_EVENT);
+      }
     }
   }, []);
 

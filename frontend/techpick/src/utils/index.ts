@@ -19,3 +19,4 @@ export { createSearchSelectOptions } from './createSearchSelectOptions';
 export { isRecommendPickDraggableObject } from './isRecommendPickDraggableObject';
 export { getItemFromLocalStorage } from './getItemFromLocalStorage';
 export { setItemToLocalStorage } from './setItemToLocalStorage';
+export { isMacOS } from './isMacOS';

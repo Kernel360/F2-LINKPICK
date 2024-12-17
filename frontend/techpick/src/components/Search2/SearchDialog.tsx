@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import { OPEN_SEARCH_DIALOG_EVENT } from '@/constants';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import { eventEmitter } from '@/utils/eventEmitter';
 import FilterContainer from './FilterContainer';
@@ -23,10 +24,10 @@ export default function SearchDialog({
    * @description 이벤트를 구독하고, emit으로 발생시킨 이벤트를 받으면 상태를 변경합니다.
    */
   useEffect(() => {
-    eventEmitter.on('open-search-dialog', onOpenChange);
+    eventEmitter.on(OPEN_SEARCH_DIALOG_EVENT, onOpenChange);
 
     return () => {
-      eventEmitter.off('open-search-dialog', onOpenChange);
+      eventEmitter.off(OPEN_SEARCH_DIALOG_EVENT, onOpenChange);
     };
   }, [isOpen]);
 
