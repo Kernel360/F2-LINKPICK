@@ -17,6 +17,7 @@ export function DeselectTagButton({
         deselectTag(tag.id);
         onClick();
       }}
+      tabIndex={-1}
     >
       <X size={8} />
     </button>
