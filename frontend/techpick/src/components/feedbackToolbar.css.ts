@@ -1,17 +1,19 @@
 import { style, keyframes } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
 
-export const qnaSection = style({
+export const feedbackToolbarStyle = style({
   position: 'absolute',
   bottom: '32px',
-  right: '32px',
+  right: '16px',
   display: 'flex',
   flexDirection: 'column',
   gap: '8px',
   padding: '8px 4px',
   border: '1px solid ',
-  borderColor: colorVars.gold8,
+  borderColor: colorVars.gold6,
   borderRadius: '8px',
+  backgroundColor: colorVars.gold2,
+  boxShadow: '1px 1px 5px rgb(0 0 0 / 15%)',
 });
 
 const slideUpAndFade = keyframes({

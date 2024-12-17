@@ -10,13 +10,13 @@ import {
 
 export function FeedbackToolbar() {
   return (
-    <Tooltip.Provider>
+    <Tooltip.Provider delayDuration={0}>
       <div className={feedbackToolbarStyle}>
         <Tooltip.Root>
           <Tooltip.Trigger>
             <div className={tooltipTriggerStyle}>
               <a
-                href="https://docs.google.com/forms/d/17xikG5dL7J9--TN7jR1b17OYHT-hOMyA9o95BOLCMGU/edit"
+                href="https://docs.google.com/forms/d/e/1FAIpQLSdTAk4txoJodHy9A48Ghn_53gKOHRIa6h9BB_h4yU-ssqC7iw/viewform"
                 target="_blank"
                 rel="noopener noreferrer"
               >
