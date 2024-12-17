@@ -37,6 +37,7 @@ export function TagAutocompleteDialog({
 }: TagSelectionDialogProps) {
   const [tagInputValue, setTagInputValue] = useState('');
   const [canCreateTag, setCanCreateTag] = useState(false);
+
   const tagInputRef = useRef<HTMLInputElement | null>(null);
   const selectedTagListRef = useRef<HTMLDivElement | null>(null);
   const isCreateFetchPendingRef = useRef<boolean>(false);
@@ -62,8 +63,17 @@ export function TagAutocompleteDialog({
     }
   };
 
+  const checkIsCreatableTag = (value: string) => {
+    const isUnique = !tagList.some((tag) => tag.name === value);
+    const isNotInitialValue = value.trim() !== '';
+    const isCreatable = isUnique && isNotInitialValue;
+
+    setCanCreateTag(isCreatable);
+  };
+
   const clearTagInputValue = () => {
     setTagInputValue('');
+    setCanCreateTag(false);
   };
 
   const onSelectTag = (tag: TagType) => {
@@ -114,14 +124,6 @@ export function TagAutocompleteDialog({
     }
   }, [open]);
 
-  const checkIsCreatableTag = (value: string) => {
-    const isUnique = !tagList.some((tag) => tag.name === tagInputValue);
-    const isNotInitialValue = value.trim() !== '';
-    const isCreatable = isUnique && isNotInitialValue;
-
-    setCanCreateTag(isCreatable);
-  };
-
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange} modal={false}>
       <Dialog.Portal container={container?.current ?? undefined}>
@@ -155,7 +157,7 @@ export function TagAutocompleteDialog({
                   checkIsCreatableTag(value);
                   setTagInputValue(value);
                 }}
-                onKeyUp={onBackspaceKeyPress}
+                onKeyDown={onBackspaceKeyPress}
               />
             </SelectedTagListLayout>
 
