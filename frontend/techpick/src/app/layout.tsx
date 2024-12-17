@@ -7,13 +7,13 @@ import '@/styles/reset.css';
 
 const notoSansKR = Noto_Sans_KR({ weight: 'variable', subsets: ['latin'] });
 export const metadata: Metadata = {
-  title: 'Techpick',
+  title: '바구니 Baguni',
   description: 'quick save, view anywhere',
   icons: {
     icon: '/favicon.ico',
   },
 };
-//
+
 export default function RootLayout({
   children,
 }: Readonly<{
