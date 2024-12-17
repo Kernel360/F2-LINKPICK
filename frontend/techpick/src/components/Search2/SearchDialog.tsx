@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { FilterIcon } from 'lucide-react';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import { eventEmitter } from '@/utils/eventEmitter';
-import FilterToggleContainer from './FilterToggleContainer';
+import FilterContainer from './FilterContainer';
 import HoverCard from './HoverCard';
 import * as styles from './searchDialog.css';
 import { SearchInfiniteScrollList } from './SearchInfiniteScrollList';
@@ -14,11 +13,7 @@ export default function SearchDialog({
   isOpen,
   onOpenChange,
 }: SearchDialogProps) {
-  const [filterVisible, setFilterVisible] = useState(false);
   const { preFetchSearchPicks, reset } = useSearchPickStore();
-  const toggleFilter = () => {
-    setFilterVisible(!filterVisible);
-  };
 
   useEffect(function prefetching() {
     preFetchSearchPicks();
@@ -50,14 +45,8 @@ export default function SearchDialog({
           </DialogPrimitive.Title>
           <div className={styles.searchBar}>
             <SearchInput />
-            <button
-              className={styles.iconButtonContainer}
-              onClick={toggleFilter}
-            >
-              <FilterIcon size={20} />
-            </button>
           </div>
-          <FilterToggleContainer isVisible={filterVisible} />
+          <FilterContainer />
           <div className={styles.searchListContainer}>
             <SearchInfiniteScrollList onClose={handleOnClose} />
             <HoverCard />

@@ -6,9 +6,7 @@ import { createSearchSelectOptions } from '@/utils';
 import FilterOptions from './FilterOptions';
 import * as styles from './searchDialog.css';
 
-export default function FilterToggleContainer({
-  isVisible,
-}: FilterToggleContainerProps) {
+export default function FilterContainer() {
   const { getFolderList } = useTreeStore();
   const folderList = getFolderList();
   const { setSearchFolder, setSearchTag } = useSearchPickStore();
@@ -28,11 +26,7 @@ export default function FilterToggleContainer({
   };
 
   return (
-    <div
-      className={`${styles.filterContainer} ${
-        isVisible ? styles.showFilterContainer : styles.hideFilterContainer
-      }`}
-    >
+    <div className={`${styles.filterContainer} ${styles.showFilterContainer}`}>
       <FilterOptions
         title="폴더"
         icon={<FolderIcon size={18} />}
@@ -51,8 +45,4 @@ export default function FilterToggleContainer({
       />
     </div>
   );
-}
-
-interface FilterToggleContainerProps {
-  isVisible: boolean;
 }

@@ -67,10 +67,6 @@ export const showFilterContainer = style({
   display: 'flex',
 });
 
-export const hideFilterContainer = style({
-  display: 'none',
-});
-
 export const filterGroup = style({
   display: 'flex',
   flexDirection: 'column',
