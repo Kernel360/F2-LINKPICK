@@ -10,24 +10,11 @@
     "128": "./pick128.png"
   },
   "homepage_url": "https://app.baguni.kr",
-  "permissions": [
-    "tabs",
-    "activeTab",
-    "scripting",
-    "cookies",
-    "storage",
-    "contextMenus"
-  ],
+  "permissions": ["tabs", "activeTab", "cookies", "storage", "contextMenus"],
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
-  "content_scripts": [
-    {
-      "matches": ["https://*/*", "http://*/*"],
-      "js": ["contentscript.js"]
-    }
-  ],
   "action": {
     "default_popup": "index.html"
   }

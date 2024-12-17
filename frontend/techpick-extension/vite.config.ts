@@ -29,6 +29,7 @@ function updateManifestPlugin(mode: string): PluginOption {
       manifest.host_permissions = [
         env.VITE_HOST_PERMISSIONS_HTTPS,
         env.VITE_HOST_PERMISSIONS_HTTP,
+        env.VITE_PUBLIC_API,
       ];
 
       if (!fs.existsSync(resolve(__dirname, 'dist'))) {
@@ -54,10 +55,6 @@ export default defineConfig(({ mode }) => {
         input: {
           background: resolve(__dirname, 'src/chrome-extension/background.ts'),
           popup: resolve(__dirname, './index.html'),
-          contentscript: resolve(
-            __dirname,
-            './src/chrome-extension/contentscript.ts'
-          ),
         },
         output: {
           entryFileNames: '[name].js',
