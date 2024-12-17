@@ -12,12 +12,9 @@ export default function ShortcutKey() {
    */
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     const isMac = isMacOS();
-    console.log('isMac', isMac);
 
     if (isMac) {
       if (e.metaKey && e.key === 'p') {
-        console.log('log meta p');
-
         e.preventDefault();
         eventEmitter.emit(OPEN_SEARCH_DIALOG_EVENT);
       }
