@@ -6,6 +6,7 @@ export const popoverTriggerStyle = style({
   flexShrink: 0,
   gap: '4px',
   alignItems: 'center',
+  width: '100px',
   fontSize: '12px',
   cursor: 'pointer',
 });

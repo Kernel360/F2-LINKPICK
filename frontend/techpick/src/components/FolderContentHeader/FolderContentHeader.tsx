@@ -9,6 +9,7 @@ import {
   createPickPopoverButtonLayoutStyle,
   folderContentHeaderLayoutStyle,
   folderContentHeaderStyle,
+  folderDescriptionStyle,
 } from './folderContentHeader.css';
 import { CreatePickPopoverButton } from '../CreatePickPopover/CreatePickPopoverButton';
 
@@ -21,7 +22,7 @@ export function FolderContentHeader() {
     <div className={folderContentHeaderLayoutStyle}>
       <Gap verticalSize="gap16" horizontalSize="gap24">
         <div className={folderContentHeaderStyle}>
-          <div>
+          <div className={folderDescriptionStyle}>
             <CurrentFolderNameSection folderInfo={folderInfo} />
             {folderInfo?.folderType === 'GENERAL' && (
               <Gap verticalSize="gap4">

@@ -19,3 +19,7 @@ export const folderContentHeaderStyle = style({
   display: 'flex',
   justifyContent: 'space-between',
 });
+
+export const folderDescriptionStyle = style({
+  minWidth: '0',
+});
