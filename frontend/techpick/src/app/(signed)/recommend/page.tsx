@@ -73,7 +73,8 @@ export default function RecommendPage() {
             <div className={recommendedPickCarouselSectionStyle}>
               <div className={recommendedPickCarouselStyle}>
                 <h2 className={recommendSectionDescription}>
-                  오늘 가장 <span className={pointTextStyle}>핫한</span> 픽 🔥
+                  오늘 가장 <span className={pointTextStyle}>핫한</span> 북마크
+                  🔥
                 </h2>
               </div>
               <Gap verticalSize="gap12" />
@@ -89,7 +90,7 @@ export default function RecommendPage() {
               <div className={recommendedPickCarouselStyle}>
                 <h2 className={recommendSectionDescription}>
                   이번 주 가장 많이
-                  <span className={pointTextStyle}> 본</span> 픽 👀
+                  <span className={pointTextStyle}> 본</span> 북마크 👀
                 </h2>
               </div>
               <Gap verticalSize="gap12" />
@@ -105,7 +106,7 @@ export default function RecommendPage() {
               <div className={recommendedPickCarouselStyle}>
                 <h2 className={recommendSectionDescription}>
                   다른 사용자가 가장 많이
-                  <span className={pointTextStyle}> 저장한</span> 픽 ⭐
+                  <span className={pointTextStyle}> 저장한</span> 북마크 ⭐
                 </h2>
               </div>
               <Gap verticalSize="gap12" />

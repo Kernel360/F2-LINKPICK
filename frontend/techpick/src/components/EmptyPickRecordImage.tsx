@@ -11,8 +11,8 @@ import {
 import { Gap } from './Gap';
 
 export function EmptyPickRecordImage({
-  title = '픽이 없습니다',
-  description = '픽을 추가해보세요!',
+  title = '북마크가 없습니다',
+  description = '북마크를 추가해보세요!',
 }: EmptyPickRecordImageProps) {
   const container = useRef<HTMLDivElement>(null);
 

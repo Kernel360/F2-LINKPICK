@@ -30,7 +30,7 @@ export function CreatePickPopoverButton() {
 
     const pick = await getPickByUrl(urlValue);
     if (pick.exist) {
-      notifyError('이미 픽이 존재합니다.');
+      notifyError('이미 북마크가 존재합니다.');
       return;
     }
 

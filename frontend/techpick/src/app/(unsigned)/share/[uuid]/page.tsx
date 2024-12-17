@@ -60,8 +60,8 @@ export default function Page() {
         <PickRecordHeader />
         {pickList.length === 0 ? (
           <EmptyPickRecordImage
-            title="공유된 픽이 없습니다."
-            description="폴더 내 공유된 픽이 존재하지 않습니다."
+            title="공유된 북마크가 없습니다."
+            description="폴더 내 공유된 북마크가 존재하지 않습니다."
           />
         ) : (
           pickList.map((pick) => {

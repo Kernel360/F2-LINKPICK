@@ -59,7 +59,7 @@ export default function RecycleBinFolderPage() {
         {pickList.length === 0 ? (
           <EmptyPickRecordImage
             title="휴지통이 비어있습니다."
-            description="삭제하고 싶은 픽이 있다면 이곳으로 옮겨주세요!"
+            description="삭제하고 싶은 북마크가 있다면 이곳으로 옮겨주세요!"
           />
         ) : (
           <PickDraggableListLayout

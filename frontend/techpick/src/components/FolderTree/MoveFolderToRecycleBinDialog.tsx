@@ -74,7 +74,7 @@ export function MoveFolderToRecycleBinDialog({
             <Dialog.Description
               className={moveRecycleBinDialogDescriptionStyle}
             >
-              픽은 남지만 폴더는 사라집니다.
+              북마크는 남지만 폴더는 사라집니다.
             </Dialog.Description>
           </div>
 
