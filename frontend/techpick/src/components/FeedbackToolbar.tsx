@@ -2,7 +2,7 @@ import Image from 'next/image';
 import * as Tooltip from '@radix-ui/react-tooltip';
 import { FileQuestionIcon, CircleAlertIcon } from 'lucide-react';
 import {
-  qnaSection,
+  feedbackToolbarStyle,
   tooltipArrow,
   tooltipContent,
   tooltipTriggerStyle,
@@ -11,7 +11,7 @@ import {
 export function FeedbackToolbar() {
   return (
     <Tooltip.Provider>
-      <div className={qnaSection}>
+      <div className={feedbackToolbarStyle}>
         <Tooltip.Root>
           <Tooltip.Trigger>
             <div className={tooltipTriggerStyle}>
@@ -62,7 +62,7 @@ export function FeedbackToolbar() {
           <Tooltip.Trigger>
             <div className={tooltipTriggerStyle}>
               <a
-                href="https://chromewebstore.google.com/detail/techpick-extension/gfkkgllophliamkdclhekgfiohnbdddl"
+                href="https://chromewebstore.google.com/detail/%EB%B0%94%EA%B5%AC%EB%8B%88-%EC%9D%B5%EC%8A%A4%ED%85%90%EC%85%98/gfkkgllophliamkdclhekgfiohnbdddl"
                 target="_blank"
                 rel="noopener noreferrer"
               >
