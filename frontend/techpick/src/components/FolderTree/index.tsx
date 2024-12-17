@@ -9,7 +9,7 @@ import { HorizontalResizableContainer } from './HorizontalResizableContainer';
 import { MyPageLinkItem } from './MyPagLinkItem';
 import { SearchBar } from './SearchBar';
 import { ShowCreateFolderInputButton } from './ShowCreateFolderInputButton';
-import { treeLayout, treeNodeLayoutStyle } from './tree.css';
+import { emptySpaceStyle, treeLayout, treeNodeLayoutStyle } from './tree.css';
 import { TreeNode } from './TreeNode';
 
 export function FolderTree() {
@@ -38,6 +38,7 @@ export function FolderTree() {
 
         <div className={treeNodeLayoutStyle}>
           {<TreeNode id={rootFolderId} depth={0} />}
+          <div className={emptySpaceStyle}></div>
         </div>
         <MyPageLinkItem />
       </div>

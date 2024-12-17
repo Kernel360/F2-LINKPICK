@@ -47,3 +47,8 @@ export const treeNodeLayoutStyle = style({
   overflowY: 'scroll',
   height: 'calc(100vh - 330px)',
 });
+
+export const emptySpaceStyle = style({
+  width: '100%',
+  height: '36px',
+});

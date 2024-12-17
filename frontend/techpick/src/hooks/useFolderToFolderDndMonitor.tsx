@@ -74,7 +74,7 @@ export function useFolderToFolderDndMonitor() {
     });
   };
 
-  const onDragEnd = (event: DragEndEvent) => {
+  const onDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     setIsDragging(false);
 
@@ -89,11 +89,19 @@ export function useFolderToFolderDndMonitor() {
       return;
     }
 
-    moveFolder({
+    await moveFolder({
       from: active,
       to: over,
       selectedFolderList,
     });
+
+    const selectedListLastFolderId =
+      selectedFolderList[selectedFolderList.length - 1];
+    const id = `#folderId-${selectedListLastFolderId}`;
+    const targetElement = document.querySelector(id);
+    if (targetElement) {
+      targetElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
   };
 
   useDndMonitor({
