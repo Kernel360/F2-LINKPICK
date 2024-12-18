@@ -132,15 +132,6 @@ public class PickDataHandler {
 		Pick pick = pickRepository.findById(command.id()).orElseThrow(ApiPickException::PICK_NOT_FOUND);
 		pick.updateTitle(command.title());
 
-		if (command.parentFolderId() != null) {
-			Folder parentFolder = pick.getParentFolder();
-			Folder destinationFolder = folderRepository.findById(command.parentFolderId())
-													   .orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
-
-			detachPickFromParentFolder(pick, parentFolder);
-			attachPickToParentFolder(pick, destinationFolder);
-			updatePickParentFolder(pick, destinationFolder);
-		}
 		if (command.tagIdOrderedList() != null) {
 			updateNewTagIdList(pick, command.tagIdOrderedList());
 		}
