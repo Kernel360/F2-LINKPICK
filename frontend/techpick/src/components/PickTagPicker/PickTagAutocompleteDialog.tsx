@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import type { CSSProperties, KeyboardEvent } from 'react';
 import { DialogTitle, Description } from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
@@ -118,16 +118,13 @@ export function PickTagAutocompleteDialog({
     }
   };
 
-  useEffect(
-    function checkIsCreatableTag() {
-      const isUnique = !tagList.some((tag) => tag.name === tagInputValue);
-      const isNotInitialValue = tagInputValue.trim() !== '';
-      const isCreatable = isUnique && isNotInitialValue;
+  const checkIsCreatableTag = (value: string) => {
+    const isUnique = !tagList.some((tag) => tag.name === value.trim());
+    const isNotInitialValue = value.trim() !== '';
+    const isCreatable = isUnique && isNotInitialValue;
 
-      setCanCreateTag(isCreatable);
-    },
-    [tagInputValue, tagList]
-  );
+    setCanCreateTag(isCreatable);
+  };
 
   return (
     <Command.Dialog
@@ -168,8 +165,11 @@ export function PickTagAutocompleteDialog({
           className={commandInputStyle}
           ref={tagInputRef}
           value={tagInputValue}
-          onValueChange={setTagInputValue}
-          onKeyUp={onBackspaceKeyPress}
+          onValueChange={(value) => {
+            checkIsCreatableTag(value);
+            setTagInputValue(value);
+          }}
+          onKeyDown={onBackspaceKeyPress}
         />
       </SelectedTagListLayout>
       {/**전체 태그 리스트 */}

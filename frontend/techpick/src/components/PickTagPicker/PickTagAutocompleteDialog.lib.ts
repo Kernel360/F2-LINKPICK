@@ -11,9 +11,9 @@ export const filterCommandItems = (
     return 0.0001; // 낮은 우선순위
   }
 
-  const extendValue = value + ' ' + keywordString;
+  const extendValue = value.trim() + ' ' + keywordString;
 
-  return extendValue.includes(search) ? 1 : 0;
+  return extendValue.includes(search.trim()) ? 1 : 0;
 };
 
 export const MAXIMUM_INT_RANGE = 512;
