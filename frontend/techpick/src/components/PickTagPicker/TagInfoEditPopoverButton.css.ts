@@ -36,12 +36,19 @@ export const popoverOverlayStyle = style({
   zIndex: 9999,
 });
 
-export const floatingOverlayRefStyle = style({
-  width: 0,
-  position: 'absolute',
-});
+export const popoverTriggerButtonStyle = style({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '20px',
+  height: '20px',
+  border: '1px solid transparent',
+  backgroundColor: 'transparent',
+  cursor: 'pointer',
+  color: colorVars.color.font,
 
-export const floatingOverlayStyle = style({
-  width: '100vw',
-  height: '100vh',
+  ':hover': {
+    backgroundColor: colorVars.color.popoverButtonHover,
+    transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
+  },
 });
