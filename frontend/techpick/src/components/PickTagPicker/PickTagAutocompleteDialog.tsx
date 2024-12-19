@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties, KeyboardEvent } from 'react';
-import { DialogTitle, Description } from '@radix-ui/react-dialog';
+import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Command } from 'cmdk';
 import { BarLoader } from 'react-spinners';
@@ -42,6 +42,7 @@ export function PickTagAutocompleteDialog({
   selectedTagList,
   floatingStyles,
   setFloating,
+  container,
 }: PickTagAutocompleteDialogProps) {
   const [tagInputValue, setTagInputValue] = useState('');
   const [canCreateTag, setCanCreateTag] = useState(false);
@@ -50,11 +51,12 @@ export function PickTagAutocompleteDialog({
   const isCreateFetchPendingRef = useRef<boolean>(false);
   const randomNumber = useRef<number>(getRandomInt());
   const tagIdOrderedList = selectedTagList.map((tag) => tag.id);
-  const tagAutocompleteDialogRef = useRef<HTMLDivElement>(null);
   const { tagList, fetchingTagState, createTag } = useTagStore();
-  const { updatePickInfo } = usePickStore();
-  const { isDarkMode } = useThemeStore();
-  const { setCurrentUpdateTagPickIdToNull } = useUpdatePickStore();
+  const updatePickInfo = usePickStore((state) => state.updatePickInfo);
+  const isDarkMode = useThemeStore((state) => state.isDarkMode);
+  const setCurrentUpdateTagPickIdToNull = useUpdatePickStore(
+    (state) => state.setCurrentUpdateTagPickIdToNull
+  );
 
   const focusTagInput = () => {
     tagInputRef.current?.focus();
@@ -107,7 +109,11 @@ export function PickTagAutocompleteDialog({
   };
 
   const onBackspaceKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Backspace' && tagInputValue === '') {
+    if (
+      event.key === 'Backspace' &&
+      tagInputValue === '' &&
+      0 < tagIdOrderedList.length
+    ) {
       const newTagIdOrderedList = [...tagIdOrderedList];
       newTagIdOrderedList.pop();
 
@@ -126,110 +132,124 @@ export function PickTagAutocompleteDialog({
     setCanCreateTag(isCreatable);
   };
 
+  useEffect(
+    function onOpenPickTagAutocompleteDialog() {
+      if (open) {
+        requestAnimationFrame(() => {
+          focusTagInput();
+        });
+      }
+    },
+    [open]
+  );
+
   return (
-    <Command.Dialog
+    <Dialog.Root
       open={open}
       onOpenChange={(open) => {
         if (!open) {
           setCurrentUpdateTagPickIdToNull();
         }
-
         onOpenChange(open);
       }}
-      className={tagDialogPortalLayout}
-      filter={filterCommandItems}
-      style={{ ...floatingStyles }}
-      ref={setFloating}
     >
-      <VisuallyHidden.Root>
-        <DialogTitle>tag autocomplete</DialogTitle>
-        <Description>select tag</Description>
-      </VisuallyHidden.Root>
+      <Dialog.Portal container={container}>
+        <Dialog.Overlay style={{ zIndex: 1 }} />
+        <Dialog.Content
+          style={{ ...floatingStyles }}
+          ref={setFloating}
+          className={tagDialogPortalLayout}
+        >
+          <VisuallyHidden.Root>
+            <Dialog.Title>tag autocomplete</Dialog.Title>
+            <Dialog.Description>select tag</Dialog.Description>
+          </VisuallyHidden.Root>
 
-      {/**선택한 태그 리스트 */}
-      <SelectedTagListLayout ref={selectedTagListRef} focusStyle="focus">
-        {selectedTagList.map((tag) => (
-          <SelectedTagItem key={tag.id} tag={tag}>
-            <DeselectTagButton
-              tag={tag}
-              onClick={() => {
-                focusTagInput();
-              }}
-              pickInfo={pickInfo}
-              selectedTagList={selectedTagList}
-            />
-          </SelectedTagItem>
-        ))}
+          <Command filter={filterCommandItems}>
+            {/**선택한 태그 리스트 */}
+            <SelectedTagListLayout ref={selectedTagListRef} focusStyle="focus">
+              {selectedTagList.map((tag) => (
+                <SelectedTagItem key={tag.id} tag={tag}>
+                  <DeselectTagButton
+                    tag={tag}
+                    onClick={() => {
+                      focusTagInput();
+                    }}
+                    pickInfo={pickInfo}
+                    selectedTagList={selectedTagList}
+                  />
+                </SelectedTagItem>
+              ))}
 
-        <Command.Input
-          className={commandInputStyle}
-          ref={tagInputRef}
-          value={tagInputValue}
-          onValueChange={(value) => {
-            checkIsCreatableTag(value);
-            setTagInputValue(value);
-          }}
-          onKeyDown={onBackspaceKeyPress}
-        />
-      </SelectedTagListLayout>
-      {/**전체 태그 리스트 */}
+              <Command.Input
+                className={commandInputStyle}
+                ref={tagInputRef}
+                value={tagInputValue}
+                onValueChange={(value) => {
+                  checkIsCreatableTag(value);
+                  setTagInputValue(value);
+                }}
+                onKeyDown={onBackspaceKeyPress}
+              />
+            </SelectedTagListLayout>
 
-      <Command.List className={tagListStyle}>
-        {fetchingTagState.isPending && (
-          <Command.Loading className={tagListLoadingStyle}>
-            <BarLoader color={colorVars.color.font} />
-          </Command.Loading>
-        )}
+            {/**전체 태그 리스트 */}
 
-        {(!fetchingTagState.isPending || tagInputValue.trim()) !== '' && (
-          <Command.Empty className={tagListItemStyle}>
-            태그를 만들어보세요!
-          </Command.Empty>
-        )}
+            <Command.List className={tagListStyle}>
+              {fetchingTagState.isPending && (
+                <Command.Loading className={tagListLoadingStyle}>
+                  <BarLoader color={colorVars.color.font} />
+                </Command.Loading>
+              )}
 
-        {tagList.map((tag) => (
-          <Command.Item
-            key={tag.id}
-            className={tagListItemStyle}
-            onSelect={() => onSelectTag(tag)}
-            keywords={[tag.name]}
-          >
-            <SelectedTagItem key={tag.id} tag={tag} />
-            <TagInfoEditPopoverButton
-              tag={tag}
-              floatingPortalRootRef={tagAutocompleteDialogRef}
-            />
-          </Command.Item>
-        ))}
+              {(!fetchingTagState.isPending || tagInputValue.trim()) !== '' && (
+                <Command.Empty className={tagListItemStyle}>
+                  태그를 만들어보세요!
+                </Command.Empty>
+              )}
 
-        {canCreateTag && (
-          <Command.Item
-            className={tagListItemStyle}
-            value={tagInputValue}
-            keywords={[CREATABLE_TAG_KEYWORD]}
-            onSelect={onSelectCreatableTag}
-            disabled={!canCreateTag}
-          >
-            <span
-              className={tagListItemContentStyle}
-              style={{
-                backgroundColor: numberToRandomColor(
-                  randomNumber.current,
-                  isDarkMode ? 'dark' : 'light'
-                ),
-              }}
-            >
-              {tagInputValue}
-            </span>
-            <span className={tagCreateTextStyle}>생성</span>
-          </Command.Item>
-        )}
-      </Command.List>
+              {tagList.map((tag) => (
+                <Command.Item
+                  key={tag.id}
+                  className={tagListItemStyle}
+                  onSelect={() => onSelectTag(tag)}
+                  keywords={[tag.name]}
+                >
+                  <SelectedTagItem key={tag.id} tag={tag} />
+                  <TagInfoEditPopoverButton tag={tag} container={container} />
+                </Command.Item>
+              ))}
 
-      {/**DeleteTagDialog를 닫고도 Command.Dialog가 켜져있기위해서 Command.Dialog 내부에 있어야합니다.*/}
-      <DeleteTagDialog />
-      <div ref={tagAutocompleteDialogRef}></div>
-    </Command.Dialog>
+              {canCreateTag && (
+                <Command.Item
+                  className={tagListItemStyle}
+                  value={tagInputValue}
+                  keywords={[CREATABLE_TAG_KEYWORD]}
+                  onSelect={onSelectCreatableTag}
+                  disabled={!canCreateTag}
+                >
+                  <span
+                    className={tagListItemContentStyle}
+                    style={{
+                      backgroundColor: numberToRandomColor(
+                        randomNumber.current,
+                        isDarkMode ? 'dark' : 'light'
+                      ),
+                    }}
+                  >
+                    {tagInputValue}
+                  </span>
+                  <span className={tagCreateTextStyle}>생성</span>
+                </Command.Item>
+              )}
+            </Command.List>
+
+            {/**DeleteTagDialog를 닫고도 Command.Dialog가 켜져있기위해서 Command.Dialog 내부에 있어야합니다.*/}
+            <DeleteTagDialog />
+          </Command>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
 
@@ -241,4 +261,5 @@ interface PickTagAutocompleteDialogProps {
   setFloating: ((node: HTMLElement | null) => void) &
     ((node: HTMLElement | null) => void);
   floatingStyles: CSSProperties;
+  container: HTMLDivElement | null;
 }

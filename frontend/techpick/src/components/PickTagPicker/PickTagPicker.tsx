@@ -1,6 +1,6 @@
 'use client';
 
-import { forwardRef, useState } from 'react';
+import { forwardRef, useRef, useState } from 'react';
 import { autoUpdate, shift, useFloating } from '@floating-ui/react';
 import { useUpdatePickStore } from '@/stores';
 import { SelectedTagItem } from '../SelectedTagItem';
@@ -16,6 +16,7 @@ import { PickInfoType, TagType } from '@/types';
 export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
   function PickTagPickerWithRef({ pickInfo, selectedTagList }, tabFocusRef) {
     const [open, setOpen] = useState(false);
+    const pickTagPickerContainerRef = useRef<HTMLDivElement>(null);
     const { setCurrentUpdateTagPickId } = useUpdatePickStore();
     const { refs, floatingStyles } = useFloating({
       strategy: 'fixed',
@@ -44,7 +45,7 @@ export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
     };
 
     return (
-      <div>
+      <div ref={pickTagPickerContainerRef}>
         <div ref={refs.setReference} />
         <div className={tagPickerLayout}>
           <div
@@ -71,6 +72,7 @@ export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
             selectedTagList={selectedTagList}
             setFloating={refs.setFloating}
             floatingStyles={floatingStyles}
+            container={pickTagPickerContainerRef.current}
           />
         </div>
       </div>
