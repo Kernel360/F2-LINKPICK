@@ -22,7 +22,7 @@ public class RankingService {
 		var before30Days = currentDay.minusDays(30);
 
 		var dailyViewRanking = // 오늘
-			rankingApi.getUrlRankingByViewCount(before1Day, currentDay, limit).getBody();
+			rankingApi.getUrlRankingByViewCount(currentDay, currentDay, limit).getBody();
 
 		var past7DaysViewRanking = // 일주일 전 ~ 어제
 			rankingApi.getUrlRankingByViewCount(before7Days, before1Day, limit).getBody();
