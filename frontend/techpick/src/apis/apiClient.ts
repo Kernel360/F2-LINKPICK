@@ -7,6 +7,7 @@ import { returnErrorFromHTTPError } from './error';
 export const apiClient = ky.create({
   credentials: 'include',
   prefixUrl: process.env.NEXT_PUBLIC_API,
+  cache: 'no-store',
   hooks: {
     beforeError: [
       async (httpError) => {
