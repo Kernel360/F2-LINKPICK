@@ -1,27 +1,35 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { usePickStore } from '@/stores';
 
 export function useResetPickFocusOnOutsideClick() {
-  const { setSelectedPickIdList } = usePickStore();
+  const setSelectedPickIdList = usePickStore(
+    (state) => state.setSelectedPickIdList
+  );
 
-  const resetFocus = (e: MouseEvent) => {
-    if (
-      e.target instanceof Element &&
-      e.target.closest('[data-pick-draggable="true"]') // draggable item에 추가해야합니다.
-    ) {
-      return;
-    }
+  const resetFocus = useCallback(
+    (e: MouseEvent) => {
+      if (
+        e.target instanceof Element &&
+        e.target.closest('[data-pick-draggable="true"]') // draggable item에 추가해야합니다.
+      ) {
+        return;
+      }
 
-    setSelectedPickIdList([]);
-  };
+      setSelectedPickIdList([]);
+    },
+    [setSelectedPickIdList]
+  );
 
-  useEffect(function addResetFocusOnOutsideClickEvent() {
-    window.addEventListener('mousedown', resetFocus);
+  useEffect(
+    function addResetFocusOnOutsideClickEvent() {
+      window.addEventListener('mousedown', resetFocus);
 
-    return () => {
-      window.removeEventListener('mousedown', resetFocus);
-    };
-  }, []);
+      return () => {
+        window.removeEventListener('mousedown', resetFocus);
+      };
+    },
+    [resetFocus]
+  );
 }
