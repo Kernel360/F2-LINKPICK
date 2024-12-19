@@ -55,6 +55,7 @@ export function SharePickRecord({
       className={pickRecordLayoutStyle}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={onClickLink}
     >
       <PickImageColumnLayout>
         <div className={pickImageStyle}>
@@ -66,7 +67,7 @@ export function SharePickRecord({
         </div>
       </PickImageColumnLayout>
       {isHovered && (
-        <div className={linkLayoutStyle} onClick={onClickLink}>
+        <div className={linkLayoutStyle}>
           <ExternalLinkIcon className={externalLinkIconStyle} strokeWidth={2} />
         </div>
       )}
