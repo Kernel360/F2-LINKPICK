@@ -46,7 +46,7 @@ public class PickRankingService {
 	public List<UrlWithCount> getDailyLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
 		assertDateIsValid(startDate, endDate);
 		var pickViewCountList = linkViewCountRepository.findByDateBetween(
-			startDate.minusDays(1), endDate.plusDays(1)
+			startDate, endDate.plusDays(1)
 		);
 		return MapUtil.sortByValue(toUrlCountPair(pickViewCountList), MapUtil.SortBy.DESCENDING)
 					  .entrySet().stream()
