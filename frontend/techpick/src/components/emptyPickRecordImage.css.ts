@@ -14,6 +14,7 @@ export const emptyPickRecordTextLayoutStyle = style({
   position: 'absolute',
   top: '20%',
   left: '50%',
+  minWidth: '600px',
   transform: 'translate(-50%, -50%)',
   textAlign: 'center',
 });
