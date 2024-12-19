@@ -54,11 +54,6 @@ export function TagInfoEditPopoverButton({
   };
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === ' ' && tagNameInputRef.current) {
-      tagNameInputRef.current.value += ' ';
-      e.preventDefault();
-    }
-
     if (e.key === 'Enter') {
       e.preventDefault();
       handleSubmit();
