@@ -66,7 +66,13 @@ export function CreatePickPopoverButton() {
           >
             <label className={inputLabelStyle} htmlFor="create-pick-input">
               URL
+              {urlInputValue !== '' && !urlInputValue.startsWith('http') && (
+                <span className={wrongDescriptionTextStyle}>
+                  잘못된 url 형식입니다.
+                </span>
+              )}
             </label>
+
             <input
               id="create-pick-input"
               className={urlInputStyle}
@@ -75,13 +81,6 @@ export function CreatePickPopoverButton() {
                 setUrlInputValue(e.target.value);
               }}
             />
-            <div>
-              {urlInputValue !== '' && !urlInputValue.startsWith('http') && (
-                <p className={wrongDescriptionTextStyle}>
-                  잘못된 url 형식입니다.
-                </p>
-              )}
-            </div>
 
             <button className={createPickButtonStyle}>생성</button>
           </form>

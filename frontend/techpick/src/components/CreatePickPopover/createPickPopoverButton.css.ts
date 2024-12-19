@@ -66,6 +66,9 @@ export const createPickButtonStyle = style({
 });
 
 export const wrongDescriptionTextStyle = style({
+  display: 'inline-block',
+  paddingLeft: '4px',
   fontSize: '12px',
+  fontWeight: '400',
   color: colorVars.red11,
 });
