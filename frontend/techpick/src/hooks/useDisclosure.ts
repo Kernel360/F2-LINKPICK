@@ -17,5 +17,5 @@ export function useDisclosure() {
     setIsOpen((isOpen) => !isOpen);
   };
 
-  return { isOpen, onOpen, onClose, onToggle };
+  return { isOpen, onOpen, onClose, onToggle, setIsOpen };
 }
