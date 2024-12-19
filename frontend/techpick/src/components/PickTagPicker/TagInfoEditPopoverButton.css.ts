@@ -48,7 +48,7 @@ export const popoverTriggerButtonStyle = style({
   color: colorVars.color.font,
 
   ':hover': {
-    backgroundColor: colorVars.color.popoverButtonHover,
+    backgroundColor: colorVars.gold5,
     transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
   },
 });
