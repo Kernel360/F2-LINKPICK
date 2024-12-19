@@ -28,6 +28,10 @@ public class PickRankingService {
 	private final LinkPickedCountRepository linkPickedCountRepository;
 
 	/**
+	 * Spring Data Mongo 는 Between 쿼리가 GT / LT 입니다.
+	 * 따라서 오늘 하루만 얻고 싶다면, 인자에 오늘을 넣어야 합니다.
+	 * ex. getDailyLinksOrderByViewCount( today , today );
+	 *
 	 * @author minkyeu kim
 	 *     ---------------------------------------------
 	 *     지금은 단순히 A~B 기간을 조회 후 연산을 해서 랭크표를 반환한다.
@@ -43,10 +47,11 @@ public class PickRankingService {
 	 */
 	@Cacheable(cacheNames = CacheType.CACHE_NAME.DAILY_LINK_RANK)
 	@BaguniAnnotation.MeasureTime
-	public List<UrlWithCount> getDailyLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
-		assertDateIsValid(startDate, endDate);
+	public List<UrlWithCount> getDailyLinksOrderByViewCount(LocalDate today, int limit) {
+		// today : 12/19 (Between = GT / LT)
+		// 12/18 < ? < 12/20 로 조회해야 오늘 데이터를 받아올 수 있습니다.
 		var pickViewCountList = linkViewCountRepository.findByDateBetween(
-			startDate.minusDays(1), endDate.plusDays(1)
+			today.minusDays(1), today.plusDays(1)
 		);
 		return MapUtil.sortByValue(toUrlCountPair(pickViewCountList), MapUtil.SortBy.DESCENDING)
 					  .entrySet().stream()
@@ -63,7 +68,6 @@ public class PickRankingService {
 	@Cacheable(cacheNames = CacheType.CACHE_NAME.WEEKLY_LINK_RANK)
 	@BaguniAnnotation.MeasureTime
 	public List<UrlWithCount> getWeeklyLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
-		assertDateIsValid(startDate, endDate);
 		var pickViewCountList = linkViewCountRepository.findByDateBetween(
 			startDate.minusDays(1), endDate.plusDays(1)
 		);
@@ -87,7 +91,6 @@ public class PickRankingService {
 	@Cacheable(cacheNames = CacheType.CACHE_NAME.MONTHLY_PICK_RANK)
 	@BaguniAnnotation.MeasureTime
 	public List<UrlWithCount> getLinksOrderByPickedCount(LocalDate startDate, LocalDate endDate, int limit) {
-		assertDateIsValid(startDate, endDate);
 		var pickCreateCountList = linkPickedCountRepository.findByDateBetween(
 			startDate.minusDays(1), endDate.plusDays(1)
 		);
@@ -96,15 +99,6 @@ public class PickRankingService {
 					  .map(v -> new UrlWithCount(v.getKey(), v.getValue()))
 					  .limit(limit)
 					  .toList();
-	}
-
-	private void assertDateIsValid(LocalDate startDate, LocalDate endDate) {
-		if (startDate == null || endDate == null)
-			throw ApiRankException.INVALID_DATE_RANGE();
-		if (startDate.isAfter(endDate))
-			throw ApiRankException.INVALID_DATE_RANGE();
-		if (startDate.isAfter(LocalDate.now()))
-			throw ApiRankException.INVALID_DATE_RANGE();
 	}
 
 	private <T extends UrlCount> Map<String, Long> toUrlCountPair(List<T> list) {

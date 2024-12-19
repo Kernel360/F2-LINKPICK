@@ -46,8 +46,8 @@ public class RankingController {
 	) {
 		int days = Period.between(date_begin, date_end).getDays();
 		List<UrlWithCount> result;
-		if (days == 1) {
-			result = pickRankingService.getDailyLinksOrderByViewCount(date_begin, date_end, limit);
+		if (days == 0) {
+			result = pickRankingService.getDailyLinksOrderByViewCount(date_begin, limit);
 		} else {
 			result = pickRankingService.getWeeklyLinksOrderByViewCount(date_begin, date_end, limit);
 		}
