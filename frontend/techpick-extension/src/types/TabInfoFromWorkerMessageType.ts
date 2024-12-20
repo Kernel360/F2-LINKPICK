@@ -1,5 +1,7 @@
+import { GetOgTagDataResponseType } from './GetOgTagDataResponseType';
+
 export type TabInfoFromWorkerMessageType = {
-  htmlText: string;
+  ogData: GetOgTagDataResponseType;
   url: string;
   title: string;
 };

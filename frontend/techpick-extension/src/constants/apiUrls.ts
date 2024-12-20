@@ -17,4 +17,10 @@ export const API_URLS = {
   getMoveTagsUrl: function () {
     return `${this.getTagsUrl}/location`;
   },
+  getLinkUrl: function () {
+    return 'links';
+  },
+  getLinkOGData: function (url: string) {
+    return `${this.getLinkUrl()}?url=${url}`;
+  },
 };

@@ -8,6 +8,8 @@ import {
   GET_TAB_HTML_TEXT_FROM_WORKER_PORT_NAME,
   REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE,
 } from '@/constants';
+import { getOgDataByUrl } from '@/apis';
+import { GetOgTagDataResponseType } from '@/types';
 
 /**
  * @description 테마를 익스텐션 로컬 호스트에서 불러오는 함수입니다.
@@ -53,7 +55,12 @@ chrome.runtime.onConnect.addListener(function changeThemeState(port) {
   });
 });
 
-let currentTabHtml = '';
+let ogData: GetOgTagDataResponseType = {
+  url: '',
+  title: '',
+  description: '',
+  imageUrl: '',
+};
 
 /**
  * @description 탭이 업데이트될 때마다 탭의 정보를 가져옵니다.
@@ -65,10 +72,14 @@ chrome.tabs.onUpdated.addListener(async (_tabId, changeInfo, tab) => {
     tab.url.startsWith('http')
   ) {
     try {
-      const response = await fetch(tab.url);
-      currentTabHtml = await response.text();
+      ogData = await getOgDataByUrl(tab.url);
     } catch {
-      currentTabHtml = '';
+      ogData = {
+        url: tab.url,
+        title: tab.title ?? '',
+        description: '',
+        imageUrl: '',
+      };
     }
   }
 });
@@ -80,13 +91,22 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
   const tab = await chrome.tabs.get(activeInfo.tabId);
   if (tab.url && tab.url.startsWith('http')) {
     try {
-      const response = await fetch(tab.url);
-      currentTabHtml = await response.text();
+      ogData = await getOgDataByUrl(tab.url);
     } catch {
-      currentTabHtml = '';
+      ogData = {
+        url: tab.url,
+        title: tab.title ?? '',
+        description: '',
+        imageUrl: '',
+      };
     }
   } else {
-    currentTabHtml = '';
+    ogData = {
+      url: tab.url ?? '',
+      title: tab.title ?? '',
+      description: '',
+      imageUrl: '',
+    };
   }
 });
 
@@ -102,11 +122,21 @@ chrome.runtime.onConnect.addListener(function getHtmlText(port) {
     if (message === REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE) {
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         const activeTab = tabs[0];
-        port.postMessage({
-          htmlText: currentTabHtml,
-          url: activeTab.url,
-          title: activeTab.title,
-        });
+        getOgDataByUrl(activeTab.url ?? '')
+          .then((ogData) => {
+            port.postMessage({
+              ogData,
+              url: activeTab.url,
+              title: activeTab.title,
+            });
+          })
+          .catch(() => {
+            port.postMessage({
+              ogData,
+              url: activeTab.url,
+              title: activeTab.title,
+            });
+          });
       });
     }
   });
