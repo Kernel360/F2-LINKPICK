@@ -7,7 +7,7 @@
 
 
 ## 팀원 소개
-| **[팀장 : 김민규](https://github.com/kimminkyeu)** | **[팀원 : 박수형](https://github.com/Gyaak)** | **[팀원 : 양상원](https://github.com/sangwonsheep)** |
+| **[김민규](https://github.com/kimminkyeu)** | **[박수형](https://github.com/Gyaak)** | **[양상원](https://github.com/sangwonsheep)** |
 | :-: | :-: | :-: |
 | <a href="https://github.com/kimminkyeu"><img src="https://avatars.githubusercontent.com/kimminkyeu" width=200px /> | <a href="https://github.com/Gyaak"><img src="https://avatars.githubusercontent.com/Gyaak" width=200px /> | <a href="https://github.com/sangwonsheep"><img src="https://avatars.githubusercontent.com/sangwonsheep" width=200px /> |
 | Backend | Backend | Backend |
