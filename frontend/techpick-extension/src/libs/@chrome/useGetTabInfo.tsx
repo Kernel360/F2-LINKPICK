@@ -31,8 +31,6 @@ export function useGetTabInfo() {
       port.postMessage(REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE);
 
       port.onMessage.addListener((msg: TabInfoFromWorkerMessageType) => {
-        console.log('msg.ogData.imageUrl,', msg.ogData.imageUrl);
-
         setTabInfo({
           title: unescapeHTML(msg.title),
           url: msg.url,

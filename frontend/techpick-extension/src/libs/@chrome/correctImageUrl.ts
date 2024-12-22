@@ -3,8 +3,6 @@ export const correctImageUrl = (url: string, imageUrl: string) => {
     const { protocol, hostname, pathname } = new URL(url);
     const baseUrl = `${protocol}//${hostname}${pathname}`;
 
-    console.log('baseUrl', baseUrl);
-
     if (imageUrl.startsWith('://')) {
       return 'https' + imageUrl;
     }
