@@ -1,3 +1,4 @@
+import { getOgDataByUrl } from '@/apis';
 import {
   GET_THEME_FROM_LOCALHOST_PORT_NAME,
   REQUEST_THEME_STATE_FROM_LOCALHOST_MESSAGE,
@@ -8,6 +9,7 @@ import {
   GET_TAB_HTML_TEXT_FROM_WORKER_PORT_NAME,
   REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE,
 } from '@/constants';
+import { GetOgTagDataResponseType } from '@/types';
 
 /**
  * @description 테마를 익스텐션 로컬 호스트에서 불러오는 함수입니다.
@@ -53,42 +55,62 @@ chrome.runtime.onConnect.addListener(function changeThemeState(port) {
   });
 });
 
-let currentTabHtml = '';
+const ogData: GetOgTagDataResponseType = {
+  url: '',
+  title: '',
+  description: '',
+  imageUrl: '',
+};
 
 /**
  * @description 탭이 업데이트될 때마다 탭의 정보를 가져옵니다.
+ * @deprecated 해당 방식은 API 변경 및 동장 방식 변경으로 주석처리합니다.
  */
-chrome.tabs.onUpdated.addListener(async (_tabId, changeInfo, tab) => {
-  if (
-    changeInfo.status === 'complete' &&
-    tab.url &&
-    tab.url.startsWith('http')
-  ) {
-    try {
-      const response = await fetch(tab.url);
-      currentTabHtml = await response.text();
-    } catch {
-      currentTabHtml = '';
-    }
-  }
-});
+// chrome.tabs.onUpdated.addListener(async (_tabId, changeInfo, tab) => {
+//   if (
+//     changeInfo.status === 'complete' &&
+//     tab.url &&
+//     tab.url.startsWith('http')
+//   ) {
+//     try {
+//       ogData = await getOgDataByUrl(tab.url);
+//     } catch {
+//       ogData = {
+//         url: tab.url,
+//         title: tab.title ?? '',
+//         description: '',
+//         imageUrl: '',
+//       };
+//     }
+//   }
+// });
 
 /**
  * @description 탭이 바뀔 때마다 탭의 html을 가져옵니다.
+ * @deprecated 해당 방식은 API 변경 및 동작 방식 변경으로 주석처리합니다.
  */
-chrome.tabs.onActivated.addListener(async (activeInfo) => {
-  const tab = await chrome.tabs.get(activeInfo.tabId);
-  if (tab.url && tab.url.startsWith('http')) {
-    try {
-      const response = await fetch(tab.url);
-      currentTabHtml = await response.text();
-    } catch {
-      currentTabHtml = '';
-    }
-  } else {
-    currentTabHtml = '';
-  }
-});
+// chrome.tabs.onActivated.addListener(async (activeInfo) => {
+//   const tab = await chrome.tabs.get(activeInfo.tabId);
+//   if (tab.url && tab.url.startsWith('http')) {
+//     try {
+//       ogData = await getOgDataByUrl(tab.url);
+//     } catch {
+//       ogData = {
+//         url: tab.url,
+//         title: tab.title ?? '',
+//         description: '',
+//         imageUrl: '',
+//       };
+//     }
+//   } else {
+//     ogData = {
+//       url: tab.url ?? '',
+//       title: tab.title ?? '',
+//       description: '',
+//       imageUrl: '',
+//     };
+//   }
+// });
 
 /**
  * @description 메세지를 받고 tab의 정보를 반환합니다.
@@ -102,11 +124,21 @@ chrome.runtime.onConnect.addListener(function getHtmlText(port) {
     if (message === REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE) {
       chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         const activeTab = tabs[0];
-        port.postMessage({
-          htmlText: currentTabHtml,
-          url: activeTab.url,
-          title: activeTab.title,
-        });
+        getOgDataByUrl(activeTab.url ?? '')
+          .then((ogData) => {
+            port.postMessage({
+              ogData,
+              url: activeTab.url,
+              title: activeTab.title,
+            });
+          })
+          .catch(() => {
+            port.postMessage({
+              ogData,
+              url: activeTab.url,
+              title: activeTab.title,
+            });
+          });
       });
     }
   });

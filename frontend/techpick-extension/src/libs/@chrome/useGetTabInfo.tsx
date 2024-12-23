@@ -3,7 +3,6 @@ import {
   REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE,
 } from '@/constants';
 import type { TabInfoFromWorkerMessageType } from '@/types';
-import { extractOpenGraphMetadata } from '@/utils';
 import { useEffect, useState } from 'react';
 import { correctImageUrl } from './correctImageUrl';
 import { unescapeHTML } from './unescapeHTML';
@@ -32,14 +31,13 @@ export function useGetTabInfo() {
       port.postMessage(REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE);
 
       port.onMessage.addListener((msg: TabInfoFromWorkerMessageType) => {
-        const { ogImage, ogDescription } = extractOpenGraphMetadata(
-          msg.htmlText
-        );
         setTabInfo({
           title: unescapeHTML(msg.title),
           url: msg.url,
-          ogImage: ogImage ? correctImageUrl(msg.url, ogImage) : '',
-          ogDescription: ogDescription ? ogDescription : '',
+          ogImage: msg.ogData.imageUrl
+            ? correctImageUrl(msg.url, msg.ogData.imageUrl)
+            : '',
+          ogDescription: msg.ogData.description ? msg.ogData.description : '',
         });
 
         port.disconnect();

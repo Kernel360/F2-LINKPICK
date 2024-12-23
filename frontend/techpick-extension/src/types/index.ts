@@ -17,3 +17,4 @@ export type { GetRootFolderChildFoldersResponseType } from './GetRootFolderChild
 export type { FolderType } from './FolderType';
 export type { TabInfoFromWorkerMessageType } from './TabInfoFromWorkerMessageType';
 export type { PickInfoType } from './PickInfoType';
+export type { GetOgTagDataResponseType } from './GetOgTagDataResponseType';
