@@ -23,9 +23,10 @@ export const pickImageStyle = style({
 });
 
 export const pickTitleSectionStyle = style({
-  fontSize: typography.fontSize['lg'],
+  fontSize: typography.fontSize['sm'],
   fontWeight: typography.fontWeights['light'],
-  height: '40px',
+  minHeight: '20px',
+  maxHeight: '40px',
   lineHeight: '20px',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
