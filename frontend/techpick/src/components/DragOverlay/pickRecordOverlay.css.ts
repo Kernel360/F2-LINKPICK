@@ -12,6 +12,7 @@ export const pickRecordLayoutStyle = style({
   borderBottom: '0.5px solid',
   borderColor: colorVars.gold7,
   background: colorVars.gold3,
+  opacity: '0.8',
 });
 
 export const pickImageStyle = style({
