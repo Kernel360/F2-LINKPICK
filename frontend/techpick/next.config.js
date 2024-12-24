@@ -22,8 +22,8 @@ module.exports = withSentryConfig(module.exports, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 
-  org: 'dmdgpdi',
-  project: 'techpick-frontend',
+  org: 'baguni',
+  project: 'baguni-nextjs',
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
