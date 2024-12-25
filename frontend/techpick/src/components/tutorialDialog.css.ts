@@ -1,5 +1,6 @@
 import { keyframes, style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
+import { orangeOutlineButtonStyle } from '@/styles/orangeButtonStyle.css';
 
 const contentShow = keyframes({
   from: {
@@ -46,31 +47,19 @@ export const tabListStyle = style({
   right: '0px',
 });
 
-export const tabTriggerButtonStyle = style({
-  width: '56px',
-  height: '32px',
-  border: '1px solid',
-  borderColor: colorVars.orange8,
-  borderRadius: '4px',
-  backgroundColor: colorVars.orange1,
-  color: colorVars.primary,
-  cursor: 'pointer',
-  transition: 'background-color 0.3s ease',
+export const tabTriggerButtonStyle = style([
+  orangeOutlineButtonStyle,
+  {
+    width: '56px',
+    height: '32px',
 
-  ':hover': {
-    backgroundColor: colorVars.orange3,
-  },
-
-  ':focus': {
-    backgroundColor: colorVars.orange3,
-  },
-
-  selectors: {
-    '&[data-state="open"]': {
-      backgroundColor: colorVars.orange3,
+    selectors: {
+      '&[data-state="open"]': {
+        backgroundColor: colorVars.orange3,
+      },
     },
   },
-});
+]);
 
 export const tabContentDescriptionStyle = style({
   height: '32px',
@@ -82,25 +71,13 @@ export const tabContentDescriptionStyle = style({
 
 export const pointTextStyle = style({ color: colorVars.primary });
 
-export const dialogCloseButtonStyle = style({
-  width: '56px',
-  height: '32px',
-  border: '1px solid',
-  borderColor: colorVars.orange8,
-  borderRadius: '4px',
-  backgroundColor: colorVars.orange1,
-  color: colorVars.primary,
-  cursor: 'pointer',
-  transition: 'background-color 0.3s ease',
-
-  ':hover': {
-    backgroundColor: colorVars.orange3,
+export const dialogCloseButtonStyle = style([
+  orangeOutlineButtonStyle,
+  {
+    width: '56px',
+    height: '32px',
   },
-
-  ':focus': {
-    backgroundColor: colorVars.orange3,
-  },
-});
+]);
 
 export const tabContentStyle = style({
   position: 'relative',
