@@ -1,24 +1,14 @@
 import { keyframes, style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
+import { goldOutlineButtonStyle } from '@/styles/goldButtonStyle.css';
 
-export const importBookmarkDialogButtonStyle = style({
-  width: '120px',
-  height: '32px',
-  border: '1px solid',
-  borderColor: colorVars.gold8,
-  borderRadius: '4px',
-  transition: 'background-color 0.3s ease',
-  color: colorVars.gold11,
-  cursor: 'pointer',
-
-  ':hover': {
-    backgroundColor: colorVars.gold3,
+export const importBookmarkDialogButtonStyle = style([
+  goldOutlineButtonStyle,
+  {
+    width: '120px',
+    height: '32px',
   },
-
-  ':focus': {
-    backgroundColor: colorVars.gold3,
-  },
-});
+]);
 
 const contentShow = keyframes({
   from: {
