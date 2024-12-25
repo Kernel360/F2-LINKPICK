@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
-import { baseButtonStyle, outlineButtonStyle } from './baseButtonStyle.css';
+import { baseButtonStyle } from './baseButtonStyle.css';
 
 /**
  * @description color만 설정했습니다. width, height, padding 등은 직접 설정하셔야합니다.
@@ -20,8 +20,8 @@ export const redSolidButtonStyle = style([
  */
 export const redOutlineButtonStyle = style([
   baseButtonStyle,
-  outlineButtonStyle,
   {
+    border: '1px solid',
     borderColor: colorVars.red7,
     backgroundColor: 'transparent',
     color: colorVars.red11,

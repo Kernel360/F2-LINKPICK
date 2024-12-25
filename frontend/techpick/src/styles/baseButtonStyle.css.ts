@@ -6,8 +6,3 @@ export const baseButtonStyle = style({
   cursor: 'pointer',
   outline: 'none',
 });
-
-export const outlineButtonStyle = style({
-  border: '1px solid',
-  backgroundColor: 'transparent',
-});
