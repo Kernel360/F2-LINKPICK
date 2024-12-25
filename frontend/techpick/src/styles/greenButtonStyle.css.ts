@@ -23,7 +23,7 @@ export const greenOutlineButtonStyle = style([
   outlineButtonStyle,
   {
     borderColor: colorVars.green7,
-    backgroundColor: 'transparent',
+    backgroundColor: colorVars.gold1,
     color: colorVars.green11,
     selectors: {
       '&:hover, &:focus': {
@@ -39,7 +39,7 @@ export const greenOutlineButtonStyle = style([
 export const greenGhostButtonStyle = style([
   baseButtonStyle,
   {
-    backgroundColor: 'transparent',
+    backgroundColor: colorVars.gold1,
     color: colorVars.green11,
     selectors: {
       '&:hover, &:focus': {
@@ -55,7 +55,7 @@ export const greenGhostButtonStyle = style([
 export const greenLinkButtonStyle = style([
   baseButtonStyle,
   {
-    backgroundColor: 'transparent',
+    backgroundColor: colorVars.gold1,
     color: colorVars.green11,
     selectors: {
       '&:hover, &:focus': {

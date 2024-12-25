@@ -23,7 +23,7 @@ export const redOutlineButtonStyle = style([
   outlineButtonStyle,
   {
     borderColor: colorVars.red7,
-    backgroundColor: 'transparent',
+    backgroundColor: colorVars.red1,
     color: colorVars.red11,
     selectors: {
       '&:hover, &:focus': {
@@ -39,7 +39,7 @@ export const redOutlineButtonStyle = style([
 export const redGhostButtonStyle = style([
   baseButtonStyle,
   {
-    backgroundColor: 'transparent',
+    backgroundColor: colorVars.red1,
     color: colorVars.red11,
     selectors: {
       '&:hover, &:focus': {
@@ -55,7 +55,7 @@ export const redGhostButtonStyle = style([
 export const redLinkButtonStyle = style([
   baseButtonStyle,
   {
-    backgroundColor: 'transparent',
+    backgroundColor: colorVars.red1,
     color: colorVars.red11,
     selectors: {
       '&:hover, &:focus': {

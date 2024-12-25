@@ -23,7 +23,7 @@ export const sandOutlineButtonStyle = style([
   outlineButtonStyle,
   {
     borderColor: colorVars.sand7,
-    backgroundColor: 'transparent',
+    backgroundColor: colorVars.sand1,
     color: colorVars.sand11,
     selectors: {
       '&:hover, &:focus': {
@@ -39,7 +39,7 @@ export const sandOutlineButtonStyle = style([
 export const sandGhostButtonStyle = style([
   baseButtonStyle,
   {
-    backgroundColor: 'transparent',
+    backgroundColor: colorVars.sand1,
     color: colorVars.sand11,
     selectors: {
       '&:hover, &:focus': {
@@ -55,7 +55,7 @@ export const sandGhostButtonStyle = style([
 export const sandLinkButtonStyle = style([
   baseButtonStyle,
   {
-    backgroundColor: 'transparent',
+    backgroundColor: colorVars.sand1,
     color: colorVars.sand11,
     selectors: {
       '&:hover, &:focus': {
