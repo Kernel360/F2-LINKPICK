@@ -23,7 +23,7 @@ export const orangeOutlineButtonStyle = style([
   outlineButtonStyle,
   {
     borderColor: colorVars.orange7,
-    backgroundColor: colorVars.orange1,
+    backgroundColor: 'transparent',
     color: colorVars.orange11,
     selectors: {
       '&:hover, &:focus': {
@@ -39,7 +39,7 @@ export const orangeOutlineButtonStyle = style([
 export const orangeGhostButtonStyle = style([
   baseButtonStyle,
   {
-    backgroundColor: colorVars.orange1,
+    backgroundColor: 'transparent',
     color: colorVars.orange11,
     selectors: {
       '&:hover, &:focus': {
@@ -55,7 +55,7 @@ export const orangeGhostButtonStyle = style([
 export const orangeLinkButtonStyle = style([
   baseButtonStyle,
   {
-    backgroundColor: colorVars.orange1,
+    backgroundColor: 'transparent',
     color: colorVars.orange11,
     selectors: {
       '&:hover, &:focus': {

@@ -23,7 +23,7 @@ export const goldOutlineButtonStyle = style([
   outlineButtonStyle,
   {
     borderColor: colorVars.gold7,
-    backgroundColor: colorVars.gold1,
+    backgroundColor: 'transparent',
     color: colorVars.gold11,
     selectors: {
       '&:hover, &:focus': {
@@ -39,7 +39,7 @@ export const goldOutlineButtonStyle = style([
 export const goldGhostButtonStyle = style([
   baseButtonStyle,
   {
-    backgroundColor: colorVars.gold1,
+    backgroundColor: 'transparent',
     color: colorVars.gold11,
     selectors: {
       '&:hover, &:focus': {
@@ -55,7 +55,7 @@ export const goldGhostButtonStyle = style([
 export const goldLinkButtonStyle = style([
   baseButtonStyle,
   {
-    backgroundColor: colorVars.gold1,
+    backgroundColor: 'transparent',
     color: colorVars.gold11,
     selectors: {
       '&:hover, &:focus': {
