@@ -1,5 +1,7 @@
 import { style } from '@vanilla-extract/css';
 import { colorVars, zIndex } from 'techpick-shared';
+import { redOutlineButtonStyle } from '@/styles/redButtonStyle.css';
+import { sandOutlineButtonStyle } from '@/styles/sandButtonStyle.css';
 
 export const dialogContentStyle = style({
   position: 'absolute',
@@ -32,42 +34,18 @@ export const dialogOverlayStyle = style({
   opacity: 0.5,
 });
 
-export const deleteTagButtonStyle = style({
-  width: '100%',
-  border: '1px solid',
-  borderColor: colorVars.red8,
-  borderRadius: '4px',
-  transition: 'background-color 0.3s ease',
-  color: colorVars.red11,
-  cursor: 'pointer',
-  fontSize: '14px',
-
-  ':hover': {
-    backgroundColor: colorVars.red3,
+export const deleteTagButtonStyle = style([
+  redOutlineButtonStyle,
+  {
+    width: '100%',
+    fontSize: '14px',
   },
+]);
 
-  ':focus': {
-    backgroundColor: colorVars.red3,
-    outline: 'none',
+export const deleteTagCancelButtonStyle = style([
+  sandOutlineButtonStyle,
+  {
+    width: '100%',
+    fontSize: '14px',
   },
-});
-
-export const deleteTagCancelButtonStyle = style({
-  width: '100%',
-  border: '1px solid',
-  borderColor: colorVars.sand8,
-  borderRadius: '4px',
-  transition: 'background-color 0.3s ease',
-  color: colorVars.sand11,
-  cursor: 'pointer',
-  fontSize: '14px',
-
-  ':hover': {
-    backgroundColor: colorVars.sand3,
-  },
-
-  ':focus': {
-    backgroundColor: colorVars.sand3,
-    outline: 'none',
-  },
-});
+]);

@@ -1,5 +1,7 @@
 import { keyframes, style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
+import { redOutlineButtonStyle } from '@/styles/redButtonStyle.css';
+import { sandOutlineButtonStyle } from '@/styles/sandButtonStyle.css';
 
 const contentShow = keyframes({
   from: {
@@ -66,37 +68,19 @@ export const moveRecycleBinDialogCloseButton = style({
   cursor: 'pointer',
 });
 
-export const moveRecycleBinConfirmButtonStyle = style({
-  width: '100%',
-  height: '32px',
-  border: '1px solid',
-  borderColor: colorVars.red8,
-  borderRadius: '4px',
-  transition: 'background-color 0.3s ease',
-  color: colorVars.red11,
-  cursor: 'pointer',
-
-  selectors: {
-    '&:hover, &:focus': {
-      backgroundColor: colorVars.red3,
-    },
+export const moveRecycleBinConfirmButtonStyle = style([
+  redOutlineButtonStyle,
+  {
+    width: '100%',
+    height: '32px',
   },
-});
+]);
 
-export const moveRecycleBinCancelButtonStyle = style({
-  marginTop: '8px',
-  width: '100%',
-  height: '32px',
-  border: '1px solid',
-  borderColor: colorVars.sand8,
-  borderRadius: '4px',
-  transition: 'background-color 0.3s ease',
-  color: colorVars.sand11,
-  cursor: 'pointer',
-
-  selectors: {
-    '&:hover, &:focus': {
-      backgroundColor: colorVars.sand3,
-    },
+export const moveRecycleBinCancelButtonStyle = style([
+  sandOutlineButtonStyle,
+  {
+    marginTop: '8px',
+    width: '100%',
+    height: '32px',
   },
-});
+]);
