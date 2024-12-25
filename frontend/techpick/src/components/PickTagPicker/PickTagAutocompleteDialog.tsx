@@ -18,6 +18,7 @@ import { DeleteTagDialog } from './DeleteTagDialog';
 import { DeselectTagButton } from './DeselectTagButton';
 import { SelectedTagItem } from '../SelectedTagItem';
 import {
+  dialogOverlayStyle,
   tagDialogPortalLayout,
   commandInputStyle,
   tagListItemStyle,
@@ -154,7 +155,7 @@ export function PickTagAutocompleteDialog({
       }}
     >
       <Dialog.Portal container={container}>
-        <Dialog.Overlay style={{ zIndex: 1 }} />
+        <Dialog.Overlay className={dialogOverlayStyle} />
         <Dialog.Content
           style={{ ...floatingStyles }}
           ref={setFloating}

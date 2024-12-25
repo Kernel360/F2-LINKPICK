@@ -4,9 +4,21 @@ import { useState } from 'react';
 import Link from 'next/link';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { Settings } from 'lucide-react';
+import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
 import { Popover, PopoverContent, PopoverTrigger } from '@/ui/Popover/Popover';
 import { handleShareFolderLinkCopy } from '@/utils/handleShareFolderLinkCopy';
-import * as styles from './shareFolderDialog.css';
+import {
+  dialogContent,
+  dialogTitle,
+  dialogDescription,
+  myLinkPageLinkText,
+  linkContent,
+  icon,
+  sharedFolderLink,
+  copyButton,
+  popoverStyle,
+  closeIcon,
+} from './shareFolderDialog.css';
 
 export default function ShareFolderDialog({
   uuid,
@@ -23,15 +35,15 @@ export default function ShareFolderDialog({
   return (
     <DialogPrimitive.Root open={isOpen} onOpenChange={onOpenChange}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className={styles.dialogOverlay} />
-        <DialogPrimitive.Content className={styles.dialogContent}>
-          <DialogPrimitive.Title className={styles.dialogTitle}>
+        <DialogPrimitive.Overlay className={dialogOverlayStyle} />
+        <DialogPrimitive.Content className={dialogContent}>
+          <DialogPrimitive.Title className={dialogTitle}>
             폴더가 공유되었습니다.
           </DialogPrimitive.Title>
-          <DialogPrimitive.Description className={styles.dialogDescription}>
-            <Link href={`/mypage`} className={styles.myLinkPageLinkText}>
-              <span className={styles.linkContent} onClick={onOpenChange}>
-                <Settings className={styles.icon} size={14} />
+          <DialogPrimitive.Description className={dialogDescription}>
+            <Link href={`/mypage`} className={myLinkPageLinkText}>
+              <span className={linkContent} onClick={onOpenChange}>
+                <Settings className={icon} size={14} />
                 내설정
               </span>
             </Link>
@@ -46,7 +58,7 @@ export default function ShareFolderDialog({
             }}
           >
             <div
-              className={styles.sharedFolderLink}
+              className={sharedFolderLink}
               id="shared-folder-link"
               title={shareFolderLink}
             >
@@ -55,21 +67,16 @@ export default function ShareFolderDialog({
             <Popover open={showPopover}>
               <PopoverTrigger asChild>
                 <button
-                  className={styles.copyButton}
+                  className={copyButton}
                   onClick={() => handleShareFolderLinkCopy(handleShowPopver)}
                 >
                   Copy
                 </button>
               </PopoverTrigger>
-              <PopoverContent className={styles.popoverStyle}>
-                Copied
-              </PopoverContent>
+              <PopoverContent className={popoverStyle}>Copied</PopoverContent>
             </Popover>
           </div>
-          <DialogPrimitive.Close
-            className={styles.closeIcon}
-            onClick={onOpenChange}
-          >
+          <DialogPrimitive.Close className={closeIcon} onClick={onOpenChange}>
             ×
           </DialogPrimitive.Close>
         </DialogPrimitive.Content>
