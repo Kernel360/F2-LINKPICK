@@ -1,6 +1,7 @@
 import { keyframes, style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
 import { goldOutlineButtonStyle } from '@/styles/goldButtonStyle.css';
+import { greenOutlineButtonStyle } from '@/styles/greenButtonStyle.css';
 
 export const importBookmarkDialogButtonStyle = style([
   goldOutlineButtonStyle,
@@ -49,26 +50,6 @@ export const dialogContent = style({
   animation: `${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1)`,
 });
 
-export const dialogCloseButtonStyle = style({
-  width: '56px',
-  height: '32px',
-  border: '1px solid',
-  borderColor: colorVars.orange8,
-  borderRadius: '4px',
-  backgroundColor: colorVars.orange1,
-  color: colorVars.primary,
-  cursor: 'pointer',
-  transition: 'background-color 0.3s ease',
-
-  ':hover': {
-    backgroundColor: colorVars.orange3,
-  },
-
-  ':focus': {
-    backgroundColor: colorVars.orange3,
-  },
-});
-
 export const dropzoneStyle = style({
   display: 'flex',
   justifyContent: 'center',
@@ -90,23 +71,14 @@ export const closeButtonStyle = style({
   cursor: 'pointer',
 });
 
-export const submitButtonStyle = style({
-  marginTop: '8px',
-  width: '100%',
-  height: '32px',
-  border: '1px solid',
-  borderColor: colorVars.green8,
-  borderRadius: '4px',
-  transition: 'background-color 0.3s ease',
-  color: colorVars.green11,
-  cursor: 'pointer',
-
-  selectors: {
-    '&:hover, &:focus': {
-      backgroundColor: colorVars.green3,
-    },
+export const submitButtonStyle = style([
+  greenOutlineButtonStyle,
+  {
+    marginTop: '8px',
+    width: '100%',
+    height: '32px',
   },
-});
+]);
 
 export const dragInfoTextStyle = style({
   whiteSpace: 'pre-wrap',
