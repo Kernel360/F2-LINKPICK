@@ -7,7 +7,7 @@ name: Baguni Test Client CI/CD
 on:
   push:
     branches:
-      - 'frontend'
+      - 'fe-develop'
   workflow_dispatch:
 
 jobs:

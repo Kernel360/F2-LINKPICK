@@ -1,7 +1,7 @@
 name: Playwright Tests
 on:
   pull_request:
-    branches: [frontend]
+    branches: [fe-develop]
   workflow_dispatch:
 jobs:
   test:
