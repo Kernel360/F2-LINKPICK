@@ -1,6 +1,6 @@
 'use client';
 
-import { DragOverlay as DndKitDragOverlay } from '@dnd-kit/core';
+import { DragOverlay as DragOverlayPrimitive } from '@dnd-kit/core';
 import { useGetDragOverStyle } from '@/hooks';
 import {
   usePickStore,
@@ -38,36 +38,37 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
     scale: 0.4,
   });
   const selectedPickListCount = selectedPickIdList.length - 1;
+  const shadowCount = Math.min(selectedPickListCount, 5);
 
   if (isPickDragging && draggingPickInfo) {
     return (
-      <DndKitDragOverlay style={pickOverlayStyle}>
+      <DragOverlayPrimitive style={pickOverlayStyle}>
         <div className={stackedOverlayStyle}>
           <PickRecordOverlay pickInfo={draggingPickInfo} />
           {0 < selectedPickListCount && (
             <>
-              <PickDragOverlayShadowList count={selectedPickListCount} />
+              <PickDragOverlayShadowList count={shadowCount} />
               <div className={dragCountStyle}>{selectedPickIdList.length}</div>
             </>
           )}
         </div>
-      </DndKitDragOverlay>
+      </DragOverlayPrimitive>
     );
   }
 
   if (isFolderDragging && draggingFolderInfo) {
     return (
-      <DndKitDragOverlay style={folderOverlayStyle}>
+      <DragOverlayPrimitive style={folderOverlayStyle}>
         <FolderItemOverlay name={draggingFolderInfo.name} />
-      </DndKitDragOverlay>
+      </DragOverlayPrimitive>
     );
   }
 
   if (isRecommendPickDragging && draggingRecommendPickInfo) {
     return (
-      <DndKitDragOverlay style={recommendPickOverlayStyle}>
+      <DragOverlayPrimitive style={recommendPickOverlayStyle}>
         <PickCarouselCard recommendPick={draggingRecommendPickInfo} />
-      </DndKitDragOverlay>
+      </DragOverlayPrimitive>
     );
   }
 }

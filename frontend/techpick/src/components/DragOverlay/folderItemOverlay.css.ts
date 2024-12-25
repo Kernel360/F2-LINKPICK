@@ -12,6 +12,7 @@ export const folderItemOverlay = style({
   backgroundColor: colorVars.gold4,
   fontSize: fontSize['sm'],
   color: colorVars.point,
+  opacity: '0.8',
 });
 
 export const FolderIconStyle = style({
