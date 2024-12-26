@@ -1,9 +1,9 @@
 import { FolderOpen as FolderOpenIcon } from 'lucide-react';
+import { folderItemOverlay } from './folderItemOverlay.css';
 import {
-  folderItemOverlay,
   FolderIconStyle,
   folderTextStyle,
-} from './folderItemOverlay.css';
+} from '../FolderTree/folderLinkItem.css';
 
 export function FolderItemOverlay({ name }: FolderItemOverlayProps) {
   return (

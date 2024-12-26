@@ -7,11 +7,11 @@ import * as Tabs from '@radix-ui/react-tabs';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY } from '@/constants';
 import { useDisclosure, useLocalStorage } from '@/hooks';
+import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
 import { Gap } from './Gap';
 import {
   dialogCloseButtonStyle,
   dialogContent,
-  overlayStyle,
   pointTextStyle,
   tabContentDescriptionStyle,
   tabContentStyle,
@@ -62,7 +62,7 @@ export function TutorialDialog() {
   return (
     <Dialog.Root open={isOpen} modal>
       <Dialog.Portal>
-        <Dialog.Overlay className={overlayStyle} />
+        <Dialog.Overlay className={dialogOverlayStyle} />
         <Dialog.Content className={dialogContent}>
           <VisuallyHidden.Root>
             <Dialog.Title>튜토리얼</Dialog.Title>

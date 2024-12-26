@@ -4,16 +4,16 @@ import Image from 'next/image';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
 import { useTagStore } from '@/stores';
 import { formatDateString } from '@/utils';
+import { pickRecordOverlayLayoutStyle } from './pickRecordOverlay.css';
+import { PickDateColumnLayout } from '../PickRecord/PickDateColumnLayout';
+import { PickImageColumnLayout } from '../PickRecord/PickImageColumnLayout';
 import {
-  pickRecordLayoutStyle,
   pickImageStyle,
   pickTitleSectionStyle,
   dateTextStyle,
-  externalLinkIconStyle,
   linkLayoutStyle,
-} from './pickRecordOverlay.css';
-import { PickDateColumnLayout } from '../PickRecord/PickDateColumnLayout';
-import { PickImageColumnLayout } from '../PickRecord/PickImageColumnLayout';
+  externalLinkIconStyle,
+} from '../PickRecord/pickRecord.css';
 import { PickTagColumnLayout } from '../PickRecord/PickTagColumnLayout';
 import { PickTitleColumnLayout } from '../PickRecord/PickTitleColumnLayout';
 import { Separator } from '../PickRecord/Separator';
@@ -35,7 +35,7 @@ export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
   });
 
   return (
-    <div className={pickRecordLayoutStyle}>
+    <div className={pickRecordOverlayLayoutStyle}>
       <PickImageColumnLayout>
         <div className={pickImageStyle}>
           {link.imageUrl ? (

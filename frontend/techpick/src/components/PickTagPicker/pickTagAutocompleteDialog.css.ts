@@ -79,3 +79,7 @@ export const tagCreateTextStyle = style({
   fontSize: '14px',
   color: color.font,
 });
+
+export const dialogOverlayStyle = style({
+  zIndex: 1,
+});

@@ -6,6 +6,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
 import { ROUTES } from '@/constants';
 import { useTreeStore } from '@/stores';
+import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
 import {
   moveRecycleBinCancelButtonStyle,
   moveRecycleBinConfirmButtonStyle,
@@ -13,7 +14,6 @@ import {
   moveRecycleBinDialogDescriptionStyle,
   moveRecycleBinDialogShareFolderWarningDescriptionStyle,
   moveRecycleBinDialogTitleStyle,
-  moveRecycleBinOverlayStyle,
   moveRecycleDialogContent,
 } from './moveFolderToRecycleBinDialog.css';
 
@@ -52,7 +52,7 @@ export function MoveFolderToRecycleBinDialog({
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className={moveRecycleBinOverlayStyle} />
+        <Dialog.Overlay className={dialogOverlayStyle} />
         <Dialog.Content className={moveRecycleDialogContent}>
           <div>
             <Dialog.Title className={moveRecycleBinDialogTitleStyle}>

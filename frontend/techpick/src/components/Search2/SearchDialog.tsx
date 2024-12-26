@@ -3,10 +3,15 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { OPEN_SEARCH_DIALOG_EVENT } from '@/constants';
 import { useSearchPickStore } from '@/stores/searchPickStore';
+import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
 import { eventEmitter } from '@/utils/eventEmitter';
 import FilterContainer from './FilterContainer';
 import HoverCard from './HoverCard';
-import * as styles from './searchDialog.css';
+import {
+  dialogContent,
+  searchBar,
+  searchListContainer,
+} from './searchDialog.css';
 import { SearchInfiniteScrollList } from './SearchInfiniteScrollList';
 import SearchInput from './SearchInput';
 
@@ -39,16 +44,16 @@ export default function SearchDialog({
   return (
     <DialogPrimitive.Root open={isOpen} onOpenChange={handleOnClose}>
       <DialogPrimitive.Portal>
-        <DialogPrimitive.Overlay className={styles.dialogOverlay} />
-        <DialogPrimitive.Content className={styles.dialogContent}>
+        <DialogPrimitive.Overlay className={dialogOverlayStyle} />
+        <DialogPrimitive.Content className={dialogContent}>
           <DialogPrimitive.Title>
             <VisuallyHidden>Pick Search</VisuallyHidden>
           </DialogPrimitive.Title>
-          <div className={styles.searchBar}>
+          <div className={searchBar}>
             <SearchInput />
           </div>
           <FilterContainer />
-          <div className={styles.searchListContainer}>
+          <div className={searchListContainer}>
             <SearchInfiniteScrollList onClose={handleOnClose} />
             <HoverCard />
           </div>

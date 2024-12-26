@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
+import { redOutlineButtonStyle } from '@/styles/redButtonStyle.css';
 
 export const myPageLayoutStyle = style({
   width: '100%',
@@ -8,24 +9,13 @@ export const myPageLayoutStyle = style({
   backgroundColor: colorVars.gold2,
 });
 
-export const logoutButtonStyle = style({
-  width: '120px',
-  height: '32px',
-  border: '1px solid',
-  borderColor: colorVars.red8,
-  borderRadius: '4px',
-  transition: 'background-color 0.3s ease',
-  color: colorVars.red11,
-  cursor: 'pointer',
-
-  ':hover': {
-    backgroundColor: colorVars.red3,
+export const logoutButtonStyle = style([
+  redOutlineButtonStyle,
+  {
+    width: '120px',
+    height: '32px',
   },
-
-  ':focus': {
-    backgroundColor: colorVars.red3,
-  },
-});
+]);
 
 export const myPageContentContainerLayoutStyle = style({
   display: 'flex',
