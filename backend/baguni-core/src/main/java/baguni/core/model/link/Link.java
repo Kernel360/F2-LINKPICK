@@ -42,7 +42,8 @@ public class Link {
 	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 
-	@Column(name = "imageUrl", columnDefinition = "VARCHAR(600)")
+	// image가 base64 로 인코딩되서 url에 담기는 경우가 있기 때문에 text로 변경
+	@Column(name = "imageUrl", columnDefinition = "TEXT")
 	private String imageUrl;
 
 	@Column(name = "invalidatedAt_at")
