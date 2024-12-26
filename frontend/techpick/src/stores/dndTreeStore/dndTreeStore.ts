@@ -9,7 +9,6 @@ import {
   updateFolder,
   createFolder,
 } from '@/apis/folder';
-import getObjectEntries from '@/components/Search/util/getObjectEntries';
 import { ROUTES, UNKNOWN_FOLDER_ID } from '@/constants';
 import { isFolderDraggableObject, reorderSortableIdList } from '@/utils';
 import { changeParentFolderId } from './utils/changeParentFolderId';
@@ -80,12 +79,7 @@ type TreeAction = {
   setDraggingFolderInfo: (
     draggingFolderInfo: FolderType | null | undefined
   ) => void;
-  /**
-   * @author 김민규
-   * @description 미리 로딩한 나의 폴더 리스트 에서 찾는다.
-   * @return {FolderType[]} 찾지 못한 경우 빈 배열 반환
-   * */
-  findFolderByName: (name: string) => FolderType[];
+
   checkIsShareFolder: (folderId: number) => boolean;
   updateFolderAccessTokenByFolderId: (
     folderId: number,
@@ -465,12 +459,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
 
         return childFolderList;
       },
-      findFolderByName: (name: string) => {
-        const map = get().treeDataMap;
-        return getObjectEntries(map)
-          .filter(([_, folder]) => folder.name === name)
-          .map((entity) => entity[1]);
-      },
+
       getFolderList: (): FolderType[] => {
         const map = get().treeDataMap;
 

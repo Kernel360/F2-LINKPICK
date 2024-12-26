@@ -74,11 +74,6 @@ globalStyle('a', {
   color: 'inherit',
 });
 
-// NOTE(Jason): disable react-arborist node focus outline style
-globalStyle('[role="treeitem"]', {
-  outline: 'none',
-});
-
 globalStyle('hr', {
   outline: 'none',
   margin: 0,
