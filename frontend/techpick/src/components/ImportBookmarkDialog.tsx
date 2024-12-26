@@ -7,10 +7,10 @@ import { XIcon } from 'lucide-react';
 import { useDropzone } from 'react-dropzone';
 import { uploadBookmark } from '@/apis/bookmark';
 import { useTreeStore } from '@/stores';
+import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
 import { notifyError, notifySuccess } from '@/utils';
 import {
   importBookmarkDialogButtonStyle,
-  overlayStyle,
   dialogContent,
   dropzoneStyle,
   closeButtonStyle,
@@ -80,7 +80,7 @@ export function ImportBookmarkDialog() {
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
-        <Dialog.Overlay className={overlayStyle} />
+        <Dialog.Overlay className={dialogOverlayStyle} />
         <Dialog.Content className={dialogContent}>
           <VisuallyHidden.Root>
             <Dialog.Title className="DialogTitle">북마크 가져오기</Dialog.Title>

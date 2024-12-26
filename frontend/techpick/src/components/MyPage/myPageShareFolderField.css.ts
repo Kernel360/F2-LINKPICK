@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
-import { colorVars, fontSize } from 'techpick-shared';
+import { fontSize } from 'techpick-shared';
+import { redOutlineButtonStyle } from '@/styles/redButtonStyle.css';
 
 export const myPageContentContainer = style({
   display: 'grid',
@@ -16,16 +17,10 @@ export const cell = style({
   padding: '0 8px',
 });
 
-export const cancelButton = style({
-  minWidth: '70px',
-  padding: '4px',
-  border: '1px solid',
-  borderColor: colorVars.red8,
-  borderRadius: '4px',
-  transition: 'background-color 0.3s ease',
-  color: colorVars.red11,
-  cursor: 'pointer',
-  ':hover': {
-    backgroundColor: colorVars.red3,
+export const cancelButton = style([
+  redOutlineButtonStyle,
+  {
+    minWidth: '70px',
+    padding: '4px',
   },
-});
+]);

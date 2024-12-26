@@ -1,5 +1,6 @@
 import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
+import { greenOutlineButtonStyle } from '@/styles/greenButtonStyle.css';
 
 export const popoverTriggerStyle = style({
   display: 'flex',
@@ -46,24 +47,15 @@ export const urlInputStyle = style({
   },
 });
 
-export const createPickButtonStyle = style({
-  marginTop: '8px',
-  width: '100%',
-  height: '20px',
-  border: '1px solid',
-  borderColor: colorVars.green8,
-  borderRadius: '4px',
-  transition: 'background-color 0.3s ease',
-  color: colorVars.green11,
-  cursor: 'pointer',
-  fontSize: '12px',
-
-  selectors: {
-    '&:hover, &:focus': {
-      backgroundColor: colorVars.green3,
-    },
+export const createPickButtonStyle = style([
+  greenOutlineButtonStyle,
+  {
+    marginTop: '8px',
+    width: '100%',
+    height: '20px',
+    fontSize: '12px',
   },
-});
+]);
 
 export const wrongDescriptionTextStyle = style({
   display: 'inline-block',

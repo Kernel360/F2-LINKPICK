@@ -1,24 +1,17 @@
 import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
+import { dialogContentStyle } from '@/styles/dialogStyle.css';
 
-export const dialogOverlay = style({
-  backgroundColor: 'rgba(0, 0, 0, 0.4)',
-  position: 'fixed',
-  inset: 0,
-});
-
-export const dialogContent = style({
-  background: 'white',
-  borderRadius: '8px',
-  padding: '16px',
-  width: '100%',
-  minWidth: '300px',
-  maxWidth: '800px',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  position: 'fixed',
-});
+export const dialogContent = style([
+  dialogContentStyle,
+  {
+    background: 'white',
+    padding: '16px',
+    width: '100%',
+    minWidth: '300px',
+    maxWidth: '800px',
+  },
+]);
 
 export const searchListContainer = style({
   display: 'flex',
