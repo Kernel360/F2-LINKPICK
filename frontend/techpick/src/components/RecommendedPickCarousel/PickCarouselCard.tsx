@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { postRecommendPickViewEventLog } from '@/apis/eventLog';
-import { useOpenUrlInNewTab } from '@/hooks';
+import { useOpenUrlInNewTab, useImageLoader } from '@/hooks';
 import {
   pickCarouselItemStyle,
   pickTitleStyle,
@@ -14,6 +14,7 @@ import { RecommendPickType } from '@/types';
 
 export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
   const { openUrlInNewTab } = useOpenUrlInNewTab(recommendPick.url);
+  const { imageStatus } = useImageLoader(recommendPick.imageUrl);
 
   const onOpenLink = async () => {
     try {
@@ -26,7 +27,19 @@ export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
 
   return (
     <div className={pickCarouselItemStyle} onClick={onOpenLink}>
-      {recommendPick.imageUrl === '' ? (
+      {imageStatus === 'loading' && (
+        <div className={defaultImageLayoutStyle}></div>
+      )}
+      {imageStatus === 'loaded' && (
+        <img
+          src={recommendPick.imageUrl}
+          alt=""
+          className={pickImageStyle}
+          width="250"
+          height="131"
+        />
+      )}
+      {imageStatus === 'error' && (
         <div className={defaultImageLayoutStyle}>
           <Image
             src={'/image/default_image.svg'}
@@ -36,16 +49,7 @@ export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
             height="65"
           />
         </div>
-      ) : (
-        <img
-          src={recommendPick.imageUrl}
-          alt=""
-          className={pickImageStyle}
-          width="250"
-          height="131"
-        />
       )}
-
       <p className={pickTitleStyle}>{recommendPick.title}</p>
     </div>
   );
