@@ -9,9 +9,9 @@ import {
 } from '@/stores';
 import { dragCountStyle, stackedOverlayStyle } from './dragOverlay.css';
 import { FolderItemOverlay } from './FolderItemOverlay';
+import { PickCarouselCardOverlay } from './PickCarouselCardOverlay';
 import { PickDragOverlayShadowList } from './PickDragOverlayShadowList';
 import { PickRecordOverlay } from './PickRecordOverlay';
-import { PickCarouselCard } from '../RecommendedPickCarousel/PickCarouselCard';
 
 export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   const { isDragging: isFolderDragging, draggingFolderInfo } = useTreeStore();
@@ -67,7 +67,7 @@ export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   if (isRecommendPickDragging && draggingRecommendPickInfo) {
     return (
       <DragOverlayPrimitive style={recommendPickOverlayStyle}>
-        <PickCarouselCard recommendPick={draggingRecommendPickInfo} />
+        <PickCarouselCardOverlay recommendPick={draggingRecommendPickInfo} />
       </DragOverlayPrimitive>
     );
   }
