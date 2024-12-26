@@ -46,6 +46,7 @@ public class LinkService {
 			var updatedLink = updateOpengraph(url, link);
 			return linkMapper.toLinkInfo(linkDataHandler.saveLink(updatedLink));
 		} catch (Exception e) {
+			log.info("saveLinkAndUpdateOgTag : ", e);
 			throw ApiLinkException.LINK_OG_TAG_UPDATE_FAILURE();
 		}
 	}

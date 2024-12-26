@@ -82,7 +82,7 @@ public class RankingApiController {
 			try {
 				appendOgDataByUrl(urlWithCount).ifPresent(result::add);
 			} catch (ApiLinkException exception) {
-				log.error("[랭킹 획득 - 서버에 저장되지 않은 링크가 랭킹에 포함되어 있습니다! ={}", urlWithCount.url(), exception);
+				log.error("[랭킹 획득 - 서버에 저장되지 않은 링크가 랭킹에 포함되어 있습니다 : {}", urlWithCount.url(), exception);
 			}
 		}
 		return result;

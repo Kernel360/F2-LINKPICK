@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import baguni.core.annotation.BaguniAnnotation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,6 +26,7 @@ public class LinkApiController {
 	private final LinkService linkService;
 	private final LinkApiMapper linkApiMapper;
 
+	@BaguniAnnotation.MeasureTime
 	@GetMapping
 	@Operation(summary = "해당 링크 og 데이터 조회", description = "해당 링크의 og 태그 데이터를 스크래핑을 통해 가져옵니다.")
 	@ApiResponses(value = {
@@ -35,6 +37,7 @@ public class LinkApiController {
 	) {
 		var result = linkService.saveLinkAndUpdateOgTag(url);
 		var response = linkApiMapper.toLinkResponse(result);
+
 		return ResponseEntity.ok(response);
 	}
 }
