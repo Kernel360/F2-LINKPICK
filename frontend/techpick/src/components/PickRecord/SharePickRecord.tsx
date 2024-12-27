@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
 import { postSharedPickViewEventLog } from '@/apis/eventLog';
-import { useOpenUrlInNewTab } from '@/hooks';
+import { useImageLoader, useOpenUrlInNewTab } from '@/hooks';
 import { formatDateString } from '@/utils';
 import { PickDateColumnLayout } from './PickDateColumnLayout';
 import { PickImageColumnLayout } from './PickImageColumnLayout';
@@ -38,6 +38,7 @@ export function SharePickRecord({
   const link = pickInfo.linkInfo!;
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
   const [isHovered, setIsHovered] = useState(false);
+  const { imageStatus } = useImageLoader(link.imageUrl);
 
   const onClickLink = async () => {
     try {
@@ -60,7 +61,9 @@ export function SharePickRecord({
     >
       <PickImageColumnLayout>
         <div className={pickImageStyle}>
-          {link.imageUrl && link.imageUrl !== '' ? (
+          {imageStatus === 'error' ? (
+            <Image src={'/image/default_image.svg'} alt="" fill sizes="96px" />
+          ) : (
             <img
               src={link.imageUrl}
               alt=""
@@ -68,8 +71,6 @@ export function SharePickRecord({
               height="47.25px"
               className={imageStyle}
             />
-          ) : (
-            <Image src={'/image/default_image.svg'} alt="" fill sizes="96px" />
           )}
         </div>
       </PickImageColumnLayout>

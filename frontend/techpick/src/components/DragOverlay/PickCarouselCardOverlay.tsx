@@ -9,10 +9,12 @@ import {
   pickImageStyle,
   defaultImageStyle,
   defaultImageLayoutStyle,
-} from './pickCarouselCard.css';
+} from '../RecommendedPickCarousel/pickCarouselCard.css';
 import { RecommendPickType } from '@/types';
 
-export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
+export function PickCarouselCardOverlay({
+  recommendPick,
+}: PickCarouselCardOverlayProps) {
   const { openUrlInNewTab } = useOpenUrlInNewTab(recommendPick.url);
   const { imageStatus } = useImageLoader(recommendPick.imageUrl);
 
@@ -27,10 +29,7 @@ export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
 
   return (
     <div className={pickCarouselItemStyle} onClick={onOpenLink}>
-      {imageStatus === 'loading' && (
-        <div className={defaultImageLayoutStyle}></div>
-      )}
-      {imageStatus === 'loaded' && (
+      {imageStatus === 'loaded' ? (
         <img
           src={recommendPick.imageUrl}
           alt=""
@@ -38,8 +37,7 @@ export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
           width="250"
           height="131"
         />
-      )}
-      {imageStatus === 'error' && (
+      ) : (
         <div className={defaultImageLayoutStyle}>
           <Image
             src={'/image/default_image.svg'}
@@ -50,11 +48,12 @@ export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
           />
         </div>
       )}
+
       <p className={pickTitleStyle}>{recommendPick.title}</p>
     </div>
   );
 }
 
-interface PickCarouselCardProps {
+interface PickCarouselCardOverlayProps {
   recommendPick: RecommendPickType;
 }

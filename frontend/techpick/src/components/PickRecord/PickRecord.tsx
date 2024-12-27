@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
 import { postUserPickViewEventLog } from '@/apis/eventLog';
-import { useOpenUrlInNewTab } from '@/hooks';
+import { useImageLoader, useOpenUrlInNewTab } from '@/hooks';
 import { usePickStore, useTagStore, useUpdatePickStore } from '@/stores';
 import { formatDateString } from '@/utils';
 import { PickDateColumnLayout } from './PickDateColumnLayout';
@@ -39,6 +39,7 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
   const [isHovered, setIsHovered] = useState(false);
   const isUpdateTitle = currentUpdateTitlePickId === pickInfo.id;
   const { isDragging } = usePickStore();
+  const { imageStatus } = useImageLoader(link.imageUrl);
 
   const filteredSelectedTagList: TagType[] = [];
 
@@ -66,7 +67,9 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
     >
       <PickImageColumnLayout>
         <div className={pickImageStyle}>
-          {link.imageUrl && link.imageUrl !== '' ? (
+          {imageStatus === 'error' ? (
+            <Image src={'/image/default_image.svg'} alt="" fill sizes="96px" />
+          ) : (
             <img
               src={link.imageUrl}
               alt=""
@@ -74,8 +77,6 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
               height="47.25px"
               className={imageStyle}
             />
-          ) : (
-            <Image src={'/image/default_image.svg'} alt="" fill sizes="96px" />
           )}
         </div>
       </PickImageColumnLayout>
