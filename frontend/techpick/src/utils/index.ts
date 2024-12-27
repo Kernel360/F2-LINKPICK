@@ -20,3 +20,4 @@ export { isRecommendPickDraggableObject } from './isRecommendPickDraggableObject
 export { getItemFromLocalStorage } from './getItemFromLocalStorage';
 export { setItemToLocalStorage } from './setItemToLocalStorage';
 export { isMacOS } from './isMacOS';
+export { isLoginUser } from './isLoginUser';
