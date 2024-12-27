@@ -68,10 +68,7 @@ public class LinkService {
 	 * og:image 가 완전한 url 형식이 아닐 수 있어 보정
 	 * 추론 불가능한 image url 일 경우 빈스트링("")으로 대치
 	 *
-	 * @author sangwon
-	 * */
-
-	/**
+	 * 	@author sangwon
 	 * 	protocol : https
 	 * 	host : blog.dongolab.com
 	 */
