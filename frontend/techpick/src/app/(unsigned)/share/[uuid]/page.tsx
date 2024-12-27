@@ -40,48 +40,6 @@ export default async function Page({ params }: { params: { uuid: string } }) {
   const isLoggedIn = await isLoginUser();
   const pickList = sharedFolder.pickList;
 
-  if (pickList.length === 0) {
-    return (
-      <ScreenLogger
-        eventName="shared_page_view"
-        logInfo={{
-          folderUUID: uuid,
-          folderName: sharedFolder.folderName,
-          pickCount: pickList.length,
-        }}
-      >
-        <FolderContentLayout>
-          <div className={folderContentHeaderStyle}>
-            <Gap verticalSize="gap32" horizontalSize="gap32">
-              <div className={currentFolderNameSectionStyle}>
-                <FolderOpenIcon size={28} className={folderOpenIconStyle} />
-                <h1 className={folderNameStyle}>{sharedFolder.folderName}</h1>
-              </div>
-            </Gap>
-
-            <div className={buttonSectionStyle}>
-              <Link href={ROUTES.HOME}>
-                <button className={homeNavigateButtonStyle}>홈으로 가기</button>
-              </Link>
-              <Link href={ROUTES.LOGIN}>
-                <button className={loginButtonStyle}>로그인</button>
-              </Link>
-
-              {!isLoggedIn && <SignUpLinkButton />}
-            </div>
-          </div>
-
-          <PickContentLayout>
-            <EmptyPickRecordImage
-              title="공유된 북마크가 없습니다."
-              description="폴더 내 공유된 북마크가 존재하지 않습니다."
-            />
-          </PickContentLayout>
-        </FolderContentLayout>
-      </ScreenLogger>
-    );
-  }
-
   return (
     <ScreenLogger
       eventName="shared_page_view"
