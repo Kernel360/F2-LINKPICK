@@ -30,6 +30,7 @@ jobs:
           echo "NEXT_PUBLIC_API=${{ secrets.FRONT_NEXT_PUBLIC_API }}" >> .env.production
           echo "NEXT_PUBLIC_DOMAIN=${{ secrets.FRONT_NEXT_PUBLIC_DOMAIN }}" >> .env.production
           echo "NEXT_PUBLIC_REDIRECT_URL=${{secrets.FRONT_NEXT_PUBLIC_REDIRECT_URL}}" >> .env.production
+          echo "NEXT_PUBLIC_MIXPANEL_TOKEN=${{secrets.FRONT_NEXT_PUBLIC_MIXPANEL_TOKEN}}" >> .env.production
 
       - # .env.sentry-build-plugin 설정
         name: Create .env.sentry-build-plugin
