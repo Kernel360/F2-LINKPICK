@@ -1,5 +1,8 @@
 package baguni.api.domain.link.service;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,20 +67,42 @@ public class LinkService {
 	/**
 	 * og:image 가 완전한 url 형식이 아닐 수 있어 보정
 	 * 추론 불가능한 image url 일 경우 빈스트링("")으로 대치
-	 * */
+	 *
+	 * 	@author sangwon
+	 * 	protocol : https
+	 * 	host : blog.dongolab.com
+	 */
 	private String correctImageUrl(String baseUrl, String imageUrl) {
+		if (imageUrl == null || imageUrl.trim().isEmpty()) {
+			return "";
+		}
+
 		if (imageUrl.startsWith("://")) {
 			return "https" + imageUrl;
 		}
 		if (imageUrl.startsWith("//")) {
 			return "https:" + imageUrl;
 		}
-		if (imageUrl.startsWith("/")) {
-			return baseUrl + imageUrl;
-		}
-		if (!imageUrl.startsWith("https://")) {
+
+		try {
+			URL url = new URL(baseUrl);
+			// ex) https://blog.dongolab.com
+			String domain = url.getProtocol() + "://" + url.getHost();
+
+			// ex) /og-image.png -> https://blog.dongholab.com/og-image.png
+			if (imageUrl.startsWith("/")) {
+				return domain + imageUrl;
+			}
+
+			if (!imageUrl.startsWith("http://") && !imageUrl.startsWith("https://")) {
+				return domain + "/" + imageUrl;
+			}
+
+			return imageUrl;
+		} catch (MalformedURLException e) {
+			// baseUrl이 올바르지 않은 경우 빈 문자열 반환
 			return "";
 		}
-		return imageUrl;
 	}
+
 }
