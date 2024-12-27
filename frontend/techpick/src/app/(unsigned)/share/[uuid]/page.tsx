@@ -58,18 +58,19 @@ export default async function Page({ params }: { params: { uuid: string } }) {
                 <h1 className={folderNameStyle}>{sharedFolder.folderName}</h1>
               </div>
             </Gap>
+
+            <div className={buttonSectionStyle}>
+              <Link href={ROUTES.HOME}>
+                <button className={homeNavigateButtonStyle}>홈으로 가기</button>
+              </Link>
+              <Link href={ROUTES.LOGIN}>
+                <button className={loginButtonStyle}>로그인</button>
+              </Link>
+
+              {!isLoggedIn && <SignUpLinkButton />}
+            </div>
           </div>
 
-          <div className={buttonSectionStyle}>
-            <Link href={ROUTES.HOME}>
-              <button className={homeNavigateButtonStyle}>홈으로 가기</button>
-            </Link>
-            <Link href={ROUTES.LOGIN}>
-              <button className={loginButtonStyle}>로그인</button>
-            </Link>
-
-            {!isLoggedIn && <SignUpLinkButton />}
-          </div>
           <PickContentLayout>
             <EmptyPickRecordImage
               title="공유된 북마크가 없습니다."
