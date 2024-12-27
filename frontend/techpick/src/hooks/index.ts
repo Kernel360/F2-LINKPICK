@@ -12,4 +12,5 @@ export { useFetchPickRecordByFolderId } from './useFetchPickRecordByFolderId';
 export { useDisclosure } from './useDisclosure';
 export { useRecommendPickToFolderDndMonitor } from './useRecommendPickToFolderDndMonitor';
 export { useLocalStorage } from './useLocalStorage';
+export { useEventLogger } from './useEventLogger';
 export { useImageLoader } from './useImageLoader';
