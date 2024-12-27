@@ -59,14 +59,18 @@ export default async function Page({ params }: { params: { uuid: string } }) {
           </Gap>
 
           <div className={buttonSectionStyle}>
-            <Link href={ROUTES.HOME}>
-              <button className={homeNavigateButtonStyle}>홈으로 가기</button>
-            </Link>
-            <Link href={ROUTES.LOGIN}>
-              <button className={loginButtonStyle}>로그인</button>
-            </Link>
-
-            {!isLoggedIn && <SignUpLinkButton />}
+            {isLoggedIn ? (
+              <Link href={ROUTES.HOME}>
+                <button className={homeNavigateButtonStyle}>홈으로 가기</button>
+              </Link>
+            ) : (
+              <>
+                <Link href={ROUTES.LOGIN}>
+                  <button className={loginButtonStyle}>로그인</button>
+                </Link>
+                <SignUpLinkButton />
+              </>
+            )}
           </div>
         </div>
         <PickContentLayout>
