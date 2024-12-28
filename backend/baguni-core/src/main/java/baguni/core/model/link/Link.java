@@ -67,6 +67,13 @@ public class Link {
 		return this;
 	}
 
+	public Link updateTitle(String title) {
+		if (!StringUtils.isBlank(title)) {
+			this.title = title;
+		}
+		return this;
+	}
+
 	public Link markAsInvalid() {
 		this.invalidatedAt = LocalDateTime.now();
 		return this;
