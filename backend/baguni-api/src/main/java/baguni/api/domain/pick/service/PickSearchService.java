@@ -62,27 +62,6 @@ public class PickSearchService {
 		);
 	}
 
-	@Transactional(readOnly = true)
-	public List<PickResult.Pick> searchPick(PickCommand.Search command) {
-		List<Long> folderIdList = command.folderIdList();
-		List<Long> tagIdList = command.tagIdList();
-
-		if (ObjectUtils.isNotEmpty(folderIdList)) {
-			for (Long folderId : folderIdList) {
-				validateFolderAccess(command.userId(), folderId);
-				validateFolderRootSearch(folderId);
-			}
-		}
-
-		if (ObjectUtils.isNotEmpty(tagIdList)) {
-			for (Long tagId : tagIdList) {
-				validateTagAccess(command.userId(), tagId);
-			}
-		}
-
-		return pickQuery.searchPick(command.userId(), folderIdList, command.searchTokenList(), command.tagIdList());
-	}
-
 	private void validateFolderAccess(Long userId, Long folderId) {
 		Folder parentFolder = folderDataHandler.getFolder(folderId); // 존재하지 않으면, FOLDER_NOT_FOUND
 		if (ObjectUtils.notEqual(userId, parentFolder.getUser().getId())) {
