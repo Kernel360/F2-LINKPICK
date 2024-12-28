@@ -8,7 +8,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import baguni.api.domain.link.dto.LinkInfo;
+import baguni.api.domain.link.service.LinkService;
 import baguni.core.annotation.BaguniAnnotation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -50,6 +51,7 @@ public class PickApiController {
 	private final PickApiMapper pickApiMapper;
 	private final PickSearchService pickSearchService;
 	private final PickBulkService pickBulkService;
+	private final LinkService linkService;
 	private final EventMessenger eventMessenger;
 
 	@GetMapping
@@ -94,28 +96,6 @@ public class PickApiController {
 		Slice<PickResult.Pick> pickResultList = pickSearchService.searchPickPagination(command);
 
 		return ResponseEntity.ok(new PickSliceResponse<>(pickApiMapper.toSliceApiResponse(pickResultList)));
-	}
-
-	/**
-	 *  현재 프론트엔드에서 미사용하는 API 입니다.
-	 */
-	@Deprecated
-	@GetMapping("/search/all")
-	@Operation(summary = "[Deprecated] 픽 리스트 검색", description = "페이지네이션 처리 되지 않은 픽 리스트 검색")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "조회 성공")
-	})
-	public ResponseEntity<List<PickApiResponse.Pick>> searchPick(
-		@LoginUserId Long userId,
-		@ParameterObject @ModelAttribute PickApiRequest.Search request
-	) {
-		List<PickResult.Pick> pickList = pickSearchService.searchPick(
-			pickApiMapper.toSearchCommand(userId, request));
-
-		List<PickApiResponse.Pick> pickResponseList = pickList.stream()
-															  .map(pickApiMapper::toApiResponse)
-															  .toList();
-		return ResponseEntity.ok(pickResponseList);
 	}
 
 	/**
@@ -195,6 +175,27 @@ public class PickApiController {
 		}
 		var command = pickApiMapper.toCreateCommand(userId, request);
 		var result = pickService.saveNewPick(command);
+		var event = new PickCreateEvent(userId, result.id(), result.linkInfo().url());
+		eventMessenger.send(event);
+		var response = pickApiMapper.toApiResponse(result);
+		return ResponseEntity.ok(response);
+	}
+
+	@PostMapping("/unclassified")
+	@Operation(
+		summary = "미분류 폴더로 픽 생성",
+		description = "익스텐션에서 미분류로 바로 픽 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계됩니다."
+	)
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
+		@ApiResponse(responseCode = "404", description = "OG 태그 업데이트를 위한 크롤링 요청 실패")
+	})
+	public ResponseEntity<PickApiResponse.Pick> savePickFromUnclassified(@LoginUserId Long userId,
+		@Valid @RequestBody PickApiRequest.Extension request) {
+		// Jsoup으로 og 데이터를 가져옵니다.
+		LinkInfo linkInfo = linkService.getOgTag(request.url(), request.title());
+		var command = pickApiMapper.toExtensionCommand(userId, request.title(), linkInfo);
+		var result = pickService.saveExtensionPick(command);
 		var event = new PickCreateEvent(userId, result.id(), result.linkInfo().url());
 		eventMessenger.send(event);
 		var response = pickApiMapper.toApiResponse(result);
