@@ -54,12 +54,21 @@ public class LinkService {
 		}
 	}
 
+	/**
+	 *	property 속성에 og 데이터가 없는 경우, name 속성에 있는 데이터 활용
+	 */
 	private Link updateOpengraph(String url, Link link) throws OpenGraphException {
 		var openGraph = new OpenGraph(url);
 		link.updateMetadata(
-			openGraph.getTag(Metadata.TITLE).orElse(""),
-			openGraph.getTag(Metadata.DESCRIPTION).orElse(""),
-			correctImageUrl(url, openGraph.getTag(Metadata.IMAGE).orElse(""))
+			openGraph.getTag(Metadata.OG_TITLE)
+				.orElse(openGraph.getTag(Metadata.TITLE)
+					.orElse("")),
+			openGraph.getTag(Metadata.OG_DESCRIPTION)
+				.orElse(openGraph.getTag(Metadata.DESCRIPTION)
+					.orElse("")),
+			correctImageUrl(url, openGraph.getTag(Metadata.OG_IMAGE)
+				.orElse(openGraph.getTag(Metadata.IMAGE)
+					.orElse("")))
 		);
 		return link;
 	}

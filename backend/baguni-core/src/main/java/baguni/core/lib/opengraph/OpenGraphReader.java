@@ -43,16 +43,23 @@ public class OpenGraphReader {
 				Charset.forName(openGraphOption.getHttpResponseDefaultCharsetName())));
 			Document htmlResponse = Jsoup.parse(response.body());
 			Element head = htmlResponse.head();
-			Elements headClildElements = head.children();
-			headClildElements
-				.stream()
-				.filter(
-					o -> "meta".equals(o.nodeName()) && o.hasAttr("property") && o.attr("property").startsWith("og:"))
-				.forEach(o -> {
-					String key = o.attr("property");
-					String value = o.attr("content");
+
+			String title = head.select("title").text();
+			result.put("title", title);
+
+			Elements metaTags = head.select("meta");
+			metaTags.forEach(meta -> {
+				// og 데이터가 없는 경우, meta name 속성 값(image, description)을 활용한다.
+				boolean isOgProperty = meta.hasAttr("property") && meta.attr("property").startsWith("og:");
+				boolean isOgNameImage = meta.hasAttr("name") && meta.attr("name").contains("image");
+				boolean isOgNameDescription = meta.hasAttr("name") && meta.attr("name").contains("description");
+
+				if (isOgProperty || isOgNameImage || isOgNameDescription) {
+					String key = isOgProperty ? meta.attr("property") : meta.attr("name");
+					String value = meta.attr("content");
 					result.put(key, value);
-				});
+				}
+			});
 		} catch (IOException | InterruptedException e) {
 			throw new OpenGraphException("Error occurred when reading OG tags.", e);
 		}
