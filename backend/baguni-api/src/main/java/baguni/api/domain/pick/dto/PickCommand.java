@@ -12,16 +12,15 @@ public class PickCommand {
 	public record ReadList(Long userId, List<Long> folderIdList) {
 	}
 
-	public record Search(Long userId, List<Long> folderIdList, List<String> searchTokenList,
-						 List<Long> tagIdList) {
-	}
-
 	public record SearchPagination(Long userId, List<Long> folderIdList, List<String> searchTokenList,
 								   List<Long> tagIdList, Long cursor, int size) {
 	}
 
 	public record Create(Long userId, String title, List<Long> tagIdOrderedList, Long parentFolderId,
 						 LinkInfo linkInfo) {
+	}
+
+	public record Extension(Long userId, String title, LinkInfo linkInfo) {
 	}
 
 	public record Update(Long userId, Long id, String title, Long parentFolderId, List<Long> tagIdOrderedList) {

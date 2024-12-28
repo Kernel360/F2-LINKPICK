@@ -16,28 +16,15 @@ public class PickApiRequest {
 	) {
 	}
 
+	public record Extension(
+		@Schema(example = "https://d2.naver.com/helloworld/8149881") String url,
+		@Schema(example = "GitHub Actions를 이용한 코드 리뷰 문화 개선기") String title
+	) {
+	}
+
 	public record Read(
 		@Schema(example = "1") @NotNull(message = "{id.notNull}") Long id
 	) {
-	}
-
-	public record Search(
-		@Schema(description = "조회할 폴더 ID 목록", example = "3, 4, 5") List<Long> folderIdList,
-		@Schema(description = "검색 토큰 목록", example = "Record, 스프링") List<String> searchTokenList,
-		@Schema(description = "검색 태그 ID 목록", example = "1, 2, 3") List<Long> tagIdList
-	) {
-	}
-
-	public record SearchPagination(
-		@Schema(description = "조회할 폴더 ID 목록", example = "3, 4, 5") List<Long> folderIdList,
-		@Schema(description = "검색 토큰 목록", example = "Record, 스프링") List<String> searchTokenList,
-		@Schema(description = "검색 태그 ID 목록", example = "1, 2, 3") List<Long> tagIdList,
-		@Schema(description = "픽 시작 id 조회", example = "0", defaultValue = "0") Long cursor,
-		@Schema(description = "한 페이지에 가져올 픽 개수", example = "20", defaultValue = "20") Integer size
-	) {
-		public Integer size() {
-			return size == null || size <= 0 ? 20 : size;
-		}
 	}
 
 	public record Update(

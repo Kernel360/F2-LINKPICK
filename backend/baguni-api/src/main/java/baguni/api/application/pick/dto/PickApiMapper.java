@@ -10,6 +10,7 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
+import baguni.api.domain.link.dto.LinkInfo;
 import baguni.api.domain.pick.dto.PickCommand;
 import baguni.api.domain.pick.dto.PickResult;
 
@@ -24,12 +25,13 @@ public interface PickApiMapper {
 
 	PickCommand.ReadList toReadListCommand(Long userId, List<Long> folderIdList);
 
-	PickCommand.Search toSearchCommand(Long userId, PickApiRequest.Search request);
-
 	PickCommand.SearchPagination toSearchPaginationCommand(Long userId, List<Long> folderIdList,
 		List<String> searchTokenList, List<Long> tagIdList, Long cursor, Integer size);
 
 	PickCommand.Create toCreateCommand(Long userId, PickApiRequest.Create request);
+
+	@Mapping(source = "linkInfo", target = "linkInfo")
+	PickCommand.Extension toExtensionCommand(Long userId, String title, LinkInfo linkInfo);
 
 	PickCommand.Update toUpdateCommand(Long userId, PickApiRequest.Update request);
 
