@@ -12,9 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * TODO: 프론트엔드가 인증 로직을 주도하는 쪽으로 변경될 예정이며
+ *       이에 따라 아래 핸들러 역시 삭제될 예정입니다.
+ */
 @Component
 @RequiredArgsConstructor
-public class BaguniLoginFailureHandler implements AuthenticationFailureHandler {
+public class BaguniOAuth2FlowFailureHandler implements AuthenticationFailureHandler {
 
 	private final SecurityProperties properties;
 

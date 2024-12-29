@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import baguni.api.domain.user.service.strategy.StarterFolderStrategy;
 import baguni.core.model.user.User;
-import baguni.security.exception.ApiOAuth2Exception;
+import baguni.security.exception.ApiAuthException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.api.domain.user.service.UserService;
@@ -69,6 +69,6 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
 				}
 			}
 		}
-		throw ApiOAuth2Exception.OAUTH_TOKEN_ATTRIBUTE_NOT_FOUND(targetKey);
+		throw ApiAuthException.OAUTH_TOKEN_ATTRIBUTE_NOT_FOUND(targetKey);
 	}
 }
