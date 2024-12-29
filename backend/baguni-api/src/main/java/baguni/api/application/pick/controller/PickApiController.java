@@ -190,7 +190,7 @@ public class PickApiController {
 		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
 		@ApiResponse(responseCode = "404", description = "OG 태그 업데이트를 위한 크롤링 요청 실패")
 	})
-	public ResponseEntity<PickApiResponse.Pick> savePickFromUnclassified(@LoginUserId Long userId,
+	public ResponseEntity<PickApiResponse.Pick> savePickAsUnclassified(@LoginUserId Long userId,
 		@Valid @RequestBody PickApiRequest.Extension request) {
 		// Jsoup으로 og 데이터를 가져옵니다.
 		LinkInfo linkInfo = linkService.getOgTag(request.url(), request.title());
