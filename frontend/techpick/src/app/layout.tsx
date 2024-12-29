@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.ico',
   },
+  openGraph: {
+    images: `${process.env.NEXT_PUBLIC_IMAGE_URL}/image/og_image.png`,
+  },
 };
 
 export default function RootLayout({
