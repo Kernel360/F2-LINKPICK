@@ -112,17 +112,17 @@ spring:
       client:
         registration:
           google:
-            redirect-uri: https://api.baguni.org/api/login/oauth2/code/google
+            redirect-uri: https://api.baguni.kr/api/login/oauth2/code/google
           naver:
-            redirect-uri: https://api.baguni.org/api/login/oauth2/code/naver
+            redirect-uri: https://api.baguni.kr/api/login/oauth2/code/naver
           kakao:
-            redirect-uri: https://api.baguni.org/api/login/oauth2/code/kakao
+            redirect-uri: https://api.baguni.kr/api/login/oauth2/code/kakao
 security:
   cors-patterns:
     - chrome-extension://*
-    - https://*.baguni.org
-  cookie-domain: baguni.org
-  default-redirect-url: https://app.baguni.org
-  base-url: https://api.baguni.org
+    - https://*.baguni.kr
+  cookie-domain: baguni.kr
+  default-redirect-url: https://app.baguni.kr
+  base-url: https://api.baguni.kr
 
 ---
