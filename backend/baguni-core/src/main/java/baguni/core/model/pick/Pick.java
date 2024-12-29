@@ -24,15 +24,6 @@ import baguni.core.model.link.Link;
 import baguni.core.model.user.User;
 import baguni.core.util.OrderConverter;
 
-@Table(
-	name = "pick",
-	uniqueConstraints = {
-		@UniqueConstraint(
-			name = "UC_ONE_LICK_PER_USER",
-			columnNames = {"user_id", "link_id"}
-		)
-	}
-)
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

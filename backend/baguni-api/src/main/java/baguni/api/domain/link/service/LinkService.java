@@ -32,6 +32,18 @@ public class LinkService {
 	}
 
 	@Transactional
+	public LinkInfo getOgTag(String url, String title) {
+		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
+		try {
+			Link updatedLink = updateOpengraph(url, link);
+			updatedLink.updateTitle(title);
+			return linkMapper.of(updatedLink);
+		} catch (Exception e) {
+			throw ApiLinkException.LINK_OG_TAG_UPDATE_FAILURE();
+		}
+	}
+
+	@Transactional
 	public void updateOgTag(String url) {
 		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
 		try {

@@ -103,6 +103,12 @@ public class PickService {
 
 	@LoginUserIdDistributedLock
 	@Transactional
+	public PickResult.Pick saveExtensionPick(PickCommand.Extension command) {
+		return pickMapper.toPickResult(pickDataHandler.saveExtensionPick(command));
+	}
+
+	@LoginUserIdDistributedLock
+	@Transactional
 	public PickResult.Pick updatePick(PickCommand.Update command) {
 		validatePickAccess(command.userId(), command.id());
 		validateFolderAccess(command.userId(), command.parentFolderId());

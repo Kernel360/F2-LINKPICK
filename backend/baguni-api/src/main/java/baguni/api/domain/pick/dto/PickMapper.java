@@ -32,8 +32,12 @@ public interface PickMapper {
 	PickResult.FolderPickWithViewCountList toPickResultList(Long folderId, List<PickResult.PickWithViewCount> pick);
 
 	@Mapping(source = "command.title", target = "title")
+	@Mapping(source = "command.tagIdOrderedList", target = "tagIdOrderedList")
 	@Mapping(source = "parentFolder", target = "parentFolder")
 	@Mapping(source = "user", target = "user")
-	@Mapping(source = "command.tagIdOrderedList", target = "tagIdOrderedList")
 	Pick toEntity(PickCommand.Create command, User user, Folder parentFolder, Link link);
+
+	@Mapping(source = "parentFolder", target = "parentFolder")
+	@Mapping(source = "link", target = "link")
+	Pick toEntityByExtension(String title, List<Long> tagIdOrderedList, User user, Folder parentFolder, Link link);
 }
