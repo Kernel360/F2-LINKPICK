@@ -23,7 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *     case 1. 쿠키가 만료된 요청이 온 경우 </br>
  *     case 2. 변조된 JWT를 가진 요청인 경우
  */
-public class BaguniInvalidAuthenticationEntrypoint implements AuthenticationEntryPoint {
+public class BaguniApiAuthExceptionEntrypoint implements AuthenticationEntryPoint {
 
 	/**
 	 * 시큐리티의 HttpServletResponse를 바구니 API ErrorResponse로 변환한다.

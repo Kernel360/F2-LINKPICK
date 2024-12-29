@@ -17,8 +17,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import baguni.security.handler.BaguniLoginFailureHandler;
-import baguni.security.handler.BaguniInvalidAuthenticationEntrypoint;
+import baguni.security.handler.BaguniOAuth2FlowFailureHandler;
+import baguni.security.handler.BaguniApiAuthExceptionEntrypoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.security.filter.TokenAuthenticationFilter;
@@ -38,7 +38,7 @@ public class SecurityConfig {
 	private final OAuth2SuccessHandler oAuth2SuccessHandler;
 	private final TokenAuthenticationFilter tokenAuthenticationFilter;
 	private final BaguniLogoutHandler logoutHandler;
-	private final BaguniLoginFailureHandler loginFailureHandler;
+	private final BaguniOAuth2FlowFailureHandler loginFailureHandler;
 	private final BaguniAuthorizationRequestRepository requestRepository;
 	private final SecurityProperties properties;
 
@@ -72,7 +72,7 @@ public class SecurityConfig {
 			)
 			.exceptionHandling((configurer ->
 				configurer.defaultAuthenticationEntryPointFor(
-					new BaguniInvalidAuthenticationEntrypoint(),
+					new BaguniApiAuthExceptionEntrypoint(),
 					new AntPathRequestMatcher("/api/**")
 				)
 			))

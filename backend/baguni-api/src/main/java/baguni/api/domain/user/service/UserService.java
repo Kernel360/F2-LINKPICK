@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import baguni.api.infrastructure.user.UserDataHandler;
 import baguni.security.exception.ApiAuthException;
+import baguni.security.handler.BaguniOAuth2FlowFailureHandler;
 import lombok.RequiredArgsConstructor;
 import baguni.core.annotation.BaguniAnnotation;
 import baguni.core.model.folder.Folder;
@@ -25,7 +26,7 @@ public class UserService {
 
 	/**
 	 *  기본 폴더 생성 실패시 롤백, 회원 가입 무효 처리
-	 *  이후 {@link baguni.security.handler.BaguniLoginFailureHandler} 에서
+	 *  이후 {@link BaguniOAuth2FlowFailureHandler} 에서
 	 *  클라이언ㅌ 에러 페이지로 리다이렉트
 	 */
 	@Transactional
