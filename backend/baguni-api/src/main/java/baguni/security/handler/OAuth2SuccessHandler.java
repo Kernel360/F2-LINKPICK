@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import baguni.core.model.user.User;
 import baguni.core.model.user.UserRepository;
 import baguni.security.config.SecurityProperties;
-import baguni.security.exception.ApiOAuth2Exception;
+import baguni.security.exception.ApiAuthException;
 import baguni.security.model.OAuth2UserInfo;
 import baguni.security.util.CookieUtil;
 import baguni.security.util.JwtUtil;
@@ -36,7 +36,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		var oAuth2UserInfo = (OAuth2UserInfo)authentication.getPrincipal();
 
 		User user = userRepository.findBySocialProviderId(oAuth2UserInfo.getName())
-								  .orElseThrow(ApiOAuth2Exception::INVALID_AUTHENTICATION);
+								  .orElseThrow(ApiAuthException::INVALID_AUTHENTICATION);
 
 		String accessToken = jwtUtil.getToken(user, ACCESS_TOKEN_DURATION);
 

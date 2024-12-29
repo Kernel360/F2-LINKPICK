@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import baguni.api.infrastructure.user.UserDataHandler;
-import baguni.security.exception.ApiOAuth2Exception;
+import baguni.security.exception.ApiAuthException;
 import lombok.RequiredArgsConstructor;
 import baguni.core.annotation.BaguniAnnotation;
 import baguni.core.model.folder.Folder;
@@ -56,7 +56,7 @@ public class UserService {
 			folderRepository.save(Folder.createEmptyRecycleBinFolder(user));
 			folderRepository.save(Folder.createEmptyRootFolder(user));
 		} catch (Exception e) {
-			throw ApiOAuth2Exception.USER_MANDATORY_FOLDER_CREATE_FAILED();
+			throw ApiAuthException.USER_MANDATORY_FOLDER_CREATE_FAILED();
 		}
 	}
 }

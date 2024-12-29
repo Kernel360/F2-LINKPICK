@@ -9,7 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import lombok.Getter;
-import baguni.security.exception.ApiOAuth2Exception;
+import baguni.security.exception.ApiAuthException;
 import baguni.core.model.user.Role;
 import baguni.core.model.user.SocialType;
 
@@ -24,7 +24,7 @@ public class OAuth2UserInfo implements OAuth2User {
 			this.provider = SocialType.providerIdOf(provider);
 			this.attributes = attributes;
 		} catch (IllegalArgumentException e) {
-			throw ApiOAuth2Exception.SOCIAL_TYPE_INVALID();
+			throw ApiAuthException.SOCIAL_TYPE_INVALID();
 		}
 
 	}

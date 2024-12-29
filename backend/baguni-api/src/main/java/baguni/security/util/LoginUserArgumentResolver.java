@@ -8,7 +8,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import baguni.security.annotation.LoginUserId;
-import baguni.security.exception.ApiOAuth2Exception;
+import baguni.security.exception.ApiAuthException;
 
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -30,6 +30,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 			return authentication.getPrincipal();
 		}
 
-		throw ApiOAuth2Exception.INVALID_AUTHENTICATION();
+		throw ApiAuthException.INVALID_AUTHENTICATION();
 	}
 }
