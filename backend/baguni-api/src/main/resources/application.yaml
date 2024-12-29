@@ -70,7 +70,7 @@ security:
     - chrome-extension://*
     - https://local.minlife.me:3000
   cookie-domain: localhost
-  default-redirect-url: http://localhost:8080
+  default-redirect-url: http://localhost:8080/swagger-ui/index.html
   base-url: http://localhost:8080
 server:
   port: 8080
