@@ -12,11 +12,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import baguni.security.handler.BaguniLoginFailureHandler;
+import baguni.security.handler.BaguniInvalidAuthenticationEntrypoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.security.filter.TokenAuthenticationFilter;
@@ -45,7 +47,8 @@ public class SecurityConfig {
 
 		// TODO: 이후 설정 추가 필요
 		http
-			.csrf(AbstractHttpConfigurer::disable) // csrf 비활성화 시 logout 했을 때 GET 메서드로 요청됨. POST로만 보내도록 하기 위해 주석 처리
+			// csrf 비활성화 시 logout 했을 때 GET 메서드로 요청됨. POST로만 보내도록 하기 위해 주석 처리
+			.csrf(AbstractHttpConfigurer::disable)
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
 			.httpBasic(AbstractHttpConfigurer::disable)
 			.formLogin(AbstractHttpConfigurer::disable)
@@ -60,13 +63,19 @@ public class SecurityConfig {
 			.authorizeHttpRequests(
 				authRequest -> authRequest
 					.requestMatchers(HttpMethod.GET, "/api/shared/{uuid}").permitAll()
-					.requestMatchers(HttpMethod.GET, "/api/event/shared/**").permitAll() // 이벤트는 shared의 경우 검증 X
+					.requestMatchers(HttpMethod.POST, "/api/events/shared/**").permitAll() // 이벤트는 shared의 경우 검증 X
 					.requestMatchers("/api-docs/**").permitAll()
 					.requestMatchers("/swagger-ui/**").permitAll()
 					.requestMatchers("/api/login/**").permitAll()
 					.requestMatchers("/api/links").permitAll()
 					.anyRequest().authenticated()
 			)
+			.exceptionHandling((configurer ->
+				configurer.defaultAuthenticationEntryPointFor(
+					new BaguniInvalidAuthenticationEntrypoint(),
+					new AntPathRequestMatcher("/api/**")
+				)
+			))
 			.oauth2Login(
 				oauth -> oauth
 					.authorizationEndpoint(authorization -> authorization
