@@ -39,7 +39,7 @@ export default function LoginFailedPage() {
           <div className={googleLoginContainer}>
             <Link
               className={loginLink}
-              href={`${process.env.NEXT_PUBLIC_API}/login/google?redirectUrl=${redirectUrl}`}
+              href={`${process.env.NEXT_PUBLIC_API}/login/google?redirect_url=${redirectUrl}`}
             >
               <Image
                 style={{ filter: 'brightness(100)' }}
@@ -54,7 +54,7 @@ export default function LoginFailedPage() {
           <div className={kakaoLoginContainer}>
             <Link
               className={loginLink}
-              href={`${process.env.NEXT_PUBLIC_API}/login/kakao?redirectUrl=${redirectUrl}`}
+              href={`${process.env.NEXT_PUBLIC_API}/login/kakao?redirect_url=${redirectUrl}`}
             >
               <Image
                 style={{ filter: 'invert(100%)' }}
