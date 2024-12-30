@@ -7,7 +7,7 @@ import DOMPurify from 'dompurify';
 import { EllipsisIcon } from 'lucide-react';
 import { useDisclosure } from '@/hooks';
 import { useTagStore } from '@/stores';
-import { notifyError, isEmptyString, isShallowEqualValue } from '@/utils';
+import { isEmptyString, isShallowEqualValue } from '@/utils';
 import { ShowDeleteTagDialogButton } from './ShowDeleteTagDialogButton';
 import {
   tagInfoEditFormLayout,
@@ -60,10 +60,8 @@ export function TagInfoEditPopoverButton({
         name: newTagName,
         colorNumber: tag.colorNumber,
       });
-    } catch (error) {
-      if (error instanceof Error) {
-        notifyError(error.message);
-      }
+    } catch {
+      /* empty */
     }
   };
 

@@ -13,7 +13,7 @@ import {
   usePickStore,
   useUpdatePickStore,
 } from '@/stores';
-import { notifyError, numberToRandomColor } from '@/utils';
+import { numberToRandomColor } from '@/utils';
 import { DeleteTagDialog } from './DeleteTagDialog';
 import { DeselectTagButton } from './DeselectTagButton';
 import { SelectedTagItem } from '../SelectedTagItem';
@@ -100,10 +100,8 @@ export function PickTagAutocompleteDialog({
       });
       randomNumber.current = getRandomInt();
       onSelectTag(newTag!);
-    } catch (error) {
-      if (error instanceof Error) {
-        notifyError(error.message);
-      }
+    } catch {
+      /* empty */
     } finally {
       isCreateFetchPendingRef.current = false;
     }
