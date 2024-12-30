@@ -19,9 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import baguni.api.application.ranking.dto.LinkInfoWithCount;
 import baguni.api.application.ranking.dto.RankingApiMapper;
 import baguni.api.application.ranking.dto.RankingResponse;
-import baguni.domain.service.link.exception.ApiLinkException;
-import baguni.domain.service.link.service.LinkService;
-import baguni.domain.service.ranking.service.RankingService;
+import baguni.api.service.link.exception.ApiLinkException;
+import baguni.api.service.link.service.LinkService;
+import baguni.api.service.ranking.service.RankingService;
 import baguni.common.annotation.BaguniAnnotation;
 import baguni.common.dto.UrlWithCount;
 

@@ -4,7 +4,7 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-import baguni.domain.service.link.dto.LinkInfo;
+import baguni.api.service.link.dto.LinkInfo;
 
 @Mapper(
 	componentModel = "spring",

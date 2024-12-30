@@ -11,8 +11,8 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import baguni.domain.service.user.service.strategy.StarterFolderStrategy;
-import baguni.domain.model.user.User;
+import baguni.api.service.user.service.UserService;
+import baguni.api.service.user.service.strategy.StarterFolderStrategy;
 import baguni.security.exception.ApiAuthException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,13 +33,13 @@ public class CustomOAuth2Service extends DefaultOAuth2UserService {
 		String provider = userRequest.getClientRegistration().getRegistrationId();
 		var oAuth2User = super.loadUser(userRequest);
 		Map<String, Object> attributes = getAttributes(oAuth2User, provider);
-		OAuth2UserInfo oAuth2UserInfo = new OAuth2UserInfo(provider, attributes);
+		OAuth2UserInfo authInfo = new OAuth2UserInfo(provider, attributes);
 
-		if (!userService.isUserExist(oAuth2UserInfo.getName())) {
-			User user = userService.createUser(oAuth2UserInfo);
-			starterFolderStrategy.initRootFolder(user);
+		if (!userService.isUserExist(authInfo.getName())) {
+			var userInfo = userService.createUser(authInfo.getProvider(), authInfo.getName(), authInfo.getEmail());
+			starterFolderStrategy.initRootFolder(userInfo);
 		}
-		return oAuth2UserInfo;
+		return authInfo;
 	}
 
 	private Map<String, Object> getAttributes(OAuth2User oAuth2User, String provider) {

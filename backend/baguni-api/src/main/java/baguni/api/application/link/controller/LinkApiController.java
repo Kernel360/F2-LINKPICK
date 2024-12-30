@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import baguni.api.application.link.dto.LinkApiMapper;
 import baguni.api.application.link.dto.LinkApiResponse;
-import baguni.domain.service.link.service.LinkService;
+import baguni.api.service.link.service.LinkService;
 
 @RestController
 @RequiredArgsConstructor

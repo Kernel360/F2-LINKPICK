@@ -2,7 +2,7 @@
 
 <configuration scan="true" scanPeriod="60 seconds">
 
-    <!-- ``````````````````````` CONVERSION RULE SETTING ```````````````````````````` -->
+    <!-- baguni.entity.annotation.`````````````````````` CONVERSION RULE SETTING ```````````````````````````` -->
 
     <!-- 콘솔 출력 색상 적용 (참고: https://oingdaddy.tistory.com/257)   -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>

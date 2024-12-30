@@ -16,7 +16,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import baguni.domain.model.user.Role;
+import baguni.entity.model.user.Role;
 import baguni.security.config.SecurityProperties;
 import baguni.security.util.JwtUtil;
 

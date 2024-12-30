@@ -1,6 +1,6 @@
 rootProject.name = 'backend'
 include 'baguni-common'
-include 'baguni-domain'
+include 'baguni-entity'
 
 include 'baguni-api'
 include 'baguni-batch'

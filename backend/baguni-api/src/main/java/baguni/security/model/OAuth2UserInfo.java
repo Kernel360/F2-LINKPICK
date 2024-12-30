@@ -10,8 +10,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import lombok.Getter;
 import baguni.security.exception.ApiAuthException;
-import baguni.domain.model.user.Role;
-import baguni.domain.model.user.SocialType;
+import baguni.entity.model.user.Role;
+import baguni.entity.model.user.SocialType;
 
 public class OAuth2UserInfo implements OAuth2User {
 

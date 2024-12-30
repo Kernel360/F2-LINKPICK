@@ -20,7 +20,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import baguni.api.application.sharedFolder.dto.SharedFolderApiMapper;
 import baguni.api.application.sharedFolder.dto.SharedFolderApiResponse;
-import baguni.domain.service.sharedFolder.service.SharedFolderService;
+import baguni.api.service.sharedFolder.service.SharedFolderService;
 import baguni.security.annotation.LoginUserId;
 
 @RestController

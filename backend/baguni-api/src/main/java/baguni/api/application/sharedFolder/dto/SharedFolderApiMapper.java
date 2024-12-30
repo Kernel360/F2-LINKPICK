@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
-import baguni.domain.service.sharedFolder.dto.SharedFolderResult;
+import baguni.api.service.sharedFolder.dto.SharedFolderResult;
 
 @Mapper(
 	componentModel = "spring",

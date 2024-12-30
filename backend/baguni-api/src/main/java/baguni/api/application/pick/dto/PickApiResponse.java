@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
-import baguni.domain.service.link.dto.LinkInfo;
-import baguni.domain.service.pick.dto.PickResult;
+import baguni.api.service.link.dto.LinkInfo;
+import baguni.api.service.pick.dto.PickResult;
 
 public class PickApiResponse {
 

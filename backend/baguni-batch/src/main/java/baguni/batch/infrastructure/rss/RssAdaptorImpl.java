@@ -12,10 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import baguni.batch.domain.rss.dto.RssBlogCommand;
 import baguni.batch.domain.rss.dto.RssMapper;
-import baguni.domain.model.rss.RssBlog;
-import baguni.domain.model.rss.RssBlogRepository;
-import baguni.domain.model.rss.RssFeed;
-import baguni.domain.model.rss.RssFeedRepository;
+import baguni.entity.model.rss.RssBlog;
+import baguni.entity.model.rss.RssBlogRepository;
+import baguni.entity.model.rss.RssFeed;
+import baguni.entity.model.rss.RssFeedRepository;
 
 @Component
 @RequiredArgsConstructor

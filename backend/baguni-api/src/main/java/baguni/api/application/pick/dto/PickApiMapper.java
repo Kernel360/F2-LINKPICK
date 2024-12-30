@@ -10,9 +10,9 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
-import baguni.domain.service.link.dto.LinkInfo;
-import baguni.domain.service.pick.dto.PickCommand;
-import baguni.domain.service.pick.dto.PickResult;
+import baguni.api.service.link.dto.LinkInfo;
+import baguni.api.service.pick.dto.PickCommand;
+import baguni.api.service.pick.dto.PickResult;
 
 @Mapper(
 	componentModel = "spring",
