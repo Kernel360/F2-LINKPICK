@@ -19,11 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import baguni.api.application.ranking.dto.LinkInfoWithCount;
 import baguni.api.application.ranking.dto.RankingApiMapper;
 import baguni.api.application.ranking.dto.RankingResponse;
-import baguni.api.domain.link.exception.ApiLinkException;
-import baguni.api.domain.link.service.LinkService;
-import baguni.api.domain.ranking.service.RankingService;
-import baguni.core.annotation.BaguniAnnotation;
-import baguni.core.dto.UrlWithCount;
+import baguni.domain.service.link.exception.ApiLinkException;
+import baguni.domain.service.link.service.LinkService;
+import baguni.domain.service.ranking.service.RankingService;
+import baguni.common.annotation.BaguniAnnotation;
+import baguni.common.dto.UrlWithCount;
 
 /**
  * baguni-ranking 서버로 부터 데이터를 받아와 뿌려준다.

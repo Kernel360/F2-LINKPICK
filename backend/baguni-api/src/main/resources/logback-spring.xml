@@ -78,12 +78,12 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>
-    <logger name="baguni.core" level="info" additivity="false">
+    <logger name="baguni.common" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>
     <logger name="p6spy" level="info" additivity="false">
-        <!--        <appender-ref ref="CONSOLE"/>-->
-        <!--        <appender-ref ref="SQL-LOG-FILE"/>-->
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="SQL-LOG-FILE"/>
     </logger>
 </configuration>

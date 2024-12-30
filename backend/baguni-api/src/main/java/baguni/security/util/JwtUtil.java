@@ -10,8 +10,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import baguni.core.model.user.Role;
-import baguni.core.model.user.User;
+import baguni.domain.model.user.Role;
+import baguni.domain.model.user.User;
 
 // 패키지 위치에 대한 고민 필요
 @Component

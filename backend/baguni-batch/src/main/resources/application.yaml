@@ -2,7 +2,8 @@
 spring:
   profiles:
     include:
-      - core
+      - domain
+      - common
   application:
     name: baguni.${PROFILE_MODE}.server.batch
 ---

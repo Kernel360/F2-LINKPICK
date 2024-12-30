@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,18 +16,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import baguni.domain.service.folder.service.FolderService;
 import jakarta.persistence.OptimisticLockException;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
-import baguni.api.domain.folder.dto.FolderCommand;
-import baguni.api.domain.folder.dto.FolderResult;
-import baguni.api.infrastructure.folder.FolderDataHandler;
-import baguni.core.model.folder.Folder;
-import baguni.core.model.folder.FolderRepository;
-import baguni.core.model.user.Role;
-import baguni.core.model.user.SocialType;
-import baguni.core.model.user.User;
-import baguni.core.model.user.UserRepository;
+import baguni.domain.service.folder.dto.FolderCommand;
+import baguni.domain.service.folder.dto.FolderResult;
+import baguni.domain.infrastructure.folder.FolderDataHandler;
+import baguni.domain.model.folder.Folder;
+import baguni.domain.model.folder.FolderRepository;
+import baguni.domain.model.user.Role;
+import baguni.domain.model.user.SocialType;
+import baguni.domain.model.user.User;
+import baguni.domain.model.user.UserRepository;
 
 @Slf4j
 @SpringBootTest(classes = BaguniApiApplication.class)

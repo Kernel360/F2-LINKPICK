@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(":baguni-core")
+    implementation project(":baguni-common")
 
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 }

@@ -1,0 +1,37 @@
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  rabbitmq:
+    url: ${DOCKER_LOCAL_RABBITMQ_URL}
+    username: ${DOCKER_RABBITMQ_USERNAME}
+    password: ${DOCKER_RABBITMQ_PASSWORD}
+server-url: # 테크픽 서버간 통신을 위한 주소
+  api-server: http://localhost:8080/api # 운영 api 서버
+  ranking-server: http://localhost:8082/api # 랭킹 서버
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  rabbitmq:
+    url: ${DOCKER_DEV_RABBITMQ_URL}
+    username: ${DOCKER_RABBITMQ_USERNAME}
+    password: ${DOCKER_RABBITMQ_PASSWORD}
+server-url: # 테크픽 서버간 통신을 위한 주소
+  api-server: http://baguni.${PROFILE_MODE}.server.api:8080/api # 운영 api 서버 (컨테이너)
+  ranking-server: http://baguni.${PROFILE_MODE}.server.ranking:8080/api # 랭킹 서버 (컨테이너)
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  rabbitmq:
+    url: ${DOCKER_PROD_RABBITMQ_URL}
+    username: ${DOCKER_RABBITMQ_USERNAME}
+    password: ${DOCKER_RABBITMQ_PASSWORD}
+server-url: # 테크픽 서버간 통신을 위한 주소
+  api-server: http://baguni.${PROFILE_MODE}.server.api:8080/api # 운영 api 서버 (컨테이너)
+  ranking-server: http://baguni.${PROFILE_MODE}.server.ranking:8080/api # 랭킹 서버 (컨테이너)
+---

@@ -2,9 +2,9 @@ package baguni.ranking.infra.sharedFolder;
 
 import java.time.LocalDate;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import jakarta.persistence.Id;
 import lombok.Getter;
 import baguni.ranking.infra.pick.UrlCount;
 

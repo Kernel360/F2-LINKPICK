@@ -11,12 +11,11 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import baguni.api.domain.user.service.strategy.StarterFolderStrategy;
-import baguni.core.model.user.User;
+import baguni.domain.service.user.service.strategy.StarterFolderStrategy;
+import baguni.domain.model.user.User;
 import baguni.security.exception.ApiAuthException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.api.domain.user.service.UserService;
 import baguni.security.config.OAuth2AttributeConfigProvider;
 import baguni.security.model.OAuth2UserInfo;
 

@@ -18,16 +18,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.domain.service.tag.service.TagService;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
-import baguni.api.domain.tag.dto.TagCommand;
-import baguni.api.domain.tag.dto.TagResult;
-import baguni.api.domain.tag.exception.ApiTagException;
-import baguni.api.infrastructure.user.UserDataHandler;
-import baguni.core.model.user.Role;
-import baguni.core.model.user.SocialType;
-import baguni.core.model.user.User;
-import baguni.core.model.user.UserRepository;
+import baguni.domain.service.tag.dto.TagCommand;
+import baguni.domain.service.tag.dto.TagResult;
+import baguni.domain.service.tag.exception.ApiTagException;
+import baguni.domain.infrastructure.user.UserDataHandler;
+import baguni.domain.model.user.Role;
+import baguni.domain.model.user.SocialType;
+import baguni.domain.model.user.User;
+import baguni.domain.model.user.UserRepository;
 
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

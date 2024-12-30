@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+}
+
+group = 'kernel360'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // spring boot
+//    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.2'
+//    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+//    // jsoup
+//    implementation 'org.jsoup:jsoup:1.18.1'
+//    // spring caffeine cache
+//    implementation 'org.springframework.boot:spring-boot-starter-cache'
+//    implementation 'com.github.ben-manes.caffeine:caffeine'
+//    // RabbitMQ
+//    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+//    implementation 'org.springframework.amqp:spring-amqp:3.2.0'
+//    // lombok annotation
+//    compileOnly 'org.projectlombok:lombok'
+//    annotationProcessor 'org.projectlombok:lombok'
+//    testCompileOnly 'org.projectlombok:lombok'
+//    testAnnotationProcessor 'org.projectlombok:lombok'
+//    // logback logger
+//    implementation 'ch.qos.logback:logback-classic:1.4.12'
+//    implementation 'org.slf4j:slf4j-api:2.0.3'
+//    // test environment
+//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+//    testRuntimeOnly 'com.mysql:mysql-connector-j'
+//    // map struct
+//    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+//    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+//    // xml
+//    implementation 'javax.xml.bind:jaxb-api:2.3.1' //xml 문서와 자바 객체 간 매핑을 자동화
+//     springdoc swagger dependency
+//    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+//    // https://mvnrepository.com/artifact/org.mockito/mockito-core
+//    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.14.2'
+}
+
+
+tasks.named('test') {
+    enabled = false
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

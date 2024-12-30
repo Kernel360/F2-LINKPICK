@@ -5,7 +5,7 @@ logging:
         data:
           mongodb:
             core:
-#              MongoTemplate: DEBUG # MongoDB Query Logging
+            # MongoTemplate: DEBUG # MongoDB Query Logging
 
 # swagger setting
 springdoc:
@@ -14,20 +14,22 @@ springdoc:
   api-docs:
     path: /api-docs
   show-actuator: true
-  use-fqn: true # swagger가 패키지를 포함 관리, 같은 클래스내의 inner class 또한 구분 가능. Ex) TagApiResponse.Create TagApiResponse.Move 를 구분할 수 있음
+  # swagger가 패키지를 포함 관리, 같은 클래스내의 inner class 또한 구분 가능. Ex) TagApiResponse.Create TagApiResponse.Move 를 구분할 수 있음
+  use-fqn: true
 
 spring:
   profiles:
     include:
-      - core
+      - common
   application:
     name: baguni.${PROFILE_MODE}.server.ranking
   output:
     ansi:
       enabled: always
-  sql:
-    init:
-      mode: never # schema.sql 실행시 always 키고 실행하시면 됩니다. option: never, always
+  # MongoDB를 위해 JPA 자동 설정을 제외.
+  # https://stackoverflow.com/questions/51221777/failed-to-configure-a-datasource-url-attribute-is-not-specified-and-no-embedd
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 ---
 spring:
   config:

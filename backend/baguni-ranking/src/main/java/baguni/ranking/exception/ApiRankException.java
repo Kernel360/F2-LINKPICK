@@ -1,7 +1,7 @@
 package baguni.ranking.exception;
 
-import baguni.core.exception.base.ApiErrorCode;
-import baguni.core.exception.base.ApiException;
+import baguni.common.exception.base.ApiErrorCode;
+import baguni.common.exception.base.ApiException;
 
 public class ApiRankException extends ApiException {
 

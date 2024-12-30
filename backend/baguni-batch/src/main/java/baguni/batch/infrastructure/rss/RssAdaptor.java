@@ -4,8 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import baguni.batch.domain.rss.dto.RssBlogCommand;
-import baguni.core.model.rss.RssBlog;
-import baguni.core.model.rss.RssFeed;
+import baguni.domain.model.rss.RssBlog;
+import baguni.domain.model.rss.RssFeed;
 
 public interface RssAdaptor {
 

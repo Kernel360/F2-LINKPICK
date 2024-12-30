@@ -5,8 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import baguni.api.domain.link.dto.LinkInfo;
-import baguni.core.dto.UrlWithCount;
+import baguni.domain.service.link.dto.LinkInfo;
+import baguni.common.dto.UrlWithCount;
 
 @Mapper(
 	componentModel = "spring",

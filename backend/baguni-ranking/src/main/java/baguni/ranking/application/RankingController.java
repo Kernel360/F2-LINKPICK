@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.ranking.domain.pick.PickRankingService;
-import baguni.core.dto.UrlWithCount;
+import baguni.common.dto.UrlWithCount;
 
 @Slf4j
 @RestController

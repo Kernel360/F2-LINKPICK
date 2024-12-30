@@ -9,16 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import baguni.domain.service.pick.service.PickBulkService;
+import baguni.domain.service.pick.service.PickService;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
-import baguni.api.domain.link.dto.LinkInfo;
-import baguni.api.domain.pick.dto.PickCommand;
-import baguni.core.model.folder.Folder;
-import baguni.core.model.folder.FolderRepository;
-import baguni.core.model.user.Role;
-import baguni.core.model.user.SocialType;
-import baguni.core.model.user.User;
-import baguni.core.model.user.UserRepository;
+import baguni.domain.service.link.dto.LinkInfo;
+import baguni.domain.service.pick.dto.PickCommand;
+import baguni.domain.model.folder.Folder;
+import baguni.domain.model.folder.FolderRepository;
+import baguni.domain.model.user.Role;
+import baguni.domain.model.user.SocialType;
+import baguni.domain.model.user.User;
+import baguni.domain.model.user.UserRepository;
 
 @Slf4j
 @SpringBootTest(classes = BaguniApiApplication.class)

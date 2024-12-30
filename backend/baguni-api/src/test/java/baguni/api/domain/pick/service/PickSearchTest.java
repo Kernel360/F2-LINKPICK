@@ -19,21 +19,23 @@ import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.domain.service.pick.service.PickSearchService;
+import baguni.domain.service.pick.service.PickService;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
-import baguni.api.domain.folder.exception.ApiFolderException;
-import baguni.api.domain.link.dto.LinkInfo;
-import baguni.api.domain.pick.dto.PickCommand;
-import baguni.api.domain.pick.dto.PickResult;
-import baguni.api.domain.tag.exception.ApiTagException;
-import baguni.core.model.folder.Folder;
-import baguni.core.model.folder.FolderRepository;
-import baguni.core.model.tag.Tag;
-import baguni.core.model.tag.TagRepository;
-import baguni.core.model.user.Role;
-import baguni.core.model.user.SocialType;
-import baguni.core.model.user.User;
-import baguni.core.model.user.UserRepository;
+import baguni.domain.service.folder.exception.ApiFolderException;
+import baguni.domain.service.link.dto.LinkInfo;
+import baguni.domain.service.pick.dto.PickCommand;
+import baguni.domain.service.pick.dto.PickResult;
+import baguni.domain.service.tag.exception.ApiTagException;
+import baguni.domain.model.folder.Folder;
+import baguni.domain.model.folder.FolderRepository;
+import baguni.domain.model.tag.Tag;
+import baguni.domain.model.tag.TagRepository;
+import baguni.domain.model.user.Role;
+import baguni.domain.model.user.SocialType;
+import baguni.domain.model.user.User;
+import baguni.domain.model.user.UserRepository;
 
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

@@ -2,13 +2,11 @@ package baguni.api.application.sharedFolder.dto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import baguni.api.domain.sharedFolder.dto.SharedFolderResult;
+import baguni.domain.service.sharedFolder.dto.SharedFolderResult;
 
 public class SharedFolderApiResponse {
 
