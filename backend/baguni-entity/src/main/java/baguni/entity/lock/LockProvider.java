@@ -1,4 +1,4 @@
-package baguni.api.infrastructure.lock;
+package baguni.entity.lock;
 
 /**
  * @author sangwon

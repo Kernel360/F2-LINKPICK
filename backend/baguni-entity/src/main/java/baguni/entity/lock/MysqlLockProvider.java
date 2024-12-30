@@ -1,11 +1,11 @@
-package baguni.api.infrastructure.lock;
+package baguni.entity.lock;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.api.infrastructure.lock.util.LockException;
+import baguni.entity.lock.util.LockException;
 
 @Slf4j
 @Component

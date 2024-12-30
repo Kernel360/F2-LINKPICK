@@ -17,7 +17,7 @@ public class MeasureTimeAspect {
 
 	private final RequestHolder requestHolder;
 
-	@Pointcut("@annotation(baguni.common.annotation.BaguniAnnotation.MeasureTime)")
+	@Pointcut("@annotation(baguni.common.annotation.MeasureTime)")
 	public void pointcut() {
 	}
 

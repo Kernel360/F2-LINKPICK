@@ -1,4 +1,4 @@
-package baguni.api.annotation;
+package baguni.entity.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.common.annotation.BaguniAnnotation;
+import baguni.common.annotation.MeasureTime;
 import baguni.common.dto.UrlWithCount;
 import baguni.ranking.cache.CacheType;
 import baguni.ranking.infra.pick.LinkPickedCountRepository;
@@ -45,7 +45,8 @@ public class PickRankingService {
 	 * 		 	    CacheType Enum 참고
 	 */
 	@Cacheable(cacheNames = CacheType.CACHE_NAME.DAILY_LINK_RANK)
-	@BaguniAnnotation.MeasureTime
+	@MeasureTime
+
 	public List<UrlWithCount> getDailyLinksOrderByViewCount(LocalDate today, int limit) {
 		// today : 12/19 (Between = GT / LT)
 		// 12/18 < ? < 12/20 로 조회해야 오늘 데이터를 받아올 수 있습니다.
@@ -65,7 +66,8 @@ public class PickRankingService {
 	 * 	 	    CacheType Enum 참고
 	 */
 	@Cacheable(cacheNames = CacheType.CACHE_NAME.WEEKLY_LINK_RANK)
-	@BaguniAnnotation.MeasureTime
+	@MeasureTime
+
 	public List<UrlWithCount> getWeeklyLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
 		var pickViewCountList = linkViewCountRepository.findByDateBetween(
 			startDate.minusDays(1), endDate.plusDays(1)
@@ -88,7 +90,8 @@ public class PickRankingService {
 	 * 	    -e394202d5c87
 	 */
 	@Cacheable(cacheNames = CacheType.CACHE_NAME.MONTHLY_PICK_RANK)
-	@BaguniAnnotation.MeasureTime
+	@MeasureTime
+
 	public List<UrlWithCount> getLinksOrderByPickedCount(LocalDate startDate, LocalDate endDate, int limit) {
 		var pickCreateCountList = linkPickedCountRepository.findByDateBetween(
 			startDate.minusDays(1), endDate.plusDays(1)

@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import baguni.api.annotation.LoginUserIdDistributedLock;
+import baguni.entity.annotation.LoginUserIdDistributedLock;
 import baguni.api.service.folder.dto.FolderCommand;
 import baguni.api.service.folder.dto.FolderMapper;
 import baguni.api.service.folder.dto.FolderResult;

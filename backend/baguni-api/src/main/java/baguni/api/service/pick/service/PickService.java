@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.api.annotation.LoginUserIdDistributedLock;
+import baguni.entity.annotation.LoginUserIdDistributedLock;
 import baguni.api.service.folder.exception.ApiFolderException;
 import baguni.api.service.pick.dto.PickCommand;
 import baguni.api.service.pick.dto.PickMapper;

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import baguni.api.service.link.dto.LinkInfo;
 import baguni.api.service.link.service.LinkService;
-import baguni.common.annotation.BaguniAnnotation;
+import baguni.common.annotation.MeasureTime;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -125,12 +125,13 @@ public class PickApiController {
 	 * Boolean으로 픽이 있다 없다를 판단하도록 변경합니다.
 	 * 익스텐션은 구글 심사 때문에 기존 getLinkDataXXX를 이용하고, 추후 getLinkDataV2 로 교체할 예정
 	 */
-	@BaguniAnnotation.MeasureTime
+	@MeasureTime
 	@GetMapping("/link-v2")
 	@Operation(summary = "링크 픽 여부 조회", description = "해당 링크를 픽한 적이 있는지 확인합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 여부 조회 성공"),
 	})
+
 	public ResponseEntity<PickApiResponse.PickExists> doesUserHasPickWithGivenUrl(
 		@LoginUserId Long userId, @RequestParam String link
 	) {

@@ -1,4 +1,4 @@
-package baguni.api.infrastructure.lock.util;
+package baguni.entity.lock.util;
 
 import java.lang.reflect.Field;
 
@@ -11,8 +11,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
-import baguni.api.annotation.LoginUserIdDistributedLock;
-import baguni.api.infrastructure.lock.LockProvider;
+import baguni.entity.annotation.LoginUserIdDistributedLock;
+import baguni.entity.lock.LockProvider;
 
 @Order(1)
 @Aspect
@@ -23,8 +23,10 @@ public class LoginUserIdDistributedLockAspect {
 	private final LockProvider lockProvider;
 
 	@Around("@annotation(loginUserIdDistributedLock)")
-	public Object handleDistributedLock(ProceedingJoinPoint joinPoint,
-		LoginUserIdDistributedLock loginUserIdDistributedLock) throws Throwable {
+	public Object handleDistributedLock(
+		ProceedingJoinPoint joinPoint,
+		LoginUserIdDistributedLock loginUserIdDistributedLock
+	) throws Throwable {
 		String key = getMethodName(joinPoint);
 		long timeout = loginUserIdDistributedLock.timeout();
 		Long userId = getUserIdFromArgs(joinPoint);

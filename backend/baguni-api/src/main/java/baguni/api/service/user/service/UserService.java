@@ -7,11 +7,9 @@ import baguni.api.infrastructure.folder.FolderDataHandler;
 import baguni.api.infrastructure.user.UserDataHandler;
 import baguni.entity.model.user.SocialType;
 import baguni.api.service.user.dto.UserInfo;
-import baguni.api.service.user.exception.ApiUserException;
 import baguni.security.exception.ApiAuthException;
 import lombok.RequiredArgsConstructor;
-import baguni.common.annotation.BaguniAnnotation;
-import baguni.entity.model.user.User;
+import baguni.common.annotation.MeasureTime;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -23,7 +21,8 @@ public class UserService {
 	private final FolderDataHandler folderDataHandler;
 
 	@Transactional
-	@BaguniAnnotation.MeasureTime
+	@MeasureTime
+
 	public UserInfo createUser(SocialType socialType, String username, String email) {
 		var user = userDataHandler.createUser(socialType, username, email);
 		try {

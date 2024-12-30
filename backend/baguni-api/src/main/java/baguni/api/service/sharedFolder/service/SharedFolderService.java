@@ -24,7 +24,7 @@ import baguni.api.infrastructure.folder.FolderDataHandler;
 import baguni.api.infrastructure.pick.PickDataHandler;
 import baguni.api.infrastructure.sharedFolder.SharedFolderDataHandler;
 import baguni.api.infrastructure.tag.TagDataHandler;
-import baguni.common.annotation.BaguniAnnotation;
+import baguni.common.annotation.MeasureTime;
 
 @Slf4j
 @Service
@@ -63,7 +63,8 @@ public class SharedFolderService {
 	 *     pick에 설정된 태그는 [ "foo", "hi", "bar" ] 이다.
 	 */
 	@Transactional(readOnly = true)
-	@BaguniAnnotation.MeasureTime
+	@MeasureTime
+
 	public SharedFolderResult.SharedFolderInfo getSharedFolderInfo(UUID uuid) {
 		var sourceFolder = sharedFolderDataHandler.getByUUID(uuid).getFolder();
 		var pickList = pickDataHandler.getPickListPreservingOrder(sourceFolder.getChildPickIdOrderedList());
