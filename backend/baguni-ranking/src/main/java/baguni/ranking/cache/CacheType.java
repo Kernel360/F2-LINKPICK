@@ -1,4 +1,4 @@
-package baguni.common.cache;
+package baguni.ranking.cache;
 
 import lombok.Getter;
 

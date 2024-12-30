@@ -1,4 +1,4 @@
-package baguni.common.config;
+package baguni.ranking.config;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 
-import baguni.common.cache.CacheType;
+import baguni.ranking.cache.CacheType;
 
 @EnableCaching
 @Configuration

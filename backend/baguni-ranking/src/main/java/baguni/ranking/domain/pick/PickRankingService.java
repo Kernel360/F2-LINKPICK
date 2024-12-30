@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.common.annotation.BaguniAnnotation;
 import baguni.common.dto.UrlWithCount;
-import baguni.common.cache.CacheType;
+import baguni.ranking.cache.CacheType;
 import baguni.ranking.infra.pick.LinkPickedCountRepository;
 import baguni.ranking.infra.pick.LinkViewCountRepository;
 import baguni.common.util.MapUtil;

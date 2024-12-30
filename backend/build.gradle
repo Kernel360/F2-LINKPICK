@@ -36,10 +36,6 @@ subprojects {
         implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.2'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-        // RabbitMQ
-        implementation 'org.springframework.boot:spring-boot-starter-amqp'
-        implementation 'org.springframework.amqp:spring-amqp:3.2.0'
-
         // lombok annotation
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
@@ -66,14 +62,6 @@ subprojects {
 
         // https://mvnrepository.com/artifact/org.mockito/mockito-core
         testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.14.2'
-
-        // jsoup
-        // https://mvnrepository.com/artifact/org.jsoup/jsoup
-        implementation 'org.jsoup:jsoup:1.18.3'
-
-        // spring caffeine cache
-        implementation 'org.springframework.boot:spring-boot-starter-cache'
-        implementation 'com.github.ben-manes.caffeine:caffeine'
     }
 
     tasks.named('test') {

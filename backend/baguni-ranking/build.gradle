@@ -12,7 +12,16 @@ repositories {
 dependencies {
     implementation project(":baguni-common")
 
+    // RabbitMQ
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'org.springframework.amqp:spring-amqp:3.2.0'
+
+    // mongoDB
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    // spring caffeine cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'com.github.ben-manes.caffeine:caffeine'
 }
 
 tasks.named('test') {
