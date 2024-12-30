@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
 
-import baguni.core.dto.UrlWithCount;
+import baguni.common.dto.UrlWithCount;
 
 /**
  * @author minkyeu kim

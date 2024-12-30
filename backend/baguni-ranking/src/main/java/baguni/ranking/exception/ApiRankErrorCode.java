@@ -2,8 +2,8 @@ package baguni.ranking.exception;
 
 import org.springframework.http.HttpStatus;
 
-import baguni.core.exception.base.ApiErrorCode;
-import baguni.core.exception.level.ErrorLevel;
+import baguni.common.exception.base.ApiErrorCode;
+import baguni.common.exception.level.ErrorLevel;
 
 public enum ApiRankErrorCode implements ApiErrorCode {
 

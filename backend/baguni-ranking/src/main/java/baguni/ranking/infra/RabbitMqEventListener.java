@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.core.config.RabbitmqConfig;
-import baguni.core.event.events.PickViewEvent;
-import baguni.core.event.events.PickCreateEvent;
-import baguni.core.event.events.SharedFolderLinkViewEvent;
-import baguni.core.event.events.SuggestionViewEvent;
+import baguni.common.config.RabbitmqConfig;
+import baguni.common.event.events.PickViewEvent;
+import baguni.common.event.events.PickCreateEvent;
+import baguni.common.event.events.SharedFolderLinkViewEvent;
+import baguni.common.event.events.SuggestionViewEvent;
 import baguni.ranking.infra.pick.LinkPickedCount;
 import baguni.ranking.infra.pick.LinkPickedCountRepository;
 import baguni.ranking.infra.pick.LinkViewCount;

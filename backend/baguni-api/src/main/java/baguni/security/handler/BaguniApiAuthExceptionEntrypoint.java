@@ -8,7 +8,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import baguni.core.exception.base.ApiErrorResponse;
+import baguni.common.exception.base.ApiErrorResponse;
 import baguni.security.exception.ApiAuthErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

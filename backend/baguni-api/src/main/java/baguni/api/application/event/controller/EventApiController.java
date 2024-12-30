@@ -4,22 +4,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import baguni.api.application.event.dto.EventApiRequest;
-import baguni.api.domain.link.service.LinkService;
-import baguni.core.event.EventMessenger;
-import baguni.core.event.events.PickViewEvent;
-import baguni.core.event.events.SharedFolderLinkViewEvent;
-import baguni.core.event.events.SuggestionViewEvent;
+import baguni.api.service.link.service.LinkService;
+import baguni.common.event.EventMessenger;
+import baguni.common.event.events.PickViewEvent;
+import baguni.common.event.events.SharedFolderLinkViewEvent;
+import baguni.common.event.events.SuggestionViewEvent;
 import baguni.security.annotation.LoginUserId;
 
 @RestController

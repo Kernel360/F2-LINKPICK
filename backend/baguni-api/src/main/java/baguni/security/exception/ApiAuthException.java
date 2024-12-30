@@ -54,7 +54,7 @@ public class ApiAuthException extends AuthenticationException {
 	 * 이를 security에서 잡아서 app.baguni.kr/login/failed 로 리다이렉트 시켜야 하기 때문에 <br>
 	 * 사용자 생성 실패를 OAuth2 예외로 처리함.
 	 */
-	public static ApiAuthException USER_MANDATORY_FOLDER_CREATE_FAILED() {
-		return new ApiAuthException(ApiAuthErrorCode.AUTH_USER_MANDATORY_FOLDER_CREATE_FAILED);
+	public static ApiAuthException AUTHENTICATION_SERVER_FAILURE() {
+		return new ApiAuthException(ApiAuthErrorCode.AUTH_SERVER_FAILURE);
 	}
 }

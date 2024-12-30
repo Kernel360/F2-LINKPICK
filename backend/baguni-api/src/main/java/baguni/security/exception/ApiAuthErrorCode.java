@@ -2,8 +2,8 @@ package baguni.security.exception;
 
 import org.springframework.http.HttpStatus;
 
-import baguni.core.exception.base.ApiErrorCode;
-import baguni.core.exception.level.ErrorLevel;
+import baguni.common.exception.base.ApiErrorCode;
+import baguni.common.exception.level.ErrorLevel;
 
 public enum ApiAuthErrorCode implements ApiErrorCode {
 
@@ -19,8 +19,9 @@ public enum ApiAuthErrorCode implements ApiErrorCode {
 	AUTH_TOKEN_ATTRIBUTE_NOT_FOUND
 		("AU-002", HttpStatus.UNAUTHORIZED, "인증 처리를 위한 필수 필드가 토큰에 없음", ErrorLevel.SHOULD_NOT_HAPPEN()),
 
-	AUTH_USER_MANDATORY_FOLDER_CREATE_FAILED
-		("AU-003", HttpStatus.SERVICE_UNAVAILABLE, "회원 가입 과정 에서 사용자 필수 폴더 생성 실패", ErrorLevel.MUST_NEVER_HAPPEN()),
+	AUTH_SERVER_FAILURE
+		("AU-003", HttpStatus.SERVICE_UNAVAILABLE, "인증 처리 과정에 서버 오류가 발생했습니다! 개발자 문의 필요",
+			ErrorLevel.MUST_NEVER_HAPPEN()),
 	;
 
 	// ------------------------------------------------------------

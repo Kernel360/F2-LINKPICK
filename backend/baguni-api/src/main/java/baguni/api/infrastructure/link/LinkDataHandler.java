@@ -5,10 +5,10 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.entity.model.link.Link;
+import baguni.entity.model.link.LinkRepository;
 import lombok.RequiredArgsConstructor;
-import baguni.api.domain.link.exception.ApiLinkException;
-import baguni.core.model.link.Link;
-import baguni.core.model.link.LinkRepository;
+import baguni.api.service.link.exception.ApiLinkException;
 
 @Component
 @RequiredArgsConstructor

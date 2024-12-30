@@ -2,7 +2,7 @@
 
 <configuration scan="true" scanPeriod="60 seconds">
 
-    <!-- ``````````````````````` CONVERSION RULE SETTING ```````````````````````````` -->
+    <!-- baguni.entity.annotation.`````````````````````` CONVERSION RULE SETTING ```````````````````````````` -->
 
     <!-- 콘솔 출력 색상 적용 (참고: https://oingdaddy.tistory.com/257)   -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
@@ -78,12 +78,12 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>
-    <logger name="baguni.core" level="info" additivity="false">
+    <logger name="baguni.common" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>
     <logger name="p6spy" level="info" additivity="false">
-        <!--        <appender-ref ref="CONSOLE"/>-->
-        <!--        <appender-ref ref="SQL-LOG-FILE"/>-->
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="SQL-LOG-FILE"/>
     </logger>
 </configuration>

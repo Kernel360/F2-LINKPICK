@@ -1,8 +1,8 @@
 package baguni.api.infrastructure.pick;
 
-import static baguni.core.model.folder.QFolder.*;
-import static baguni.core.model.pick.QPick.*;
-import static baguni.core.model.pick.QPickTag.*;
+import static baguni.entity.model.folder.QFolder.*;
+import static baguni.entity.model.pick.QPick.*;
+import static baguni.entity.model.pick.QPickTag.*;
 
 import java.util.List;
 import java.util.StringTokenizer;
@@ -24,8 +24,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.api.domain.link.dto.LinkInfo;
-import baguni.api.domain.pick.dto.PickResult;
+import baguni.api.service.link.dto.LinkInfo;
+import baguni.api.service.pick.dto.PickResult;
 
 @Slf4j
 @Repository

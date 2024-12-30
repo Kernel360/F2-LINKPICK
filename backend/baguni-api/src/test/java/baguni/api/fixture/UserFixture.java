@@ -9,9 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Builder;
 import lombok.Getter;
-import baguni.core.model.user.Role;
-import baguni.core.model.user.SocialType;
-import baguni.core.model.user.User;
+import baguni.entity.model.user.Role;
+import baguni.entity.model.user.SocialType;
+import baguni.entity.model.user.User;
 
 @Builder
 @Getter

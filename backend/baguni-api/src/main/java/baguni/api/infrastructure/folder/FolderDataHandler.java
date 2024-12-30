@@ -7,14 +7,14 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.entity.model.folder.Folder;
+import baguni.entity.model.folder.FolderRepository;
+import baguni.entity.model.user.User;
+import baguni.entity.model.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import baguni.api.domain.folder.dto.FolderCommand;
-import baguni.api.domain.folder.exception.ApiFolderException;
-import baguni.api.domain.user.exception.ApiUserException;
-import baguni.core.model.folder.Folder;
-import baguni.core.model.folder.FolderRepository;
-import baguni.core.model.user.User;
-import baguni.core.model.user.UserRepository;
+import baguni.api.service.folder.dto.FolderCommand;
+import baguni.api.service.folder.exception.ApiFolderException;
+import baguni.api.service.user.exception.ApiUserException;
 
 @Component
 @RequiredArgsConstructor
@@ -22,6 +22,13 @@ public class FolderDataHandler {
 
 	private final FolderRepository folderRepository;
 	private final UserRepository userRepository;
+
+	@Transactional
+	public void createMandatoryFolder(User user) {
+		folderRepository.save(Folder.createEmptyUnclassifiedFolder(user));
+		folderRepository.save(Folder.createEmptyRecycleBinFolder(user));
+		folderRepository.save(Folder.createEmptyRootFolder(user));
+	}
 
 	@Transactional(readOnly = true)
 	public Folder getFolder(Long folderId) {

@@ -15,17 +15,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import baguni.api.domain.folder.dto.FolderCommand;
-import baguni.api.domain.folder.dto.FolderMapper;
-import baguni.api.domain.folder.exception.ApiFolderErrorCode;
-import baguni.api.domain.folder.exception.ApiFolderException;
+import baguni.api.service.folder.dto.FolderCommand;
+import baguni.api.service.folder.dto.FolderMapper;
+import baguni.api.service.folder.exception.ApiFolderErrorCode;
+import baguni.api.service.folder.exception.ApiFolderException;
 import baguni.api.fixture.FolderFixture;
 import baguni.api.fixture.UserFixture;
 import baguni.api.infrastructure.folder.FolderDataHandler;
 import baguni.api.infrastructure.pick.PickDataHandler;
-import baguni.core.model.folder.Folder;
-import baguni.core.model.folder.FolderType;
-import baguni.core.model.user.User;
+import baguni.entity.model.folder.Folder;
+import baguni.entity.model.folder.FolderType;
+import baguni.entity.model.user.User;
+import baguni.api.service.folder.service.FolderService;
 
 @DisplayName("폴더 서비스 단위 테스트")
 @ExtendWith(MockitoExtension.class)

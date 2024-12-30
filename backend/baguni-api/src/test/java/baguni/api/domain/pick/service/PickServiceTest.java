@@ -19,28 +19,29 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
+import baguni.api.service.pick.service.PickService;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
 import baguni.api.application.pick.dto.PickApiMapper;
-import baguni.api.domain.link.dto.LinkInfo;
-import baguni.api.domain.pick.dto.PickCommand;
-import baguni.api.domain.pick.dto.PickResult;
-import baguni.api.domain.pick.exception.ApiPickException;
-import baguni.api.domain.tag.dto.TagCommand;
-import baguni.api.domain.tag.service.TagService;
+import baguni.api.service.link.dto.LinkInfo;
+import baguni.api.service.pick.dto.PickCommand;
+import baguni.api.service.pick.dto.PickResult;
+import baguni.api.service.pick.exception.ApiPickException;
+import baguni.api.service.tag.dto.TagCommand;
+import baguni.api.service.tag.service.TagService;
 import baguni.api.infrastructure.pick.PickDataHandler;
-import baguni.core.model.folder.Folder;
-import baguni.core.model.folder.FolderRepository;
-import baguni.core.model.link.LinkRepository;
-import baguni.core.model.pick.PickRepository;
-import baguni.core.model.pick.PickTag;
-import baguni.core.model.pick.PickTagRepository;
-import baguni.core.model.tag.Tag;
-import baguni.core.model.tag.TagRepository;
-import baguni.core.model.user.Role;
-import baguni.core.model.user.SocialType;
-import baguni.core.model.user.User;
-import baguni.core.model.user.UserRepository;
+import baguni.entity.model.folder.Folder;
+import baguni.entity.model.folder.FolderRepository;
+import baguni.entity.model.link.LinkRepository;
+import baguni.entity.model.pick.PickRepository;
+import baguni.entity.model.pick.PickTag;
+import baguni.entity.model.pick.PickTagRepository;
+import baguni.entity.model.tag.Tag;
+import baguni.entity.model.tag.TagRepository;
+import baguni.entity.model.user.Role;
+import baguni.entity.model.user.SocialType;
+import baguni.entity.model.user.User;
+import baguni.entity.model.user.UserRepository;
 
 @Slf4j
 @SpringBootTest(classes = BaguniApiApplication.class)

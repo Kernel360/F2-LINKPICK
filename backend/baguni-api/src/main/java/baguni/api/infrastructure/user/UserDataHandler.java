@@ -5,15 +5,16 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import baguni.core.model.folder.FolderRepository;
-import baguni.core.model.pick.PickRepository;
-import baguni.core.model.pick.PickTagRepository;
-import baguni.core.model.sharedFolder.SharedFolderRepository;
-import baguni.core.model.tag.TagRepository;
+import baguni.entity.model.folder.FolderRepository;
+import baguni.entity.model.pick.PickRepository;
+import baguni.entity.model.pick.PickTagRepository;
+import baguni.entity.model.sharedFolder.SharedFolderRepository;
+import baguni.entity.model.tag.TagRepository;
+import baguni.entity.model.user.SocialType;
 import lombok.RequiredArgsConstructor;
-import baguni.api.domain.user.exception.ApiUserException;
-import baguni.core.model.user.User;
-import baguni.core.model.user.UserRepository;
+import baguni.api.service.user.exception.ApiUserException;
+import baguni.entity.model.user.User;
+import baguni.entity.model.user.UserRepository;
 
 @Component
 @RequiredArgsConstructor
@@ -27,8 +28,18 @@ public class UserDataHandler {
 	private final TagRepository tagRepository;
 
 	@Transactional(readOnly = true)
+	public boolean existsBySocialProviderId(String socialProviderId) {
+		return this.userRepository.existsBySocialProviderId(socialProviderId);
+	}
+
+	@Transactional(readOnly = true)
 	public User getUser(Long userId) {
 		return userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
+	}
+
+	@Transactional
+	public User createUser(SocialType type, String name, String email) {
+		return userRepository.save(User.SocialUser(type, name, email));
 	}
 
 	/**

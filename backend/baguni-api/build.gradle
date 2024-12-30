@@ -10,20 +10,26 @@ repositories {
 }
 
 dependencies {
-    implementation project(":baguni-core")
+    implementation project(":baguni-common")
+    implementation project(":baguni-entity")
 
-    // Spring Retry 의존성 추가
-    implementation 'org.springframework.retry:spring-retry'
+    // package for [@Transactional] + [@Aspect] + [Slice<T> from PickSliceResponse.java]
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-    // spring security and oauth client
+    // Querydsl for [pickQuery.java]
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // spring security + oauth client + jwt
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     testImplementation 'org.springframework.security:spring-security-test'
-
-    // jwt
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
 
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // jsoup for chrome bookmark service
+    implementation 'org.jsoup:jsoup:1.18.3'
 }
 
 tasks.named('test') {

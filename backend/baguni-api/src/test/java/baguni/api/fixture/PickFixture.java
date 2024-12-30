@@ -8,10 +8,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Builder;
 import lombok.Getter;
-import baguni.core.model.folder.Folder;
-import baguni.core.model.link.Link;
-import baguni.core.model.pick.Pick;
-import baguni.core.model.user.User;
+import baguni.entity.model.folder.Folder;
+import baguni.entity.model.link.Link;
+import baguni.entity.model.pick.Pick;
+import baguni.entity.model.user.User;
 
 @Builder
 @Getter

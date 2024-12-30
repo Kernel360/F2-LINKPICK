@@ -8,8 +8,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 
-import baguni.core.model.rss.RssBlog;
-import baguni.core.model.rss.RssFeed;
+import baguni.entity.model.rss.RssBlog;
+import baguni.entity.model.rss.RssFeed;
 
 @Mapper(
 	componentModel = "spring",

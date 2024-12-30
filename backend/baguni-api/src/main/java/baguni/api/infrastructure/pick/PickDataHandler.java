@@ -10,25 +10,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.api.domain.folder.exception.ApiFolderException;
-import baguni.api.domain.link.dto.LinkMapper;
-import baguni.api.domain.pick.dto.PickCommand;
-import baguni.api.domain.pick.dto.PickMapper;
-import baguni.api.domain.pick.exception.ApiPickException;
-import baguni.api.domain.tag.exception.ApiTagException;
-import baguni.api.domain.user.exception.ApiUserException;
-import baguni.core.model.folder.Folder;
-import baguni.core.model.folder.FolderRepository;
-import baguni.core.model.link.Link;
-import baguni.core.model.link.LinkRepository;
-import baguni.core.model.pick.Pick;
-import baguni.core.model.pick.PickRepository;
-import baguni.core.model.pick.PickTag;
-import baguni.core.model.pick.PickTagRepository;
-import baguni.core.model.tag.Tag;
-import baguni.core.model.tag.TagRepository;
-import baguni.core.model.user.User;
-import baguni.core.model.user.UserRepository;
+import baguni.api.service.folder.exception.ApiFolderException;
+import baguni.api.service.link.dto.LinkMapper;
+import baguni.api.service.pick.dto.PickCommand;
+import baguni.api.service.pick.dto.PickMapper;
+import baguni.api.service.pick.exception.ApiPickException;
+import baguni.api.service.tag.exception.ApiTagException;
+import baguni.api.service.user.exception.ApiUserException;
+import baguni.entity.model.folder.Folder;
+import baguni.entity.model.folder.FolderRepository;
+import baguni.entity.model.link.Link;
+import baguni.entity.model.link.LinkRepository;
+import baguni.entity.model.pick.Pick;
+import baguni.entity.model.pick.PickRepository;
+import baguni.entity.model.pick.PickTag;
+import baguni.entity.model.pick.PickTagRepository;
+import baguni.entity.model.tag.Tag;
+import baguni.entity.model.tag.TagRepository;
+import baguni.entity.model.user.User;
+import baguni.entity.model.user.UserRepository;
 
 @Slf4j
 @Component
@@ -43,6 +43,7 @@ public class PickDataHandler {
 	private final LinkRepository linkRepository;
 	private final LinkMapper linkMapper;
 	private final TagRepository tagRepository;
+	private final PickQuery pickQuery;
 
 	@Transactional(readOnly = true)
 	public Pick getPick(Long pickId) {

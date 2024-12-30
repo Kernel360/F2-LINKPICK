@@ -10,8 +10,13 @@ repositories {
 }
 
 dependencies {
-    implementation project(":baguni-core")
+    implementation project(":baguni-common")
+    implementation project(":baguni-entity")
 
+    // spring jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // for batch retry logic
     implementation 'org.springframework.retry:spring-retry'
 }
 

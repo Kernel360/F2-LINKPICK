@@ -6,18 +6,18 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.entity.model.pick.PickRepository;
+import baguni.entity.model.pick.PickTagRepository;
+import baguni.entity.model.tag.Tag;
+import baguni.entity.model.tag.TagRepository;
+import baguni.entity.model.user.User;
+import baguni.entity.model.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.api.domain.tag.dto.TagCommand;
-import baguni.api.domain.tag.dto.TagMapper;
-import baguni.api.domain.tag.exception.ApiTagException;
-import baguni.api.domain.user.exception.ApiUserException;
-import baguni.core.model.pick.PickRepository;
-import baguni.core.model.pick.PickTagRepository;
-import baguni.core.model.tag.Tag;
-import baguni.core.model.tag.TagRepository;
-import baguni.core.model.user.User;
-import baguni.core.model.user.UserRepository;
+import baguni.api.service.tag.dto.TagCommand;
+import baguni.api.service.tag.dto.TagMapper;
+import baguni.api.service.tag.exception.ApiTagException;
+import baguni.api.service.user.exception.ApiUserException;
 
 @Slf4j
 @Component

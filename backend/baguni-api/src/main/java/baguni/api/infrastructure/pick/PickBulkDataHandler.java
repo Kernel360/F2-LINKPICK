@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import baguni.api.domain.link.dto.LinkInfo;
-import baguni.api.domain.pick.dto.PickCommand;
-import baguni.core.model.link.Link;
-import baguni.core.model.link.LinkRepository;
+import baguni.api.service.link.dto.LinkInfo;
+import baguni.api.service.pick.dto.PickCommand;
+import baguni.entity.model.link.Link;
+import baguni.entity.model.link.LinkRepository;
 
 @Repository
 @RequiredArgsConstructor

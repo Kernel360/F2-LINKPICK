@@ -5,8 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import baguni.api.domain.folder.dto.FolderCommand;
-import baguni.api.domain.folder.dto.FolderResult;
+import baguni.api.service.folder.dto.FolderCommand;
+import baguni.api.service.folder.dto.FolderResult;
 
 @Mapper(
 	componentModel = "spring",

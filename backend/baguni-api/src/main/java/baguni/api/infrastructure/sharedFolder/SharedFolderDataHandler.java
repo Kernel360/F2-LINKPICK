@@ -6,16 +6,16 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
+import baguni.entity.model.folder.Folder;
+import baguni.entity.model.folder.FolderRepository;
+import baguni.entity.model.sharedFolder.SharedFolder;
+import baguni.entity.model.sharedFolder.SharedFolderRepository;
+import baguni.entity.model.user.User;
+import baguni.entity.model.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import baguni.api.domain.folder.exception.ApiFolderException;
-import baguni.api.domain.sharedFolder.exception.ApiSharedFolderException;
-import baguni.api.domain.user.exception.ApiUserException;
-import baguni.core.model.folder.Folder;
-import baguni.core.model.folder.FolderRepository;
-import baguni.core.model.sharedFolder.SharedFolder;
-import baguni.core.model.sharedFolder.SharedFolderRepository;
-import baguni.core.model.user.User;
-import baguni.core.model.user.UserRepository;
+import baguni.api.service.folder.exception.ApiFolderException;
+import baguni.api.service.sharedFolder.exception.ApiSharedFolderException;
+import baguni.api.service.user.exception.ApiUserException;
 
 @Component
 @RequiredArgsConstructor

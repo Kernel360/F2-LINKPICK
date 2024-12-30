@@ -23,9 +23,9 @@ import baguni.batch.domain.rss.dto.RssMapper;
 import baguni.batch.domain.rss.dto.RssRawFeed;
 import baguni.batch.domain.rss.exception.ApiRssException;
 import baguni.batch.infrastructure.rss.RssAdaptor;
-import baguni.core.annotation.BaguniAnnotation;
-import baguni.core.model.rss.RssBlog;
-import baguni.core.model.rss.RssFeed;
+import baguni.common.annotation.MeasureTime;
+import baguni.entity.model.rss.RssBlog;
+import baguni.entity.model.rss.RssFeed;
 
 @Slf4j
 @Service
@@ -52,7 +52,8 @@ public class RssServiceImpl implements RssService {
 
 	// 매일 새벽 3시에 수집
 	@Scheduled(cron = "0 0 3 * * *")
-	@BaguniAnnotation.MeasureTime
+	@MeasureTime
+
 	public void rssCrawling() {
 		ExecutorService executorService = Executors.newFixedThreadPool(5);
 		for (var blog : rssAdaptor.getAllRssBlog()) {

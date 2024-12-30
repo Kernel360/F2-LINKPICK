@@ -19,11 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import baguni.api.application.ranking.dto.LinkInfoWithCount;
 import baguni.api.application.ranking.dto.RankingApiMapper;
 import baguni.api.application.ranking.dto.RankingResponse;
-import baguni.api.domain.link.exception.ApiLinkException;
-import baguni.api.domain.link.service.LinkService;
-import baguni.api.domain.ranking.service.RankingService;
-import baguni.core.annotation.BaguniAnnotation;
-import baguni.core.dto.UrlWithCount;
+import baguni.api.service.link.exception.ApiLinkException;
+import baguni.api.service.link.service.LinkService;
+import baguni.api.service.ranking.service.RankingService;
+import baguni.common.annotation.MeasureTime;
+import baguni.common.dto.UrlWithCount;
 
 /**
  * baguni-ranking 서버로 부터 데이터를 받아와 뿌려준다.
@@ -43,7 +43,7 @@ public class RankingApiController {
 	 * 주별, 일별 조회 수를 기반 으로 추천 한다.
 	 * - 조회수 기반 집계
 	 */
-	@BaguniAnnotation.MeasureTime
+	@MeasureTime
 	@GetMapping("/ranking")
 	@Operation(
 		summary = "인기 픽 Top 10",
@@ -57,6 +57,7 @@ public class RankingApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
+
 	public ResponseEntity<RankingResponse> getSuggestionByViewCount(
 	) {
 		int LIMIT = 10;

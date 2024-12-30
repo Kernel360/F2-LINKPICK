@@ -3,7 +3,6 @@ package baguni.api.application.pick.controller;
 import java.util.List;
 import java.util.Objects;
 
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import baguni.api.domain.link.dto.LinkInfo;
-import baguni.api.domain.link.service.LinkService;
-import baguni.core.annotation.BaguniAnnotation;
+import baguni.api.service.link.dto.LinkInfo;
+import baguni.api.service.link.service.LinkService;
+import baguni.common.annotation.MeasureTime;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,13 +30,13 @@ import baguni.api.application.pick.dto.PickApiMapper;
 import baguni.api.application.pick.dto.PickApiRequest;
 import baguni.api.application.pick.dto.PickApiResponse;
 import baguni.api.application.pick.dto.PickSliceResponse;
-import baguni.api.domain.pick.dto.PickResult;
-import baguni.api.domain.pick.exception.ApiPickException;
-import baguni.api.domain.pick.service.PickBulkService;
-import baguni.api.domain.pick.service.PickSearchService;
-import baguni.api.domain.pick.service.PickService;
-import baguni.core.event.EventMessenger;
-import baguni.core.event.events.PickCreateEvent;
+import baguni.api.service.pick.dto.PickResult;
+import baguni.api.service.pick.exception.ApiPickException;
+import baguni.api.service.pick.service.PickBulkService;
+import baguni.api.service.pick.service.PickSearchService;
+import baguni.api.service.pick.service.PickService;
+import baguni.common.event.EventMessenger;
+import baguni.common.event.events.PickCreateEvent;
 import baguni.security.annotation.LoginUserId;
 
 @Slf4j
@@ -126,12 +125,13 @@ public class PickApiController {
 	 * Boolean으로 픽이 있다 없다를 판단하도록 변경합니다.
 	 * 익스텐션은 구글 심사 때문에 기존 getLinkDataXXX를 이용하고, 추후 getLinkDataV2 로 교체할 예정
 	 */
-	@BaguniAnnotation.MeasureTime
+	@MeasureTime
 	@GetMapping("/link-v2")
 	@Operation(summary = "링크 픽 여부 조회", description = "해당 링크를 픽한 적이 있는지 확인합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 여부 조회 성공"),
 	})
+
 	public ResponseEntity<PickApiResponse.PickExists> doesUserHasPickWithGivenUrl(
 		@LoginUserId Long userId, @RequestParam String link
 	) {

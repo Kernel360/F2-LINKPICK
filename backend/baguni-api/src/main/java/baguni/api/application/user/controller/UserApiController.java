@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import baguni.api.domain.user.service.UserService;
+import baguni.api.service.user.service.UserService;
 import baguni.security.annotation.LoginUserId;
 import baguni.security.handler.BaguniLogoutHandler;
 import io.swagger.v3.oas.annotations.Operation;
