@@ -81,9 +81,7 @@ export function useRecommendPickToFolderDndMonitor() {
         linkInfo: { url, description, imageUrl, title },
       });
       insertPickInfo(createdPickInfo, overObject.id);
-      notifySuccess('성공적으로 북마크가 추가되었습니다!', {
-        position: 'bottom-right',
-      });
+      notifySuccess('성공적으로 북마크가 추가되었습니다!');
     } catch {
       /** empty */
     }

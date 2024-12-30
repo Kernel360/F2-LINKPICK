@@ -59,9 +59,7 @@ export function usePickToFolderDndMonitor() {
     }
 
     await movePicksToDifferentFolder({ from: activeObject, to: overObject });
-    notifySuccess('다른 폴더로 북마크를 이동했습니다!', {
-      position: 'bottom-right',
-    });
+    notifySuccess('다른 폴더로 북마크를 이동했습니다!');
     await preFetchSearchPicks();
   };
 
