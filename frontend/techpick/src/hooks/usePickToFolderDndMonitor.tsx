@@ -3,7 +3,11 @@
 import { useDndMonitor } from '@dnd-kit/core';
 import { usePickStore, useTreeStore } from '@/stores';
 import { useSearchPickStore } from '@/stores/searchPickStore';
-import { isPickDraggableObject, isPickToFolderDroppableObject } from '@/utils';
+import {
+  isPickDraggableObject,
+  isPickToFolderDroppableObject,
+  notifySuccess,
+} from '@/utils';
 import type { DragEndEvent, DragOverEvent } from '@dnd-kit/core';
 
 /**
@@ -55,6 +59,9 @@ export function usePickToFolderDndMonitor() {
     }
 
     await movePicksToDifferentFolder({ from: activeObject, to: overObject });
+    notifySuccess('다른 폴더로 북마크를 이동했습니다!', {
+      position: 'bottom-right',
+    });
     await preFetchSearchPicks();
   };
 
