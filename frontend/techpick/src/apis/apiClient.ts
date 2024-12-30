@@ -21,10 +21,12 @@ export const apiClient = ky.create({
           const parsedErrorMessage = error.message.split(' ');
           const errorCode = parsedErrorMessage.shift();
 
-          if (!errorCode) {
-            /* empty */
-          } else if (ERROR_MESSAGE_JSON[errorCode]) {
-            notifyError(ERROR_MESSAGE_JSON[errorCode]);
+          if (errorCode && ERROR_MESSAGE_JSON[errorCode]) {
+            if (errorCode === 'AU-001') {
+              window.location.href = '/login';
+            } else {
+              notifyError(ERROR_MESSAGE_JSON[errorCode]);
+            }
           }
         }
 
