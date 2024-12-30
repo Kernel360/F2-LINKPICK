@@ -13,7 +13,7 @@ dependencies {
     // for custom annotation
     implementation 'org.springframework.boot:spring-boot-starter-aop'
 
-    // RabbitMQ
+    // for RabbitMQ Event Messenger (= producer)
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.amqp:spring-amqp:3.2.0'
 

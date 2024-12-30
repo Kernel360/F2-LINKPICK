@@ -12,7 +12,7 @@ repositories {
 dependencies {
     implementation project(":baguni-common")
 
-    // RabbitMQ
+    // RabbitMQ for @EventListener (Consumer)
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.amqp:spring-amqp:3.2.0'
 

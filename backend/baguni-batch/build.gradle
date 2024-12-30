@@ -16,6 +16,7 @@ dependencies {
     // spring jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+    // for batch retry logic
     implementation 'org.springframework.retry:spring-retry'
 }
 
