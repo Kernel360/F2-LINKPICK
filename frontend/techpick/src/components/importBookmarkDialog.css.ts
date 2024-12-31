@@ -1,6 +1,9 @@
 import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
-import { dialogContentStyle } from '@/styles/dialogStyle.css';
+import {
+  dialogContentBackgroundColorStyle,
+  dialogContentLayoutStyle,
+} from '@/styles/dialogStyle.css';
 import { goldOutlineButtonStyle } from '@/styles/goldButtonStyle.css';
 import { greenOutlineButtonStyle } from '@/styles/greenButtonStyle.css';
 
@@ -13,7 +16,8 @@ export const importBookmarkDialogButtonStyle = style([
 ]);
 
 export const dialogContent = style([
-  dialogContentStyle,
+  dialogContentLayoutStyle,
+  dialogContentBackgroundColorStyle,
   {
     display: 'flex',
     flexDirection: 'column',

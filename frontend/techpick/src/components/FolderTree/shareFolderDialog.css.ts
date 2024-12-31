@@ -1,11 +1,15 @@
 import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
-import { dialogContentStyle } from '@/styles/dialogStyle.css';
+import {
+  dialogContentLayoutStyle,
+  dialogContentBackgroundColorStyle,
+} from '@/styles/dialogStyle.css';
 
 /* --------------- Dialog --------------- */
 
 export const dialogContent = style([
-  dialogContentStyle,
+  dialogContentLayoutStyle,
+  dialogContentBackgroundColorStyle,
   {
     display: 'flex',
     flexDirection: 'column',
