@@ -167,17 +167,13 @@ public class PickService {
 
 		// 여기서 폴더 내 픽이 주간 인기 픽인지 체크하고, 맞을 경우 조회수를 함께 반환한다.
 		// 내가 저장해둔 픽의 인기도를 볼 수 있는 기능이다.
-
-		Map<String, UrlWithCount> viewCountMap
-			= rankingService.getUrlRanking(10)
-							.weeklyUrlViewRanking().stream()
-							.collect(Collectors.toMap(UrlWithCount::url, Function.identity()));
+		var viewCountPerLink = getViewRankingFromRankingServer();
 
 		List<PickResult.PickWithViewCount> pickResultList
 			= pickList.stream()
 					  .map(pickMapper::toPickResult)
 					  .map(pickResult -> {
-						  var urlWithCount = viewCountMap.get(pickResult.linkInfo().url());
+						  var urlWithCount = viewCountPerLink.get(pickResult.linkInfo().url());
 						  if (Objects.isNull(urlWithCount)) {
 							  return pickMapper.toPickResultWithViewCount(pickResult, false, null);
 						  }
@@ -185,6 +181,20 @@ public class PickService {
 					  })
 					  .toList();
 		return pickMapper.toPickResultList(folderId, pickResultList);
+	}
+
+	/**
+	 * 랭킹 서버가 다운되어 있어도 내 픽 리스트는 조회가 가능하도록 처리.
+	 */
+	private Map<String, UrlWithCount> getViewRankingFromRankingServer() {
+		try {
+			return rankingService.getUrlRanking(10)
+								 .weeklyUrlViewRanking().stream()
+								 .collect(Collectors.toMap(UrlWithCount::url, Function.identity()));
+		} catch (Exception e) {
+			log.error("내 픽이 인기 픽인지 조회하려 했으나, 랭킹 서버와 통신할 수 없습니다! {}", e.getMessage(), e);
+			return Map.of();
+		}
 	}
 
 	private boolean isParentFolderChanged(Long originalFolderId, Long destinationFolderId) {
