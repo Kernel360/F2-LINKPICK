@@ -3,6 +3,7 @@ package baguni.api.infrastructure.pick;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -177,8 +178,11 @@ public class PickDataHandler {
 		Pick pick = pickRepository.findById(command.id()).orElseThrow(ApiPickException::PICK_NOT_FOUND);
 		pick.updateTitle(command.title());
 
-		if (command.parentFolderId() != null) {
-			Folder parentFolder = pick.getParentFolder();
+		Folder parentFolder = pick.getParentFolder();
+
+		if (Objects.nonNull(command.parentFolderId()) &&
+			isDifferentFolder(parentFolder, command)
+		) {
 			Folder destinationFolder = folderRepository.findById(command.parentFolderId())
 													   .orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 			detachPickFromParentFolder(pick, parentFolder);
@@ -285,6 +289,10 @@ public class PickDataHandler {
 					   .forEach(tagId -> attachTagToPickTag(pick, tagId));
 
 		pick.updateTagOrderList(newTagOrderList);
+	}
+
+	private boolean isDifferentFolder(Folder parentFolder, PickCommand.UpdateXXX command) {
+		return !Objects.equals(parentFolder.getId(), command.parentFolderId());
 	}
 
 }
