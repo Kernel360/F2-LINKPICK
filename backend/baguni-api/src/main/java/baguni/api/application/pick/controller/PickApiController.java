@@ -228,8 +228,15 @@ public class PickApiController {
 		return ResponseEntity.ok(new PickApiResponse.CreateFromRecommend(existPick, result));
 	}
 
-	@PatchMapping
-	@Operation(summary = "픽 내용 수정", description = "픽 내용(제목, 메모)을 수정합니다.")
+	/**
+	 * @apiNote
+	 * updatePickXXX API가 삭제되면 /v2를 지우고 해당 api로 대체할 예정입니다.
+	 */
+	@PatchMapping("/v2")
+	@Operation(summary = "픽 내용 수정", description = """
+			픽의 제목, 메모, 태그 리스트를 수정합니다.
+			익스텐션 버전 업과 동시에 기존 PATCH /api/picks로 변경되며, /v2 경로는 없어질 예정입니다.
+		""")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 내용 수정 성공")
 	})
@@ -241,6 +248,27 @@ public class PickApiController {
 
 		return ResponseEntity.ok(
 			pickApiMapper.toApiResponse(pickService.updatePick(pickApiMapper.toUpdateCommand(userId, request))));
+	}
+
+	/**
+	 * @deprecated
+	 * 구 버전 익스텐션은 폴더 위치도 수정할 수 있습니다.
+	 * 해당 기능을 유지하기 위한 임시 기능이며, 익스텐션 버전 업과 동시에 삭제 예정입니다.
+	 */
+	@Deprecated
+	@PatchMapping
+	@Operation(summary = "[Deprecated] 픽 내용 수정", description = "기존 익스텐션 기능을 위한 임시 API이며, 폴더 이동까지 지원합니다.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "픽 내용 수정 성공")
+	})
+	public ResponseEntity<PickApiResponse.Pick> updatePickXXX(@LoginUserId Long userId,
+		@Valid @RequestBody PickApiRequest.UpdateXXX request) {
+		if (!Objects.isNull(request.title()) && 200 < request.title().length()) {
+			throw ApiPickException.PICK_TITLE_TOO_LONG();
+		}
+
+		return ResponseEntity.ok(
+			pickApiMapper.toApiResponse(pickService.updatePickXXX(pickApiMapper.toUpdateCommandXXX(userId, request))));
 	}
 
 	@PatchMapping("/location")

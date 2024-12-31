@@ -167,6 +167,31 @@ public class PickDataHandler {
 		return pick;
 	}
 
+	/**
+	 * @deprecated
+	 * 구 버전 익스텐션은 폴더 위치도 수정할 수 있습니다.
+	 * 해당 기능을 유지하기 위한 임시 기능이며, 익스텐션 버전 업과 동시에 삭제 예정입니다.
+	 */
+	@Transactional
+	public Pick updatePickXXX(PickCommand.UpdateXXX command) {
+		Pick pick = pickRepository.findById(command.id()).orElseThrow(ApiPickException::PICK_NOT_FOUND);
+		pick.updateTitle(command.title());
+
+		if (command.parentFolderId() != null) {
+			Folder parentFolder = pick.getParentFolder();
+			Folder destinationFolder = folderRepository.findById(command.parentFolderId())
+													   .orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+			detachPickFromParentFolder(pick, parentFolder);
+			attachPickToParentFolder(pick, destinationFolder);
+			updatePickParentFolder(pick, destinationFolder);
+		}
+
+		if (command.tagIdOrderedList() != null) {
+			updateNewTagIdList(pick, command.tagIdOrderedList());
+		}
+		return pick;
+	}
+
 	@Transactional
 	public void movePickToCurrentFolder(PickCommand.Move command) {
 		List<Long> pickIdList = command.idList();

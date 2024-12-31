@@ -110,9 +110,22 @@ public class PickService {
 	@Transactional
 	public PickResult.Pick updatePick(PickCommand.Update command) {
 		validatePickAccess(command.userId(), command.id());
-		validateFolderAccess(command.userId(), command.parentFolderId());
 		validateTagListAccess(command.userId(), command.tagIdOrderedList());
 		return pickMapper.toPickResult(pickDataHandler.updatePick(command));
+	}
+
+	/**
+	 * @deprecated
+	 * 구 버전 익스텐션은 폴더 위치도 수정할 수 있습니다.
+	 * 해당 기능을 유지하기 위한 임시 기능이며, 익스텐션 버전 업과 동시에 삭제 예정입니다.
+	 */
+	@LoginUserIdDistributedLock
+	@Transactional
+	public PickResult.Pick updatePickXXX(PickCommand.UpdateXXX command) {
+		validatePickAccess(command.userId(), command.id());
+		validateFolderAccess(command.userId(), command.parentFolderId());
+		validateTagListAccess(command.userId(), command.tagIdOrderedList());
+		return pickMapper.toPickResult(pickDataHandler.updatePickXXX(command));
 	}
 
 	@LoginUserIdDistributedLock
@@ -152,7 +165,9 @@ public class PickService {
 		Folder folder = folderDataHandler.getFolder(folderId);
 		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickIdOrderedList());
 
-		// 여기서 pick 주간 인기 데이터 반환
+		// 여기서 폴더 내 픽이 주간 인기 픽인지 체크하고, 맞을 경우 조회수를 함께 반환한다.
+		// 내가 저장해둔 픽의 인기도를 볼 수 있는 기능이다.
+
 		Map<String, UrlWithCount> viewCountMap
 			= rankingService.getUrlRanking(10)
 							.weeklyUrlViewRanking().stream()
