@@ -3,6 +3,7 @@ package baguni.api.infrastructure.pick;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -167,6 +168,34 @@ public class PickDataHandler {
 		return pick;
 	}
 
+	/**
+	 * @deprecated
+	 * 구 버전 익스텐션은 폴더 위치도 수정할 수 있습니다.
+	 * 해당 기능을 유지하기 위한 임시 기능이며, 익스텐션 버전 업과 동시에 삭제 예정입니다.
+	 */
+	@Transactional
+	public Pick updatePickXXX(PickCommand.UpdateXXX command) {
+		Pick pick = pickRepository.findById(command.id()).orElseThrow(ApiPickException::PICK_NOT_FOUND);
+		pick.updateTitle(command.title());
+
+		Folder parentFolder = pick.getParentFolder();
+
+		if (Objects.nonNull(command.parentFolderId()) &&
+			isDifferentFolder(parentFolder, command)
+		) {
+			Folder destinationFolder = folderRepository.findById(command.parentFolderId())
+													   .orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+			detachPickFromParentFolder(pick, parentFolder);
+			attachPickToParentFolder(pick, destinationFolder);
+			updatePickParentFolder(pick, destinationFolder);
+		}
+
+		if (command.tagIdOrderedList() != null) {
+			updateNewTagIdList(pick, command.tagIdOrderedList());
+		}
+		return pick;
+	}
+
 	@Transactional
 	public void movePickToCurrentFolder(PickCommand.Move command) {
 		List<Long> pickIdList = command.idList();
@@ -260,6 +289,10 @@ public class PickDataHandler {
 					   .forEach(tagId -> attachTagToPickTag(pick, tagId));
 
 		pick.updateTagOrderList(newTagOrderList);
+	}
+
+	private boolean isDifferentFolder(Folder parentFolder, PickCommand.UpdateXXX command) {
+		return !Objects.equals(parentFolder.getId(), command.parentFolderId());
 	}
 
 }

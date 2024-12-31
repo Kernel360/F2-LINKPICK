@@ -35,6 +35,8 @@ public interface PickApiMapper {
 
 	PickCommand.Update toUpdateCommand(Long userId, PickApiRequest.Update request);
 
+	PickCommand.UpdateXXX toUpdateCommandXXX(Long userId, PickApiRequest.UpdateXXX request);
+
 	PickCommand.Move toMoveCommand(Long userId, PickApiRequest.Move request);
 
 	PickCommand.Delete toDeleteCommand(Long userId, PickApiRequest.Delete request);
