@@ -2,13 +2,15 @@ import { style } from '@vanilla-extract/css';
 import { zIndex } from 'techpick-shared';
 import {
   dialogOverlayStyle as baseDialogOverlayStyle,
-  dialogContentStyle as baseDialogContentStyle,
+  dialogContentLayoutStyle,
+  dialogContentBackgroundColorStyle,
 } from '@/styles/dialogStyle.css';
 import { redOutlineButtonStyle } from '@/styles/redButtonStyle.css';
 import { sandOutlineButtonStyle } from '@/styles/sandButtonStyle.css';
 
 export const dialogContentStyle = style([
-  baseDialogContentStyle,
+  dialogContentLayoutStyle,
+  dialogContentBackgroundColorStyle,
   {
     margin: 'auto',
     zIndex: zIndex.level5,
