@@ -23,7 +23,7 @@ import {
   loginButtonStyle,
 } from './page.css';
 import { SignUpLinkButton } from './SignUpLinkButton';
-
+import type { Metadata, ResolvingMetadata } from 'next';
 const EmptyPickRecordImage = dynamic(
   () =>
     import('@/components/EmptyPickRecordImage').then(
@@ -33,6 +33,45 @@ const EmptyPickRecordImage = dynamic(
     ssr: false,
   }
 );
+
+export async function generateMetadata(
+  {
+    params,
+  }: {
+    params: { uuid: string };
+  },
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { uuid } = params;
+  const sharedFolder = await getShareFolderById(uuid);
+  const { pickList } = sharedFolder;
+
+  const imageUrls = pickList
+    .map((pick) => pick.linkInfo.imageUrl)
+    .filter((url) => url && url !== '')
+    .slice(0, 16); // 최대 16개까지 허용
+
+  let ogImageUrl: string;
+
+  if (imageUrls.length === 0) {
+    ogImageUrl = `${process.env.NEXT_PUBLIC_IMAGE_URL}/image/og_image.png`;
+  } else {
+    const apiUrl = new URL(
+      `${process.env.NEXT_PUBLIC_IMAGE_URL}/api/generate-og-image`
+    );
+    apiUrl.searchParams.set('imageUrls', JSON.stringify(imageUrls));
+    ogImageUrl = apiUrl.toString();
+  }
+
+  const previousImages = (await parent).openGraph?.images || [];
+  return {
+    title: `${sharedFolder.folderName} 폴더 공유 페이지`,
+    description: `${pickList.length}개의 북마크가 공유되었습니다.`,
+    openGraph: {
+      images: [ogImageUrl, ...previousImages],
+    },
+  };
+}
 
 export default async function Page({ params }: { params: { uuid: string } }) {
   const { uuid } = params;
