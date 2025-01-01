@@ -67,6 +67,11 @@ spring:
       database: ${DOCKER_MONGO_DATABASE}
       username: ${DOCKER_MONGO_USERNAME}
       password: ${DOCKER_MONGO_PASSWORD}
+springdoc: # 운영 환경에서 스웨거 접근 못하도록 막는 설정
+  api-docs:
+    enabled: false # false로 변경하면, swagger api-docs(정적 json 파일) 접근 불가
+  swagger-ui:
+    enabled: false # false로 변경하면, swagger 접근 불가
 server:
   port: 8080
 ---
