@@ -30,12 +30,11 @@ public class RankingController {
 
 	private final PickRankingService pickRankingService;
 
+	/**
+	 * 링크 조회수 기반 Top N{:limit}개 조회
+	 * 조회수가 높은 순부터 N{:limit} 개를 반환합니다.
+	 */
 	@GetMapping("/link/view")
-	@Operation(summary = "링크 조회수 기반 Top N{:limit}개 조회", description = "조회수가 높은 순부터 N{:limit} 개를 반환합니다.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "조회수 랭킹 획득 성공"),
-		@ApiResponse(responseCode = "404", description = "유효하지 않는 날짜입니다.")
-	})
 	public ResponseEntity<List<UrlWithCount>> getLinkViewRank(
 		@Parameter(description = "범위 시작 날짜 (결과에 포함됩니다)", example = "2024-12-08")
 		@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_begin,
@@ -54,12 +53,11 @@ public class RankingController {
 		return ResponseEntity.ok(result);
 	}
 
+	/**
+	 * 링크가 픽된 횟수 기반 Top N{:limit}개 조회
+	 * 조회수가 높은 순부터 N{:limit} 개를 반환합니다.
+	 */
 	@GetMapping("/link/picked")
-	@Operation(summary = "링크가 픽된 횟수 기반 Top N{:limit}개 조회", description = "조회수가 높은 순부터 N{:limit} 개를 반환합니다.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "픽된 횟수 기반 랭킹 획득 성공"),
-		@ApiResponse(responseCode = "404", description = "유효하지 않는 날짜입니다.")
-	})
 	public ResponseEntity<List<UrlWithCount>> getLinkPickedRank(
 		@Parameter(description = "범위 시작 날짜 (결과에 포함됩니다)", example = "2024-12-08")
 		@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date_begin,

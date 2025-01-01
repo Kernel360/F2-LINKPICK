@@ -6,17 +6,6 @@ logging:
           mongodb:
             core:
             # MongoTemplate: DEBUG # MongoDB Query Logging
-
-# swagger setting
-springdoc:
-  swagger-ui:
-    disable-swagger-default-url: true
-  api-docs:
-    path: /api-docs
-  show-actuator: true
-  # swagger가 패키지를 포함 관리, 같은 클래스내의 inner class 또한 구분 가능. Ex) TagApiResponse.Create TagApiResponse.Move 를 구분할 수 있음
-  use-fqn: true
-
 spring:
   profiles:
     include:
@@ -67,11 +56,6 @@ spring:
       database: ${DOCKER_MONGO_DATABASE}
       username: ${DOCKER_MONGO_USERNAME}
       password: ${DOCKER_MONGO_PASSWORD}
-springdoc: # 운영 환경에서 스웨거 접근 못하도록 막는 설정
-  api-docs:
-    enabled: false # false로 변경하면, swagger api-docs(정적 json 파일) 접근 불가
-  swagger-ui:
-    enabled: false # false로 변경하면, swagger 접근 불가
 server:
   port: 8080
 ---
