@@ -22,6 +22,7 @@ public class RabbitMqEventMessenger implements EventMessenger {
 	public void send(Event event) {
 		try {
 			rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE.EVENT, "", event);
+			log.info("이벤트 전송 {}", event);
 		} catch (AmqpException e) {
 			log.error(e.getMessage(), e);
 		}
