@@ -58,7 +58,7 @@ export async function generateMetadata(
   let ogImageUrl: string;
 
   if (imageUrls.length === 0) {
-    ogImageUrl = `${process.env.NEXT_PUBLIC_IMAGE_URL}/image/og_image.png`;
+    ogImageUrl = `/image/og_image.png`;
   } else {
     const apiUrl = new URL(
       `${process.env.NEXT_PUBLIC_IMAGE_URL}/api/generate-og-image`
