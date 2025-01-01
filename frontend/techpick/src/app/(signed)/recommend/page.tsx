@@ -6,9 +6,12 @@ import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { Gap } from '@/components/Gap';
 import { RecommendedPickCarousel } from '@/components/RecommendedPickCarousel/RecommendedPickCarousel';
 import { TutorialDialog } from '@/components/TutorialDialog';
+import { IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY } from '@/constants';
 import {
   useClearSelectedPickIdsOnMount,
+  useDisclosure,
   useFetchTagList,
+  useLocalStorage,
   useResetPickFocusOnOutsideClick,
 } from '@/hooks';
 import { useTreeStore } from '@/stores';
@@ -34,6 +37,11 @@ export default function RecommendPage() {
   const [suggestionRankingPicks, setSuggestionRankingPicks] =
     useState<GetSuggestionRankingPicksResponseType>();
   useFetchTagList();
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const { storedValue: isTutorialSeen, isStoredValueLoad } = useLocalStorage(
+    IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY,
+    false
+  );
 
   useEffect(
     function selectRootFolderId() {
@@ -55,13 +63,22 @@ export default function RecommendPage() {
     fetchSuggestionRankingPicks();
   }, []);
 
+  useEffect(
+    function openTutorialForFirstTimeUser() {
+      if (isStoredValueLoad && !isTutorialSeen) {
+        onOpen();
+      }
+    },
+    [isStoredValueLoad, isTutorialSeen, onOpen]
+  );
+
   if (!basicFolderMap || !suggestionRankingPicks) {
     return <RecommendLoadingPage />;
   }
 
   return (
     <FolderContentLayout>
-      <TutorialDialog />
+      <TutorialDialog isOpen={isOpen} onClose={onClose} />
 
       <div className={recommendSectionLayoutStyle}>
         <div className={recommendPageDescriptionSectionStyle}>

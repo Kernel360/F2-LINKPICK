@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY } from '@/constants';
-import { useDisclosure, useLocalStorage } from '@/hooks';
+import { useLocalStorage } from '@/hooks';
 import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
 import { Gap } from './Gap';
 import {
@@ -23,19 +23,17 @@ import {
 const tutorialStepList = ['tutorial-step-1', 'tutorial-step-2'] as const;
 type TutorialStepType = (typeof tutorialStepList)[number];
 
-export function TutorialDialog() {
+export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
   const [tutorialStep, setTutorialStep] = useState<TutorialStepType>(
     tutorialStepList[0]
   );
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const { isOpen, onClose, onOpen } = useDisclosure();
 
-  const {
-    storedValue: isTutorialSeen,
-    setValue: setIsTutorialSeen,
-    isStoredValueLoad,
-  } = useLocalStorage(IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY, false);
+  const { setValue: setIsTutorialSeen } = useLocalStorage(
+    IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY,
+    false
+  );
 
   const onValueChange = (value: string) => {
     setTutorialStep(value as TutorialStepType);
@@ -49,15 +47,6 @@ export function TutorialDialog() {
     setIsTutorialSeen(true);
     onClose();
   };
-
-  useEffect(
-    function openTutorialForFirstTimeUser() {
-      if (isStoredValueLoad && !isTutorialSeen) {
-        onOpen();
-      }
-    },
-    [isStoredValueLoad, isTutorialSeen, onOpen]
-  );
 
   return (
     <Dialog.Root open={isOpen} modal>
@@ -147,4 +136,9 @@ export function TutorialDialog() {
       </Dialog.Portal>
     </Dialog.Root>
   );
+}
+
+interface TutorialDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
 }

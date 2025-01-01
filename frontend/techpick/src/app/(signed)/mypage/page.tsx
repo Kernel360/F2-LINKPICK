@@ -1,20 +1,25 @@
 'use client';
 
 import { useEffect } from 'react';
+import * as Checkbox from '@radix-ui/react-checkbox';
+import { CheckIcon } from 'lucide-react';
 import { postLogout } from '@/apis/postLogout';
 import { ImportBookmarkDialog } from '@/components/ImportBookmarkDialog';
 import MyPageContentContainer from '@/components/MyPage/MyPageContentContainer';
 import MyPageShareFolderContent from '@/components/MyPage/MyPageShareFolderContent';
-import { TutorialReplaySwitch } from '@/components/TutorialReplaySwitch';
+import { TutorialDialog } from '@/components/TutorialDialog';
 import { ROUTES } from '@/constants';
+import { useDisclosure } from '@/hooks';
 import { useTreeStore } from '@/stores';
 import {
   buttonSectionStyle,
   logoutButtonStyle,
   myPageContentContainerLayoutStyle,
   myPageLayoutStyle,
-  tutorialReplaySwitchLabelStyle,
-  tutorialReplaySwitchLayoutStyle,
+  tutorialReplayCheckboxLabelStyle,
+  tutorialReplayCheckboxLayoutStyle,
+  checkboxRootStyle,
+  checkboxIndicatorStyle,
 } from './page.css';
 
 export default function MyPage() {
@@ -22,6 +27,7 @@ export default function MyPage() {
   const setSelectedFolderList = useTreeStore(
     (state) => state.setSelectedFolderList
   );
+  const { isOpen, onClose, onToggle } = useDisclosure();
 
   const handleLogout = async () => {
     try {
@@ -51,15 +57,25 @@ export default function MyPage() {
             </button>
           </div>
         </MyPageContentContainer>
-        <div className={tutorialReplaySwitchLayoutStyle}>
+        <div className={tutorialReplayCheckboxLayoutStyle}>
+          <Checkbox.Root
+            id="tutorial-replay-checkbox"
+            checked={isOpen}
+            onCheckedChange={onToggle}
+            className={checkboxRootStyle}
+          >
+            <Checkbox.Indicator className={checkboxIndicatorStyle}>
+              <CheckIcon />
+            </Checkbox.Indicator>
+          </Checkbox.Root>
           <label
-            htmlFor="tutorial-replay-switch"
-            className={tutorialReplaySwitchLabelStyle}
+            htmlFor="tutorial-replay-checkbox"
+            className={tutorialReplayCheckboxLabelStyle}
           >
             튜토리얼 다시 보기
           </label>
-          <TutorialReplaySwitch labelTargetId="tutorial-replay-switch" />
         </div>
+        {isOpen && <TutorialDialog isOpen={isOpen} onClose={onClose} />}
       </div>
 
       <MyPageContentContainer title="공개된 폴더">
