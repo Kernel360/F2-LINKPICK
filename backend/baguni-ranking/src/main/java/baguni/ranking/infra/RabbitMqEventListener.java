@@ -40,6 +40,7 @@ public class RabbitMqEventListener {
 	 */
 	@RabbitHandler
 	public void pickCreateEvent(PickCreateEvent event) {
+		log.info("픽 생성 이벤트 수신 {}", event);
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
 		var pickId = event.getPickId(); // unused
@@ -52,6 +53,7 @@ public class RabbitMqEventListener {
 	 */
 	@RabbitHandler
 	public void pickViewEvent(PickViewEvent event) {
+		log.info("픽 조회 이벤트 수신 {}", event);
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
 		var pickId = event.getPickId(); // unused
@@ -66,6 +68,7 @@ public class RabbitMqEventListener {
 	 */
 	@RabbitHandler
 	public void sharedFolderViewEvent(SharedFolderLinkViewEvent event) {
+		log.info("공유 폴더 내 픽 조회 이벤트 수신 {}", event);
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
 		var folderAccessToken = event.getFolderAccessToken();
@@ -78,6 +81,7 @@ public class RabbitMqEventListener {
 	 */
 	@RabbitHandler
 	public void suggestionViewEvent(SuggestionViewEvent event) {
+		log.info("추천 페이지 내 픽 조회 이벤트 수신 {}", event);
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
 		var userId = event.getUserId(); // unused
