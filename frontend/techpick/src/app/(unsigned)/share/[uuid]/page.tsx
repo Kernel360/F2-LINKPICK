@@ -34,6 +34,10 @@ const EmptyPickRecordImage = dynamic(
   }
 );
 
+// TODO:
+// 해당 코드는 api를 쓰는 방식이 아닌,
+// https://nextjs.org/docs/14/app/api-reference/file-conventions/metadata/opengraph-image#generate-images-using-code-js-ts-tsx
+// 에서 나오는 방식으로 변경해야합니다.
 export async function generateMetadata(
   {
     params,
@@ -54,7 +58,7 @@ export async function generateMetadata(
   let ogImageUrl: string;
 
   if (imageUrls.length === 0) {
-    ogImageUrl = `/image/og_image.png`;
+    ogImageUrl = `${process.env.NEXT_PUBLIC_IMAGE_URL}/image/og_image.png`;
   } else {
     const apiUrl = new URL(
       `${process.env.NEXT_PUBLIC_IMAGE_URL}/api/generate-og-image`
