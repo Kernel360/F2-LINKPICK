@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
   },
   openGraph: {
-    images: `${process.env.NEXT_PUBLIC_IMAGE_URL}/image/og_image.png`,
+    images: `/image/og_image.png`,
   },
 };
 
