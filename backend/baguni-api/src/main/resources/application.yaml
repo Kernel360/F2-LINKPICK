@@ -1,7 +1,7 @@
 spring:
   profiles:
     include:
-      - domain
+      - entity
       - common
   application:
     name: baguni.${PROFILE_MODE}.server.api
