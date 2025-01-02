@@ -233,7 +233,7 @@ public class PickApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 내용 수정 성공")
 	})
-	public ResponseEntity<PickApiResponse.Pick> updatePickXXX(@LoginUserId Long userId,
+	public ResponseEntity<PickApiResponse.Pick> updatePick(@LoginUserId Long userId,
 		@Valid @RequestBody PickApiRequest.Update request) {
 		if (!Objects.isNull(request.title()) && 200 < request.title().length()) {
 			throw ApiPickException.PICK_TITLE_TOO_LONG();
