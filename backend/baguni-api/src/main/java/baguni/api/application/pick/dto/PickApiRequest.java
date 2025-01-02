@@ -30,18 +30,6 @@ public class PickApiRequest {
 	public record Update(
 		@Schema(example = "1") @NotNull(message = "{id.notNull}") Long id,
 		@Schema(example = "Record란 뭘까?") String title,
-		@Schema(example = "[4, 5, 2, 1]") List<Long> tagIdOrderedList
-	) {
-	}
-
-	/**
-	 * @deprecated
-	 * 구 버전 익스텐션은 폴더 위치도 수정할 수 있습니다.
-	 * 해당 기능을 유지하기 위한 임시 기능이며, 익스텐션 버전 업과 동시에 삭제 예정입니다.
-	 */
-	public record UpdateXXX(
-		@Schema(example = "1") @NotNull(message = "{id.notNull}") Long id,
-		@Schema(example = "Record란 뭘까?") String title,
 		@Schema(example = "3") Long parentFolderId,
 		@Schema(example = "[4, 5, 2, 1]") List<Long> tagIdOrderedList
 	) {
