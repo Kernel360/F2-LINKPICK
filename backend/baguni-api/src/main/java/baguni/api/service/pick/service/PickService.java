@@ -111,6 +111,7 @@ public class PickService {
 	public PickResult.Pick updatePick(PickCommand.Update command) {
 		validatePickAccess(command.userId(), command.id());
 		validateFolderAccess(command.userId(), command.parentFolderId());
+		validateRootAccess(command.parentFolderId());
 		validateTagListAccess(command.userId(), command.tagIdOrderedList());
 		return pickMapper.toPickResult(pickDataHandler.updatePick(command));
 	}
