@@ -28,7 +28,6 @@ import baguni.api.infrastructure.tag.TagDataHandler;
 import baguni.common.dto.UrlWithCount;
 import baguni.entity.model.folder.Folder;
 import baguni.entity.model.folder.FolderType;
-import baguni.entity.model.link.Link;
 import baguni.entity.model.pick.Pick;
 import baguni.entity.model.tag.Tag;
 
@@ -46,8 +45,9 @@ public class PickService {
 
 	@Transactional(readOnly = true)
 	public boolean existPickByUrl(Long userId, String url) {
-		Link link = linkDataHandler.getLink(url);
-		return pickDataHandler.existsByUserIdAndLink(userId, link);
+		return linkDataHandler.getOptionalLink(url)
+			.map(link -> pickDataHandler.existsByUserIdAndLink(userId, link))
+			.orElse(false);
 	}
 
 	@Transactional(readOnly = true)
