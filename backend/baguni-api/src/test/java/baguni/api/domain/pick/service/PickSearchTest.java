@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import baguni.api.service.pick.service.PickSearchService;
 import baguni.api.service.pick.service.PickService;
+import baguni.entity.model.user.SocialProvider;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
 import baguni.api.service.folder.exception.ApiFolderException;
@@ -33,7 +34,6 @@ import baguni.entity.model.folder.FolderRepository;
 import baguni.entity.model.tag.Tag;
 import baguni.entity.model.tag.TagRepository;
 import baguni.entity.model.user.Role;
-import baguni.entity.model.user.SocialType;
 import baguni.entity.model.user.User;
 import baguni.entity.model.user.UserRepository;
 
@@ -499,7 +499,7 @@ class PickSearchTest {
 				.nickname("user1")
 				.password("user1")
 				.role(Role.ROLE_USER)
-				.socialProvider(SocialType.KAKAO)
+				.socialProvider(SocialProvider.KAKAO)
 				.socialProviderId("1")
 				.tagOrderList(new ArrayList<>())
 				.build()
@@ -513,7 +513,7 @@ class PickSearchTest {
 				.nickname("user2")
 				.password("user2")
 				.role(Role.ROLE_USER)
-				.socialProvider(SocialType.KAKAO)
+				.socialProvider(SocialProvider.KAKAO)
 				.socialProviderId("2")
 				.tagOrderList(new ArrayList<>())
 				.build()

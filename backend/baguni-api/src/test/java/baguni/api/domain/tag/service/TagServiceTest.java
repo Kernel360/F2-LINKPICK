@@ -26,7 +26,7 @@ import baguni.api.service.tag.dto.TagResult;
 import baguni.api.service.tag.exception.ApiTagException;
 import baguni.api.infrastructure.user.UserDataHandler;
 import baguni.entity.model.user.Role;
-import baguni.entity.model.user.SocialType;
+import baguni.entity.model.user.SocialProvider;
 import baguni.entity.model.user.User;
 import baguni.entity.model.user.UserRepository;
 
@@ -56,7 +56,7 @@ class TagServiceTest {
 			.nickname("test")
 			.password("test")
 			.role(Role.ROLE_USER)
-			.socialProvider(SocialType.KAKAO)
+			.socialProvider(SocialProvider.KAKAO)
 			.socialProviderId("1")
 			.tagOrderList(new ArrayList<>())
 			.build();
