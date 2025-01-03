@@ -1,68 +1,75 @@
 package baguni.security.handler;
 
 import java.io.IOException;
-import java.time.Duration;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import baguni.api.infrastructure.user.UserDataHandler;
+import baguni.security.config.JwtProperties;
+import baguni.security.util.AccessToken;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import baguni.entity.model.user.User;
-import baguni.entity.model.user.UserRepository;
 import baguni.security.config.SecurityProperties;
 import baguni.security.exception.ApiAuthException;
 import baguni.security.model.OAuth2UserInfo;
 import baguni.security.util.CookieUtil;
-import baguni.security.util.JwtUtil;
 
 @Component
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+	private final JwtProperties jwtProps;
+	private final SecurityProperties securityProps;
+
 	private final CookieUtil cookieUtil;
-	private final JwtUtil jwtUtil;
-	private final UserRepository userRepository;
-	private static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
-	private final SecurityProperties properties;
+	private final UserDataHandler userDataHandler;
 
 	@Override
-	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-		Authentication authentication) throws IOException, ServletException {
-
-		var oAuth2UserInfo = (OAuth2UserInfo)authentication.getPrincipal();
-
-		User user = userRepository.findBySocialProviderId(oAuth2UserInfo.getName())
+	public void onAuthenticationSuccess(
+		HttpServletRequest request,
+		HttpServletResponse response,
+		Authentication authentication
+	) throws IOException, ServletException {
+		var auth = (OAuth2UserInfo)authentication.getPrincipal();
+		var user = userDataHandler.findSocialUser(auth.getProvider(), auth.getProviderId())
 								  .orElseThrow(ApiAuthException::INVALID_AUTHENTICATION);
+		var accessToken = AccessToken.makeNew(jwtProps, user.getIdToken(), user.getRole());
 
-		String accessToken = jwtUtil.getToken(user, ACCESS_TOKEN_DURATION);
-
-		var redirectUrl = cookieUtil.findCookieValue(request.getCookies(),
-			properties.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY).orElse(properties.getDefaultRedirectUrl());
-
-		addAccessTokenToCookie(request, response, accessToken);
-		cookieUtil.deleteCookie(request, response, properties.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY);
-		response.sendRedirect(redirectUrl);
+		assignNewAccessToken(response, accessToken);
+		redirectUserToSuccessPage(request, response);
 
 		super.clearAuthenticationAttributes(request);
 		super.onAuthenticationSuccess(request, response, authentication);
 	}
 
-	private void addAccessTokenToCookie(HttpServletRequest request, HttpServletResponse response,
-		String token) {
+	private void redirectUserToSuccessPage(
+		HttpServletRequest request,
+		HttpServletResponse response
+	) throws
+		IOException {
+		var successPage = cookieUtil.findCookieValue(request.getCookies(), securityProps.OAUTH_RETURN_URL_KEY)
+									.orElse(securityProps.getDefaultRedirectUrl());
 
-		int cookieMaxAge = (int)ACCESS_TOKEN_DURATION.toSeconds();
+		cookieUtil.deleteCookie(response, securityProps.OAUTH_RETURN_URL_KEY);
+		cookieUtil.deleteCookie(response, "JSESSIONID");
+		response.sendRedirect(successPage);
+	}
 
-		cookieUtil.deleteCookie(request, response, properties.ACCESS_TOKEN_KEY);
+	/**
+	 * 엑세스 토큰의 만료 기간 (exp) 와 쿠키의 만료 기간 (max age)를 동일하게 설정합니다.
+	 */
+	private void assignNewAccessToken(
+		HttpServletResponse response,
+		String token
+	) {
+		cookieUtil.deleteCookie(response, securityProps.ACCESS_TOKEN_KEY);
 		cookieUtil.addCookie(
-			response,
-			properties.ACCESS_TOKEN_KEY,
-			token,
-			cookieMaxAge,
-			true
+			response, securityProps.ACCESS_TOKEN_KEY, token,
+			(int)AccessToken.EXPIRY_DAY.toSeconds(), true
 		);
 	}
 }

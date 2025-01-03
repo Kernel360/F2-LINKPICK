@@ -7,10 +7,10 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import baguni.entity.model.user.SocialProvider;
 import lombok.Builder;
 import lombok.Getter;
 import baguni.entity.model.user.Role;
-import baguni.entity.model.user.SocialType;
 import baguni.entity.model.user.User;
 
 @Builder
@@ -28,7 +28,7 @@ public class UserFixture {
 
 	private String password;
 
-	private SocialType socialProvider;
+	private SocialProvider socialProvider;
 
 	private String socialProviderId;
 

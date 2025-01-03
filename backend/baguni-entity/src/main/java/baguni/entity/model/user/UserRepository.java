@@ -4,9 +4,11 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import baguni.entity.model.util.IDToken;
+
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	boolean existsBySocialProviderId(String socialProviderId);
+	Optional<User> findBySocialProviderAndSocialProviderId(SocialProvider socialProvider, String socialProviderId);
 
-	Optional<User> findBySocialProviderId(String socialProviderId);
+	Optional<User> findByIdToken(IDToken idToken);
 }

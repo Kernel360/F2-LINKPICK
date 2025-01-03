@@ -18,7 +18,7 @@ import baguni.api.service.pick.dto.PickCommand;
 import baguni.entity.model.folder.Folder;
 import baguni.entity.model.folder.FolderRepository;
 import baguni.entity.model.user.Role;
-import baguni.entity.model.user.SocialType;
+import baguni.entity.model.user.SocialProvider;
 import baguni.entity.model.user.User;
 import baguni.entity.model.user.UserRepository;
 
@@ -50,7 +50,7 @@ class PickBulkInsertTest {
 				.nickname("test")
 				.password("test")
 				.role(Role.ROLE_USER)
-				.socialProvider(SocialType.KAKAO)
+				.socialProvider(SocialProvider.KAKAO)
 				.socialProviderId("1")
 				.tagOrderList(new ArrayList<>())
 				.build()

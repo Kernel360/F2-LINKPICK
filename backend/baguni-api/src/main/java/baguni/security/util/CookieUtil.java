@@ -1,21 +1,28 @@
 package baguni.security.util;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
+import baguni.security.config.JwtProperties;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import baguni.security.config.SecurityProperties;
 
+/**
+ * minkyeu kim
+ * 아래 CookieUtil로 전체적인 리팩토링이 필요합니다.
+ */
 @Component
 @RequiredArgsConstructor
 public class CookieUtil {
 
-	private final SecurityProperties properties;
+	private final SecurityProperties securityProps;
+	private final JwtProperties jwtProps;
 
 	/**
 	 * response에 쿠키를 등록하는 메소드
@@ -42,7 +49,7 @@ public class CookieUtil {
 													  .path("/")
 													  .httpOnly(httpOnly)
 													  .secure(true)
-													  .domain(properties.getCookieDomain())
+													  .domain(securityProps.getCookieDomain())
 													  .build();
 		response.addHeader("Set-Cookie", responseCookie.toString());
 
@@ -53,11 +60,10 @@ public class CookieUtil {
 	 * 삭제하려는 쿠키를 덮어씌워 삭제함
 	 * @author Gyaak
 	 *
-	 * @param request
 	 * @param response
 	 * @param name 삭제하려는 쿠키 이름
 	 */
-	public void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
+	public void deleteCookie(HttpServletResponse response, String name) {
 		this.addCookie(response, name, "", 0, true);
 	}
 
@@ -67,6 +73,24 @@ public class CookieUtil {
 
 		for (Cookie cookie : cookies) {
 			if (name.equals(cookie.getName()) && !cookie.getValue().isEmpty()) {
+				return Optional.of(cookie.getValue());
+			}
+		}
+		return Optional.empty();
+	}
+
+	public Optional<AccessToken> findAccessTokenFrom(HttpServletRequest request) {
+		return findCookieValueByKey(
+			request.getCookies(), securityProps.ACCESS_TOKEN_KEY
+		).map(rawValue -> AccessToken.fromString(jwtProps, rawValue));
+	}
+
+	private Optional<String> findCookieValueByKey(Cookie[] cookies, String key) {
+		if (Objects.isNull(cookies) || cookies.length < 1) {
+			return Optional.empty();
+		}
+		for (Cookie cookie : cookies) {
+			if (cookie.getName().equals(key)) {
 				return Optional.of(cookie.getValue());
 			}
 		}

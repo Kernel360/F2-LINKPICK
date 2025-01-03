@@ -30,10 +30,12 @@ public class UserApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "204", description = "회원 탈퇴 성공")
 	})
-	public ResponseEntity<Void> deleteUser(@LoginUserId Long userId, HttpServletRequest request,
-		HttpServletResponse response) {
+	public ResponseEntity<Void> deleteUser(
+		@LoginUserId Long userId,
+		HttpServletResponse response
+	) {
 		userService.deleteUser(userId);
-		logoutHandler.clearCookies(request, response);
+		logoutHandler.clearCookies(response);
 		return ResponseEntity.noContent().build();
 	}
 }

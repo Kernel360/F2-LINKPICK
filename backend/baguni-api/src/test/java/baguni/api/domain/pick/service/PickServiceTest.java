@@ -20,6 +20,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import baguni.api.service.pick.service.PickService;
+import baguni.entity.model.user.SocialProvider;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
 import baguni.api.application.pick.dto.PickApiMapper;
@@ -39,7 +40,6 @@ import baguni.entity.model.pick.PickTagRepository;
 import baguni.entity.model.tag.Tag;
 import baguni.entity.model.tag.TagRepository;
 import baguni.entity.model.user.Role;
-import baguni.entity.model.user.SocialType;
 import baguni.entity.model.user.User;
 import baguni.entity.model.user.UserRepository;
 
@@ -76,7 +76,7 @@ class PickServiceTest {
 				.nickname("test")
 				.password("test")
 				.role(Role.ROLE_USER)
-				.socialProvider(SocialType.KAKAO)
+				.socialProvider(SocialProvider.KAKAO)
 				.socialProviderId("1")
 				.tagOrderList(new ArrayList<>())
 				.build()

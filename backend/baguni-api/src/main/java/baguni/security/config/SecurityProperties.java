@@ -2,6 +2,7 @@ package baguni.security.config;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class SecurityProperties {
 	 * 프론트엔드에서 넘겨준 리다이렉트 대상 주소.
 	 * 쿠키에 임시로 저장해두었다가, 로그인 성공 시 해당 값을 꺼내서 리다이렉트
 	 */
-	public final String OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY = "redirect_url";
+	public final String OAUTH_RETURN_URL_KEY = "redirect_url";
 
 	private final List<String> corsPatterns;
 

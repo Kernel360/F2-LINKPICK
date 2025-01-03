@@ -5,13 +5,17 @@ import java.util.Objects;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import baguni.api.service.user.service.UserService;
 import baguni.common.exception.base.ApiErrorResponse;
 import baguni.security.exception.ApiAuthErrorCode;
+import baguni.security.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 /**
  * @author minkyeu kim
@@ -20,9 +24,11 @@ import jakarta.servlet.http.HttpServletResponse;
  *   이젠, 프론트가 에러코드 기반으로 페이지를 처리합니다. </br>
  *
  * - /api/** 경로로 요청이 왔는데, JWT 엑세스 토큰이 없거나 위조되었을 경우 아래 EntryPoint로 진입합니다. </br>
- *     case 1. 쿠키가 만료된 요청이 온 경우 </br>
+ *     case 1. 토큰이 만료된 요청이 온 경우 </br>
  *     case 2. 변조된 JWT를 가진 요청인 경우
  */
+@Component
+@RequiredArgsConstructor
 public class BaguniApiAuthExceptionEntrypoint implements AuthenticationEntryPoint {
 
 	/**
