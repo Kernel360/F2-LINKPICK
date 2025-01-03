@@ -20,9 +20,6 @@ export const API_URLS = {
   getLinkUrl: function () {
     return 'links';
   },
-  getLinkOGData: function (url: string) {
-    return `${this.getLinkUrl()}?url=${url}`;
-  },
   getCreateUnclassifiedFolderPickUrl: function () {
     return `${this.getPicksUrl()}/unclassified`;
   },

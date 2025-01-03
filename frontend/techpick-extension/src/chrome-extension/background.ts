@@ -1,4 +1,3 @@
-import { getOgDataByUrl } from '@/apis';
 import {
   GET_THEME_FROM_LOCALHOST_PORT_NAME,
   REQUEST_THEME_STATE_FROM_LOCALHOST_MESSAGE,
@@ -6,10 +5,7 @@ import {
   DARK_THEME_STATE,
   THEME_STATE_LOCALHOST_KEY,
   CHANGE_THEME_STATE_TO_LOCALHOST_PORT_NAME,
-  GET_TAB_HTML_TEXT_FROM_WORKER_PORT_NAME,
-  REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE,
 } from '@/constants';
-import { GetOgTagDataResponseType } from '@/types';
 
 /**
  * @description 테마를 익스텐션 로컬 호스트에서 불러오는 함수입니다.
@@ -54,13 +50,6 @@ chrome.runtime.onConnect.addListener(function changeThemeState(port) {
     });
   });
 });
-
-const ogData: GetOgTagDataResponseType = {
-  url: '',
-  title: '',
-  description: '',
-  imageUrl: '',
-};
 
 /**
  * @description 탭이 업데이트될 때마다 탭의 정보를 가져옵니다.
@@ -111,35 +100,3 @@ const ogData: GetOgTagDataResponseType = {
 //     };
 //   }
 // });
-
-/**
- * @description 메세지를 받고 tab의 정보를 반환합니다.
- */
-chrome.runtime.onConnect.addListener(function getHtmlText(port) {
-  if (port.name !== GET_TAB_HTML_TEXT_FROM_WORKER_PORT_NAME) {
-    return;
-  }
-
-  port.onMessage.addListener(function (message) {
-    if (message === REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE) {
-      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-        const activeTab = tabs[0];
-        getOgDataByUrl(activeTab.url ?? '')
-          .then((ogData) => {
-            port.postMessage({
-              ogData,
-              url: activeTab.url,
-              title: activeTab.title,
-            });
-          })
-          .catch(() => {
-            port.postMessage({
-              ogData,
-              url: activeTab.url,
-              title: activeTab.title,
-            });
-          });
-      });
-    }
-  });
-});
