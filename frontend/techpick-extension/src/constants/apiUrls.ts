@@ -23,4 +23,7 @@ export const API_URLS = {
   getLinkOGData: function (url: string) {
     return `${this.getLinkUrl()}?url=${url}`;
   },
+  getCreateUnclassifiedFolderPickUrl: function () {
+    return `${this.getPicksUrl()}/unclassified`;
+  },
 };

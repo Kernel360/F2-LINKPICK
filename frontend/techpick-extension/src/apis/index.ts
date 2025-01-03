@@ -8,3 +8,4 @@ export { updateTag } from './updateTag';
 export { getBasicFolderList } from './getBasicFolders';
 export { getRootFolderChildFolders } from './getRootFolderChildFolders';
 export { getOgDataByUrl } from './getLinkOgDataByUrl';
+export { createPickToUnclassifiedFolder } from './createPickToUnclassifiedFolder';
