@@ -162,22 +162,6 @@ public class PickDataHandler {
 		Pick pick = pickRepository.findById(command.id()).orElseThrow(ApiPickException::PICK_NOT_FOUND);
 		pick.updateTitle(command.title());
 
-		if (command.tagIdOrderedList() != null) {
-			updateNewTagIdList(pick, command.tagIdOrderedList());
-		}
-		return pick;
-	}
-
-	/**
-	 * @deprecated
-	 * 구 버전 익스텐션은 폴더 위치도 수정할 수 있습니다.
-	 * 해당 기능을 유지하기 위한 임시 기능이며, 익스텐션 버전 업과 동시에 삭제 예정입니다.
-	 */
-	@Transactional
-	public Pick updatePickXXX(PickCommand.UpdateXXX command) {
-		Pick pick = pickRepository.findById(command.id()).orElseThrow(ApiPickException::PICK_NOT_FOUND);
-		pick.updateTitle(command.title());
-
 		Folder parentFolder = pick.getParentFolder();
 
 		if (Objects.nonNull(command.parentFolderId()) &&
@@ -291,7 +275,7 @@ public class PickDataHandler {
 		pick.updateTagOrderList(newTagOrderList);
 	}
 
-	private boolean isDifferentFolder(Folder parentFolder, PickCommand.UpdateXXX command) {
+	private boolean isDifferentFolder(Folder parentFolder, PickCommand.Update command) {
 		return !Objects.equals(parentFolder.getId(), command.parentFolderId());
 	}
 
