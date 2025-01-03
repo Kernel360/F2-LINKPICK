@@ -60,6 +60,12 @@ export const useTagStore = create<TagState & TagAction>()(
       });
     },
 
+    setTagList: async (tagList) => {
+      set((state) => {
+        state.tagList = tagList;
+      });
+    },
+
     fetchingTagList: async () => {
       try {
         set((state) => {
