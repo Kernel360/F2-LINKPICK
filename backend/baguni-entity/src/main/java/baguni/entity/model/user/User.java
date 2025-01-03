@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import baguni.entity.model.util.IDToken;
+import baguni.entity.model.util.IDTokenConverter;
 import baguni.entity.model.util.OrderConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -24,7 +26,7 @@ import baguni.entity.model.common.BaseEntity;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseEntity /* implements UserDetails --> 시큐리티 도입시 추가 */ {
+public class User extends BaseEntity {
 
 	private static final String SOCIAL_USER_HAS_NO_PASSWORD = null;
 
@@ -32,10 +34,6 @@ public class User extends BaseEntity /* implements UserDetails --> 시큐리티 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-
-	// 닉네임 (없으면 랜덤 생성 - Ex. "노래하는피치#145")
-	@Column(name = "nickname") //, nullable = false /*, unique = true */)
-	private String nickname;
 
 	// 이메일 (WARN: 두 소셜 로그인이 같은 이메일을 가질 수 있음)
 	@Column(name = "email", nullable = false)
@@ -46,18 +44,30 @@ public class User extends BaseEntity /* implements UserDetails --> 시큐리티 
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
+	// 유저 식별 토큰 ( Unique )
+	@Convert(converter = IDTokenConverter.class)
+	@Column(name = "id_token", nullable = false, columnDefinition = "char(36)", unique = true)
+	private IDToken idToken;
+
+	// 닉네임 (없으면 랜덤 생성 - Ex. "노래하는피치#145")
+	@Column(name = "nickname")
+	private String nickname;
+
+	// 일반 로그인만 해당 ----------------------------------
 	// 비밀번호 (소셜 로그인 사용자는 null)
 	@Column(name = "password") // nullable
 	private String password;
 
+	// 소셜 로그인만 해당 ----------------------------------
 	// 소셜 제공자 (null일 경우 자체 가입 회원)
 	@Enumerated(EnumType.STRING)
 	@Column(name = "social_provider") // nullable
-	private SocialType socialProvider;
+	private SocialProvider socialProvider;
 
-	// 소셜 제공자 Id
+	// 소셜 제공자 Id (null일 경우 자체 가입 회원)
 	@Column(name = "social_provider_id") // nullable
 	private String socialProviderId;
+	// -------------------------------------------------
 
 	// 유저의 tag id들을 공백으로 분리된 String으로 변환하여 db에 저장
 	// ex) [6,3,2,23,1] -> "6 3 2 23 1"
@@ -89,12 +99,13 @@ public class User extends BaseEntity /* implements UserDetails --> 시큐리티 
 
 	@Builder
 	private User(
-		SocialType socialProvider,
+		SocialProvider socialProvider,
 		String socialProviderId,
 		String nickname,
 		String password,
 		String email,
 		Role role,
+		IDToken idToken,
 		List<Long> tagOrderList
 	) {
 		this.socialProviderId = socialProviderId;
@@ -103,18 +114,23 @@ public class User extends BaseEntity /* implements UserDetails --> 시큐리티 
 		this.password = password;
 		this.email = email;
 		this.role = role;
+		this.idToken = idToken;
 		this.tagOrderList = tagOrderList;
 	}
 
-	// TODO: 엔티티 사용자가 정적 팩토리 메소드로 필요한 함수를 구현 하세요
-	public static User SocialUser(SocialType socialProvider, String socialProviderId, String email) {
+	public static User SocialUser(SocialProvider socialProvider, String socialProviderId, String email) {
 		return User
 			.builder()
 			.socialProvider(socialProvider)
 			.socialProviderId(socialProviderId)
 			.email(email)
-			.nickname("random nickname")
+			.idToken(IDToken.makeNew())
 			.role(Role.ROLE_USER)
 			.build();
+	}
+
+	public IDToken renewIdToken() {
+		this.idToken = IDToken.makeNew();
+		return this.idToken;
 	}
 }
