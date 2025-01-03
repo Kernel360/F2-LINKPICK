@@ -44,9 +44,8 @@ public class PickRankingService {
 	 * 		 		1시간마다 캐싱하도록 처리
 	 * 		 	    CacheType Enum 참고
 	 */
-	@Cacheable(cacheNames = CacheType.CACHE_NAME.DAILY_LINK_RANK)
 	@MeasureTime
-
+	@Cacheable(cacheNames = CacheType.CACHE_NAME.DAILY_LINK_RANK)
 	public List<UrlWithCount> getDailyLinksOrderByViewCount(LocalDate today, int limit) {
 		// today : 12/19 (Between = GT / LT)
 		// 12/18 < ? < 12/20 로 조회해야 오늘 데이터를 받아올 수 있습니다.
@@ -65,9 +64,8 @@ public class PickRankingService {
 	 * 	 		24시간마다 캐싱하도록 처리
 	 * 	 	    CacheType Enum 참고
 	 */
-	@Cacheable(cacheNames = CacheType.CACHE_NAME.WEEKLY_LINK_RANK)
 	@MeasureTime
-
+	@Cacheable(cacheNames = CacheType.CACHE_NAME.WEEKLY_LINK_RANK)
 	public List<UrlWithCount> getWeeklyLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
 		var pickViewCountList = linkViewCountRepository.findByDateBetween(
 			startDate.minusDays(1), endDate.plusDays(1)
@@ -89,9 +87,8 @@ public class PickRankingService {
 	 * 	    https://techblog.uplus.co.kr/%EB%A1%9C%EC%BB%AC-%EC%BA%90%EC%8B%9C-%EC%84%A0%ED%83%9D%ED%95%98%EA%B8%B0
 	 * 	    -e394202d5c87
 	 */
-	@Cacheable(cacheNames = CacheType.CACHE_NAME.MONTHLY_PICK_RANK)
 	@MeasureTime
-
+	@Cacheable(cacheNames = CacheType.CACHE_NAME.MONTHLY_PICK_RANK)
 	public List<UrlWithCount> getLinksOrderByPickedCount(LocalDate startDate, LocalDate endDate, int limit) {
 		var pickCreateCountList = linkPickedCountRepository.findByDateBetween(
 			startDate.minusDays(1), endDate.plusDays(1)
