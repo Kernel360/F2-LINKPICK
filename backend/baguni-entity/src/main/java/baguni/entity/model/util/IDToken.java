@@ -7,7 +7,7 @@ import java.util.UUID;
  */
 public class IDToken {
 
-	private final UUID raw;
+	private final UUID uuid;
 
 	public static IDToken fromString(String raw) {
 		return new IDToken(UUID.fromString(raw));
@@ -19,7 +19,7 @@ public class IDToken {
 
 	@Override
 	public String toString() {
-		return this.raw.toString();
+		return this.uuid.toString();
 	}
 
 	@Override
@@ -30,10 +30,10 @@ public class IDToken {
 		if (!(o instanceof IDToken token)) {
 			return false;
 		}
-		return this.raw.compareTo(token.raw) == 0;
+		return this.uuid.compareTo(token.uuid) == 0;
 	}
 
-	private IDToken(UUID raw) {
-		this.raw = raw;
+	private IDToken(UUID uuid) {
+		this.uuid = uuid;
 	}
 }
