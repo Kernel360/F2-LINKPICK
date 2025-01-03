@@ -1,31 +1,24 @@
 package baguni.security.filter;
 
 import java.io.IOException;
-import java.util.List;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import baguni.security.util.AccessToken;
+import baguni.security.util.CookieUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import baguni.entity.model.user.Role;
-import baguni.security.config.SecurityProperties;
-import baguni.security.util.JwtUtil;
 
 @Component
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-	private final JwtUtil jwtUtil;
-	private final SecurityProperties properties;
+	private final CookieUtil cookieUtil;
 
 	@Override
 	protected void doFilterInternal(
@@ -33,42 +26,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		HttpServletResponse response,
 		FilterChain filterChain
 	) throws ServletException, IOException {
-		String token = getTokenFromCookie(request);
+		var securityContext = SecurityContextHolder.getContext();
 
-		if (jwtUtil.isValidToken(token)) {
-			Authentication authentication = convertToAuthentication(token);
-			SecurityContextHolder.getContext().setAuthentication(authentication);
-		}
+		cookieUtil.findAccessTokenFrom(request)
+				  .map(AccessToken::toAuthenticationToken)
+				  .ifPresent(securityContext::setAuthentication);
 
 		filterChain.doFilter(request, response);
-	}
-
-	private String getTokenFromCookie(HttpServletRequest request) {
-		Cookie[] cookies = request.getCookies();
-		if (cookies == null) {
-			return null;
-		}
-		return findCookieByKey(cookies);
-	}
-
-	private String findCookieByKey(Cookie[] cookies) {
-		for (Cookie cookie : cookies) {
-			if (cookie.getName().equals(properties.ACCESS_TOKEN_KEY)) {
-				return cookie.getValue();
-			}
-		}
-		return null;
-	}
-
-	private Authentication convertToAuthentication(String token) {
-
-		Long id = jwtUtil.getUserId(token);
-		Role role = jwtUtil.getRole(token);
-
-		return new UsernamePasswordAuthenticationToken(
-			id,
-			token,
-			List.of(new SimpleGrantedAuthority(role.toString()))
-		);
 	}
 }

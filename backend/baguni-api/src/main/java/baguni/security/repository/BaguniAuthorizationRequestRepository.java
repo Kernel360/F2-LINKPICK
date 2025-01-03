@@ -42,8 +42,8 @@ public class BaguniAuthorizationRequestRepository
 		HttpServletRequest request,
 		HttpServletResponse response
 	) {
-		String returnUrl = request.getParameter(properties.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY);
-		cookieUtil.addCookie(response, properties.OAUTH_SUCCESS_RETURN_URL_TOKEN_KEY, returnUrl, 180, true);
+		String returnUrl = request.getParameter(properties.OAUTH_RETURN_URL_KEY);
+		cookieUtil.addCookie(response, properties.OAUTH_RETURN_URL_KEY, returnUrl, 180, true);
 		defaultRepository.saveAuthorizationRequest(authorizationRequest, request, response);
 	}
 

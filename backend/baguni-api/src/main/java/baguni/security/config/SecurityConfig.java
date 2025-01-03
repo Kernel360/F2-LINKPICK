@@ -40,6 +40,7 @@ public class SecurityConfig {
 	private final BaguniLogoutHandler logoutHandler;
 	private final BaguniOAuth2FlowFailureHandler loginFailureHandler;
 	private final BaguniAuthorizationRequestRepository requestRepository;
+	private final BaguniApiAuthExceptionEntrypoint authExceptionEntrypoint;
 	private final SecurityProperties properties;
 
 	@Bean
@@ -72,7 +73,7 @@ public class SecurityConfig {
 			)
 			.exceptionHandling((configurer ->
 				configurer.defaultAuthenticationEntryPointFor(
-					new BaguniApiAuthExceptionEntrypoint(),
+					authExceptionEntrypoint,
 					new AntPathRequestMatcher("/api/**")
 				)
 			))
