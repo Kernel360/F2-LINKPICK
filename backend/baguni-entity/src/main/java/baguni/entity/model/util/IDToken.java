@@ -9,8 +9,13 @@ public class IDToken {
 
 	private final UUID uuid;
 
-	public static IDToken fromString(String raw) {
-		return new IDToken(UUID.fromString(raw));
+	public static IDToken fromString(String raw) throws IdTokenConversionException {
+		try {
+			var uuid = UUID.fromString(raw);
+			return new IDToken(uuid);
+		} catch (Exception e) {
+			throw new IdTokenConversionException("ID 토큰의 값이 UUID 가 아닙니다!");
+		}
 	}
 
 	public static IDToken makeNew() {

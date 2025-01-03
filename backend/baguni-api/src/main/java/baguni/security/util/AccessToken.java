@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import baguni.entity.model.user.Role;
 import baguni.entity.model.util.IDToken;
+import baguni.entity.model.util.IdTokenConversionException;
 import baguni.security.config.JwtProperties;
 import baguni.security.exception.ApiAuthException;
 import io.jsonwebtoken.Claims;
@@ -38,7 +39,11 @@ public class AccessToken {
 
 	public IDToken getUserIdToken() {
 		var raw = getClaims().get("id", String.class);
-		return IDToken.fromString(raw);
+		try {
+			return IDToken.fromString(raw);
+		} catch (IdTokenConversionException e) {
+			throw ApiAuthException.INVALID_AUTHENTICATION();
+		}
 	}
 
 	public UsernamePasswordAuthenticationToken toAuthenticationToken() {
