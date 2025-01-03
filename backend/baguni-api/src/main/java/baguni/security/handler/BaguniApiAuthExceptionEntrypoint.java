@@ -12,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import baguni.api.service.user.service.UserService;
 import baguni.common.exception.base.ApiErrorResponse;
 import baguni.security.exception.ApiAuthErrorCode;
-import baguni.security.util.AccessToken;
 import baguni.security.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,9 +31,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BaguniApiAuthExceptionEntrypoint implements AuthenticationEntryPoint {
 
-	private final CookieUtil cookieUtil;
-	private final UserService userService;
-
 	/**
 	 * 시큐리티의 HttpServletResponse를 바구니 API ErrorResponse로 변환한다.
 	 * Security에서 서비스 에러 코드를 보내야 프론트가 UI를 처리할 수 있기 때문이다.
@@ -50,19 +46,11 @@ public class BaguniApiAuthExceptionEntrypoint implements AuthenticationEntryPoin
 		var body = errorResponse.getBody();
 
 		response.setStatus(errorStatus);
-		renewUserIdTokenForSafety(request);
-
 		if (Objects.nonNull(body)) {
 			var errorResponseJson = new ObjectMapper().writeValueAsString(body);
 			response.setContentType("application/json; charset=UTF-8"); // UTF 설정 안하면 한글 깨짐
 			response.getWriter().write(errorResponseJson);
 		}
-	}
-
-	private void renewUserIdTokenForSafety(HttpServletRequest request) {
-		cookieUtil.findAccessTokenFrom(request)
-				  .map(AccessToken::getUserIdToken)
-				  .ifPresent(userService::renewIdToken);
 	}
 }
 

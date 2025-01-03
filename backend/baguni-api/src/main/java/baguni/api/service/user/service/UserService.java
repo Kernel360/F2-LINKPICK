@@ -46,12 +46,6 @@ public class UserService {
 	}
 
 	@Transactional
-	public void renewIdToken(IDToken prevToken) {
-		var newToken = userDataHandler.getUser(prevToken).renewIdToken();
-		log.info("Renewing user id token. prev: {}, new: {}", prevToken, newToken);
-	}
-
-	@Transactional
 	public void deleteUser(Long userId) {
 		userDataHandler.deleteUser(userId);
 	}

@@ -28,8 +28,6 @@ import baguni.entity.model.common.BaseEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
-	private static final String SOCIAL_USER_HAS_NO_PASSWORD = null;
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -127,10 +125,5 @@ public class User extends BaseEntity {
 			.idToken(IDToken.makeNew())
 			.role(Role.ROLE_USER)
 			.build();
-	}
-
-	public IDToken renewIdToken() {
-		this.idToken = IDToken.makeNew();
-		return this.idToken;
 	}
 }
