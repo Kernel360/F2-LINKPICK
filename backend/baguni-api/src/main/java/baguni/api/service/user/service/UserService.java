@@ -5,9 +5,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import baguni.api.infrastructure.folder.FolderDataHandler;
 import baguni.api.infrastructure.user.UserDataHandler;
-import baguni.entity.model.user.SocialType;
 import baguni.api.service.user.dto.UserInfo;
+import baguni.entity.model.util.IDToken;
 import baguni.security.exception.ApiAuthException;
+import baguni.security.model.OAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
 import baguni.common.annotation.MeasureTime;
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +21,10 @@ public class UserService {
 	private final UserDataHandler userDataHandler;
 	private final FolderDataHandler folderDataHandler;
 
-	@Transactional
 	@MeasureTime
-
-	public UserInfo createUser(SocialType socialType, String username, String email) {
-		var user = userDataHandler.createUser(socialType, username, email);
+	@Transactional
+	public UserInfo createSocialUser(OAuth2UserInfo oAuthInfo) {
+		var user = userDataHandler.createSocialUser(oAuthInfo);
 		try {
 			folderDataHandler.createMandatoryFolder(user);
 			return UserInfo.from(user);
@@ -33,8 +33,22 @@ public class UserService {
 		}
 	}
 
-	public boolean isUserExist(String socialProviderId) {
-		return userDataHandler.existsBySocialProviderId(socialProviderId);
+	@Transactional(readOnly = true)
+	public boolean isSocialUserExists(OAuth2UserInfo oAuthInfo) {
+		return userDataHandler.findSocialUser(oAuthInfo.getProvider(), oAuthInfo.getProviderId())
+							  .isPresent();
+	}
+
+	@Transactional(readOnly = true)
+	public UserInfo getUserInfoByToken(IDToken idToken) {
+		var user = userDataHandler.getUser(idToken);
+		return UserInfo.from(user);
+	}
+
+	@Transactional
+	public void renewIdToken(IDToken prevToken) {
+		var newToken = userDataHandler.getUser(prevToken).renewIdToken();
+		log.info("Renewing user id token. prev: {}, new: {}", prevToken, newToken);
 	}
 
 	@Transactional
