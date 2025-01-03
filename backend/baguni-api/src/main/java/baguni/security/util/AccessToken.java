@@ -38,10 +38,10 @@ public class AccessToken {
 	}
 
 	public IDToken getUserIdToken() {
-		var raw = getClaims().get("id", String.class);
 		try {
+			var raw = getClaims().get("id", String.class);
 			return IDToken.fromString(raw);
-		} catch (IdTokenConversionException e) {
+		} catch (Exception e) {
 			throw ApiAuthException.INVALID_AUTHENTICATION();
 		}
 	}

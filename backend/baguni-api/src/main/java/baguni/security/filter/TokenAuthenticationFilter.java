@@ -13,7 +13,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
@@ -28,10 +30,14 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	) throws ServletException, IOException {
 		var securityContext = SecurityContextHolder.getContext();
 
-		cookieUtil.findAccessTokenFrom(request)
-				  .map(AccessToken::toAuthenticationToken)
-				  .ifPresent(securityContext::setAuthentication);
-
-		filterChain.doFilter(request, response);
+		try {
+			cookieUtil.findAccessTokenFrom(request)
+					  .map(AccessToken::toAuthenticationToken)
+					  .ifPresent(securityContext::setAuthentication);
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		} finally {
+			filterChain.doFilter(request, response);
+		}
 	}
 }
