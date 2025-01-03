@@ -17,7 +17,7 @@ import {
   footerTextStyle,
   footerLinkStyle,
   footerLinkTextStyle,
-} from './CreatePickForm.css';
+} from './UpdatePickForm.css';
 import { useEffect, useRef, useState } from 'react';
 import { FolderSelect } from './FolderSelect';
 import { PlusIcon } from '@radix-ui/react-icons';
