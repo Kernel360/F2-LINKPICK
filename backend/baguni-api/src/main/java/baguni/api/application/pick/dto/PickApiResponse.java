@@ -53,6 +53,11 @@ public class PickApiResponse {
 	) {
 	}
 
+	public record Exist(
+		@NotNull Boolean exist
+	){
+	}
+
 	public record CreateFromRecommend(
 		boolean exist,
 		PickResult.Pick pick

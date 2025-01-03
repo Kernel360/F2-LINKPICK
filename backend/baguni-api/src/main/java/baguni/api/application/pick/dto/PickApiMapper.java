@@ -43,6 +43,8 @@ public interface PickApiMapper {
 
 	PickApiResponse.Pick toApiResponse(PickResult.Pick pickResult);
 
+	PickApiResponse.Exist toApiExistResponse(Boolean exist);
+
 	@Mapping(target = "pickList", source = "pickList", qualifiedByName = "mapPickList")
 	PickApiResponse.FolderPickList toApiFolderPickList(PickResult.FolderPickList folderPickList);
 

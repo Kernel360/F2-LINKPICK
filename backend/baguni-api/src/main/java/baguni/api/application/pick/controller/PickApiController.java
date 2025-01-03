@@ -97,26 +97,20 @@ public class PickApiController {
 		return ResponseEntity.ok(new PickSliceResponse<>(pickApiMapper.toSliceApiResponse(pickResultList)));
 	}
 
-	/**
-	 * @deprecated
-	 * 현재 익스텐션에서만 사용되며, 추후 없어질 예정입니다.
-	 */
-	@Deprecated
 	@GetMapping("/link")
 	@Operation(
-		summary = "[Deprecated] 링크 픽 여부 조회",
+		summary = "링크 픽 여부 조회",
 		description = """
 				해당 링크를 픽한 적이 있는지 확인합니다.
-				픽이 존재하지 않음을 4XX로 판단하는 것이 프론트엔드에서 처리하기 까다로워
-				Deprecated 처리하였습니다.
+				boolean 값을 반환합니다.
+				true : 존재, false : 존재하지 않음.
 			""")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 여부 조회 성공"),
-		@ApiResponse(responseCode = "404", description = "해당 링크에 대해 픽이 되어 있지 않습니다.")
 	})
-	public ResponseEntity<PickApiResponse.Pick> getPickUrl(@LoginUserId Long userId,
+	public ResponseEntity<PickApiResponse.Exist> getPickUrl(@LoginUserId Long userId,
 		@RequestParam String link) {
-		return ResponseEntity.ok(pickApiMapper.toApiResponse(pickService.getPickUrl(userId, link)));
+		return ResponseEntity.ok(pickApiMapper.toApiExistResponse(pickService.existPickByUrl(userId, link)));
 	}
 
 	/**
@@ -127,7 +121,7 @@ public class PickApiController {
 	 */
 	@MeasureTime
 	@GetMapping("/link-v2")
-	@Operation(summary = "링크 픽 여부 조회", description = "해당 링크를 픽한 적이 있는지 확인합니다.")
+	@Operation(summary = "링크 픽 여부 조회 + 픽 정보 조회", description = "해당 링크를 픽한 적이 있는지 확인합니다. + 픽에 대한 정보도 반환합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 여부 조회 성공"),
 	})
