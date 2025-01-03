@@ -181,6 +181,7 @@ public class PickApiController {
 		return ResponseEntity.ok(response);
 	}
 
+	@MeasureTime
 	@PostMapping("/unclassified")
 	@Operation(
 		summary = "미분류 폴더로 픽 생성",
