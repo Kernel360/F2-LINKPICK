@@ -1,94 +1,72 @@
 import { DeferredComponent } from '@/libs/@components';
-import { useGetTabInfo } from '@/libs/@chrome/useGetTabInfo';
-import { useHasPick } from '@/hooks';
-import { SkeltonPickForm, CreatePickForm, UpdatePickForm } from '@/components';
+import { SkeltonPickForm, UpdatePickForm } from '@/components';
 import { bookmarkPageLayout } from './BookmarkPage.css';
 import { useEffect, useRef, useState } from 'react';
 import { FolderType } from '@/types';
-import { getBasicFolderList, getRootFolderChildFolders } from '@/apis';
+import {
+  createPickToUnclassifiedFolder,
+  getBasicFolderList,
+  getRootFolderChildFolders,
+  getTagList,
+} from '@/apis';
 import { useTagStore } from '@/stores';
+import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
+import { filterSelectableFolder } from '@/utils';
+import type { CreatePickToUnclassifiedFolderResponseType } from '@/types';
 
 export function BookmarkPage() {
-  const {
-    ogImage: imageUrl,
-    title,
-    url,
-    ogDescription: description,
-  } = useGetTabInfo();
-  const {
-    isLoading: isGetPickInfoLoading,
-    hasLink,
-    data: pickData,
-  } = useHasPick(url);
-  const [isFolderInfoListLoading, setIsFolderInfoListLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [folderInfoList, setFolderInfoList] = useState<FolderType[]>([]);
-  const replaceSelectedTagList = useTagStore(
-    (state) => state.replaceSelectedTagList
-  );
-  const tagList = useTagStore((state) => state.tagList);
-  const { fetchingTagList } = useTagStore();
-  const isInitialLoadRef = useRef(true);
+  const [pickInfo, setPickInfo] =
+    useState<CreatePickToUnclassifiedFolderResponseType>();
+  const [imageUrl, setImageUrl] = useState('');
+  const isFetched = useRef(false);
+  const setTagList = useTagStore((state) => state.setTagList);
 
-  useEffect(function onBookmarkPageLoad() {
-    const fetchFolderInfoList = async () => {
-      const folderInfoList: FolderType[] = [];
+  useEffect(
+    function onLoad() {
+      const fetchInitialData = async () => {
+        const { title, url, favIconUrl } = await getCurrentTabInfo();
 
-      const basicFolders = await getBasicFolderList();
-      const rootFolderChildFolders = await getRootFolderChildFolders();
-
-      for (const folderInfo of rootFolderChildFolders) {
-        if (
-          folderInfo.folderType !== 'ROOT' &&
-          folderInfo.folderType !== 'RECYCLE_BIN'
-        ) {
-          folderInfoList.push(folderInfo);
+        if (!title || !url || !favIconUrl) {
+          throw new Error('getCurrentTabInfo failed');
         }
-      }
 
-      for (const folderInfo of basicFolders) {
-        if (
-          folderInfo.folderType !== 'ROOT' &&
-          folderInfo.folderType !== 'RECYCLE_BIN'
-        ) {
-          folderInfoList.push(folderInfo);
-        }
-      }
+        const slicedTitle = title.slice(0, 255);
 
-      folderInfoList.sort((a, b) => {
-        return (
-          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        const [
+          fetchedTagList,
+          basicFolderList,
+          rootFolderChildFolderList,
+          createdPickInfo,
+        ] = await Promise.all([
+          getTagList(),
+          getBasicFolderList(),
+          getRootFolderChildFolders(),
+          createPickToUnclassifiedFolder({ title: slicedTitle, url }),
+        ]);
+
+        const filteredFolderInfoList = filterSelectableFolder(
+          basicFolderList,
+          rootFolderChildFolderList
         );
-      });
 
-      setFolderInfoList(folderInfoList);
-      setIsFolderInfoListLoading(false);
-    };
+        setFolderInfoList([...filteredFolderInfoList]);
+        setTagList(fetchedTagList);
+        setPickInfo(createdPickInfo);
+        setImageUrl(favIconUrl);
+        setIsLoading(false);
+      };
 
-    fetchFolderInfoList();
-  }, []);
-
-  useEffect(
-    function onUpdatePickFormLoad() {
-      if (pickData && isInitialLoadRef.current && 0 < tagList.length) {
-        isInitialLoadRef.current = false;
-        const initialData = pickData?.tagIdOrderedList
-          ? tagList.filter((tag) => pickData.tagIdOrderedList.includes(tag.id))
-          : [];
-
-        replaceSelectedTagList(initialData);
+      if (!isFetched.current) {
+        isFetched.current = true;
+        fetchInitialData();
       }
     },
-    [pickData, replaceSelectedTagList, tagList]
+    [setTagList]
   );
 
-  useEffect(
-    function fetchTagList() {
-      fetchingTagList();
-    },
-    [fetchingTagList]
-  );
-
-  if (isGetPickInfoLoading || isFolderInfoListLoading) {
+  if (isLoading || !pickInfo) {
     return (
       <div className={bookmarkPageLayout}>
         <DeferredComponent>
@@ -100,23 +78,13 @@ export function BookmarkPage() {
 
   return (
     <div className={bookmarkPageLayout}>
-      {hasLink ? (
-        <UpdatePickForm
-          id={pickData.id}
-          title={pickData.title}
-          imageUrl={imageUrl}
-          folderId={pickData.parentFolderId}
-          folderInfoList={folderInfoList}
-        />
-      ) : (
-        <CreatePickForm
-          title={title}
-          url={url}
-          imageUrl={imageUrl}
-          description={description}
-          folderInfoList={folderInfoList}
-        />
-      )}
+      <UpdatePickForm
+        id={pickInfo.id}
+        title={pickInfo.title}
+        imageUrl={imageUrl}
+        folderId={pickInfo.parentFolderId}
+        folderInfoList={folderInfoList}
+      />
     </div>
   );
 }
