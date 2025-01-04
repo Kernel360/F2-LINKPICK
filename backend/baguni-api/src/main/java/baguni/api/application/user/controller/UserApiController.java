@@ -42,7 +42,7 @@ public class UserApiController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping
+	@GetMapping("/me")
 	@Operation(summary = "로그인 회원의 정보 획득", description = "회원 식별자(ID_TOKEN) 및 이메일 등의 비민감성 정보를 획득합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "204", description = "회원 정보 획득 성공")
