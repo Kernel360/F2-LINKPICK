@@ -45,6 +45,10 @@ public class ApiAuthException extends AuthenticationException {
 		return new ApiAuthException(ApiAuthErrorCode.AUTH_INVALID_AUTHENTICATION);
 	}
 
+	public static ApiAuthException INVALID_USER_ID_TOKEN() {
+		return new ApiAuthException(ApiAuthErrorCode.AUTH_INVALID_ID_TOKEN);
+	}
+
 	public static ApiAuthException OAUTH_TOKEN_ATTRIBUTE_NOT_FOUND(String targetTokenKey) {
 		return new ApiAuthException(ApiAuthErrorCode.AUTH_TOKEN_ATTRIBUTE_NOT_FOUND, targetTokenKey);
 	}
