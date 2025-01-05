@@ -42,16 +42,16 @@ public class UserApiController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("/me")
+	@GetMapping
 	@Operation(summary = "로그인 회원의 정보 획득", description = "회원 식별자(ID_TOKEN) 및 이메일 등의 비민감성 정보를 획득합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "204", description = "회원 정보 획득 성공")
+		@ApiResponse(responseCode = "200", description = "회원 정보 획득 성공")
 	})
 	public ResponseEntity<UserInfoApiResponse> getUserInfo(
 		@LoginUserId Long userId
 	) {
 		var userInfo = userService.getUserInfoById(userId);
-		var response = userApiMapper.from(userInfo);
+		var response = userApiMapper.toApiResponse(userInfo);
 		return ResponseEntity.ok(response);
 	}
 }
