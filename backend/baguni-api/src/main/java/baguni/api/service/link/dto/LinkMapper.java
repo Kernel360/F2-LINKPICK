@@ -26,6 +26,8 @@ public interface LinkMapper {
 
 	LinkInfo of(Link link);
 
+	LinkResult toLinkResult(Link link);
+
 	@Named("E2R")
 	LinkInfo toLinkInfo(Link link);
 

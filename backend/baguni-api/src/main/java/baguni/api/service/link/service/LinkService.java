@@ -6,6 +6,11 @@ import java.net.URL;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.api.service.link.dto.LinkResult;
+import baguni.common.lib.opengraph.OpenGraphOption;
+import baguni.common.lib.opengraph.OpenGraphReader;
+import baguni.common.lib.opengraph.OpenGraphReaderJsoup;
+import baguni.common.lib.opengraph.OpenGraphReaderSelenium;
 import baguni.entity.model.link.Link;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +27,8 @@ import baguni.common.lib.opengraph.OpenGraphException;
 @RequiredArgsConstructor
 public class LinkService {
 
+	private static final int TIMEOUT_SECONDS = 10;
+
 	private final LinkDataHandler linkDataHandler;
 	private final LinkMapper linkMapper;
 
@@ -31,23 +38,17 @@ public class LinkService {
 		return linkMapper.of(link);
 	}
 
-	@Transactional
-	public LinkInfo getOgTag(String url, String title) {
-		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
-		try {
-			Link updatedLink = updateOpengraph(url, link);
-			updatedLink.updateTitle(title);
-			return linkMapper.of(updatedLink);
-		} catch (Exception e) {
-			throw ApiLinkException.LINK_OG_TAG_UPDATE_FAILURE();
-		}
+	@Transactional(readOnly = true)
+	public LinkResult getLinkResult(Long id, String url, String title) {
+		Link link = linkDataHandler.getOptionalLinkById(id).orElseGet(() -> Link.createLinkByUrlAndTitle(url, title));
+		return linkMapper.toLinkResult(link);
 	}
 
 	@Transactional
 	public void updateOgTag(String url) {
 		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
 		try {
-			var updatedLink = updateOpengraph(url, link);
+			var updatedLink = updateOgTagByJsoup(url, link);
 			linkDataHandler.saveLink(updatedLink);
 		} catch (Exception e) {
 			log.info("url : {} 의 og tag 추출에 실패했습니다.", url, e);
@@ -55,22 +56,53 @@ public class LinkService {
 	}
 
 	@Transactional
-	public LinkInfo saveLinkAndUpdateOgTag(String url) {
+	public LinkInfo saveLinkAndUpdateOgTagByJsoup(String url) {
 		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
 		try {
-			var updatedLink = updateOpengraph(url, link);
+			var updatedLink = updateOgTagByJsoup(url, link);
 			return linkMapper.toLinkInfo(linkDataHandler.saveLink(updatedLink));
 		} catch (Exception e) {
-			log.info("saveLinkAndUpdateOgTag : ", e);
+			log.info("OG Tag Jsoup으로 업데이트 : ", e);
 			throw ApiLinkException.LINK_OG_TAG_UPDATE_FAILURE();
 		}
 	}
 
 	/**
-	 *	property 속성에 og 데이터가 없는 경우, name 속성에 있는 데이터 활용
+	 * title은 update 하지 않음.
+	 * 크롤링 시 image_url, description이 비어있을 때 해당 메서드 호출
 	 */
-	private Link updateOpengraph(String url, Link link) throws OpenGraphException {
-		var openGraph = new OpenGraph(url);
+	@Transactional
+	public LinkInfo saveLinkAndUpdateOgTagBySelenium(String url, String title) {
+		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrlAndTitle(url, title));
+		try {
+			var updatedLink = updateOgTagBySelenium(url, link);
+			return linkMapper.toLinkInfo(linkDataHandler.saveLink(updatedLink));
+		} catch (Exception e) {
+			log.info("OG Tag Selenium으로 업데이트 : ", e);
+			throw ApiLinkException.LINK_OG_TAG_UPDATE_FAILURE();
+		}
+	}
+
+	/**
+	 *  Jsoup으로 크롤링
+	 */
+	private Link updateOgTagByJsoup(String url, Link link) throws OpenGraphException {
+		var openGraphOption = new OpenGraphOption(TIMEOUT_SECONDS);
+		var openGraphReader = new OpenGraphReaderJsoup(openGraphOption); // Jsoup
+		return updateOgTagCommon(url, link, openGraphReader);
+	}
+
+	/**
+	 * 	Selenium으로 크롤링
+	 */
+	private Link updateOgTagBySelenium(String url, Link link) throws OpenGraphException {
+		var openGraphOption = new OpenGraphOption(TIMEOUT_SECONDS);
+		var openGraphReader = new OpenGraphReaderSelenium(openGraphOption); // Selenium
+		return updateOgTagCommon(url, link, openGraphReader);
+	}
+
+	private Link updateOgTagCommon(String url, Link link, OpenGraphReader openGraphReader) throws OpenGraphException {
+		var openGraph = new OpenGraph(url, openGraphReader);
 		link.updateMetadata(
 			openGraph.getTag(Metadata.OG_TITLE)
 					 .orElse(openGraph.getTag(Metadata.TITLE)
@@ -80,21 +112,24 @@ public class LinkService {
 									  .orElse("")),
 			correctImageUrl(url, openGraph.getTag(Metadata.OG_IMAGE)
 										  .orElse(openGraph.getTag(Metadata.IMAGE)
-														   .orElse("")))
+														   .orElse(openGraph.getTag(Metadata.ICON)
+																			.orElse(""))))
 		);
 		return link;
 	}
 
 	/**
-	 * og:image 가 완전한 url 형식이 아닐 수 있어 보정
-	 * 추론 불가능한 image url 일 경우 빈스트링("")으로 대치
+	 * 	og:image 가 완전한 url 형식이 아닐 수 있어 보정
+	 * 	추론 불가능한 image url 일 경우 빈스트링("")으로 대치
 	 *
-	 *    @author sangwon
+	 *  @author sangwon
 	 * 	protocol : https
 	 * 	host : blog.dongolab.com
 	 */
 	private String correctImageUrl(String baseUrl, String imageUrl) {
-		if (imageUrl == null || imageUrl.trim().isEmpty()) {
+		// "null"이 넘어오는 경우가 있음.
+		// favicon 가져올 때 <link href=> -> "null"로 넘어옴
+		if (imageUrl == null || imageUrl.trim().isEmpty() || imageUrl.equals("null")) {
 			return "";
 		}
 
