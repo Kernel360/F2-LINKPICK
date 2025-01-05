@@ -28,7 +28,7 @@ public class LinkApiController {
 
 	@MeasureTime
 	@GetMapping
-	@Operation(summary = "해당 링크 og 데이터 조회", description = "해당 링크의 og 태그 데이터를 스크래핑을 통해 가져옵니다.")
+	@Operation(summary = "링크 og 데이터 조회 - Selenium", description = "해당 링크의 og 태그 데이터를 스크래핑을 통해 가져옵니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
@@ -36,7 +36,8 @@ public class LinkApiController {
 	public ResponseEntity<LinkApiResponse> getLinkData(
 		@Parameter(description = "og 태그 데이터 가져올 url") @RequestParam String url
 	) {
-		var result = linkService.saveLinkAndUpdateOgTag(url);
+		// Selenium 사용하도록 변경
+		var result = linkService.saveLinkAndUpdateOgTagBySelenium(url, "");
 		var response = linkApiMapper.toLinkResponse(result);
 
 		return ResponseEntity.ok(response);
