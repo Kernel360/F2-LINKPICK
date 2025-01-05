@@ -64,7 +64,7 @@ public class RankingInitStrategy implements ContentInitStrategy {
 			try {
 				linkInfo = linkService.getLinkInfo(curr.url());
 			} catch (ApiLinkException exception) {
-				linkInfo = linkService.saveLinkAndUpdateOgTag(curr.url());
+				linkInfo = linkService.saveLinkAndUpdateOgTagByJsoup(curr.url());
 			}
 			if (linkInfo.title().isBlank()) {
 				continue;

@@ -43,7 +43,7 @@ public class ManualInitStrategy implements ContentInitStrategy {
 			try {
 				linkInfo = linkService.getLinkInfo(url);
 			} catch (ApiLinkException exception) {
-				linkInfo = linkService.saveLinkAndUpdateOgTag(url);
+				linkInfo = linkService.saveLinkAndUpdateOgTagByJsoup(url);
 			}
 			var command = new PickCommand.Create(
 				info.id(), linkInfo.title(), new ArrayList<>(), folderId, linkInfo
