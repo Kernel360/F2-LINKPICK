@@ -22,14 +22,14 @@ import baguni.ranking.infra.sharedFolder.SharedFolderPickViewCountRepository;
 
 /**
  * @author minkyeu kim
- * RabbitMq Queue(Q1) 에 들어오는 대로
+ * RabbitMq Queue(PICK_RANKING) 에 들어오는 대로
  * 즉시 꺼내 집계에 반영하는 소비자 컴포넌트
  * */
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@RabbitListener(queues = {RabbitmqConfig.QUEUE.Q1})
-public class RabbitMqEventListener {
+@RabbitListener(queues = {RabbitmqConfig.QUEUE.PICK_RANKING})
+public class RankingEventListener {
 
 	private final LinkViewCountRepository linkViewCountRepository;
 	private final LinkPickedCountRepository linkPickedCountRepository;

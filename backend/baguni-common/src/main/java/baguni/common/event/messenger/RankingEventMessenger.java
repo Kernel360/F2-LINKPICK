@@ -1,4 +1,4 @@
-package baguni.common.event;
+package baguni.common.event.messenger;
 
 import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -14,14 +14,14 @@ import baguni.common.event.events.Event;
 @Primary
 @Component
 @RequiredArgsConstructor
-public class RabbitMqEventMessenger implements EventMessenger {
+public class RankingEventMessenger implements EventMessenger {
 
 	private final RabbitTemplate rabbitTemplate;
 
 	@Override
 	public void send(Event event) {
 		try {
-			rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE.EVENT, "", event);
+			rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE.RANKING_EVENT, "", event);
 			log.info("이벤트 전송 {}", event);
 		} catch (AmqpException e) {
 			log.error(e.getMessage(), e);
