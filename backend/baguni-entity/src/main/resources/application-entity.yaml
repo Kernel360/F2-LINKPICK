@@ -74,7 +74,8 @@ spring:
   flyway:
     url: ${DOCKER_PROD_MYSQL_URL}
     enabled: true
+    baseline-version: 2 # V2_add_user_idToken 부터 적용 시작
 decorator:
   datasource:
-    p6spy: # 운영서버에서는 p6spy 로깅을 사용하지 않음
+    p6spy: # 운영 서버에서는 p6spy 로깅을 사용하지 않음
       enable-logging: false
