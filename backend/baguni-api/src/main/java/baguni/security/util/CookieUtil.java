@@ -67,6 +67,17 @@ public class CookieUtil {
 		this.addCookie(response, name, "", 0, true);
 	}
 
+	/**
+	 * @author sangwon
+	 * 쿠키 삭제 메서드 분리 (공통으로 사용하기 위함)
+	 * 시큐리티, 쿠키를 제거해주고 싶은 컨트롤러에서 사용하기 위해 분리
+	 */
+	public void clearCookies(HttpServletResponse response) {
+		deleteCookie(response, securityProps.ACCESS_TOKEN_KEY);
+		deleteCookie(response, securityProps.OAUTH_RETURN_URL_KEY);
+		deleteCookie(response, "JSESSIONID");
+	}
+
 	public Optional<String> findCookieValue(Cookie[] cookies, String name) {
 		if (cookies == null)
 			return Optional.empty();

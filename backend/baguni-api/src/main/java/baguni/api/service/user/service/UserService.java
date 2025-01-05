@@ -45,6 +45,12 @@ public class UserService {
 		return UserInfo.from(user);
 	}
 
+	@Transactional(readOnly = true)
+	public UserInfo getUserInfoById(Long userId) {
+		var user = userDataHandler.getUser(userId);
+		return UserInfo.from(user);
+	}
+
 	@Transactional
 	public void deleteUser(Long userId) {
 		userDataHandler.deleteUser(userId);

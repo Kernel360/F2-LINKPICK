@@ -75,14 +75,8 @@
     <!--        <appender-ref ref="CONSOLE"/>-->
     <!--    </logger>-->
     <!-- (1) 프로젝트 전체 로그 설정  -->
-    <logger name="baguni.ranking" level="info" additivity="false">
+    <logger name="baguni" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>
-    <logger name="baguni.common" level="info" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="APP-LOG-FILE"/>
-    </logger>
-
-
 </configuration>
