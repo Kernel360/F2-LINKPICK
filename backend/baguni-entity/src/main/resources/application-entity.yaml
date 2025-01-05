@@ -1,3 +1,6 @@
+# -----------------------------
+#       COMMON SETTINGS
+# -----------------------------
 spring:
   output:
     ansi:
@@ -14,19 +17,34 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DOCKER_MYSQL_USERNAME}
+    password: ${DOCKER_MYSQL_PASSWORD}
+  flyway:
+    user: ${DOCKER_MYSQL_USERNAME}
+    password: ${DOCKER_MYSQL_PASSWORD}
+    schemas: ${DOCKER_MYSQL_DATABASE}
+
 ---
+# -----------------------------
+#       LOCAL SETTINGS
+# -----------------------------
 spring:
   config:
     activate:
       on-profile: local
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
   datasource:
     url: ${DOCKER_LOCAL_MYSQL_URL}
-    username: ${DOCKER_MYSQL_USERNAME}
-    password: ${DOCKER_MYSQL_PASSWORD}
+  flyway:
+    url: ${DOCKER_LOCAL_MYSQL_URL}
+    enabled: true
+
 ---
+# -----------------------------
+#     DEVELOPMENT SETTINGS
+# -----------------------------
 spring:
   config:
     activate:
@@ -36,9 +54,14 @@ spring:
       ddl-auto: validate
   datasource:
     url: ${DOCKER_DEV_MYSQL_URL}
-    username: ${DOCKER_MYSQL_USERNAME}
-    password: ${DOCKER_MYSQL_PASSWORD}
+  flyway:
+    url: ${DOCKER_DEV_MYSQL_URL}
+    enabled: true
+
 ---
+# -----------------------------
+#     PRODUCTION SETTINGS
+# -----------------------------
 spring:
   config:
     activate:
@@ -48,13 +71,10 @@ spring:
       ddl-auto: none
   datasource:
     url: ${DOCKER_PROD_MYSQL_URL}
-    username: ${DOCKER_MYSQL_USERNAME}
-    password: ${DOCKER_MYSQL_PASSWORD}
-# 운영서버에서는 p6spy 로깅을 사용하지 않음
-# @Profile 로 처리했었지만, logback 때문인지 제대로 적용되지 않아 yaml 에 추가
-# by psh
+  flyway:
+    url: ${DOCKER_PROD_MYSQL_URL}
+    enabled: true
 decorator:
   datasource:
-    p6spy:
+    p6spy: # 운영서버에서는 p6spy 로깅을 사용하지 않음
       enable-logging: false
----

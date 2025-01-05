@@ -22,6 +22,10 @@ dependencies {
 
     // Sql logging formatter / https://www.baeldung.com/java-p6spy-intercept-sql-logging
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.2'
+
+    // flyway
+    implementation 'org.flywaydb:flyway-core'
+    implementation "org.flywaydb:flyway-mysql"
 }
 
 tasks.named('test') {
