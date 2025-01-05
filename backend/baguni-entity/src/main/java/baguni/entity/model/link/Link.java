@@ -46,30 +46,31 @@ public class Link {
 	@Column(name = "imageUrl", columnDefinition = "TEXT")
 	private String imageUrl;
 
-	@Column(name = "invalidatedAt_at")
+	@Column(name = "invalidatedAt")
 	private LocalDateTime invalidatedAt;
 
 	public static Link createLinkByUrl(String url) {
 		return new Link(url, "", "", "", null);
 	}
 
-	// null 값이 아닌 필드만 업데이트
-	public Link updateMetadata(String title, String description, String imageUrl) {
-		if (!StringUtils.isBlank(title)) {
-			this.title = title;
-		}
-		if (!StringUtils.isBlank(description)) {
-			this.description = description;
-		}
-		if (!StringUtils.isBlank(imageUrl)) {
-			this.imageUrl = imageUrl;
-		}
-		return this;
+	/**
+	 * 익스텐션으로 픽 생성 시 항상 title을 받기 때문에 생성 메서드 추가
+	 */
+	public static Link createLinkByUrlAndTitle(String url, String title) {
+		return new Link(url, title, "", "", null);
 	}
 
-	public Link updateTitle(String title) {
-		if (!StringUtils.isBlank(title)) {
+	// null 값이 아닌 필드만 업데이트
+	// 이미 값이 있으면 업데이트하지 않음.
+	public Link updateMetadata(String title, String description, String imageUrl) {
+		if (StringUtils.isEmpty(this.title)) {
 			this.title = title;
+		}
+		if (StringUtils.isEmpty(this.description)) {
+			this.description = description;
+		}
+		if (StringUtils.isEmpty(this.imageUrl)) {
+			this.imageUrl = imageUrl;
 		}
 		return this;
 	}
