@@ -20,6 +20,16 @@ public class PickApiResponse {
 	) {
 	}
 
+	public record Unclassified(
+		Long id,
+		String title,
+		Long parentFolderId,
+		List<Long> tagIdOrderedList,
+		LocalDateTime createdAt,
+		LocalDateTime updatedAt
+	){
+	}
+
 	public record PickWithViewCount(
 		Long id,
 		String title,

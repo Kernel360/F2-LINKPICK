@@ -128,21 +128,15 @@ public class PickDataHandler {
 
 	/**
 	 * @author sangwon
-	 * TODO: 픽 생성 시 Link 데이터 수정하는 로직이 포함되어 있음.
-	 *  Selenium, 스케줄링 이용 시 수정 로직 제거
+	 * 픽 생성 시 Link 데이터 수정하지 않음.
 	 */
 	@Transactional
-	public Pick saveExtensionPick(PickCommand.Extension command) {
+	public Pick savePickToUnclassified(PickCommand.Unclassified command) {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
 		Folder unclassified = folderRepository.findUnclassifiedByUserId(user.getId());
-		Link link = linkRepository.findByUrl(command.linkInfo().url())
-								  .map(existLink -> {
-									  existLink.updateMetadata(command.linkInfo().title(),
-										  command.linkInfo().description(),
-										  command.linkInfo().imageUrl());
-									  return existLink;
-								  })
-								  .orElseGet(() -> linkRepository.save(linkMapper.of(command.linkInfo())));
+		Link link = linkRepository.findByUrl(command.url())
+								  .orElseGet(() -> linkRepository.save(Link.createLinkByUrlAndTitle(command.url(),
+									  command.title())));
 
 		Pick pick = pickMapper.toEntityByExtension(command.title(), new ArrayList<>(), user, unclassified,
 			link);

@@ -18,6 +18,18 @@ public class PickResult {
 	) {
 	}
 
+	public record Unclassified(
+		Long id,
+		String title,
+		Long linkId,
+		String url,
+		Long parentFolderId,
+		List<Long> tagIdOrderedList,
+		LocalDateTime createdAt,
+		LocalDateTime updatedAt
+	) {
+	}
+
 	public record PickWithViewCount(
 		Long id,
 		String title,

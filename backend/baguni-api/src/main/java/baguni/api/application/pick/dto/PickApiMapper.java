@@ -10,7 +10,6 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
-import baguni.api.service.link.dto.LinkInfo;
 import baguni.api.service.pick.dto.PickCommand;
 import baguni.api.service.pick.dto.PickResult;
 
@@ -30,8 +29,7 @@ public interface PickApiMapper {
 
 	PickCommand.Create toCreateCommand(Long userId, PickApiRequest.Create request);
 
-	@Mapping(source = "linkInfo", target = "linkInfo")
-	PickCommand.Extension toExtensionCommand(Long userId, String title, LinkInfo linkInfo);
+	PickCommand.Unclassified toExtensionCommand(Long userId, String title, String url);
 
 	PickCommand.Update toUpdateCommand(Long userId, PickApiRequest.Update request);
 
@@ -43,7 +41,9 @@ public interface PickApiMapper {
 
 	PickApiResponse.Pick toApiResponse(PickResult.Pick pickResult);
 
-	PickApiResponse.Exist toApiExistResponse(Boolean exist);
+	PickApiResponse.Unclassified toApiResponseWithUnclassified(PickResult.Unclassified pickResult);
+
+	PickApiResponse.Exist toApiReponseWithExist(Boolean exist);
 
 	@Mapping(target = "pickList", source = "pickList", qualifiedByName = "mapPickList")
 	PickApiResponse.FolderPickList toApiFolderPickList(PickResult.FolderPickList folderPickList);

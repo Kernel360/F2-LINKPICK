@@ -20,7 +20,7 @@ public class PickCommand {
 						 LinkInfo linkInfo) {
 	}
 
-	public record Extension(Long userId, String title, LinkInfo linkInfo) {
+	public record Unclassified(Long userId, String title, String url) {
 	}
 
 	public record Update(Long userId, Long id, String title, Long parentFolderId, List<Long> tagIdOrderedList) {

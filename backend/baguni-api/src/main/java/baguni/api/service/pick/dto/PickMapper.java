@@ -23,6 +23,11 @@ public interface PickMapper {
 	@Mapping(source = "pick.parentFolder.id", target = "parentFolderId")
 	PickResult.Pick toPickResult(Pick pick);
 
+	@Mapping(source = "pick.link.id", target = "linkId")
+	@Mapping(source = "pick.link.url", target = "url")
+	@Mapping(source = "pick.parentFolder.id", target = "parentFolderId")
+	PickResult.Unclassified toUnclassifiedResult(Pick pick);
+
 	PickResult.PickWithViewCount toPickResultWithViewCount(PickResult.Pick pickResult, Boolean isHot,
 		Long weeklyViewCount);
 
