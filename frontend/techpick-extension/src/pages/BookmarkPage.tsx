@@ -13,6 +13,7 @@ import { useTagStore } from '@/stores';
 import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
 import { filterSelectableFolder } from '@/utils';
 import type { CreatePickToUnclassifiedFolderResponseType } from '@/types';
+import { CHANGE_ICON_PORT_NAME } from '@/constants';
 
 export function BookmarkPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -33,6 +34,7 @@ export function BookmarkPage() {
         }
 
         const slicedTitle = title.slice(0, 255);
+        chrome.runtime.connect({ name: CHANGE_ICON_PORT_NAME });
 
         const [
           fetchedTagList,
