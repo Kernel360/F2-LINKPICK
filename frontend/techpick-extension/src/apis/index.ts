@@ -1,6 +1,6 @@
 export { createTag } from './createTag';
 export { deleteTag } from './deleteTag';
-export { getPickByUrl } from './getPickByUrl';
+export { checkPickByUrl } from './checkPickByUrl';
 export { getTagList } from './getTagList';
 export { updatePick } from './updatePick';
 export { updateTag } from './updateTag';

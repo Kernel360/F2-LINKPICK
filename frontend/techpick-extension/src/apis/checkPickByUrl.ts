@@ -4,7 +4,7 @@ import { API_URLS } from '@/constants';
 import { HTTPError } from 'ky';
 import { returnErrorFromHTTPError } from '@/utils';
 
-export const getPickByUrl = async (url: string) => {
+export const checkPickByUrl = async (url: string) => {
   try {
     const response = await apiClient.get<GetPickByUrlResponseType>(
       API_URLS.getPicksByLinkUrl(encodeURIComponent(url))
