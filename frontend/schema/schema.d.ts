@@ -405,6 +405,30 @@ export interface paths {
         patch: operations["moveFolder"];
         trace?: never;
     };
+    "/api/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 로그인 회원의 정보 획득
+         * @description 회원 식별자(ID_TOKEN) 및 이메일 등의 비민감성 정보를 획득합니다.
+         */
+        get: operations["getUserInfo"];
+        put?: never;
+        post?: never;
+        /**
+         * 회원 탈퇴
+         * @description 회원 탈퇴를 하면 모든 폴더, 픽, 태그가 삭제됩니다.
+         */
+        delete: operations["deleteUser"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/suggestion/ranking": {
         parameters: {
             query?: never;
@@ -610,26 +634,6 @@ export interface paths {
         put?: never;
         post?: never;
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/users": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post?: never;
-        /**
-         * 회원 탈퇴
-         * @description 회원 탈퇴를 하면 모든 폴더, 픽, 태그가 삭제됩니다.
-         */
-        delete: operations["deleteUser"];
         options?: never;
         head?: never;
         patch?: never;
@@ -898,6 +902,14 @@ export interface components {
              * @example 2
              */
             orderIdx?: number;
+        };
+        "baguni.api.application.user.controller.dto.UserInfoApiResponse": {
+            /** @description 사용자 식별 토큰 */
+            idToken: string;
+            /** @description 사용자 이메일 */
+            email: string;
+            /** @description 사용자 이름 */
+            name?: string;
         };
         "baguni.api.application.tag.dto.TagApiResponse$Read": {
             /** Format: int64 */
@@ -1811,6 +1823,44 @@ export interface operations {
             };
         };
     };
+    getUserInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 회원 정보 획득 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.user.controller.dto.UserInfoApiResponse"];
+                };
+            };
+        };
+    };
+    deleteUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 회원 탈퇴 성공 */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     getSuggestionByViewCount: {
         parameters: {
             query?: never;
@@ -2072,24 +2122,6 @@ export interface operations {
                 content: {
                     "*/*": string;
                 };
-            };
-        };
-    };
-    deleteUser: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 회원 탈퇴 성공 */
-            204: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
