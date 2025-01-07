@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+}
+
+group = 'kernel360'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(":baguni-common")
+    implementation project(":baguni-entity")
+
+    // spring jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // for batch retry logic
+    implementation 'org.springframework.retry:spring-retry'
+}
+
+tasks.named('test') {
+    enabled = false
+}
+
+bootJar {
+    enabled = true
+}
+
+jar {
+    enabled = false
+}
