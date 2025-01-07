@@ -11,6 +11,7 @@ export type TagAction = {
   selectTag: (tag: TagType) => void;
   deselectTag: (tagId: TagType['id']) => void;
   updateSelectedTagList: (tag: TagType) => void;
+  setTagList: (tagList: TagType[]) => void;
   fetchingTagList: () => Promise<void>;
   createTag: (tagData: CreateTagRequestType) => Promise<TagType | undefined>;
   deleteTag: (tagId: TagType['id']) => Promise<void>;

@@ -120,7 +120,7 @@ export function SharePickRecord({
 }
 
 interface SharePickRecordProps {
-  pickInfo: components['schemas']['baguni.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo'];
-  tagList: components['schemas']['baguni.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo'][];
+  pickInfo: components['schemas']['baguni.api.service.sharedFolder.dto.SharedFolderResult$SharedPickInfo'];
+  tagList: components['schemas']['baguni.api.service.sharedFolder.dto.SharedFolderResult$SharedTagInfo'][];
   folderAccessToken: string;
 }

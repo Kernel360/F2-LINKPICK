@@ -9,5 +9,4 @@ export { PUBLIC_DOMAIN } from './publicDomain';
 export { PORTAL_CONTAINER_ID } from './portalContainer';
 export { COLOR_LIST } from './colorList';
 export { ERROR_MESSAGE_JSON } from './errorMessageJson';
-export { GET_TAB_HTML_TEXT_FROM_WORKER_PORT_NAME } from './getTabIHtmlTextFromWorkerPortName';
-export { REQUEST_TAB_HTML_TEXT_FROM_WORKER_MESSAGE } from './requestTabHtmlTextFromWorkerMessage';
+export { CHANGE_ICON_PORT_NAME } from './changeIconPortName';

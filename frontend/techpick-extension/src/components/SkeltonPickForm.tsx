@@ -8,7 +8,7 @@ import {
   pickFormFieldListLayout,
   footerStyle,
   footerTextStyle,
-} from './CreatePickForm.css';
+} from './UpdatePickForm.css';
 import {
   skeleton,
   skeletonImageStyle,

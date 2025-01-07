@@ -4,32 +4,6 @@
  */
 
 export interface paths {
-    "/api/login/naver": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** 네이버 소셜 로그인 */
-        get: {
-            parameters: {
-                query?: never;
-                header?: never;
-                path?: never;
-                cookie?: never;
-            };
-            requestBody?: never;
-            responses: never;
-        };
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/login/kakao": {
         parameters: {
             query?: never;
@@ -194,9 +168,29 @@ export interface paths {
         head?: never;
         /**
          * 픽 내용 수정
-         * @description 픽 내용(제목, 메모)을 수정합니다.
+         * @description 픽 내용 수정 및 폴더 이동까지 지원합니다.
          */
         patch: operations["updatePick"];
+        trace?: never;
+    };
+    "/api/picks/unclassified": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * 미분류 폴더로 픽 생성
+         * @description 익스텐션에서 미분류로 바로 픽 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계됩니다.
+         */
+        post: operations["savePickAsUnclassified"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
         trace?: never;
     };
     "/api/picks/recommend": {
@@ -498,27 +492,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/picks/search/all": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * [Deprecated] 픽 리스트 검색
-         * @deprecated
-         * @description 페이지네이션 처리 되지 않은 픽 리스트 검색
-         */
-        get: operations["searchPick"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/picks/link": {
         parameters: {
             query?: never;
@@ -527,11 +500,10 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * [Deprecated] 링크 픽 여부 조회
-         * @deprecated
+         * 링크 픽 여부 조회
          * @description 	해당 링크를 픽한 적이 있는지 확인합니다.
-         *     	픽이 존재하지 않음을 4XX로 판단하는 것이 프론트엔드에서 처리하기 까다로워
-         *     	Deprecated 처리하였습니다.
+         *     	boolean 값을 반환합니다.
+         *     	true : 존재, false : 존재하지 않음.
          *
          */
         get: operations["getPickUrl"];
@@ -551,8 +523,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 링크 픽 여부 조회
-         * @description 해당 링크를 픽한 적이 있는지 확인합니다.
+         * 링크 픽 여부 조회 + 픽 정보 조회
+         * @description 해당 링크를 픽한 적이 있는지 확인합니다. + 픽에 대한 정보도 반환합니다.
          */
         get: operations["doesUserHasPickWithGivenUrl"];
         put?: never;
@@ -643,6 +615,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * 회원 탈퇴
+         * @description 회원 탈퇴를 하면 모든 폴더, 픽, 태그가 삭제됩니다.
+         */
+        delete: operations["deleteUser"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/shared/{sourceFolderId}": {
         parameters: {
             query?: never;
@@ -706,9 +698,9 @@ export interface components {
              * @example 1
              */
             parentFolderId?: number;
-            linkInfo?: components["schemas"]["baguni.api.domain.link.dto.LinkInfo"];
+            linkInfo?: components["schemas"]["baguni.api.service.link.dto.LinkInfo"];
         };
-        "baguni.api.domain.link.dto.LinkInfo": {
+        "baguni.api.service.link.dto.LinkInfo": {
             /** @example https://velog.io/@hyeok_1212/Java-Record-%EC%82%AC%EC%9A%A9%ED%95%98%EC%8B%9C%EB%82%98%EC%9A%94 */
             url: string;
             /** @example [Java] Record 사용하시나요? */
@@ -727,7 +719,7 @@ export interface components {
             /** Format: int64 */
             id?: number;
             title?: string;
-            linkInfo?: components["schemas"]["baguni.api.domain.link.dto.LinkInfo"];
+            linkInfo?: components["schemas"]["baguni.api.service.link.dto.LinkInfo"];
             /** Format: int64 */
             parentFolderId?: number;
             tagIdOrderedList?: number[];
@@ -736,15 +728,21 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
+        "baguni.api.application.pick.dto.PickApiRequest$Extension": {
+            /** @example https://d2.naver.com/helloworld/8149881 */
+            url?: string;
+            /** @example GitHub Actions를 이용한 코드 리뷰 문화 개선기 */
+            title?: string;
+        };
         "baguni.api.application.pick.dto.PickApiResponse$CreateFromRecommend": {
             exist?: boolean;
-            pick?: components["schemas"]["baguni.api.domain.pick.dto.PickResult$Pick"];
+            pick?: components["schemas"]["baguni.api.service.pick.dto.PickResult$Pick"];
         };
-        "baguni.api.domain.pick.dto.PickResult$Pick": {
+        "baguni.api.service.pick.dto.PickResult$Pick": {
             /** Format: int64 */
             id?: number;
             title?: string;
-            linkInfo?: components["schemas"]["baguni.api.domain.link.dto.LinkInfo"];
+            linkInfo?: components["schemas"]["baguni.api.service.link.dto.LinkInfo"];
             /** Format: int64 */
             parentFolderId?: number;
             tagIdOrderedList?: number[];
@@ -973,7 +971,7 @@ export interface components {
              */
             updatedAt: string;
             /** @description 폴더 내 pick 리스트 */
-            pickList: components["schemas"]["baguni.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo"][];
+            pickList: components["schemas"]["baguni.api.service.sharedFolder.dto.SharedFolderResult$SharedPickInfo"][];
             /**
              * @description 해당 폴더 내에서 사용된 모든 태그 정보가 담길 배열. tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.
              * @example [
@@ -987,13 +985,13 @@ export interface components {
              *       }
              *     ]
              */
-            tagList: components["schemas"]["baguni.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo"][];
+            tagList: components["schemas"]["baguni.api.service.sharedFolder.dto.SharedFolderResult$SharedTagInfo"][];
         };
         /** @description 폴더 내 pick 리스트 */
-        "baguni.api.domain.sharedFolder.dto.SharedFolderResult$SharedPickInfo": {
+        "baguni.api.service.sharedFolder.dto.SharedFolderResult$SharedPickInfo": {
             /** @example 자바 레코드 참고 블로그 1 */
             title: string;
-            linkInfo: components["schemas"]["baguni.api.domain.link.dto.LinkInfo"];
+            linkInfo: components["schemas"]["baguni.api.service.link.dto.LinkInfo"];
             /**
              * @description tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.
              * @example [
@@ -1022,7 +1020,7 @@ export interface components {
          *       }
          *     ]
          */
-        "baguni.api.domain.sharedFolder.dto.SharedFolderResult$SharedTagInfo": {
+        "baguni.api.service.sharedFolder.dto.SharedFolderResult$SharedTagInfo": {
             name: string;
             /** Format: int32 */
             colorNumber: number;
@@ -1036,7 +1034,7 @@ export interface components {
             /** Format: int64 */
             id?: number;
             title?: string;
-            linkInfo?: components["schemas"]["baguni.api.domain.link.dto.LinkInfo"];
+            linkInfo?: components["schemas"]["baguni.api.service.link.dto.LinkInfo"];
             /** Format: int64 */
             parentFolderId?: number;
             tagIdOrderedList?: number[];
@@ -1055,6 +1053,9 @@ export interface components {
             /** Format: int32 */
             size?: number;
             hasNext?: boolean;
+        };
+        "baguni.api.application.pick.dto.PickApiResponse$Exist": {
+            exist: boolean;
         };
         "baguni.api.application.pick.dto.PickApiResponse$PickExists": {
             exist: boolean;
@@ -1387,6 +1388,39 @@ export interface operations {
         responses: {
             /** @description 픽 내용 수정 성공 */
             200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
+                };
+            };
+        };
+    };
+    savePickAsUnclassified: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["baguni.api.application.pick.dto.PickApiRequest$Extension"];
+            };
+        };
+        responses: {
+            /** @description 픽 생성 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
+                };
+            };
+            /** @description OG 태그 업데이트를 위한 크롤링 요청 실패 */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -1894,42 +1928,6 @@ export interface operations {
             };
         };
     };
-    searchPick: {
-        parameters: {
-            query?: {
-                /**
-                 * @description 조회할 폴더 ID 목록
-                 * @example 3, 4, 5
-                 */
-                folderIdList?: string;
-                /**
-                 * @description 검색 토큰 목록
-                 * @example Record, 스프링
-                 */
-                searchTokenList?: string;
-                /**
-                 * @description 검색 태그 ID 목록
-                 * @example 1, 2, 3
-                 */
-                tagIdList?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"][];
-                };
-            };
-        };
-    };
     getPickUrl: {
         parameters: {
             query: {
@@ -1947,16 +1945,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
-                };
-            };
-            /** @description 해당 링크에 대해 픽이 되어 있지 않습니다. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Exist"];
                 };
             };
         };
@@ -2083,6 +2072,24 @@ export interface operations {
                 content: {
                     "*/*": string;
                 };
+            };
+        };
+    };
+    deleteUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 회원 탈퇴 성공 */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

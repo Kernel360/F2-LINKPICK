@@ -1,13 +1,13 @@
-import { HTTPError } from 'ky';
 import { apiClient } from './apiClient';
+import type { GetPickByUrlResponseType } from '@/types';
 import { API_URLS } from '@/constants';
+import { HTTPError } from 'ky';
 import { returnErrorFromHTTPError } from '@/utils';
-import { GetOgTagDataResponseType } from '@/types';
 
-export const getOgDataByUrl = async (url: string) => {
+export const checkPickByUrl = async (url: string) => {
   try {
-    const response = await apiClient.get<GetOgTagDataResponseType>(
-      API_URLS.getLinkOGData(encodeURIComponent(url))
+    const response = await apiClient.get<GetPickByUrlResponseType>(
+      API_URLS.getPicksByLinkUrl(encodeURIComponent(url))
     );
 
     const data = await response.json();
