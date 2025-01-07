@@ -1,22 +1,29 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEventLogger } from '@/hooks';
 import {
-  dividerStyle,
-  failedDescriptionTextStyle,
   googleLoginContainer,
   kakaoLoginContainer,
-  loginBlockContainer,
-  loginLink,
-  pickBrandContainer,
-  pickBrandContainerWithText,
-  pickIconContainer,
   screenContainer,
-} from './page.css';
+  loginLink,
+  loginBlockContainer,
+  pickIconContainer,
+  pickBrandContainer,
+  dividerStyle,
+  pickBrandContainerWithText,
+  failedDescriptionTextStyle,
+} from '../page.css';
 
 export default function LoginFailedPage() {
   const redirectUrl = encodeURIComponent(
     process.env.NEXT_PUBLIC_REDIRECT_URL ?? ''
   );
+
+  const { trackEvent: trackLoginButtonClick } = useEventLogger({
+    eventName: 'login_failed_page_login_button_click',
+  });
 
   return (
     <div className={screenContainer}>
@@ -40,6 +47,7 @@ export default function LoginFailedPage() {
             <Link
               className={loginLink}
               href={`${process.env.NEXT_PUBLIC_API}/login/google?redirect_url=${redirectUrl}`}
+              onClick={trackLoginButtonClick}
             >
               <Image
                 style={{ filter: 'brightness(100)' }}
@@ -55,6 +63,7 @@ export default function LoginFailedPage() {
             <Link
               className={loginLink}
               href={`${process.env.NEXT_PUBLIC_API}/login/kakao?redirect_url=${redirectUrl}`}
+              onClick={trackLoginButtonClick}
             >
               <Image
                 style={{ filter: 'invert(100%)' }}
