@@ -18,14 +18,14 @@ export async function ScreenLogger({
   const { device, os } = userAgent({ headers: headersList });
   const $user_id = await getUserIdForServer();
   const $device_id = `${device.vendor || 'unknown'}-${device.type || undefined}-${device.model || 'unknown'}`;
-  const device_type = device.type || 'unknown';
+  const deviceType = device.type || 'unknown';
   const $os = os.name ?? 'unknown';
 
   const properties: Record<string, unknown> = {
     ...logInfo,
     $user_id,
     $device_id,
-    device_type,
+    deviceType,
     $os,
   };
 
