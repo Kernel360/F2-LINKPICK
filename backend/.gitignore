@@ -1,5 +1,8 @@
 *.env
 data/mysql-data
+data/develop
+data/mongo
+logs
 
 HELP.md
 .gradle

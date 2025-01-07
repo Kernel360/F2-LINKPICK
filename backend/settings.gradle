@@ -1,5 +1,8 @@
 rootProject.name = 'backend'
-include 'techpick-batch'
-include 'techpick-core'
-include 'techpick-api'
+include 'baguni-common'
+include 'baguni-entity'
+
+include 'baguni-api'
+include 'baguni-batch'
+include 'baguni-ranking'
 
