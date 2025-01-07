@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { postRecommendPickViewEventLog } from '@/apis/eventLog';
-import { useOpenUrlInNewTab, useImageLoader } from '@/hooks';
+import { useOpenUrlInNewTab, useImageLoader, useEventLogger } from '@/hooks';
 import {
   pickCarouselItemStyle,
   pickTitleStyle,
@@ -15,10 +15,17 @@ import { RecommendPickType } from '@/types';
 export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
   const { openUrlInNewTab } = useOpenUrlInNewTab(recommendPick.url);
   const { imageStatus } = useImageLoader(recommendPick.imageUrl);
+  const { trackEvent: trackRecommendBookmarkClick } = useEventLogger({
+    eventName: 'recommend_page_bookmark_click',
+    logInfo: {
+      bookmarkTitle: recommendPick.title,
+    },
+  });
 
   const onOpenLink = async () => {
     try {
       openUrlInNewTab();
+      trackRecommendBookmarkClick();
       await postRecommendPickViewEventLog({ url: recommendPick.url });
     } catch {
       /*empty */

@@ -12,8 +12,13 @@ export function useEventLogger({
   eventName,
   logInfo = {},
 }: UseEventLoggerParameter) {
-  const trackEvent = () => {
+  /**
+   *
+   * @param trackEventLogInfo  이벤트의 추가적인 정보를 담고 싶을 때 사용해주세요. logInfo보다 우선순위가 낮습니다.
+   */
+  const trackEvent = (trackEventLogInfo: object = {}) => {
     mixpanel.track(eventName, {
+      ...trackEventLogInfo,
       ...logInfo,
     });
   };
