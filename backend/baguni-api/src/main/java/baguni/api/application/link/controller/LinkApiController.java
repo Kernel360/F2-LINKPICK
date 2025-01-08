@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import baguni.common.annotation.MeasureTime;
+import baguni.entity.model.link.dto.LinkInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,7 +29,7 @@ public class LinkApiController {
 
 	@MeasureTime
 	@GetMapping
-	@Operation(summary = "링크 og 데이터 조회 - Selenium", description = "해당 링크의 og 태그 데이터를 스크래핑을 통해 가져옵니다.")
+	@Operation(summary = "링크 정보 조회", description = "해당 링크의 데이터를 DB에서 가져옵니다. 해당 메서드에서 더 이상 스크래핑하지 않습니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
@@ -37,9 +38,8 @@ public class LinkApiController {
 		@Parameter(description = "og 태그 데이터 가져올 url") @RequestParam String url
 	) {
 		// Selenium 사용하도록 변경
-		var result = linkService.saveLinkAndUpdateOgTagBySelenium(url, "");
-		var response = linkApiMapper.toLinkResponse(result);
-
+		LinkInfo linkInfo = linkService.getLinkInfo(url);
+		var response = linkApiMapper.toLinkResponse(linkInfo);
 		return ResponseEntity.ok(response);
 	}
 }
