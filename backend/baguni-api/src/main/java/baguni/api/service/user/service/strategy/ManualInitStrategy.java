@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import baguni.api.service.user.dto.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.api.service.link.dto.LinkInfo;
-import baguni.api.service.link.exception.ApiLinkException;
+import baguni.entity.model.link.dto.LinkInfo;
+import baguni.entity.exception.link.ApiLinkException;
 import baguni.api.service.link.service.LinkService;
 import baguni.api.service.pick.dto.PickCommand;
 import baguni.api.service.pick.service.PickService;
@@ -43,7 +43,7 @@ public class ManualInitStrategy implements ContentInitStrategy {
 			try {
 				linkInfo = linkService.getLinkInfo(url);
 			} catch (ApiLinkException exception) {
-				linkInfo = linkService.saveLinkAndUpdateOgTagByJsoup(url);
+				linkInfo = linkService.saveLink(url); // url 외에 다른 필드는 모두 빈 문자열인 Link 생성
 			}
 			var command = new PickCommand.Create(
 				info.id(), linkInfo.title(), new ArrayList<>(), folderId, linkInfo
