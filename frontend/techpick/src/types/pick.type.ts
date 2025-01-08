@@ -54,10 +54,6 @@ export type CreatePickRequestType = ConcreteType<
   components['schemas']['baguni.api.application.pick.dto.PickApiRequest$Create']
 >;
 
-export type GetOgTagDataResponseType = ConcreteType<
-  components['schemas']['baguni.api.application.link.dto.LinkApiResponse']
->;
-
 export type CreatePickResponseType = ConcreteType<
   components['schemas']['baguni.api.application.pick.dto.PickApiResponse$Pick']
 >;
