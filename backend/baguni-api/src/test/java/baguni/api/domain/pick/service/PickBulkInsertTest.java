@@ -13,14 +13,14 @@ import baguni.api.service.pick.service.PickBulkService;
 import baguni.api.service.pick.service.PickService;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
-import baguni.entity.model.link.dto.LinkInfo;
-import baguni.api.service.pick.dto.PickCommand;
-import baguni.entity.model.folder.Folder;
-import baguni.entity.model.folder.FolderRepository;
-import baguni.entity.model.user.Role;
-import baguni.entity.model.user.SocialProvider;
-import baguni.entity.model.user.User;
-import baguni.entity.model.user.UserRepository;
+import baguni.domain.infrastructure.link.dto.LinkInfo;
+import baguni.domain.infrastructure.pick.dto.PickCommand;
+import baguni.domain.model.folder.Folder;
+import baguni.domain.infrastructure.folder.FolderRepository;
+import baguni.domain.model.user.Role;
+import baguni.domain.model.user.SocialProvider;
+import baguni.domain.model.user.User;
+import baguni.domain.infrastructure.user.UserRepository;
 
 @Slf4j
 @SpringBootTest(classes = BaguniApiApplication.class)

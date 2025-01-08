@@ -7,11 +7,11 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import baguni.entity.model.user.SocialProvider;
+import baguni.domain.model.user.SocialProvider;
 import lombok.Builder;
 import lombok.Getter;
-import baguni.entity.model.user.Role;
-import baguni.entity.model.user.User;
+import baguni.domain.model.user.Role;
+import baguni.domain.model.user.User;
 
 @Builder
 @Getter

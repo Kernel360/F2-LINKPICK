@@ -31,8 +31,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import baguni.api.service.chromebookmark.dto.ChromeImportResult;
 import baguni.api.service.chromebookmark.service.ChromeBookmarkService;
-import baguni.api.service.folder.dto.FolderCommand;
-import baguni.api.service.link.service.LinkService;
+import baguni.domain.infrastructure.folder.dto.FolderCommand;
 import baguni.security.annotation.LoginUserId;
 
 @RestController

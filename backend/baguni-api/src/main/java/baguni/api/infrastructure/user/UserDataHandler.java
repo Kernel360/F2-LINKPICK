@@ -6,18 +6,18 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import baguni.entity.model.folder.FolderRepository;
-import baguni.entity.model.pick.PickRepository;
-import baguni.entity.model.pick.PickTagRepository;
-import baguni.entity.model.sharedFolder.SharedFolderRepository;
-import baguni.entity.model.tag.TagRepository;
-import baguni.entity.model.user.SocialProvider;
-import baguni.entity.model.util.IDToken;
+import baguni.domain.infrastructure.folder.FolderRepository;
+import baguni.domain.infrastructure.pick.PickRepository;
+import baguni.domain.infrastructure.pick.PickTagRepository;
+import baguni.domain.infrastructure.sharedFolder.SharedFolderRepository;
+import baguni.domain.infrastructure.tag.TagRepository;
+import baguni.domain.model.user.SocialProvider;
+import baguni.domain.model.util.IDToken;
 import baguni.security.model.OAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
-import baguni.api.service.user.exception.ApiUserException;
-import baguni.entity.model.user.User;
-import baguni.entity.model.user.UserRepository;
+import baguni.domain.exception.user.ApiUserException;
+import baguni.domain.model.user.User;
+import baguni.domain.infrastructure.user.UserRepository;
 
 @Component
 @RequiredArgsConstructor

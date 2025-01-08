@@ -6,13 +6,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import baguni.api.service.user.dto.UserInfo;
+import baguni.domain.infrastructure.user.dto.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.entity.model.link.dto.LinkInfo;
-import baguni.entity.exception.link.ApiLinkException;
+import baguni.domain.infrastructure.link.dto.LinkInfo;
+import baguni.domain.exception.link.ApiLinkException;
 import baguni.api.service.link.service.LinkService;
-import baguni.api.service.pick.dto.PickCommand;
+import baguni.domain.infrastructure.pick.dto.PickCommand;
 import baguni.api.service.pick.service.PickService;
 
 @Slf4j

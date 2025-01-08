@@ -13,16 +13,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import baguni.entity.annotation.LoginUserIdDistributedLock;
-import baguni.api.service.folder.dto.FolderCommand;
-import baguni.api.service.folder.dto.FolderMapper;
-import baguni.api.service.folder.dto.FolderResult;
-import baguni.api.service.folder.exception.ApiFolderException;
-import baguni.api.infrastructure.folder.FolderDataHandler;
-import baguni.api.infrastructure.pick.PickDataHandler;
-import baguni.api.infrastructure.sharedFolder.SharedFolderDataHandler;
-import baguni.entity.model.folder.Folder;
-import baguni.entity.model.folder.FolderType;
+import baguni.domain.annotation.LoginUserIdDistributedLock;
+import baguni.domain.infrastructure.folder.dto.FolderCommand;
+import baguni.domain.infrastructure.folder.dto.FolderMapper;
+import baguni.domain.infrastructure.folder.dto.FolderResult;
+import baguni.domain.exception.folder.ApiFolderException;
+import baguni.domain.infrastructure.folder.FolderDataHandler;
+import baguni.domain.infrastructure.pick.PickDataHandler;
+import baguni.domain.infrastructure.sharedFolder.SharedFolderDataHandler;
+import baguni.domain.model.folder.Folder;
+import baguni.domain.model.folder.FolderType;
 
 @Service
 @RequiredArgsConstructor

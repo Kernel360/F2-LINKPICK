@@ -3,10 +3,10 @@ package baguni.api.service.user.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import baguni.api.infrastructure.folder.FolderDataHandler;
+import baguni.domain.infrastructure.folder.FolderDataHandler;
 import baguni.api.infrastructure.user.UserDataHandler;
-import baguni.api.service.user.dto.UserInfo;
-import baguni.entity.model.util.IDToken;
+import baguni.domain.infrastructure.user.dto.UserInfo;
+import baguni.domain.model.util.IDToken;
 import baguni.security.exception.ApiAuthException;
 import baguni.security.model.OAuth2UserInfo;
 import lombok.RequiredArgsConstructor;

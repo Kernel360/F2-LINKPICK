@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     implementation project(":baguni-common")
-    implementation project(":baguni-entity")
+    implementation project(":baguni-domain")
 
     // spring jpa
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

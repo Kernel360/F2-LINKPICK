@@ -9,9 +9,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.Builder;
 import lombok.Getter;
-import baguni.entity.model.folder.Folder;
-import baguni.entity.model.folder.FolderType;
-import baguni.entity.model.user.User;
+import baguni.domain.model.folder.Folder;
+import baguni.domain.model.folder.FolderType;
+import baguni.domain.model.user.User;
 
 @Builder
 @Getter

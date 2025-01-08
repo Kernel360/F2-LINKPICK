@@ -3,12 +3,12 @@ package baguni.api.service.link.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import baguni.entity.model.link.Link;
+import baguni.domain.model.link.Link;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.entity.model.link.dto.LinkInfo;
-import baguni.entity.model.link.dto.LinkMapper;
-import baguni.entity.model.link.LinkDataHandler;
+import baguni.domain.infrastructure.link.dto.LinkInfo;
+import baguni.domain.infrastructure.link.dto.LinkMapper;
+import baguni.domain.infrastructure.link.LinkDataHandler;
 
 @Slf4j
 @Service

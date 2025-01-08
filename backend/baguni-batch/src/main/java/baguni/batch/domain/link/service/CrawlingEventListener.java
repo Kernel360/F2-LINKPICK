@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import baguni.common.config.RabbitmqConfig;
 import baguni.common.event.events.CrawlingEvent;
 import baguni.common.event.events.LinkEvent;
-import baguni.entity.model.link.dto.LinkResult;
+import baguni.domain.infrastructure.link.dto.LinkResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,7 +38,7 @@ public class CrawlingEventListener {
 			}
 		}
 	}
-	
+
 	@RabbitListener
 	public void linkUrlEvent(LinkEvent event) {
 		LinkResult link = linkCrawlingService.getLinkResultByUrl(event.getUrl());

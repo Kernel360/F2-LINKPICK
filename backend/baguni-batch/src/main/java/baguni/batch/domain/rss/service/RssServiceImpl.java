@@ -24,8 +24,8 @@ import baguni.batch.domain.rss.dto.RssRawFeed;
 import baguni.batch.domain.rss.exception.ApiRssException;
 import baguni.batch.infrastructure.rss.RssAdaptor;
 import baguni.common.annotation.MeasureTime;
-import baguni.entity.model.rss.RssBlog;
-import baguni.entity.model.rss.RssFeed;
+import baguni.domain.model.rss.RssBlog;
+import baguni.domain.model.rss.RssFeed;
 
 @Slf4j
 @Service

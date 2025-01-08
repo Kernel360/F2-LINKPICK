@@ -13,12 +13,12 @@ import baguni.common.lib.opengraph.OpenGraphOption;
 import baguni.common.lib.opengraph.OpenGraphReader;
 import baguni.common.lib.opengraph.OpenGraphReaderJsoup;
 import baguni.common.lib.opengraph.OpenGraphReaderSelenium;
-import baguni.entity.exception.link.ApiLinkException;
-import baguni.entity.model.link.Link;
-import baguni.entity.model.link.LinkDataHandler;
-import baguni.entity.model.link.dto.LinkInfo;
-import baguni.entity.model.link.dto.LinkMapper;
-import baguni.entity.model.link.dto.LinkResult;
+import baguni.domain.exception.link.ApiLinkException;
+import baguni.domain.model.link.Link;
+import baguni.domain.infrastructure.link.LinkDataHandler;
+import baguni.domain.infrastructure.link.dto.LinkInfo;
+import baguni.domain.infrastructure.link.dto.LinkMapper;
+import baguni.domain.infrastructure.link.dto.LinkResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
