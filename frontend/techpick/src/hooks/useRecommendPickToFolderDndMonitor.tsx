@@ -12,6 +12,7 @@ import {
   isRecommendPickDraggableObject,
   notifySuccess,
 } from '@/utils';
+import { useEventLogger } from './useEventLogger';
 import type {
   DragEndEvent,
   DragOverEvent,
@@ -26,6 +27,9 @@ export function useRecommendPickToFolderDndMonitor() {
   const { insertPickInfo } = usePickStore();
   const { setIsDragging, setDraggingPickInfo } =
     useDraggingRecommendPickStore();
+  const { trackEvent: trackRecommendBookmarkSave } = useEventLogger({
+    eventName: 'recommend_page_bookmark_save',
+  });
 
   const onDragStart = (event: DragStartEvent) => {
     const { active } = event;
@@ -82,6 +86,7 @@ export function useRecommendPickToFolderDndMonitor() {
       });
       insertPickInfo(createdPickInfo, overObject.id);
       notifySuccess('성공적으로 북마크가 추가되었습니다!');
+      trackRecommendBookmarkSave({ title: title });
     } catch {
       /** empty */
     }

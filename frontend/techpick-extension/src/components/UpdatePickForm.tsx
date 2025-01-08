@@ -22,6 +22,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FolderSelect } from './FolderSelect';
 import { PlusIcon } from '@radix-ui/react-icons';
 import { PUBLIC_DOMAIN } from '@/constants';
+import { useEventLogger } from '@/hooks/useEventLogger';
 
 export function UpdatePickForm({
   id,
@@ -35,6 +36,12 @@ export function UpdatePickForm({
   const folderSelectRef = useRef<HTMLButtonElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const { selectedTagList } = useTagStore();
+  const { trackEvent: trackUpdateBookmark } = useEventLogger({
+    eventName: 'extension_update_bookmark',
+  });
+  const { trackEvent: trackUpdateTag } = useEventLogger({
+    eventName: 'extension_update_tag',
+  });
 
   useChangeFocusUsingArrowKey([
     titleInputRef,
@@ -62,6 +69,12 @@ export function UpdatePickForm({
     if (userModifiedTitle.trim() === '') {
       notifyError('제목이 비어있는 상태로 수정할 수 없습니다.');
       return;
+    }
+
+    if (0 < selectedTagList.length) {
+      // 태그를 직접 추가하는지 확인하는 이벤트입니다.
+      const selectedTagNameList = selectedTagList.map((tag) => tag.name);
+      trackUpdateTag({ tagList: selectedTagNameList });
     }
 
     updatePick({
@@ -116,7 +129,10 @@ export function UpdatePickForm({
       </div>
       <button
         className={submitButtonStyle}
-        onClick={onSubmit}
+        onClick={() => {
+          onSubmit();
+          trackUpdateBookmark();
+        }}
         ref={submitButtonRef}
       >
         <div className={plusIconStyle}>

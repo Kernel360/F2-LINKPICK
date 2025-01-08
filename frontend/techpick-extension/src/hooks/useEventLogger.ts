@@ -1,6 +1,6 @@
 'use client';
 
-import mixpanel from '@/libs/mixpanel-client';
+import mixpanel from '@/libs/@mixpanel/mixpanel-client';
 
 /**
  * @description 특정 액션에 로그를 추가하는 훅입니다.

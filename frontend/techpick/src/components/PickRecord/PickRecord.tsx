@@ -67,9 +67,9 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
     >
       <PickImageColumnLayout>
         <div className={pickImageStyle}>
-          {imageStatus === 'error' ? (
-            <Image src={'/image/default_image.svg'} alt="" fill sizes="96px" />
-          ) : (
+          {imageStatus === 'loading' && <div></div>}
+
+          {imageStatus === 'loaded' && (
             <img
               src={link.imageUrl}
               alt=""
@@ -77,6 +77,10 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
               height="47.25px"
               className={imageStyle}
             />
+          )}
+
+          {imageStatus === 'error' && (
+            <Image src={'/image/default_image.svg'} alt="" fill sizes="96px" />
           )}
         </div>
       </PickImageColumnLayout>

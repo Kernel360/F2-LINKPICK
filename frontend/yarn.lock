@@ -12276,6 +12276,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jwt-decode@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "jwt-decode@npm:4.0.0"
+  checksum: 10c0/de75bbf89220746c388cf6a7b71e56080437b77d2edb29bae1c2155048b02c6b8c59a3e5e8d6ccdfd54f0b8bda25226e491a4f1b55ac5f8da04cfbadec4e546c
+  languageName: node
+  linkType: hard
+
 "keyv@npm:^4.5.3, keyv@npm:^4.5.4":
   version: 4.5.4
   resolution: "keyv@npm:4.5.4"
@@ -15883,6 +15890,7 @@ __metadata:
     immer: "npm:^10.1.1"
     jest: "npm:^29.7.0"
     jest-environment-jsdom: "npm:^29.7.0"
+    jwt-decode: "npm:^4.0.0"
     ky: "npm:^1.7.2"
     lottie-web: "npm:^5.12.2"
     lucide-react: "npm:^0.447.0"
@@ -15929,6 +15937,7 @@ __metadata:
     "@radix-ui/react-visually-hidden": "npm:^1.1.0"
     "@types/chrome": "npm:^0.0.271"
     "@types/dompurify": "npm:^3"
+    "@types/mixpanel-browser": "npm:^2"
     "@types/react": "npm:^18.3.3"
     "@types/react-dom": "npm:^18.3.0"
     "@vanilla-extract/css": "npm:^1.15.5"
@@ -15942,8 +15951,10 @@ __metadata:
     globals: "npm:^15.9.0"
     husky: "npm:^9.1.6"
     immer: "npm:^10.1.1"
+    jwt-decode: "npm:^4.0.0"
     ky: "npm:^1.7.2"
     lucide-react: "npm:^0.446.0"
+    mixpanel-browser: "npm:^2.58.0"
     path: "npm:^0.12.7"
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"

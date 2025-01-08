@@ -14,6 +14,7 @@ import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
 import { filterSelectableFolder } from '@/utils';
 import type { CreatePickToUnclassifiedFolderResponseType } from '@/types';
 import { CHANGE_ICON_PORT_NAME } from '@/constants';
+import { useEventLogger } from '@/hooks/useEventLogger';
 
 export function BookmarkPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,6 +24,9 @@ export function BookmarkPage() {
   const [imageUrl, setImageUrl] = useState('');
   const isFetched = useRef(false);
   const setTagList = useTagStore((state) => state.setTagList);
+  const { trackEvent: trackSaveBookmark } = useEventLogger({
+    eventName: 'extension_save_bookmark',
+  });
 
   useEffect(
     function onLoad() {
@@ -53,6 +57,7 @@ export function BookmarkPage() {
           rootFolderChildFolderList
         );
 
+        trackSaveBookmark();
         setFolderInfoList([...filteredFolderInfoList]);
         setTagList(fetchedTagList);
         setPickInfo(createdPickInfo);

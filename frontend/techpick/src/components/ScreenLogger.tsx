@@ -1,21 +1,32 @@
 import type { PropsWithChildren } from 'react';
+import { headers } from 'next/headers';
+import { userAgent } from 'next/server';
 import { mixpanelServer } from '@/libs/mixpanel-server';
+import { getUserIdForServer } from '@/utils';
 
 /**
- * @description 특정 페이지에 방문했는지 확인하는 컴포넌트입니다.
+ * @description 특정 페이지에 방문했는지 확인하는 서버 컴포넌트입니다.
  * @param eventName 해당 이벤트의 이름입니다. snake case로 명세해주세요. ex) shared_page_view
- * @param userId 인증된 사용자의 ID입니다. 없을 경우 익명 사용자로 처리됩니다.
  * @param logInfo 이벤트의 추가적인 정보를 담고 싶을 때 사용해주세요.
  */
-export function ScreenLogger({
+export async function ScreenLogger({
   eventName,
-  userId = 'anonymous',
   logInfo = {},
   children,
 }: PropsWithChildren<ScreenLoggerProps>) {
+  const headersList = headers();
+  const { device, os } = userAgent({ headers: headersList });
+  const $user_id = await getUserIdForServer();
+  const $device_id = `${device.vendor || 'unknown'}-${device.type || undefined}-${device.model || 'unknown'}`;
+  const deviceType = device.type || 'unknown';
+  const $os = os.name ?? 'unknown';
+
   const properties: Record<string, unknown> = {
     ...logInfo,
-    $user_id: userId,
+    $user_id,
+    $device_id,
+    deviceType,
+    $os,
   };
 
   mixpanelServer.track(eventName, properties);
@@ -25,6 +36,5 @@ export function ScreenLogger({
 
 interface ScreenLoggerProps {
   eventName: string;
-  userId?: string;
   logInfo?: object;
 }

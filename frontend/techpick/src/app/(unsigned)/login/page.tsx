@@ -1,10 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
-import { getClientCookie } from '@/utils';
+import { useEventLogger } from '@/hooks';
 import {
   googleLoginContainer,
   kakaoLoginContainer,
@@ -15,20 +13,16 @@ import {
   pickBrandContainer,
   dividerStyle,
   pickBrandContainerWithText,
+  loginContainerLayoutStyle,
 } from './page.css';
 
 export default function LoginPage() {
   const redirectUrl = encodeURIComponent(
     process.env.NEXT_PUBLIC_REDIRECT_URL ?? ''
   );
-
-  useEffect(() => {
-    const isLoggedInCookie = getClientCookie('techPickLogin');
-
-    if (isLoggedInCookie) {
-      redirect('/');
-    }
-  }, []);
+  const { trackEvent: trackLoginButtonClick } = useEventLogger({
+    eventName: 'login_page_login_button_click',
+  });
 
   return (
     <div className={screenContainer}>
@@ -47,11 +41,12 @@ export default function LoginPage() {
           </div>
         </div>
         <hr className={dividerStyle} />
-        <div style={{ padding: '36px 0' }}>
+        <div className={loginContainerLayoutStyle}>
           <div className={googleLoginContainer}>
             <Link
               className={loginLink}
               href={`${process.env.NEXT_PUBLIC_API}/login/google?redirect_url=${redirectUrl}`}
+              onClick={trackLoginButtonClick}
             >
               <Image
                 style={{ filter: 'brightness(100)' }}
@@ -67,6 +62,7 @@ export default function LoginPage() {
             <Link
               className={loginLink}
               href={`${process.env.NEXT_PUBLIC_API}/login/kakao?redirect_url=${redirectUrl}`}
+              onClick={trackLoginButtonClick}
             >
               <Image
                 style={{ filter: 'invert(100%)' }}

@@ -1,5 +1,4 @@
 export { notifyError, notifySuccess } from './toast';
-export { getClientCookie } from './getClientCookie';
 export { hasIndex } from './array';
 export { isEmptyString } from './string';
 export { getPortalContainer } from './portal';
@@ -21,3 +20,4 @@ export { getItemFromLocalStorage } from './getItemFromLocalStorage';
 export { setItemToLocalStorage } from './setItemToLocalStorage';
 export { isMacOS } from './isMacOS';
 export { isLoginUser } from './isLoginUser';
+export { getUserIdForServer } from './getUserIdForServer';

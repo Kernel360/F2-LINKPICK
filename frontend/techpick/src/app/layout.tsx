@@ -1,9 +1,14 @@
 import { Noto_Sans_KR } from 'next/font/google';
 import { PORTAL_CONTAINER_ID } from '@/constants';
-import { ToastProvider, ThemeProvider } from '@/providers';
+import {
+  ToastProvider,
+  ThemeProvider,
+  UserIdentifyProvider,
+} from '@/providers';
 import { QueryProvider } from '@/providers/QueryProvider';
-import type { Metadata } from 'next';
 import '@/styles/reset.css';
+import { getUserIdForServer } from '@/utils';
+import type { Metadata } from 'next';
 
 const notoSansKR = Noto_Sans_KR({ weight: 'variable', subsets: ['latin'] });
 export const metadata: Metadata = {
@@ -23,21 +28,25 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const userId = await getUserIdForServer();
+
   return (
     <html lang="en">
-      <ThemeProvider classname={`${notoSansKR.className}`}>
-        <ToastProvider>
-          <QueryProvider>
-            {children}
-            <div id={PORTAL_CONTAINER_ID} />
-          </QueryProvider>
-        </ToastProvider>
-      </ThemeProvider>
+      <UserIdentifyProvider userId={userId}>
+        <ThemeProvider classname={`${notoSansKR.className}`}>
+          <ToastProvider>
+            <QueryProvider>
+              {children}
+              <div id={PORTAL_CONTAINER_ID} />
+            </QueryProvider>
+          </ToastProvider>
+        </ThemeProvider>
+      </UserIdentifyProvider>
     </html>
   );
 }
