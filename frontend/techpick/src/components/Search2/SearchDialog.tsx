@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { OPEN_SEARCH_DIALOG_EVENT } from '@/constants';
@@ -20,6 +20,7 @@ export default function SearchDialog({
   onOpenChange,
 }: SearchDialogProps) {
   const { preFetchSearchPicks, reset } = useSearchPickStore();
+  const [isSelectMenuOpen, setIsSelectMenuOpen] = useState(false);
 
   useEffect(function prefetching() {
     preFetchSearchPicks();
@@ -42,17 +43,27 @@ export default function SearchDialog({
   };
 
   return (
-    <DialogPrimitive.Root open={isOpen} onOpenChange={handleOnClose}>
+    <DialogPrimitive.Root open={isOpen} onOpenChange={handleOnClose} modal>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay className={dialogOverlayStyle} />
-        <DialogPrimitive.Content className={dialogContent}>
-          <DialogPrimitive.Title>
-            <VisuallyHidden>Pick Search</VisuallyHidden>
-          </DialogPrimitive.Title>
+        <DialogPrimitive.Content
+          className={dialogContent}
+          onEscapeKeyDown={(e) => {
+            if (isSelectMenuOpen) {
+              e.preventDefault();
+            }
+          }}
+        >
+          <VisuallyHidden>
+            <DialogPrimitive.Title>Pick Search</DialogPrimitive.Title>
+            <DialogPrimitive.Description>
+              Pick Search Dialog
+            </DialogPrimitive.Description>
+          </VisuallyHidden>
           <div className={searchBar}>
             <SearchInput />
           </div>
-          <FilterContainer />
+          <FilterContainer setIsSelectMenuOpen={setIsSelectMenuOpen} />
           <div className={searchListContainer}>
             <SearchInfiniteScrollList onClose={handleOnClose} />
             <HoverCard />

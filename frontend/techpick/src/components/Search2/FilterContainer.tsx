@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FolderIcon, Tags } from 'lucide-react';
 import { useTreeStore, useTagStore } from '@/stores';
 import { useSearchPickStore } from '@/stores/searchPickStore';
@@ -6,11 +6,15 @@ import { createSearchSelectOptions } from '@/utils';
 import FilterOptions from './FilterOptions';
 import * as styles from './searchDialog.css';
 
-export default function FilterContainer() {
+export default function FilterContainer({
+  setIsSelectMenuOpen,
+}: FilterContainerProps) {
   const { getFolderList } = useTreeStore();
   const folderList = getFolderList();
   const { setSearchFolder, setSearchTag } = useSearchPickStore();
   const { tagList } = useTagStore();
+  const [isFolderFilterOpen, setIsFolderFilterOpen] = useState(false);
+  const [isTagFilterOpen, setIsTagFilterOpen] = useState(false);
 
   const folderOptions = createSearchSelectOptions(
     folderList,
@@ -25,6 +29,17 @@ export default function FilterContainer() {
     setSearchState(queryString.length === 0 ? '' : queryString.join(','));
   };
 
+  useEffect(
+    function isFilterOpen() {
+      if (isFolderFilterOpen || isTagFilterOpen) {
+        setIsSelectMenuOpen(true);
+      } else {
+        setIsSelectMenuOpen(false);
+      }
+    },
+    [isFolderFilterOpen, isTagFilterOpen, setIsSelectMenuOpen]
+  );
+
   return (
     <div className={`${styles.filterContainer} ${styles.showFilterContainer}`}>
       <FilterOptions
@@ -34,6 +49,7 @@ export default function FilterContainer() {
         updateSearchState={(queryString: number[]) =>
           updateSearchState(queryString, setSearchFolder)
         }
+        setIsSelectMenuOpen={setIsFolderFilterOpen}
       />
       <FilterOptions
         title="태그"
@@ -42,7 +58,12 @@ export default function FilterContainer() {
         updateSearchState={(queryString: number[]) =>
           updateSearchState(queryString, setSearchTag)
         }
+        setIsSelectMenuOpen={setIsTagFilterOpen}
       />
     </div>
   );
+}
+
+interface FilterContainerProps {
+  setIsSelectMenuOpen: (isOpen: boolean) => void;
 }
