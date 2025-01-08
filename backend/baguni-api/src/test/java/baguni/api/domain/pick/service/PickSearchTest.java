@@ -25,7 +25,7 @@ import baguni.entity.model.user.SocialProvider;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
 import baguni.api.service.folder.exception.ApiFolderException;
-import baguni.api.service.link.dto.LinkInfo;
+import baguni.entity.model.link.dto.LinkInfo;
 import baguni.api.service.pick.dto.PickCommand;
 import baguni.api.service.pick.dto.PickResult;
 import baguni.api.service.tag.exception.ApiTagException;

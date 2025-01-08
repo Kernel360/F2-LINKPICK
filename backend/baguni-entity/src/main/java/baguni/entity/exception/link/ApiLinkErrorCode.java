@@ -1,4 +1,4 @@
-package baguni.api.service.link.exception;
+package baguni.entity.exception.link;
 
 import org.springframework.http.HttpStatus;
 

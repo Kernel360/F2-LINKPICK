@@ -22,7 +22,7 @@ import baguni.api.service.pick.exception.ApiPickException;
 import baguni.api.service.ranking.service.RankingService;
 import baguni.api.service.tag.exception.ApiTagException;
 import baguni.api.infrastructure.folder.FolderDataHandler;
-import baguni.api.infrastructure.link.LinkDataHandler;
+import baguni.entity.model.link.LinkDataHandler;
 import baguni.api.infrastructure.pick.PickDataHandler;
 import baguni.api.infrastructure.tag.TagDataHandler;
 import baguni.common.dto.UrlWithCount;

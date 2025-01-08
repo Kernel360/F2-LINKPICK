@@ -3,7 +3,7 @@ package baguni.api.service.pick.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import baguni.api.service.link.dto.LinkInfo;
+import baguni.entity.model.link.dto.LinkInfo;
 
 public class PickResult {
 

@@ -24,7 +24,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.api.service.link.dto.LinkInfo;
+import baguni.entity.model.link.dto.LinkInfo;
 import baguni.api.service.pick.dto.PickResult;
 
 @Slf4j

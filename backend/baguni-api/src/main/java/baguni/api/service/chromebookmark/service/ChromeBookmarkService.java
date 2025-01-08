@@ -17,7 +17,7 @@ import baguni.api.service.chromebookmark.dto.ChromeMapper;
 import baguni.api.service.folder.dto.FolderCommand;
 import baguni.api.service.folder.exception.ApiFolderException;
 import baguni.api.infrastructure.folder.FolderDataHandler;
-import baguni.api.infrastructure.link.LinkDataHandler;
+import baguni.entity.model.link.LinkDataHandler;
 import baguni.api.infrastructure.pick.PickDataHandler;
 import baguni.entity.model.folder.Folder;
 import baguni.entity.model.link.Link;

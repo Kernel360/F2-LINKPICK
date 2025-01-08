@@ -1,4 +1,4 @@
-package baguni.api.service.link.exception;
+package baguni.entity.exception.link;
 
 import baguni.common.exception.base.ApiErrorCode;
 import baguni.common.exception.base.ApiException;

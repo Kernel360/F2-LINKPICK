@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import baguni.api.service.link.dto.LinkInfo;
+import baguni.entity.model.link.dto.LinkInfo;
 import baguni.api.service.pick.dto.PickCommand;
 import baguni.api.infrastructure.folder.FolderDataHandler;
 import baguni.api.infrastructure.pick.PickBulkDataHandler;

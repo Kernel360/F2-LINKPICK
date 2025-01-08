@@ -1,14 +1,12 @@
-package baguni.api.infrastructure.link;
+package baguni.entity.model.link;
 
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import baguni.entity.model.link.Link;
-import baguni.entity.model.link.LinkRepository;
+import baguni.entity.exception.link.ApiLinkException;
 import lombok.RequiredArgsConstructor;
-import baguni.api.service.link.exception.ApiLinkException;
 
 @Component
 @RequiredArgsConstructor

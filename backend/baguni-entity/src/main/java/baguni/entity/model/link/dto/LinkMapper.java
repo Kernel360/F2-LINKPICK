@@ -1,4 +1,4 @@
-package baguni.api.service.link.dto;
+package baguni.entity.model.link.dto;
 
 import java.util.List;
 
@@ -28,9 +28,9 @@ public interface LinkMapper {
 
 	LinkResult toLinkResult(Link link);
 
-	@Named("E2R")
+	@Named("toLinkInfoList")
 	LinkInfo toLinkInfo(Link link);
 
-	@IterableMapping(qualifiedByName = "E2R")
+	@IterableMapping(qualifiedByName = "toLinkInfoList")
 	List<LinkInfo> toLinkInfoList(List<Link> links);
 }

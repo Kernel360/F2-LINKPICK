@@ -1,4 +1,4 @@
-package baguni.api.service.link.dto;
+package baguni.entity.model.link.dto;
 
 public class LinkCommand {
 

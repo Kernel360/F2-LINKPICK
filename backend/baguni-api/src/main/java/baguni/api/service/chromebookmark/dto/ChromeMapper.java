@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import org.springframework.stereotype.Component;
 
 import baguni.api.service.folder.dto.FolderCommand;
-import baguni.api.service.link.dto.LinkInfo;
+import baguni.entity.model.link.dto.LinkInfo;
 import baguni.api.service.pick.dto.PickCommand;
 
 @Component

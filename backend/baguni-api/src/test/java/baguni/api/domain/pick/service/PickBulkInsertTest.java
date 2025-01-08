@@ -13,7 +13,7 @@ import baguni.api.service.pick.service.PickBulkService;
 import baguni.api.service.pick.service.PickService;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
-import baguni.api.service.link.dto.LinkInfo;
+import baguni.entity.model.link.dto.LinkInfo;
 import baguni.api.service.pick.dto.PickCommand;
 import baguni.entity.model.folder.Folder;
 import baguni.entity.model.folder.FolderRepository;
