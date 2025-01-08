@@ -6,6 +6,7 @@ export const myPageContentContainer = style({
   display: 'grid',
   gridTemplateColumns: '15% 75% 10%',
   alignItems: 'center',
+  minWidth: '700px',
   padding: '8px',
   fontSize: fontSize.sm,
 });
