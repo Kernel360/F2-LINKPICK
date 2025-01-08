@@ -1,0 +1,1 @@
+ALTER TABLE baguni_db.link RENAME COLUMN invalidated_at_at TO invalidated_at;
