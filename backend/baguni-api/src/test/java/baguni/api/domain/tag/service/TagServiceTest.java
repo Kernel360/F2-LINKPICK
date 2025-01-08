@@ -21,14 +21,14 @@ import org.springframework.transaction.annotation.Transactional;
 import baguni.api.service.tag.service.TagService;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
-import baguni.api.service.tag.dto.TagCommand;
-import baguni.api.service.tag.dto.TagResult;
-import baguni.api.service.tag.exception.ApiTagException;
+import baguni.domain.infrastructure.tag.dto.TagCommand;
+import baguni.domain.infrastructure.tag.dto.TagResult;
+import baguni.domain.exception.tag.ApiTagException;
 import baguni.api.infrastructure.user.UserDataHandler;
-import baguni.entity.model.user.Role;
-import baguni.entity.model.user.SocialProvider;
-import baguni.entity.model.user.User;
-import baguni.entity.model.user.UserRepository;
+import baguni.domain.model.user.Role;
+import baguni.domain.model.user.SocialProvider;
+import baguni.domain.model.user.User;
+import baguni.domain.infrastructure.user.UserRepository;
 
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

@@ -10,9 +10,8 @@ import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
-import baguni.api.service.link.dto.LinkInfo;
-import baguni.api.service.pick.dto.PickCommand;
-import baguni.api.service.pick.dto.PickResult;
+import baguni.domain.infrastructure.pick.dto.PickCommand;
+import baguni.domain.infrastructure.pick.dto.PickResult;
 
 @Mapper(
 	componentModel = "spring",
@@ -30,8 +29,7 @@ public interface PickApiMapper {
 
 	PickCommand.Create toCreateCommand(Long userId, PickApiRequest.Create request);
 
-	@Mapping(source = "linkInfo", target = "linkInfo")
-	PickCommand.Extension toExtensionCommand(Long userId, String title, LinkInfo linkInfo);
+	PickCommand.Unclassified toExtensionCommand(Long userId, String title, String url);
 
 	PickCommand.Update toUpdateCommand(Long userId, PickApiRequest.UpdateFromExtension request);
 
@@ -45,6 +43,8 @@ public interface PickApiMapper {
 	PickApiResponse.PickWithViewCount toApiResponseWithPickViewCount(PickResult.PickWithViewCount pickResult);
 
 	PickApiResponse.Pick toApiResponse(PickResult.Pick pickResult);
+
+	PickApiResponse.Extension toApiExtensionResponse(PickResult.Extension pickResult);
 
 	PickApiResponse.Exist toApiExistResponse(Boolean exist);
 

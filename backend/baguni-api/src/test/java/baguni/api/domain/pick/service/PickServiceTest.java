@@ -20,28 +20,28 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import baguni.api.service.pick.service.PickService;
-import baguni.entity.model.user.SocialProvider;
+import baguni.domain.model.user.SocialProvider;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
 import baguni.api.application.pick.dto.PickApiMapper;
-import baguni.api.service.link.dto.LinkInfo;
-import baguni.api.service.pick.dto.PickCommand;
-import baguni.api.service.pick.dto.PickResult;
-import baguni.api.service.pick.exception.ApiPickException;
-import baguni.api.service.tag.dto.TagCommand;
+import baguni.domain.infrastructure.link.dto.LinkInfo;
+import baguni.domain.infrastructure.pick.dto.PickCommand;
+import baguni.domain.infrastructure.pick.dto.PickResult;
+import baguni.domain.exception.pick.ApiPickException;
+import baguni.domain.infrastructure.tag.dto.TagCommand;
 import baguni.api.service.tag.service.TagService;
-import baguni.api.infrastructure.pick.PickDataHandler;
-import baguni.entity.model.folder.Folder;
-import baguni.entity.model.folder.FolderRepository;
-import baguni.entity.model.link.LinkRepository;
-import baguni.entity.model.pick.PickRepository;
-import baguni.entity.model.pick.PickTag;
-import baguni.entity.model.pick.PickTagRepository;
-import baguni.entity.model.tag.Tag;
-import baguni.entity.model.tag.TagRepository;
-import baguni.entity.model.user.Role;
-import baguni.entity.model.user.User;
-import baguni.entity.model.user.UserRepository;
+import baguni.domain.infrastructure.pick.PickDataHandler;
+import baguni.domain.model.folder.Folder;
+import baguni.domain.infrastructure.folder.FolderRepository;
+import baguni.domain.infrastructure.link.LinkRepository;
+import baguni.domain.infrastructure.pick.PickRepository;
+import baguni.domain.model.pick.PickTag;
+import baguni.domain.infrastructure.pick.PickTagRepository;
+import baguni.domain.model.tag.Tag;
+import baguni.domain.infrastructure.tag.TagRepository;
+import baguni.domain.model.user.Role;
+import baguni.domain.model.user.User;
+import baguni.domain.infrastructure.user.UserRepository;
 
 @Slf4j
 @SpringBootTest(classes = BaguniApiApplication.class)

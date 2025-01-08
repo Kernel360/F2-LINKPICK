@@ -11,19 +11,12 @@ import java.util.Optional;
  */
 public class OpenGraph {
 
-	/**
-	 * timeout setting for connection
-	 */
-	private static final int TIMEOUT_SECONDS = 2;
-
 	private final Map<String, String> openGraphTags;
 
-	public OpenGraph(String uri) throws OpenGraphException {
+	public OpenGraph(String uri, OpenGraphReader openGraphReader) throws OpenGraphException {
 		try {
-			var URI = new URI(uri);
-			var openGraphOption = new OpenGraphOption(TIMEOUT_SECONDS);
-			OpenGraphReader openGraphReader = new OpenGraphReader(openGraphOption);
-			this.openGraphTags = openGraphReader.read(URI);
+			var parsedUri = new URI(uri);
+			this.openGraphTags = openGraphReader.read(parsedUri);
 		} catch (URISyntaxException e) {
 			throw new OpenGraphException("Invalid URI: " + uri, e);
 		}

@@ -9,21 +9,21 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import baguni.entity.model.folder.Folder;
-import baguni.entity.model.folder.FolderType;
-import baguni.entity.model.pick.Pick;
-import baguni.entity.model.sharedFolder.SharedFolder;
+import baguni.domain.model.folder.Folder;
+import baguni.domain.model.folder.FolderType;
+import baguni.domain.model.pick.Pick;
+import baguni.domain.model.sharedFolder.SharedFolder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.api.service.folder.exception.ApiFolderException;
-import baguni.api.service.link.dto.LinkMapper;
-import baguni.api.service.sharedFolder.dto.SharedFolderMapper;
-import baguni.api.service.sharedFolder.dto.SharedFolderResult;
-import baguni.api.service.sharedFolder.exception.ApiSharedFolderException;
-import baguni.api.infrastructure.folder.FolderDataHandler;
-import baguni.api.infrastructure.pick.PickDataHandler;
-import baguni.api.infrastructure.sharedFolder.SharedFolderDataHandler;
-import baguni.api.infrastructure.tag.TagDataHandler;
+import baguni.domain.exception.folder.ApiFolderException;
+import baguni.domain.infrastructure.link.dto.LinkMapper;
+import baguni.domain.infrastructure.sharedFolder.dto.SharedFolderMapper;
+import baguni.domain.infrastructure.sharedFolder.dto.SharedFolderResult;
+import baguni.domain.exception.sharedFolder.ApiSharedFolderException;
+import baguni.domain.infrastructure.folder.FolderDataHandler;
+import baguni.domain.infrastructure.pick.PickDataHandler;
+import baguni.domain.infrastructure.sharedFolder.SharedFolderDataHandler;
+import baguni.domain.infrastructure.tag.TagDataHandler;
 import baguni.common.annotation.MeasureTime;
 
 @Slf4j

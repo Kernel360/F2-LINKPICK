@@ -11,7 +11,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import baguni.api.service.user.service.UserService;
-import baguni.entity.model.util.IDToken;
+import baguni.domain.model.util.IDToken;
 import baguni.security.annotation.LoginUserId;
 import baguni.security.exception.ApiAuthException;
 import lombok.RequiredArgsConstructor;

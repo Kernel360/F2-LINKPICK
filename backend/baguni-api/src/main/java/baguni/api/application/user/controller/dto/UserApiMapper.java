@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import baguni.api.service.user.dto.UserInfo;
+import baguni.domain.infrastructure.user.dto.UserInfo;
 
 @Mapper(
 	componentModel = "spring",

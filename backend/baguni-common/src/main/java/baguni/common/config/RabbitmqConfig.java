@@ -17,11 +17,13 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitmqConfig {
 
 	public static final class EXCHANGE {
-		public static final String EVENT = "exchange.baguni-event";
+		public static final String RANKING_EVENT = "exchange.ranking-event";
+		public static final String CRAWLING_EVENT = "exchange.crawling-event";
 	}
 
 	public static final class QUEUE {
-		public static final String Q1 = "queue.event-q1";
+		public static final String PICK_RANKING = "queue.pick-ranking";
+		public static final String PICK_CRAWLING = "queue.pick-crawling";
 	}
 
 	@Value("${spring.application.name}")
@@ -39,24 +41,43 @@ public class RabbitmqConfig {
 	/**
 	 * 1. Exchange 구성 */
 	@Bean
-	DirectExchange directExchange() {
-		return new DirectExchange(EXCHANGE.EVENT);
+	DirectExchange rankingDirectExchange() {
+		return new DirectExchange(EXCHANGE.RANKING_EVENT);
+	}
+
+	@Bean
+	DirectExchange crawlingDirectExchange() {
+		return new DirectExchange(EXCHANGE.CRAWLING_EVENT);
 	}
 
 	/**
 	 * 2. 큐 구성 */
 	@Bean
-	Queue queue1() {
-		return new Queue(QUEUE.Q1, false);
+	Queue pickRanking() {
+		return new Queue(QUEUE.PICK_RANKING, false);
 	}
+
+	@Bean
+	Queue pickCrawling() {
+		return new Queue(QUEUE.PICK_CRAWLING, false);
+	}
+
 
 	/**
 	 * 3. 큐와 DirectExchange를 바인딩 */
 	@Bean
-	Binding directBinding(DirectExchange directExchange, Queue queue1) {
+	Binding rankingDirectBinding(DirectExchange rankingDirectExchange, Queue pickRanking) {
 		return BindingBuilder
-			.bind(queue1)
-			.to(directExchange)
+			.bind(pickRanking)
+			.to(rankingDirectExchange)
+			.with(""); // 라우팅 키는  필요 없음
+	}
+
+	@Bean
+	Binding crawlingDirectBinding(DirectExchange crawlingDirectExchange, Queue pickCrawling) {
+		return BindingBuilder
+			.bind(pickCrawling)
+			.to(crawlingDirectExchange)
 			.with(""); // 라우팅 키는  필요 없음
 	}
 
