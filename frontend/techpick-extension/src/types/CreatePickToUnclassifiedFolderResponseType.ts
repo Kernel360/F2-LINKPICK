@@ -3,7 +3,7 @@ import { ConcreteType } from './ConcreteType';
 
 export type CreatePickToUnclassifiedFolderResponseType = ConcreteType<
   Omit<
-    components['schemas']['baguni.api.application.pick.dto.PickApiResponse$Pick'],
+    components['schemas']['baguni.api.application.pick.dto.PickApiResponse$Extension'],
     'linkInfo'
   >
 >;

@@ -10,12 +10,10 @@ import type {
 export const createPickToUnclassifiedFolder = async (
   createPickInfo: CreatePickToUnclassifiedFolderRequestType
 ) => {
-  console.log('호출!');
-
   try {
     const response =
       await apiClient.post<CreatePickToUnclassifiedFolderResponseType>(
-        API_URLS.getCreateUnclassifiedFolderPickUrl(),
+        API_URLS.getExtensionPickUrl(),
         {
           json: createPickInfo,
         }

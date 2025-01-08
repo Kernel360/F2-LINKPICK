@@ -20,7 +20,7 @@ export const API_URLS = {
   getLinkUrl: function () {
     return 'links';
   },
-  getCreateUnclassifiedFolderPickUrl: function () {
-    return `${this.getPicksUrl()}/unclassified`;
+  getExtensionPickUrl: function () {
+    return `${this.getPicksUrl()}/extension`;
   },
 };
