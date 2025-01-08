@@ -11,6 +11,7 @@ export default function FilterOptions({
   icon,
   options,
   updateSearchState,
+  setIsSelectMenuOpen,
 }: TagFilterOptionsProps) {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
 
@@ -32,6 +33,12 @@ export default function FilterOptions({
         closeMenuOnSelect={false}
         onChange={onChange}
         styles={customSelectStyles}
+        onMenuClose={() => {
+          setIsSelectMenuOpen(false);
+        }}
+        onMenuOpen={() => {
+          setIsSelectMenuOpen(true);
+        }}
       />
     </div>
   );
@@ -42,4 +49,5 @@ interface TagFilterOptionsProps {
   icon: React.ReactNode;
   options: SearchSelectOption[];
   updateSearchState: (queryString: number[]) => void;
+  setIsSelectMenuOpen: (isOpen: boolean) => void;
 }
