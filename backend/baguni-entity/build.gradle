@@ -10,6 +10,8 @@ repositories {
 }
 
 dependencies {
+    implementation project(":baguni-common")
+
     // for @Entity + @Repository
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.mysql:mysql-connector-j'
