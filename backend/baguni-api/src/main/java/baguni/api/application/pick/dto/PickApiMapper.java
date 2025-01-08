@@ -33,6 +33,9 @@ public interface PickApiMapper {
 	@Mapping(source = "linkInfo", target = "linkInfo")
 	PickCommand.Extension toExtensionCommand(Long userId, String title, LinkInfo linkInfo);
 
+	PickCommand.Update toUpdateCommand(Long userId, PickApiRequest.UpdateFromExtension request);
+
+	@Mapping(target = "parentFolderId", ignore = true)
 	PickCommand.Update toUpdateCommand(Long userId, PickApiRequest.Update request);
 
 	PickCommand.Move toMoveCommand(Long userId, PickApiRequest.Move request);
@@ -44,9 +47,6 @@ public interface PickApiMapper {
 	PickApiResponse.Pick toApiResponse(PickResult.Pick pickResult);
 
 	PickApiResponse.Exist toApiExistResponse(Boolean exist);
-
-	@Mapping(target = "pickList", source = "pickList", qualifiedByName = "mapPickList")
-	PickApiResponse.FolderPickList toApiFolderPickList(PickResult.FolderPickList folderPickList);
 
 	@Named("mapPickList")
 	default List<PickApiResponse.Pick> mapPickList(List<PickResult.Pick> pickList) {
