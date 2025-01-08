@@ -67,8 +67,17 @@ export function PickTagAutocompleteDialog({
     });
   };
 
+  const checkIsCreatableTag = (value: string) => {
+    const isUnique = !tagList.some((tag) => tag.name === value.trim());
+    const isNotInitialValue = value.trim() !== '';
+    const isCreatable = isUnique && isNotInitialValue;
+
+    setCanCreateTag(isCreatable);
+  };
+
   const clearTagInputValue = () => {
     setTagInputValue('');
+    checkIsCreatableTag('');
   };
 
   const onSelectTag = (tag: TagType) => {
@@ -121,14 +130,6 @@ export function PickTagAutocompleteDialog({
         tagIdOrderedList: newTagIdOrderedList,
       });
     }
-  };
-
-  const checkIsCreatableTag = (value: string) => {
-    const isUnique = !tagList.some((tag) => tag.name === value.trim());
-    const isNotInitialValue = value.trim() !== '';
-    const isCreatable = isUnique && isNotInitialValue;
-
-    setCanCreateTag(isCreatable);
   };
 
   useEffect(
