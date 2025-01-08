@@ -1,13 +1,18 @@
 import { API_URLS } from '@/constants';
 import { apiClient } from './apiClient';
-import type { UpdatePickRequestType, UpdatePickResponseType } from '@/types';
+import type {
+  UpdatePickFromExtensionRequestType,
+  UpdatePickFromExtensionResponseType,
+} from '@/types';
 import { HTTPError } from 'ky';
 import { returnErrorFromHTTPError } from '@/utils';
 
-export const updatePick = async (pickInfo: UpdatePickRequestType) => {
+export const updatePickFromExtension = async (
+  pickInfo: UpdatePickFromExtensionRequestType
+) => {
   try {
-    const response = await apiClient.patch<UpdatePickResponseType>(
-      API_URLS.getPicksUrl(),
+    const response = await apiClient.patch<UpdatePickFromExtensionResponseType>(
+      API_URLS.getExtensionPickUrl(),
       {
         json: pickInfo,
       }

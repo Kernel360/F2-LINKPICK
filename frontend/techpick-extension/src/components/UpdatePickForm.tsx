@@ -3,7 +3,7 @@ import { notifyError, notifySuccess } from '@/libs/@toast';
 import { useChangeFocusUsingArrowKey } from '@/hooks';
 import { useTagStore } from '@/stores';
 import { FolderType } from '@/types';
-import { updatePick } from '@/apis';
+import { updatePickFromExtension } from '@/apis';
 import { TagPicker } from '@/components';
 import { ThumbnailImage } from './ThumbnailImage';
 import {
@@ -77,7 +77,7 @@ export function UpdatePickForm({
       trackUpdateTag({ tagList: selectedTagNameList });
     }
 
-    updatePick({
+    updatePickFromExtension({
       id,
       title: DOMPurify.sanitize(userModifiedTitle.trim()),
       tagIdOrderedList: selectedTagList.map((tag) => tag.id),
