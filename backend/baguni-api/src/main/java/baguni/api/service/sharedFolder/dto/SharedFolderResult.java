@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import baguni.api.service.folder.dto.FolderResult;
-import baguni.api.service.link.dto.LinkInfo;
+import baguni.entity.model.link.dto.LinkInfo;
 
 public class SharedFolderResult {
 

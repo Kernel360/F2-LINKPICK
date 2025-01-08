@@ -16,7 +16,7 @@ import baguni.entity.model.sharedFolder.SharedFolder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.api.service.folder.exception.ApiFolderException;
-import baguni.api.service.link.dto.LinkMapper;
+import baguni.entity.model.link.dto.LinkMapper;
 import baguni.api.service.sharedFolder.dto.SharedFolderMapper;
 import baguni.api.service.sharedFolder.dto.SharedFolderResult;
 import baguni.api.service.sharedFolder.exception.ApiSharedFolderException;
