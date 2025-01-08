@@ -21,3 +21,4 @@ export { setItemToLocalStorage } from './setItemToLocalStorage';
 export { isMacOS } from './isMacOS';
 export { isLoginUser } from './isLoginUser';
 export { getUserIdForServer } from './getUserIdForServer';
+export { pointerWithinWithClosestCenter } from './pointerWithinWithClosestCenter';
