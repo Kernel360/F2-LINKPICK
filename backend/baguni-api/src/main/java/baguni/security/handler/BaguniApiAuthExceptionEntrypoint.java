@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import baguni.api.service.user.service.UserService;
 import baguni.common.exception.base.ApiErrorResponse;
 import baguni.security.exception.ApiAuthErrorCode;
 import baguni.security.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author minkyeu kim
@@ -27,9 +27,12 @@ import lombok.RequiredArgsConstructor;
  *     case 1. 토큰이 만료된 요청이 온 경우 </br>
  *     case 2. 변조된 JWT를 가진 요청인 경우
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class BaguniApiAuthExceptionEntrypoint implements AuthenticationEntryPoint {
+
+	private final CookieUtil cookieUtil;
 
 	/**
 	 * 시큐리티의 HttpServletResponse를 바구니 API ErrorResponse로 변환한다.
@@ -39,11 +42,14 @@ public class BaguniApiAuthExceptionEntrypoint implements AuthenticationEntryPoin
 	public void commence(
 		HttpServletRequest request,
 		HttpServletResponse response,
-		AuthenticationException arg2
+		AuthenticationException exception
 	) throws IOException {
+		log.error(exception.getMessage(), exception);
 		var errorResponse = ApiErrorResponse.of(ApiAuthErrorCode.AUTH_INVALID_AUTHENTICATION);
 		var errorStatus = errorResponse.getStatusCode().value();
 		var body = errorResponse.getBody();
+
+		cookieUtil.clearCookies(response);
 
 		response.setStatus(errorStatus);
 		if (Objects.nonNull(body)) {

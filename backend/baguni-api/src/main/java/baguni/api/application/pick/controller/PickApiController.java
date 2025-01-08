@@ -19,6 +19,7 @@ import baguni.common.annotation.MeasureTime;
 import baguni.common.event.events.CrawlingEvent;
 import baguni.common.event.messenger.CrawlingEventMessenger;
 import baguni.common.event.messenger.RankingEventMessenger;
+import baguni.common.event.events.CrawlingEvent;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -33,7 +34,6 @@ import baguni.api.application.pick.dto.PickApiResponse;
 import baguni.api.application.pick.dto.PickSliceResponse;
 import baguni.domain.infrastructure.pick.dto.PickResult;
 import baguni.domain.exception.pick.ApiPickException;
-import baguni.api.service.pick.service.PickBulkService;
 import baguni.api.service.pick.service.PickSearchService;
 import baguni.api.service.pick.service.PickService;
 import baguni.common.event.events.PickCreateEvent;
@@ -49,7 +49,6 @@ public class PickApiController {
 	private final PickService pickService;
 	private final PickApiMapper pickApiMapper;
 	private final PickSearchService pickSearchService;
-	private final PickBulkService pickBulkService;
 	private final RankingEventMessenger rankingEventMessenger;
 	private final CrawlingEventMessenger crawlingEventMessenger;
 
@@ -60,8 +59,10 @@ public class PickApiController {
 	})
 	public ResponseEntity<List<PickApiResponse.FolderPickListWithViewCount>> getFolderChildPickList(
 		@LoginUserId Long userId,
-		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3") @RequestParam(required = false, defaultValue =
-			"") List<Long> folderIdList) {
+		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3")
+		@RequestParam(required = false, defaultValue = "")
+		List<Long> folderIdList
+	) {
 		var folderPickList = pickService.getFolderListChildPickList(
 			pickApiMapper.toReadListCommand(userId, folderIdList)
 		);
@@ -110,7 +111,7 @@ public class PickApiController {
 	})
 	public ResponseEntity<PickApiResponse.Exist> getPickUrl(@LoginUserId Long userId,
 		@RequestParam String link) {
-		return ResponseEntity.ok(pickApiMapper.toApiReponseWithExist(pickService.existPickByUrl(userId, link)));
+		return ResponseEntity.ok(pickApiMapper.toApiExistResponse(pickService.existPickByUrl(userId, link)));
 	}
 
 	/**
@@ -175,27 +176,6 @@ public class PickApiController {
 		return ResponseEntity.ok(response);
 	}
 
-	@MeasureTime
-	@PostMapping("/unclassified")
-	@Operation(
-		summary = "미분류 폴더로 픽 생성",
-		description = "익스텐션에서 미분류로 바로 픽 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계됩니다."
-	)
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "픽 생성 성공")
-	})
-	public ResponseEntity<PickApiResponse.Unclassified> savePickAsUnclassified(@LoginUserId Long userId,
-		@Valid @RequestBody PickApiRequest.Extension request) {
-		var command = pickApiMapper.toExtensionCommand(userId, request.title(), request.url());
-		var result = pickService.savePickToUnclassified(command);
-		var rankingEvent = new PickCreateEvent(userId, result.id(), request.url());
-		var crawlingEvent = new CrawlingEvent(result.linkId(), request.url(), request.title());
-		rankingEventMessenger.send(rankingEvent);
-		crawlingEventMessenger.send(crawlingEvent);
-		var response = pickApiMapper.toApiResponseWithUnclassified(result);
-		return ResponseEntity.ok(response);
-	}
-
 	@PostMapping("/recommend")
 	@Operation(
 		summary = "추천 링크로 픽 생성",
@@ -205,8 +185,10 @@ public class PickApiController {
 		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
 		@ApiResponse(responseCode = "403", description = "접근할 수 없는 폴더")
 	})
-	public ResponseEntity<PickApiResponse.CreateFromRecommend> savePickFromRecommend(@LoginUserId Long userId,
-		@Valid @RequestBody PickApiRequest.Create request) {
+	public ResponseEntity<PickApiResponse.CreateFromRecommend> savePickFromRecommend(
+		@LoginUserId Long userId,
+		@Valid @RequestBody PickApiRequest.Create request
+	) {
 		boolean existPick;
 		PickResult.Pick result;
 		if (pickService.existPickByUrl(userId, request.linkInfo().url())) {
@@ -222,19 +204,65 @@ public class PickApiController {
 		return ResponseEntity.ok(new PickApiResponse.CreateFromRecommend(existPick, result));
 	}
 
-	@PatchMapping
-	@Operation(summary = "픽 내용 수정", description = "픽 내용 수정 및 폴더 이동까지 지원합니다.")
+	@MeasureTime
+	@PostMapping("/extension")
+	@Operation(
+		summary = "[익스텐션 전용] 미분류 폴더로 픽 생성",
+		description = "익스텐션에서 미분류로 바로 픽 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계됩니다."
+	)
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
+		@ApiResponse(responseCode = "404", description = "OG 태그 업데이트를 위한 크롤링 요청 실패")
+	})
+	public ResponseEntity<PickApiResponse.Pick> savePickAsUnclassified(
+		@LoginUserId Long userId,
+		@Valid @RequestBody PickApiRequest.CreateFromExtension request
+	) {
+		var command = pickApiMapper.toExtensionCommand(userId, request.title(), request.url());
+		var result = pickService.savePickToUnclassified(command);
+		var rankingEvent = new PickCreateEvent(userId, result.id(), request.url());
+		var crawlingEvent = new CrawlingEvent(result.linkId(), request.url(), request.title());
+		rankingEventMessenger.send(rankingEvent);
+		crawlingEventMessenger.send(crawlingEvent);
+		var response = pickApiMapper.toApiResponseWithUnclassified(result);
+		return ResponseEntity.ok(response);
+	}
+
+	// TODO: 다루는 도메인이 pick 외에 생길 경우 extension 컨트롤러로 빼기
+	@PatchMapping("/extension")
+	@Operation(summary = "[익스텐션 전용] 픽 수정", description = "픽 내용 수정 및 폴더 이동까지 지원합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 내용 수정 성공")
 	})
-	public ResponseEntity<PickApiResponse.Pick> updatePick(@LoginUserId Long userId,
-		@Valid @RequestBody PickApiRequest.Update request) {
-		if (!Objects.isNull(request.title()) && 200 < request.title().length()) {
+	public ResponseEntity<PickApiResponse.Pick> updatePickFromChromeExtension(
+		@LoginUserId Long userId,
+		@Valid @RequestBody PickApiRequest.UpdateFromExtension request
+	) {
+		if (Objects.nonNull(request.title()) && (200 < request.title().length())) {
 			throw ApiPickException.PICK_TITLE_TOO_LONG();
 		}
+		var command = pickApiMapper.toUpdateCommand(userId, request);
+		var result = pickService.updatePick(command);
+		var response = pickApiMapper.toApiResponse(result);
+		return ResponseEntity.ok(response);
+	}
 
-		return ResponseEntity.ok(
-			pickApiMapper.toApiResponse(pickService.updatePick(pickApiMapper.toUpdateCommand(userId, request))));
+	@PatchMapping
+	@Operation(summary = "웹사이트에서 픽 내용만 수정 (폴더 이동 X)", description = "픽 내용 수정 및 폴더 이동까지 지원합니다.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "픽 내용 수정 성공")
+	})
+	public ResponseEntity<PickApiResponse.Pick> updatePick(
+		@LoginUserId Long userId,
+		@Valid @RequestBody PickApiRequest.Update request
+	) {
+		if (Objects.nonNull(request.title()) && (200 < request.title().length())) {
+			throw ApiPickException.PICK_TITLE_TOO_LONG();
+		}
+		var command = pickApiMapper.toUpdateCommand(userId, request);
+		var result = pickService.updatePick(command);
+		var response = pickApiMapper.toApiResponse(result);
+		return ResponseEntity.ok(response);
 	}
 
 	@PatchMapping("/location")
@@ -243,9 +271,12 @@ public class PickApiController {
 		@ApiResponse(responseCode = "204", description = "픽 이동 성공"),
 		@ApiResponse(responseCode = "400", description = "폴더가 존재하지 않음.")
 	})
-	public ResponseEntity<Void> movePick(@LoginUserId Long userId,
-		@Valid @RequestBody PickApiRequest.Move request) {
-		pickService.movePick(pickApiMapper.toMoveCommand(userId, request));
+	public ResponseEntity<Void> movePick(
+		@LoginUserId Long userId,
+		@Valid @RequestBody PickApiRequest.Move request
+	) {
+		var command = pickApiMapper.toMoveCommand(userId, request);
+		pickService.movePick(command);
 		return ResponseEntity.noContent().build();
 	}
 
@@ -256,16 +287,12 @@ public class PickApiController {
 		@ApiResponse(responseCode = "406", description = "휴지통이 아닌 폴더에서 픽 삭제 불가"),
 		@ApiResponse(responseCode = "500", description = "미확인 서버 에러 혹은 존재하지 않는 픽 삭제")
 	})
-	public ResponseEntity<Void> deletePick(@LoginUserId Long userId,
-		@Valid @RequestBody PickApiRequest.Delete request) {
-		pickService.deletePick(pickApiMapper.toDeleteCommand(userId, request));
+	public ResponseEntity<Void> deletePick(
+		@LoginUserId Long userId,
+		@Valid @RequestBody PickApiRequest.Delete request
+	) {
+		var command = pickApiMapper.toDeleteCommand(userId, request);
+		pickService.deletePick(command);
 		return ResponseEntity.noContent().build();
-	}
-
-	@PostMapping("/bulk")
-	@Operation(summary = "픽 10000개 insert", description = "픽 10000개 insert - 1회만 가능합니다.")
-	public ResponseEntity<Void> bulkInsertPick(@LoginUserId Long userId, @RequestParam Long folderId) {
-		pickBulkService.saveBulkPick(userId, folderId);
-		return ResponseEntity.ok().build();
 	}
 }

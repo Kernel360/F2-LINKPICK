@@ -37,8 +37,12 @@ public class AccessToken {
 	}
 
 	public IDToken getUserIdToken() {
-		var raw = getClaims().get("id", String.class);
-		return IDToken.fromString(raw);
+		try {
+			var raw = getClaims().get("id", String.class);
+			return IDToken.fromString(raw);
+		} catch (Exception e) {
+			throw ApiAuthException.INVALID_USER_ID_TOKEN();
+		}
 	}
 
 	public UsernamePasswordAuthenticationToken toAuthenticationToken() {

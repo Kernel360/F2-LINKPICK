@@ -7,10 +7,11 @@
 
 
 ## 팀원 소개
-| **[김민규](https://github.com/kimminkyeu)** | **[박수형](https://github.com/Gyaak)** | **[양상원](https://github.com/sangwonsheep)** |
-| :-: | :-: | :-: |
-| <a href="https://github.com/kimminkyeu"><img src="https://avatars.githubusercontent.com/kimminkyeu" width=200px /> | <a href="https://github.com/Gyaak"><img src="https://avatars.githubusercontent.com/Gyaak" width=200px /> | <a href="https://github.com/sangwonsheep"><img src="https://avatars.githubusercontent.com/sangwonsheep" width=200px /> |
-| Backend | Backend | Backend |
+| **[팀장 : 김민규](https://github.com/kimminkyeu)** | **[팀원 : 김승태](https://github.com/dmdgpdi)** | **[팀원 : 오송민](https://github.com/obvoso)** | **[팀원 : 박수형](https://github.com/Gyaak)** | **[팀원 : 양상원](https://github.com/sangwonsheep)** |
+| :-: | :-: | :-: | :-: | :-: |
+| <a href="https://github.com/kimminkyeu"><img src="https://avatars.githubusercontent.com/kimminkyeu" width=200px /> | <a href="https://github.com/dmdgpdi"><img src="https://avatars.githubusercontent.com/dmdgpdi" width=200px /> | <a href="https://github.com/obvoso"><img src="https://avatars.githubusercontent.com/obvoso" width=200px /> | <a href="https://github.com/Gyaak"><img src="https://avatars.githubusercontent.com/Gyaak" width=200px /> | <a href="https://github.com/sangwonsheep"><img src="https://avatars.githubusercontent.com/sangwonsheep" width=200px /> |
+| Backend | Frontend | Frontend | Backend | Backend |
+
 
 
 ## 프로젝트 소개
@@ -40,6 +41,13 @@
 
 ## 기술 스택
 <div style="display:flex; flex-direction:column; align-items:flex-start;">
+    <p><strong>FrontEnd</strong></p>
+    <div>
+        <img src="https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=Typescript&logoColor=white"/>
+        <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black"/>
+        <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=Next.js&logoColor=white"/>
+        <img src="https://img.shields.io/badge/Zustand-6492FE?style=for-the-badge&logo=Zustand&logoColor=white"/>
+    </div>
     <p><strong>Backend</strong></p>
     <div>
         <img src="https://img.shields.io/badge/Java_17-007396?style=for-the-badge&logo=java&logoColor=white"> 
@@ -55,8 +63,9 @@
     </div>
     <p><strong>Infra</strong></p>
     <div>
+        <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white"/>
         <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white"/>
-        <img src="https://img.shields.io/badge/Github Action-2088FF?style=for-the-badge&logo=github action&logoColor=white"/>
+        <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white"><br>
     </div>
     <p><strong>Others</strong></p>
     <div>

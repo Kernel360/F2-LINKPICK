@@ -5,6 +5,7 @@ import baguni.domain.model.user.User;
 public record UserInfo(
 	Long id,
 	String name,
+	IDToken idToken,
 	String email
 ) {
 	public static UserInfo from(User user) {

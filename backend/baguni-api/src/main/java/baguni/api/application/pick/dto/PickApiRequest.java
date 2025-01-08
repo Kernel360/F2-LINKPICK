@@ -8,6 +8,11 @@ import baguni.domain.infrastructure.link.dto.LinkInfo;
 
 public class PickApiRequest {
 
+	public record Read(
+		@Schema(example = "1") @NotNull(message = "{id.notNull}") Long id
+	) {
+	}
+
 	public record Create(
 		@Schema(example = "Record란?") String title,
 		@Schema(example = "[4, 5, 2, 1, 3]") List<Long> tagIdOrderedList,
@@ -16,18 +21,20 @@ public class PickApiRequest {
 	) {
 	}
 
-	public record Extension(
+	public record Update(
+		@Schema(example = "1") @NotNull(message = "{id.notNull}") Long id,
+		@Schema(example = "Record란 뭘까?") String title,
+		@Schema(example = "[4, 5, 2, 1]") List<Long> tagIdOrderedList
+	) {
+	}
+
+	public record CreateFromExtension(
 		@Schema(example = "https://d2.naver.com/helloworld/8149881") String url,
 		@Schema(example = "GitHub Actions를 이용한 코드 리뷰 문화 개선기") String title
 	) {
 	}
 
-	public record Read(
-		@Schema(example = "1") @NotNull(message = "{id.notNull}") Long id
-	) {
-	}
-
-	public record Update(
+	public record UpdateFromExtension(
 		@Schema(example = "1") @NotNull(message = "{id.notNull}") Long id,
 		@Schema(example = "Record란 뭘까?") String title,
 		@Schema(example = "3") Long parentFolderId,

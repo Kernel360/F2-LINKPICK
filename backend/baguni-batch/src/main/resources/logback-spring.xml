@@ -85,11 +85,11 @@
     <!--    <logger name="root" level="debug" additivity="false">-->
     <!--        <appender-ref ref="CONSOLE"/>-->
     <!--    </logger>-->
-    <logger name="baguni.batch" level="info" additivity="false">
+    <logger name="baguni" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>
-    <logger name="baguni.common" level="info" additivity="false">
+    <logger name="org.flywaydb" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>
@@ -97,6 +97,4 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="SQL-LOG-FILE"/>
     </logger>
-
-
 </configuration>

@@ -22,6 +22,10 @@ public enum ApiAuthErrorCode implements ApiErrorCode {
 	AUTH_SERVER_FAILURE
 		("AU-003", HttpStatus.SERVICE_UNAVAILABLE, "인증 처리 과정에 서버 오류가 발생했습니다! 개발자 문의 필요",
 			ErrorLevel.MUST_NEVER_HAPPEN()),
+
+	AUTH_INVALID_ID_TOKEN
+		("AU-004", HttpStatus.UNAUTHORIZED, "사용자 식별 토큰 (ID TOKEN)이 유효한 값이 아닙니다.",
+			ErrorLevel.MUST_NEVER_HAPPEN()),
 	;
 
 	// ------------------------------------------------------------
