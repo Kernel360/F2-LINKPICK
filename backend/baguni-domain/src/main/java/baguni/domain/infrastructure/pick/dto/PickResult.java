@@ -18,7 +18,7 @@ public class PickResult {
 	) {
 	}
 
-	public record Unclassified(
+	public record Extension(
 		Long id,
 		String title,
 		Long linkId,

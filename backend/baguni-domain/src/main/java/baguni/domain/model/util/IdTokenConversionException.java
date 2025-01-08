@@ -1,4 +1,4 @@
-package baguni.entity.model.util;
+package baguni.domain.model.util;
 
 public class IdTokenConversionException extends RuntimeException {
 

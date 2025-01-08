@@ -102,8 +102,8 @@ public class PickService {
 
 	@LoginUserIdDistributedLock
 	@Transactional
-	public PickResult.Unclassified savePickToUnclassified(PickCommand.Unclassified command) {
-		return pickMapper.toUnclassifiedResult(pickDataHandler.savePickToUnclassified(command));
+	public PickResult.Extension savePickToUnclassified(PickCommand.Unclassified command) {
+		return pickMapper.toExtensionResult(pickDataHandler.savePickToUnclassified(command));
 	}
 
 	@LoginUserIdDistributedLock

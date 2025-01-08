@@ -20,7 +20,7 @@ public class PickApiResponse {
 	) {
 	}
 
-	public record Unclassified(
+	public record Extension(
 		Long id,
 		String title,
 		Long parentFolderId,

@@ -44,9 +44,9 @@ public interface PickApiMapper {
 
 	PickApiResponse.Pick toApiResponse(PickResult.Pick pickResult);
 
-	PickApiResponse.Unclassified toApiResponseWithUnclassified(PickResult.Unclassified pickResult);
+	PickApiResponse.Extension toApiExtensionResponse(PickResult.Extension pickResult);
 
-	PickApiResponse.Exist toApiReponseWithExist(Boolean exist);
+	PickApiResponse.Exist toApiExistResponse(Boolean exist);
 
 	@Named("mapPickList")
 	default List<PickApiResponse.Pick> mapPickList(List<PickResult.Pick> pickList) {

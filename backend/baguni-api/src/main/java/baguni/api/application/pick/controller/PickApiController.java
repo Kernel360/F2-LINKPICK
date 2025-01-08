@@ -19,7 +19,6 @@ import baguni.common.annotation.MeasureTime;
 import baguni.common.event.events.CrawlingEvent;
 import baguni.common.event.messenger.CrawlingEventMessenger;
 import baguni.common.event.messenger.RankingEventMessenger;
-import baguni.common.event.events.CrawlingEvent;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -214,7 +213,7 @@ public class PickApiController {
 		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
 		@ApiResponse(responseCode = "404", description = "OG 태그 업데이트를 위한 크롤링 요청 실패")
 	})
-	public ResponseEntity<PickApiResponse.Pick> savePickAsUnclassified(
+	public ResponseEntity<PickApiResponse.Extension> savePickAsUnclassified(
 		@LoginUserId Long userId,
 		@Valid @RequestBody PickApiRequest.CreateFromExtension request
 	) {
@@ -224,7 +223,7 @@ public class PickApiController {
 		var crawlingEvent = new CrawlingEvent(result.linkId(), request.url(), request.title());
 		rankingEventMessenger.send(rankingEvent);
 		crawlingEventMessenger.send(crawlingEvent);
-		var response = pickApiMapper.toApiResponseWithUnclassified(result);
+		var response = pickApiMapper.toApiExtensionResponse(result);
 		return ResponseEntity.ok(response);
 	}
 
