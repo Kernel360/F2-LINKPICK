@@ -167,30 +167,10 @@ export interface paths {
         options?: never;
         head?: never;
         /**
-         * 픽 내용 수정
+         * 웹사이트에서 픽 내용만 수정 (폴더 이동 X)
          * @description 픽 내용 수정 및 폴더 이동까지 지원합니다.
          */
         patch: operations["updatePick"];
-        trace?: never;
-    };
-    "/api/picks/unclassified": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 미분류 폴더로 픽 생성
-         * @description 익스텐션에서 미분류로 바로 픽 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계됩니다.
-         */
-        post: operations["savePickAsUnclassified"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
         trace?: never;
     };
     "/api/picks/recommend": {
@@ -213,7 +193,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/picks/bulk": {
+    "/api/picks/extension": {
         parameters: {
             query?: never;
             header?: never;
@@ -223,14 +203,18 @@ export interface paths {
         get?: never;
         put?: never;
         /**
-         * 픽 10000개 insert
-         * @description 픽 10000개 insert - 1회만 가능합니다.
+         * [익스텐션 전용] 미분류 폴더로 픽 생성
+         * @description 익스텐션에서 미분류로 바로 픽 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계됩니다.
          */
-        post: operations["bulkInsertPick"];
+        post: operations["savePickAsUnclassified"];
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        /**
+         * [익스텐션 전용] 픽 수정
+         * @description 픽 내용 수정 및 폴더 이동까지 지원합니다.
+         */
+        patch: operations["updatePickFromChromeExtension"];
         trace?: never;
     };
     "/api/folders": {
@@ -567,8 +551,8 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 해당 링크 og 데이터 조회
-         * @description 해당 링크의 og 태그 데이터를 스크래핑을 통해 가져옵니다.
+         * 링크 정보 조회
+         * @description 해당 링크의 데이터를 DB에서 가져옵니다. 해당 메서드에서 더 이상 스크래핑하지 않습니다.
          */
         get: operations["getLinkData"];
         put?: never;
@@ -702,9 +686,9 @@ export interface components {
              * @example 1
              */
             parentFolderId?: number;
-            linkInfo?: components["schemas"]["baguni.api.service.link.dto.LinkInfo"];
+            linkInfo?: components["schemas"]["baguni.domain.infrastructure.link.dto.LinkInfo"];
         };
-        "baguni.api.service.link.dto.LinkInfo": {
+        "baguni.domain.infrastructure.link.dto.LinkInfo": {
             /** @example https://velog.io/@hyeok_1212/Java-Record-%EC%82%AC%EC%9A%A9%ED%95%98%EC%8B%9C%EB%82%98%EC%9A%94 */
             url: string;
             /** @example [Java] Record 사용하시나요? */
@@ -723,7 +707,7 @@ export interface components {
             /** Format: int64 */
             id?: number;
             title?: string;
-            linkInfo?: components["schemas"]["baguni.api.service.link.dto.LinkInfo"];
+            linkInfo?: components["schemas"]["baguni.domain.infrastructure.link.dto.LinkInfo"];
             /** Format: int64 */
             parentFolderId?: number;
             tagIdOrderedList?: number[];
@@ -732,21 +716,33 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
-        "baguni.api.application.pick.dto.PickApiRequest$Extension": {
+        "baguni.api.application.pick.dto.PickApiResponse$CreateFromRecommend": {
+            exist?: boolean;
+            pick?: components["schemas"]["baguni.domain.infrastructure.pick.dto.PickResult$Pick"];
+        };
+        "baguni.domain.infrastructure.pick.dto.PickResult$Pick": {
+            /** Format: int64 */
+            id?: number;
+            title?: string;
+            linkInfo?: components["schemas"]["baguni.domain.infrastructure.link.dto.LinkInfo"];
+            /** Format: int64 */
+            parentFolderId?: number;
+            tagIdOrderedList?: number[];
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
+        "baguni.api.application.pick.dto.PickApiRequest$CreateFromExtension": {
             /** @example https://d2.naver.com/helloworld/8149881 */
             url?: string;
             /** @example GitHub Actions를 이용한 코드 리뷰 문화 개선기 */
             title?: string;
         };
-        "baguni.api.application.pick.dto.PickApiResponse$CreateFromRecommend": {
-            exist?: boolean;
-            pick?: components["schemas"]["baguni.api.service.pick.dto.PickResult$Pick"];
-        };
-        "baguni.api.service.pick.dto.PickResult$Pick": {
+        "baguni.api.application.pick.dto.PickApiResponse$Extension": {
             /** Format: int64 */
             id?: number;
             title?: string;
-            linkInfo?: components["schemas"]["baguni.api.service.link.dto.LinkInfo"];
             /** Format: int64 */
             parentFolderId?: number;
             tagIdOrderedList?: number[];
@@ -838,11 +834,6 @@ export interface components {
             id: number;
             /** @example Record란 뭘까? */
             title?: string;
-            /**
-             * Format: int64
-             * @example 3
-             */
-            parentFolderId?: number;
             /** @example [
              *       4,
              *       5,
@@ -867,6 +858,27 @@ export interface components {
              * @example 0
              */
             orderIdx?: number;
+        };
+        "baguni.api.application.pick.dto.PickApiRequest$UpdateFromExtension": {
+            /**
+             * Format: int64
+             * @example 1
+             */
+            id: number;
+            /** @example Record란 뭘까? */
+            title?: string;
+            /**
+             * Format: int64
+             * @example 3
+             */
+            parentFolderId?: number;
+            /** @example [
+             *       4,
+             *       5,
+             *       2,
+             *       1
+             *     ] */
+            tagIdOrderedList?: number[];
         };
         "baguni.api.application.folder.dto.FolderApiRequest$Update": {
             /**
@@ -983,7 +995,7 @@ export interface components {
              */
             updatedAt: string;
             /** @description 폴더 내 pick 리스트 */
-            pickList: components["schemas"]["baguni.api.service.sharedFolder.dto.SharedFolderResult$SharedPickInfo"][];
+            pickList: components["schemas"]["baguni.domain.infrastructure.sharedFolder.dto.SharedFolderResult$SharedPickInfo"][];
             /**
              * @description 해당 폴더 내에서 사용된 모든 태그 정보가 담길 배열. tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.
              * @example [
@@ -997,13 +1009,13 @@ export interface components {
              *       }
              *     ]
              */
-            tagList: components["schemas"]["baguni.api.service.sharedFolder.dto.SharedFolderResult$SharedTagInfo"][];
+            tagList: components["schemas"]["baguni.domain.infrastructure.sharedFolder.dto.SharedFolderResult$SharedTagInfo"][];
         };
         /** @description 폴더 내 pick 리스트 */
-        "baguni.api.service.sharedFolder.dto.SharedFolderResult$SharedPickInfo": {
+        "baguni.domain.infrastructure.sharedFolder.dto.SharedFolderResult$SharedPickInfo": {
             /** @example 자바 레코드 참고 블로그 1 */
             title: string;
-            linkInfo: components["schemas"]["baguni.api.service.link.dto.LinkInfo"];
+            linkInfo: components["schemas"]["baguni.domain.infrastructure.link.dto.LinkInfo"];
             /**
              * @description tagList.get(idx) 로 태그 정보를 획득할 수 있습니다.
              * @example [
@@ -1032,7 +1044,7 @@ export interface components {
          *       }
          *     ]
          */
-        "baguni.api.service.sharedFolder.dto.SharedFolderResult$SharedTagInfo": {
+        "baguni.domain.infrastructure.sharedFolder.dto.SharedFolderResult$SharedTagInfo": {
             name: string;
             /** Format: int32 */
             colorNumber: number;
@@ -1046,7 +1058,7 @@ export interface components {
             /** Format: int64 */
             id?: number;
             title?: string;
-            linkInfo?: components["schemas"]["baguni.api.service.link.dto.LinkInfo"];
+            linkInfo?: components["schemas"]["baguni.domain.infrastructure.link.dto.LinkInfo"];
             /** Format: int64 */
             parentFolderId?: number;
             tagIdOrderedList?: number[];
@@ -1409,39 +1421,6 @@ export interface operations {
             };
         };
     };
-    savePickAsUnclassified: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["baguni.api.application.pick.dto.PickApiRequest$Extension"];
-            };
-        };
-        responses: {
-            /** @description 픽 생성 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
-                };
-            };
-            /** @description OG 태그 업데이트를 위한 크롤링 요청 실패 */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
-                };
-            };
-        };
-    };
     savePickFromRecommend: {
         parameters: {
             query?: never;
@@ -1475,23 +1454,60 @@ export interface operations {
             };
         };
     };
-    bulkInsertPick: {
+    savePickAsUnclassified: {
         parameters: {
-            query: {
-                folderId: number;
-            };
+            query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["baguni.api.application.pick.dto.PickApiRequest$CreateFromExtension"];
+            };
+        };
         responses: {
-            /** @description OK */
+            /** @description 픽 생성 성공 */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Extension"];
+                };
+            };
+            /** @description OG 태그 업데이트를 위한 크롤링 요청 실패 */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Extension"];
+                };
+            };
+        };
+    };
+    updatePickFromChromeExtension: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["baguni.api.application.pick.dto.PickApiRequest$UpdateFromExtension"];
+            };
+        };
+        responses: {
+            /** @description 픽 내용 수정 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
+                };
             };
         };
     };
