@@ -89,10 +89,12 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>
+    <logger name="org.flywaydb" level="info" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="APP-LOG-FILE"/>
+    </logger>
     <logger name="p6spy" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="SQL-LOG-FILE"/>
     </logger>
-
-
 </configuration>
