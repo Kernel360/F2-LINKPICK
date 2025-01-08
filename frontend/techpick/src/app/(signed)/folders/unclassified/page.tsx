@@ -59,18 +59,16 @@ export default function UnclassifiedFolderPage() {
         {pickList.length === 0 ? (
           <EmptyPickRecordImage />
         ) : (
-          <>
-            <PickDraggableListLayout
-              folderId={basicFolderMap['UNCLASSIFIED'].id}
-              viewType="record"
-            >
-              {pickList.map((pickInfo) => {
-                return (
-                  <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
-                );
-              })}
-            </PickDraggableListLayout>
-          </>
+          <PickDraggableListLayout
+            folderId={basicFolderMap['UNCLASSIFIED'].id}
+            viewType="record"
+          >
+            {pickList.map((pickInfo) => {
+              return (
+                <PickDraggableRecord key={pickInfo.id} pickInfo={pickInfo} />
+              );
+            })}
+          </PickDraggableListLayout>
         )}
       </PickContentLayout>
     </FolderContentLayout>

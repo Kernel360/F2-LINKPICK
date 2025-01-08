@@ -9,4 +9,9 @@ export const pickRecordHeaderLayoutStyle = style({
   borderTop: '1px solid ',
   borderBottom: '0.5px solid ',
   borderColor: colorVars.gold7,
+  backgroundColor: colorVars.gold2,
+});
+
+export const columnStyle = style({
+  lineHeight: '24px',
 });

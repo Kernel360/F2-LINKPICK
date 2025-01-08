@@ -5,4 +5,5 @@ export const pickContentLayoutStyle = style({
   margin: 'auto',
   marginTop: '24px',
   padding: '0 32px',
+  paddingBottom: '32px',
 });
