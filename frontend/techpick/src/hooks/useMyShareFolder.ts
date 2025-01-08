@@ -22,7 +22,7 @@ export function useMyShareFolder() {
   }, [checkIsShareFolder, treeDataMap]);
 
   const handleDeleteMyShareFolder = async (sourceFolderId: number) => {
-    const deleteAcceessToken = treeDataMap[sourceFolderId].folderAccessToken;
+    const deleteAccessToken = treeDataMap[sourceFolderId].folderAccessToken;
 
     updateFolderAccessTokenByFolderId(sourceFolderId, null);
     notifySuccess('공유 폴더가 삭제되었습니다.');
@@ -30,7 +30,7 @@ export function useMyShareFolder() {
       await deleteMyShareFolder(sourceFolderId);
     } catch {
       notifyError('공유 폴더 삭제에 실패했습니다.');
-      updateFolderAccessTokenByFolderId(sourceFolderId, deleteAcceessToken);
+      updateFolderAccessTokenByFolderId(sourceFolderId, deleteAccessToken);
     }
   };
 
