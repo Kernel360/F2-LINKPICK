@@ -39,12 +39,8 @@ public class OpenGraphReaderSelenium implements OpenGraphReader {
 		// WebDriverManager 사용 시, 별도의 드라이버 설치 및 경로 지정 없이 자동 세팅
 		WebDriverManager.chromedriver().setup();
 
-		ChromeOptions options = new ChromeOptions();
-		options.addArguments("--headless"); // 브라우저 UI 없이 백그라운드로 동작
-		options.addArguments("--user-agent=" + openGraphOption.getUserAgent());
-
-		// 2. WebDriver 생성
-		WebDriver driver = new ChromeDriver(options);
+		// 2. 크롬 옵션 설정
+		WebDriver driver = chromeOptionSetting();
 
 		try {
 			// 페이지 로딩 타임아웃 설정
@@ -55,7 +51,8 @@ public class OpenGraphReaderSelenium implements OpenGraphReader {
 
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 			wait.until(webDriver -> ((JavascriptExecutor) driver)
-				.executeScript("return document.readyState").equals("complete"));
+				.executeScript("return document.readyState").equals("complete")); // 초기 로딩 완료될 때까지 대기
+			Thread.sleep(300);
 
 			// 제목 저장
 			String title = driver.getTitle();
@@ -82,19 +79,37 @@ public class OpenGraphReaderSelenium implements OpenGraphReader {
 				boolean isOgNameDescription = nameAttr != null && nameAttr.contains("description");
 				boolean isItempropImage = itempropAttr != null && itempropAttr.equals("image");
 
-				if (isOgProperty || isOgNameImage || isOgNameDescription || isItempropImage) {
+				if (isOgProperty || isOgNameImage || isItempropImage) {
 					String key = isOgProperty ? propertyAttr : (isOgNameImage ? nameAttr : itempropAttr);
 					String value = meta.getAttribute("content");
 					result.put(key, value);
 				}
+
+				if (isOgNameDescription) {
+					String value = meta.getAttribute("content");
+					result.put(nameAttr, value);
+				}
 			}
 		} catch (Exception e) {
-			throw new OpenGraphException("Error occurred when reading OG tags via Selenium", e);
+			throw new OpenGraphException("Error occurred when reading OG tags via Selenium, url : " + uri, e);
 		} finally {
 			// 5. 리소스 해제
 			driver.quit();
 		}
 
 		return result;
+	}
+
+	private WebDriver chromeOptionSetting() {
+		ChromeOptions options = new ChromeOptions();
+		options.addArguments("--headless"); // 브라우저 UI 없이 백그라운드로 동작
+		options.addArguments("--user-agent=" + openGraphOption.getUserAgent());
+		options.addArguments("--start-maximized");
+		options.addArguments("--disable-popup-blocking"); // 팝업 안뜨게
+		options.addArguments("--remote-allow-origins=*"); // 모든 출처에서의 연결을 허용, 자동화된 테스트나 CORS 제한을 우회할 때 유용
+		// options.addArguments("--disable-dev-shm-usage"); // Chrome이 /dev/shm 대신 /tmp 디렉토리를 사용, /tmp는 일반적인 파일 시스템으로, 크기 제한이 없어 메모리 부족 문제를 방지
+
+		// WebDriver 생성
+		return new ChromeDriver(options);
 	}
 }
