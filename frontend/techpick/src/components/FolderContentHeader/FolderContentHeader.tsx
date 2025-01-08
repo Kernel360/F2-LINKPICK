@@ -11,7 +11,7 @@ import {
   folderContentHeaderStyle,
   folderDescriptionStyle,
 } from './folderContentHeader.css';
-import { CreatePickPopoverButton } from '../CreatePickPopover/CreatePickPopoverButton';
+import { ChromeExtensionLinkButton } from '../ChromeExtensionLinkButton/ChromeExtensionLinkButton';
 
 export function FolderContentHeader() {
   const pathname = usePathname();
@@ -33,7 +33,7 @@ export function FolderContentHeader() {
 
           <div className={createPickPopoverButtonLayoutStyle}>
             {folderInfo?.folderType !== 'RECYCLE_BIN' && (
-              <CreatePickPopoverButton />
+              <ChromeExtensionLinkButton />
             )}
           </div>
         </div>
