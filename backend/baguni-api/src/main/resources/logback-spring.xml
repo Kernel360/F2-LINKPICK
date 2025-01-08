@@ -70,10 +70,11 @@
     </appender>
 
     <!-- ``````````````````````` LOGGER SETTING ```````````````````````````` -->
-    <!-- (1) 프로젝트 전체 로그 설정  -->
-    <!--    <logger name="root" level="debug" additivity="false">-->
-    <!--        <appender-ref ref="CONSOLE"/>-->
-    <!--    </logger>-->
+    <springProfile name="!prod">
+        <logger name="root" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+    </springProfile>
     <logger name="baguni" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
