@@ -1,5 +1,5 @@
 # chrome, chromedriver image 사용
-FROM chrome-base
+FROM minkyeu/baguni:baguni-selenium
 
 LABEL authors="Baguni"
 
