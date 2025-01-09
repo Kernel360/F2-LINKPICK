@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+}
+
+group = 'kernel360'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // for custom annotation
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+    // for RabbitMQ Event Messenger (= producer)
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+    implementation 'org.springframework.amqp:spring-amqp:3.2.0'
+
+    // selenium for opengraph
+    implementation 'org.seleniumhq.selenium:selenium-java:4.25.0'
+    implementation 'io.github.bonigarcia:webdrivermanager:5.8.0'
+
+    // jsoup for opengraph
+    implementation 'org.jsoup:jsoup:1.18.3'
+}
+
+
+tasks.named('test') {
+    enabled = false
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

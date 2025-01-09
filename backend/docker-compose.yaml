@@ -1,0 +1,137 @@
+#*************************************************#
+#                                                 #
+#    Author: minkyeu kim                          #
+#                                                 #
+#    로컬 테스트용  docker-compose                  #
+#    ( 배포 버전과 다릅니다 )                         #
+#*************************************************#
+
+networks:
+  baguni-dev-network:
+    name: baguni-dev-network
+    driver: bridge
+
+services:
+  # **********************************
+  #   BAGUNI MYSQL 운영 DB
+  # **********************************
+  baguni-mysql:
+    container_name: baguni.${PROFILE_MODE}.infra.database
+    image: mysql:8.0
+    restart: unless-stopped
+    ports:
+      - "13306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DOCKER_MYSQL_PASSWORD}
+      - TZ=Asia/Seoul
+    volumes:
+      - ./data/mysql-data:/var/lib/mysql
+      - ./data/mysql-files:/var/lib/mysql-files
+      - ./data/mysql-log:/var/tmp
+    command:
+      - --character-set-server=utf8mb4
+      - --log_timestamps=SYSTEM # 로그는 기본값이 UTC 여서 명시적으로 변경해야 한다.
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake # 클라이언트 character set 값을 보낼 때 서버에서 이를 무시하는 명령어, docker linux에서 locale 설정하지 않아 default 값인 latin1로 설정
+      - --lower_case_table_names=1
+    networks:
+      - baguni-dev-network
+
+  # **********************************
+  #   BAGUNI MESSAGE QUEUE
+  # **********************************
+  baguni-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: baguni.${PROFILE_MODE}.infra.message-queue
+    hostname: baguni
+    environment:
+      - RABBITMQ_ERLANG_COOKIE=${DOCKER_RABBITMQ_ERLANG_COOKIE}
+      - RABBITMQ_DEFAULT_USER=${DOCKER_RABBITMQ_USERNAME}
+      - RABBITMQ_DEFAULT_PASS=${DOCKER_RABBITMQ_PASSWORD}
+    ports:
+      - "25672:15672" # 관리 UI 포트
+      - "35672:5672" # AMQP 포트
+    networks:
+      - baguni-dev-network
+
+  # **********************************
+  #        BAGUNI API SERVER
+  # **********************************
+  baguni-api:
+    build:
+      context: ./baguni-api
+      dockerfile: Dockerfile
+    container_name: baguni.${PROFILE_MODE}.server.api
+    volumes:
+      - ./logs/api:/app/logs
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=${PROFILE_MODE}
+    networks:
+      - baguni-dev-network
+    depends_on:
+      - baguni-mysql
+      - baguni-rabbitmq
+
+  # **********************************
+  #       BAGUNI BATCH SERVER
+  # **********************************
+  baguni-batch:
+    build:
+      context: ./baguni-batch
+      dockerfile: Dockerfile
+    container_name: baguni.${PROFILE_MODE}.server.batch
+    volumes:
+      - ./logs/batch:/app/logs
+    ports:
+      - 8081:8080
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=${PROFILE_MODE}
+    networks:
+      - baguni-dev-network
+    depends_on:
+      - baguni-mysql
+
+  # **********************************
+  #       BAGUNI RANKING SERVER
+  # **********************************
+  baguni-ranking:
+    build:
+      context: ./baguni-ranking
+      dockerfile: Dockerfile
+    container_name: baguni.${PROFILE_MODE}.server.ranking
+    depends_on:
+      - baguni-ranking-db
+      - baguni-rabbitmq
+    volumes:
+      - ./logs/ranking:/app/logs
+    ports:
+      - 8082:8080
+    env_file:
+      - .env
+    environment:
+      - SPRING_PROFILES_ACTIVE=${PROFILE_MODE}
+    networks:
+      - baguni-dev-network
+
+  baguni-ranking-db:
+    build:
+      context: ./baguni-ranking
+      dockerfile: Dockerfile
+    container_name: baguni.${PROFILE_MODE}.server.ranking.database
+    image: mongo
+    ports:
+      - "37017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${DOCKER_MONGO_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${DOCKER_MONGO_PASSWORD}
+    volumes:
+      - ./data/mongo:/data/db
+    command: [ "--bind_ip", "0.0.0.0" ]
+    networks:
+      - baguni-dev-network
