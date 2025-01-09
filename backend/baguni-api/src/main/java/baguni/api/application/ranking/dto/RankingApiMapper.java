@@ -5,7 +5,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import baguni.api.service.link.dto.LinkInfo;
+import baguni.domain.infrastructure.link.dto.LinkInfo;
 import baguni.common.dto.UrlWithCount;
 
 @Mapper(

@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import baguni.common.event.events.LinkEvent;
+import baguni.common.event.messenger.CrawlingEventMessenger;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,8 +32,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import baguni.api.service.chromebookmark.dto.ChromeImportResult;
 import baguni.api.service.chromebookmark.service.ChromeBookmarkService;
-import baguni.api.service.folder.dto.FolderCommand;
-import baguni.api.service.link.service.LinkService;
+import baguni.domain.infrastructure.folder.dto.FolderCommand;
 import baguni.security.annotation.LoginUserId;
 
 @RestController
@@ -38,8 +40,9 @@ import baguni.security.annotation.LoginUserId;
 @RequestMapping("/api/chrome")
 @Tag(name = "Chrome API", description = "Chrome Bookmark Import / Export API")
 public class ChromeBookmarkController {
+
 	private final ChromeBookmarkService chromeBookmarkService;
-	private final LinkService linkService;
+	private final CrawlingEventMessenger crawlingEventMessenger;
 
 	@GetMapping("/{folderId}/export")
 	@Operation(summary = "특정 폴더 다운로드", description = "사용자의 특정 폴더를 크롬 브라우저 북마크에 import 가능한 형태로 다운로드 받습니다.")
@@ -101,7 +104,7 @@ public class ChromeBookmarkController {
 		int maxThreadPoolSize = 5;
 		ExecutorService executor = Executors.newFixedThreadPool(maxThreadPoolSize);
 		for (String url : result.ogTagUpdateUrls()) {
-			CompletableFuture.runAsync(() -> linkService.updateOgTag(url), executor)
+			CompletableFuture.runAsync(() -> crawlingEventMessenger.send(new LinkEvent(url)), executor)
 							 .orTimeout(60, TimeUnit.SECONDS);
 		}
 

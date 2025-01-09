@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import org.springframework.stereotype.Component;
 
-import baguni.api.service.folder.dto.FolderCommand;
-import baguni.api.service.link.dto.LinkInfo;
-import baguni.api.service.pick.dto.PickCommand;
+import baguni.domain.infrastructure.folder.dto.FolderCommand;
+import baguni.domain.infrastructure.link.dto.LinkInfo;
+import baguni.domain.infrastructure.pick.dto.PickCommand;
 
 @Component
 public class ChromeMapper {

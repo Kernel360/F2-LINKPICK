@@ -135,4 +135,3 @@ services:
     command: [ "--bind_ip", "0.0.0.0" ]
     networks:
       - baguni-dev-network
-

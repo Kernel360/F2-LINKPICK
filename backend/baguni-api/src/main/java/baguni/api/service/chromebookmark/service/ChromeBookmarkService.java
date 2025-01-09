@@ -14,14 +14,14 @@ import baguni.api.service.chromebookmark.dto.ChromeBookmark;
 import baguni.api.service.chromebookmark.dto.ChromeFolder;
 import baguni.api.service.chromebookmark.dto.ChromeImportResult;
 import baguni.api.service.chromebookmark.dto.ChromeMapper;
-import baguni.api.service.folder.dto.FolderCommand;
-import baguni.api.service.folder.exception.ApiFolderException;
-import baguni.api.infrastructure.folder.FolderDataHandler;
-import baguni.api.infrastructure.link.LinkDataHandler;
-import baguni.api.infrastructure.pick.PickDataHandler;
-import baguni.entity.model.folder.Folder;
-import baguni.entity.model.link.Link;
-import baguni.entity.model.pick.Pick;
+import baguni.domain.infrastructure.folder.dto.FolderCommand;
+import baguni.domain.exception.folder.ApiFolderException;
+import baguni.domain.infrastructure.folder.FolderDataHandler;
+import baguni.domain.infrastructure.link.LinkDataHandler;
+import baguni.domain.infrastructure.pick.PickDataHandler;
+import baguni.domain.model.folder.Folder;
+import baguni.domain.model.link.Link;
+import baguni.domain.model.pick.Pick;
 
 /**
  * 폴더 Import와 Export를 담당하는 서비스

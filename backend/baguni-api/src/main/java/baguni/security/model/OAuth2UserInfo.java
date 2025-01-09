@@ -8,9 +8,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import baguni.entity.model.user.SocialProvider;
+import baguni.domain.model.user.SocialProvider;
 import baguni.security.exception.ApiAuthException;
-import baguni.entity.model.user.Role;
+import baguni.domain.model.user.Role;
 
 public class OAuth2UserInfo implements OAuth2User {
 

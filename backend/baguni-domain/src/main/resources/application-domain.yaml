@@ -1,0 +1,83 @@
+# -----------------------------
+#       COMMON SETTINGS
+# -----------------------------
+spring:
+  output:
+    ansi:
+      enabled: always
+  sql:
+    init:
+      mode: never # schema.sql 실행시 always 키고 실행하시면 됩니다. option: never, always
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+        dialect: org.hibernate.dialect.MySQL8Dialect
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DOCKER_MYSQL_USERNAME}
+    password: ${DOCKER_MYSQL_PASSWORD}
+  flyway:
+    user: ${DOCKER_MYSQL_USERNAME}
+    password: ${DOCKER_MYSQL_PASSWORD}
+    schemas: ${DOCKER_MYSQL_DATABASE}
+
+---
+# -----------------------------
+#       LOCAL SETTINGS
+# -----------------------------
+spring:
+  config:
+    activate:
+      on-profile: local
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: ${DOCKER_LOCAL_MYSQL_URL}
+  flyway:
+    url: ${DOCKER_LOCAL_MYSQL_URL}
+    baseline-on-migrate: true
+    enabled: true
+
+---
+# -----------------------------
+#     DEVELOPMENT SETTINGS
+# -----------------------------
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: ${DOCKER_DEV_MYSQL_URL}
+  flyway:
+    url: ${DOCKER_DEV_MYSQL_URL}
+    baseline-on-migrate: true
+    enabled: true
+
+---
+# -----------------------------
+#     PRODUCTION SETTINGS
+# -----------------------------
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: ${DOCKER_PROD_MYSQL_URL}
+  flyway:
+    url: ${DOCKER_PROD_MYSQL_URL}
+    baseline-on-migrate: true
+    enabled: true
+decorator:
+  datasource:
+    p6spy: # 운영 서버에서는 p6spy 로깅을 사용하지 않음
+      enable-logging: false

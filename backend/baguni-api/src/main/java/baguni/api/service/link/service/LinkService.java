@@ -1,21 +1,14 @@
 package baguni.api.service.link.service;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import baguni.entity.model.link.Link;
+import baguni.domain.model.link.Link;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.api.service.link.dto.LinkInfo;
-import baguni.api.service.link.dto.LinkMapper;
-import baguni.api.service.link.exception.ApiLinkException;
-import baguni.api.infrastructure.link.LinkDataHandler;
-import baguni.common.lib.opengraph.Metadata;
-import baguni.common.lib.opengraph.OpenGraph;
-import baguni.common.lib.opengraph.OpenGraphException;
+import baguni.domain.infrastructure.link.dto.LinkInfo;
+import baguni.domain.infrastructure.link.dto.LinkMapper;
+import baguni.domain.infrastructure.link.LinkDataHandler;
 
 @Slf4j
 @Service
@@ -32,98 +25,8 @@ public class LinkService {
 	}
 
 	@Transactional
-	public LinkInfo getOgTag(String url, String title) {
+	public LinkInfo saveLink(String url) {
 		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
-		try {
-			Link updatedLink = updateOpengraph(url, link);
-			updatedLink.updateTitle(title);
-			return linkMapper.of(updatedLink);
-		} catch (Exception e) {
-			throw ApiLinkException.LINK_OG_TAG_UPDATE_FAILURE();
-		}
+		return linkMapper.of(linkDataHandler.saveLink(link));
 	}
-
-	@Transactional
-	public void updateOgTag(String url) {
-		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
-		try {
-			var updatedLink = updateOpengraph(url, link);
-			linkDataHandler.saveLink(updatedLink);
-		} catch (Exception e) {
-			log.info("url : {} 의 og tag 추출에 실패했습니다.", url, e);
-		}
-	}
-
-	@Transactional
-	public LinkInfo saveLinkAndUpdateOgTag(String url) {
-		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
-		try {
-			var updatedLink = updateOpengraph(url, link);
-			return linkMapper.toLinkInfo(linkDataHandler.saveLink(updatedLink));
-		} catch (Exception e) {
-			log.info("saveLinkAndUpdateOgTag : ", e);
-			throw ApiLinkException.LINK_OG_TAG_UPDATE_FAILURE();
-		}
-	}
-
-	/**
-	 *	property 속성에 og 데이터가 없는 경우, name 속성에 있는 데이터 활용
-	 */
-	private Link updateOpengraph(String url, Link link) throws OpenGraphException {
-		var openGraph = new OpenGraph(url);
-		link.updateMetadata(
-			openGraph.getTag(Metadata.OG_TITLE)
-					 .orElse(openGraph.getTag(Metadata.TITLE)
-									  .orElse("")),
-			openGraph.getTag(Metadata.OG_DESCRIPTION)
-					 .orElse(openGraph.getTag(Metadata.DESCRIPTION)
-									  .orElse("")),
-			correctImageUrl(url, openGraph.getTag(Metadata.OG_IMAGE)
-										  .orElse(openGraph.getTag(Metadata.IMAGE)
-														   .orElse("")))
-		);
-		return link;
-	}
-
-	/**
-	 * og:image 가 완전한 url 형식이 아닐 수 있어 보정
-	 * 추론 불가능한 image url 일 경우 빈스트링("")으로 대치
-	 *
-	 *    @author sangwon
-	 * 	protocol : https
-	 * 	host : blog.dongolab.com
-	 */
-	private String correctImageUrl(String baseUrl, String imageUrl) {
-		if (imageUrl == null || imageUrl.trim().isEmpty()) {
-			return "";
-		}
-
-		if (imageUrl.startsWith("://")) {
-			return "https" + imageUrl;
-		}
-		if (imageUrl.startsWith("//")) {
-			return "https:" + imageUrl;
-		}
-
-		try {
-			URL url = new URL(baseUrl);
-			// ex) https://blog.dongolab.com
-			String domain = url.getProtocol() + "://" + url.getHost();
-
-			// ex) /og-image.png -> https://blog.dongholab.com/og-image.png
-			if (imageUrl.startsWith("/")) {
-				return domain + imageUrl;
-			}
-
-			if (!imageUrl.startsWith("http://") && !imageUrl.startsWith("https://")) {
-				return domain + "/" + imageUrl;
-			}
-
-			return imageUrl;
-		} catch (MalformedURLException e) {
-			// baseUrl이 올바르지 않은 경우 빈 문자열 반환
-			return "";
-		}
-	}
-
 }

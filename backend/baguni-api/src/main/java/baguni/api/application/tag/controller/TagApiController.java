@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 import baguni.api.application.tag.dto.TagApiMapper;
 import baguni.api.application.tag.dto.TagApiRequest;
 import baguni.api.application.tag.dto.TagApiResponse;
-import baguni.api.service.tag.exception.ApiTagException;
+import baguni.domain.exception.tag.ApiTagException;
 import baguni.api.service.tag.service.TagService;
 import baguni.security.annotation.LoginUserId;
 

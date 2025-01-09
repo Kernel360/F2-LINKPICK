@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import baguni.entity.annotation.LoginUserIdDistributedLock;
-import baguni.api.service.tag.dto.TagCommand;
-import baguni.api.service.tag.dto.TagMapper;
-import baguni.api.service.tag.dto.TagResult;
-import baguni.api.service.tag.exception.ApiTagException;
-import baguni.api.infrastructure.tag.TagDataHandler;
-import baguni.entity.model.tag.Tag;
+import baguni.domain.annotation.LoginUserIdDistributedLock;
+import baguni.domain.infrastructure.tag.dto.TagCommand;
+import baguni.domain.infrastructure.tag.dto.TagMapper;
+import baguni.domain.infrastructure.tag.dto.TagResult;
+import baguni.domain.exception.tag.ApiTagException;
+import baguni.domain.infrastructure.tag.TagDataHandler;
+import baguni.domain.model.tag.Tag;
 
 @Service
 @RequiredArgsConstructor

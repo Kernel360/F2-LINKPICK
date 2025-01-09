@@ -7,15 +7,15 @@
 ##### (1) 포매터 설정
 
 - IntelliJ 설정
-    - Code Formatter 설정
-        - ./formatter 에 위치한 `naver-intellij-formatter.xml` 파일을 이용하여 설정
-        - Settings -> CodeStyle -> Java -> Import Scheme
-    - CheckStyle 설정
-        - Plugin CheckStyle 설치
-        - ./formatter 에 위치한 `naver-checkstyle-rules.xml` 파일을 이용하여 설정
-        - suppression file 의 경우 `./.idea/naver-checkstyle-suppresssions.xml` 지정
-    - Format-on-save 기능 활성화
-        - Settings -> Tools -> Actions on Save -> Reformat code 체크
+  - Code Formatter 설정
+    - ./formatter 에 위치한 `naver-intellij-formatter.xml` 파일을 이용하여 설정
+    - Settings -> CodeStyle -> Java -> Import Scheme
+  - CheckStyle 설정
+    - Plugin CheckStyle 설치
+    - ./formatter 에 위치한 `naver-checkstyle-rules.xml` 파일을 이용하여 설정
+    - suppression file 의 경우 `./.idea/naver-checkstyle-suppresssions.xml` 지정
+  - Format-on-save 기능 활성화
+    - Settings -> Tools -> Actions on Save -> Reformat code 체크
 
 ##### (2) Env 설정
 
@@ -27,13 +27,3 @@
 
 아래 설정을 꼭 해줘야 테스트가 실행 됩니다.
 ![how-to-run-test.png](how-to-run-test.png)
-
-
-
-
-
-
-
-
-
-

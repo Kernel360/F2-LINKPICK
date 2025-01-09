@@ -2,7 +2,7 @@
 
 <configuration scan="true" scanPeriod="60 seconds">
 
-    <!-- baguni.entity.annotation.`````````````````````` CONVERSION RULE SETTING ```````````````````````````` -->
+    <!-- baguni.domain.annotation.`````````````````````` CONVERSION RULE SETTING ```````````````````````````` -->
 
     <!-- 콘솔 출력 색상 적용 (참고: https://oingdaddy.tistory.com/257)   -->
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
@@ -70,11 +70,16 @@
     </appender>
 
     <!-- ``````````````````````` LOGGER SETTING ```````````````````````````` -->
-    <!-- (1) 프로젝트 전체 로그 설정  -->
-    <!--    <logger name="root" level="debug" additivity="false">-->
-    <!--        <appender-ref ref="CONSOLE"/>-->
-    <!--    </logger>-->
+    <springProfile name="!prod">
+        <logger name="root" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+    </springProfile>
     <logger name="baguni" level="info" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="APP-LOG-FILE"/>
+    </logger>
+    <logger name="org.flywaydb" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="APP-LOG-FILE"/>
     </logger>

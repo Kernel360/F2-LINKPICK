@@ -21,6 +21,8 @@ public class Metadata {
 	public static final MetadataTag TYPE = MetadataTag.of("og:type");
 
 	// An image URL which should represent your object within the graph.
+	public static final MetadataTag ICON = MetadataTag.of("icon");
+
 	public static final MetadataTag IMAGE = MetadataTag.of("image");
 
 	public static final MetadataTag OG_IMAGE = MetadataTag.of("og:image");

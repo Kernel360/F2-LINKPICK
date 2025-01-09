@@ -13,23 +13,23 @@ import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.entity.annotation.LoginUserIdDistributedLock;
-import baguni.api.service.folder.exception.ApiFolderException;
-import baguni.api.service.pick.dto.PickCommand;
-import baguni.api.service.pick.dto.PickMapper;
-import baguni.api.service.pick.dto.PickResult;
-import baguni.api.service.pick.exception.ApiPickException;
+import baguni.domain.annotation.LoginUserIdDistributedLock;
+import baguni.domain.exception.folder.ApiFolderException;
+import baguni.domain.infrastructure.pick.dto.PickCommand;
+import baguni.domain.infrastructure.pick.dto.PickMapper;
+import baguni.domain.infrastructure.pick.dto.PickResult;
+import baguni.domain.exception.pick.ApiPickException;
 import baguni.api.service.ranking.service.RankingService;
-import baguni.api.service.tag.exception.ApiTagException;
-import baguni.api.infrastructure.folder.FolderDataHandler;
-import baguni.api.infrastructure.link.LinkDataHandler;
-import baguni.api.infrastructure.pick.PickDataHandler;
-import baguni.api.infrastructure.tag.TagDataHandler;
+import baguni.domain.exception.tag.ApiTagException;
+import baguni.domain.infrastructure.folder.FolderDataHandler;
+import baguni.domain.infrastructure.link.LinkDataHandler;
+import baguni.domain.infrastructure.pick.PickDataHandler;
+import baguni.domain.infrastructure.tag.TagDataHandler;
 import baguni.common.dto.UrlWithCount;
-import baguni.entity.model.folder.Folder;
-import baguni.entity.model.folder.FolderType;
-import baguni.entity.model.pick.Pick;
-import baguni.entity.model.tag.Tag;
+import baguni.domain.model.folder.Folder;
+import baguni.domain.model.folder.FolderType;
+import baguni.domain.model.pick.Pick;
+import baguni.domain.model.tag.Tag;
 
 @Slf4j
 @Service
@@ -46,13 +46,13 @@ public class PickService {
 	@Transactional(readOnly = true)
 	public boolean existPickByUrl(Long userId, String url) {
 		return linkDataHandler.getOptionalLink(url)
-			.map(link -> pickDataHandler.existsByUserIdAndLink(userId, link))
-			.orElse(false);
+							  .map(link -> pickDataHandler.existsByUserIdAndLink(userId, link))
+							  .orElse(false);
 	}
 
 	@Transactional(readOnly = true)
 	public PickResult.Pick getPick(PickCommand.Read command) {
-		validatePickAccess(command.userId(), command.id());
+		assertUserIsPickOwner(command.userId(), command.id());
 		var pick = pickDataHandler.getPick(command.id());
 		return pickMapper.toPickResult(pick);
 	}
@@ -72,7 +72,7 @@ public class PickService {
 	// 구현은 해두었지만, 추후 사용되지 않을 때 삭제 예정
 	@Transactional(readOnly = true)
 	public List<PickResult.Pick> getFolderChildPickList(Long userId, Long folderId) {
-		validateFolderAccess(userId, folderId);
+		assertUserIsFolderOwner(userId, folderId);
 		Folder folder = folderDataHandler.getFolder(folderId);
 		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickIdOrderedList());
 
@@ -85,7 +85,7 @@ public class PickService {
 	@Transactional(readOnly = true)
 	public List<PickResult.FolderPickWithViewCountList> getFolderListChildPickList(PickCommand.ReadList command) {
 		return command.folderIdList().stream()
-					  .peek(folderId -> validateFolderAccess(command.userId(), folderId))  // 폴더 접근 유효성 검사
+					  .peek(folderId -> assertUserIsFolderOwner(command.userId(), folderId))  // 폴더 접근 유효성 검사
 					  .map(this::getFolderChildPickResultList)
 					  .toList();
 	}
@@ -93,36 +93,39 @@ public class PickService {
 	@LoginUserIdDistributedLock
 	@Transactional
 	public PickResult.Pick saveNewPick(PickCommand.Create command) {
-		validateRootAccess(command.parentFolderId());
-		validateFolderAccess(command.userId(), command.parentFolderId());
-		validateTagListAccess(command.userId(), command.tagIdOrderedList());
-
+		assertParentFolderIsNotRoot(command.parentFolderId());
+		assertUserIsFolderOwner(command.userId(), command.parentFolderId());
+		assertUserIsTagOwner(command.userId(), command.tagIdOrderedList());
 		return pickMapper.toPickResult(pickDataHandler.savePick(command));
 	}
 
 	@LoginUserIdDistributedLock
 	@Transactional
-	public PickResult.Pick saveExtensionPick(PickCommand.Extension command) {
-		return pickMapper.toPickResult(pickDataHandler.saveExtensionPick(command));
+	public PickResult.Extension savePickToUnclassified(PickCommand.Unclassified command) {
+		return pickMapper.toExtensionResult(pickDataHandler.savePickToUnclassified(command));
 	}
 
 	@LoginUserIdDistributedLock
 	@Transactional
 	public PickResult.Pick updatePick(PickCommand.Update command) {
-		validatePickAccess(command.userId(), command.id());
-		validateFolderAccess(command.userId(), command.parentFolderId());
-		validateRootAccess(command.parentFolderId());
-		validateTagListAccess(command.userId(), command.tagIdOrderedList());
-		return pickMapper.toPickResult(pickDataHandler.updatePick(command));
+		if (Objects.nonNull(command.parentFolderId())) {
+			assertUserIsFolderOwner(command.userId(), command.parentFolderId());
+			assertParentFolderIsNotRoot(command.parentFolderId());
+		}
+		assertUserIsPickOwner(command.userId(), command.id());
+		assertUserIsTagOwner(command.userId(), command.tagIdOrderedList());
+
+		var pick = pickDataHandler.updatePick(command);
+		return pickMapper.toPickResult(pick);
 	}
 
 	@LoginUserIdDistributedLock
 	@Transactional
 	public void movePick(PickCommand.Move command) {
-		validateRootAccess(command.destinationFolderId());
+		assertParentFolderIsNotRoot(command.destinationFolderId());
 		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(command.idList());
 		for (Pick pick : pickList) {
-			validatePickAccess(command.userId(), pick.getId());
+			assertUserIsPickOwner(command.userId(), pick.getId());
 		}
 
 		if (isParentFolderChanged(pickList.get(0).getParentFolder().getId(), command.destinationFolderId())) {
@@ -137,7 +140,7 @@ public class PickService {
 	public void deletePick(PickCommand.Delete command) {
 		List<Pick> pickList = pickDataHandler.getPickList(command.idList());
 		for (Pick pick : pickList) {
-			validatePickAccess(command.userId(), pick.getId());
+			assertUserIsPickOwner(command.userId(), pick.getId());
 			if (pick.getParentFolder().getFolderType() != FolderType.RECYCLE_BIN) {
 				throw ApiPickException.PICK_DELETE_NOT_ALLOWED();
 			}
@@ -189,14 +192,14 @@ public class PickService {
 		return ObjectUtils.notEqual(originalFolderId, destinationFolderId);
 	}
 
-	private void validatePickAccess(Long userId, Long pickId) {
+	private void assertUserIsPickOwner(Long userId, Long pickId) {
 		var pick = pickDataHandler.getPick(pickId);
 		if (ObjectUtils.notEqual(userId, pick.getUser().getId())) {
 			throw ApiPickException.PICK_UNAUTHORIZED_USER_ACCESS();
 		}
 	}
 
-	private void validateFolderAccess(Long userId, Long folderId) {
+	private void assertUserIsFolderOwner(Long userId, Long folderId) {
 		// folderId가 null인 경우 변경이 없는 것이니 검증하지 않음
 		if (folderId == null) {
 			return;
@@ -207,18 +210,14 @@ public class PickService {
 		}
 	}
 
-	private void validateRootAccess(Long parentFolderId) {
+	private void assertParentFolderIsNotRoot(Long parentFolderId) {
 		Folder parentFolder = folderDataHandler.getFolder(parentFolderId);
 		if (Objects.isNull(parentFolder.getId()) || parentFolder.getFolderType() == FolderType.ROOT) {
 			throw ApiPickException.PICK_UNAUTHORIZED_ROOT_ACCESS();
 		}
 	}
 
-	private void validateTagListAccess(Long userId, List<Long> tagIdList) {
-		// tagIdList가 null인 경우 변경이 없는 것이니 검증하지 않음
-		if (tagIdList == null) {
-			return;
-		}
+	private void assertUserIsTagOwner(Long userId, List<Long> tagIdList) {
 		for (Tag tag : tagDataHandler.getTagList(tagIdList)) {
 			if (ObjectUtils.notEqual(userId, tag.getUser().getId())) {
 				throw ApiTagException.UNAUTHORIZED_TAG_ACCESS();

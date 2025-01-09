@@ -4,8 +4,8 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-import baguni.api.service.tag.dto.TagCommand;
-import baguni.api.service.tag.dto.TagResult;
+import baguni.domain.infrastructure.tag.dto.TagCommand;
+import baguni.domain.infrastructure.tag.dto.TagResult;
 
 @Mapper(
 	componentModel = "spring",
