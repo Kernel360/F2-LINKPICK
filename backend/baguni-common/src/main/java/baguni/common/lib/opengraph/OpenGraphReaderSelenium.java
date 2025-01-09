@@ -103,7 +103,6 @@ public class OpenGraphReaderSelenium implements OpenGraphReader {
 	private WebDriver chromeOptionSetting() {
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments("--headless"); // 브라우저 UI 없이 백그라운드로 동작
-		options.addArguments("--user-agent=" + openGraphOption.getUserAgent());
 		options.addArguments("--no-sandbox");
 		options.addArguments("--single-process");
 		options.addArguments("--start-maximized");

@@ -80,7 +80,7 @@
 
     <!-- ``````````````````````` LOGGER SETTING ```````````````````````````` -->
     <springProfile name="!prod">
-        <logger name="root" level="debug" additivity="false">
+        <logger name="root" level="info" additivity="false">
             <appender-ref ref="CONSOLE"/>
         </logger>
     </springProfile>

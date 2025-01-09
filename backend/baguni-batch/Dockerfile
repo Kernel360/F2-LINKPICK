@@ -18,11 +18,10 @@ RUN wget https://chrome-versions.com/google-chrome-stable-114.0.5735.106-1.deb &
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-
 # Chromedriver 설치
-RUN wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/$(curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE_114)/chromedriver_linux64.zip && \
-    unzip /tmp/chromedriver.zip chromedriver -d . && \
-    rm -f /tmp/chromedriver.zip
+RUN wget -O /tmp/chromedriver.zip https://chromedriver.storage.googleapis.com/114.0.5735.106/chromedriver_linux64.zip && \
+    unzip /tmp/chromedriver.zip -d /usr/local/bin/ && \
+    rm -f /tmp/chromedriver.zip && \
 
 # Xvfb 설정
 RUN Xvfb :99 -ac &
