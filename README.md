@@ -4,14 +4,11 @@
 ## 팀 소개 페이지 [🔗 Notion](https://positive-airboat-4de.notion.site/Baguni-15841a7fba6580c59591e2d5d1c2414b)
 [<img width="1464" alt="스크린샷 2024-12-18 오후 12 19 13" src="https://github.com/user-attachments/assets/2d1f8c70-fd90-4f4b-9494-3cf1e2f5813a" />](https://app.baguni.kr/)
 
-
-
 ## 팀원 소개
 | **[팀장 : 김민규](https://github.com/kimminkyeu)** | **[팀원 : 김승태](https://github.com/dmdgpdi)** | **[팀원 : 오송민](https://github.com/obvoso)** | **[팀원 : 박수형](https://github.com/Gyaak)** | **[팀원 : 양상원](https://github.com/sangwonsheep)** |
 | :-: | :-: | :-: | :-: | :-: |
 | <a href="https://github.com/kimminkyeu"><img src="https://avatars.githubusercontent.com/kimminkyeu" width=200px /> | <a href="https://github.com/dmdgpdi"><img src="https://avatars.githubusercontent.com/dmdgpdi" width=200px /> | <a href="https://github.com/obvoso"><img src="https://avatars.githubusercontent.com/obvoso" width=200px /> | <a href="https://github.com/Gyaak"><img src="https://avatars.githubusercontent.com/Gyaak" width=200px /> | <a href="https://github.com/sangwonsheep"><img src="https://avatars.githubusercontent.com/sangwonsheep" width=200px /> |
 | Backend | Frontend | Frontend | Backend | Backend |
-
 
 
 ## 프로젝트 소개

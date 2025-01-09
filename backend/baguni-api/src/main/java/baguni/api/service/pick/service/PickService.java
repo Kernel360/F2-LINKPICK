@@ -96,7 +96,6 @@ public class PickService {
 		assertParentFolderIsNotRoot(command.parentFolderId());
 		assertUserIsFolderOwner(command.userId(), command.parentFolderId());
 		assertUserIsTagOwner(command.userId(), command.tagIdOrderedList());
-
 		return pickMapper.toPickResult(pickDataHandler.savePick(command));
 	}
 
