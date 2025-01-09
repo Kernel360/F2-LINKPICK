@@ -16,7 +16,6 @@ dependencies {
     // package for [@Transactional] + [@Aspect] + [Slice<T> from PickSliceResponse.java]
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
-
     // rabbitMQ
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
     implementation 'org.springframework.amqp:spring-amqp:3.2.0'

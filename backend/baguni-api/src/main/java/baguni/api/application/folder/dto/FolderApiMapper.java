@@ -8,7 +8,6 @@ import org.mapstruct.ReportingPolicy;
 import baguni.domain.infrastructure.folder.dto.FolderCommand;
 import baguni.domain.infrastructure.folder.dto.FolderResult;
 
-
 @Mapper(
 	componentModel = "spring",
 	injectionStrategy = InjectionStrategy.CONSTRUCTOR,
