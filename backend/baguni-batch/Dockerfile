@@ -1,5 +1,4 @@
-# chrome, chromedriver image 사용
-FROM minkyeu/baguni:baguni-selenium
+FROM amazoncorretto:17
 
 LABEL authors="Baguni"
 
