@@ -1,0 +1,1 @@
+export { uploadBookmark } from './uploadBookmark';

@@ -18,10 +18,8 @@ springdoc:
 ---
 spring:
   jwt:
-    secret:
-      ${JWT_SECRET}
-    issuer:
-      ${JWT_ISSUER}
+    secret: ${JWT_SECRET}
+    issuer: ${JWT_ISSUER}
   security:
     oauth2:
       client:
@@ -48,11 +46,11 @@ spring:
 oauth2-attribute-config-provider:
   attributeConfig:
     google:
-      name: "sub" # use `sub` attribute as name
-      email: "email"
+      name: 'sub' # use `sub` attribute as name
+      email: 'email'
     kakao:
-      name: "id" # use `id` attribute as name
-      email: "email"
+      name: 'id' # use `id` attribute as name
+      email: 'email'
 ---
 spring:
   config:
@@ -126,3 +124,4 @@ springdoc: # 운영 환경에서 스웨거 접근 못하도록 막는 설정
 server:
   port: 8080
 ---
+
