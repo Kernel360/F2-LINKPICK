@@ -105,6 +105,7 @@ public class OpenGraphReaderSelenium implements OpenGraphReader {
 		options.addArguments("--headless"); // 브라우저 UI 없이 백그라운드로 동작
 		options.addArguments("--user-agent=" + openGraphOption.getUserAgent());
 		options.addArguments("--no-sandbox");
+		options.addArguments("--single-process");
 		options.addArguments("--start-maximized");
 		options.addArguments("--disable-popup-blocking"); // 팝업 안뜨게
 		options.addArguments("--remote-allow-origins=*"); // 모든 출처에서의 연결을 허용, 자동화된 테스트나 CORS 제한을 우회할 때 유용
