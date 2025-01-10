@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * @author suhyeong park
- * 함수 진입 / 종료 시간을 측정해 로그를 남깁니다.
+ * 함수 진입 / 종료 시간을 측정해 로그를 남깁니다..
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

@@ -43,7 +43,7 @@ jobs:
       - # Docker image 빌드
         name: Build docker image
         run: |
-          docker build -t ${{ env.docker-hub-username }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }} frontend
+          docker build -t ${{ env.docker-hub-username }}/${{ env.docker-hub-repo }}:${{ env.module-name }} frontend
       - # Docker hub 로그인
         name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -52,7 +52,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_REPO_BAGUNI_TOKEN }}
       - # Docker hub 업로드
         name: Publish to docker hub
-        run: docker push ${{ env.docker-hub-username }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }}
+        run: docker push ${{ env.docker-hub-username }}/${{ env.docker-hub-repo }}:${{ env.module-name }}
       - # 서버 ssh 접속 후 방금 올린 이미지 pull 받고 실행
         name: Deploy on Test-Server
         uses: appleboy/ssh-action@master
@@ -67,11 +67,8 @@ jobs:
             echo ${{ secrets.DOCKERHUB_REPO_BAGUNI_TOKEN }} | docker login -u ${{ env.docker-hub-username }} --password-stdin
 
             echo "docker - pulling..."
-            docker pull ${{ env.docker-hub-username }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }}
-
-            echo "docker - changing image name and tag ..."
-            docker tag ${{ env.docker-hub-username }}/${{ env.docker-hub-repo }}:${{ env.module-name }}-${{ github.sha }} ${{ env.docker-hub-repo }}:${{ env.module-name }}-staging
-
+            docker pull ${{ env.docker-hub-username }}/${{ env.docker-hub-repo }}:${{ env.module-name }}
+      
             echo "moving to project directory..."
             cd /home/project/baguni/develop
 
