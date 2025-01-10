@@ -5,7 +5,7 @@ on:
     branches:
       - 'be-develop' # 배포 대상 브랜치
     paths:
-      - 'backend/baguni-core/**'
+      - 'backend/baguni-common/**'
       - 'backend/baguni-ranking/**'
   workflow_dispatch:
 
