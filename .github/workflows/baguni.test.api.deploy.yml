@@ -3,7 +3,7 @@ name: Baguni Test Api-Module CI/CD
 on:
   push:
     branches:
-      - 'be-develop' # 배포 대상 브랜치
+      - 'main' # 배포 대상 브랜치
     paths:
       - 'backend/baguni-common/**'
       - 'backend/baguni-domain/**'
@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       docker-hub-username: 'sangwon917'
-      docker-hub-repo: 'baguni' # TODO: change to baguni
+      docker-hub-repo: 'baguni'
       module-name: 'baguni-api'
 
     steps:
