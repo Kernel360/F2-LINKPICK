@@ -60,5 +60,6 @@
     ],
     "import/no-unresolved": "off",
     "@next/next/no-img-element": "off"
-  }
+  },
+  "ignorePatterns": ["node_modules/**"]
 }
