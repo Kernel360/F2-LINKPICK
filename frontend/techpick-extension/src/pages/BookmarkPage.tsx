@@ -15,6 +15,7 @@ import { filterSelectableFolder } from '@/utils';
 import type { CreatePickToUnclassifiedFolderResponseType } from '@/types';
 import { CHANGE_ICON_PORT_NAME } from '@/constants';
 import { useEventLogger } from '@/hooks/useEventLogger';
+import { notifyError } from '@/libs/@toast';
 
 export function BookmarkPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -33,8 +34,15 @@ export function BookmarkPage() {
       const fetchInitialData = async () => {
         const { title, url, favIconUrl } = await getCurrentTabInfo();
 
-        if (!title || !url || !favIconUrl) {
-          throw new Error('getCurrentTabInfo failed');
+        if (
+          !title ||
+          !url ||
+          !favIconUrl ||
+          url.trim() === '' ||
+          !url.startsWith('http')
+        ) {
+          notifyError('해당 url은 저장할 수 없습니다.');
+          return;
         }
 
         const slicedTitle = title.slice(0, 255);
@@ -70,7 +78,7 @@ export function BookmarkPage() {
         fetchInitialData();
       }
     },
-    [setTagList]
+    [setTagList, trackSaveBookmark]
   );
 
   if (isLoading || !pickInfo) {
