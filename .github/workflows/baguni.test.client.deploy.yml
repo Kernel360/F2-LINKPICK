@@ -7,7 +7,7 @@ name: Baguni Test Client CI/CD
 on:
   push:
     branches:
-      - 'fe-develop'
+      - 'develop'
     paths:
       - 'frontend/techpick/**'
       - 'frontend/techpick-shared/**'

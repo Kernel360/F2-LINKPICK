@@ -11,4 +11,4 @@ COPY ${JAR_FILE} /app/baguni-batch.jar
 EXPOSE 8080
 
 # 애플리케이션 실행
-ENTRYPOINT ["java", "-jar", "-Duser.timezone=Asia/Seoul", "/app/baguni-batch.jar"]
+ENTRYPOINT ["java", "-Dfile.encoding=UTF-8", "-jar", "-Duser.timezone=Asia/Seoul", "/app/baguni-batch.jar"]
