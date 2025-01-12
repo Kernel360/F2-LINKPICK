@@ -71,12 +71,12 @@ chrome.tabs.onUpdated.addListener(async (_tabId, changeInfo, tab) => {
         const { exist } = await checkPickByUrl(tab.url);
 
         if (exist) {
-          chrome.action.setIcon({ path: './pick128.png', tabId: tab.id });
-        } else {
           chrome.action.setIcon({
-            path: './uncheckedPick128.png',
+            path: './checkedPick128.png',
             tabId: tab.id,
           });
+        } else {
+          chrome.action.setIcon({ path: './pick128.png', tabId: tab.id });
         }
       } catch {
         /* empty */
@@ -98,12 +98,12 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
         const { exist } = await checkPickByUrl(tab.url);
 
         if (exist) {
-          chrome.action.setIcon({ path: './pick128.png', tabId: tab.id });
-        } else {
           chrome.action.setIcon({
-            path: './uncheckedPick128.png',
+            path: './checkedPick128.png',
             tabId: tab.id,
           });
+        } else {
+          chrome.action.setIcon({ path: './pick128.png', tabId: tab.id });
         }
       } catch {
         /* empty */
@@ -122,7 +122,7 @@ chrome.runtime.onConnect.addListener(async function changeIcon(port) {
 
   const currentTabInfo = await getCurrentTabInfo();
   chrome.action.setIcon({
-    path: './pick128.png',
+    path: './checkedPick128.png',
     tabId: currentTabInfo.id,
   });
 });
