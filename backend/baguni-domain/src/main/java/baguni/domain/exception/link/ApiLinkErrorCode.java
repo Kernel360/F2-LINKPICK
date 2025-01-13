@@ -23,7 +23,7 @@ public enum ApiLinkErrorCode implements ApiErrorCode {
 		("LI-003", HttpStatus.NOT_FOUND, "OG 태그 업데이트를 위한 크롤링 요청 실패", ErrorLevel.CAN_HAPPEN()),
 
 	LINK_URL_TOO_LONG
-		("LI-004", HttpStatus.BAD_REQUEST, "저장 가능한 URL 길이 초과 [< 2048]", ErrorLevel.CAN_HAPPEN()),
+		("LI-004", HttpStatus.URI_TOO_LONG, "저장 가능한 URL 길이 초과 [< 2048]", ErrorLevel.CAN_HAPPEN()),
 	;
 
 	// ------------------------------------------------------------
