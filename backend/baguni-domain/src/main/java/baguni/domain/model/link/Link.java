@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.apache.commons.lang3.StringUtils;
 
+import baguni.domain.exception.link.ApiLinkException;
 import baguni.domain.model.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,12 +28,8 @@ public class Link extends BaseEntity {
 	@Column(name = "id")
 	private Long id;
 
-	// URL
-	// TODO: VARCHAR 최대 크기를 몇으로 할지 토의 필요합니다.
-	// 		 The index key prefix length limit is 3072 bytes for InnoDB -> VARCHAR(1000) + utf8 = 4000byte
-	//       일단 medium 기준 가장 길었던 url 320 글자의 약 2배인 VARCHAR(600)으로 변경
-	//       Baguni 노션 기술 부채에 VARCHAR, TEXT 부분 참고.
-	@Column(name = "url", nullable = false, columnDefinition = "VARCHAR(600)", unique = true)
+	// url로 검색이 자주 되므로 text가 아닌 varchar를 사용 + unique
+	@Column(name = "url", nullable = false, columnDefinition = "VARCHAR(2048)", unique = true)
 	private String url;
 
 	// title이 한글 200자 이상인 경우가 있어 text타입으로 변경
@@ -87,6 +84,9 @@ public class Link extends BaseEntity {
 
 	@Builder
 	private Link(String url, String title, String description, String imageUrl, LocalDateTime invalidatedAt) {
+		if (2048 < url.length()) {
+			throw ApiLinkException.LINK_URL_TOO_LONG();
+		}
 		this.url = url;
 		this.title = title;
 		this.description = description;
