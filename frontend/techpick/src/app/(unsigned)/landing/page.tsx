@@ -11,6 +11,12 @@ import {
   titleStyle,
   landingPageStyle,
   sectionStyle,
+  sectionTitleStyle,
+  videoStyle,
+  sectionDescriptionStyle,
+  sectionTextAreaStyle,
+  sectionContentStyle,
+  lineBreakStyle,
 } from './page.css';
 
 export default function LandingPage() {
@@ -47,27 +53,89 @@ export default function LandingPage() {
         </h1>
 
         <section className={sectionStyle}>
-          <div>
-            <h2>썼던 방식 그대로</h2>
-            <p>태그를 달거나 어울리는 폴더로 넣을 수 있어요.</p>
-            <div>봤던 링크를 태그로 구분해보세요!</div>
-            <video src=""></video>
+          <div className={sectionContentStyle}>
+            <div className={sectionTextAreaStyle}>
+              <h2 className={sectionTitleStyle}>
+                태그를 이용해 <br />
+                보기 쉽게 관리해요
+              </h2>
+              <p className={sectionDescriptionStyle}>
+                이 북마크를 읽었는지, <span className={lineBreakStyle}></span>
+                마음에 들어 다시 보고 싶은지 태그로 기록하는 건 어떠세요?
+              </p>
+            </div>
+            <video
+              src="/video/tagEdit.mp4"
+              autoPlay
+              muted
+              playsInline
+              loop
+              className={videoStyle}
+            ></video>
           </div>
         </section>
 
         <section className={sectionStyle}>
-          <h2>더 직관적인 검색</h2>
-          <p>제목과 태그, 폴더고 구분해서 검색할 수 있어요</p>
-          <div>봤던 링크를 태그로 구분해보세요!</div>
-          <video src=""></video>
+          <div className={sectionContentStyle}>
+            <div className={sectionTextAreaStyle}>
+              <h2 className={sectionTitleStyle}>
+                익숙한 방식
+                <br /> 그대로 북마크를 수집해요
+              </h2>
+              <p className={sectionDescriptionStyle}>
+                태그를 달거나 어울리는 폴더로 넣을 수 있어요.
+              </p>
+            </div>
+            <video
+              src="/video/tagEdit.mp4"
+              autoPlay
+              muted
+              playsInline
+              loop
+              className={videoStyle}
+            ></video>
+          </div>
         </section>
 
         <section className={sectionStyle}>
-          <h2>쉬운 공유</h2>
-          <p>스터디에서 같이 읽었던 링크, 쉽게 공유할 수 있어요</p>
-          <div>더 이상 url을 한줄씩 붙여넣지 마세요!</div>
-          <div>봤던 링크를 태그로 구분해보세요!</div>
-          <video src=""></video>
+          <div className={sectionContentStyle}>
+            <div className={sectionTextAreaStyle}>
+              <h2 className={sectionTitleStyle}>더 직관적인 검색</h2>
+              <p className={sectionDescriptionStyle}>
+                제목과 태그, 폴더고 구분해서 검색할 수 있어요
+              </p>
+            </div>
+            <video
+              src="/video/tagEdit.mp4"
+              autoPlay
+              muted
+              playsInline
+              loop
+              className={videoStyle}
+            ></video>
+          </div>
+        </section>
+
+        <section className={sectionStyle}>
+          <div className={sectionContentStyle}>
+            <div className={sectionTextAreaStyle}>
+              <h2 className={sectionTitleStyle}>
+                링크를 <br />
+                쉽게 공유할 수 있어요
+              </h2>
+              <p className={sectionDescriptionStyle}>
+                더 이상 어딘가에 url을 한줄씩 붙여넣지 마세요
+              </p>
+            </div>
+            <video
+              src="/video/tagEdit.mp4"
+              autoPlay
+              muted
+              playsInline
+              loop
+              className={videoStyle}
+            ></video>
+          </div>
         </section>
       </main>
     </div>

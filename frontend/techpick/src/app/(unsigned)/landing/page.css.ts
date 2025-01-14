@@ -16,6 +16,7 @@ export const headerStyle = style({
   display: 'flex',
   justifyContent: 'center',
   width: '100%',
+  height: '64px',
   borderBottom: '1px solid',
   borderColor: colorVars.sand6,
   backgroundColor: colorVars.gold1,
@@ -28,7 +29,6 @@ export const navStyle = style({
   alignItems: 'center',
   width: '100%',
   maxWidth: '1280px',
-  height: '64px',
   padding: '0px 12px',
 });
 
@@ -83,4 +83,84 @@ export const sectionStyle = style({
   width: '100%',
   height: '100vh',
   border: '1px solid black',
+});
+
+export const sectionContentStyle = style({
+  '@media': {
+    [desktop]: {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: '60px',
+    },
+  },
+});
+
+export const sectionTextAreaStyle = style({
+  marginBottom: '16px',
+
+  '@media': {
+    [desktop]: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      marginBottom: '0px',
+      width: '440px',
+    },
+  },
+});
+
+export const sectionTitleStyle = style({
+  fontSize: '20px',
+  fontWeight: fontWeights.medium,
+
+  '@media': {
+    [desktop]: {
+      fontSize: '40px',
+    },
+  },
+});
+
+export const sectionDescriptionStyle = style({
+  paddingTop: '4px',
+  lineHeight: '1.25',
+  fontSize: '12px',
+  color: colorVars.sand11,
+
+  '@media': {
+    [desktop]: {
+      maxWidth: '400px',
+      paddingTop: '8px',
+      lineHeight: 'inherit',
+      fontSize: '16px',
+    },
+  },
+});
+
+export const lineBreakStyle = style({
+  display: 'block',
+  content: '""',
+  width: '100%',
+
+  // '@media': {
+  //   [desktop]: {
+  //     display: 'none',
+  //     content: '" "',
+  //   },
+  // },
+});
+
+export const videoStyle = style({
+  width: '100%',
+  height: 'auto',
+  border: '1px solid',
+  borderColor: colorVars.gold6,
+  borderRadius: '12px',
+  aspectRatio: '16 / 9',
+  objectFit: 'cover',
+
+  '@media': {
+    [desktop]: {
+      width: '680px',
+    },
+  },
 });
