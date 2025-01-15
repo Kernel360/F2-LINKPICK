@@ -19,6 +19,12 @@ import {
   lineBreakStyle,
 } from './page.css';
 import { SignUpLink } from './SignUpLink';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '바구니 | 깔끔한 북마크 관리',
+  description: '수집하다보니 쌓여버린 북마크, 편하게 관리하세요',
+};
 
 export default function LandingPage() {
   return (
