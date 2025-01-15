@@ -94,12 +94,12 @@ export const sectionStyle = style({
   alignItems: 'center',
   width: '100%',
   minHeight: 'fit-content',
-  marginBottom: '12px',
+  marginBottom: '20px',
 
   '@media': {
     [tablet]: {
       height: '50vh',
-      marginBottom: '20px',
+      marginBottom: '28px',
     },
 
     [desktop]: {
@@ -120,6 +120,19 @@ export const sectionContentStyle = style({
   },
 });
 
+export const extensionSectionStyle = style({
+  flexDirection: 'column',
+  alignItems: 'center',
+});
+
+export const shareBookmarkSectionStyle = style({
+  '@media': {
+    [desktop]: {
+      flexDirection: 'row-reverse',
+    },
+  },
+});
+
 export const sectionTextAreaStyle = style({
   marginBottom: '16px',
 
@@ -129,7 +142,7 @@ export const sectionTextAreaStyle = style({
       flexDirection: 'column',
       justifyContent: 'center',
       marginBottom: '0px',
-      width: '440px',
+      minWidth: '440px',
     },
   },
 });
@@ -145,6 +158,16 @@ export const sectionTitleStyle = style({
   },
 });
 
+export const sectionTitleBrStyle = style({
+  display: 'none',
+
+  '@media': {
+    [desktop]: {
+      display: 'inline',
+    },
+  },
+});
+
 export const sectionDescriptionStyle = style({
   paddingTop: '4px',
   lineHeight: '1.25',
@@ -153,7 +176,7 @@ export const sectionDescriptionStyle = style({
 
   '@media': {
     [desktop]: {
-      maxWidth: '400px',
+      minWidth: '400px',
       paddingTop: '8px',
       lineHeight: 'inherit',
       fontSize: '16px',
@@ -182,7 +205,17 @@ export const videoStyle = style({
     },
 
     [desktop]: {
-      width: '680px',
+      width: '40vw',
+      maxWidth: '680px',
+    },
+  },
+});
+
+export const extensionVideoStyle = style({
+  '@media': {
+    [desktop]: {
+      width: '50vw',
+      maxWidth: '55vw',
     },
   },
 });
@@ -192,4 +225,8 @@ export const circleBaseStyle = style({
   borderRadius: '50%',
   opacity: 0.3,
   zIndex: 0,
+});
+
+export const textPointStyle = style({
+  color: colorVars.primary,
 });

@@ -17,6 +17,11 @@ import {
   sectionTextAreaStyle,
   sectionContentStyle,
   lineBreakStyle,
+  textPointStyle,
+  sectionTitleBrStyle,
+  shareBookmarkSectionStyle,
+  extensionSectionStyle,
+  extensionVideoStyle,
 } from './page.css';
 import { SignUpLink } from './SignUpLink';
 import type { Metadata } from 'next';
@@ -59,10 +64,10 @@ export default function LandingPage() {
           </h1>
 
           <section className={`${sectionStyle} section`}>
-            <div className={`${sectionContentStyle} section-content`}>
+            <div className={`${sectionContentStyle}  section-content`}>
               <div className={sectionTextAreaStyle}>
                 <h2 className={sectionTitleStyle}>
-                  태그를 이용해 <br />
+                  태그를 이용해 <br className={sectionTitleBrStyle} />
                   보기 쉽게 관리해요
                 </h2>
                 <p className={sectionDescriptionStyle}>
@@ -82,14 +87,25 @@ export default function LandingPage() {
           </section>
 
           <section className={`${sectionStyle} section`}>
-            <div className={`${sectionContentStyle} section-content`}>
+            <div
+              className={`${sectionContentStyle} ${extensionSectionStyle} section-content`}
+            >
               <div className={sectionTextAreaStyle}>
                 <h2 className={sectionTitleStyle}>
-                  익숙한 방식
-                  <br /> 그대로 북마크를 수집해요
+                  익숙한 방식 그대로 북마크를 수집해요
                 </h2>
                 <p className={sectionDescriptionStyle}>
                   태그를 달거나 어울리는 폴더로 넣을 수 있어요.
+                  <a
+                    href="https://chromewebstore.google.com/detail/%EB%B0%94%EA%B5%AC%EB%8B%88-%EC%9D%B5%EC%8A%A4%ED%85%90%EC%85%98/gfkkgllophliamkdclhekgfiohnbdddl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={` ${textPointStyle}`}
+                  >
+                    {' '}
+                    익스텐션
+                  </a>
+                  을 바로 설치해보세요!
                 </p>
               </div>
               <video
@@ -98,41 +114,25 @@ export default function LandingPage() {
                 muted
                 playsInline
                 loop
-                className={videoStyle}
+                className={`${videoStyle} ${extensionVideoStyle}`}
               ></video>
             </div>
           </section>
 
-          <section className={`${sectionStyle} section`}>
-            <div className={`${sectionContentStyle} section-content`}>
-              <div className={sectionTextAreaStyle}>
-                <h2 className={sectionTitleStyle}>더 편하게 검색해요</h2>
-                <p className={sectionDescriptionStyle}>
-                  제목과 태그, 폴더를 구분해서 검색할 수 있어요
-                </p>
-              </div>
-              <video
-                src="/video/search.mp4"
-                autoPlay
-                muted
-                playsInline
-                loop
-                className={videoStyle}
-              ></video>
-            </div>
-          </section>
-
-          <section className={`${sectionStyle} section`}>
-            <div className={`${sectionContentStyle} section-content`}>
+          <section className={`${sectionStyle}  section`}>
+            <div
+              className={`${sectionContentStyle} ${shareBookmarkSectionStyle} section-content`}
+            >
               <div className={sectionTextAreaStyle}>
                 <h2 className={sectionTitleStyle}>
-                  링크를 <br />
+                  링크를 <br className={sectionTitleBrStyle} />
                   쉽게 공유할 수 있어요
                 </h2>
                 <p className={sectionDescriptionStyle}>
                   더 이상 어딘가에 url을 한줄씩 붙여넣지 마세요
                 </p>
               </div>
+
               <video
                 src="/video/share.mp4"
                 autoPlay
