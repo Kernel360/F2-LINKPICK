@@ -72,11 +72,14 @@ export const titleStyle = style({
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
-  padding: '32px 0',
+  padding: '20px 0',
   fontSize: fontSize['2xl'],
   fontWeight: fontWeights.semibold,
 
   '@media': {
+    [tablet]: {
+      padding: '32px 0',
+    },
     [desktop]: {
       alignItems: 'center',
       padding: '52px 0',
@@ -91,15 +94,17 @@ export const sectionStyle = style({
   alignItems: 'center',
   width: '100%',
   minHeight: 'fit-content',
-  height: '50vh',
+  marginBottom: '12px',
 
   '@media': {
     [tablet]: {
+      height: '50vh',
       marginBottom: '20px',
     },
 
     [desktop]: {
       justifyContent: 'center',
+      height: '50vh',
       marginBottom: '60px',
     },
   },
