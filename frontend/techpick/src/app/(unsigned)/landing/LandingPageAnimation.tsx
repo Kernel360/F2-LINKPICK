@@ -31,7 +31,7 @@ export function LandingPageAnimation({ children }: PropsWithChildren) {
           ease: 'power1.out',
           scrollTrigger: {
             trigger: section,
-            start: 'top 80%',
+            start: 'top 70%',
             end: 'center 20%',
             toggleActions: 'play none none none',
           },
