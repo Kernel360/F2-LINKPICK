@@ -19,7 +19,7 @@ public class CrawlingEventMessenger implements EventMessenger {
 	@Override
 	public void send(Event event) {
 		try {
-			rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE.CRAWLING_EVENT, "", event);
+			rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE.EVENT, "crawling", event);
 		} catch (AmqpException e) {
 			log.error(e.getMessage(), e);
 		}

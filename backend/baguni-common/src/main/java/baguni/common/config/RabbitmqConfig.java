@@ -17,13 +17,13 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitmqConfig {
 
 	public static final class EXCHANGE {
-		public static final String RANKING_EVENT = "exchange.ranking-event";
-		public static final String CRAWLING_EVENT = "exchange.crawling-event";
+		public static final String EVENT = "exchange.event";
 	}
 
 	public static final class QUEUE {
 		public static final String PICK_RANKING = "queue.pick-ranking";
 		public static final String PICK_CRAWLING = "queue.pick-crawling";
+		public static final String SLACK_NOTIFICATION = "queue.slack-notification";
 	}
 
 	@Value("${spring.application.name}")
@@ -41,13 +41,8 @@ public class RabbitmqConfig {
 	/**
 	 * 1. Exchange 구성 */
 	@Bean
-	DirectExchange rankingDirectExchange() {
-		return new DirectExchange(EXCHANGE.RANKING_EVENT);
-	}
-
-	@Bean
-	DirectExchange crawlingDirectExchange() {
-		return new DirectExchange(EXCHANGE.CRAWLING_EVENT);
+	DirectExchange directExchange() {
+		return new DirectExchange(EXCHANGE.EVENT);
 	}
 
 	/**
@@ -62,23 +57,36 @@ public class RabbitmqConfig {
 		return new Queue(QUEUE.PICK_CRAWLING, false);
 	}
 
+	@Bean
+	Queue slackNotification() {
+		return new Queue(QUEUE.SLACK_NOTIFICATION, false);
+	}
+
 
 	/**
 	 * 3. 큐와 DirectExchange를 바인딩 */
 	@Bean
-	Binding rankingDirectBinding(DirectExchange rankingDirectExchange, Queue pickRanking) {
+	Binding rankingDirectBinding(DirectExchange directExchange, Queue pickRanking) {
 		return BindingBuilder
 			.bind(pickRanking)
-			.to(rankingDirectExchange)
-			.with(""); // 라우팅 키는  필요 없음
+			.to(directExchange)
+			.with("ranking"); // 라우팅 키는  필요 없음
 	}
 
 	@Bean
-	Binding crawlingDirectBinding(DirectExchange crawlingDirectExchange, Queue pickCrawling) {
+	Binding crawlingDirectBinding(DirectExchange directExchange, Queue pickCrawling) {
 		return BindingBuilder
 			.bind(pickCrawling)
-			.to(crawlingDirectExchange)
-			.with(""); // 라우팅 키는  필요 없음
+			.to(directExchange)
+			.with("crawling"); // 라우팅 키는  필요 없음
+	}
+
+	@Bean
+	Binding slackNotificationBinding(DirectExchange directExchange, Queue slackNotification) {
+		return BindingBuilder
+			.bind(slackNotification)
+			.to(directExchange)
+			.with("slack");
 	}
 
 	/**
