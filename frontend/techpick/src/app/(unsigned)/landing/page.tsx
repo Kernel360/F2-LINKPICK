@@ -22,6 +22,8 @@ import {
   shareBookmarkSectionStyle,
   extensionSectionStyle,
   extensionVideoStyle,
+  extensionTextAreaStyle,
+  mobileLinBreakStyle,
 } from './page.css';
 import { SignUpLink } from './SignUpLink';
 import type { Metadata } from 'next';
@@ -90,12 +92,15 @@ export default function LandingPage() {
             <div
               className={`${sectionContentStyle} ${extensionSectionStyle} section-content`}
             >
-              <div className={sectionTextAreaStyle}>
+              <div
+                className={`${sectionTextAreaStyle} ${extensionTextAreaStyle}`}
+              >
                 <h2 className={sectionTitleStyle}>
                   익숙한 방식 그대로 북마크를 수집해요
                 </h2>
                 <p className={sectionDescriptionStyle}>
                   태그를 달거나 어울리는 폴더로 넣을 수 있어요.
+                  <span className={mobileLinBreakStyle}></span>
                   <a
                     href="https://chromewebstore.google.com/detail/%EB%B0%94%EA%B5%AC%EB%8B%88-%EC%9D%B5%EC%8A%A4%ED%85%90%EC%85%98/gfkkgllophliamkdclhekgfiohnbdddl"
                     target="_blank"

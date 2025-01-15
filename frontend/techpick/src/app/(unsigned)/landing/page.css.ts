@@ -147,6 +147,14 @@ export const sectionTextAreaStyle = style({
   },
 });
 
+export const extensionTextAreaStyle = style({
+  '@media': {
+    [desktop]: {
+      textAlign: 'center',
+    },
+  },
+});
+
 export const sectionTitleStyle = style({
   fontSize: '20px',
   fontWeight: fontWeights.medium,
@@ -188,6 +196,18 @@ export const lineBreakStyle = style({
   display: 'block',
   content: '""',
   width: '100%',
+});
+
+export const mobileLinBreakStyle = style({
+  display: 'block',
+  content: '""',
+  width: '100%',
+
+  '@media': {
+    [desktop]: {
+      display: 'none',
+    },
+  },
 });
 
 export const videoStyle = style({
