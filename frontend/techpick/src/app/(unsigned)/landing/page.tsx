@@ -6,7 +6,6 @@ import {
   navStyle,
   navUlStyle,
   loginLinkStyle,
-  signUpButtonStyle,
   headerStyle,
   mainSectionStyle,
   titleStyle,
@@ -19,6 +18,7 @@ import {
   sectionContentStyle,
   lineBreakStyle,
 } from './page.css';
+import { SignUpLink } from './SignUpLink';
 
 export default function LandingPage() {
   return (
@@ -41,9 +41,7 @@ export default function LandingPage() {
                 </Link>
               </li>
               <li>
-                <Link href={ROUTES.LOGIN} className={signUpButtonStyle}>
-                  회원가입
-                </Link>
+                <SignUpLink />
               </li>
             </ul>
           </nav>
