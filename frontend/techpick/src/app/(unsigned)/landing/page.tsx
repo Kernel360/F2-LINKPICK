@@ -89,7 +89,7 @@ export default function LandingPage() {
                 </p>
               </div>
               <video
-                src="/video/tagEdit.mp4"
+                src="/video/saveBookmark.mp4"
                 autoPlay
                 muted
                 playsInline
@@ -102,13 +102,13 @@ export default function LandingPage() {
           <section className={`${sectionStyle} section`}>
             <div className={`${sectionContentStyle} section-content`}>
               <div className={sectionTextAreaStyle}>
-                <h2 className={sectionTitleStyle}>더 직관적인 검색</h2>
+                <h2 className={sectionTitleStyle}>더 편하게 검색해요</h2>
                 <p className={sectionDescriptionStyle}>
-                  제목과 태그, 폴더고 구분해서 검색할 수 있어요
+                  제목과 태그, 폴더를 구분해서 검색할 수 있어요
                 </p>
               </div>
               <video
-                src="/video/tagEdit.mp4"
+                src="/video/search.mp4"
                 autoPlay
                 muted
                 playsInline
@@ -130,7 +130,7 @@ export default function LandingPage() {
                 </p>
               </div>
               <video
-                src="/video/tagEdit.mp4"
+                src="/video/share.mp4"
                 autoPlay
                 muted
                 playsInline
