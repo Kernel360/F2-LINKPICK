@@ -63,6 +63,7 @@ export const mainSectionStyle = style({
 });
 
 export const titleStyle = style({
+  position: 'relative',
   display: 'flex',
   flexDirection: 'column',
   padding: '32px 0',
@@ -80,9 +81,17 @@ export const titleStyle = style({
 
 export const sectionStyle = style({
   position: 'relative',
+  display: 'flex',
+  alignItems: 'center',
   width: '100%',
-  height: '100vh',
-  border: '1px solid black',
+  minHeight: 'fit-content',
+  height: '50vh',
+
+  '@media': {
+    [desktop]: {
+      justifyContent: 'center',
+    },
+  },
 });
 
 export const sectionContentStyle = style({
@@ -140,13 +149,6 @@ export const lineBreakStyle = style({
   display: 'block',
   content: '""',
   width: '100%',
-
-  // '@media': {
-  //   [desktop]: {
-  //     display: 'none',
-  //     content: '" "',
-  //   },
-  // },
 });
 
 export const videoStyle = style({
@@ -163,4 +165,11 @@ export const videoStyle = style({
       width: '680px',
     },
   },
+});
+
+export const circleBaseStyle = style({
+  position: 'absolute',
+  borderRadius: '50%',
+  opacity: 0.3,
+  zIndex: 0,
 });
