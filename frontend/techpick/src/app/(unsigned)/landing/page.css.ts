@@ -100,6 +100,7 @@ export const sectionStyle = style({
 
     [desktop]: {
       justifyContent: 'center',
+      marginBottom: '60px',
     },
   },
 });
