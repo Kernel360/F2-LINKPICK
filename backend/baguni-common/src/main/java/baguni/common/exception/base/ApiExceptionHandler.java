@@ -1,11 +1,14 @@
 package baguni.common.exception.base;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import baguni.common.exception.level.FatalErrorLevel;
+import baguni.common.util.SlackNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.common.exception.level.ErrorLevel;
@@ -17,6 +20,7 @@ import baguni.common.util.RequestHolder;
 public class ApiExceptionHandler {
 
 	private final RequestHolder requestHolder;
+	private final SlackNotificationService slackNotificationService;
 
 	/**
 	 * ApiException 에서 잡지 못한 예외는
@@ -25,6 +29,7 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ApiErrorResponse handleGlobalException(Exception exception) {
 		ErrorLevel.MUST_NEVER_HAPPEN().handleError(exception, requestHolder.getRequest());
+		slackNotificationService.sendSlackMessage(exception, HttpStatus.INTERNAL_SERVER_ERROR);
 		return ApiErrorResponse.UNKNOWN_SERVER_ERROR();
 	}
 
@@ -33,8 +38,14 @@ public class ApiExceptionHandler {
 	 */
 	@ExceptionHandler(ApiException.class)
 	public ApiErrorResponse handleApiException(ApiException exception) {
+		ApiErrorCode apiErrorCode = exception.getApiErrorCode();
+		ErrorLevel errorLevel = apiErrorCode.getErrorLevel();
+		if (errorLevel instanceof FatalErrorLevel) {
+			slackNotificationService.sendSlackMessage(exception, apiErrorCode.getHttpStatus());
+		}
+
 		exception.handleErrorByLevel(requestHolder.getRequest());
-		return ApiErrorResponse.of(exception.getApiErrorCode());
+		return ApiErrorResponse.of(apiErrorCode);
 	}
 
 	/**

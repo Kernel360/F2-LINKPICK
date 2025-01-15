@@ -1,6 +1,7 @@
 package baguni.common.event.events;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import lombok.Getter;
 
@@ -13,4 +14,9 @@ public abstract class Event {
 
 	/** 이벤트가 발생한 시각 */
 	private final LocalDateTime time = LocalDateTime.now();
+
+	/** 기본 포맷: yyyy-MM-dd HH:mm:ss */
+	public String getTimeFormatted() {
+		return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	}
 }
