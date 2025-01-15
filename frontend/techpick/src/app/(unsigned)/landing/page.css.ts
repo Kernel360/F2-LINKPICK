@@ -1,5 +1,11 @@
 import { style } from '@vanilla-extract/css';
-import { colorVars, desktop, fontSize, fontWeights } from 'techpick-shared';
+import {
+  colorVars,
+  desktop,
+  tablet,
+  fontSize,
+  fontWeights,
+} from 'techpick-shared';
 import {
   orangeSolidButtonStyle,
   orangeOutlineButtonStyle,
@@ -88,6 +94,10 @@ export const sectionStyle = style({
   height: '50vh',
 
   '@media': {
+    [tablet]: {
+      marginBottom: '20px',
+    },
+
     [desktop]: {
       justifyContent: 'center',
     },
@@ -161,6 +171,10 @@ export const videoStyle = style({
   objectFit: 'cover',
 
   '@media': {
+    [tablet]: {
+      width: '60vw',
+    },
+
     [desktop]: {
       width: '680px',
     },
