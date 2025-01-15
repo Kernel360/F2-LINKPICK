@@ -35,7 +35,7 @@ export function LandingPageAnimation({ children }: PropsWithChildren) {
               trigger: section,
               start: 'top 80%',
               end: 'center 20%',
-              toggleActions: 'play none none reverse',
+              toggleActions: 'play none none none',
             },
           }
         );
