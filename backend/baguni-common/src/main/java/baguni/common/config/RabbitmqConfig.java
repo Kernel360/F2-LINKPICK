@@ -70,7 +70,7 @@ public class RabbitmqConfig {
 		return BindingBuilder
 			.bind(pickRanking)
 			.to(directExchange)
-			.with("ranking"); // 라우팅 키는  필요 없음
+			.with("ranking"); // 라우팅 키
 	}
 
 	@Bean
@@ -78,7 +78,7 @@ public class RabbitmqConfig {
 		return BindingBuilder
 			.bind(pickCrawling)
 			.to(directExchange)
-			.with("crawling"); // 라우팅 키는  필요 없음
+			.with("crawling"); // 라우팅 키
 	}
 
 	@Bean
@@ -86,7 +86,7 @@ public class RabbitmqConfig {
 		return BindingBuilder
 			.bind(slackNotification)
 			.to(directExchange)
-			.with("slack");
+			.with("slack"); // 라우팅 키
 	}
 
 	/**
