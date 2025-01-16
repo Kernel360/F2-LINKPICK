@@ -22,3 +22,5 @@ export { isMacOS } from './isMacOS';
 export { isLoginUser } from './isLoginUser';
 export { getUserIdForServer } from './getUserIdForServer';
 export { pointerWithinWithClosestCenter } from './pointerWithinWithClosestCenter';
+export { findTagById } from './findTagById';
+export { getFilteredSelectedTagList } from './getFilteredSelectedTagList';
