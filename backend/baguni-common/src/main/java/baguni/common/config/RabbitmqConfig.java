@@ -70,7 +70,7 @@ public class RabbitmqConfig {
 		return BindingBuilder
 			.bind(pickRanking)
 			.to(directExchange)
-			.with("ranking"); // 라우팅 키
+			.with("ranking"); // directExchange 에 ranking 라우팅 키를 가진 메시지가 있으면 pickRanking 큐에 메시지 전달
 	}
 
 	@Bean
@@ -78,7 +78,7 @@ public class RabbitmqConfig {
 		return BindingBuilder
 			.bind(pickCrawling)
 			.to(directExchange)
-			.with("crawling"); // 라우팅 키
+			.with("crawling");
 	}
 
 	@Bean
@@ -86,7 +86,7 @@ public class RabbitmqConfig {
 		return BindingBuilder
 			.bind(slackNotification)
 			.to(directExchange)
-			.with("slack"); // 라우팅 키
+			.with("slack");
 	}
 
 	/**
