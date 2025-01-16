@@ -20,5 +20,5 @@ module.exports = {
   rules: {
     'react/react-in-jsx-scope': 'off',
   },
-  ignorePatterns: ['node_modules/**'],
+  ignorePatterns: ['node_modules/**','schema/**'],
 };

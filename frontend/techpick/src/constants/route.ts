@@ -8,4 +8,5 @@ export const ROUTES = {
   SEARCH: '/folders/search',
   LOGIN: '/login',
   MY_PAGE: '/mypage',
+  LANDING: '/landing',
 };

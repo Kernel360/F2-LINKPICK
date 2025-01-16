@@ -9,7 +9,7 @@ export const orangeSolidButtonStyle = style([
   baseButtonStyle,
   {
     backgroundColor: colorVars.orange9,
-    color: 'white',
+    color: colorVars.orange1,
     ':hover': { backgroundColor: colorVars.orange10 },
     ':active': { backgroundColor: colorVars.orange11 },
   },

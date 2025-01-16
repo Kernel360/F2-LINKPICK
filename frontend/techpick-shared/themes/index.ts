@@ -14,3 +14,4 @@ export {
 } from './commonTheme.css';
 export { darkTheme } from './darkTheme.css';
 export { lightTheme, colorVars } from './lightTheme.css';
+export { tablet, mobile, desktop } from './mediaQuery.css';

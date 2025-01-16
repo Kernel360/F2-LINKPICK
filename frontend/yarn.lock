@@ -2296,6 +2296,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@gsap/react@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "@gsap/react@npm:2.1.1"
+  dependencies:
+    gsap: "npm:^3.12.5"
+    react: "npm:>=16"
+  checksum: 10c0/11d1303e41d26a188efbf69bdef229654b52adf796ac53cd41742747b4094778eb37e4347e68baaff18946ac9b7419510575684f76ab7780087e68e3ccb6125c
+  languageName: node
+  linkType: hard
+
 "@humanfs/core@npm:^0.19.1":
   version: 0.19.1
   resolution: "@humanfs/core@npm:0.19.1"
@@ -10670,6 +10680,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"gsap@npm:^3.12.5":
+  version: 3.12.5
+  resolution: "gsap@npm:3.12.5"
+  checksum: 10c0/cb38e89bd577fc18c9cf77e4aeb83617603b1e0fa768fe8ca1acd836fd852936722e186a88c9cf6ece42e53407edd45324be2bfe35a41f424c5f2c2b33fd1a98
+  languageName: node
+  linkType: hard
+
 "has-bigints@npm:^1.0.1, has-bigints@npm:^1.0.2":
   version: 1.0.2
   resolution: "has-bigints@npm:1.0.2"
@@ -14477,6 +14494,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react@npm:>=16":
+  version: 19.0.0
+  resolution: "react@npm:19.0.0"
+  checksum: 10c0/9cad8f103e8e3a16d15cb18a0d8115d8bd9f9e1ce3420310aea381eb42aa0a4f812cf047bb5441349257a05fba8a291515691e3cb51267279b2d2c3253f38471
+  languageName: node
+  linkType: hard
+
 "react@npm:^16.8.0 || ^17.0.0 || ^18.0.0, react@npm:^18, react@npm:^18.3.1":
   version: 18.3.1
   resolution: "react@npm:18.3.1"
@@ -15833,6 +15857,7 @@ __metadata:
     "@dnd-kit/sortable": "npm:^8.0.0"
     "@dnd-kit/utilities": "npm:^3.2.2"
     "@floating-ui/react": "npm:^0.26.24"
+    "@gsap/react": "npm:^2.1.1"
     "@jest/globals": "npm:^29.7.0"
     "@jest/types": "npm:^29.6.3"
     "@next/eslint-plugin-next": "npm:^14.2.10"
@@ -15886,6 +15911,7 @@ __metadata:
     eslint-plugin-import: "npm:^2.31.0"
     eslint-plugin-react: "npm:^7.35.2"
     eslint-plugin-storybook: "npm:^0.8.0"
+    gsap: "npm:^3.12.5"
     husky: "npm:^9.1.6"
     immer: "npm:^10.1.1"
     jest: "npm:^29.7.0"
