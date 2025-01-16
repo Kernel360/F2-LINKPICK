@@ -37,8 +37,8 @@ public class PickSearchService {
 		if (ObjectUtils.isNotEmpty(folderIdList)) {
 			folderIdList.removeAll(Collections.singletonList(null));
 			for (Long folderId : folderIdList) {
-				validateFolderAccess(command.userId(), folderId);
-				validateFolderRootSearch(folderId);
+				assertUserIsFolderOwner(command.userId(), folderId);
+				assertSearchTargetIsNotRootFolder(folderId);
 			}
 		}
 
@@ -46,7 +46,7 @@ public class PickSearchService {
 		if (ObjectUtils.isNotEmpty(tagIdList)) {
 			tagIdList.removeAll(Collections.singletonList(null));
 			for (Long tagId : tagIdList) {
-				validateTagAccess(command.userId(), tagId);
+				assertUserIsTagOwner(command.userId(), tagId);
 			}
 		}
 
@@ -62,21 +62,21 @@ public class PickSearchService {
 		);
 	}
 
-	private void validateFolderAccess(Long userId, Long folderId) {
+	private void assertUserIsFolderOwner(Long userId, Long folderId) {
 		Folder parentFolder = folderDataHandler.getFolder(folderId); // 존재하지 않으면, FOLDER_NOT_FOUND
 		if (ObjectUtils.notEqual(userId, parentFolder.getUser().getId())) {
 			throw ApiFolderException.FOLDER_ACCESS_DENIED();
 		}
 	}
 
-	private void validateFolderRootSearch(Long folderId) {
+	private void assertSearchTargetIsNotRootFolder(Long folderId) {
 		Folder parentFolder = folderDataHandler.getFolder(folderId); // 존재하지 않으면, FOLDER_NOT_FOUND
 		if (Objects.equals(parentFolder.getFolderType(), FolderType.ROOT)) {
 			throw ApiFolderException.ROOT_FOLDER_SEARCH_NOT_ALLOWED();
 		}
 	}
 
-	private void validateTagAccess(Long userId, Long tagId) {
+	private void assertUserIsTagOwner(Long userId, Long tagId) {
 		Tag tag = tagDataHandler.getTag(tagId); // 존재하지 않으면, TAG_NOT_FOUND
 		if (!userId.equals(tag.getUser().getId())) {
 			throw ApiTagException.UNAUTHORIZED_TAG_ACCESS();

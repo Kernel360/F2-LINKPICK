@@ -24,7 +24,7 @@ public class TagService {
 	@Transactional(readOnly = true)
 	public TagResult getTag(TagCommand.Read command) throws ApiTagException {
 		Tag tag = tagDataHandler.getTag(command.id());
-		validateTagAccess(command.userId(), tag);
+		assertUserIsTagOwner(command.userId(), tag);
 		return tagMapper.toResult(tag);
 	}
 
@@ -37,17 +37,15 @@ public class TagService {
 	@LoginUserIdDistributedLock
 	@Transactional
 	public TagResult saveTag(TagCommand.Create command) {
-		validateDuplicateTagName(command.userId(), command.name());
+		assertTagNameIsUnique(command.userId(), command.name());
 		return tagMapper.toResult(tagDataHandler.saveTag(command.userId(), command));
 	}
 
 	@Transactional
 	public TagResult updateTag(TagCommand.Update command) {
 		Tag tag = tagDataHandler.getTag(command.id());
-
-		validateTagAccess(command.userId(), tag);
-		validateDuplicateTagName(command.userId(), command.name());
-
+		assertUserIsTagOwner(command.userId(), tag);
+		assertTagNameIsUnique(command.userId(), command.name());
 		return tagMapper.toResult(tagDataHandler.updateTag(command));
 	}
 
@@ -55,9 +53,7 @@ public class TagService {
 	@Transactional
 	public void moveUserTag(TagCommand.Move command) {
 		Tag tag = tagDataHandler.getTag(command.id());
-
-		validateTagAccess(command.userId(), tag);
-
+		assertUserIsTagOwner(command.userId(), tag);
 		tagDataHandler.moveTag(command.userId(), command);
 	}
 
@@ -65,19 +61,17 @@ public class TagService {
 	@Transactional
 	public void deleteTag(TagCommand.Delete command) {
 		Tag tag = tagDataHandler.getTag(command.id());
-
-		validateTagAccess(command.userId(), tag);
-
+		assertUserIsTagOwner(command.userId(), tag);
 		tagDataHandler.deleteTag(command.userId(), command);
 	}
 
-	private void validateTagAccess(Long userId, Tag tag) {
+	private void assertUserIsTagOwner(Long userId, Tag tag) {
 		if (!userId.equals(tag.getUser().getId())) {
 			throw ApiTagException.UNAUTHORIZED_TAG_ACCESS();
 		}
 	}
 
-	private void validateDuplicateTagName(Long userId, String name) {
+	private void assertTagNameIsUnique(Long userId, String name) {
 		if (tagDataHandler.checkDuplicateTagName(userId, name)) {
 			throw ApiTagException.TAG_ALREADY_EXIST();
 		}
