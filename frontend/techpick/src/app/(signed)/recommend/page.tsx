@@ -10,10 +10,10 @@ import { IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY } from '@/constants';
 import {
   useClearSelectedPickIdsOnMount,
   useDisclosure,
-  useFetchTagList,
   useLocalStorage,
   useResetPickFocusOnOutsideClick,
 } from '@/hooks';
+import { useFetchTagList } from '@/queries';
 import { useTreeStore } from '@/stores';
 import {
   recommendedPickCarouselSectionStyle,

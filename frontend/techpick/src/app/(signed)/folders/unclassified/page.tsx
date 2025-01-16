@@ -16,10 +16,10 @@ import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
 import {
   useClearSelectedPickIdsOnMount,
-  useFetchTagList,
   useResetPickFocusOnOutsideClick,
   useFetchPickRecordByFolderId,
 } from '@/hooks';
+import { useFetchTagList } from '@/queries';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { getOrderedPickListByFolderId } from '@/utils';
 

@@ -17,9 +17,9 @@ import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord
 import {
   useClearSelectedPickIdsOnMount,
   useFetchPickRecordByFolderId,
-  useFetchTagList,
   useResetPickFocusOnOutsideClick,
 } from '@/hooks';
+import { useFetchTagList } from '@/queries';
 import { useTreeStore } from '@/stores';
 import { getOrderedPickListByFolderId } from '@/utils';
 

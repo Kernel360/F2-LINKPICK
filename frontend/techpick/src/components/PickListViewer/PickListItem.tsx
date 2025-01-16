@@ -3,8 +3,9 @@
 import Image from 'next/image';
 import { SelectedTagItem, SelectedTagListLayout } from '@/components';
 import { useOpenUrlInNewTab } from '@/hooks';
-import { usePickStore, useTagStore, useUpdatePickStore } from '@/stores';
-import { formatDateString } from '@/utils';
+import { useFetchTagList } from '@/queries';
+import { usePickStore, useUpdatePickStore } from '@/stores';
+import { formatDateString, getFilteredSelectedTagList } from '@/utils';
 import {
   pickListItemLayoutStyle,
   pickImageSectionLayoutStyle,
@@ -22,7 +23,6 @@ import { PickTitleInput } from './PickTitleInput';
 export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
   const pick = pickInfo;
   const link = pickInfo.linkInfo;
-  const { findTagById } = useTagStore();
   const { updatePickInfo } = usePickStore();
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
   const {
@@ -30,6 +30,12 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
     setCurrentUpdateTitlePickIdToNull,
     setCurrentUpdateTitlePickId,
   } = useUpdatePickStore();
+  const { data: tagList = [] } = useFetchTagList();
+  const filteredSelectedTagList = getFilteredSelectedTagList({
+    tagList,
+    selectedTagIdList: pickInfo.tagIdOrderedList,
+  });
+
   const isUpdateTitle = currentUpdateTitlePickId === pickInfo.id;
 
   return (
@@ -71,11 +77,9 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
         <div className={pickDetailInfoLayoutStyle}>
           {0 < pick.tagIdOrderedList.length && (
             <SelectedTagListLayout height="fixed">
-              {pick.tagIdOrderedList
-                .map(findTagById)
-                .map(
-                  (tag) => tag && <SelectedTagItem key={tag.id} tag={tag} />
-                )}
+              {filteredSelectedTagList.map(
+                (tag) => tag && <SelectedTagItem key={tag.id} tag={tag} />
+              )}
             </SelectedTagListLayout>
           )}
           {0 < pick.tagIdOrderedList.length && (

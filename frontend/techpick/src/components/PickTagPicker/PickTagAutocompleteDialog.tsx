@@ -7,12 +7,8 @@ import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Command } from 'cmdk';
 import { BarLoader } from 'react-spinners';
 import { colorVars } from 'techpick-shared';
-import {
-  useThemeStore,
-  useTagStore,
-  usePickStore,
-  useUpdatePickStore,
-} from '@/stores';
+import { useCreateTag, useFetchTagList } from '@/queries';
+import { useThemeStore, usePickStore, useUpdatePickStore } from '@/stores';
 import { numberToRandomColor } from '@/utils';
 import { DeleteTagDialog } from './DeleteTagDialog';
 import { DeselectTagButton } from './DeselectTagButton';
@@ -52,7 +48,8 @@ export function PickTagAutocompleteDialog({
   const isCreateFetchPendingRef = useRef<boolean>(false);
   const randomNumber = useRef<number>(getRandomInt());
   const tagIdOrderedList = selectedTagList.map((tag) => tag.id);
-  const { tagList, fetchingTagState, createTag } = useTagStore();
+  const { data: tagList = [], isLoading } = useFetchTagList();
+  const { mutateAsync: createTag } = useCreateTag();
   const updatePickInfo = usePickStore((state) => state.updatePickInfo);
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
   const setCurrentUpdateTagPickIdToNull = useUpdatePickStore(
@@ -107,6 +104,7 @@ export function PickTagAutocompleteDialog({
         name: tagInputValue.trim(),
         colorNumber: randomNumber.current,
       });
+
       randomNumber.current = getRandomInt();
       onSelectTag(newTag!);
     } catch {
@@ -196,13 +194,13 @@ export function PickTagAutocompleteDialog({
             {/**전체 태그 리스트 */}
 
             <Command.List className={tagListStyle}>
-              {fetchingTagState.isPending && (
+              {isLoading && (
                 <Command.Loading className={tagListLoadingStyle}>
                   <BarLoader color={colorVars.color.font} />
                 </Command.Loading>
               )}
 
-              {(!fetchingTagState.isPending || tagInputValue.trim()) !== '' && (
+              {(!isLoading || tagInputValue.trim()) !== '' && (
                 <Command.Empty className={tagListItemStyle}>
                   태그를 만들어보세요!
                 </Command.Empty>
