@@ -6,7 +6,6 @@ export { useOpenUrlInNewTab } from './useOpenUrlInNewTab';
 export { useCalculateCommandListHeight } from './useCalculateCommandListHeight';
 export { useResetPickFocusOnOutsideClick } from './useResetPickFocusOnOutsideClick';
 export { useClearSelectedPickIdsOnMount } from './useClearSelectedPickIdsOnMount';
-export { useFetchTagList } from './useFetchTagList';
 export { useGetDragOverStyle } from './useGetDragOverStyle';
 export { useFetchPickRecordByFolderId } from './useFetchPickRecordByFolderId';
 export { useDisclosure } from './useDisclosure';

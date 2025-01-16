@@ -3,7 +3,8 @@
 import { useRef, memo, KeyboardEvent, MouseEvent } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import { useTagStore, useDeleteTagDialogStore } from '@/stores';
+import { useDeleteTag } from '@/queries';
+import { useDeleteTagDialogStore } from '@/stores';
 import { Text } from '@/ui/Text/Text';
 import { Gap } from '../Gap';
 import {
@@ -16,8 +17,8 @@ import {
 export const DeleteTagDialog = memo(function DeleteTagDialog() {
   const deleteButtonRef = useRef<HTMLButtonElement>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
-  const { deleteTag } = useTagStore();
   const { deleteTagId, isOpen, setIsOpen } = useDeleteTagDialogStore();
+  const { mutate: deleteTag } = useDeleteTag();
 
   const closeDialog = () => {
     setIsOpen(false);
@@ -39,7 +40,7 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
     }
 
     closeDialog();
-    await deleteTag(deleteTagId);
+    deleteTag(deleteTagId);
   };
 
   const DeleteTagByClick = async (e: MouseEvent<HTMLButtonElement>) => {

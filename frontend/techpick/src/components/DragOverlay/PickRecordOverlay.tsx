@@ -3,8 +3,8 @@
 import Image from 'next/image';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
 import { useImageLoader } from '@/hooks';
-import { useTagStore } from '@/stores';
-import { formatDateString } from '@/utils';
+import { useFetchTagList } from '@/queries';
+import { formatDateString, getFilteredSelectedTagList } from '@/utils';
 import { pickRecordOverlayLayoutStyle } from './pickRecordOverlay.css';
 import { PickDateColumnLayout } from '../PickRecord/PickDateColumnLayout';
 import { PickImageColumnLayout } from '../PickRecord/PickImageColumnLayout';
@@ -20,17 +20,18 @@ import { PickTagColumnLayout } from '../PickRecord/PickTagColumnLayout';
 import { PickTitleColumnLayout } from '../PickRecord/PickTitleColumnLayout';
 import { Separator } from '../PickRecord/Separator';
 import { PickTagPicker } from '../PickTagPicker';
-import { PickViewItemComponentProps, TagType } from '@/types';
+import type { PickViewItemComponentProps } from '@/types';
 
 export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
   const pick = pickInfo;
   const link = pickInfo.linkInfo;
-  const { findTagById } = useTagStore();
   const { imageStatus } = useImageLoader(link.imageUrl);
+  const { data: tagList = [] } = useFetchTagList();
 
-  const filteredSelectedTagList: TagType[] = pickInfo.tagIdOrderedList
-    .map((tagId) => findTagById(tagId))
-    .filter((tag): tag is TagType => tag !== undefined);
+  const filteredSelectedTagList = getFilteredSelectedTagList({
+    tagList,
+    selectedTagIdList: pickInfo.tagIdOrderedList,
+  });
 
   return (
     <div className={pickRecordOverlayLayoutStyle}>

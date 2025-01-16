@@ -6,7 +6,7 @@ import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import DOMPurify from 'dompurify';
 import { EllipsisIcon } from 'lucide-react';
 import { useDisclosure } from '@/hooks';
-import { useTagStore } from '@/stores';
+import { useUpdateTag } from '@/queries';
 import { isEmptyString, isShallowEqualValue } from '@/utils';
 import { ShowDeleteTagDialogButton } from './ShowDeleteTagDialogButton';
 import {
@@ -21,7 +21,7 @@ export function TagInfoEditPopoverButton({
   container,
 }: TagInfoEditPopoverButtonProps) {
   const tagNameInputRef = useRef<HTMLInputElement | null>(null);
-  const updateTag = useTagStore((state) => state.updateTag);
+  const { mutate: updateTag } = useUpdateTag();
   const {
     isOpen: isPopoverOpen,
     onClose: closePopover,
@@ -55,7 +55,7 @@ export function TagInfoEditPopoverButton({
 
     try {
       closePopover();
-      await updateTag({
+      updateTag({
         id: tag.id,
         name: newTagName,
         colorNumber: tag.colorNumber,

@@ -5,8 +5,9 @@ import Image from 'next/image';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
 import { postUserPickViewEventLog } from '@/apis/eventLog';
 import { useImageLoader, useOpenUrlInNewTab } from '@/hooks';
-import { usePickStore, useTagStore, useUpdatePickStore } from '@/stores';
-import { formatDateString } from '@/utils';
+import { useFetchTagList } from '@/queries';
+import { usePickStore, useUpdatePickStore } from '@/stores';
+import { formatDateString, getFilteredSelectedTagList } from '@/utils';
 import { PickDateColumnLayout } from './PickDateColumnLayout';
 import { PickImageColumnLayout } from './PickImageColumnLayout';
 import {
@@ -23,12 +24,11 @@ import { PickTagColumnLayout } from './PickTagColumnLayout';
 import { PickTitleColumnLayout } from './PickTitleColumnLayout';
 import { Separator } from './Separator';
 import { PickTagPicker } from '../PickTagPicker';
-import { PickViewItemComponentProps, TagType } from '@/types';
+import { PickViewItemComponentProps } from '@/types';
 
 export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
   const pick = pickInfo;
   const link = pickInfo.linkInfo;
-  const { findTagById } = useTagStore();
   const { updatePickInfo } = usePickStore();
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
   const {
@@ -40,14 +40,11 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
   const isUpdateTitle = currentUpdateTitlePickId === pickInfo.id;
   const { isDragging } = usePickStore();
   const { imageStatus } = useImageLoader(link.imageUrl);
+  const { data: tagList = [] } = useFetchTagList();
 
-  const filteredSelectedTagList: TagType[] = [];
-
-  pickInfo.tagIdOrderedList.forEach((tagId) => {
-    const tagInfo = findTagById(tagId);
-    if (tagInfo) {
-      filteredSelectedTagList.push(tagInfo);
-    }
+  const filteredSelectedTagList = getFilteredSelectedTagList({
+    tagList,
+    selectedTagIdList: pickInfo.tagIdOrderedList,
   });
 
   const onClickLink = async () => {

@@ -19,9 +19,9 @@ import { ROUTES } from '@/constants';
 import {
   useResetPickFocusOnOutsideClick,
   useClearSelectedPickIdsOnMount,
-  useFetchTagList,
   useFetchPickRecordByFolderId,
 } from '@/hooks';
+import { useFetchTagList } from '@/queries';
 import { useTreeStore } from '@/stores';
 import { getOrderedPickListByFolderId } from '@/utils';
 

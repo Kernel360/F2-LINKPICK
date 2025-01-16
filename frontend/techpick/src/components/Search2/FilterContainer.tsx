@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FolderIcon, Tags } from 'lucide-react';
-import { useTreeStore, useTagStore } from '@/stores';
+import { useFetchTagList } from '@/queries';
+import { useTreeStore } from '@/stores';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import { createSearchSelectOptions } from '@/utils';
 import FilterOptions from './FilterOptions';
@@ -12,7 +13,7 @@ export default function FilterContainer({
   const { getFolderList } = useTreeStore();
   const folderList = getFolderList();
   const { setSearchFolder, setSearchTag } = useSearchPickStore();
-  const { tagList } = useTagStore();
+  const { data: tagList = [] } = useFetchTagList();
   const [isFolderFilterOpen, setIsFolderFilterOpen] = useState(false);
   const [isTagFilterOpen, setIsTagFilterOpen] = useState(false);
 
