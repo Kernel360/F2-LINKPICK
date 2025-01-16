@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
  */
 @Component
 @RequiredArgsConstructor
-public class SlackNotificationService {
+public class ErrorLogEventBuilder {
 
 	private final RequestHolder requestHolder;
 	private final Environment environment; // Profile 정보 얻기 위한 클래스
