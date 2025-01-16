@@ -55,7 +55,7 @@ public class SlackNotificationEventListener {
 		// 슬랙 알림에 어떤 데이터를 보여줄 지 정하는 곳
 		// 이미지와 이름은 웹 훅에서 설정해두었기 때문에 생략
 		Payload payload = Payload.builder()
-			.text("[서버 에러 발생]") // 에러 제목
+			.text(":rotating_light: [서버 에러 발생] :rotating_light:") // 에러 제목
 			.attachments(List.of(attachment)) // Field에 지정한 메세지들
 			.build();
 
