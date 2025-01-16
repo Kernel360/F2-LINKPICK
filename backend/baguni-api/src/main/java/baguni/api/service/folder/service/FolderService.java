@@ -62,13 +62,6 @@ public class FolderService {
 						   .toList();
 	}
 
-	@Transactional(readOnly = true)
-	public FolderResult getFolder(Long userId, Long folderId) {
-		Folder folder = folderDataHandler.getFolder(folderId);
-		validateFolderAccess(userId, folder);
-		return folderMapper.toResult(folder);
-	}
-
 	/**
 	 * 생성하려는 폴더가 미분류폴더, 휴지통이 아닌지 검증합니다.
 	 * */
@@ -76,8 +69,8 @@ public class FolderService {
 	@Transactional
 	public FolderResult saveFolder(FolderCommand.Create command) {
 		Folder parentFolder = folderDataHandler.getFolder(command.parentFolderId());
-		validateFolderAccess(command.userId(), parentFolder);
-		validateDestinationFolder(parentFolder);
+		assertUserIsFolderOwner(command.userId(), parentFolder);
+		assertDestinationIsRootFolder(parentFolder);
 
 		return folderMapper.toResult(folderDataHandler.saveFolder(command));
 	}
@@ -87,8 +80,8 @@ public class FolderService {
 
 		Folder folder = folderDataHandler.getFolder(command.id());
 
-		validateFolderAccess(command.userId(), folder);
-		validateBasicFolderChange(folder);
+		assertUserIsFolderOwner(command.userId(), folder);
+		assertFolderIsGeneralFolder(folder);
 
 		return folderMapper.toResult(folderDataHandler.updateFolder(command));
 	}
@@ -101,16 +94,16 @@ public class FolderService {
 	@Transactional
 	public void moveFolder(FolderCommand.Move command) {
 		Folder destinationFolder = folderDataHandler.getFolder(command.destinationFolderId());
-		validateFolderAccess(command.userId(), destinationFolder);
-		validateDestinationFolder(destinationFolder);
+		assertUserIsFolderOwner(command.userId(), destinationFolder);
+		assertDestinationIsRootFolder(destinationFolder);
 
 		List<Folder> folderList = folderDataHandler.getFolderList(command.idList());
 		for (Folder folder : folderList) {
-			validateFolderAccess(command.userId(), folder);
-			validateBasicFolderChange(folder);
+			assertUserIsFolderOwner(command.userId(), folder);
+			assertFolderIsGeneralFolder(folder);
 		}
 
-		validateParentFolder(folderList, command.parentFolderId());
+		assertParentFolderIsNotChanged(folderList, command.parentFolderId());
 		if (Objects.equals(command.parentFolderId(), command.destinationFolderId())) {
 			folderDataHandler.moveFolderWithinParent(command);
 		} else {
@@ -128,8 +121,8 @@ public class FolderService {
 		// 삭제할 폴더 리스트
 		List<Folder> targetFolderList = folderDataHandler.getFolderList(command.idList());
 		for (Folder folder : targetFolderList) {
-			validateFolderAccess(command.userId(), folder);
-			validateBasicFolderChange(folder);
+			assertUserIsFolderOwner(command.userId(), folder);
+			assertFolderIsGeneralFolder(folder);
 		}
 		// db 재귀조회를 하지 않기위해 본인 폴더를 모두 가져와서 Map 형태로 들고있음.
 		// TODO: queryDSL을 사용해서 최적화 할 수 있으면 좋을거같음.
@@ -153,13 +146,13 @@ public class FolderService {
 		folderDataHandler.deleteFolderList(command);
 	}
 
-	private void validateFolderAccess(Long userId, Folder folder) {
+	private void assertUserIsFolderOwner(Long userId, Folder folder) {
 		if (!folder.getUser().getId().equals(userId)) {
 			throw ApiFolderException.FOLDER_ACCESS_DENIED();
 		}
 	}
 
-	private void validateBasicFolderChange(Folder folder) {
+	private void assertFolderIsGeneralFolder(Folder folder) {
 		if (FolderType.GENERAL != folder.getFolderType()) {
 			throw ApiFolderException.BASIC_FOLDER_CANNOT_CHANGED();
 		}
@@ -169,7 +162,7 @@ public class FolderService {
 	 * 같은 폴더 내에서 순서를 변경하는 경우에 검증로직입니다.
 	 * 이동하려는 폴더들의 부모가 실제 부모폴더와 일치하는지 검증합니다.
 	 * */
-	private void validateParentFolder(List<Folder> folderList, Long parentFolderId) {
+	private void assertParentFolderIsNotChanged(List<Folder> folderList, Long parentFolderId) {
 		for (Folder folder : folderList) {
 			Folder parentFolder = folder.getParentFolder();
 			if (ObjectUtils.notEqual(parentFolder.getId(), parentFolderId)) {
@@ -181,7 +174,7 @@ public class FolderService {
 	/**
 	 * 폴더 생성, 이동시 미분류폴더, 휴지통으로는 이동할 수 없습니다.
 	 * */
-	private void validateDestinationFolder(Folder destinationFolder) {
+	private void assertDestinationIsRootFolder(Folder destinationFolder) {
 		if (Objects.equals(destinationFolder.getFolderType(), FolderType.UNCLASSIFIED)) {
 			throw ApiFolderException.INVALID_TARGET();
 		}

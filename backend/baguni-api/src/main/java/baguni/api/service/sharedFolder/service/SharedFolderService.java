@@ -43,9 +43,9 @@ public class SharedFolderService {
 	@Transactional
 	public SharedFolderResult.Create createSharedFolder(Long userId, Long sourceFolderId) {
 		var folder = folderDataHandler.getFolder(sourceFolderId);
-		validateUserIsFolderOwner(userId, folder);
-		validateFolderIsNotShared(folder);
-		validateFolderIsGeneralType(folder);
+		assertUserIsFolderOwner(userId, folder);
+		assertFolderIsNotShared(folder);
+		assertFolderIsGeneralType(folder);
 		var sharedFolder = sharedFolderDataHandler.save(userId, sourceFolderId);
 		return sharedFolderMapper.toCreateResult(sharedFolder);
 	}
@@ -94,29 +94,29 @@ public class SharedFolderService {
 	@Transactional
 	public void deleteSharedFolder(Long userId, Long sourceFolderId) {
 		SharedFolder sharedFolder = sharedFolderDataHandler.getByFolderId(sourceFolderId);
-		validateUserIsSharedFolderOwner(userId, sharedFolder);
+		assertUserIsSharedFolderOwner(userId, sharedFolder);
 		sharedFolderDataHandler.deleteBySourceFolderId(sourceFolderId);
 	}
 
-	private void validateFolderIsNotShared(Folder folder) {
+	private void assertFolderIsNotShared(Folder folder) {
 		if (sharedFolderDataHandler.isSharedFolder(folder.getId())) {
 			throw ApiSharedFolderException.FOLDER_ALREADY_SHARED();
 		}
 	}
 
-	private void validateUserIsFolderOwner(Long userId, Folder folder) {
+	private void assertUserIsFolderOwner(Long userId, Folder folder) {
 		if (!folder.getUser().getId().equals(userId)) {
 			throw ApiFolderException.FOLDER_ACCESS_DENIED();
 		}
 	}
 
-	private void validateUserIsSharedFolderOwner(Long userId, SharedFolder sharedFolder) {
+	private void assertUserIsSharedFolderOwner(Long userId, SharedFolder sharedFolder) {
 		if (!sharedFolder.getUser().getId().equals(userId)) {
 			throw ApiSharedFolderException.SHARED_FOLDER_UNAUTHORIZED();
 		}
 	}
 
-	private void validateFolderIsGeneralType(Folder folder) {
+	private void assertFolderIsGeneralType(Folder folder) {
 		if (!folder.getFolderType().equals(FolderType.GENERAL)) {
 			throw ApiSharedFolderException.FOLDER_CANNOT_BE_SHARED();
 		}
