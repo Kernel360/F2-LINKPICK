@@ -1,14 +1,12 @@
-import { API_URLS } from '@/constants';
-import { returnErrorFromHTTPError } from '@/utils';
+import { API_URLS } from '@/constants/apiUrls';
+import type { CreatePickToUnclassifiedFolderRequestType } from '@/types/CreatePickToUnclassifiedFolderRequestType';
+import type { CreatePickToUnclassifiedFolderResponseType } from '@/types/CreatePickToUnclassifiedFolderResponseType';
+import { returnErrorFromHTTPError } from '@/utils/returnErrorFromHTTPError';
 import { HTTPError } from 'ky';
 import { apiClient } from './apiClient';
 
-import type {
-  CreatePickToUnclassifiedFolderRequestType,
-  CreatePickToUnclassifiedFolderResponseType,
-} from '@/types';
 export const createPickToUnclassifiedFolder = async (
-  createPickInfo: CreatePickToUnclassifiedFolderRequestType
+  createPickInfo: CreatePickToUnclassifiedFolderRequestType,
 ) => {
   try {
     const response =
@@ -16,7 +14,7 @@ export const createPickToUnclassifiedFolder = async (
         API_URLS.getExtensionPickUrl(),
         {
           json: createPickInfo,
-        }
+        },
       );
     const data = await response.json();
 
