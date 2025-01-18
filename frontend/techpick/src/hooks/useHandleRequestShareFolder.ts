@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { deleteMyShareFolder } from '@/apis/folder/deleteShareFolder';
 import { shareFolder } from '@/apis/folder/shareFolder';
-import { useTreeStore } from '@/stores';
-import { notifySuccess } from '@/utils';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { notifySuccess } from '@/utils/toast';
+import { useState } from 'react';
 import { useDisclosure } from './useDisclosure';
 
 export default function useHandleRequestShareFolder(folderId: number) {

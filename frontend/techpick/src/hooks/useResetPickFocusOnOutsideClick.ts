@@ -1,11 +1,11 @@
 'use client';
 
+import { usePickStore } from '@/stores/pickStore/pickStore';
 import { useCallback, useEffect } from 'react';
-import { usePickStore } from '@/stores';
 
 export function useResetPickFocusOnOutsideClick() {
   const setSelectedPickIdList = usePickStore(
-    (state) => state.setSelectedPickIdList
+    (state) => state.setSelectedPickIdList,
   );
 
   const resetFocus = useCallback(
@@ -19,7 +19,7 @@ export function useResetPickFocusOnOutsideClick() {
 
       setSelectedPickIdList([]);
     },
-    [setSelectedPickIdList]
+    [setSelectedPickIdList],
   );
 
   useEffect(
@@ -30,6 +30,6 @@ export function useResetPickFocusOnOutsideClick() {
         window.removeEventListener('mousedown', resetFocus);
       };
     },
-    [resetFocus]
+    [resetFocus],
   );
 }
