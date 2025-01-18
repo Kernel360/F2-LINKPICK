@@ -55,10 +55,11 @@ export const unescapeHTML = (string: string): string => {
   return string.replace(entityPattern, (match: string): string => {
     if (match in htmlEntities) {
       return htmlEntities[match];
-    } else if (match.startsWith('&#')) {
+    }
+    if (match.startsWith('&#')) {
       // 숫자 엔티티 처리
       const numericCode = match.slice(2, -1);
-      return String.fromCharCode(parseInt(numericCode, 10));
+      return String.fromCharCode(Number.parseInt(numericCode, 10));
     }
     return match; // 알 수 없는 엔티티는 그대로 반환
   });

@@ -1,13 +1,13 @@
-import { PropsWithChildren } from 'react';
 import { Slot, Slottable } from '@radix-ui/react-slot';
+import type { PropsWithChildren } from 'react';
 import {
-  fontSizeVariants,
-  fontWeightVariants,
-  fontSizeVariantKeyTypes,
-  fontWeightVariantKeyTypes,
-  textStyle,
+  type FontColorVariantsKtyTypes,
   fontColorVariants,
-  FontColorVariantsKtyTypes,
+  type fontSizeVariantKeyTypes,
+  fontSizeVariants,
+  type fontWeightVariantKeyTypes,
+  fontWeightVariants,
+  textStyle,
 } from './Text.css';
 
 export function Text({
