@@ -28,9 +28,6 @@
         "all": true,
         "noBarrelFile": "error",
         "noReExportAll": "error"
-      },
-      "a11y": {
-        "useButtonType": "info"
       }
     }
   },
