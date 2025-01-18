@@ -6,6 +6,6 @@ if git diff --cached --name-only | grep -q '^frontend/techpick-extension'; then
 elif git diff --cached --name-only | grep -q '^frontend/techpick'; then
   echo "frontend/techpick lint or tsc error"
   cd frontend/techpick 
-  yarn lint
+  yarn biome lint ./src
   yarn tsc
 fi
