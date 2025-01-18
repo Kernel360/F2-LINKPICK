@@ -1,7 +1,7 @@
-import type { FolderDraggableObjectType } from '@/types';
+import type { FolderDraggableObjectType } from '@/types/FolderDraggableObjectType';
 
 export const isFolderDraggableObject = (
-  data: unknown
+  data: unknown,
 ): data is FolderDraggableObjectType => {
   if (!data || typeof data !== 'object') {
     return false;

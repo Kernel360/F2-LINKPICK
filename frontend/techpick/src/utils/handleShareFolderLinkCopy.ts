@@ -2,7 +2,7 @@
 
 export const handleShareFolderLinkCopy = (handleShowPopver: () => void) => {
   const linkElement = document.getElementById(
-    'shared-folder-link'
+    'shared-folder-link',
   ) as HTMLElement;
   if (linkElement) {
     const linkText = linkElement.textContent || '';

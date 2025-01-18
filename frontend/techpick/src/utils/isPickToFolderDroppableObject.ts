@@ -1,7 +1,7 @@
-import type { PickToFolderDroppableObjectType } from '@/types';
+import type { PickToFolderDroppableObjectType } from '@/types/PickToFolderDroppableObjectType';
 
 export const isPickToFolderDroppableObject = (
-  data: unknown
+  data: unknown,
 ): data is PickToFolderDroppableObjectType => {
   if (!data || typeof data !== 'object') {
     return false;

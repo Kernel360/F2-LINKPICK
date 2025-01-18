@@ -1,7 +1,7 @@
 'use server';
 
-import { cookies } from 'next/headers';
 import { jwtDecode } from 'jwt-decode';
+import { cookies } from 'next/headers';
 
 /**
  * 서버 컴포넌트에서만 사용할 수 있습니다.

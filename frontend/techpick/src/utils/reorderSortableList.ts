@@ -1,10 +1,8 @@
-import { hasIndex } from '@/utils';
+import type { ChildFolderListType } from '@/types/ChildFolderListType';
+import type { SelectedFolderListType } from '@/types/SelectedFolderListType';
+import type { SelectedPickIdListType } from '@/types/SelectedPickIdListType';
 import type { UniqueIdentifier } from '@dnd-kit/core';
-import type {
-  ChildFolderListType,
-  SelectedFolderListType,
-  SelectedPickIdListType,
-} from '@/types';
+import { hasIndex } from './hasIndex';
 
 export const reorderSortableIdList = ({
   sortableIdList,

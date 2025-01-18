@@ -1,5 +1,5 @@
+import type { TagType } from '@/types/TagType';
 import { findTagById } from './findTagById';
-import type { TagType } from '@/types';
 
 export const getFilteredSelectedTagList = ({
   selectedTagIdList,
@@ -10,12 +10,12 @@ export const getFilteredSelectedTagList = ({
 }) => {
   const filteredSelectedTagList: TagType[] = [];
 
-  selectedTagIdList.forEach((tagId) => {
+  for (const tagId of selectedTagIdList) {
     const tagInfo = findTagById(tagId, tagList);
     if (tagInfo) {
       filteredSelectedTagList.push(tagInfo);
     }
-  });
+  }
 
   return filteredSelectedTagList;
 };

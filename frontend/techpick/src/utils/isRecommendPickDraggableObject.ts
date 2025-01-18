@@ -1,7 +1,7 @@
-import { RecommendPickType } from '@/types';
+import type { RecommendPickType } from '@/types/RecommendPickType';
 
 export const isRecommendPickDraggableObject = (
-  data: unknown
+  data: unknown,
 ): data is RecommendPickType => {
   if (!data || typeof data !== 'object') {
     return false;

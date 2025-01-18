@@ -1,5 +1,5 @@
-import { ROUTES } from '@/constants';
-import { FolderType } from '@/types';
+import { ROUTES } from '@/constants/route';
+import type { FolderType } from '@/types/FolderType';
 
 export const getFolderLinkByType = (folder: FolderType) => {
   switch (folder.folderType) {
