@@ -16,7 +16,7 @@ export const folderOpenIconStyle = style({
 
 export const folderNameStyle = style({
   display: 'inline-block',
-  fontWeight: fontWeights['medium'],
+  fontWeight: fontWeights.medium,
   height: '28px',
   lineHeight: '24px',
   fontSize: '24px',

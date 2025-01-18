@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import * as Tooltip from '@radix-ui/react-tooltip';
-import { FileQuestionIcon, CircleAlertIcon } from 'lucide-react';
+import { CircleAlertIcon, FileQuestionIcon } from 'lucide-react';
+import Image from 'next/image';
 import {
   feedbackToolbarStyle,
   tooltipArrow,

@@ -1,41 +1,42 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
+import { postSharedPickViewEventLog } from '@/apis/eventLog/postSharedPickViewEventLog';
+import { useImageLoader } from '@/hooks/useImageLoader';
+import { useOpenUrlInNewTab } from '@/hooks/useOpenUrlInNewTab';
+import type { components } from '@/schema';
+import type { TagType } from '@/types/TagType';
+import { formatDateString } from '@/utils/formatDateString';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
-import { postSharedPickViewEventLog } from '@/apis/eventLog';
-import { useImageLoader, useOpenUrlInNewTab } from '@/hooks';
-import { formatDateString } from '@/utils';
+import Image from 'next/image';
+import { useState } from 'react';
+import {
+  tagDialogTriggerLayout,
+  tagPickerLayout,
+  tagPickerPlaceholderStyle,
+} from '../PickTagPicker/pickTagPicker.css';
+import { SelectedTagItem } from '../SelectedTagItem/SelectedTagItem';
+import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
 import { PickDateColumnLayout } from './PickDateColumnLayout';
 import { PickImageColumnLayout } from './PickImageColumnLayout';
-import {
-  pickRecordLayoutStyle,
-  pickImageStyle,
-  pickTitleSectionStyle,
-  dateTextStyle,
-  externalLinkIconStyle,
-  linkLayoutStyle,
-  imageStyle,
-} from './pickRecord.css';
 import { PickTagColumnLayout } from './PickTagColumnLayout';
 import { PickTitleColumnLayout } from './PickTitleColumnLayout';
 import { Separator } from './Separator';
 import {
-  tagPickerLayout,
-  tagDialogTriggerLayout,
-  tagPickerPlaceholderStyle,
-} from '../PickTagPicker/pickTagPicker.css';
-import { SelectedTagItem } from '../SelectedTagItem';
-import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
-import { TagType } from '@/types';
-import { components } from '@/schema';
+  dateTextStyle,
+  externalLinkIconStyle,
+  imageStyle,
+  linkLayoutStyle,
+  pickImageStyle,
+  pickRecordLayoutStyle,
+  pickTitleSectionStyle,
+} from './pickRecord.css';
 
 export function SharePickRecord({
   pickInfo,
   tagList,
   folderAccessToken,
 }: SharePickRecordProps) {
-  const link = pickInfo.linkInfo!;
+  const link = pickInfo.linkInfo;
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
   const [isHovered, setIsHovered] = useState(false);
   const { imageStatus } = useImageLoader(link.imageUrl);
@@ -53,6 +54,7 @@ export function SharePickRecord({
   };
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div
       className={pickRecordLayoutStyle}
       onMouseEnter={() => setIsHovered(true)}
@@ -61,7 +63,7 @@ export function SharePickRecord({
     >
       <PickImageColumnLayout>
         <div className={pickImageStyle}>
-          {imageStatus === 'loading' && <div></div>}
+          {imageStatus === 'loading' && <div />}
 
           {imageStatus === 'loaded' && (
             <img
@@ -87,9 +89,7 @@ export function SharePickRecord({
       <Separator />
 
       <PickTitleColumnLayout>
-        <div className={pickTitleSectionStyle} role="button">
-          {pickInfo.title}
-        </div>
+        <div className={pickTitleSectionStyle}>{pickInfo.title}</div>
       </PickTitleColumnLayout>
 
       <Separator />
@@ -97,11 +97,11 @@ export function SharePickRecord({
       <PickTagColumnLayout>
         <div className={tagPickerLayout}>
           <div className={tagDialogTriggerLayout}>
-            {pickInfo.tagIdxList!.length === 0 && (
+            {pickInfo.tagIdxList?.length === 0 && (
               <p className={tagPickerPlaceholderStyle}>태그가 없습니다.</p>
             )}
             <SelectedTagListLayout>
-              {pickInfo.tagIdxList!.map((tagIdx) => (
+              {pickInfo.tagIdxList?.map((tagIdx) => (
                 <SelectedTagItem
                   key={tagIdx}
                   tag={{ id: tagIdx, ...tagList[tagIdx] } as TagType}

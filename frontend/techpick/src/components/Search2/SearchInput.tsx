@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useSearchPickStore } from '@/stores/searchPickStore';
 import { debounce } from 'es-toolkit';
 import { Loader, SearchIcon } from 'lucide-react';
-import { useSearchPickStore } from '@/stores/searchPickStore';
+import type React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import * as styles from './searchDialog.css';
 
 export default function SearchInput() {
@@ -13,7 +14,7 @@ export default function SearchInput() {
       const parseQuery = query.replace(/ /g, ',');
       setSearchQuery(parseQuery);
     }, 300),
-    []
+    [],
   );
 
   /**

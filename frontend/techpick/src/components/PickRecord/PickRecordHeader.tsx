@@ -2,13 +2,13 @@
 
 import { PickDateColumnLayout } from './PickDateColumnLayout';
 import { PickImageColumnLayout } from './PickImageColumnLayout';
-import {
-  pickRecordHeaderLayoutStyle,
-  columnStyle,
-} from './pickRecordHeader.css';
 import { PickTagColumnLayout } from './PickTagColumnLayout';
 import { PickTitleColumnLayout } from './PickTitleColumnLayout';
 import { Separator } from './Separator';
+import {
+  columnStyle,
+  pickRecordHeaderLayoutStyle,
+} from './pickRecordHeader.css';
 
 export function PickRecordHeader() {
   return (

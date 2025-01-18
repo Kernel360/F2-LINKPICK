@@ -1,17 +1,15 @@
 'use client';
 
+import { useGetDragOverStyle } from '@/hooks/useGetDragOverStyle';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { useDraggingRecommendPickStore } from '@/stores/draggingRecommendPickStore';
+import { usePickStore } from '@/stores/pickStore/pickStore';
 import { DragOverlay as DragOverlayPrimitive } from '@dnd-kit/core';
-import { useGetDragOverStyle } from '@/hooks';
-import {
-  usePickStore,
-  useDraggingRecommendPickStore,
-  useTreeStore,
-} from '@/stores';
-import { dragCountStyle, stackedOverlayStyle } from './dragOverlay.css';
 import { FolderItemOverlay } from './FolderItemOverlay';
 import { PickCarouselCardOverlay } from './PickCarouselCardOverlay';
 import { PickDragOverlayShadowList } from './PickDragOverlayShadowList';
 import { PickRecordOverlay } from './PickRecordOverlay';
+import { dragCountStyle, stackedOverlayStyle } from './dragOverlay.css';
 
 export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   const { isDragging: isFolderDragging, draggingFolderInfo } = useTreeStore();

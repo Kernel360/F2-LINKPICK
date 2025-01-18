@@ -1,24 +1,27 @@
 'use client';
 
+import { useOpenUrlInNewTab } from '@/hooks/useOpenUrlInNewTab';
+import { useFetchTagList } from '@/queries/useFetchTagList';
+import { usePickStore } from '@/stores/pickStore/pickStore';
+import { useUpdatePickStore } from '@/stores/updatePickStore';
+import { formatDateString } from '@/utils/formatDateString';
+import { getFilteredSelectedTagList } from '@/utils/getFilteredSelectedTagList';
 import Image from 'next/image';
-import { SelectedTagItem, SelectedTagListLayout } from '@/components';
-import { useOpenUrlInNewTab } from '@/hooks';
-import { useFetchTagList } from '@/queries';
-import { usePickStore, useUpdatePickStore } from '@/stores';
-import { formatDateString, getFilteredSelectedTagList } from '@/utils';
+import { SelectedTagItem } from '../SelectedTagItem/SelectedTagItem';
+import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
+import type { PickViewItemComponentProps } from './PickListViewer';
+import { PickTitleInput } from './PickTitleInput';
 import {
-  pickListItemLayoutStyle,
+  dateTextStyle,
+  dividerDot,
+  pickContentSectionLayoutStyle,
+  pickDetailInfoLayoutStyle,
+  pickEmptyImageStyle,
   pickImageSectionLayoutStyle,
   pickImageStyle,
-  pickEmptyImageStyle,
-  pickContentSectionLayoutStyle,
+  pickListItemLayoutStyle,
   pickTitleSectionStyle,
-  pickDetailInfoLayoutStyle,
-  dividerDot,
-  dateTextStyle,
 } from './pickListItem.css';
-import { PickViewItemComponentProps } from './PickListViewer';
-import { PickTitleInput } from './PickTitleInput';
 
 export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
   const pick = pickInfo;
@@ -63,13 +66,13 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
             }}
           />
         ) : (
+          // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
           <div
             className={pickTitleSectionStyle}
             onClick={(event) => {
               setCurrentUpdateTitlePickId(pickInfo.id);
               event.stopPropagation();
             }}
-            role="button"
           >
             {pick.title}
           </div>
@@ -78,7 +81,7 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
           {0 < pick.tagIdOrderedList.length && (
             <SelectedTagListLayout height="fixed">
               {filteredSelectedTagList.map(
-                (tag) => tag && <SelectedTagItem key={tag.id} tag={tag} />
+                (tag) => tag && <SelectedTagItem key={tag.id} tag={tag} />,
               )}
             </SelectedTagListLayout>
           )}
@@ -89,6 +92,7 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
         </div>
       </div>
 
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <div
         style={{
           position: 'absolute',

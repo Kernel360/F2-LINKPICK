@@ -1,5 +1,5 @@
-import { CSSProperties, ReactNode } from 'react';
 import { selectedFolderLayoutStyle } from '@/components/SelectedFolderItem/SelectedFolderLayout.css';
+import type { CSSProperties, ReactNode } from 'react';
 
 export function SelectedFolderLayout({
   style,

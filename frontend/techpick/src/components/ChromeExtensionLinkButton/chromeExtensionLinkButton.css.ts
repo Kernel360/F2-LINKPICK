@@ -1,5 +1,5 @@
-import { style } from '@vanilla-extract/css';
 import { orangeOutlineButtonStyle } from '@/styles/orangeButtonStyle.css';
+import { style } from '@vanilla-extract/css';
 
 export const chromeExtensionLinkButtonStyle = style([
   orangeOutlineButtonStyle,

@@ -1,14 +1,14 @@
 'use client';
 
+import lottie, { type AnimationItem } from 'lottie-web';
 import { useEffect, useRef } from 'react';
-import lottie, { AnimationItem } from 'lottie-web';
+import { Gap } from './Gap';
 import {
   emptyPickRecordImageLayoutStyle,
   emptyPickRecordImageStyle,
   emptyPickRecordTextLayoutStyle,
   titleTextStyle,
 } from './emptyPickRecordImage.css';
-import { Gap } from './Gap';
 
 export function EmptyPickRecordImage({
   title = '북마크가 없습니다',
@@ -38,7 +38,7 @@ export function EmptyPickRecordImage({
 
   return (
     <div className={emptyPickRecordImageLayoutStyle}>
-      <div className={emptyPickRecordImageStyle} ref={container}></div>
+      <div className={emptyPickRecordImageStyle} ref={container} />
       <div className={emptyPickRecordTextLayoutStyle}>
         <p className={titleTextStyle}>{title}</p>
         <Gap verticalSize="gap4">

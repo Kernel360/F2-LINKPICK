@@ -1,17 +1,17 @@
 'use client';
 
-import { useRef, memo, KeyboardEvent, MouseEvent } from 'react';
+import { useDeleteTag } from '@/queries/useDeleteTag';
+import { useDeleteTagDialogStore } from '@/stores/deleteTagDialogStore';
+import { Text } from '@/ui/Text/Text';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import { useDeleteTag } from '@/queries';
-import { useDeleteTagDialogStore } from '@/stores';
-import { Text } from '@/ui/Text/Text';
+import { type KeyboardEvent, type MouseEvent, memo, useRef } from 'react';
 import { Gap } from '../Gap';
 import {
-  dialogContentStyle,
-  dialogOverlayStyle,
   deleteTagButtonStyle,
   deleteTagCancelButtonStyle,
+  dialogContentStyle,
+  dialogOverlayStyle,
 } from './DeleteTagDialog.css';
 
 export const DeleteTagDialog = memo(function DeleteTagDialog() {
@@ -78,6 +78,7 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
           </VisuallyHidden.Root>
 
           <div>
+            {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
             <button
               onClick={DeleteTagByClick}
               onKeyDown={DeleteTagByEnterKey}
@@ -88,6 +89,7 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
               삭제
             </button>
             <Gap verticalSize="gap4" />
+            {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
             <button
               onClick={closeDialog}
               onKeyDown={closeDialogByEnterKey}

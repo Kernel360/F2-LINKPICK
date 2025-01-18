@@ -1,8 +1,8 @@
-import React from 'react';
-import Image from 'next/image';
 import { useSearchPickStore } from '@/stores/searchPickStore';
-import { formatDateString } from '@/utils';
 import { checkImageUrlByUrl } from '@/utils/checkImageUrlByUrl';
+import { formatDateString } from '@/utils/formatDateString';
+import Image from 'next/image';
+import React from 'react';
 import * as styles from './hoverCard.css';
 
 export default function HoverCard() {
@@ -18,10 +18,11 @@ export default function HoverCard() {
           <a
             href={searchResultList[hoverPickIndex]?.linkInfo.url as string}
             target="_blank"
+            rel="noreferrer"
           >
             <Image
               src={checkImageUrlByUrl(
-                searchResultList[hoverPickIndex]?.linkInfo.imageUrl
+                searchResultList[hoverPickIndex]?.linkInfo.imageUrl,
               )}
               alt="link-image"
               height={200}

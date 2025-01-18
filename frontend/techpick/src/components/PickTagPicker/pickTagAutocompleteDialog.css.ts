@@ -17,7 +17,7 @@ export const commandInputStyle = style({
   outline: 'none',
   border: 'none',
   padding: '0 4px',
-  fontSize: fontSize['sm'],
+  fontSize: fontSize.sm,
   color: color.font,
   margin: 0,
 });
@@ -62,7 +62,7 @@ export const tagListItemStyle = style({
 });
 
 export const tagListItemContentStyle = style({
-  maxWidth: `calc(288px - 38px)`, // 26px은 생성 텍스트의 영역 12px는 패딩
+  maxWidth: 'calc(288px - 38px)', // 26px은 생성 텍스트의 영역 12px는 패딩
   height: '20px',
   lineHeight: '20px',
   borderRadius: '4px',

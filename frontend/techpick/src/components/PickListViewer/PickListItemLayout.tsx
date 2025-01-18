@@ -1,6 +1,6 @@
 'use client';
+import type { PickViewItemListLayoutComponentProps } from './PickListViewer';
 import { pickListItemLayoutStyle } from './pickListItemLayout.css';
-import { PickViewItemListLayoutComponentProps } from './PickListViewer';
 
 export function PickListItemLayout({
   children,

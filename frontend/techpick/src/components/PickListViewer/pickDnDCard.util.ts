@@ -1,5 +1,5 @@
-import { hasIndex } from '@/utils';
-import type { OrderedPickIdListType } from '@/types';
+import type { OrderedPickIdListType } from '@/types/OrderedPickIdListType';
+import { hasIndex } from '@/utils/hasIndex';
 
 export const getSelectedPickRange = ({
   orderedPickIdList,
@@ -7,10 +7,10 @@ export const getSelectedPickRange = ({
   endPickId,
 }: GetSelectedPickRangePayload) => {
   const firstSelectedIndex = orderedPickIdList.findIndex(
-    (orderedPickId) => orderedPickId === startPickId
+    (orderedPickId) => orderedPickId === startPickId,
   );
   const lastSelectedIndex = orderedPickIdList.findIndex(
-    (orderedPickId) => orderedPickId === endPickId
+    (orderedPickId) => orderedPickId === endPickId,
   );
 
   if (!hasIndex(firstSelectedIndex) || !hasIndex(lastSelectedIndex)) return [];
@@ -19,7 +19,7 @@ export const getSelectedPickRange = ({
   const endIndex = Math.max(firstSelectedIndex, lastSelectedIndex);
   const newSelectedPickIdList = orderedPickIdList.slice(
     startIndex,
-    endIndex + 1
+    endIndex + 1,
   );
 
   return newSelectedPickIdList;

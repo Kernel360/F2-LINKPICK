@@ -8,7 +8,7 @@ export function ChromeExtensionLinkButton() {
       target="_blank"
       rel="noopener noreferrer"
     >
-      <button className={chromeExtensionLinkButtonStyle}>
+      <button className={chromeExtensionLinkButtonStyle} type="button">
         <PlusIcon size={12} />
         <span>북마크 추가하기</span>
       </button>

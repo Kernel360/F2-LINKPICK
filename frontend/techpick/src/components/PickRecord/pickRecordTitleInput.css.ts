@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { typography, colorVars, zIndex } from 'techpick-shared';
+import { colorVars, typography, zIndex } from 'techpick-shared';
 
 export const pickRecordTitleInputLayoutStyle = style({
   position: 'absolute',
@@ -20,7 +20,7 @@ export const pickTitleInputStyle = style({
   borderColor: colorVars.gold8,
   boxShadow: '4px 4px 0px 0px rgba(0, 0, 0, 0.2)',
   backgroundColor: colorVars.gold4,
-  fontSize: typography.fontSize['sm'],
-  fontWeight: typography.fontWeights['light'],
+  fontSize: typography.fontSize.sm,
+  fontWeight: typography.fontWeights.light,
   fontFamily: 'inherit',
 });

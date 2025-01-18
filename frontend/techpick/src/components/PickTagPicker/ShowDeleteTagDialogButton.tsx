@@ -1,8 +1,8 @@
 'use client';
 
-import { useDeleteTagDialogStore } from '@/stores';
+import { useDeleteTagDialogStore } from '@/stores/deleteTagDialogStore';
+import type { TagType } from '@/types/TagType';
 import { deleteTagDialogButtonStyle } from './showDeleteTagDialogButton.css';
-import type { TagType } from '@/types';
 
 export function ShowDeleteTagDialogButton({
   tag,
@@ -17,6 +17,7 @@ export function ShowDeleteTagDialogButton({
   };
 
   return (
+    // biome-ignore lint/a11y/useButtonType: <explanation>
     <button
       onClick={showDeleteTagDialog}
       className={deleteTagDialogButtonStyle}

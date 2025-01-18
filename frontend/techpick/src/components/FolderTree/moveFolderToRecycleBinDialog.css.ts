@@ -1,11 +1,11 @@
-import { style } from '@vanilla-extract/css';
-import { colorVars } from 'techpick-shared';
 import {
-  dialogContentLayoutStyle,
   dialogContentBackgroundColorStyle,
+  dialogContentLayoutStyle,
 } from '@/styles/dialogStyle.css';
 import { redOutlineButtonStyle } from '@/styles/redButtonStyle.css';
 import { sandOutlineButtonStyle } from '@/styles/sandButtonStyle.css';
+import { style } from '@vanilla-extract/css';
+import { colorVars } from 'techpick-shared';
 
 export const moveRecycleDialogContent = style([
   dialogContentLayoutStyle,

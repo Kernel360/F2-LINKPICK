@@ -1,19 +1,19 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import type { RecommendPickCategoryType } from '@/types/RecommendPickCategoryType';
+import type { RecommendPickType } from '@/types/RecommendPickType';
 import useEmblaCarousel from 'embla-carousel-react';
-import { ChevronRightIcon, ChevronLeftIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { PickCarouselCard } from './PickCarouselCard';
+import { RecommendPickDraggable } from './RecommendPickDraggable';
 import {
-  recommendedPickCarouselStyle,
-  recommendedPickItemListStyle,
   chevronLeftIconStyle,
   chevronRightIconStyle,
   recommendedPickCarouselLayoutStyle,
+  recommendedPickCarouselStyle,
+  recommendedPickItemListStyle,
 } from './RecommendedPickCarousel.css';
-import { RecommendPickDraggable } from './RecommendPickDraggable';
-import { RecommendPickCategoryType, RecommendPickType } from '@/types';
-
 export function RecommendedPickCarousel({
   recommendPickList,
   recommendPickCategoryType,
@@ -61,7 +61,7 @@ export function RecommendedPickCarousel({
         emblaApi.off('reInit', onSelect);
       };
     },
-    [emblaApi, onSelect]
+    [emblaApi, onSelect],
   );
 
   useEffect(
@@ -92,7 +92,7 @@ export function RecommendedPickCarousel({
         };
       }
     },
-    [emblaApi, scrollNext, scrollPrev]
+    [emblaApi, scrollNext, scrollPrev],
   );
 
   return (

@@ -22,7 +22,7 @@ export const tagInputStyle = style({
   outline: 'none',
   margin: 0,
   border: `1px solid ${colorVars.gold8}`,
-  fontSize: fontSize['sm'],
+  fontSize: fontSize.sm,
 });
 
 export const popoverOverlayStyle = style({

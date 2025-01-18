@@ -1,16 +1,17 @@
 'use client';
 
+import { postRecommendPickViewEventLog } from '@/apis/eventLog/postRecommendPickViewEventLog';
+import { useImageLoader } from '@/hooks/useImageLoader';
+import { useOpenUrlInNewTab } from '@/hooks/useOpenUrlInNewTab';
+import type { RecommendPickType } from '@/types/RecommendPickType';
 import Image from 'next/image';
-import { postRecommendPickViewEventLog } from '@/apis/eventLog';
-import { useOpenUrlInNewTab, useImageLoader } from '@/hooks';
 import {
-  pickCarouselItemStyle,
-  pickTitleStyle,
-  pickImageStyle,
-  defaultImageStyle,
   defaultImageLayoutStyle,
+  defaultImageStyle,
+  pickCarouselItemStyle,
+  pickImageStyle,
+  pickTitleStyle,
 } from '../RecommendedPickCarousel/pickCarouselCard.css';
-import { RecommendPickType } from '@/types';
 
 export function PickCarouselCardOverlay({
   recommendPick,
@@ -28,7 +29,15 @@ export function PickCarouselCardOverlay({
   };
 
   return (
-    <div className={pickCarouselItemStyle} onClick={onOpenLink}>
+    <div
+      className={pickCarouselItemStyle}
+      onClick={onOpenLink}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          onOpenLink();
+        }
+      }}
+    >
       {imageStatus === 'loaded' ? (
         <img
           src={recommendPick.imageUrl}

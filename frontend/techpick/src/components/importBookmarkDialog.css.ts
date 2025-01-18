@@ -1,11 +1,11 @@
-import { style } from '@vanilla-extract/css';
-import { colorVars } from 'techpick-shared';
 import {
   dialogContentBackgroundColorStyle,
   dialogContentLayoutStyle,
 } from '@/styles/dialogStyle.css';
 import { goldOutlineButtonStyle } from '@/styles/goldButtonStyle.css';
 import { greenOutlineButtonStyle } from '@/styles/greenButtonStyle.css';
+import { style } from '@vanilla-extract/css';
+import { colorVars } from 'techpick-shared';
 
 export const importBookmarkDialogButtonStyle = style([
   goldOutlineButtonStyle,

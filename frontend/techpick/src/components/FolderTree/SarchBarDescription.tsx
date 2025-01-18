@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { isMacOS } from '@/utils';
+import { isMacOS } from '@/utils/isMacOS';
+import { useEffect, useState } from 'react';
 import { searchBarDescriptionStyle } from './searchBar.css';
 
 export function SearchBarDescription() {

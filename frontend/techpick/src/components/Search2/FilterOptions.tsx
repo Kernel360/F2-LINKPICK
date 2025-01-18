@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import type { SearchSelectOptionType } from '@/types/SearchSelectOptionType';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import Select from 'react-select';
 import customSelectStyles from './customSelectStyles';
 import * as styles from './filterOptions.css';
-import { SearchSelectOption } from '@/types';
 
 type MultiValue<Option> = readonly Option[];
 
@@ -15,11 +16,12 @@ export default function FilterOptions({
 }: TagFilterOptionsProps) {
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     updateSearchState(selectedOptions);
   }, [selectedOptions]);
 
-  function onChange(selectedOptions: MultiValue<SearchSelectOption>) {
+  function onChange(selectedOptions: MultiValue<SearchSelectOptionType>) {
     setSelectedOptions(selectedOptions.map((option) => option.value));
   }
 
@@ -47,7 +49,7 @@ export default function FilterOptions({
 interface TagFilterOptionsProps {
   title: string;
   icon: React.ReactNode;
-  options: SearchSelectOption[];
+  options: SearchSelectOptionType[];
   updateSearchState: (queryString: number[]) => void;
   setIsSelectMenuOpen: (isOpen: boolean) => void;
 }

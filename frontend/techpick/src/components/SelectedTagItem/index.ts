@@ -1,1 +1,0 @@
-export { SelectedTagItem } from './SelectedTagItem';

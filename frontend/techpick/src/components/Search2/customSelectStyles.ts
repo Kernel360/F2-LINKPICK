@@ -1,13 +1,17 @@
 // eslint-disable-next-line import/named
-import { StylesConfig, ControlProps, CSSObjectWithLabel } from 'react-select';
+import type { SearchSelectOptionType } from '@/types/SearchSelectOptionType';
+import type {
+  CSSObjectWithLabel,
+  ControlProps,
+  StylesConfig,
+} from 'react-select';
 import { colorVars } from 'techpick-shared';
-import { SearchSelectOption } from '@/types';
 
-const customSelectStyles: StylesConfig<SearchSelectOption, true> = {
+const customSelectStyles: StylesConfig<SearchSelectOptionType, true> = {
   control: (
     base: CSSObjectWithLabel,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    props: ControlProps<SearchSelectOption, true>
+    _props: ControlProps<SearchSelectOptionType, true>,
   ) => ({
     ...base,
     borderRadius: '24px',

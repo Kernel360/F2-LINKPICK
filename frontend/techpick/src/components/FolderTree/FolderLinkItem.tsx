@@ -1,15 +1,15 @@
 'use client';
 
-import type { ElementType, MouseEvent } from 'react';
-import Link from 'next/link';
+import { usePickStore } from '@/stores/pickStore/pickStore';
 import { Folder } from 'lucide-react';
-import { usePickStore } from '@/stores';
+import Link from 'next/link';
+import type { ElementType, MouseEvent } from 'react';
 import {
-  folderInfoItemStyle,
-  selectedDragItemStyle,
   FolderIconStyle,
   dragOverItemStyle,
+  folderInfoItemStyle,
   folderTextStyle,
+  selectedDragItemStyle,
 } from './folderLinkItem.css';
 
 export function FolderLinkItem({
@@ -22,13 +22,14 @@ export function FolderLinkItem({
   icon: IconComponent = Folder,
 }: FolderListItemProps) {
   const isMovingDestinationFolderId = usePickStore(
-    (state) => state.isMovingDestinationFolderId
+    (state) => state.isMovingDestinationFolderId,
   );
 
   return (
     <Link href={isMovingDestinationFolderId === folderId ? '#' : href}>
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <div
-        className={`${folderInfoItemStyle}  ${isSelected ? selectedDragItemStyle : ''} ${isHovered ? dragOverItemStyle : ''}`}
+        className={`${folderInfoItemStyle} ${isSelected ? selectedDragItemStyle : ''} ${isHovered ? dragOverItemStyle : ''}`}
         onClick={onClick}
       >
         <IconComponent className={FolderIconStyle} />

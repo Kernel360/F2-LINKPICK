@@ -1,16 +1,18 @@
 'use client';
 
+import { postRecommendPickViewEventLog } from '@/apis/eventLog/postRecommendPickViewEventLog';
+import { useEventLogger } from '@/hooks/useEventLogger';
+import { useImageLoader } from '@/hooks/useImageLoader';
+import { useOpenUrlInNewTab } from '@/hooks/useOpenUrlInNewTab';
+import type { RecommendPickType } from '@/types/RecommendPickType';
 import Image from 'next/image';
-import { postRecommendPickViewEventLog } from '@/apis/eventLog';
-import { useOpenUrlInNewTab, useImageLoader, useEventLogger } from '@/hooks';
 import {
-  pickCarouselItemStyle,
-  pickTitleStyle,
-  pickImageStyle,
-  defaultImageStyle,
   defaultImageLayoutStyle,
+  defaultImageStyle,
+  pickCarouselItemStyle,
+  pickImageStyle,
+  pickTitleStyle,
 } from './pickCarouselCard.css';
-import { RecommendPickType } from '@/types';
 
 export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
   const { openUrlInNewTab } = useOpenUrlInNewTab(recommendPick.url);
@@ -33,10 +35,9 @@ export function PickCarouselCard({ recommendPick }: PickCarouselCardProps) {
   };
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div className={pickCarouselItemStyle} onClick={onOpenLink}>
-      {imageStatus === 'loading' && (
-        <div className={defaultImageLayoutStyle}></div>
-      )}
+      {imageStatus === 'loading' && <div className={defaultImageLayoutStyle} />}
       {imageStatus === 'loaded' && (
         <img
           src={recommendPick.imageUrl}

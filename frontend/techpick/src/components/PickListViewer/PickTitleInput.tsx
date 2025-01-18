@@ -1,8 +1,8 @@
 'use client';
 
+import { isEmptyString } from '@/utils/string';
 import { useCallback, useEffect, useRef } from 'react';
 import type { KeyboardEvent } from 'react';
-import { isEmptyString } from '@/utils';
 import { pickTitleInputStyle } from './pickTitleInput.css';
 
 export function PickTitleInput({
@@ -43,7 +43,7 @@ export function PickTitleInput({
         document.removeEventListener('mousedown', handleClickOutside);
       };
     },
-    [onClickOutSide, submitIfNotEmptyString]
+    [onClickOutSide, submitIfNotEmptyString],
   );
 
   useEffect(
@@ -55,10 +55,11 @@ export function PickTitleInput({
         setTimeout(() => inputRef.current?.focus(), 0);
       }
     },
-    [initialValue]
+    [initialValue],
   );
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div ref={containerRef} onClick={(e) => e.stopPropagation()}>
       <input
         type="text"

@@ -1,17 +1,17 @@
 'use client';
 
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { usePathname } from 'next/navigation';
-import { useTreeStore } from '@/stores';
+import { ChromeExtensionLinkButton } from '../ChromeExtensionLinkButton/ChromeExtensionLinkButton';
+import { Gap } from '../Gap';
 import { CurrentFolderNameSection } from './CurrentFolderNameSection';
 import { CurrentPathIndicator } from './CurrentPathIndicator';
-import { Gap } from '../Gap';
 import {
   createPickPopoverButtonLayoutStyle,
   folderContentHeaderLayoutStyle,
   folderContentHeaderStyle,
   folderDescriptionStyle,
 } from './folderContentHeader.css';
-import { ChromeExtensionLinkButton } from '../ChromeExtensionLinkButton/ChromeExtensionLinkButton';
 
 export function FolderContentHeader() {
   const pathname = usePathname();

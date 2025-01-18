@@ -1,12 +1,12 @@
-import { style } from '@vanilla-extract/css';
-import { zIndex } from 'techpick-shared';
 import {
   dialogOverlayStyle as baseDialogOverlayStyle,
-  dialogContentLayoutStyle,
   dialogContentBackgroundColorStyle,
+  dialogContentLayoutStyle,
 } from '@/styles/dialogStyle.css';
 import { redOutlineButtonStyle } from '@/styles/redButtonStyle.css';
 import { sandOutlineButtonStyle } from '@/styles/sandButtonStyle.css';
+import { style } from '@vanilla-extract/css';
+import { zIndex } from 'techpick-shared';
 
 export const dialogContentStyle = style([
   dialogContentLayoutStyle,

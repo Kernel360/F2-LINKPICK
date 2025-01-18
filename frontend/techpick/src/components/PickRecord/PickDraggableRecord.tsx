@@ -1,19 +1,21 @@
 'use client';
 
-import type { CSSProperties, MouseEvent } from 'react';
+import useSearchElementId from '@/hooks/useSearchElementId';
+import { usePickStore } from '@/stores/pickStore/pickStore';
+import { useUpdatePickStore } from '@/stores/updatePickStore';
+import type { PickViewDraggableItemComponentProps } from '@/types/PickViewDraggableItemComponentProps';
+import { isSelectionActive } from '@/utils/isSelectionActive';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import useSearchElementId from '@/hooks/useSearchElementId';
-import { usePickStore, useUpdatePickStore } from '@/stores';
-import { getSelectedPickRange, isSelectionActive } from '@/utils';
+import type { CSSProperties, MouseEvent } from 'react';
+import { getSelectedPickRange } from '../PickListViewer/pickDnDCard.util';
 import { PickContextMenu } from './PickContextMenu';
+import { PickRecord } from './PickRecord';
 import {
   isActiveDraggingItemStyle,
-  selectedDragItemStyle,
   searchedItemStyle,
+  selectedDragItemStyle,
 } from './pickDraggableRecord.css';
-import { PickRecord } from './PickRecord';
-import { PickViewDraggableItemComponentProps } from '@/types';
 
 export function PickDraggableRecord({
   pickInfo,
@@ -81,7 +83,7 @@ export function PickDraggableRecord({
 
   const handleClick = (
     pickId: number,
-    event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+    event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
   ) => {
     if (event.shiftKey && isSelectionActive(selectedPickIdList.length)) {
       event.preventDefault();
@@ -109,6 +111,7 @@ export function PickDraggableRecord({
       style={{ width: 'fit-content', ...style }}
       data-pick-draggable={true} // 해당 data는 focus를 바꾸는 동작과 연관이 있습니다.
     >
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <div
         className={`${isSelected ? selectedDragItemStyle : ''} ${isActiveDragging ? isActiveDraggingItemStyle : ''}`}
         onClick={(event) => handleClick(pickId, event)}

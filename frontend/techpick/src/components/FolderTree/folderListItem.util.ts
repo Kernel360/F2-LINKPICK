@@ -1,10 +1,10 @@
-import { hasIndex } from '@/utils';
-import type { FolderMapType } from '@/types';
+import type { FolderMapType } from '@/types/FolderMapType';
+import { hasIndex } from '@/utils/hasIndex';
 
 export const isSameParentFolder = (
   id: number,
   selectedId: number,
-  treeDataMap: FolderMapType
+  treeDataMap: FolderMapType,
 ) => {
   return (
     treeDataMap[id].parentFolderId === treeDataMap[selectedId].parentFolderId
@@ -20,10 +20,10 @@ export const getSelectedFolderRange = ({
   const parentFolderInfo = treeDataMap[treeDataMap[endFolderId].parentFolderId];
   const firstSelectedIndex =
     parentFolderInfo.childFolderIdOrderedList.findIndex(
-      (childFolderId) => childFolderId === startFolderId
+      (childFolderId) => childFolderId === startFolderId,
     );
   const endSelectedIndex = parentFolderInfo.childFolderIdOrderedList.findIndex(
-    (childFolderId) => childFolderId === endFolderId
+    (childFolderId) => childFolderId === endFolderId,
   );
 
   if (!hasIndex(firstSelectedIndex) || !hasIndex(endSelectedIndex)) return [];
@@ -33,7 +33,7 @@ export const getSelectedFolderRange = ({
 
   const newSelectedFolderList = parentFolderInfo.childFolderIdOrderedList.slice(
     start,
-    end + 1
+    end + 1,
   );
 
   return newSelectedFolderList;

@@ -1,5 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
-import { space, colorVars } from 'techpick-shared';
+import { colorVars, space } from 'techpick-shared';
 
 export const pickCardLayout = style({
   display: 'flex',
