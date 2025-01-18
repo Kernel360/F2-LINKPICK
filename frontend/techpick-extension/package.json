@@ -8,7 +8,7 @@
     "dev:watch": "yarn dev --watch",
     "build": "tsc -b && vite build",
     "build:watch": "yarn build --watch",
-    "lint": "eslint .",
+    "lint": "biome lint ./src",
     "preview": "vite preview",
     "postinstall": "cd .. && husky"
   },
@@ -36,6 +36,7 @@
     "zustand": "4.5.5"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@eslint/js": "^9.9.0",
     "@types/chrome": "^0.0.271",
     "@types/dompurify": "^3",

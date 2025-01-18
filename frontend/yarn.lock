@@ -14630,6 +14630,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "techpick-extension@workspace:techpick-extension"
   dependencies:
+    "@biomejs/biome": "npm:1.9.4"
     "@eslint/js": "npm:^9.9.0"
     "@floating-ui/react": "npm:^0.26.24"
     "@radix-ui/react-dialog": "npm:^1.1.2"
