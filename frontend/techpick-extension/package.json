@@ -37,7 +37,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@eslint/js": "^9.9.0",
     "@types/chrome": "^0.0.271",
     "@types/dompurify": "^3",
     "@types/mixpanel-browser": "^2",
@@ -45,14 +44,10 @@
     "@types/react-dom": "^18.3.0",
     "@vanilla-extract/vite-plugin": "^4.0.15",
     "@vitejs/plugin-react": "^4.3.1",
-    "eslint": "^9.9.0",
-    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
-    "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
     "husky": "^9.1.6",
     "path": "^0.12.7",
     "typescript": "5.5.4",
-    "typescript-eslint": "^8.0.1",
     "vite": "^5.4.1",
     "vite-plugin-static-copy": "^2.1.0",
     "vite-tsconfig-paths": "^5.0.1"
