@@ -31,5 +31,5 @@ export const useDeleteTagDialogStore = create<
         state.deleteTagId = deleteTagId;
       });
     },
-  }))
+  })),
 );

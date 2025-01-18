@@ -1,12 +1,9 @@
+import { CHANGE_THEME_STATE_TO_LOCALHOST_PORT_NAME } from '@/constants/changeThemeStateToLocalhostPortName';
+import { GET_THEME_FROM_LOCALHOST_PORT_NAME } from '@/constants/getThemeFromLocalhostPortName';
+import { REQUEST_THEME_STATE_FROM_LOCALHOST_MESSAGE } from '@/constants/requestThemeStateFromLocalhostMessage';
+import { DARK_THEME_STATE, LIGHT_THEME_STATE } from '@/constants/themeState';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import {
-  GET_THEME_FROM_LOCALHOST_PORT_NAME,
-  REQUEST_THEME_STATE_FROM_LOCALHOST_MESSAGE,
-  DARK_THEME_STATE,
-  LIGHT_THEME_STATE,
-  CHANGE_THEME_STATE_TO_LOCALHOST_PORT_NAME,
-} from '@/constants';
 
 type ThemeState = {
   isDarkMode: boolean;
@@ -49,7 +46,7 @@ export const useThemeStore = create<ThemeState & ThemeAction>()(
       });
       port.postMessage(REQUEST_THEME_STATE_FROM_LOCALHOST_MESSAGE);
 
-      port.onMessage.addListener(function (msg: string) {
+      port.onMessage.addListener((msg: string) => {
         if (msg === DARK_THEME_STATE) {
           set((state) => {
             state.isDarkMode = true;
@@ -58,5 +55,5 @@ export const useThemeStore = create<ThemeState & ThemeAction>()(
         port.disconnect();
       });
     },
-  }))
+  })),
 );

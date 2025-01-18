@@ -1,4 +1,6 @@
-import { CreateTagRequestType, TagType, UpdateTagRequestType } from '@/types';
+import type { CreateTagRequestType } from '@/types/CreateTagRequestType';
+import type { TagType } from '@/types/TagType';
+import type { UpdateTagRequestType } from '@/types/UpdateTagRequestType';
 
 export type TagState = {
   tagList: TagType[];
