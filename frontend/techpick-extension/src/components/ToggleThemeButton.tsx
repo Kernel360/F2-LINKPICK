@@ -1,4 +1,4 @@
-import { useThemeStore } from '@/stores';
+import { useThemeStore } from '@/stores/themeStore';
 import { Sun as SunIcon } from 'lucide-react';
 import { Moon as MoonIcon } from 'lucide-react';
 import { toggleThemeButtonStyle } from './ToggleThemeButton.css';
@@ -8,7 +8,11 @@ export function ToggleThemeButton() {
 
   return (
     <div>
-      <button onClick={toggleTheme} className={toggleThemeButtonStyle}>
+      <button
+        type="button"
+        onClick={toggleTheme}
+        className={toggleThemeButtonStyle}
+      >
         {isDarkMode ? <MoonIcon /> : <SunIcon />}
       </button>
     </div>

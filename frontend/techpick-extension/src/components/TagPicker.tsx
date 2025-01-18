@@ -1,11 +1,11 @@
+import { useTagStore } from '@/stores/tagStore';
 import { forwardRef, useRef, useState } from 'react';
-import { useTagStore } from '@/stores';
 import { SelectedTagItem } from './SelectedTagItem';
 import { SelectedTagListLayout } from './SelectedTagListLayout';
 import { TagAutocompleteDialog } from './TagAutocompleteDialog';
 import {
-  tagPickerLayout,
   tagDialogTriggerLayout,
+  tagPickerLayout,
   tagPickerPlaceholderStyle,
 } from './TagPicker.css';
 
@@ -34,6 +34,7 @@ export const TagPicker = forwardRef<HTMLDivElement>(
           className={tagDialogTriggerLayout}
           onClick={openDialog}
           onKeyDown={onEnterKeyDown}
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
           tabIndex={0}
           ref={tabFocusRef}
         >
@@ -54,5 +55,5 @@ export const TagPicker = forwardRef<HTMLDivElement>(
         />
       </div>
     );
-  }
+  },
 );
