@@ -1,9 +1,9 @@
 'use client';
 
+import { updateTag } from '@/apis/tag/updateTag';
+import type { TagType } from '@/types/TagType';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateTag } from '@/apis/tag';
 import { tagKeys } from './tagKeys';
-import type { TagType } from '@/types';
 
 export function useUpdateTag() {
   const queryClient = useQueryClient();
@@ -27,7 +27,7 @@ export function useUpdateTag() {
       queryClient.invalidateQueries({ queryKey: tagKeys.all });
     },
     onError(_error, _variables, context) {
-      const { prevTagList } = context!;
+      const prevTagList = context?.prevTagList ?? [];
       queryClient.setQueryData(tagKeys.all, prevTagList);
     },
   });

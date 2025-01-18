@@ -1,9 +1,9 @@
 'use client';
 
+import { createTag } from '@/apis/tag/createTag';
+import type { TagType } from '@/types/TagType';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createTag } from '@/apis/tag';
 import { tagKeys } from './tagKeys';
-import type { TagType } from '@/types';
 
 export function useCreateTag() {
   const queryClient = useQueryClient();
@@ -39,7 +39,7 @@ export function useCreateTag() {
       queryClient.invalidateQueries({ queryKey: tagKeys.all });
     },
     onError(_error, _variables, context) {
-      const { prevTagList } = context!;
+      const prevTagList = context?.prevTagList ?? [];
       queryClient.setQueryData(tagKeys.all, prevTagList);
     },
   });
