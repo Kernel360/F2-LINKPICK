@@ -1,5 +1,5 @@
 export const extractOpenGraphMetadata = (
-  htmlText: string
+  htmlText: string,
 ): {
   ogImage: string | null;
   ogDescription: string | null;
@@ -7,10 +7,10 @@ export const extractOpenGraphMetadata = (
   const parser = new DOMParser();
   const doc = parser.parseFromString(htmlText, 'text/html');
   const ogImage = doc.querySelector(
-    "meta[property='og:image']"
+    "meta[property='og:image']",
   ) as HTMLMetaElement | null;
   const ogDescription = doc.querySelector(
-    "meta[property='og:description']"
+    "meta[property='og:description']",
   ) as HTMLMetaElement | null;
 
   return {

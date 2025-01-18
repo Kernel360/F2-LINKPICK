@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
-import { SelectedTagCommonStyle } from './SelectedTagCommonStyle.css';
 import { colorVars } from 'techpick-shared';
+import { SelectedTagCommonStyle } from './SelectedTagCommonStyle.css';
 
 export const selectedTagContentStyle = style({
   boxSizing: 'border-box',

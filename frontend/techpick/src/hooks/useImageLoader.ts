@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect } from 'react';
+import { useLayoutEffect, useState } from 'react';
 
 type ImageStatus = 'loading' | 'loaded' | 'error';
 

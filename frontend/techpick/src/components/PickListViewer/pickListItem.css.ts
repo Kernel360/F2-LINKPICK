@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { sizes, typography, colorVars, space } from 'techpick-shared';
+import { colorVars, sizes, space, typography } from 'techpick-shared';
 
 export const pickListItemLayoutStyle = style({
   position: 'relative',
@@ -38,7 +38,7 @@ export const pickContentSectionLayoutStyle = style({
 
 export const pickTitleSectionStyle = style({
   fontSize: typography.fontSize['2xl'],
-  fontWeight: typography.fontWeights['light'],
+  fontWeight: typography.fontWeights.light,
   height: '32px',
   lineHeight: '32px',
   overflow: 'hidden',
@@ -54,13 +54,13 @@ export const pickDetailInfoLayoutStyle = style({
 });
 
 export const dividerDot = style({
-  fontSize: typography.fontSize['sm'],
-  fontWeight: typography.fontWeights['normal'],
+  fontSize: typography.fontSize.sm,
+  fontWeight: typography.fontWeights.normal,
   color: colorVars.gray11,
 });
 
 export const dateTextStyle = style({
-  fontSize: typography.fontSize['sm'],
-  fontWeight: typography.fontWeights['normal'],
+  fontSize: typography.fontSize.sm,
+  fontWeight: typography.fontWeights.normal,
   color: colorVars.gray11,
 });

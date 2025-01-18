@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { space, sizes } from 'techpick-shared';
+import { sizes, space } from 'techpick-shared';
 
 export const pickCardGridLayoutStyle = style({
   display: 'grid',
@@ -8,7 +8,7 @@ export const pickCardGridLayoutStyle = style({
   padding: space[8],
   rowGap: space[8],
   columnGap: space[8],
-  width: sizes['full'],
-  height: sizes['full'],
+  width: sizes.full,
+  height: sizes.full,
   overflowY: 'scroll',
 });

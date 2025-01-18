@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import type {
-  DraggingRecommendPickState,
   DraggingRecommendPickAction,
+  DraggingRecommendPickState,
 } from './draggingRecommendPickStore.type';
 
 const initialState: DraggingRecommendPickState = {
@@ -27,5 +27,5 @@ export const useDraggingRecommendPickStore = create<
         state.draggingRecommendPickInfo = draggingPickInfo;
       });
     },
-  }))
+  })),
 );

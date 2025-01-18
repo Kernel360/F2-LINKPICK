@@ -1,7 +1,9 @@
+import type { PickInfoType } from '@/types/PickInfoType';
+import type { UpdatePickRequestType } from '@/types/UpdatePickRequestType';
 import { HTTPError } from 'ky';
-import { apiClient, returnErrorFromHTTPError } from '@/apis';
+import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
-import type { UpdatePickRequestType, PickInfoType } from '@/types';
+import { returnErrorFromHTTPError } from '../error';
 
 export const updatePick = async (pickInfo: UpdatePickRequestType) => {
   try {
@@ -9,7 +11,7 @@ export const updatePick = async (pickInfo: UpdatePickRequestType) => {
       API_URLS.UPDATE_PICKS,
       {
         json: pickInfo,
-      }
+      },
     );
     const data = await response.json();
 

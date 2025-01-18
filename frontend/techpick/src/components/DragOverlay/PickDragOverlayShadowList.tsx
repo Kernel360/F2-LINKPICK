@@ -7,6 +7,7 @@ export function PickDragOverlayShadowList({
     <>
       {Array.from({ length: count }, (_, index) => (
         <div
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
           key={index}
           className={stackedItem}
           style={{

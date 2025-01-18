@@ -4,10 +4,10 @@ export const correctImageUrl = (url: string, imageUrl: string) => {
     const baseUrl = `${protocol}//${hostname}${pathname}`;
 
     if (imageUrl.startsWith('://')) {
-      return 'https' + imageUrl;
+      return `https${imageUrl}`;
     }
     if (imageUrl.startsWith('//')) {
-      return 'https:' + imageUrl;
+      return `https:${imageUrl}`;
     }
     if (imageUrl.startsWith('/')) {
       return baseUrl + imageUrl;

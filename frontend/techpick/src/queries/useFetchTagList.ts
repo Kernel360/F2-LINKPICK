@@ -1,7 +1,7 @@
 'use client';
 
+import { getTagList } from '@/apis/tag/getTagList';
 import { useQuery } from '@tanstack/react-query';
-import { getTagList } from '@/apis/tag';
 import { tagKeys } from './tagKeys';
 
 export function useFetchTagList() {

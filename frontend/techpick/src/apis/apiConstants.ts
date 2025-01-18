@@ -1,4 +1,4 @@
-import { SearchQueryParam } from '@/types/search';
+import type { SearchQueryParamType } from '@/types/SearchQueryParamType';
 
 const API_ENDPOINTS = {
   FOLDERS: 'folders',
@@ -27,17 +27,11 @@ export const API_URLS = {
     `${API_ENDPOINTS.PICKS}?folderIdList=${folderId}`,
   DELETE_PICKS: API_ENDPOINTS.PICKS,
   SEARCH_PICKS_BY_QUERY_PARAM: (
-    queryParam: SearchQueryParam,
+    queryParam: SearchQueryParamType,
     cursor?: number | string,
-    size?: number
+    size?: number,
   ) =>
-    API_ENDPOINTS.PICKS +
-    `/search?` +
-    `${queryParam.searchTokenList ? `searchTokenList=${queryParam.searchTokenList}` : ''}` +
-    `${queryParam.tagIdList ? `&tagIdList=${queryParam.tagIdList}` : ''}` +
-    `${queryParam.folderIdList ? `&folderIdList=${queryParam.folderIdList}` : ''}` +
-    `${cursor ? '&cursor=' + cursor : ''}` +
-    `${size ? '&size=' + size : ''}`,
+    `${API_ENDPOINTS.PICKS}/search?${queryParam.searchTokenList ? `searchTokenList=${queryParam.searchTokenList}` : ''}${queryParam.tagIdList ? `&tagIdList=${queryParam.tagIdList}` : ''}${queryParam.folderIdList ? `&folderIdList=${queryParam.folderIdList}` : ''}${cursor ? `&cursor=${cursor}` : ''}${size ? `&size=${size}` : ''}`,
   MOVE_PICKS: `${API_ENDPOINTS.PICKS}/${API_ENDPOINTS.LOCATION}`,
   CREATE_PICKS: `${API_ENDPOINTS.PICKS}`,
   UPDATE_PICKS: `${API_ENDPOINTS.PICKS}`,

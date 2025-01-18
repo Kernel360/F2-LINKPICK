@@ -1,8 +1,8 @@
-import type { PropsWithChildren } from 'react';
+import { mixpanelServer } from '@/libs/mixpanel-server';
+import { getUserIdForServer } from '@/utils/getUserIdForServer';
 import { headers } from 'next/headers';
 import { userAgent } from 'next/server';
-import { mixpanelServer } from '@/libs/mixpanel-server';
-import { getUserIdForServer } from '@/utils';
+import type { PropsWithChildren } from 'react';
 
 /**
  * @description 특정 페이지에 방문했는지 확인하는 서버 컴포넌트입니다.

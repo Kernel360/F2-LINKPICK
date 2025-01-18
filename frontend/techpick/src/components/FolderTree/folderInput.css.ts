@@ -6,7 +6,7 @@ export const folderInputLayout = style({
   alignItems: 'center',
   gap: space['8'],
   minWidth: sizes['6xs'],
-  maxWidth: sizes['full'],
+  maxWidth: sizes.full,
   padding: space['8'],
   paddingLeft: '12px',
 });
@@ -24,6 +24,6 @@ export const inputStyle = style({
   borderBottom: '1px solid',
   borderColor: colorVars.primary,
   padding: '0',
-  fontSize: fontSize['sm'],
+  fontSize: fontSize.sm,
   width: '0px',
 });

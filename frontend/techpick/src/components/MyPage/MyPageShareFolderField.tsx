@@ -1,5 +1,5 @@
+import type { GetMyShareFolderResponseType } from '@/types/GetMyShareFolderResponseType';
 import * as styles from './myPageShareFolderField.css';
-import { GetMyShareFolderResponseType } from '@/types';
 
 export function MyPageShareFolderField({
   folderInfo,
@@ -11,10 +11,16 @@ export function MyPageShareFolderField({
     <div className={styles.myPageContentContainer}>
       <span className={styles.cell}>{folderInfo.sourceFolderName}</span>
       <span className={styles.cell}>
-        <a href={shareFolderLink} className={styles.cell} target="_blank">
+        <a
+          href={shareFolderLink}
+          className={styles.cell}
+          target="_blank"
+          rel="noreferrer"
+        >
           {shareFolderLink}
         </a>
       </span>
+      {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
       <button
         className={styles.cancelButton}
         onClick={() =>

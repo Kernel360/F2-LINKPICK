@@ -1,6 +1,6 @@
 import { SelectedFolderContent } from '@/components/SelectedFolderItem/SelectedFolderContent';
 import { SelectedFolderLayout } from '@/components/SelectedFolderItem/SelectedFolderLayout';
-import { FolderType } from '@/types';
+import type { FolderType } from '@/types/FolderType';
 
 export function SelectedFolderItem({ folder, children }: FolderItemProps) {
   return (

@@ -1,7 +1,7 @@
 'use client';
 
-import { Plus } from 'lucide-react';
 import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
+import { Plus } from 'lucide-react';
 import { buttonStyle } from './showCreateFolderInputButton.css';
 
 export function ShowCreateFolderInputButton({
@@ -14,6 +14,7 @@ export function ShowCreateFolderInputButton({
   };
 
   return (
+    // biome-ignore lint/a11y/useButtonType: <explanation>
     <button onClick={onClick} className={buttonStyle}>
       <Plus size={20} />
     </button>

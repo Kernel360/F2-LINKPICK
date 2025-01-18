@@ -1,23 +1,23 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { Settings } from 'lucide-react';
 import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
 import { Popover, PopoverContent, PopoverTrigger } from '@/ui/Popover/Popover';
 import { handleShareFolderLinkCopy } from '@/utils/handleShareFolderLinkCopy';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { Settings } from 'lucide-react';
+import Link from 'next/link';
+import { useState } from 'react';
 import {
-  dialogContent,
-  dialogTitle,
-  dialogDescription,
-  myLinkPageLinkText,
-  linkContent,
-  icon,
-  sharedFolderLink,
-  copyButton,
-  popoverStyle,
   closeIcon,
+  copyButton,
+  dialogContent,
+  dialogDescription,
+  dialogTitle,
+  icon,
+  linkContent,
+  myLinkPageLinkText,
+  popoverStyle,
+  sharedFolderLink,
 } from './shareFolderDialog.css';
 
 export default function ShareFolderDialog({
@@ -41,8 +41,16 @@ export default function ShareFolderDialog({
             폴더가 공유되었습니다.
           </DialogPrimitive.Title>
           <DialogPrimitive.Description className={dialogDescription}>
-            <Link href={`/mypage`} className={myLinkPageLinkText}>
-              <span className={linkContent} onClick={onOpenChange}>
+            <Link href={'/mypage'} className={myLinkPageLinkText}>
+              <span
+                className={linkContent}
+                onClick={onOpenChange}
+                onKeyDown={(e) => {
+                  if (e.key === 'enter') {
+                    onOpenChange();
+                  }
+                }}
+              >
                 <Settings className={icon} size={14} />
                 내설정
               </span>
@@ -66,6 +74,7 @@ export default function ShareFolderDialog({
             </div>
             <Popover open={showPopover}>
               <PopoverTrigger asChild>
+                {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
                 <button
                   className={copyButton}
                   onClick={() => handleShareFolderLinkCopy(handleShowPopver)}

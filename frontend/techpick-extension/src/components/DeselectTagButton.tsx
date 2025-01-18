@@ -1,6 +1,6 @@
+import { useTagStore } from '@/stores/tagStore';
+import type { TagType } from '@/types/TagType';
 import { X } from 'lucide-react';
-import { useTagStore } from '@/stores';
-import { TagType } from '@/types';
 import { DeselectTagButtonStyle } from './DeselectTagButton.css';
 
 export function DeselectTagButton({

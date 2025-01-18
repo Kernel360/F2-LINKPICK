@@ -21,8 +21,8 @@ export const pickImageStyle = style({
 });
 
 export const pickTitleSectionStyle = style({
-  fontSize: typography.fontSize['sm'],
-  fontWeight: typography.fontWeights['light'],
+  fontSize: typography.fontSize.sm,
+  fontWeight: typography.fontWeights.light,
   minHeight: '20px',
   maxHeight: '40px',
   lineHeight: '20px',
@@ -36,8 +36,8 @@ export const pickTitleSectionStyle = style({
 });
 
 export const dateTextStyle = style({
-  fontSize: typography.fontSize['sm'],
-  fontWeight: typography.fontWeights['normal'],
+  fontSize: typography.fontSize.sm,
+  fontWeight: typography.fontWeights.normal,
   color: colorVars.gray11,
   whiteSpace: 'nowrap',
 });

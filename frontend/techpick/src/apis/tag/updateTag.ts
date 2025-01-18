@@ -1,8 +1,9 @@
+import type { UpdateTagRequestType } from '@/types/UpdateTagRequestType';
+import type { UpdateTagResponseType } from '@/types/UpdateTagResponseType';
 import { HTTPError } from 'ky';
 import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
 import { returnErrorFromHTTPError } from '../error';
-import { UpdateTagRequestType, UpdateTagResponseType } from '@/types';
 
 export const updateTag = async (updateTag: UpdateTagRequestType) => {
   try {

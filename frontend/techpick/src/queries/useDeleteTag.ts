@@ -1,9 +1,9 @@
 'use client';
 
+import { deleteTag } from '@/apis/tag/deleteTag';
+import type { TagType } from '@/types/TagType';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteTag } from '@/apis/tag';
 import { tagKeys } from './tagKeys';
-import type { TagType } from '@/types';
 
 export function useDeleteTag() {
   const queryClient = useQueryClient();
@@ -19,7 +19,7 @@ export function useDeleteTag() {
       return { prevTagList };
     },
     onError(_error, _variables, context) {
-      const { prevTagList } = context!;
+      const prevTagList = context?.prevTagList ?? [];
       queryClient.setQueryData(tagKeys.all, prevTagList);
     },
   });

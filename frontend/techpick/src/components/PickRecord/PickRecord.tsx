@@ -1,30 +1,33 @@
 'use client';
 
-import { useState } from 'react';
-import Image from 'next/image';
+import { postUserPickViewEventLog } from '@/apis/eventLog/postUserPickViewEventLog';
+import { useImageLoader } from '@/hooks/useImageLoader';
+import { useOpenUrlInNewTab } from '@/hooks/useOpenUrlInNewTab';
+import { useFetchTagList } from '@/queries/useFetchTagList';
+import { usePickStore } from '@/stores/pickStore/pickStore';
+import { useUpdatePickStore } from '@/stores/updatePickStore';
+import type { PickViewItemComponentProps } from '@/types/PickViewItemComponentProps';
+import { formatDateString } from '@/utils/formatDateString';
+import { getFilteredSelectedTagList } from '@/utils/getFilteredSelectedTagList';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
-import { postUserPickViewEventLog } from '@/apis/eventLog';
-import { useImageLoader, useOpenUrlInNewTab } from '@/hooks';
-import { useFetchTagList } from '@/queries';
-import { usePickStore, useUpdatePickStore } from '@/stores';
-import { formatDateString, getFilteredSelectedTagList } from '@/utils';
+import Image from 'next/image';
+import { useState } from 'react';
+import { PickTagPicker } from '../PickTagPicker/PickTagPicker';
 import { PickDateColumnLayout } from './PickDateColumnLayout';
 import { PickImageColumnLayout } from './PickImageColumnLayout';
-import {
-  pickRecordLayoutStyle,
-  pickImageStyle,
-  pickTitleSectionStyle,
-  dateTextStyle,
-  externalLinkIconStyle,
-  linkLayoutStyle,
-  imageStyle,
-} from './pickRecord.css';
 import { PickRecordTitleInput } from './PickRecordTitleInput';
 import { PickTagColumnLayout } from './PickTagColumnLayout';
 import { PickTitleColumnLayout } from './PickTitleColumnLayout';
 import { Separator } from './Separator';
-import { PickTagPicker } from '../PickTagPicker';
-import { PickViewItemComponentProps } from '@/types';
+import {
+  dateTextStyle,
+  externalLinkIconStyle,
+  imageStyle,
+  linkLayoutStyle,
+  pickImageStyle,
+  pickRecordLayoutStyle,
+  pickTitleSectionStyle,
+} from './pickRecord.css';
 
 export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
   const pick = pickInfo;
@@ -64,7 +67,7 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
     >
       <PickImageColumnLayout>
         <div className={pickImageStyle}>
-          {imageStatus === 'loading' && <div></div>}
+          {imageStatus === 'loading' && <div />}
 
           {imageStatus === 'loaded' && (
             <img
@@ -82,6 +85,7 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
         </div>
       </PickImageColumnLayout>
       {isHovered && !isDragging && (
+        // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
         <div className={linkLayoutStyle} onClick={onClickLink}>
           <ExternalLinkIcon className={externalLinkIconStyle} strokeWidth={2} />
         </div>
@@ -96,7 +100,6 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
             setCurrentUpdateTitlePickId(pickInfo.id);
             event.stopPropagation();
           }}
-          role="button"
         >
           {pick.title}
         </div>

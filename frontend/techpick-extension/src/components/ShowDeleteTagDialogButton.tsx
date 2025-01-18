@@ -1,5 +1,5 @@
-import type { TagType } from '@/types';
-import { useDeleteTagDialogStore } from '@/stores';
+import { useDeleteTagDialogStore } from '@/stores/deleteTagDialogStore';
+import type { TagType } from '@/types/TagType';
 import { deleteTagDialogButtonStyle } from './ShowDeleteTagDialogButton.css';
 
 export function ShowDeleteTagDialogButton({
@@ -16,6 +16,7 @@ export function ShowDeleteTagDialogButton({
 
   return (
     <button
+      type="button"
       onClick={showDeleteTagDialog}
       className={deleteTagDialogButtonStyle}
     >

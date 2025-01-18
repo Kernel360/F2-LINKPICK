@@ -1,5 +1,6 @@
 'use client';
 
+import type { FolderType } from '@/types/FolderType';
 import { FolderOpenIcon } from 'lucide-react';
 import {
   currentFolderNameSectionStyle,
@@ -7,7 +8,6 @@ import {
   folderOpenIconStyle,
   folderSharedInfoTextStyle,
 } from './currentFolderNameSection.css';
-import { FolderType } from '@/types';
 
 export function CurrentFolderNameSection({
   folderInfo,
@@ -18,7 +18,8 @@ export function CurrentFolderNameSection({
       <h1 className={folderNameStyle}>
         {folderInfo ? folderInfo.name : 'loading...'}
       </h1>
-      {folderInfo && folderInfo.folderAccessToken ? (
+
+      {folderInfo?.folderAccessToken ? (
         <div className={folderSharedInfoTextStyle}>
           <div>(공유 중)</div>
         </div>

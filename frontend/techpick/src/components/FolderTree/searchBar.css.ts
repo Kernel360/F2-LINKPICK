@@ -13,7 +13,7 @@ export const searchItemStyle = style({
   borderColor: colorVars.gold6,
   borderRadius: '4px',
   padding: '8px 12px',
-  fontSize: fontSize['sm'],
+  fontSize: fontSize.sm,
   color: colorVars.sand11,
   cursor: 'pointer',
   transition: 'background-color 0.2s',

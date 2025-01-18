@@ -1,9 +1,9 @@
-import type { CSSProperties, PropsWithChildren } from 'react';
+import type { RecommendPickCategoryType } from '@/types/RecommendPickCategoryType';
+import type { RecommendPickType } from '@/types/RecommendPickType';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
+import type { CSSProperties, PropsWithChildren } from 'react';
 import { draggableStyle } from './recommendPickDraggable.css';
-import { RecommendPickCategoryType, RecommendPickType } from '@/types';
-
 export function RecommendPickDraggable({
   recommendPick,
   recommendPickCategoryType,

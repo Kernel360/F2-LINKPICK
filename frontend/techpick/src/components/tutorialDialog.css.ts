@@ -1,10 +1,10 @@
-import { style } from '@vanilla-extract/css';
-import { colorVars } from 'techpick-shared';
 import {
-  dialogContentLayoutStyle,
   dialogContentBackgroundColorStyle,
+  dialogContentLayoutStyle,
 } from '@/styles/dialogStyle.css';
 import { orangeOutlineButtonStyle } from '@/styles/orangeButtonStyle.css';
+import { style } from '@vanilla-extract/css';
+import { colorVars } from 'techpick-shared';
 
 export const dialogContent = style([
   dialogContentLayoutStyle,

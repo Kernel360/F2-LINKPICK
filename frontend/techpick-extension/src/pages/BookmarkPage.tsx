@@ -1,21 +1,20 @@
-import { DeferredComponent } from '@/libs/@components';
-import { SkeltonPickForm, UpdatePickForm } from '@/components';
-import { bookmarkPageLayout } from './BookmarkPage.css';
-import { useEffect, useRef, useState } from 'react';
-import { FolderType } from '@/types';
-import {
-  createPickToUnclassifiedFolder,
-  getBasicFolderList,
-  getRootFolderChildFolders,
-  getTagList,
-} from '@/apis';
-import { useTagStore } from '@/stores';
-import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
-import { filterSelectableFolder } from '@/utils';
-import type { CreatePickToUnclassifiedFolderResponseType } from '@/types';
-import { CHANGE_ICON_PORT_NAME } from '@/constants';
+import { createPickToUnclassifiedFolder } from '@/apis/createPickToUnclassifiedFolder';
+import { getBasicFolderList } from '@/apis/getBasicFolders';
+import { getRootFolderChildFolders } from '@/apis/getRootFolderChildFolders';
+import { getTagList } from '@/apis/getTagList';
+import { SkeltonPickForm } from '@/components/SkeltonPickForm';
+import { UpdatePickForm } from '@/components/UpdatePickForm';
+import { CHANGE_ICON_PORT_NAME } from '@/constants/changeIconPortName';
 import { useEventLogger } from '@/hooks/useEventLogger';
-import { notifyError } from '@/libs/@toast';
+import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
+import { DeferredComponent } from '@/libs/@components/DeferredComponent';
+import { notifyError } from '@/libs/@toast/notifyError';
+import { useTagStore } from '@/stores/tagStore';
+import type { CreatePickToUnclassifiedFolderResponseType } from '@/types/CreatePickToUnclassifiedFolderResponseType';
+import type { FolderType } from '@/types/FolderType';
+import { filterSelectableFolder } from '@/utils/filterSelectableFolderList';
+import { useEffect, useRef, useState } from 'react';
+import { bookmarkPageLayout } from './BookmarkPage.css';
 
 export function BookmarkPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -62,7 +61,7 @@ export function BookmarkPage() {
 
         const filteredFolderInfoList = filterSelectableFolder(
           basicFolderList,
-          rootFolderChildFolderList
+          rootFolderChildFolderList,
         );
 
         trackSaveBookmark();
@@ -78,7 +77,7 @@ export function BookmarkPage() {
         fetchInitialData();
       }
     },
-    [setTagList, trackSaveBookmark]
+    [setTagList, trackSaveBookmark],
   );
 
   if (isLoading || !pickInfo) {

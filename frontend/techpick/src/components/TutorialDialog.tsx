@@ -1,13 +1,13 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import Image from 'next/image';
+import { IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY } from '@/constants/isTutorialSeenLocalStorageKey';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import { IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY } from '@/constants';
-import { useLocalStorage } from '@/hooks';
-import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
 import { Gap } from './Gap';
 import {
   dialogCloseButtonStyle,
@@ -25,14 +25,14 @@ type TutorialStepType = (typeof tutorialStepList)[number];
 
 export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
   const [tutorialStep, setTutorialStep] = useState<TutorialStepType>(
-    tutorialStepList[0]
+    tutorialStepList[0],
   );
   const prevButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   const { setValue: setIsTutorialSeen } = useLocalStorage(
     IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY,
-    false
+    false,
   );
 
   const onValueChange = (value: string) => {
@@ -107,7 +107,7 @@ export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
                   value={tutorialStepList[1]}
                   asChild
                 >
-                  <button>다음</button>
+                  <button type="button">다음</button>
                 </Tabs.Trigger>
               ) : (
                 <div className={tabTriggerLayoutStyle}>
@@ -118,8 +118,9 @@ export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
                     onMouseEnter={() => handleMouseEnter(prevButtonRef)}
                     asChild
                   >
-                    <button>이전</button>
+                    <button type="button">이전</button>
                   </Tabs.Trigger>
+                  {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
                   <button
                     onClick={onCloseTutorial}
                     ref={closeButtonRef}

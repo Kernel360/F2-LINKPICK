@@ -1,27 +1,26 @@
+import { PORTAL_CONTAINER_ID } from '@/constants/portalContainer';
+import type { FolderType } from '@/types/FolderType';
+import { getElementById } from '@/utils/getElementById';
 import * as Select from '@radix-ui/react-select';
-import { getElementById } from '@/utils';
-import { PORTAL_CONTAINER_ID } from '@/constants';
+import { ChevronDown as ChevronDownIcon } from 'lucide-react';
+import { FolderOpen as FolderOpenIcon } from 'lucide-react';
 import {
-  folderSelectTriggerButtonStyle,
+  type Dispatch,
+  type SetStateAction,
+  forwardRef,
+  useState,
+} from 'react';
+import {
   folderSelectContentStyle,
+  folderSelectTriggerButtonStyle,
   selectItemStyle,
   selectTextStyle,
 } from './FolderSelect.css';
-import { ChevronDown as ChevronDownIcon } from 'lucide-react';
-import { FolderType } from '@/types';
-import {
-  forwardRef,
-  useState,
-  type Dispatch,
-  type SetStateAction,
-} from 'react';
-
-import { FolderOpen as FolderOpenIcon } from 'lucide-react';
 
 export const FolderSelect = forwardRef<HTMLButtonElement, FolderSelectProps>(
   function TagPicker(
     { folderInfoList, selectedFolderId, setSelectedFolderId },
-    tabFocusRef
+    tabFocusRef,
   ) {
     const portalContainerElement = getElementById(PORTAL_CONTAINER_ID);
     const [open, setOpen] = useState(false);
@@ -89,7 +88,7 @@ export const FolderSelect = forwardRef<HTMLButtonElement, FolderSelectProps>(
         </Select.Portal>
       </Select.Root>
     );
-  }
+  },
 );
 
 interface FolderSelectProps {

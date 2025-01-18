@@ -34,7 +34,7 @@ globalStyle(
     font: 'inherit',
     verticalAlign: 'baseline',
     boxSizing: 'border-box',
-  }
+  },
 );
 
 globalStyle(
@@ -44,7 +44,7 @@ globalStyle(
 `,
   {
     display: 'block',
-  }
+  },
 );
 
 globalStyle('body', {

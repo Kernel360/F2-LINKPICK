@@ -4,7 +4,7 @@ const mixpanelToken = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;
 
 if (!mixpanelToken) {
   throw new Error(
-    'NEXT_PUBLIC_MIXPANEL_TOKEN is not set in environment variables'
+    'NEXT_PUBLIC_MIXPANEL_TOKEN is not set in environment variables',
   );
 }
 

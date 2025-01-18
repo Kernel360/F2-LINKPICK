@@ -1,5 +1,5 @@
-import { components } from '@/schema';
-import { ConcreteType } from './ConcreteType';
+import type { components } from '@/schema';
+import type { ConcreteType } from './ConcreteType';
 
 export type CreatePickToUnclassifiedFolderResponseType = ConcreteType<
   Omit<

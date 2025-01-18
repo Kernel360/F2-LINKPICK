@@ -1,17 +1,18 @@
 'use client';
 
-import { memo } from 'react';
-import type { PropsWithChildren } from 'react';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { usePickStore } from '@/stores/pickStore/pickStore';
+import type { PickInfoType } from '@/types/PickInfoType';
+import { getPortalContainer } from '@/utils/portal';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { isEqual } from 'es-toolkit';
-import { Trash2 as TrashIcon, CircleX as CircleXIcon } from 'lucide-react';
-import { usePickStore, useTreeStore } from '@/stores';
-import { getPortalContainer } from '@/utils';
+import { CircleX as CircleXIcon, Trash2 as TrashIcon } from 'lucide-react';
+import { memo } from 'react';
+import type { PropsWithChildren } from 'react';
 import {
   contextMenuContentLayout,
   contextMenuItemStyle,
 } from './pickContextMenu.css';
-import { PickInfoType } from '@/types';
 
 interface PickContextMenuProps {
   pickInfo: PickInfoType;
@@ -26,7 +27,7 @@ const PickContextMenu = memo(
     const { basicFolderMap } = useTreeStore();
 
     const recycleBinFolderId = basicFolderMap
-      ? basicFolderMap['RECYCLE_BIN'].id
+      ? basicFolderMap.RECYCLE_BIN.id
       : -1;
     const isRecycleBinFolder = recycleBinFolderId === pickInfo.parentFolderId;
     const {
@@ -95,11 +96,11 @@ const PickContextMenu = memo(
       prevProps.pickInfo.title === nextProps.pickInfo.title;
     const isEqualSelectedTagList = isEqual(
       prevProps.pickInfo.tagIdOrderedList,
-      nextProps.pickInfo.tagIdOrderedList
+      nextProps.pickInfo.tagIdOrderedList,
     );
     const isEqualParentFolderId = isEqual(
       prevProps.pickInfo.parentFolderId,
-      nextProps.pickInfo.parentFolderId
+      nextProps.pickInfo.parentFolderId,
     );
 
     return (
@@ -108,7 +109,7 @@ const PickContextMenu = memo(
       isEqualSelectedTagList &&
       isEqualParentFolderId
     );
-  }
+  },
 );
 
 PickContextMenu.displayName = 'PickContextMenu';

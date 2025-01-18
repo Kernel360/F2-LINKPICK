@@ -1,19 +1,20 @@
-import { useRef, useState } from 'react';
-import { useFloating, shift, FloatingFocusManager } from '@floating-ui/react';
+import { notifyError } from '@/libs/@toast/notifyError';
+import { useTagStore } from '@/stores/tagStore';
+import type { TagType } from '@/types/TagType';
+import { isEmptyString } from '@/utils/isEmptyString';
+import { isShallowEqualValue } from '@/utils/isShallowEqualValue';
+import { FloatingFocusManager, shift, useFloating } from '@floating-ui/react';
+import { FloatingOverlay } from '@floating-ui/react';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import DOMPurify from 'dompurify';
-import { notifyError } from '@/libs/@toast';
-import type { TagType } from '@/types';
-import { useTagStore } from '@/stores';
-import { ShowDeleteTagDialogButton } from './ShowDeleteTagDialogButton';
+import { useRef, useState } from 'react';
 import { PopoverTriggerButton } from './PopoverTriggerButton';
-import { isEmptyString, isShallowEqualValue } from '@/utils';
+import { ShowDeleteTagDialogButton } from './ShowDeleteTagDialogButton';
 import {
   floatingOverlayStyle,
   tagInfoEditFormLayout,
   tagInputStyle,
 } from './TagInfoEditPopoverButton.css';
-import { FloatingOverlay } from '@floating-ui/react';
 
 export function TagInfoEditPopoverButton({
   tag,
@@ -95,12 +96,14 @@ export function TagInfoEditPopoverButton({
               style={floatingStyles}
               onClick={(e) => e.stopPropagation()}
               onKeyDown={(e) => e.stopPropagation()}
+              // biome-ignore lint/a11y/useSemanticElements: <explanation>
               role="dialog"
             >
               <input
                 type="text"
                 defaultValue={tag.name}
                 ref={tagNameInputRef}
+                // biome-ignore lint/a11y/noAutofocus: <explanation>
                 autoFocus
                 onKeyDown={handleInputKeyDown}
                 className={tagInputStyle}

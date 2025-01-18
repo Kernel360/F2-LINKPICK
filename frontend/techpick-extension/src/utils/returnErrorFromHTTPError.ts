@@ -1,8 +1,8 @@
-import { HTTPError } from 'ky';
-import { ApiErrorBodyType } from '@/types';
+import type { ApiErrorBodyType } from '@/types/ApiErrorBodyType';
+import type { HTTPError } from 'ky';
 
 export const returnErrorFromHTTPError = async (
-  error: HTTPError
+  error: HTTPError,
 ): Promise<Error> => {
   const errorData = await error.response.json<ApiErrorBodyType>();
 

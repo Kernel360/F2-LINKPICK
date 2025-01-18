@@ -17,7 +17,9 @@ class EventEmitterClass {
 
   emit(event: string) {
     if (!this.events[event]) return;
-    this.events[event].forEach((callback) => callback());
+    for (const listener of this.events[event]) {
+      listener();
+    }
   }
 }
 

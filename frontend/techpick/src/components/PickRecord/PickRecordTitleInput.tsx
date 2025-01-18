@@ -1,12 +1,12 @@
 'uer client';
 
+import { isEmptyString } from '@/utils/string';
 import { useCallback, useEffect, useRef } from 'react';
 import type { KeyboardEvent } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import { isEmptyString } from '@/utils';
 import {
-  pickTitleInputStyle,
   pickRecordTitleInputLayoutStyle,
+  pickTitleInputStyle,
 } from './pickRecordTitleInput.css';
 
 export function PickRecordTitleInput({
@@ -52,7 +52,7 @@ export function PickRecordTitleInput({
         document.removeEventListener('mousedown', handleClickOutside);
       };
     },
-    [onClickOutSide, submitIfNotEmptyString]
+    [onClickOutSide, submitIfNotEmptyString],
   );
 
   useEffect(
@@ -64,14 +64,15 @@ export function PickRecordTitleInput({
         // 커서를 텍스트의 끝으로 이동
         textAreaRef.current?.setSelectionRange(
           initialValue.length,
-          initialValue.length
+          initialValue.length,
         );
       }
     },
-    [initialValue]
+    [initialValue],
   );
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div
       ref={containerRef}
       onClick={(e) => e.stopPropagation()}

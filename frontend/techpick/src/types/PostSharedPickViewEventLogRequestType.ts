@@ -1,4 +1,4 @@
-import { components } from '@/schema';
+import type { components } from '@/schema';
 
 export type PostSharedPickViewEventLogRequestType =
   components['schemas']['baguni.api.application.event.dto.EventApiRequest$SharedBookmarkView'];

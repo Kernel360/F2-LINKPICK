@@ -1,9 +1,10 @@
 'use client';
 
+import { usePickStore } from '@/stores/pickStore/pickStore';
+import type { PickInfoType } from '@/types/PickInfoType';
+import type { TagType } from '@/types/TagType';
 import { X } from 'lucide-react';
-import { usePickStore } from '@/stores';
 import { DeselectTagButtonStyle } from './DeselectTagButton.css';
-import { PickInfoType, TagType } from '@/types';
 
 export function DeselectTagButton({
   tag,
@@ -28,7 +29,7 @@ export function DeselectTagButton({
         updatePickInfo(pickInfo.parentFolderId, {
           id: pickInfo.id,
           tagIdOrderedList: tagIdOrderedList.filter(
-            (tagId) => tagId !== tag.id
+            (tagId) => tagId !== tag.id,
           ),
         });
       }}

@@ -1,8 +1,9 @@
+import type { CreateTagRequestType } from '@/types/CreateTagRequestType';
+import type { CreateTagResponseType } from '@/types/CreateTagResponseType';
 import { HTTPError } from 'ky';
 import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
 import { returnErrorFromHTTPError } from '../error';
-import { CreateTagRequestType, CreateTagResponseType } from '@/types';
 
 export const createTag = async (createTag: CreateTagRequestType) => {
   try {
@@ -10,7 +11,7 @@ export const createTag = async (createTag: CreateTagRequestType) => {
       API_URLS.CREATE_TAGS,
       {
         json: createTag,
-      }
+      },
     );
     const data = await response.json();
 

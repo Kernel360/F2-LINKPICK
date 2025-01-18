@@ -1,11 +1,11 @@
-import React, { CSSProperties } from 'react';
-import { useRouter } from 'next/navigation';
-import { useTreeStore } from '@/stores';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { useSearchPickStore } from '@/stores/searchPickStore';
-import { formatDateString } from '@/utils';
-import * as styles from './searchItemRenderer.css';
+import type { PickInfoType } from '@/types/PickInfoType';
+import { formatDateString } from '@/utils/formatDateString';
+import { useRouter } from 'next/navigation';
+import React, { type CSSProperties } from 'react';
 import { CurrentPathIndicator } from '../FolderContentHeader/CurrentPathIndicator';
-import { PickInfoType } from '@/types';
+import * as styles from './searchItemRenderer.css';
 
 export default function SearchItemRenderer({
   item,
@@ -41,7 +41,7 @@ export default function SearchItemRenderer({
      */
     const date = new Date();
     router.push(
-      `/folders/${targetLocation}?searchId=pickId-${item.id}&dateId=${date.getMilliseconds()}`
+      `/folders/${targetLocation}?searchId=pickId-${item.id}&dateId=${date.getMilliseconds()}`,
     );
   };
 
@@ -50,6 +50,7 @@ export default function SearchItemRenderer({
   }
 
   return (
+    // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
     <div
       style={{
         ...style,

@@ -1,28 +1,29 @@
+import { updatePickFromExtension } from '@/apis/updatePickFromExtension';
+import { PUBLIC_DOMAIN } from '@/constants/publicDomain';
+import { useChangeFocusUsingArrowKey } from '@/hooks/useChangeFocusUsingArrowKey';
+import { useEventLogger } from '@/hooks/useEventLogger';
+import { notifyError } from '@/libs/@toast/notifyError';
+import { notifySuccess } from '@/libs/@toast/notifySuccess';
+import { useTagStore } from '@/stores/tagStore';
+import type { FolderType } from '@/types/FolderType';
+import { PlusIcon } from '@radix-ui/react-icons';
 import DOMPurify from 'dompurify';
-import { notifyError, notifySuccess } from '@/libs/@toast';
-import { useChangeFocusUsingArrowKey } from '@/hooks';
-import { useTagStore } from '@/stores';
-import { FolderType } from '@/types';
-import { updatePickFromExtension } from '@/apis';
-import { TagPicker } from '@/components';
-import { ThumbnailImage } from './ThumbnailImage';
-import {
-  pickFormLayout,
-  formFieldLayout,
-  titleInputStyle,
-  pickFormFieldListLayout,
-  submitButtonStyle,
-  plusIconStyle,
-  footerStyle,
-  footerTextStyle,
-  footerLinkStyle,
-  footerLinkTextStyle,
-} from './UpdatePickForm.css';
 import { useEffect, useRef, useState } from 'react';
 import { FolderSelect } from './FolderSelect';
-import { PlusIcon } from '@radix-ui/react-icons';
-import { PUBLIC_DOMAIN } from '@/constants';
-import { useEventLogger } from '@/hooks/useEventLogger';
+import { TagPicker } from './TagPicker';
+import { ThumbnailImage } from './ThumbnailImage';
+import {
+  footerLinkStyle,
+  footerLinkTextStyle,
+  footerStyle,
+  footerTextStyle,
+  formFieldLayout,
+  pickFormFieldListLayout,
+  pickFormLayout,
+  plusIconStyle,
+  submitButtonStyle,
+  titleInputStyle,
+} from './UpdatePickForm.css';
 
 export function UpdatePickForm({
   id,
@@ -51,10 +52,10 @@ export function UpdatePickForm({
   ]);
 
   const currentSelectedFolderInfo = folderInfoList.find(
-    (folder) => folder.id === folderId
+    (folder) => folder.id === folderId,
   );
   const [selectedFolderId, setSelectedFolderId] = useState(
-    `${currentSelectedFolderInfo?.id ?? folderInfoList[0].id}`
+    `${currentSelectedFolderInfo?.id ?? folderInfoList[0].id}`,
   );
 
   useEffect(() => {
@@ -90,7 +91,7 @@ export function UpdatePickForm({
         }, 900);
       })
       .catch(() => {
-        notifyError(`북마크가 실패했습니다!`);
+        notifyError('북마크가 실패했습니다!');
       });
   };
 
@@ -121,13 +122,19 @@ export function UpdatePickForm({
         </div>
 
         <div className={footerStyle}>
-          <a href={PUBLIC_DOMAIN} className={footerLinkStyle} target="_blank">
+          <a
+            href={PUBLIC_DOMAIN}
+            className={footerLinkStyle}
+            target="_blank"
+            rel="noreferrer"
+          >
             <p className={footerLinkTextStyle}>app.baguni.kr</p>
           </a>
           <p className={footerTextStyle}>수정하기</p>
         </div>
       </div>
       <button
+        type="submit"
         className={submitButtonStyle}
         onClick={() => {
           onSubmit();

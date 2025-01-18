@@ -1,10 +1,10 @@
-import { COLOR_LIST } from '@/constants';
+import { COLOR_LIST } from '@/constants/colorList';
 
 type LuminosityType = 'dark' | 'light';
 
 export const numberToRandomColor = (
   number: number,
-  luminosity: LuminosityType = 'light'
+  luminosity: LuminosityType = 'light',
 ) => {
   const colorList = luminosity ? COLOR_LIST : COLOR_LIST;
   const length = colorList.length;

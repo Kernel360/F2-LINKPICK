@@ -1,9 +1,9 @@
 'use client';
 
-import type { PropsWithChildren } from 'react';
+import { getPortalContainer } from '@/utils/portal';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { FolderPen, FolderX, ScreenShare } from 'lucide-react';
-import { getPortalContainer } from '@/utils';
+import type { PropsWithChildren } from 'react';
 import {
   contextMenuContentLayout,
   contextMenuItemStyle,

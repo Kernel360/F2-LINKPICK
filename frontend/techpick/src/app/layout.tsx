@@ -1,13 +1,11 @@
-import { Noto_Sans_KR } from 'next/font/google';
-import { PORTAL_CONTAINER_ID } from '@/constants';
-import {
-  ToastProvider,
-  ThemeProvider,
-  UserIdentifyProvider,
-} from '@/providers';
 import { QueryProvider } from '@/providers/QueryProvider';
+import { Noto_Sans_KR } from 'next/font/google';
 import '@/styles/reset.css';
-import { getUserIdForServer } from '@/utils';
+import { PORTAL_CONTAINER_ID } from '@/constants/portalContainerId';
+import { ThemeProvider } from '@/providers/ThemeProvider';
+import { ToastProvider } from '@/providers/ToastProvider';
+import { UserIdentifyProvider } from '@/providers/UserIdentifyProvider';
+import { getUserIdForServer } from '@/utils/getUserIdForServer';
 import type { Metadata } from 'next';
 
 const notoSansKR = Noto_Sans_KR({ weight: 'variable', subsets: ['latin'] });

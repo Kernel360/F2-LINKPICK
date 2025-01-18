@@ -1,7 +1,9 @@
+import type { FolderMapType } from '@/types/FolderMapType';
+import type { GetFolderListResponseType } from '@/types/GetFolderListResponseType';
 import { HTTPError } from 'ky';
-import { apiClient, returnErrorFromHTTPError } from '@/apis';
+import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
-import type { GetFolderListResponseType, FolderMapType } from '@/types';
+import { returnErrorFromHTTPError } from '../error';
 
 export const getFolders = async () => {
   const data = await getRootFolderList();
@@ -12,7 +14,7 @@ export const getFolders = async () => {
 const getRootFolderList = async () => {
   try {
     const response = await apiClient.get<GetFolderListResponseType>(
-      API_URLS.GET_FOLDERS
+      API_URLS.GET_FOLDERS,
     );
     const data = await response.json();
 

@@ -1,4 +1,4 @@
-import { HOST_PERMISSIONS_HTTPS } from '@/constants';
+import { HOST_PERMISSIONS_HTTPS } from '@/constants/hostPermissionsHttpsUrl';
 
 export const getAccessToken = async () => {
   const accessTokenCookie = await chrome.cookies.get({

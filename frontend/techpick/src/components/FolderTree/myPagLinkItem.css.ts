@@ -15,7 +15,7 @@ export const navItemStyle = style({
   borderRadius: '4px',
   padding: '8px 12px',
   paddingTop: '12px',
-  fontSize: fontSize['sm'],
+  fontSize: fontSize.sm,
   cursor: 'pointer',
   transition: 'background-color 0.2s',
   selectors: {

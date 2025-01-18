@@ -1,6 +1,6 @@
-import { pickDraggableListLayoutStyle } from './pickDraggableListLayout.css';
+import type { PickViewDraggableItemListLayoutComponentProps } from '@/types/PickViewDraggableItemListLayoutComponentProps';
 import { PickListSortableContextProvider } from './PickListSortableContextProvider';
-import { PickViewDraggableItemListLayoutComponentProps } from '@/types';
+import { pickDraggableListLayoutStyle } from './pickDraggableListLayout.css';
 
 export function PickDraggableListLayout({
   viewType = 'record',

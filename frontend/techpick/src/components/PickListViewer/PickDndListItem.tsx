@@ -1,17 +1,18 @@
 'use client';
 
-import { MouseEvent, type CSSProperties } from 'react';
+import { usePickStore } from '@/stores/pickStore/pickStore';
+import { useUpdatePickStore } from '@/stores/updatePickStore';
+import { isSelectionActive } from '@/utils/isSelectionActive';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { usePickStore, useUpdatePickStore } from '@/stores';
-import { isSelectionActive } from '@/utils';
+import type { CSSProperties, MouseEvent } from 'react';
+import { PickListItem } from './PickListItem';
+import type { PickViewDnDItemComponentProps } from './PickListViewer';
 import {
   isActiveDraggingItemStyle,
   selectedDragItemStyle,
 } from './pickDnDCard.css';
 import { getSelectedPickRange } from './pickDnDCard.util';
-import { PickListItem } from './PickListItem';
-import type { PickViewDnDItemComponentProps } from './PickListViewer';
 
 export function PickDndListItem({ pickInfo }: PickViewDnDItemComponentProps) {
   const {
@@ -67,7 +68,7 @@ export function PickDndListItem({ pickInfo }: PickViewDnDItemComponentProps) {
 
   const handleClick = (
     pickId: number,
-    event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+    event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
   ) => {
     if (event.shiftKey && isSelectionActive(selectedPickIdList.length)) {
       event.preventDefault();
@@ -85,6 +86,7 @@ export function PickDndListItem({ pickInfo }: PickViewDnDItemComponentProps) {
 
   return (
     <div ref={setNodeRef} {...attributes} {...listeners} style={style}>
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <div
         className={`${isSelected ? selectedDragItemStyle : ''} ${isActiveDragging ? isActiveDraggingItemStyle : ''}`}
         onClick={(event) => handleClick(pickId, event)}

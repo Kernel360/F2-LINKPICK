@@ -1,4 +1,4 @@
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { type PropsWithChildren, useEffect, useState } from 'react';
 
 export function DeferredComponent({ children }: PropsWithChildren) {
   const [isDeferred, setIsDeferred] = useState(false);

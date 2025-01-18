@@ -1,12 +1,12 @@
 'use client';
 
-import { PropsWithChildren } from 'react';
 import { Slot, Slottable } from '@radix-ui/react-slot';
+import type { PropsWithChildren } from 'react';
 import {
+  type fontSizeVariantKeyTypes,
   fontSizeVariants,
+  type fontWeightVariantKeyTypes,
   fontWeightVariants,
-  fontSizeVariantKeyTypes,
-  fontWeightVariantKeyTypes,
   textStyle,
 } from './Text.css';
 

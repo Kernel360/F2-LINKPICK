@@ -1,8 +1,8 @@
 'use client';
 
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { isFolderDraggableObject } from '@/utils/isFolderDraggableObject';
 import { useDndMonitor } from '@dnd-kit/core';
-import { useTreeStore } from '@/stores';
-import { isFolderDraggableObject } from '@/utils';
 import type {
   DragEndEvent,
   DragOverEvent,

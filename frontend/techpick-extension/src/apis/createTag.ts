@@ -1,14 +1,16 @@
-import { apiClient } from './apiClient';
-import { CreateTagRequestType, CreateTagResponseType } from '@/types';
-import { API_URLS } from '@/constants';
+import { API_URLS } from '@/constants/apiUrls';
+import type { CreateTagRequestType } from '@/types/CreateTagRequestType';
+import type { CreateTagResponseType } from '@/types/CreateTagResponseType';
+import { returnErrorFromHTTPError } from '@/utils/returnErrorFromHTTPError';
 import { HTTPError } from 'ky';
-import { returnErrorFromHTTPError } from '@/utils';
+import { apiClient } from './apiClient';
 
 export const createTag = async (createTag: CreateTagRequestType) => {
   try {
     const response = await apiClient.post<CreateTagResponseType>(
       API_URLS.getTagsUrl(),
-      { json: createTag }
+
+      { json: createTag },
     );
     const data = await response.json();
 

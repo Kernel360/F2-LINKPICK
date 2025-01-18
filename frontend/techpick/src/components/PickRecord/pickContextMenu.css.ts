@@ -1,12 +1,12 @@
 import { style } from '@vanilla-extract/css';
-import { colorVars, sizes, space, borderRadius } from 'techpick-shared';
+import { borderRadius, colorVars, sizes, space } from 'techpick-shared';
 
 export const contextMenuContentLayout = style({
-  width: sizes['min'],
-  height: sizes['min'],
+  width: sizes.min,
+  height: sizes.min,
   border: '1px solid',
   borderColor: colorVars.gold8,
-  borderRadius: borderRadius['base'],
+  borderRadius: borderRadius.base,
   backgroundColor: colorVars.gold5,
 });
 

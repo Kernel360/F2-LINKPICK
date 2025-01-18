@@ -1,6 +1,6 @@
-import Link from 'next/link';
+import { ROUTES } from '@/constants/route';
 import { CircleUserRoundIcon } from 'lucide-react';
-import { ROUTES } from '@/constants';
+import Link from 'next/link';
 import { navItemStyle, topBorderColor } from './myPagLinkItem.css';
 
 export function MyPageLinkItem() {

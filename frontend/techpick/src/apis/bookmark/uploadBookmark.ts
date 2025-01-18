@@ -1,13 +1,14 @@
+import type { UploadBookmarkResponseType } from '@/types/UploadBookmarkResponseType';
 import { HTTPError } from 'ky';
-import { apiClient, returnErrorFromHTTPError } from '@/apis';
+import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
-import { UploadBookmarkResponseType } from '@/types';
+import { returnErrorFromHTTPError } from '../error';
 
 export const uploadBookmark = async (formData: FormData) => {
   try {
     const response = await apiClient.post<UploadBookmarkResponseType>(
       API_URLS.UPLOAD_BOOKMARK,
-      { body: formData }
+      { body: formData },
     );
     const data = await response.json();
 

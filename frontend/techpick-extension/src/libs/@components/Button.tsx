@@ -1,11 +1,11 @@
-import { PropsWithChildren, forwardRef } from 'react';
+import { type PropsWithChildren, forwardRef } from 'react';
 import {
-  buttonSizeVariants,
-  buttonColorVariants,
+  type buttonBackgroundVariantKeyTypes,
   buttonBackgroundVariants,
-  buttonSizeVariantKeyTypes,
-  buttonColorVariantKeyTypes,
-  buttonBackgroundVariantKeyTypes,
+  type buttonColorVariantKeyTypes,
+  buttonColorVariants,
+  type buttonSizeVariantKeyTypes,
+  buttonSizeVariants,
   buttonStyle,
   wideButtonStyle,
 } from './Button.css';
@@ -23,10 +23,11 @@ export const Button = forwardRef<
     onKeyDown,
     children,
   },
-  ref
+  ref,
 ) {
   return (
     <button
+      type="button"
       ref={ref}
       className={`${buttonSizeVariants[size]} ${buttonColorVariants[color]} ${buttonBackgroundVariants[background]} ${buttonStyle} ${wide ? wideButtonStyle : ''}`}
       onClick={onClick}

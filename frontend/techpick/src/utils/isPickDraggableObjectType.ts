@@ -1,7 +1,7 @@
-import type { PickDraggableObjectType } from '@/types';
+import type { PickDraggableObjectType } from '@/types/PickDraggableObjectType';
 
 export const isPickDraggableObject = (
-  data: unknown
+  data: unknown,
 ): data is PickDraggableObjectType => {
   if (!data || typeof data !== 'object') {
     return false;

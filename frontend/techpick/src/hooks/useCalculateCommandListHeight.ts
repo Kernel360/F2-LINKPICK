@@ -1,9 +1,9 @@
 'use client';
 
-import { MutableRefObject, useEffect, useState } from 'react';
+import { type MutableRefObject, useEffect, useState } from 'react';
 
 export function useCalculateCommandListHeight(
-  selectedTagListRef: MutableRefObject<HTMLDivElement | null>
+  selectedTagListRef: MutableRefObject<HTMLDivElement | null>,
 ) {
   const [commandListHeight, setCommandListHeight] = useState(0);
 
@@ -21,11 +21,11 @@ export function useCalculateCommandListHeight(
       const { height } = selectedTagListRef.current.getBoundingClientRect();
       const commandListHeight = Math.max(
         0,
-        Math.min(COMMAND_LIST_INITIAL_HEIGHT, COMMAND_LIST_MAX_HEIGHT - height)
+        Math.min(COMMAND_LIST_INITIAL_HEIGHT, COMMAND_LIST_MAX_HEIGHT - height),
       );
       setCommandListHeight(commandListHeight);
     },
-    [selectedTagListRef]
+    [selectedTagListRef],
   );
 
   return { commandListHeight };

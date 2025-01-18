@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colorVars, fontSize, space, fontWeights } from 'techpick-shared';
+import { colorVars, fontSize, fontWeights, space } from 'techpick-shared';
 
 export const selectedTagContentStyle = style({
   boxSizing: 'border-box',
@@ -8,8 +8,8 @@ export const selectedTagContentStyle = style({
   maxWidth: '228px',
   height: '20px',
   lineHeight: '18px',
-  fontSize: fontSize['sm'],
-  fontWeight: fontWeights['normal'],
+  fontSize: fontSize.sm,
+  fontWeight: fontWeights.normal,
   whiteSpace: 'nowrap', // 줄 바꿈 방지
   overflow: 'hidden', // 넘치는 내용 숨김
   textOverflow: 'ellipsis', // 생략 부호 추가

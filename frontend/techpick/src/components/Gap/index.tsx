@@ -1,7 +1,11 @@
 'use client';
 
-import { PropsWithChildren } from 'react';
-import { verticalGapVariants, horizontalGapVariants, GapSize } from './Gap.css';
+import type { PropsWithChildren } from 'react';
+import {
+  type GapSize,
+  horizontalGapVariants,
+  verticalGapVariants,
+} from './Gap.css';
 
 export function Gap({
   verticalSize = 'gap0',

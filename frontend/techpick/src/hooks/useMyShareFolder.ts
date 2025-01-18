@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
 import { deleteMyShareFolder } from '@/apis/folder/deleteShareFolder';
-import { useTreeStore } from '@/stores';
-import { notifySuccess, notifyError } from '@/utils';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { notifyError, notifySuccess } from '@/utils/toast';
+import { useMemo } from 'react';
 
 export function useMyShareFolder() {
   const { checkIsShareFolder, updateFolderAccessTokenByFolderId, treeDataMap } =
@@ -13,10 +13,10 @@ export function useMyShareFolder() {
     return folders
       .filter((folder) => checkIsShareFolder(folder.id))
       .map((folder) => ({
-        sourceFolderId: folder.id!,
-        sourceFolderName: folder.name!,
-        sourceFolderCreatedAt: folder.createdAt!,
-        sourceFolderUpdatedAt: folder.updatedAt!,
+        sourceFolderId: folder.id,
+        sourceFolderName: folder.name,
+        sourceFolderCreatedAt: folder.createdAt,
+        sourceFolderUpdatedAt: folder.updatedAt,
         folderAccessToken: folder.folderAccessToken ?? '',
       }));
   }, [checkIsShareFolder, treeDataMap]);

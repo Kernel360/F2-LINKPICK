@@ -1,8 +1,11 @@
+import { createTag } from '@/apis/createTag';
+import { deleteTag } from '@/apis/deleteTag';
+import { getTagList } from '@/apis/getTagList';
+import { updateTag } from '@/apis/updateTag';
+import { hasIndex } from '@/utils/hasIndex';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { getTagList, createTag, deleteTag, updateTag } from '@/apis';
-import type { TagState, TagAction } from './tagStore.type';
-import { hasIndex } from '@/utils';
+import type { TagAction, TagState } from './tagStore.type';
 
 const initialState: TagState = {
   tagList: [],
@@ -34,7 +37,7 @@ export const useTagStore = create<TagState & TagAction>()(
     deselectTag: (tagId) =>
       set((state) => {
         state.selectedTagList = state.selectedTagList.filter(
-          (tag) => tag.id !== tagId
+          (tag) => tag.id !== tagId,
         );
       }),
 
@@ -47,7 +50,7 @@ export const useTagStore = create<TagState & TagAction>()(
     updateSelectedTagList: (updatedTag) => {
       set((state) => {
         const index = state.selectedTagList.findIndex(
-          (tag) => tag.id === updatedTag.id
+          (tag) => tag.id === updatedTag.id,
         );
 
         if (!hasIndex(index)) {
@@ -104,10 +107,10 @@ export const useTagStore = create<TagState & TagAction>()(
 
     deleteTag: async (tagId: number) => {
       const deleteTargetTagIndex = get().tagList.findIndex(
-        (tag) => tag.id === tagId
+        (tag) => tag.id === tagId,
       );
       const deleteTargetSelectedIndex = get().selectedTagList.findIndex(
-        (tag) => tag.id === tagId
+        (tag) => tag.id === tagId,
       );
 
       if (!hasIndex(deleteTargetTagIndex)) {
@@ -134,7 +137,7 @@ export const useTagStore = create<TagState & TagAction>()(
             state.selectedTagList.splice(
               deleteTargetSelectedIndex,
               0,
-              deleteTagInfo
+              deleteTagInfo,
             );
           }
         });
@@ -143,10 +146,10 @@ export const useTagStore = create<TagState & TagAction>()(
 
     updateTag: async (updateTagInfo) => {
       const updateTagIndexInTagList = get().tagList.findIndex(
-        (tag) => tag.id === updateTagInfo.id
+        (tag) => tag.id === updateTagInfo.id,
       );
       const updateTagIndexInSelectedTagList = get().selectedTagList.findIndex(
-        (tag) => tag.id === updateTagInfo.id
+        (tag) => tag.id === updateTagInfo.id,
       );
 
       if (!hasIndex(updateTagIndexInTagList)) {
@@ -177,5 +180,5 @@ export const useTagStore = create<TagState & TagAction>()(
         });
       }
     },
-  }))
+  })),
 );

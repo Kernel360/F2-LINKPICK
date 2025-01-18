@@ -1,9 +1,10 @@
-import { createMemoryRouter } from 'react-router-dom';
-import { BookmarkPage, ErrorPage } from '@/pages';
-import { PUBLIC_DOMAIN } from './constants';
-import { getAccessToken } from './libs/@chrome/getCookie';
-import { jwtDecode } from 'jwt-decode';
 import mixpanel from '@/libs/@mixpanel/mixpanel-client';
+import { jwtDecode } from 'jwt-decode';
+import { createMemoryRouter } from 'react-router-dom';
+import { PUBLIC_DOMAIN } from './constants/publicDomain';
+import { getAccessToken } from './libs/@chrome/getCookie';
+import { BookmarkPage } from './pages/BookmarkPage';
+import { ErrorPage } from './pages/ErrorPage';
 
 export const router = createMemoryRouter([
   {

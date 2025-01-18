@@ -1,9 +1,9 @@
 'use client';
 
-import type { CSSProperties, PropsWithChildren } from 'react';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import type { CSSProperties, PropsWithChildren } from 'react';
 import { activeDraggingFolderStyle } from './folderDraggable.css';
 
 export const FolderDraggable = ({
@@ -45,7 +45,7 @@ export const FolderDraggable = ({
         {...listeners}
         style={style}
         className={activeDraggingFolderStyle}
-      ></div>
+      />
     );
   }
 

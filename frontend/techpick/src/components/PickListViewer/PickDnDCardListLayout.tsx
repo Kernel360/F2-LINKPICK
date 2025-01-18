@@ -1,8 +1,8 @@
 'use client';
 
-import { PickViewDnDItemListLayoutComponentProps } from './DraggablePickListViewer';
-import { pickCardGridLayoutStyle } from './pickCardGridLayout.css';
+import type { PickViewDnDItemListLayoutComponentProps } from './DraggablePickListViewer';
 import { PickListSortableContext } from './PickListSortableContext';
+import { pickCardGridLayoutStyle } from './pickCardGridLayout.css';
 
 export function PickDnDCardListLayout({
   children,

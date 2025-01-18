@@ -1,12 +1,12 @@
 'use client';
 
-import { useRef } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { ROUTES } from '@/constants/route';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
-import { ROUTES } from '@/constants';
-import { useTreeStore } from '@/stores';
-import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
+import { useParams, useRouter } from 'next/navigation';
+import { useRef } from 'react';
 import {
   moveRecycleBinCancelButtonStyle,
   moveRecycleBinConfirmButtonStyle,
@@ -25,7 +25,7 @@ export function MoveFolderToRecycleBinDialog({
   const router = useRouter();
   const { folderId: urlFolderId } = useParams<{ folderId: string }>();
   const moveFolderToRecycleBin = useTreeStore(
-    (state) => state.moveFolderToRecycleBin
+    (state) => state.moveFolderToRecycleBin,
   );
   const { checkIsShareFolder, updateFolderAccessTokenByFolderId } =
     useTreeStore();
@@ -79,6 +79,7 @@ export function MoveFolderToRecycleBinDialog({
           </div>
 
           <Dialog.Close asChild>
+            {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
             <button
               ref={deleteButtonRef}
               onMouseEnter={() => handleMouseEnter(deleteButtonRef)}
@@ -90,6 +91,7 @@ export function MoveFolderToRecycleBinDialog({
 
           <div>
             <Dialog.Close asChild>
+              {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
               <button
                 className={moveRecycleBinConfirmButtonStyle}
                 onClick={moveRecycleBinAndRedirect}
@@ -101,6 +103,7 @@ export function MoveFolderToRecycleBinDialog({
             </Dialog.Close>
 
             <Dialog.Close asChild>
+              {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
               <button
                 ref={cancelButtonRef}
                 onMouseEnter={() => handleMouseEnter(cancelButtonRef)}

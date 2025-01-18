@@ -1,7 +1,8 @@
-import type { PickInfoType, PickRecordValueType } from '@/types';
+import type { PickInfoType } from '@/types/PickInfoType';
+import type { PickRecordValueType } from '@/types/PickRecordValueType';
 
 export const getOrderedPickListByFolderId = (
-  pickRecordValue: PickRecordValueType | null | undefined
+  pickRecordValue: PickRecordValueType | null | undefined,
 ) => {
   if (!pickRecordValue) {
     return [];

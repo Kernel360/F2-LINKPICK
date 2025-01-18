@@ -1,6 +1,6 @@
-/* eslint-disable jsx-a11y/alt-text */
-import { NextRequest } from 'next/server';
 import { ImageResponse } from '@vercel/og';
+/* eslint-disable jsx-a11y/alt-text */
+import type { NextRequest } from 'next/server';
 
 export const runtime = 'edge';
 
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
   const adjustedCount = [1, 2, 4, 8, 16].reduce((prev, curr) =>
     Math.abs(curr - imageUrls.length) < Math.abs(prev - imageUrls.length)
       ? curr
-      : prev
+      : prev,
   );
 
   const images = await Promise.all(
@@ -39,32 +39,33 @@ export async function GET(req: NextRequest) {
       } catch {
         return '/image/og_image.png';
       }
-    })
+    }),
   );
   const imageCount = images.length;
 
   return new ImageResponse(
-    (
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          width: '1200px',
-          height: '630px',
-        }}
-      >
-        {images.map((url: string, index: number) => (
-          <img
-            key={index}
-            src={url}
-            style={{
-              ...getImageStyle(imageCount),
-              objectFit: 'cover',
-            }}
-          />
-        ))}
-      </div>
-    ),
-    { width, height }
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        width: '1200px',
+        height: '630px',
+      }}
+    >
+      {images.map((url: string, index: number) => (
+        <img
+          // biome-ignore lint/a11y/noRedundantAlt: <explanation>
+          alt="open graph image"
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+          key={index}
+          src={url}
+          style={{
+            ...getImageStyle(imageCount),
+            objectFit: 'cover',
+          }}
+        />
+      ))}
+    </div>,
+    { width, height },
   );
 }

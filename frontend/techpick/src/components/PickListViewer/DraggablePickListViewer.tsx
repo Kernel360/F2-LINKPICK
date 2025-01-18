@@ -1,3 +1,5 @@
+import type { PickInfoType } from '@/types/PickInfoType';
+import type { PickRenderModeType } from '@/types/PickRenderModeType';
 import type { ReactNode } from 'react';
 import { PickDnDCard } from './PickDnDCard';
 import { PickDnDCardListLayout } from './PickDnDCardListLayout';
@@ -7,7 +9,6 @@ import type {
   PickViewItemComponentProps,
   PickViewItemListLayoutComponentProps,
 } from './PickListViewer';
-import type { PickInfoType, PickRenderModeType } from '@/types';
 
 export function DraggablePickListViewer({
   pickList,
@@ -48,7 +49,7 @@ const DND_PICK_LIST_VIEW_TEMPLATES: Record<
 
 interface DnDViewTemplateValueType {
   PickViewItemListLayoutComponent: (
-    props: PickViewDnDItemListLayoutComponentProps
+    props: PickViewDnDItemListLayoutComponentProps,
   ) => ReactNode;
   PickViewItemComponent: (props: PickViewDnDItemComponentProps) => ReactNode;
 }

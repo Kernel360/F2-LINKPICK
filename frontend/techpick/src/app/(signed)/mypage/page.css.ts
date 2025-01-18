@@ -1,6 +1,6 @@
+import { redOutlineButtonStyle } from '@/styles/redButtonStyle.css';
 import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
-import { redOutlineButtonStyle } from '@/styles/redButtonStyle.css';
 
 export const myPageLayoutStyle = style({
   width: '100%',

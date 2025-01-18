@@ -1,9 +1,9 @@
 'use client';
 
-import { PropsWithChildren } from 'react';
 import { useGSAP } from '@gsap/react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import type { PropsWithChildren } from 'react';
 
 /**
  * GSAP을 이용한 애니메이션이 포함되어있습니다.
@@ -16,9 +16,9 @@ export function LandingPageAnimation({ children }: PropsWithChildren) {
 
     const sections = gsap.utils.toArray('.section') as HTMLElement[];
 
-    sections.forEach((section) => {
+    for (const section of sections) {
       const sectionContent = section.querySelector(
-        '.section-content'
+        '.section-content',
       ) as HTMLElement;
 
       gsap.fromTo(
@@ -35,9 +35,9 @@ export function LandingPageAnimation({ children }: PropsWithChildren) {
             end: 'center 20%',
             toggleActions: 'play none none none',
           },
-        }
+        },
       );
-    });
+    }
   });
 
   return children;

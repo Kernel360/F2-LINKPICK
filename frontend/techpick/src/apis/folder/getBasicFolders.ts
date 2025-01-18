@@ -1,7 +1,9 @@
+import type { BasicFolderMap } from '@/types/BasicFolderMapType';
+import type { GetBasicFolderListType } from '@/types/GetBasicFolderListType';
 import { HTTPError } from 'ky';
-import { apiClient, returnErrorFromHTTPError } from '@/apis';
+import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
-import type { GetBasicFolderListType, BasicFolderMap } from '@/types';
+import { returnErrorFromHTTPError } from '../error';
 
 export const getBasicFolders = async () => {
   const data = await getBasicFolderList();
@@ -12,7 +14,7 @@ export const getBasicFolders = async () => {
 const getBasicFolderList = async () => {
   try {
     const response = await apiClient.get<GetBasicFolderListType>(
-      API_URLS.GET_BASIC_FOLDERS
+      API_URLS.GET_BASIC_FOLDERS,
     );
     const data = await response.json();
 

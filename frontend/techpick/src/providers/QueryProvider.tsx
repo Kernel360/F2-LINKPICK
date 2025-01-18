@@ -1,12 +1,12 @@
 'use client';
 
-import type { PropsWithChildren } from 'react';
 import {
   QueryClient,
   QueryClientProvider,
   isServer,
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import type { PropsWithChildren } from 'react';
 
 const makeQueryClient = () => {
   return new QueryClient({
@@ -23,10 +23,11 @@ let browserQueryClient: QueryClient | undefined = undefined;
 const getQueryClient = () => {
   if (isServer) {
     return makeQueryClient();
-  } else {
-    if (!browserQueryClient) browserQueryClient = makeQueryClient();
-    return browserQueryClient;
   }
+  if (!browserQueryClient) {
+    browserQueryClient = makeQueryClient();
+  }
+  return browserQueryClient;
 };
 
 export const QueryProvider = ({ children }: PropsWithChildren) => {

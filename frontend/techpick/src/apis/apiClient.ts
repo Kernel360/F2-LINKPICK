@@ -1,9 +1,9 @@
-import { redirect } from 'next/navigation';
+import { ERROR_MESSAGE_JSON } from '@/constants/errorMessageJson';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { notifyError } from '@/utils/toast';
 import * as Sentry from '@sentry/nextjs';
 import ky, { HTTPError } from 'ky';
-import { ERROR_MESSAGE_JSON } from '@/constants';
-import { notifyError } from '@/utils';
-import { getAccessToken } from '@/utils/getAccessToken';
+import { redirect } from 'next/navigation';
 import { returnErrorFromHTTPError } from './error';
 
 const isServer = typeof window === 'undefined';
@@ -20,7 +20,7 @@ export const apiClient = ky.create({
           if (accessToken) {
             request.headers.set(
               'Cookie',
-              `${accessToken.name}=${accessToken.value}`
+              `${accessToken.name}=${accessToken.value}`,
             );
           }
         }
