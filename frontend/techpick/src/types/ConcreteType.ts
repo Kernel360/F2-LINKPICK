@@ -1,3 +1,3 @@
-export type Concrete<Type> = {
+export type ConcreteType<Type> = {
   [Property in keyof Type]-?: Type[Property];
 };
