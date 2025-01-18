@@ -13,28 +13,28 @@ const fadeOut = keyframes({
   '100%': { opacity: 0 },
 });
 const zoomIn = keyframes({
-  '0%': { transform: `scale(1.0)` },
+  '0%': { transform: 'scale(1.0)' },
   '100%': { transform: `scale(${SCALE_FACTOR})` },
 });
 const zoomOut = keyframes({
   '0%': { transform: `scale(${SCALE_FACTOR})` },
-  '100%': { transform: `scale(1.0)` },
+  '100%': { transform: 'scale(1.0)' },
 });
 const slideUp = keyframes({
   '0%': { transform: `translateY(${MOVEMENT})` },
-  '100%': { transform: `translateY(0)` },
+  '100%': { transform: 'translateY(0)' },
 });
 const slideDown = keyframes({
   '0%': { transform: `translateY(-${MOVEMENT})` },
-  '100%': { transform: `translateY(0)` },
+  '100%': { transform: 'translateY(0)' },
 });
 const slideRight = keyframes({
   '0%': { transform: `translateX(${MOVEMENT})` },
-  '100%': { transform: `translateX(0)` },
+  '100%': { transform: 'translateX(0)' },
 });
 const slideLeft = keyframes({
   '0%': { transform: `translateX(-${MOVEMENT})` },
-  '100%': { transform: `translateX(0)` },
+  '100%': { transform: 'translateX(0)' },
 });
 
 export const popoverStyle = style({
