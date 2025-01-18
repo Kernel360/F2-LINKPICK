@@ -1,4 +1,4 @@
-import { globalStyle, globalFontFace } from '@vanilla-extract/css';
+import { globalFontFace, globalStyle } from '@vanilla-extract/css';
 
 globalStyle('*', {
   boxSizing: 'border-box',
@@ -33,7 +33,7 @@ globalStyle(
     font: 'inherit',
     verticalAlign: 'baseline',
     boxSizing: 'border-box',
-  }
+  },
 );
 
 globalStyle(
@@ -43,7 +43,7 @@ globalStyle(
 `,
   {
     display: 'block',
-  }
+  },
 );
 
 globalStyle('body', {
