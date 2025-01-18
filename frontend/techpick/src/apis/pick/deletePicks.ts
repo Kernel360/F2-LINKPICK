@@ -1,8 +1,8 @@
+import type { PickDeleteRequestType } from '@/types/PickDeleteRequestType';
 import { HTTPError } from 'ky';
 import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
 import { returnErrorFromHTTPError } from '../error';
-import { PickDeleteRequestType } from '@/types';
 
 export const deletePicks = async (deletePicksInfo: PickDeleteRequestType) => {
   try {

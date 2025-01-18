@@ -1,7 +1,8 @@
+import type { MoveFolderRequestType } from '@/types/MoveFolderRequestType';
 import { HTTPError } from 'ky';
-import { apiClient, returnErrorFromHTTPError } from '@/apis';
+import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
-import type { MoveFolderRequestType } from '@/types';
+import { returnErrorFromHTTPError } from '../error';
 
 export const moveFolder = async (moveFolderInfo: MoveFolderRequestType) => {
   try {

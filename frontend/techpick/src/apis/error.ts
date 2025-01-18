@@ -1,4 +1,4 @@
-import { HTTPError } from 'ky';
+import type { HTTPError } from 'ky';
 
 export const handleHTTPError = async (error: HTTPError): Promise<never> => {
   const errorData = await error.response.json<ApiErrorBody>();
@@ -11,7 +11,7 @@ export const handleHTTPError = async (error: HTTPError): Promise<never> => {
 };
 
 export const returnErrorFromHTTPError = async (
-  error: HTTPError
+  error: HTTPError,
 ): Promise<Error> => {
   const errorData = await error.response.json<ApiErrorBody>();
 

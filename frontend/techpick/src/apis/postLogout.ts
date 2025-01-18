@@ -1,5 +1,5 @@
-import { HTTPError } from 'ky';
 import { apiClient } from '@/apis/apiClient';
+import { HTTPError } from 'ky';
 import { API_URLS } from './apiConstants';
 import { returnErrorFromHTTPError } from './error';
 

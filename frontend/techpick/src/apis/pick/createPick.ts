@@ -1,7 +1,9 @@
+import type { CreatePickRequestType } from '@/types/CreatePickRequestType';
+import type { CreatePickResponseType } from '@/types/CreatePickResponseType';
 import { HTTPError } from 'ky';
-import { apiClient, returnErrorFromHTTPError } from '@/apis';
+import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
-import { CreatePickRequestType, CreatePickResponseType } from '@/types';
+import { returnErrorFromHTTPError } from '../error';
 
 export const createPick = async (pickInfo: CreatePickRequestType) => {
   try {
@@ -9,7 +11,7 @@ export const createPick = async (pickInfo: CreatePickRequestType) => {
       API_URLS.CREATE_PICKS,
       {
         json: pickInfo,
-      }
+      },
     );
     const data = await response.json();
 

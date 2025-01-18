@@ -1,7 +1,8 @@
+import type { MovePicksRequestType } from '@/types/MovePicksRequestType';
 import { HTTPError } from 'ky';
-import { apiClient, returnErrorFromHTTPError } from '@/apis';
+import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
-import type { MovePicksRequestType } from '@/types';
+import { returnErrorFromHTTPError } from '../error';
 
 export const movePicks = async (movePicksInfo: MovePicksRequestType) => {
   try {
