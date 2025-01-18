@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 export const config = {
   matcher: [
@@ -16,7 +16,7 @@ export default async function middleware(req: NextRequest) {
 
   const isUnauthenticatedOnlyPath = unauthenticatedOnlyPaths.includes(pathname);
   const isAuthenticatedOnlyPath = authenticatedOnlyPaths.some((path) =>
-    pathname.startsWith(path)
+    pathname.startsWith(path),
   );
 
   if (isUnauthenticatedOnlyPath && isAuthenticated) {
