@@ -1,4 +1,4 @@
-import type { FolderType } from '@/types';
+import type { FolderType } from '@/types/FolderType';
 
 export const filterSelectableFolder = (
   ...folderLists: FolderType[][]
