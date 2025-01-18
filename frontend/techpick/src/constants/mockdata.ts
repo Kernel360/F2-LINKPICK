@@ -40,16 +40,16 @@ export const dynamicMockData = [
       'React',
       pick('React Hooks'),
       pick('React Router'),
-      pick('React Context')
+      pick('React Context'),
     ),
     folder('TypeScript', pick('TypeScript Basics'), pick('Advanced Types')),
-    folder('CSS', pick('Flexbox'), pick('Grid Layout'))
+    folder('CSS', pick('Flexbox'), pick('Grid Layout')),
   ),
   folder(
     'Backend',
     folder('Node.js', pick('Express.js'), pick('Nest.js')),
     folder('Databases', pick('MongoDB'), pick('PostgreSQL')),
-    folder('Docker', pick('Docker Basics'), pick('Docker Compose'))
+    folder('Docker', pick('Docker Basics'), pick('Docker Compose')),
   ),
   folder('Full Stack', folder('React'), folder('Node.js'), folder('Databases')),
 ];
