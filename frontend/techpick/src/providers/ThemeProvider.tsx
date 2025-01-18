@@ -1,7 +1,7 @@
 'use client';
-import { PropsWithChildren } from 'react';
-import { lightTheme, darkTheme, commonThemeClass } from 'techpick-shared';
 import { useThemeStore } from '@/stores/themeStore';
+import type { PropsWithChildren } from 'react';
+import { commonThemeClass, darkTheme, lightTheme } from 'techpick-shared';
 
 export const ThemeProvider = ({
   classname = '',
