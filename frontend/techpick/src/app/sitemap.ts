@@ -1,5 +1,5 @@
-import { MetadataRoute } from 'next';
-import { ROUTES } from '@/constants';
+import { ROUTES } from '@/constants/route';
+import type { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const url = process.env.NEXT_PUBLIC_DOMAIN ?? 'https://app.baguni.kr';

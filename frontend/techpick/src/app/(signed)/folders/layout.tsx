@@ -1,11 +1,11 @@
-import type { PropsWithChildren } from 'react';
+import { getTagList } from '@/apis/tag/getTagList';
+import { tagKeys } from '@/queries/tagKeys';
 import {
-  dehydrate,
   HydrationBoundary,
   QueryClient,
+  dehydrate,
 } from '@tanstack/react-query';
-import { getTagList } from '@/apis/tag';
-import { tagKeys } from '@/queries';
+import type { PropsWithChildren } from 'react';
 
 export default async function FolderLayout({ children }: PropsWithChildren) {
   const tagList = await getTagList();

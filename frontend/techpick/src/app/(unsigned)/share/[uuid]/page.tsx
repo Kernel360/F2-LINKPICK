@@ -1,37 +1,37 @@
-import React from 'react';
-import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { FolderOpenIcon } from 'lucide-react';
 import { getShareFolderById } from '@/apis/folder/getShareFolderById';
-import { PickRecordHeader } from '@/components';
 import {
   currentFolderNameSectionStyle,
-  folderOpenIconStyle,
   folderNameStyle,
+  folderOpenIconStyle,
 } from '@/components/FolderContentHeader/currentFolderNameSection.css';
 import { folderContentHeaderStyle } from '@/components/FolderContentHeader/folderContentHeader.css';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { Gap } from '@/components/Gap';
 import { PickContentLayout } from '@/components/PickContentLayout';
+import { PickRecordHeader } from '@/components/PickRecord/PickRecordHeader';
 import { SharePickRecord } from '@/components/PickRecord/SharePickRecord';
 import { ScreenLogger } from '@/components/ScreenLogger';
-import { ROUTES } from '@/constants';
-import { isLoginUser } from '@/utils';
+import { ROUTES } from '@/constants/route';
+import { isLoginUser } from '@/utils/isLoginUser';
+import { FolderOpenIcon } from 'lucide-react';
+import type { Metadata, ResolvingMetadata } from 'next';
+import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import React from 'react';
+import { SignUpLinkButton } from './SignUpLinkButton';
 import {
   buttonSectionStyle,
   homeNavigateButtonStyle,
   loginButtonStyle,
 } from './page.css';
-import { SignUpLinkButton } from './SignUpLinkButton';
-import type { Metadata, ResolvingMetadata } from 'next';
 const EmptyPickRecordImage = dynamic(
   () =>
     import('@/components/EmptyPickRecordImage').then(
-      (mod) => mod.EmptyPickRecordImage
+      (mod) => mod.EmptyPickRecordImage,
     ),
   {
     ssr: false,
-  }
+  },
 );
 
 // TODO:
@@ -44,7 +44,7 @@ export async function generateMetadata(
   }: {
     params: { uuid: string };
   },
-  parent: ResolvingMetadata
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const { uuid } = params;
   const sharedFolder = await getShareFolderById(uuid);
@@ -58,10 +58,10 @@ export async function generateMetadata(
   let ogImageUrl: string;
 
   if (imageUrls.length === 0) {
-    ogImageUrl = `/image/og_image.png`;
+    ogImageUrl = '/image/og_image.png';
   } else {
     const apiUrl = new URL(
-      `${process.env.NEXT_PUBLIC_IMAGE_URL}/api/generate-og-image`
+      `${process.env.NEXT_PUBLIC_IMAGE_URL}/api/generate-og-image`,
     );
     apiUrl.searchParams.set('imageUrls', JSON.stringify(imageUrls));
     ogImageUrl = apiUrl.toString();
@@ -104,11 +104,13 @@ export default async function Page({ params }: { params: { uuid: string } }) {
           <div className={buttonSectionStyle}>
             {isLoggedIn ? (
               <Link href={ROUTES.HOME}>
+                {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
                 <button className={homeNavigateButtonStyle}>홈으로 가기</button>
               </Link>
             ) : (
               <>
                 <Link href={ROUTES.LOGIN}>
+                  {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
                   <button className={loginButtonStyle}>로그인</button>
                 </Link>
                 <SignUpLinkButton />
@@ -129,7 +131,7 @@ export default async function Page({ params }: { params: { uuid: string } }) {
                 <SharePickRecord
                   key={pick.title}
                   pickInfo={pick}
-                  tagList={sharedFolder.tagList!}
+                  tagList={sharedFolder.tagList}
                   folderAccessToken={uuid}
                 />
               );

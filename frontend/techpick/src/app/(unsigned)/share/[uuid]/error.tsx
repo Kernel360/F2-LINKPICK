@@ -1,21 +1,21 @@
 'use client'; // Error components must be Client Components
 
-import { useEffect } from 'react';
-import dynamic from 'next/dynamic';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { PickContentLayout } from '@/components/PickContentLayout';
+import dynamic from 'next/dynamic';
+import { useEffect } from 'react';
 
 const EmptyPickRecordImage = dynamic(
   () =>
     import('@/components/EmptyPickRecordImage').then(
-      (mod) => mod.EmptyPickRecordImage
+      (mod) => mod.EmptyPickRecordImage,
     ),
   {
     ssr: false,
-  }
+  },
 );
 
-export default function Error({
+export default function ErrorPage({
   error,
 }: {
   error: Error & { digest?: string };

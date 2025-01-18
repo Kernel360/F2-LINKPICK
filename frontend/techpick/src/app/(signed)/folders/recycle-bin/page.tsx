@@ -1,12 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { PickRecordHeader } from '@/components';
+import { useEffect } from 'react';
 const EmptyPickRecordImage = dynamic(() =>
   import('@/components/EmptyPickRecordImage').then(
-    (mod) => mod.EmptyPickRecordImage
-  )
+    (mod) => mod.EmptyPickRecordImage,
+  ),
 );
 import { FolderContentHeader } from '@/components/FolderContentHeader/FolderContentHeader';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
@@ -14,14 +13,13 @@ import { FolderLoadingPage } from '@/components/FolderLoadingPage';
 import { PickContentLayout } from '@/components/PickContentLayout';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
-import {
-  useClearSelectedPickIdsOnMount,
-  useFetchPickRecordByFolderId,
-  useResetPickFocusOnOutsideClick,
-} from '@/hooks';
-import { useFetchTagList } from '@/queries';
-import { useTreeStore } from '@/stores';
-import { getOrderedPickListByFolderId } from '@/utils';
+import { PickRecordHeader } from '@/components/PickRecord/PickRecordHeader';
+import { useClearSelectedPickIdsOnMount } from '@/hooks/useClearSelectedPickIdsOnMount';
+import { useFetchPickRecordByFolderId } from '@/hooks/useFetchPickRecordByFolderId';
+import { useResetPickFocusOnOutsideClick } from '@/hooks/useResetPickFocusOnOutsideClick';
+import { useFetchTagList } from '@/queries/useFetchTagList';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { getOrderedPickListByFolderId } from '@/utils/getOrderedPickListByFolderId';
 
 export default function RecycleBinFolderPage() {
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
@@ -40,9 +38,9 @@ export default function RecycleBinFolderPage() {
         return;
       }
 
-      selectSingleFolder(basicFolderMap['RECYCLE_BIN'].id);
+      selectSingleFolder(basicFolderMap.RECYCLE_BIN.id);
     },
-    [basicFolderMap, selectSingleFolder]
+    [basicFolderMap, selectSingleFolder],
   );
 
   if (!basicFolderMap || (isLoading && !data)) {
@@ -63,7 +61,7 @@ export default function RecycleBinFolderPage() {
           />
         ) : (
           <PickDraggableListLayout
-            folderId={basicFolderMap['RECYCLE_BIN'].id}
+            folderId={basicFolderMap.RECYCLE_BIN.id}
             viewType="record"
           >
             {pickList.map((pickInfo) => {

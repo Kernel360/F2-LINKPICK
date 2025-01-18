@@ -1,32 +1,32 @@
+import { ROUTES } from '@/constants/route';
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ROUTES } from '@/constants';
 import { LandingPageAnimation } from './LandingPageAnimation';
+import { SignUpLink } from './SignUpLink';
 import {
+  extensionSectionStyle,
+  extensionTextAreaStyle,
+  extensionVideoStyle,
+  headerStyle,
+  landingPageStyle,
+  lineBreakStyle,
+  loginLinkStyle,
+  mainSectionStyle,
+  mobileLinBreakStyle,
   navStyle,
   navUlStyle,
-  loginLinkStyle,
-  headerStyle,
-  mainSectionStyle,
-  titleStyle,
-  landingPageStyle,
-  sectionStyle,
-  sectionTitleStyle,
-  videoStyle,
-  sectionDescriptionStyle,
-  sectionTextAreaStyle,
   sectionContentStyle,
-  lineBreakStyle,
-  textPointStyle,
+  sectionDescriptionStyle,
+  sectionStyle,
+  sectionTextAreaStyle,
   sectionTitleBrStyle,
+  sectionTitleStyle,
   shareBookmarkSectionStyle,
-  extensionSectionStyle,
-  extensionVideoStyle,
-  extensionTextAreaStyle,
-  mobileLinBreakStyle,
+  textPointStyle,
+  titleStyle,
+  videoStyle,
 } from './page.css';
-import { SignUpLink } from './SignUpLink';
-import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: '바구니 | 깔끔한 북마크 관리',
@@ -73,7 +73,7 @@ export default function LandingPage() {
                   보기 쉽게 관리해요
                 </h2>
                 <p className={sectionDescriptionStyle}>
-                  이 북마크를 읽었는지, <span className={lineBreakStyle}></span>
+                  이 북마크를 읽었는지, <span className={lineBreakStyle} />
                   마음에 들어 다시 보고 싶은지 태그로 기록하는 건 어떠세요?
                 </p>
               </div>
@@ -84,7 +84,7 @@ export default function LandingPage() {
                 playsInline
                 loop
                 className={videoStyle}
-              ></video>
+              />
             </div>
           </section>
 
@@ -100,7 +100,7 @@ export default function LandingPage() {
                 </h2>
                 <p className={sectionDescriptionStyle}>
                   태그를 달거나 어울리는 폴더로 넣을 수 있어요.
-                  <span className={mobileLinBreakStyle}></span>
+                  <span className={mobileLinBreakStyle} />
                   <a
                     href="https://chromewebstore.google.com/detail/%EB%B0%94%EA%B5%AC%EB%8B%88-%EC%9D%B5%EC%8A%A4%ED%85%90%EC%85%98/gfkkgllophliamkdclhekgfiohnbdddl"
                     target="_blank"
@@ -120,7 +120,7 @@ export default function LandingPage() {
                 playsInline
                 loop
                 className={`${videoStyle} ${extensionVideoStyle}`}
-              ></video>
+              />
             </div>
           </section>
 
@@ -145,7 +145,7 @@ export default function LandingPage() {
                 playsInline
                 loop
                 className={videoStyle}
-              ></video>
+              />
             </div>
           </section>
         </main>

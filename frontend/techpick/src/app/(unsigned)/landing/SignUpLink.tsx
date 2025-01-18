@@ -1,8 +1,8 @@
 'use client';
 
+import { ROUTES } from '@/constants/route';
+import { useEventLogger } from '@/hooks/useEventLogger';
 import Link from 'next/link';
-import { ROUTES } from '@/constants';
-import { useEventLogger } from '@/hooks';
 import { signUpButtonStyle } from './page.css';
 
 export function SignUpLink() {
@@ -20,6 +20,7 @@ export function SignUpLink() {
         }
       }}
     >
+      {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
       <button className={signUpButtonStyle}>회원가입</button>
     </Link>
   );

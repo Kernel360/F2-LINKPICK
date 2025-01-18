@@ -1,8 +1,9 @@
-import type { PropsWithChildren } from 'react';
-import { FolderAndPickDndContextProvider, FolderTree } from '@/components';
 import { FeedbackToolbar } from '@/components/FeedbackToolbar';
+import { FolderAndPickDndContextProvider } from '@/components/FolderAndPickDndContextProvider';
+import { FolderTree } from '@/components/FolderTree';
 import { ScreenLogger } from '@/components/ScreenLogger';
 import ShortcutKey from '@/components/ShortcutKey';
+import type { PropsWithChildren } from 'react';
 import { pageContainerLayout } from './layout.css';
 
 export default function SignedLayout({ children }: PropsWithChildren) {

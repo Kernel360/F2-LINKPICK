@@ -1,15 +1,15 @@
+import {
+  orangeOutlineButtonStyle,
+  orangeSolidButtonStyle,
+} from '@/styles/orangeButtonStyle.css';
 import { style } from '@vanilla-extract/css';
 import {
   colorVars,
   desktop,
-  tablet,
   fontSize,
   fontWeights,
+  tablet,
 } from 'techpick-shared';
-import {
-  orangeSolidButtonStyle,
-  orangeOutlineButtonStyle,
-} from '@/styles/orangeButtonStyle.css';
 
 export const landingPageStyle = style({
   position: 'relative',

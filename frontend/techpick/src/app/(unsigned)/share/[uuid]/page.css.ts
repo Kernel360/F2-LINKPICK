@@ -1,9 +1,9 @@
-import { style } from '@vanilla-extract/css';
 import {
   orangeGhostButtonStyle,
   orangeOutlineButtonStyle,
   orangeSolidButtonStyle,
 } from '@/styles/orangeButtonStyle.css';
+import { style } from '@vanilla-extract/css';
 
 export const buttonSectionStyle = style({
   display: 'flex',

@@ -1,9 +1,9 @@
 'use server';
 
-import type { PropsWithChildren } from 'react';
+import { ROUTES } from '@/constants/route';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { ROUTES } from '@/constants';
+import type { PropsWithChildren } from 'react';
 
 export default async function LoginPageLayout({ children }: PropsWithChildren) {
   const authToken = cookies().get('access_token');
