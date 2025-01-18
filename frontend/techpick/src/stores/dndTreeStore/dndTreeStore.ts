@@ -1,26 +1,24 @@
+import { createFolder } from '@/apis/folder/createFolder';
+import { deleteFolder } from '@/apis/folder/deleteFolder';
+import { getBasicFolders } from '@/apis/folder/getBasicFolders';
+import { getFolders } from '@/apis/folder/getFolders';
+import { moveFolder } from '@/apis/folder/moveFolder';
+import { updateFolder } from '@/apis/folder/updateFolder';
+import { ROUTES } from '@/constants/route';
+import { UNKNOWN_FOLDER_ID } from '@/constants/unknownFolderId';
+import type { BasicFolderMap } from '@/types/BasicFolderMapType';
+import type { ChildFolderListType } from '@/types/ChildFolderListType';
+import type { FolderMapType } from '@/types/FolderMapType';
+import type { FolderType } from '@/types/FolderType';
+import type { SelectedFolderListType } from '@/types/SelectedFolderListType';
+import { isFolderDraggableObject } from '@/utils/isFolderDraggableObject';
+import { reorderSortableIdList } from '@/utils/reorderSortableList';
+import type { Active, Over, UniqueIdentifier } from '@dnd-kit/core';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import {
-  getFolders,
-  getBasicFolders,
-  moveFolder,
-  deleteFolder,
-  updateFolder,
-  createFolder,
-} from '@/apis/folder';
-import { ROUTES, UNKNOWN_FOLDER_ID } from '@/constants';
-import { isFolderDraggableObject, reorderSortableIdList } from '@/utils';
 import { changeParentFolderId } from './utils/changeParentFolderId';
 import { moveFolderToDifferentParent } from './utils/moveFolderToDifferentParent';
-import type { Active, Over, UniqueIdentifier } from '@dnd-kit/core';
-import type {
-  FolderType,
-  FolderMapType,
-  SelectedFolderListType,
-  BasicFolderMap,
-  ChildFolderListType,
-} from '@/types';
 
 type TreeState = {
   treeDataMap: FolderMapType;
@@ -48,7 +46,7 @@ type TreeAction = {
   getFolders: () => Promise<void>;
   getBasicFolders: () => Promise<void>;
   getChildFolderListByParentFolderId: (
-    parentId: UniqueIdentifier
+    parentId: UniqueIdentifier,
   ) => FolderType[];
   /**
    * @author 김민규
@@ -57,7 +55,7 @@ type TreeAction = {
   getFolderList: () => FolderType[];
   getFolderInfoByPathname: (pathname: string) => FolderType | null;
   getAncestorFolderListFromLeaf: (
-    leaf: FolderType | null | undefined
+    leaf: FolderType | null | undefined,
   ) => FolderType[];
   moveFolder: ({
     from,
@@ -69,7 +67,7 @@ type TreeAction = {
   selectSingleFolder: (folderId: number) => void;
   setTreeMap: (newTreeDate: FolderMapType) => void;
   setSelectedFolderList: (
-    newSelectedFolderData: SelectedFolderListType
+    newSelectedFolderData: SelectedFolderListType,
   ) => void;
   setFrom: (newFrom: Active) => void;
   setTo: (newTo: Over) => void;
@@ -77,13 +75,13 @@ type TreeAction = {
   setFocusFolderId: (newFolderId: number | null) => void;
   setHoverFolderId: (hoverFolderId: number | null | undefined) => void;
   setDraggingFolderInfo: (
-    draggingFolderInfo: FolderType | null | undefined
+    draggingFolderInfo: FolderType | null | undefined,
   ) => void;
 
   checkIsShareFolder: (folderId: number) => boolean;
   updateFolderAccessTokenByFolderId: (
     folderId: number,
-    folderAccessToken: string | null
+    folderAccessToken: string | null,
   ) => void;
 };
 
@@ -227,7 +225,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
 
           set((state) => {
             state.basicFolderMap = basicFolderMap;
-            state.rootFolderId = basicFolderMap['ROOT'].id;
+            state.rootFolderId = basicFolderMap.ROOT.id;
 
             for (const [_key, value] of Object.entries(basicFolderMap)) {
               if (value.folderType !== 'ROOT') {
@@ -249,7 +247,7 @@ export const useTreeStore = create<TreeState & TreeAction>()(
 
         switch (pathname) {
           case ROUTES.FOLDERS_UNCLASSIFIED:
-            return basicFolderMap['UNCLASSIFIED'];
+            return basicFolderMap.UNCLASSIFIED;
           case ROUTES.FOLDERS_RECYCLE_BIN:
             return basicFolderMap.RECYCLE_BIN;
           case ROUTES.RECOMMEND:
@@ -261,8 +259,6 @@ export const useTreeStore = create<TreeState & TreeAction>()(
             return get().getFolderInfoByFolderId(Number(path));
           }
         }
-
-        return null;
       },
       getAncestorFolderListFromLeaf: (leaf) => {
         if (!leaf) {
@@ -271,13 +267,13 @@ export const useTreeStore = create<TreeState & TreeAction>()(
 
         const folderList = [leaf];
         let parentFolderInfo = get().getFolderInfoByFolderId(
-          leaf.parentFolderId
+          leaf.parentFolderId,
         );
 
         while (parentFolderInfo) {
           folderList.push(parentFolderInfo);
           parentFolderInfo = get().getFolderInfoByFolderId(
-            parentFolderInfo.parentFolderId
+            parentFolderInfo.parentFolderId,
           );
         }
 
@@ -476,17 +472,15 @@ export const useTreeStore = create<TreeState & TreeAction>()(
        * @return {boolean} 공유 폴더인 경우 true, 아닌 경우 false를 반환합니다.
        * */
       checkIsShareFolder: (folderId) => {
-        return get().getFolderInfoByFolderId(folderId)?.folderAccessToken
-          ? true
-          : false;
+        return !!get().getFolderInfoByFolderId(folderId)?.folderAccessToken;
       },
       updateFolderAccessTokenByFolderId: (folderId, folderAccessToken) => {
         set((state) => {
           state.treeDataMap[folderId].folderAccessToken = folderAccessToken;
         });
       },
-    }))
-  )
+    })),
+  ),
 );
 
 type MoveFolderPayload = {

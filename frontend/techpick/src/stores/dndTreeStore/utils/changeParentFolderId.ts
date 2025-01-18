@@ -1,4 +1,5 @@
-import type { ChildFolderListType, FolderMapType } from '@/types';
+import type { ChildFolderListType } from '@/types/ChildFolderListType';
+import type { FolderMapType } from '@/types/FolderMapType';
 
 export const changeParentFolderId = ({
   treeDataMap,

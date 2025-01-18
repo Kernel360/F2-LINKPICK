@@ -1,4 +1,4 @@
-import { RecommendPickType } from '@/types';
+import type { RecommendPickType } from '@/types/RecommendPickType';
 
 export type DraggingRecommendPickState = {
   isDragging: boolean;
@@ -8,6 +8,6 @@ export type DraggingRecommendPickState = {
 export type DraggingRecommendPickAction = {
   setIsDragging: (isDragging: boolean) => void;
   setDraggingPickInfo: (
-    draggingRecommendPickInfo: RecommendPickType | null | undefined
+    draggingRecommendPickInfo: RecommendPickType | null | undefined,
   ) => void;
 };

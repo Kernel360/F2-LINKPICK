@@ -1,26 +1,23 @@
+import { createPick } from '@/apis/pick/createPick';
+import { deletePicks } from '@/apis/pick/deletePicks';
+import { getPicksByFolderId } from '@/apis/pick/getPicks';
+import { getPickListByQueryParam } from '@/apis/pick/getPicks';
+import { movePicks } from '@/apis/pick/movePicks';
+import { updatePick } from '@/apis/pick/updatePick';
+import type { PickInfoType } from '@/types/PickInfoType';
+import type { PickRecordValueType } from '@/types/PickRecordValueType';
+import type { SearchPicksResponseType } from '@/types/SearchPicksResponseType';
+import { isPickDraggableObject } from '@/utils/isPickDraggableObjectType';
+import { reorderSortableIdList } from '@/utils/reorderSortableList';
 import { enableMapSet } from 'immer';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import {
-  getPicksByFolderId,
-  movePicks,
-  updatePick,
-  deletePicks,
-  createPick,
-} from '@/apis/pick';
-import { getPickListByQueryParam } from '@/apis/pick/getPicks';
-import { isPickDraggableObject, reorderSortableIdList } from '@/utils';
 import type {
   DeleteSelectedPicksPayload,
   PickAction,
   PickState,
 } from './pickStore.type';
-import type {
-  PickInfoType,
-  PickRecordValueType,
-  SearchPicksResponseType,
-} from '@/types';
 
 enableMapSet();
 
@@ -109,7 +106,7 @@ export const usePickStore = create<PickState & PickAction>()(
         return pickInfoRecord[`${pickId}`];
       },
       hasPickRecordValue: (
-        pickRecordValue
+        pickRecordValue,
       ): pickRecordValue is PickRecordValueType => {
         if (!pickRecordValue) {
           return false;
@@ -230,7 +227,7 @@ export const usePickStore = create<PickState & PickAction>()(
         for (const selectedPickId of selectedPickIdList) {
           const selectedPickInfo = get().getPickInfoByFolderIdAndPickId(
             currentFolderId,
-            selectedPickId
+            selectedPickId,
           );
 
           if (selectedPickInfo) {
@@ -267,7 +264,7 @@ export const usePickStore = create<PickState & PickAction>()(
           state.pickRecord[nextFolderId].data.pickIdOrderedList.splice(
             0,
             0,
-            ...selectedPickIdList
+            ...selectedPickIdList,
           );
         });
 
@@ -275,7 +272,7 @@ export const usePickStore = create<PickState & PickAction>()(
         set((state) => {
           if (
             !get().hasPickRecordValue(
-              state.pickRecord[currentFolderId]?.data
+              state.pickRecord[currentFolderId]?.data,
             ) ||
             !state.pickRecord[currentFolderId].data
           ) {
@@ -290,7 +287,7 @@ export const usePickStore = create<PickState & PickAction>()(
 
           state.pickRecord[currentFolderId].data.pickIdOrderedList =
             prevCurrentPickIdOrderedList.filter(
-              (pickId) => !selectedPickIdList.includes(pickId)
+              (pickId) => !selectedPickIdList.includes(pickId),
             );
         });
 
@@ -379,7 +376,7 @@ export const usePickStore = create<PickState & PickAction>()(
         for (const selectedPickId of selectedPickIdList) {
           const selectedPickInfo = get().getPickInfoByFolderIdAndPickId(
             currentFolderId,
-            selectedPickId
+            selectedPickId,
           );
 
           if (selectedPickInfo) {
@@ -411,7 +408,7 @@ export const usePickStore = create<PickState & PickAction>()(
           state.pickRecord[nextFolderId].data.pickIdOrderedList.splice(
             0,
             0,
-            ...selectedPickIdList
+            ...selectedPickIdList,
           );
         });
 
@@ -419,7 +416,7 @@ export const usePickStore = create<PickState & PickAction>()(
         set((state) => {
           if (
             !get().hasPickRecordValue(
-              state.pickRecord[currentFolderId]?.data
+              state.pickRecord[currentFolderId]?.data,
             ) ||
             !state.pickRecord[currentFolderId].data
           ) {
@@ -434,7 +431,7 @@ export const usePickStore = create<PickState & PickAction>()(
 
           state.pickRecord[currentFolderId].data.pickIdOrderedList =
             prevCurrentPickIdOrderedList.filter(
-              (pickId) => !selectedPickIdList.includes(pickId)
+              (pickId) => !selectedPickIdList.includes(pickId),
             );
         });
         // api 요청
@@ -484,7 +481,7 @@ export const usePickStore = create<PickState & PickAction>()(
         set((state) => {
           if (
             !get().hasPickRecordValue(
-              state.pickRecord[recycleBinFolderId]?.data
+              state.pickRecord[recycleBinFolderId]?.data,
             ) ||
             !state.pickRecord[recycleBinFolderId].data
           ) {
@@ -499,7 +496,7 @@ export const usePickStore = create<PickState & PickAction>()(
 
           state.pickRecord[recycleBinFolderId].data.pickIdOrderedList =
             state.pickRecord[recycleBinFolderId].data.pickIdOrderedList.filter(
-              (pickId) => !selectedPickIdList.includes(pickId)
+              (pickId) => !selectedPickIdList.includes(pickId),
             );
         });
 
@@ -540,9 +537,9 @@ export const usePickStore = create<PickState & PickAction>()(
       },
 
       searchPicksByQueryParam: async (
-        param: string,
+        _param: string,
         cursor?: number | string,
-        size?: number
+        size?: number,
       ) => {
         try {
           const searchParams = {
@@ -553,7 +550,7 @@ export const usePickStore = create<PickState & PickAction>()(
           const result = await getPickListByQueryParam(
             searchParams,
             cursor,
-            size
+            size,
           );
           set((state) => {
             state.searchResult = result;
@@ -632,7 +629,7 @@ export const usePickStore = create<PickState & PickAction>()(
         set((state) => {
           if (
             !state.hasPickRecordValue(
-              state.pickRecord[pickParentFolderId]?.data
+              state.pickRecord[pickParentFolderId]?.data,
             )
           ) {
             return;
@@ -702,6 +699,6 @@ export const usePickStore = create<PickState & PickAction>()(
           /* empty */
         }
       },
-    }))
-  )
+    })),
+  ),
 );

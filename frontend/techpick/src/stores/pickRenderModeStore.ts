@@ -20,5 +20,5 @@ export const usePickRenderModeStore = create<
         state.pickRenderMode = newPickRenderMode;
       });
     },
-  }))
+  })),
 );
