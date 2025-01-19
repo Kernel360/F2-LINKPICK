@@ -72,10 +72,6 @@
     </div>
 </div>
 
-## 운영 서버
-### [:link: Frontend](https://github.com/Kernel360/F2-BAGUNI/tree/fe-develop)
-### [:link: Backend](https://github.com/Kernel360/F2-BAGUNI/tree/be-develop)
-
 ## 협업 관련 자료
 ###  [:speech_balloon: Github Discussion](https://github.com/Kernel360/F2-TECHPICK/discussions)
 ###  [:book: Github Wiki](https://github.com/Kernel360/F2-TECHPICK/wiki)
