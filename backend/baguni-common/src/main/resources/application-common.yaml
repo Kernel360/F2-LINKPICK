@@ -1,6 +1,3 @@
-slack:
-  webhook:
-    url: ${SLACK_WEBHOOK_URL}
 ---
 spring:
   config:
@@ -13,6 +10,8 @@ spring:
 server-url: # 테크픽 서버간 통신을 위한 주소
   api-server: http://localhost:8080/api # 운영 api 서버
   ranking-server: http://localhost:8082/api # 랭킹 서버
+slack-config:
+  webhook-url: "" # 로컬은 알림 없음
 ---
 spring:
   config:
@@ -25,6 +24,8 @@ spring:
 server-url: # 테크픽 서버간 통신을 위한 주소
   api-server: http://baguni.${PROFILE_MODE}.server.api:8080/api # 운영 api 서버 (컨테이너)
   ranking-server: http://baguni.${PROFILE_MODE}.server.ranking:8080/api # 랭킹 서버 (컨테이너)
+slack-config:
+  webhook-url: ${SLACK_DEV_WEBHOOK_URL}
 ---
 spring:
   config:
@@ -37,4 +38,6 @@ spring:
 server-url: # 테크픽 서버간 통신을 위한 주소
   api-server: http://baguni.${PROFILE_MODE}.server.api:8080/api # 운영 api 서버 (컨테이너)
   ranking-server: http://baguni.${PROFILE_MODE}.server.ranking:8080/api # 랭킹 서버 (컨테이너)
+slack-config:
+  webhook-url: ${SLACK_PROD_WEBHOOK_URL}
 ---

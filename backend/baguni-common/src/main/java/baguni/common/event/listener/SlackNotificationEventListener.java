@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 	@author sangwon
+ *    @author sangwon
  * 	메세지 큐에서 이벤트를 꺼내서 슬랙에 알림을 보내는 클래스
  * 	Webhook url에 post 요청을 보내면 슬랙에 알림이 가는 시스템
  */
@@ -32,36 +32,49 @@ public class SlackNotificationEventListener {
 
 	private final Slack slack = Slack.getInstance();
 
-	@Value("${slack.webhook.url}")
-	private String webhookUrl;
+	@Value("${slack-config.webhook-url}")
+	private String url;
 
 	@RabbitHandler
 	public void sendSlackMessage(ErrorLogEvent event) {
+		if (url == null || url.isEmpty()) {
+			return;
+		}
 		Attachment attachment = new Attachment();
 		attachment.setFallback("Error");
 		attachment.setColor("danger"); // 슬랙 메세지 색상
 
 		Field[] fields = new Field[] {
-			Field.builder().title("요청 시간").value(event.getRequestTime()).build(),
-			Field.builder().title("Request Method + URI").value(event.getRequestMethod() + " " + event.getRequestUri()).build(),
-			Field.builder().title("응답 코드").value(event.getHttpStatusCode() + " " + event.getHttpStatusMessage()).build(),
-			Field.builder().title("Exception 종류").value(event.getExceptionClass()).build(),
-			Field.builder().title("예외 메시지").value(event.getExceptionMessage()).build(),
-			Field.builder().title("Request IP").value(event.getRequestAddress()).build(),
-			Field.builder().title("Profile 정보").value(event.getProfile()).build()
+			Field
+				.builder().title("요청 시간").value(event.getRequestTime()).build(),
+			Field
+				.builder()
+				.title("Request Method + URI")
+				.value(event.getRequestMethod() + " " + event.getRequestUri()).build(),
+			Field
+				.builder().title("응답 코드").value(event.getHttpStatusCode() + " " + event.getHttpStatusMessage()).build(),
+			Field
+				.builder().title("Exception 종류").value(event.getExceptionClass()).build(),
+			Field
+				.builder().title("예외 메시지").value(event.getExceptionMessage()).build(),
+			Field
+				.builder().title("Request IP").value(event.getRequestAddress()).build(),
+			Field
+				.builder().title("Profile 정보").value(event.getProfile()).build()
 		};
 		attachment.setFields(Arrays.asList(fields));
 
 		// 슬랙 알림에 어떤 데이터를 보여줄 지 정하는 곳
 		// 이미지와 이름은 웹 훅에서 설정해두었기 때문에 생략
-		Payload payload = Payload.builder()
+		Payload payload = Payload
+			.builder()
 			.text(":rotating_light: [서버 에러 발생] :rotating_light:") // 에러 제목
 			.attachments(List.of(attachment)) // Field에 지정한 메세지들
 			.build();
 
 		try {
 			// 슬랙에 알림을 보내는 부분
-			slack.send(webhookUrl, payload);
+			slack.send(url, payload);
 		} catch (IOException e) {
 			log.error("슬랙 알림 전송 실패 : {}", e.getMessage(), e);
 		}
