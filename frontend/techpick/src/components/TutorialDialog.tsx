@@ -76,9 +76,12 @@ export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
                 있어요!
               </p>
 
-              <img
-                src={'/video/recommendPickMove.gif'}
-                alt=""
+              <video
+                src="/video/recommendPickMove.mp4"
+                autoPlay
+                muted
+                playsInline
+                loop
                 className={videoStyle}
               />
             </Tabs.Content>
@@ -94,9 +97,12 @@ export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
                 <span className={pointTextStyle}> 이동</span>할 수 있어요!
               </p>
 
-              <img
-                src={'/video/multiSelectPickMove.gif'}
-                alt=""
+              <video
+                src="/video/multiSelectPickMove.mp4"
+                autoPlay
+                muted
+                playsInline
+                loop
                 className={videoStyle}
               />
             </Tabs.Content>
