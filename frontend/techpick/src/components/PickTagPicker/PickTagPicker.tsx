@@ -1,17 +1,18 @@
 'use client';
 
-import { forwardRef, useRef, useState } from 'react';
+import { useUpdatePickStore } from '@/stores/updatePickStore';
+import type { PickInfoType } from '@/types/PickInfoType';
+import type { TagType } from '@/types/TagType';
 import { autoUpdate, shift, useFloating } from '@floating-ui/react';
-import { useUpdatePickStore } from '@/stores';
-import { SelectedTagItem } from '../SelectedTagItem';
+import { forwardRef, useRef, useState } from 'react';
+import { SelectedTagItem } from '../SelectedTagItem/SelectedTagItem';
+import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
 import { PickTagAutocompleteDialog } from './PickTagAutocompleteDialog';
 import {
-  tagPickerLayout,
   tagDialogTriggerLayout,
+  tagPickerLayout,
   tagPickerPlaceholderStyle,
 } from './pickTagPicker.css';
-import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
-import { PickInfoType, TagType } from '@/types';
 
 export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
   function PickTagPickerWithRef({ pickInfo, selectedTagList }, tabFocusRef) {
@@ -52,6 +53,7 @@ export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
             className={tagDialogTriggerLayout}
             onDoubleClick={openDialog}
             onKeyDown={onEnterKeyDown}
+            // biome-ignore lint/a11y/noNoninteractiveTabindex: <explanation>
             tabIndex={0}
             ref={tabFocusRef}
           >
@@ -77,7 +79,7 @@ export const PickTagPicker = forwardRef<HTMLDivElement, PickTagPickerProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 interface PickTagPickerProps {

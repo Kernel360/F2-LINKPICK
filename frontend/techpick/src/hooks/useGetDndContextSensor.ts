@@ -1,5 +1,5 @@
-import type { Dispatch, SetStateAction } from 'react';
 import { MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
+import type { Dispatch, SetStateAction } from 'react';
 
 export function useGetDndContextSensor({
   setElementClickPosition,

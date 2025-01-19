@@ -1,15 +1,15 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import type { UniqueIdentifier } from '@dnd-kit/core';
 import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { useCallback } from 'react';
 import { FolderInput } from './FolderInput';
 import { FolderListItem } from './FolderListItem';
-import type { UniqueIdentifier } from '@dnd-kit/core';
 
 export function TreeNode({ id }: TreeNodeProps) {
   const {
@@ -21,13 +21,13 @@ export function TreeNode({ id }: TreeNodeProps) {
   } = useTreeStore();
   const curTreeNodeChildList = getChildFolderListByParentFolderId(Number(id));
   const orderedChildFolderIdList = curTreeNodeChildList.map(
-    (childFolder) => childFolder.id
+    (childFolder) => childFolder.id,
   );
   const orderedChildFolderIdListWithoutSelectedIdList = isDragging
     ? orderedChildFolderIdList.filter(
         (childFolderId) =>
           !selectedFolderList.includes(childFolderId) ||
-          childFolderId === focusFolderId
+          childFolderId === focusFolderId,
       )
     : orderedChildFolderIdList;
   const { newFolderParentId } = useCreateFolderInputStore();
@@ -42,7 +42,7 @@ export function TreeNode({ id }: TreeNodeProps) {
       });
       closeCreateFolderInput();
     },
-    [closeCreateFolderInput, createFolderInStore, id]
+    [closeCreateFolderInput, createFolderInStore, id],
   );
 
   return (
@@ -59,7 +59,7 @@ export function TreeNode({ id }: TreeNodeProps) {
       <SortableContext
         id={`${id}`}
         items={orderedChildFolderIdListWithoutSelectedIdList.map(
-          (childFolderId) => `folder-${childFolderId}`
+          (childFolderId) => `folder-${childFolderId}`,
         )}
         strategy={verticalListSortingStrategy}
       >

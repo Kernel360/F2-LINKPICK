@@ -1,8 +1,9 @@
 'use client';
 
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import type { FolderType } from '@/types/FolderType';
+import { getFolderLinkByType } from '@/utils/getFolderLinkByType';
 import Link from 'next/link';
-import { useTreeStore } from '@/stores';
-import { getFolderLinkByType } from '@/utils';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -12,16 +13,15 @@ import {
 } from './Breadcrumb';
 import {
   breadcrumbItemLayout,
-  breadcrumbLinkStyle,
   breadcrumbItemStyle,
+  breadcrumbLinkStyle,
 } from './currentPathIndicator.css';
-import type { FolderType } from '@/types';
 
 export function CurrentPathIndicator({
   folderInfo,
 }: CurrentPathIndicatorProps) {
   const getAncestorFolderListFromLeaf = useTreeStore(
-    (state) => state.getAncestorFolderListFromLeaf
+    (state) => state.getAncestorFolderListFromLeaf,
   );
   const ancestorFolderList = getAncestorFolderListFromLeaf(folderInfo);
 

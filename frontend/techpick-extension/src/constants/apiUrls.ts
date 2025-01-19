@@ -1,25 +1,17 @@
 export const API_URLS = {
-  getFoldersUrl: function () {
-    return 'folders';
-  },
+  getFoldersUrl: () => 'folders',
   getBasicsFolderUrl: function () {
     return `${this.getFoldersUrl()}/basic`;
   },
-  getPicksUrl: function () {
-    return 'picks';
-  },
+  getPicksUrl: () => 'picks',
   getPicksByLinkUrl: function (url: string) {
     return `${this.getPicksUrl()}/link?link=${url}`;
   },
-  getTagsUrl: function () {
-    return 'tags';
-  },
+  getTagsUrl: () => 'tags',
   getMoveTagsUrl: function () {
     return `${this.getTagsUrl}/location`;
   },
-  getLinkUrl: function () {
-    return 'links';
-  },
+  getLinkUrl: () => 'links',
   getExtensionPickUrl: function () {
     return `${this.getPicksUrl()}/extension`;
   },

@@ -1,5 +1,5 @@
 'use client';
-import { PickViewItemListLayoutComponentProps } from './PickListViewer';
+import type { PickViewItemListLayoutComponentProps } from './PickListViewer';
 import { pickRecordListLayoutStyle } from './pickRecordListLayout.css';
 
 export function PickRecordListLayout({

@@ -1,8 +1,10 @@
-import { memo, KeyboardEvent, MouseEvent, useRef } from 'react';
+import { Gap } from '@/libs/@components/Gap';
+import { Text } from '@/libs/@components/Text';
+import { useDeleteTagDialogStore } from '@/stores/deleteTagDialogStore';
+import { useTagStore } from '@/stores/tagStore';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import { Text, Gap } from '@/libs/@components';
-import { useTagStore, useDeleteTagDialogStore } from '@/stores';
+import { type KeyboardEvent, type MouseEvent, memo, useRef } from 'react';
 import {
   deleteTagDialogButtonStyle,
   deleteTagDialogCancelButtonStyle,
@@ -68,6 +70,7 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
 
           <div>
             <button
+              type="button"
               onClick={DeleteTagByClick}
               onKeyDown={DeleteTagByEnterKey}
               ref={deleteButtonRef}
@@ -78,6 +81,7 @@ export const DeleteTagDialog = memo(function DeleteTagDialog() {
             </button>
             <Gap verticalSize="gap4" />
             <button
+              type="button"
               onClick={closeDialog}
               onKeyDown={closeDialogByEnterKey}
               ref={cancelButtonRef}

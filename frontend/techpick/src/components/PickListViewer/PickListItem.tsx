@@ -1,28 +1,31 @@
 'use client';
 
+import { useOpenUrlInNewTab } from '@/hooks/useOpenUrlInNewTab';
+import { useFetchTagList } from '@/queries/useFetchTagList';
+import { usePickStore } from '@/stores/pickStore/pickStore';
+import { useUpdatePickStore } from '@/stores/updatePickStore';
+import { formatDateString } from '@/utils/formatDateString';
+import { getFilteredSelectedTagList } from '@/utils/getFilteredSelectedTagList';
 import Image from 'next/image';
-import { SelectedTagItem, SelectedTagListLayout } from '@/components';
-import { useOpenUrlInNewTab } from '@/hooks';
-import { usePickStore, useTagStore, useUpdatePickStore } from '@/stores';
-import { formatDateString } from '@/utils';
+import { SelectedTagItem } from '../SelectedTagItem/SelectedTagItem';
+import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
+import type { PickViewItemComponentProps } from './PickListViewer';
+import { PickTitleInput } from './PickTitleInput';
 import {
-  pickListItemLayoutStyle,
+  dateTextStyle,
+  dividerDot,
+  pickContentSectionLayoutStyle,
+  pickDetailInfoLayoutStyle,
+  pickEmptyImageStyle,
   pickImageSectionLayoutStyle,
   pickImageStyle,
-  pickEmptyImageStyle,
-  pickContentSectionLayoutStyle,
+  pickListItemLayoutStyle,
   pickTitleSectionStyle,
-  pickDetailInfoLayoutStyle,
-  dividerDot,
-  dateTextStyle,
 } from './pickListItem.css';
-import { PickViewItemComponentProps } from './PickListViewer';
-import { PickTitleInput } from './PickTitleInput';
 
 export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
   const pick = pickInfo;
   const link = pickInfo.linkInfo;
-  const { findTagById } = useTagStore();
   const { updatePickInfo } = usePickStore();
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
   const {
@@ -30,6 +33,12 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
     setCurrentUpdateTitlePickIdToNull,
     setCurrentUpdateTitlePickId,
   } = useUpdatePickStore();
+  const { data: tagList = [] } = useFetchTagList();
+  const filteredSelectedTagList = getFilteredSelectedTagList({
+    tagList,
+    selectedTagIdList: pickInfo.tagIdOrderedList,
+  });
+
   const isUpdateTitle = currentUpdateTitlePickId === pickInfo.id;
 
   return (
@@ -57,13 +66,13 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
             }}
           />
         ) : (
+          // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
           <div
             className={pickTitleSectionStyle}
             onClick={(event) => {
               setCurrentUpdateTitlePickId(pickInfo.id);
               event.stopPropagation();
             }}
-            role="button"
           >
             {pick.title}
           </div>
@@ -71,11 +80,9 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
         <div className={pickDetailInfoLayoutStyle}>
           {0 < pick.tagIdOrderedList.length && (
             <SelectedTagListLayout height="fixed">
-              {pick.tagIdOrderedList
-                .map(findTagById)
-                .map(
-                  (tag) => tag && <SelectedTagItem key={tag.id} tag={tag} />
-                )}
+              {filteredSelectedTagList.map(
+                (tag) => tag && <SelectedTagItem key={tag.id} tag={tag} />,
+              )}
             </SelectedTagListLayout>
           )}
           {0 < pick.tagIdOrderedList.length && (
@@ -85,6 +92,7 @@ export function PickListItem({ pickInfo }: PickViewItemComponentProps) {
         </div>
       </div>
 
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <div
         style={{
           position: 'absolute',

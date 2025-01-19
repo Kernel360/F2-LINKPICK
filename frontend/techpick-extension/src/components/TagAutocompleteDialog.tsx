@@ -1,34 +1,35 @@
+import { notifyError } from '@/libs/@toast/notifyError';
+import { useTagStore } from '@/stores/tagStore';
+import { useThemeStore } from '@/stores/themeStore';
+import type { TagType } from '@/types/TagType';
+import { numberToRandomColor } from '@/utils/numberToRandomColor';
+import * as Dialog from '@radix-ui/react-dialog';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
+import { Command } from 'cmdk';
 import { useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent } from 'react';
-import { Command } from 'cmdk';
 import { BarLoader } from 'react-spinners';
 import { colorVars } from 'techpick-shared';
-import { useThemeStore, useTagStore } from '@/stores';
-import { numberToRandomColor } from '@/utils';
-import { notifyError } from '@/libs/@toast';
+import { DeleteTagDialog } from './DeleteTagDialog';
+import { DeselectTagButton } from './DeselectTagButton';
 import { SelectedTagItem } from './SelectedTagItem';
 import { SelectedTagListLayout } from './SelectedTagListLayout';
-import { DeselectTagButton } from './DeselectTagButton';
-import { DeleteTagDialog } from './DeleteTagDialog';
-import { TagInfoEditPopoverButton } from './TagInfoEditPopoverButton';
-import * as Dialog from '@radix-ui/react-dialog';
 import {
-  filterCommandItems,
+  commandInputStyle,
+  tagCreateTextStyle,
+  tagDialogPortalLayout,
+  tagListItemContentStyle,
+  tagListItemStyle,
+  tagListLoadingStyle,
+  tagListStyle,
+} from './TagAutocompleteDialog.css';
+import { overlayStyle } from './TagAutocompleteDialog.css';
+import {
   CREATABLE_TAG_KEYWORD,
+  filterCommandItems,
   getRandomInt,
 } from './TagAutocompleteDialog.lib';
-import {
-  tagDialogPortalLayout,
-  commandInputStyle,
-  tagListItemStyle,
-  tagListItemContentStyle,
-  tagCreateTextStyle,
-  tagListStyle,
-  tagListLoadingStyle,
-} from './TagAutocompleteDialog.css';
-import { TagType } from '@/types';
-import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import { overlayStyle } from './TagAutocompleteDialog.css';
+import { TagInfoEditPopoverButton } from './TagInfoEditPopoverButton';
 
 export function TagAutocompleteDialog({
   open,
@@ -116,6 +117,7 @@ export function TagAutocompleteDialog({
     }
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (open) {
       requestAnimationFrame(() => {
@@ -200,7 +202,7 @@ export function TagAutocompleteDialog({
                     style={{
                       backgroundColor: numberToRandomColor(
                         randomNumber.current,
-                        isDarkMode ? 'dark' : 'light'
+                        isDarkMode ? 'dark' : 'light',
                       ),
                     }}
                   >

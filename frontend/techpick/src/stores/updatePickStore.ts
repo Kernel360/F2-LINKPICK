@@ -41,5 +41,5 @@ export const useUpdatePickStore = create<UpdatePickState & UpdatePickAction>()(
         state.currentUpdateTagPickId = null;
       });
     },
-  }))
+  })),
 );

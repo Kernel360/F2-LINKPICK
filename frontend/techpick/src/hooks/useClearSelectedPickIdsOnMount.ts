@@ -1,7 +1,7 @@
 'use client';
 
+import { usePickStore } from '@/stores/pickStore/pickStore';
 import { useEffect } from 'react';
-import { usePickStore } from '@/stores';
 
 export function useClearSelectedPickIdsOnMount() {
   const { setSelectedPickIdList } = usePickStore();
@@ -10,6 +10,6 @@ export function useClearSelectedPickIdsOnMount() {
     function clearSelectedPickIdsOnMount() {
       setSelectedPickIdList([]);
     },
-    [setSelectedPickIdList]
+    [setSelectedPickIdList],
   );
 }

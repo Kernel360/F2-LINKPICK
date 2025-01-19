@@ -29,5 +29,5 @@ export const useCreateFolderInputStore = create<
         state.newFolderParentId = null;
       });
     },
-  }))
+  })),
 );

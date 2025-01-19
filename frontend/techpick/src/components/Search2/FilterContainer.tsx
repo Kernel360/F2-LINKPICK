@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { FolderIcon, Tags } from 'lucide-react';
-import { useTreeStore, useTagStore } from '@/stores';
+import { useFetchTagList } from '@/queries/useFetchTagList';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { useSearchPickStore } from '@/stores/searchPickStore';
-import { createSearchSelectOptions } from '@/utils';
+import { createSearchSelectOptions } from '@/utils/createSearchSelectOptions';
+import { FolderIcon, Tags } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
 import FilterOptions from './FilterOptions';
 import * as styles from './searchDialog.css';
 
@@ -12,19 +13,19 @@ export default function FilterContainer({
   const { getFolderList } = useTreeStore();
   const folderList = getFolderList();
   const { setSearchFolder, setSearchTag } = useSearchPickStore();
-  const { tagList } = useTagStore();
+  const { data: tagList = [] } = useFetchTagList();
   const [isFolderFilterOpen, setIsFolderFilterOpen] = useState(false);
   const [isTagFilterOpen, setIsTagFilterOpen] = useState(false);
 
   const folderOptions = createSearchSelectOptions(
     folderList,
-    (folder) => folder.folderType !== 'ROOT'
+    (folder) => folder.folderType !== 'ROOT',
   );
   const tagOptions = createSearchSelectOptions(tagList);
 
   const updateSearchState = (
     queryString: number[],
-    setSearchState: (value: string) => void
+    setSearchState: (value: string) => void,
   ) => {
     setSearchState(queryString.length === 0 ? '' : queryString.join(','));
   };
@@ -37,7 +38,7 @@ export default function FilterContainer({
         setIsSelectMenuOpen(false);
       }
     },
-    [isFolderFilterOpen, isTagFilterOpen, setIsSelectMenuOpen]
+    [isFolderFilterOpen, isTagFilterOpen, setIsSelectMenuOpen],
   );
 
   return (

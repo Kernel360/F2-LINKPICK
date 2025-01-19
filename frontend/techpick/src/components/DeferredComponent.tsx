@@ -1,6 +1,7 @@
 'use client';
 
-import { PropsWithChildren, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import type { PropsWithChildren } from 'react';
 
 export function DeferredComponent({
   children,
@@ -13,7 +14,7 @@ export function DeferredComponent({
       setIsDeferred(true);
     }, deferredMillisecond);
     return () => clearTimeout(timeoutId);
-  }, []);
+  }, [deferredMillisecond]);
 
   if (!isDeferred) {
     return null;

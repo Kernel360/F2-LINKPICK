@@ -1,24 +1,23 @@
+import type { GetPicksResponseType } from '@/types/GetPicksResponseType';
+import type { PickIdOrderedListType } from '@/types/PickIdOrderedListType';
+import type { PickInfoRecordType } from '@/types/PickInfoRecordType';
+import type { PickListType } from '@/types/PickListType';
+import type { SearchPicksResponseType } from '@/types/SearchPicksResponseType';
+import type { SearchQueryParamType } from '@/types/SearchQueryParamType';
 import { HTTPError } from 'ky';
-import { apiClient, returnErrorFromHTTPError } from '@/apis';
-import { SearchQueryParam } from '@/types/search';
+import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
-import type {
-  GetPicksResponseType,
-  PickIdOrderedListType,
-  PickInfoRecordType,
-  PickListType,
-  SearchPicksResponseType,
-} from '@/types';
+import { returnErrorFromHTTPError } from '../error';
 
 export const getPicksByFolderId = async (folderId: number) => {
   const data = await getPickListByFolderId(folderId);
-  return generatePickRecordData(data[0]['pickList']);
+  return generatePickRecordData(data[0].pickList);
 };
 
 export const getPickListByQueryParam = async (
-  queryParam: SearchQueryParam,
+  queryParam: SearchQueryParamType,
   cursor?: number | string,
-  size?: number
+  size?: number,
 ): Promise<SearchPicksResponseType> => {
   try {
     const URL = API_URLS.SEARCH_PICKS_BY_QUERY_PARAM(queryParam, cursor, size);
@@ -38,7 +37,7 @@ export const getPickListByQueryParam = async (
 const getPickListByFolderId = async (folderId: number) => {
   try {
     const response = await apiClient.get<GetPicksResponseType>(
-      API_URLS.GET_PICKS_BY_FOLDER_ID(folderId)
+      API_URLS.GET_PICKS_BY_FOLDER_ID(folderId),
     );
     const data = await response.json();
 

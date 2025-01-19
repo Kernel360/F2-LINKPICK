@@ -1,33 +1,31 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { getSuggestionRankingPicks } from '@/apis/getSuggestionRankingPicks';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { Gap } from '@/components/Gap';
 import { RecommendedPickCarousel } from '@/components/RecommendedPickCarousel/RecommendedPickCarousel';
 import { TutorialDialog } from '@/components/TutorialDialog';
-import { IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY } from '@/constants';
+import { IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY } from '@/constants/isTutorialSeenLocalStorageKey';
+import { useClearSelectedPickIdsOnMount } from '@/hooks/useClearSelectedPickIdsOnMount';
+import { useDisclosure } from '@/hooks/useDisclosure';
+import { useLocalStorage } from '@/hooks/useLocalStorage';
+import { useResetPickFocusOnOutsideClick } from '@/hooks/useResetPickFocusOnOutsideClick';
+import { useFetchTagList } from '@/queries/useFetchTagList';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import type { GetSuggestionRankingPicksResponseType } from '@/types/GetSuggestionRankingPicksResponseType';
+import { useEffect, useState } from 'react';
+import { RecommendLoadingPage } from './RecommendLoadingPage';
 import {
-  useClearSelectedPickIdsOnMount,
-  useDisclosure,
-  useFetchTagList,
-  useLocalStorage,
-  useResetPickFocusOnOutsideClick,
-} from '@/hooks';
-import { useTreeStore } from '@/stores';
-import {
+  pointTextStyle,
+  recommendContentSectionStyle,
+  recommendPageDescriptionSectionStyle,
+  recommendPageDescriptionStyle,
+  recommendPageTitleStyle,
+  recommendSectionDescription,
+  recommendSectionLayoutStyle,
   recommendedPickCarouselSectionStyle,
   recommendedPickCarouselStyle,
-  recommendSectionDescription,
-  pointTextStyle,
-  recommendSectionLayoutStyle,
-  recommendPageTitleStyle,
-  recommendContentSectionStyle,
-  recommendPageDescriptionStyle,
-  recommendPageDescriptionSectionStyle,
 } from './page.css';
-import { RecommendLoadingPage } from './RecommendLoadingPage';
-import { GetSuggestionRankingPicksResponseType } from '@/types';
 
 export default function RecommendPage() {
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
@@ -40,7 +38,7 @@ export default function RecommendPage() {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { storedValue: isTutorialSeen, isStoredValueLoad } = useLocalStorage(
     IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY,
-    false
+    false,
   );
 
   useEffect(
@@ -49,9 +47,9 @@ export default function RecommendPage() {
         return;
       }
 
-      selectSingleFolder(basicFolderMap['ROOT'].id);
+      selectSingleFolder(basicFolderMap.ROOT.id);
     },
-    [basicFolderMap, selectSingleFolder]
+    [basicFolderMap, selectSingleFolder],
   );
 
   useEffect(function loadSuggestionRankingPicks() {
@@ -69,7 +67,7 @@ export default function RecommendPage() {
         onOpen();
       }
     },
-    [isStoredValueLoad, isTutorialSeen, onOpen]
+    [isStoredValueLoad, isTutorialSeen, onOpen],
   );
 
   if (!basicFolderMap || !suggestionRankingPicks) {

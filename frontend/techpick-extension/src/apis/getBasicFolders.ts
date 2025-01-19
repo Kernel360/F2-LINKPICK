@@ -1,13 +1,13 @@
-import { returnErrorFromHTTPError } from '@/utils';
+import { API_URLS } from '@/constants/apiUrls';
+import type { GetBasicFolderListType } from '@/types/GetBasicFolderListType';
+import { returnErrorFromHTTPError } from '@/utils/returnErrorFromHTTPError';
 import { HTTPError } from 'ky';
 import { apiClient } from './apiClient';
-import { API_URLS } from '@/constants';
-import type { GetBasicFolderListType } from '@/types';
 
 export const getBasicFolderList = async () => {
   try {
     const response = await apiClient.get<GetBasicFolderListType>(
-      API_URLS.getBasicsFolderUrl()
+      API_URLS.getBasicsFolderUrl(),
     );
     const data = await response.json();
 

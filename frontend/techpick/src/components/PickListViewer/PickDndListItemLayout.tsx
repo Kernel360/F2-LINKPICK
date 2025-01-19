@@ -1,4 +1,4 @@
-import { PickViewDnDItemListLayoutComponentProps } from './DraggablePickListViewer';
+import type { PickViewDnDItemListLayoutComponentProps } from './DraggablePickListViewer';
 import { PickListItemLayout } from './PickListItemLayout';
 import { PickListSortableContext } from './PickListSortableContext';
 

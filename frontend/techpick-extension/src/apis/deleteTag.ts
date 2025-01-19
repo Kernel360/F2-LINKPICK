@@ -1,8 +1,8 @@
-import { apiClient } from './apiClient';
-import { DeleteTagRequestType } from '@/types';
-import { API_URLS } from '@/constants';
+import { API_URLS } from '@/constants/apiUrls';
+import type { DeleteTagRequestType } from '@/types/DeleteTagRequestType';
+import { returnErrorFromHTTPError } from '@/utils/returnErrorFromHTTPError';
 import { HTTPError } from 'ky';
-import { returnErrorFromHTTPError } from '@/utils';
+import { apiClient } from './apiClient';
 
 export const deleteTag = async (deleteTagInfo: DeleteTagRequestType) => {
   try {

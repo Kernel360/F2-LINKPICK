@@ -1,9 +1,9 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
-import { OPEN_SEARCH_DIALOG_EVENT } from '@/constants';
-import { isMacOS } from '@/utils';
+import { OPEN_SEARCH_DIALOG_EVENT } from '@/constants/openSearchDialogEvent';
 import { eventEmitter } from '@/utils/eventEmitter';
+import { isMacOS } from '@/utils/isMacOS';
+import { useCallback, useEffect } from 'react';
 
 export default function ShortcutKey() {
   /**

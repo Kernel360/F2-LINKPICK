@@ -1,7 +1,7 @@
 'use client';
 
-import type { PropsWithChildren } from 'react';
 import { useDroppable } from '@dnd-kit/core';
+import type { PropsWithChildren } from 'react';
 
 export function PickToFolderDropZone({
   folderId,

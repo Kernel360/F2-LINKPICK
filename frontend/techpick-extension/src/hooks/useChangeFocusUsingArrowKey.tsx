@@ -1,14 +1,14 @@
-import { hasIndex } from '@/utils';
-import { RefObject, useCallback, useEffect } from 'react';
+import { hasIndex } from '@/utils/hasIndex';
+import { type RefObject, useCallback, useEffect } from 'react';
 
 export function useChangeFocusUsingArrowKey(refList: RefObject<HTMLElement>[]) {
   const focusElement = useCallback(
     (index: number) => {
       if (refList[index]?.current) {
-        refList[index].current!.focus();
+        refList[index].current?.focus();
       }
     },
-    [refList]
+    [refList],
   );
 
   const findFocusedIndex = useCallback(() => {
@@ -39,7 +39,7 @@ export function useChangeFocusUsingArrowKey(refList: RefObject<HTMLElement>[]) {
         focusElement(nextIndex);
       }
     },
-    [focusElement, findFocusedIndex, refList.length]
+    [focusElement, findFocusedIndex, refList.length],
   );
 
   useEffect(() => {
@@ -48,5 +48,5 @@ export function useChangeFocusUsingArrowKey(refList: RefObject<HTMLElement>[]) {
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [focusElement, findFocusedIndex, handleKeyDown]);
+  }, [handleKeyDown]);
 }

@@ -1,12 +1,12 @@
 'use client';
 
+import { usePickStore } from '@/stores/pickStore/pickStore';
+import type { PickViewDraggableItemListLayoutComponentProps } from '@/types/PickViewDraggableItemListLayoutComponentProps';
 import {
   SortableContext,
   rectSortingStrategy,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { usePickStore } from '@/stores';
-import { PickViewDraggableItemListLayoutComponentProps } from '@/types';
 
 export function PickListSortableContextProvider({
   folderId,
@@ -24,7 +24,7 @@ export function PickListSortableContextProvider({
     ? orderedPickIdList.filter(
         (orderedPickId) =>
           !selectedPickIdList.includes(orderedPickId) ||
-          orderedPickId === focusPickId
+          orderedPickId === focusPickId,
       )
     : orderedPickIdList;
 

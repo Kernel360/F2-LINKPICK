@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { type NextRequest, NextResponse } from 'next/server';
 
 export const config = {
   matcher: [
@@ -11,12 +11,12 @@ export default async function middleware(req: NextRequest) {
 
   const isAuthenticated = !!req.cookies.get('access_token');
 
-  const unauthenticatedOnlyPaths = ['/login', '/share'];
+  const unauthenticatedOnlyPaths = ['/login', '/share', '/landing'];
   const authenticatedOnlyPaths = ['/folders', '/recommend', '/mypage'];
 
   const isUnauthenticatedOnlyPath = unauthenticatedOnlyPaths.includes(pathname);
   const isAuthenticatedOnlyPath = authenticatedOnlyPaths.some((path) =>
-    pathname.startsWith(path)
+    pathname.startsWith(path),
   );
 
   if (isUnauthenticatedOnlyPath && isAuthenticated) {
@@ -28,7 +28,7 @@ export default async function middleware(req: NextRequest) {
     !isAuthenticated &&
     !isUnauthenticatedOnlyPath
   ) {
-    return NextResponse.redirect(new URL('/login', req.url));
+    return NextResponse.redirect(new URL('/landing', req.url));
   }
 
   if (isAuthenticated && pathname === '/') {

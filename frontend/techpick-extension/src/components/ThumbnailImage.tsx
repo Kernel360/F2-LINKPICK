@@ -1,7 +1,7 @@
 import {
-  imageStyle,
-  imagePlaceholderStyle,
   fadeInStyle,
+  imagePlaceholderStyle,
+  imageStyle,
 } from './ThumbnailImage.css';
 
 export function ThumbnailImage({ image }: ThumbnailImageProps) {
@@ -12,7 +12,8 @@ export function ThumbnailImage({ image }: ThumbnailImageProps) {
   return (
     <img
       src={image}
-      alt="Bookmark page image"
+      // biome-ignore lint/a11y/noRedundantAlt: <explanation>
+      alt="Bookmark page open graph image"
       className={`${imageStyle} ${fadeInStyle}`}
     />
   );

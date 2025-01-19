@@ -1,8 +1,8 @@
 'use client';
 
+import mixpanel from '@/libs/mixpanel-client';
 import { useEffect } from 'react';
 import type { PropsWithChildren } from 'react';
-import mixpanel from '@/libs/mixpanel-client';
 
 export function UserIdentifyProvider({
   userId,

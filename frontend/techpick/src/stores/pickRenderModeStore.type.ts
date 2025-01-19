@@ -1,4 +1,4 @@
-import type { PickRenderModeType } from '@/types';
+import type { PickRenderModeType } from '@/types/PickRenderModeType';
 
 export type PickRenderModeState = {
   pickRenderMode: PickRenderModeType;

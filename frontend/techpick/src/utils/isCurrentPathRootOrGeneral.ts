@@ -1,4 +1,4 @@
-import { ROUTES } from '@/constants';
+import { ROUTES } from '@/constants/route';
 
 export const isCurrentPathRootOrGeneral = (pathname: string): boolean => {
   return (

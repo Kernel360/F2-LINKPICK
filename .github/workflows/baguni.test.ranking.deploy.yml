@@ -3,7 +3,7 @@ name: Baguni Test Ranking-Module CI/CD
 on:
   push:
     branches:
-      - 'main' # 배포 대상 브랜치
+      - 'develop' # 배포 대상 브랜치
     paths:
       - 'backend/baguni-common/**'
       - 'backend/baguni-ranking/**'
@@ -13,8 +13,8 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      docker-hub-username: 'sangwon917'
-      docker-hub-repo: 'baguni'
+      docker-hub-username: 'minkyeu'
+      docker-hub-repo: 'baguni' # TODO: change to baguni
       module-name: 'baguni-ranking'
 
     steps:
@@ -44,7 +44,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ env.docker-hub-username }}
-          password: ${{ secrets.DOCKERHUB_REPO_BAGUNI_OTHER_TOKEN }}
+          password: ${{ secrets.DOCKERHUB_REPO_BAGUNI_TOKEN }}
       - # Docker hub 업로드
         name: Publish to docker hub
         run: docker push ${{ env.docker-hub-username }}/${{ env.docker-hub-repo }}:${{ env.module-name }}
@@ -58,7 +58,7 @@ jobs:
           password: ${{ secrets.SSH_TEST_SERVER_KYEU_PASSWORD }}
           script: |
             echo "login docker hub for private repository access ..."
-            echo ${{ secrets.DOCKERHUB_REPO_BAGUNI_OTHER_TOKEN }} | docker login -u ${{ env.docker-hub-username }} --password-stdin
+            echo ${{ secrets.DOCKERHUB_REPO_BAGUNI_TOKEN }} | docker login -u ${{ env.docker-hub-username }} --password-stdin
             
             echo "docker - pulling..."
             docker pull ${{ env.docker-hub-username }}/${{ env.docker-hub-repo }}:${{ env.module-name }}

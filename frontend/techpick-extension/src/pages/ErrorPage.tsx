@@ -1,4 +1,5 @@
-import { Text, Gap } from '@/libs/@components';
+import { Gap } from '@/libs/@components/Gap';
+import { Text } from '@/libs/@components/Text';
 import { errorPageLayout } from './ErrorPage.css';
 
 export function ErrorPage() {

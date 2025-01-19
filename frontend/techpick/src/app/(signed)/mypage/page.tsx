@@ -1,31 +1,32 @@
 'use client';
 
-import { useEffect } from 'react';
-import * as Checkbox from '@radix-ui/react-checkbox';
-import { CheckIcon } from 'lucide-react';
 import { postLogout } from '@/apis/postLogout';
 import { ImportBookmarkDialog } from '@/components/ImportBookmarkDialog';
 import MyPageContentContainer from '@/components/MyPage/MyPageContentContainer';
 import MyPageShareFolderContent from '@/components/MyPage/MyPageShareFolderContent';
 import { TutorialDialog } from '@/components/TutorialDialog';
-import { ROUTES } from '@/constants';
-import { useDisclosure } from '@/hooks';
-import { useTreeStore } from '@/stores';
+import * as Checkbox from '@radix-ui/react-checkbox';
+import { CheckIcon } from 'lucide-react';
+import { useEffect } from 'react';
+
+import { ROUTES } from '@/constants/route';
+import { useDisclosure } from '@/hooks/useDisclosure';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import {
   buttonSectionStyle,
+  checkboxIndicatorStyle,
+  checkboxRootStyle,
   logoutButtonStyle,
   myPageContentContainerLayoutStyle,
   myPageLayoutStyle,
   tutorialReplayCheckboxLabelStyle,
   tutorialReplayCheckboxLayoutStyle,
-  checkboxRootStyle,
-  checkboxIndicatorStyle,
 } from './page.css';
 
 export default function MyPage() {
   const setFocusFolderId = useTreeStore((state) => state.setFocusFolderId);
   const setSelectedFolderList = useTreeStore(
-    (state) => state.setSelectedFolderList
+    (state) => state.setSelectedFolderList,
   );
   const { isOpen, onClose, onToggle } = useDisclosure();
 
@@ -43,7 +44,7 @@ export default function MyPage() {
       setFocusFolderId(null);
       setSelectedFolderList([]);
     },
-    [setFocusFolderId, setSelectedFolderList]
+    [setFocusFolderId, setSelectedFolderList],
   );
 
   return (
@@ -52,6 +53,7 @@ export default function MyPage() {
         <MyPageContentContainer title="내 계정">
           <div className={buttonSectionStyle}>
             <ImportBookmarkDialog />
+            {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
             <button className={logoutButtonStyle} onClick={handleLogout}>
               로그아웃
             </button>

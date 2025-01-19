@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, Dispatch, SetStateAction } from 'react';
-import { getItemFromLocalStorage, setItemToLocalStorage } from '@/utils';
+import { getItemFromLocalStorage } from '@/utils/getItemFromLocalStorage';
+import { setItemToLocalStorage } from '@/utils/setItemToLocalStorage';
+import { type Dispatch, type SetStateAction, useEffect, useState } from 'react';
 
 type SetValue<T> = Dispatch<SetStateAction<T>>;
 

@@ -1,24 +1,24 @@
 'use client';
 
+import { useEventLogger } from '@/hooks/useEventLogger';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEventLogger } from '@/hooks';
 import {
+  dividerStyle,
   googleLoginContainer,
   kakaoLoginContainer,
-  screenContainer,
-  loginLink,
   loginBlockContainer,
-  pickIconContainer,
-  pickBrandContainer,
-  dividerStyle,
-  pickBrandContainerWithText,
   loginContainerLayoutStyle,
+  loginLink,
+  pickBrandContainer,
+  pickBrandContainerWithText,
+  pickIconContainer,
+  screenContainer,
 } from './page.css';
 
 export default function LoginPage() {
   const redirectUrl = encodeURIComponent(
-    process.env.NEXT_PUBLIC_REDIRECT_URL ?? ''
+    process.env.NEXT_PUBLIC_REDIRECT_URL ?? '',
   );
   const { trackEvent: trackLoginButtonClick } = useEventLogger({
     eventName: 'login_page_login_button_click',
@@ -31,7 +31,7 @@ export default function LoginPage() {
           <div className={pickBrandContainerWithText}>
             <div className={pickIconContainer}>
               <Image
-                src={`/image/logo_techpick.png`}
+                src={'/image/logo_techpick.png'}
                 alt="TechPick Logo"
                 fill
                 objectFit={'contain'}
@@ -50,7 +50,7 @@ export default function LoginPage() {
             >
               <Image
                 style={{ filter: 'brightness(100)' }}
-                src={`/image/logo_google.png`}
+                src={'/image/logo_google.png'}
                 alt="Google Logo"
                 width={20}
                 height={20}
@@ -66,7 +66,7 @@ export default function LoginPage() {
             >
               <Image
                 style={{ filter: 'invert(100%)' }}
-                src={`/image/logo_kakao.svg`}
+                src={'/image/logo_kakao.svg'}
                 alt="Kakao Logo"
                 width={20}
                 height={20}

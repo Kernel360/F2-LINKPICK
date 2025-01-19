@@ -7,7 +7,10 @@ name: Baguni Test Client CI/CD
 on:
   push:
     branches:
-      - 'fe-develop'
+      - 'develop'
+    paths:
+      - 'frontend/techpick/**'
+      - 'frontend/techpick-shared/**'
   workflow_dispatch:
 
 jobs:
@@ -68,7 +71,7 @@ jobs:
 
             echo "docker - pulling..."
             docker pull ${{ env.docker-hub-username }}/${{ env.docker-hub-repo }}:${{ env.module-name }}
-      
+
             echo "moving to project directory..."
             cd /home/project/baguni/develop
 

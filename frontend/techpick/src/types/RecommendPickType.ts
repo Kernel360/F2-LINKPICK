@@ -1,6 +1,6 @@
-import { Concrete } from './util.type';
-import { components } from '@/schema';
+import type { components } from '@/schema';
+import type { ConcreteType } from './ConcreteType';
 
-export type RecommendPickType = Concrete<
+export type RecommendPickType = ConcreteType<
   components['schemas']['baguni.api.application.ranking.dto.LinkInfoWithCount']
 >;

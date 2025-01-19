@@ -1,10 +1,11 @@
+import type { UpdateFolderRequestType } from '@/types/UpdateFolderRequestType';
 import { HTTPError } from 'ky';
-import { apiClient, returnErrorFromHTTPError } from '@/apis';
+import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
-import type { UpdateFolderRequestType } from '@/types';
+import { returnErrorFromHTTPError } from '../error';
 
 export const updateFolder = async (
-  updateFolderInfo: UpdateFolderRequestType
+  updateFolderInfo: UpdateFolderRequestType,
 ) => {
   try {
     await apiClient.patch(API_URLS.UPDATE_FOLDER, {

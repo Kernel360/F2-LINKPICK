@@ -40,9 +40,8 @@ public class ChromeBookmarkService {
 
 	@Transactional(readOnly = true)
 	public String exportFolder(FolderCommand.Export command) {
-		StringBuilder sb = new StringBuilder();
 		Folder folder = folderDataHandler.getFolder(command.folderId());
-		validateFolderAccess(command.userId(), folder);
+		assertUserIsFolderOwner(command.userId(), folder);
 
 		return searchExportData(new StringBuilder(), folder).toString();
 	}
@@ -71,7 +70,7 @@ public class ChromeBookmarkService {
 		return new ChromeImportResult(ogTagUpdateUrls, alreadyExistBookmarks);
 	}
 
-	private void validateFolderAccess(Long userId, Folder folder) {
+	private void assertUserIsFolderOwner(Long userId, Folder folder) {
 		if (!folder.getUser().getId().equals(userId)) {
 			throw ApiFolderException.FOLDER_ACCESS_DENIED();
 		}

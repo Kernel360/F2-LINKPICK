@@ -9,7 +9,7 @@ export const folderInfoItemStyle = style({
   height: '36px',
   padding: '8px 12px',
   borderRadius: '4px',
-  fontSize: typography.fontSize['sm'],
+  fontSize: typography.fontSize.sm,
 
   cursor: 'grab',
   transition: 'background-color 0.2s',

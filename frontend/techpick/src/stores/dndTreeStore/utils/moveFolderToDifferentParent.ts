@@ -1,6 +1,7 @@
-import { hasIndex } from '@/utils';
+import type { FolderMapType } from '@/types/FolderMapType';
+import type { SelectedFolderListType } from '@/types/SelectedFolderListType';
+import { hasIndex } from '@/utils/hasIndex';
 import type { UniqueIdentifier } from '@dnd-kit/core';
-import type { FolderMapType, SelectedFolderListType } from '@/types';
 
 export const moveFolderToDifferentParent = ({
   treeDataMap,

@@ -1,6 +1,6 @@
 'ues client';
 
-import { PORTAL_CONTAINER_ID } from '@/constants';
+import { PORTAL_CONTAINER_ID } from '@/constants/portalContainerId';
 
 export const getPortalContainer = () => {
   const portalContainer = document.querySelector(`#${PORTAL_CONTAINER_ID}`);

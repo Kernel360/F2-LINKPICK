@@ -1,6 +1,6 @@
+import { dialogContentLayoutStyle } from '@/styles/dialogStyle.css';
 import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
-import { dialogContentLayoutStyle } from '@/styles/dialogStyle.css';
 
 export const dialogContent = style([
   dialogContentLayoutStyle,

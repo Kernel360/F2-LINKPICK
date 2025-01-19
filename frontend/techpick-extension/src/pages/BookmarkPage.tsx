@@ -1,20 +1,21 @@
-import { DeferredComponent } from '@/libs/@components';
-import { SkeltonPickForm, UpdatePickForm } from '@/components';
-import { bookmarkPageLayout } from './BookmarkPage.css';
-import { useEffect, useRef, useState } from 'react';
-import { FolderType } from '@/types';
-import {
-  createPickToUnclassifiedFolder,
-  getBasicFolderList,
-  getRootFolderChildFolders,
-  getTagList,
-} from '@/apis';
-import { useTagStore } from '@/stores';
-import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
-import { filterSelectableFolder } from '@/utils';
-import type { CreatePickToUnclassifiedFolderResponseType } from '@/types';
-import { CHANGE_ICON_PORT_NAME } from '@/constants';
+import { createPickToUnclassifiedFolder } from '@/apis/createPickToUnclassifiedFolder';
+import { getBasicFolderList } from '@/apis/getBasicFolders';
+import { getRootFolderChildFolders } from '@/apis/getRootFolderChildFolders';
+import { getTagList } from '@/apis/getTagList';
+import { SkeltonPickForm } from '@/components/SkeltonPickForm';
+import { UpdatePickForm } from '@/components/UpdatePickForm';
+import { CHANGE_ICON_PORT_NAME } from '@/constants/changeIconPortName';
 import { useEventLogger } from '@/hooks/useEventLogger';
+import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
+import { DeferredComponent } from '@/libs/@components/DeferredComponent';
+import { notifyError } from '@/libs/@toast/notifyError';
+import { notifySuccess } from '@/libs/@toast/notifySuccess';
+import { useTagStore } from '@/stores/tagStore';
+import type { CreatePickToUnclassifiedFolderResponseType } from '@/types/CreatePickToUnclassifiedFolderResponseType';
+import type { FolderType } from '@/types/FolderType';
+import { filterSelectableFolder } from '@/utils/filterSelectableFolderList';
+import { useEffect, useRef, useState } from 'react';
+import { bookmarkPageLayout } from './BookmarkPage.css';
 
 export function BookmarkPage() {
   const [isLoading, setIsLoading] = useState(true);
@@ -33,8 +34,15 @@ export function BookmarkPage() {
       const fetchInitialData = async () => {
         const { title, url, favIconUrl } = await getCurrentTabInfo();
 
-        if (!title || !url || !favIconUrl) {
-          throw new Error('getCurrentTabInfo failed');
+        if (
+          !title ||
+          !url ||
+          !favIconUrl ||
+          url.trim() === '' ||
+          !url.startsWith('http')
+        ) {
+          notifyError('해당 url은 저장할 수 없습니다.');
+          return;
         }
 
         const slicedTitle = title.slice(0, 255);
@@ -54,10 +62,13 @@ export function BookmarkPage() {
 
         const filteredFolderInfoList = filterSelectableFolder(
           basicFolderList,
-          rootFolderChildFolderList
+          rootFolderChildFolderList,
         );
 
         trackSaveBookmark();
+        notifySuccess('미분류 폴더에 북마크가 추가되었습니다!', {
+          duration: 800,
+        });
         setFolderInfoList([...filteredFolderInfoList]);
         setTagList(fetchedTagList);
         setPickInfo(createdPickInfo);
@@ -70,7 +81,7 @@ export function BookmarkPage() {
         fetchInitialData();
       }
     },
-    [setTagList]
+    [setTagList, trackSaveBookmark],
   );
 
   if (isLoading || !pickInfo) {

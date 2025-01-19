@@ -1,40 +1,40 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import type { CSSProperties, KeyboardEvent } from 'react';
+import { useCreateTag } from '@/queries/useCreateTag';
+import { useFetchTagList } from '@/queries/useFetchTagList';
+import { usePickStore } from '@/stores/pickStore/pickStore';
+import { useThemeStore } from '@/stores/themeStore';
+import { useUpdatePickStore } from '@/stores/updatePickStore';
+import type { PickInfoType } from '@/types/PickInfoType';
+import type { TagType } from '@/types/TagType';
+import { numberToRandomColor } from '@/utils/numberToRandomColor';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { Command } from 'cmdk';
+import { useEffect, useRef, useState } from 'react';
+import type { CSSProperties, KeyboardEvent } from 'react';
 import { BarLoader } from 'react-spinners';
 import { colorVars } from 'techpick-shared';
-import {
-  useThemeStore,
-  useTagStore,
-  usePickStore,
-  useUpdatePickStore,
-} from '@/stores';
-import { numberToRandomColor } from '@/utils';
+import { SelectedTagItem } from '../SelectedTagItem/SelectedTagItem';
+import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
 import { DeleteTagDialog } from './DeleteTagDialog';
 import { DeselectTagButton } from './DeselectTagButton';
-import { SelectedTagItem } from '../SelectedTagItem';
 import {
-  dialogOverlayStyle,
-  tagDialogPortalLayout,
-  commandInputStyle,
-  tagListItemStyle,
-  tagListItemContentStyle,
-  tagCreateTextStyle,
-  tagListStyle,
-  tagListLoadingStyle,
-} from './pickTagAutocompleteDialog.css';
-import {
-  filterCommandItems,
   CREATABLE_TAG_KEYWORD,
+  filterCommandItems,
   getRandomInt,
 } from './PickTagAutocompleteDialog.lib';
 import { TagInfoEditPopoverButton } from './TagInfoEditPopoverButton';
-import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
-import { PickInfoType, TagType } from '@/types';
+import {
+  commandInputStyle,
+  dialogOverlayStyle,
+  tagCreateTextStyle,
+  tagDialogPortalLayout,
+  tagListItemContentStyle,
+  tagListItemStyle,
+  tagListLoadingStyle,
+  tagListStyle,
+} from './pickTagAutocompleteDialog.css';
 
 export function PickTagAutocompleteDialog({
   open,
@@ -52,11 +52,12 @@ export function PickTagAutocompleteDialog({
   const isCreateFetchPendingRef = useRef<boolean>(false);
   const randomNumber = useRef<number>(getRandomInt());
   const tagIdOrderedList = selectedTagList.map((tag) => tag.id);
-  const { tagList, fetchingTagState, createTag } = useTagStore();
+  const { data: tagList = [], isLoading } = useFetchTagList();
+  const { mutateAsync: createTag } = useCreateTag();
   const updatePickInfo = usePickStore((state) => state.updatePickInfo);
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
   const setCurrentUpdateTagPickIdToNull = useUpdatePickStore(
-    (state) => state.setCurrentUpdateTagPickIdToNull
+    (state) => state.setCurrentUpdateTagPickIdToNull,
   );
 
   const focusTagInput = () => {
@@ -107,8 +108,9 @@ export function PickTagAutocompleteDialog({
         name: tagInputValue.trim(),
         colorNumber: randomNumber.current,
       });
+
       randomNumber.current = getRandomInt();
-      onSelectTag(newTag!);
+      onSelectTag(newTag);
     } catch {
       /* empty */
     } finally {
@@ -132,6 +134,7 @@ export function PickTagAutocompleteDialog({
     }
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(
     function onOpenPickTagAutocompleteDialog() {
       if (open) {
@@ -140,7 +143,7 @@ export function PickTagAutocompleteDialog({
         });
       }
     },
-    [open]
+    [open],
   );
 
   return (
@@ -196,13 +199,13 @@ export function PickTagAutocompleteDialog({
             {/**전체 태그 리스트 */}
 
             <Command.List className={tagListStyle}>
-              {fetchingTagState.isPending && (
+              {isLoading && (
                 <Command.Loading className={tagListLoadingStyle}>
                   <BarLoader color={colorVars.color.font} />
                 </Command.Loading>
               )}
 
-              {(!fetchingTagState.isPending || tagInputValue.trim()) !== '' && (
+              {(!isLoading || tagInputValue.trim()) !== '' && (
                 <Command.Empty className={tagListItemStyle}>
                   태그를 만들어보세요!
                 </Command.Empty>
@@ -233,7 +236,7 @@ export function PickTagAutocompleteDialog({
                     style={{
                       backgroundColor: numberToRandomColor(
                         randomNumber.current,
-                        isDarkMode ? 'dark' : 'light'
+                        isDarkMode ? 'dark' : 'light',
                       ),
                     }}
                   >

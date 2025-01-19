@@ -13,7 +13,7 @@ export const dividerStyle = style({
 });
 
 export const folderTreeHeaderTitleLayout = style({
-  fontWeight: typography.fontWeights['semibold'],
+  fontWeight: typography.fontWeights.semibold,
   color: colorVars.gray9,
   margin: '12px 8px 12px 12px',
   display: 'flex',

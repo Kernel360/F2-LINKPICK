@@ -1,14 +1,31 @@
+import { ERROR_MESSAGE_JSON } from '@/constants/errorMessageJson';
+import { getAccessToken } from '@/utils/getAccessToken';
+import { notifyError } from '@/utils/toast';
 import * as Sentry from '@sentry/nextjs';
 import ky, { HTTPError } from 'ky';
-import { ERROR_MESSAGE_JSON } from '@/constants';
-import { notifyError } from '@/utils';
+import { redirect } from 'next/navigation';
 import { returnErrorFromHTTPError } from './error';
+
+const isServer = typeof window === 'undefined';
 
 export const apiClient = ky.create({
   credentials: 'include',
   prefixUrl: process.env.NEXT_PUBLIC_API,
   cache: 'no-store',
   hooks: {
+    beforeRequest: [
+      async (request) => {
+        if (isServer) {
+          const accessToken = await getAccessToken();
+          if (accessToken) {
+            request.headers.set(
+              'Cookie',
+              `${accessToken.name}=${accessToken.value}`,
+            );
+          }
+        }
+      },
+    ],
     beforeError: [
       async (httpError) => {
         if (httpError instanceof HTTPError) {
@@ -23,9 +40,15 @@ export const apiClient = ky.create({
 
           if (errorCode && ERROR_MESSAGE_JSON[errorCode]) {
             if (errorCode === 'AU-001') {
-              window.location.href = '/login';
+              if (isServer) {
+                redirect('/login');
+              } else {
+                window.location.href = '/login';
+              }
             } else {
-              notifyError(ERROR_MESSAGE_JSON[errorCode]);
+              if (!isServer) {
+                notifyError(ERROR_MESSAGE_JSON[errorCode]);
+              }
             }
           }
         }
@@ -34,4 +57,5 @@ export const apiClient = ky.create({
       },
     ],
   },
+  retry: 1,
 });

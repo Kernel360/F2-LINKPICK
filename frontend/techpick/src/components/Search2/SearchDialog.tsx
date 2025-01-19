@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import { OPEN_SEARCH_DIALOG_EVENT } from '@/constants';
+import { OPEN_SEARCH_DIALOG_EVENT } from '@/constants/openSearchDialogEvent';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
 import { eventEmitter } from '@/utils/eventEmitter';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
+import React, { useEffect, useState } from 'react';
 import FilterContainer from './FilterContainer';
 import HoverCard from './HoverCard';
+import { SearchInfiniteScrollList } from './SearchInfiniteScrollList';
+import SearchInput from './SearchInput';
 import {
   dialogContent,
   searchBar,
   searchListContainer,
 } from './searchDialog.css';
-import { SearchInfiniteScrollList } from './SearchInfiniteScrollList';
-import SearchInput from './SearchInput';
 
 export default function SearchDialog({
   isOpen,
@@ -22,6 +22,7 @@ export default function SearchDialog({
   const { preFetchSearchPicks, reset } = useSearchPickStore();
   const [isSelectMenuOpen, setIsSelectMenuOpen] = useState(false);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(function prefetching() {
     preFetchSearchPicks();
   }, []);
@@ -29,6 +30,8 @@ export default function SearchDialog({
   /**
    * @description 이벤트를 구독하고, emit으로 발생시킨 이벤트를 받으면 상태를 변경합니다.
    */
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     eventEmitter.on(OPEN_SEARCH_DIALOG_EVENT, onOpenChange);
 

@@ -55,7 +55,7 @@ export function useGetDragOverStyle({
         window.removeEventListener('touchmove', handleMouseMove);
       };
     },
-    [elementClickPosition.x, elementClickPosition.y, scale, isDragging]
+    [elementClickPosition.x, elementClickPosition.y, scale, isDragging],
   );
 
   useEffect(() => {

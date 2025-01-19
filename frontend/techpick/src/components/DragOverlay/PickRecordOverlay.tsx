@@ -1,36 +1,38 @@
 'use client';
 
-import Image from 'next/image';
+import { useImageLoader } from '@/hooks/useImageLoader';
+import { useFetchTagList } from '@/queries/useFetchTagList';
+import type { PickViewItemComponentProps } from '@/types/PickViewItemComponentProps';
+import { formatDateString } from '@/utils/formatDateString';
+import { getFilteredSelectedTagList } from '@/utils/getFilteredSelectedTagList';
 import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
-import { useImageLoader } from '@/hooks';
-import { useTagStore } from '@/stores';
-import { formatDateString } from '@/utils';
-import { pickRecordOverlayLayoutStyle } from './pickRecordOverlay.css';
+import Image from 'next/image';
 import { PickDateColumnLayout } from '../PickRecord/PickDateColumnLayout';
 import { PickImageColumnLayout } from '../PickRecord/PickImageColumnLayout';
-import {
-  pickImageStyle,
-  pickTitleSectionStyle,
-  dateTextStyle,
-  linkLayoutStyle,
-  externalLinkIconStyle,
-  imageStyle,
-} from '../PickRecord/pickRecord.css';
 import { PickTagColumnLayout } from '../PickRecord/PickTagColumnLayout';
 import { PickTitleColumnLayout } from '../PickRecord/PickTitleColumnLayout';
 import { Separator } from '../PickRecord/Separator';
-import { PickTagPicker } from '../PickTagPicker';
-import { PickViewItemComponentProps, TagType } from '@/types';
+import {
+  dateTextStyle,
+  externalLinkIconStyle,
+  imageStyle,
+  linkLayoutStyle,
+  pickImageStyle,
+  pickTitleSectionStyle,
+} from '../PickRecord/pickRecord.css';
+import { PickTagPicker } from '../PickTagPicker/PickTagPicker';
+import { pickRecordOverlayLayoutStyle } from './pickRecordOverlay.css';
 
 export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
   const pick = pickInfo;
   const link = pickInfo.linkInfo;
-  const { findTagById } = useTagStore();
   const { imageStatus } = useImageLoader(link.imageUrl);
+  const { data: tagList = [] } = useFetchTagList();
 
-  const filteredSelectedTagList: TagType[] = pickInfo.tagIdOrderedList
-    .map((tagId) => findTagById(tagId))
-    .filter((tag): tag is TagType => tag !== undefined);
+  const filteredSelectedTagList = getFilteredSelectedTagList({
+    tagList,
+    selectedTagIdList: pickInfo.tagIdOrderedList,
+  });
 
   return (
     <div className={pickRecordOverlayLayoutStyle}>
@@ -56,9 +58,7 @@ export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
       <Separator />
 
       <PickTitleColumnLayout>
-        <div className={pickTitleSectionStyle} role="button">
-          {pick.title}
-        </div>
+        <div className={pickTitleSectionStyle}>{pick.title}</div>
       </PickTitleColumnLayout>
 
       <Separator />

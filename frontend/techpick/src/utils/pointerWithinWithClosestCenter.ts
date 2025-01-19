@@ -1,6 +1,6 @@
 'use client';
 
-import { pointerWithin, closestCenter } from '@dnd-kit/core';
+import { closestCenter, pointerWithin } from '@dnd-kit/core';
 import type { CollisionDetection } from '@dnd-kit/core';
 
 /**

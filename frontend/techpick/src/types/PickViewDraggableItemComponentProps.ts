@@ -1,3 +1,3 @@
-import { PickViewItemComponentProps } from './PickViewItemComponentProps';
+import type { PickViewItemComponentProps } from './PickViewItemComponentProps';
 
 export type PickViewDraggableItemComponentProps = PickViewItemComponentProps;

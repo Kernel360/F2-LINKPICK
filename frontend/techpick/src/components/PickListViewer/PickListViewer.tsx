@@ -1,9 +1,10 @@
+import type { PickInfoType } from '@/types/PickInfoType';
+import type { PickRenderModeType } from '@/types/PickRenderModeType';
 import type { PropsWithChildren, ReactNode } from 'react';
 import { PickCard } from './PickCard';
 import { PickCardListLayout } from './PickCardListLayout';
 import { PickListItem } from './PickListItem';
 import { PickListItemLayout } from './PickListItemLayout';
-import type { PickInfoType, PickRenderModeType } from '@/types';
 
 export function PickListViewer({
   pickList,
@@ -42,7 +43,7 @@ const NORMAL_PICK_LIST_VIEW_TEMPLATES: Record<
 
 interface ViewTemplateValueType {
   PickViewItemListLayoutComponent: (
-    props: PickViewItemListLayoutComponentProps
+    props: PickViewItemListLayoutComponentProps,
   ) => ReactNode;
   PickViewItemComponent: (props: PickViewItemComponentProps) => ReactNode;
 }

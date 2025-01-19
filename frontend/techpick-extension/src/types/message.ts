@@ -10,7 +10,7 @@ export type ResponseOgImageType = {
 };
 
 export const isResponseOgImageType = (
-  message: ResponseMessageType
+  message: ResponseMessageType,
 ): message is ResponseOgImageType => {
   return message.type === 'OG_IMAGE' && 'ogImageUrl' in message;
 };

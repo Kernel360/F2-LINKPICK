@@ -1,15 +1,15 @@
-import { CSSProperties } from 'react';
-import { useThemeStore } from '@/stores';
-import { TagType } from '@/types';
+import { useThemeStore } from '@/stores/themeStore';
+import type { TagType } from '@/types/TagType';
+import { numberToRandomColor } from '@/utils/numberToRandomColor';
+import type { CSSProperties } from 'react';
 import { SelectedTagContent } from './SelectedTagContent';
 import { SelectedTagLayout } from './SelectedTagLayout';
-import { numberToRandomColor } from '@/utils';
 
 export function SelectedTagItem({ tag, children }: SelectedTagItemProps) {
   const { isDarkMode } = useThemeStore();
   const backgroundColor = numberToRandomColor(
     tag.colorNumber,
-    isDarkMode ? 'dark' : 'light'
+    isDarkMode ? 'dark' : 'light',
   );
   const style: CSSProperties = { backgroundColor };
 

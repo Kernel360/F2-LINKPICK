@@ -1,23 +1,19 @@
 'use client';
 
-import { useDndMonitor } from '@dnd-kit/core';
 import { createPick } from '@/apis/pick/createPick';
-import {
-  usePickStore,
-  useDraggingRecommendPickStore,
-  useTreeStore,
-} from '@/stores';
-import {
-  isPickToFolderDroppableObject,
-  isRecommendPickDraggableObject,
-  notifySuccess,
-} from '@/utils';
-import { useEventLogger } from './useEventLogger';
+import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { useDraggingRecommendPickStore } from '@/stores/draggingRecommendPickStore';
+import { usePickStore } from '@/stores/pickStore/pickStore';
+import { isPickToFolderDroppableObject } from '@/utils/isPickToFolderDroppableObject';
+import { isRecommendPickDraggableObject } from '@/utils/isRecommendPickDraggableObject';
+import { notifySuccess } from '@/utils/toast';
+import { useDndMonitor } from '@dnd-kit/core';
 import type {
   DragEndEvent,
   DragOverEvent,
   DragStartEvent,
 } from '@dnd-kit/core';
+import { useEventLogger } from './useEventLogger';
 
 /**
  * @description 추천 목록에서 folder로 dnd를 할 때의 이벤트를 감지하고 동작하는 hook입니다.

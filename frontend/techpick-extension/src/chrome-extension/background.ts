@@ -1,13 +1,10 @@
-import { checkPickByUrl } from '@/apis';
-import {
-  GET_THEME_FROM_LOCALHOST_PORT_NAME,
-  REQUEST_THEME_STATE_FROM_LOCALHOST_MESSAGE,
-  LIGHT_THEME_STATE,
-  DARK_THEME_STATE,
-  THEME_STATE_LOCALHOST_KEY,
-  CHANGE_THEME_STATE_TO_LOCALHOST_PORT_NAME,
-  CHANGE_ICON_PORT_NAME,
-} from '@/constants';
+import { checkPickByUrl } from '@/apis/checkPickByUrl';
+import { CHANGE_ICON_PORT_NAME } from '@/constants/changeIconPortName';
+import { CHANGE_THEME_STATE_TO_LOCALHOST_PORT_NAME } from '@/constants/changeThemeStateToLocalhostPortName';
+import { GET_THEME_FROM_LOCALHOST_PORT_NAME } from '@/constants/getThemeFromLocalhostPortName';
+import { REQUEST_THEME_STATE_FROM_LOCALHOST_MESSAGE } from '@/constants/requestThemeStateFromLocalhostMessage';
+import { DARK_THEME_STATE, LIGHT_THEME_STATE } from '@/constants/themeState';
+import { THEME_STATE_LOCALHOST_KEY } from '@/constants/themeStateLocalhostKey';
 import { getAccessToken } from '@/libs/@chrome/getCookie';
 import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
 
@@ -19,7 +16,7 @@ chrome.runtime.onConnect.addListener(function checkThemeState(port) {
     return;
   }
 
-  port.onMessage.addListener(function (msg: string) {
+  port.onMessage.addListener((msg: string) => {
     if (msg === REQUEST_THEME_STATE_FROM_LOCALHOST_MESSAGE) {
       // 로컬 스토리지에서 값 불러오기.
       chrome.storage.sync.get([THEME_STATE_LOCALHOST_KEY]).then((value) => {
@@ -44,7 +41,7 @@ chrome.runtime.onConnect.addListener(function changeThemeState(port) {
     return;
   }
 
-  port.onMessage.addListener(function (msg: string) {
+  port.onMessage.addListener((msg: string) => {
     if (msg !== LIGHT_THEME_STATE && msg !== DARK_THEME_STATE) {
       return;
     }
@@ -71,12 +68,12 @@ chrome.tabs.onUpdated.addListener(async (_tabId, changeInfo, tab) => {
         const { exist } = await checkPickByUrl(tab.url);
 
         if (exist) {
-          chrome.action.setIcon({ path: './pick128.png', tabId: tab.id });
-        } else {
           chrome.action.setIcon({
-            path: './uncheckedPick128.png',
+            path: './checkedPick128.png',
             tabId: tab.id,
           });
+        } else {
+          chrome.action.setIcon({ path: './pick128.png', tabId: tab.id });
         }
       } catch {
         /* empty */
@@ -90,7 +87,7 @@ chrome.tabs.onUpdated.addListener(async (_tabId, changeInfo, tab) => {
  */
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
   const tab = await chrome.tabs.get(activeInfo.tabId);
-  if (tab.url && tab.url.startsWith('http')) {
+  if (tab.url?.startsWith('http')) {
     const accessTokenCookie = await getAccessToken();
 
     if (accessTokenCookie) {
@@ -98,12 +95,12 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
         const { exist } = await checkPickByUrl(tab.url);
 
         if (exist) {
-          chrome.action.setIcon({ path: './pick128.png', tabId: tab.id });
-        } else {
           chrome.action.setIcon({
-            path: './uncheckedPick128.png',
+            path: './checkedPick128.png',
             tabId: tab.id,
           });
+        } else {
+          chrome.action.setIcon({ path: './pick128.png', tabId: tab.id });
         }
       } catch {
         /* empty */
@@ -122,7 +119,7 @@ chrome.runtime.onConnect.addListener(async function changeIcon(port) {
 
   const currentTabInfo = await getCurrentTabInfo();
   chrome.action.setIcon({
-    path: './pick128.png',
+    path: './checkedPick128.png',
     tabId: currentTabInfo.id,
   });
 });

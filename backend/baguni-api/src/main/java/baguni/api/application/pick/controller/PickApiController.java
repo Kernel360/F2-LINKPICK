@@ -32,7 +32,6 @@ import baguni.api.application.pick.dto.PickApiRequest;
 import baguni.api.application.pick.dto.PickApiResponse;
 import baguni.api.application.pick.dto.PickSliceResponse;
 import baguni.domain.infrastructure.pick.dto.PickResult;
-import baguni.domain.exception.pick.ApiPickException;
 import baguni.api.service.pick.service.PickSearchService;
 import baguni.api.service.pick.service.PickService;
 import baguni.common.event.events.PickCreateEvent;
@@ -164,9 +163,6 @@ public class PickApiController {
 	})
 	public ResponseEntity<PickApiResponse.Pick> savePick(@LoginUserId Long userId,
 		@Valid @RequestBody PickApiRequest.Create request) {
-		if (!Objects.isNull(request.title()) && 200 < request.title().length()) {
-			throw ApiPickException.PICK_TITLE_TOO_LONG();
-		}
 		var command = pickApiMapper.toCreateCommand(userId, request);
 		var result = pickService.saveNewPick(command);
 		var event = new PickCreateEvent(userId, result.id(), result.linkInfo().url());
@@ -237,9 +233,6 @@ public class PickApiController {
 		@LoginUserId Long userId,
 		@Valid @RequestBody PickApiRequest.UpdateFromExtension request
 	) {
-		if (Objects.nonNull(request.title()) && (200 < request.title().length())) {
-			throw ApiPickException.PICK_TITLE_TOO_LONG();
-		}
 		var command = pickApiMapper.toUpdateCommand(userId, request);
 		var result = pickService.updatePick(command);
 		var response = pickApiMapper.toApiResponse(result);
@@ -255,9 +248,6 @@ public class PickApiController {
 		@LoginUserId Long userId,
 		@Valid @RequestBody PickApiRequest.Update request
 	) {
-		if (Objects.nonNull(request.title()) && (200 < request.title().length())) {
-			throw ApiPickException.PICK_TITLE_TOO_LONG();
-		}
 		var command = pickApiMapper.toUpdateCommand(userId, request);
 		var result = pickService.updatePick(command);
 		var response = pickApiMapper.toApiResponse(result);

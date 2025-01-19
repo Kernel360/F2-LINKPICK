@@ -27,4 +27,8 @@ public class ApiLinkException extends ApiException {
 	public static ApiLinkException LINK_OG_TAG_UPDATE_FAILURE() {
 		return new ApiLinkException(ApiLinkErrorCode.LINK_OG_TAG_UPDATE_FAILURE);
 	}
+
+	public static ApiLinkException LINK_URL_TOO_LONG() {
+		return new ApiLinkException(ApiLinkErrorCode.LINK_URL_TOO_LONG);
+	}
 }

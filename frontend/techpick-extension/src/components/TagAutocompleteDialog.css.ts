@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css';
-import { SelectedTagCommonStyle } from './SelectedTagCommonStyle.css';
 import { colorVars } from 'techpick-shared';
+import { SelectedTagCommonStyle } from './SelectedTagCommonStyle.css';
 
 const { color } = colorVars;
 
@@ -36,7 +36,7 @@ export const commandInputStyle = style({
 
 export const tagListStyle = style({
   maxHeight: '90px',
-  border: `1px solid black`,
+  border: '1px solid black',
   borderTop: 'none',
   overflowY: 'auto',
   '::-webkit-scrollbar': {

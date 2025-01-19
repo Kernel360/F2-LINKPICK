@@ -1,8 +1,8 @@
+import { getPickListByQueryParam } from '@/apis/pick/getPicks';
+import type { PickListType } from '@/types/PickListType';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { getPickListByQueryParam } from '@/apis/pick/getPicks';
-import { PickListType } from '@/types';
 
 const SIZE = 10;
 
@@ -91,7 +91,7 @@ export const useSearchPickStore = create<
             const result = await getPickListByQueryParam(
               searchParams,
               '',
-              SIZE
+              SIZE,
             );
             set((state) => {
               state.searchResultList = result.content;
@@ -122,11 +122,11 @@ export const useSearchPickStore = create<
             const result = await getPickListByQueryParam(
               searchParams,
               state.lastCursor,
-              SIZE
+              SIZE,
             );
             set((state) => {
               state.searchResultList = state.searchResultList.concat(
-                result.content
+                result.content,
               );
               state.lastCursor = result.lastCursor;
               state.hasNext = result.hasNext;
@@ -171,6 +171,6 @@ export const useSearchPickStore = create<
         set((state) => {
           Object.assign(state, initialState);
         }),
-    }))
-  )
+    })),
+  ),
 );

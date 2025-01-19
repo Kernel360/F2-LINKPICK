@@ -1,12 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { PickRecordHeader } from '@/components';
+import { useEffect } from 'react';
 const EmptyPickRecordImage = dynamic(() =>
   import('@/components/EmptyPickRecordImage').then(
-    (mod) => mod.EmptyPickRecordImage
-  )
+    (mod) => mod.EmptyPickRecordImage,
+  ),
 );
 import { FolderContentHeader } from '@/components/FolderContentHeader/FolderContentHeader';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
@@ -14,14 +13,13 @@ import { FolderLoadingPage } from '@/components/FolderLoadingPage';
 import { PickContentLayout } from '@/components/PickContentLayout';
 import { PickDraggableListLayout } from '@/components/PickDraggableListLayout';
 import { PickDraggableRecord } from '@/components/PickRecord/PickDraggableRecord';
-import {
-  useClearSelectedPickIdsOnMount,
-  useFetchTagList,
-  useResetPickFocusOnOutsideClick,
-  useFetchPickRecordByFolderId,
-} from '@/hooks';
+import { PickRecordHeader } from '@/components/PickRecord/PickRecordHeader';
+import { useClearSelectedPickIdsOnMount } from '@/hooks/useClearSelectedPickIdsOnMount';
+import { useFetchPickRecordByFolderId } from '@/hooks/useFetchPickRecordByFolderId';
+import { useResetPickFocusOnOutsideClick } from '@/hooks/useResetPickFocusOnOutsideClick';
+import { useFetchTagList } from '@/queries/useFetchTagList';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
-import { getOrderedPickListByFolderId } from '@/utils';
+import { getOrderedPickListByFolderId } from '@/utils/getOrderedPickListByFolderId';
 
 export default function UnclassifiedFolderPage() {
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
@@ -40,9 +38,9 @@ export default function UnclassifiedFolderPage() {
         return;
       }
 
-      selectSingleFolder(basicFolderMap['UNCLASSIFIED'].id);
+      selectSingleFolder(basicFolderMap.UNCLASSIFIED.id);
     },
-    [basicFolderMap, selectSingleFolder]
+    [basicFolderMap, selectSingleFolder],
   );
 
   if (!basicFolderMap || (isLoading && !data)) {
@@ -60,7 +58,7 @@ export default function UnclassifiedFolderPage() {
           <EmptyPickRecordImage />
         ) : (
           <PickDraggableListLayout
-            folderId={basicFolderMap['UNCLASSIFIED'].id}
+            folderId={basicFolderMap.UNCLASSIFIED.id}
             viewType="record"
           >
             {pickList.map((pickInfo) => {

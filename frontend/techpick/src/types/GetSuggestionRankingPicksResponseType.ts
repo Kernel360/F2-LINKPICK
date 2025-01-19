@@ -1,14 +1,14 @@
-import { Concrete } from './util.type';
-import { components } from '@/schema';
+import type { components } from '@/schema';
+import type { ConcreteType } from './ConcreteType';
 
-export type GetSuggestionRankingPicksResponseType = {
-  dailyViewRanking: Concrete<
+export interface GetSuggestionRankingPicksResponseType {
+  dailyViewRanking: ConcreteType<
     components['schemas']['baguni.api.application.ranking.dto.LinkInfoWithCount']
   >[];
-  weeklyViewRanking: Concrete<
+  weeklyViewRanking: ConcreteType<
     components['schemas']['baguni.api.application.ranking.dto.LinkInfoWithCount']
   >[];
-  monthlyPickRanking: Concrete<
+  monthlyPickRanking: ConcreteType<
     components['schemas']['baguni.api.application.ranking.dto.LinkInfoWithCount']
   >[];
-};
+}

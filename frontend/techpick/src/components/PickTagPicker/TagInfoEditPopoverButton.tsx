@@ -1,27 +1,28 @@
 'use client';
 
-import { useRef } from 'react';
+import { useDisclosure } from '@/hooks/useDisclosure';
+import { useUpdateTag } from '@/queries/useUpdateTag';
+import type { TagType } from '@/types/TagType';
+import { isShallowEqualValue } from '@/utils/isShallowEqualValue';
+import { isEmptyString } from '@/utils/string';
 import * as Popover from '@radix-ui/react-popover';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import DOMPurify from 'dompurify';
 import { EllipsisIcon } from 'lucide-react';
-import { useDisclosure } from '@/hooks';
-import { useTagStore } from '@/stores';
-import { isEmptyString, isShallowEqualValue } from '@/utils';
+import { useRef } from 'react';
 import { ShowDeleteTagDialogButton } from './ShowDeleteTagDialogButton';
 import {
+  popoverTriggerButtonStyle,
   tagInfoEditFormLayout,
   tagInputStyle,
-  popoverTriggerButtonStyle,
 } from './TagInfoEditPopoverButton.css';
-import type { TagType } from '@/types';
 
 export function TagInfoEditPopoverButton({
   tag,
   container,
 }: TagInfoEditPopoverButtonProps) {
   const tagNameInputRef = useRef<HTMLInputElement | null>(null);
-  const updateTag = useTagStore((state) => state.updateTag);
+  const { mutate: updateTag } = useUpdateTag();
   const {
     isOpen: isPopoverOpen,
     onClose: closePopover,
@@ -55,7 +56,7 @@ export function TagInfoEditPopoverButton({
 
     try {
       closePopover();
-      await updateTag({
+      updateTag({
         id: tag.id,
         name: newTagName,
         colorNumber: tag.colorNumber,
@@ -69,6 +70,7 @@ export function TagInfoEditPopoverButton({
     <Popover.Root open={isPopoverOpen} onOpenChange={setIsOpen} modal>
       <Popover.Trigger
         className={popoverTriggerButtonStyle}
+        // biome-ignore lint/a11y/useSemanticElements: <explanation>
         role="button"
         onClick={(e) => {
           e.stopPropagation(); // 옵션 버튼을 눌렀을 때, 해당 태그를 선택하는 onSelect를 막기 위헤서 전파 방지
@@ -94,6 +96,7 @@ export function TagInfoEditPopoverButton({
               type="text"
               defaultValue={tag.name}
               ref={tagNameInputRef}
+              // biome-ignore lint/a11y/noAutofocus: <explanation>
               autoFocus
               onKeyDown={handleInputKeyDown}
               className={tagInputStyle}

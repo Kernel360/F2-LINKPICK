@@ -1,9 +1,9 @@
 'use client';
 
+import { isEmptyString } from '@/utils/string';
+import { FolderPlus } from 'lucide-react';
 import { useCallback, useEffect, useRef } from 'react';
 import type { KeyboardEvent } from 'react';
-import { FolderPlus } from 'lucide-react';
-import { isEmptyString } from '@/utils';
 import { folderInputLayout, inputStyle, labelStyle } from './folderInput.css';
 
 export function FolderInput({
@@ -44,7 +44,7 @@ export function FolderInput({
         document.removeEventListener('mousedown', handleClickOutside);
       };
     },
-    [onClickOutSide, submitIfNotEmptyString]
+    [onClickOutSide, submitIfNotEmptyString],
   );
 
   useEffect(
@@ -56,7 +56,7 @@ export function FolderInput({
         setTimeout(() => inputRef.current?.focus(), 0);
       }
     },
-    [initialValue]
+    [initialValue],
   );
 
   return (

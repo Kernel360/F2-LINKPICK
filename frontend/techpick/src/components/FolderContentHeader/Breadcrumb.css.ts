@@ -8,9 +8,9 @@ export const breadcrumbListStyle = style({
   alignItems: 'center',
   overflowWrap: 'break-word',
   color: colorVars.gray8,
-  fontSize: typography.fontSize['lg'],
-  lineHeight: typography.lineHeight['lg'],
-  fontWeight: typography.fontWeights['semibold'],
+  fontSize: typography.fontSize.lg,
+  lineHeight: typography.lineHeight.lg,
+  fontWeight: typography.fontWeights.semibold,
 });
 
 export const breadcrumbItemStyle = style({
@@ -19,7 +19,7 @@ export const breadcrumbItemStyle = style({
 });
 
 export const breadcrumbLinkStyle = style({
-  padding: space['px'],
+  padding: space.px,
   borderRadius: '4px',
   fontPalette: colorVars.gray1,
   transitionProperty: 'color, background-color, border-color, text-decoration',
@@ -43,7 +43,7 @@ export const breadcrumbLinkStyle = style({
 
 export const breadcrumbPageStyle = style({
   fontPalette: colorVars.gray4,
-  fontWeight: typography.fontWeights['normal'],
+  fontWeight: typography.fontWeights.normal,
 });
 
 export const breadcrumbSeparatorStyle = style({

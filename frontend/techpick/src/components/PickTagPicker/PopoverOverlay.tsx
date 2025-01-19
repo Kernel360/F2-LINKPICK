@@ -1,6 +1,6 @@
 'use client';
 
-import { MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
 import { popoverOverlayStyle } from './TagInfoEditPopoverButton.css';
 
 export function PopoverOverlay({
@@ -8,5 +8,6 @@ export function PopoverOverlay({
 }: {
   onClick?: (e: MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => void;
 }) {
+  // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
   return <div className={popoverOverlayStyle} onClick={onClick} />;
 }

@@ -1,13 +1,13 @@
-import { apiClient } from './apiClient';
-import type { GetPickByUrlResponseType } from '@/types';
-import { API_URLS } from '@/constants';
+import { API_URLS } from '@/constants/apiUrls';
+import type { GetPickByUrlResponseType } from '@/types/GetPickByUrlResponseType';
+import { returnErrorFromHTTPError } from '@/utils/returnErrorFromHTTPError';
 import { HTTPError } from 'ky';
-import { returnErrorFromHTTPError } from '@/utils';
+import { apiClient } from './apiClient';
 
 export const checkPickByUrl = async (url: string) => {
   try {
     const response = await apiClient.get<GetPickByUrlResponseType>(
-      API_URLS.getPicksByLinkUrl(encodeURIComponent(url))
+      API_URLS.getPicksByLinkUrl(encodeURIComponent(url)),
     );
 
     const data = await response.json();

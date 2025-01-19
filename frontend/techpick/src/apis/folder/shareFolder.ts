@@ -1,7 +1,9 @@
+import type { ShareFolderRequestType } from '@/types/ShareFolderRequestType';
+import type { ShareFolderResponseType } from '@/types/ShareFolderResponseType';
 import { HTTPError } from 'ky';
-import { apiClient, returnErrorFromHTTPError } from '@/apis';
+import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
-import { ShareFolderRequestType, ShareFolderResponseType } from '@/types';
+import { returnErrorFromHTTPError } from '../error';
 
 export const shareFolder = async (shareFolderInfo: ShareFolderRequestType) => {
   try {
@@ -9,7 +11,7 @@ export const shareFolder = async (shareFolderInfo: ShareFolderRequestType) => {
       API_URLS.SHARE_FOLDER,
       {
         json: shareFolderInfo,
-      }
+      },
     );
     const data = await response.json();
     return data;

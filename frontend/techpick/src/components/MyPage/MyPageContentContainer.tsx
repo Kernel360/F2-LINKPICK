@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { type PropsWithChildren } from 'react';
 import * as styles from './myPageContentContainer.css';
 
 export default function MyPageContentContainer({

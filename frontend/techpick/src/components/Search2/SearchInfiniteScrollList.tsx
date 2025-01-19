@@ -1,10 +1,10 @@
+import { useSearchPickStore } from '@/stores/searchPickStore';
 import React, { useEffect, useCallback } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
-import { useSearchPickStore } from '@/stores/searchPickStore';
-import * as styles from './searchInfiniteScrollList.css';
 import SearchItemRenderer from './SearchItemRenderer';
+import * as styles from './searchInfiniteScrollList.css';
 
 export function SearchInfiniteScrollList({
   onClose,
@@ -21,10 +21,12 @@ export function SearchInfiniteScrollList({
     searchFolder,
   } = useSearchPickStore();
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (!searchResultList.length) searchPicksByQueryParam();
   }, [searchQuery, searchTag, searchFolder, searchResultList]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const loadMoreItems = useCallback(async () => {
     await loadMoreSearchPicks();
   }, [hasNext, isLoading, lastCursor]);

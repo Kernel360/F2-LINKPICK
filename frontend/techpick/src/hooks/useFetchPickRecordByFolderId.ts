@@ -1,16 +1,16 @@
 'use client';
 
-import { useEffect, useCallback, useRef } from 'react';
-import { usePickStore } from '@/stores';
-import { FetchRequestType } from '@/types/FetchRequestType';
-import type { PickRecordValueType } from '@/types';
+import { usePickStore } from '@/stores/pickStore/pickStore';
+import type { FetchRequestType } from '@/types/FetchRequestType';
+import type { PickRecordValueType } from '@/types/PickRecordValueType';
+import { useCallback, useEffect, useRef } from 'react';
 
 export function useFetchPickRecordByFolderId({
   folderId,
   alwaysFetch = false,
 }: useFetchPickInfoParams): useFetchResult {
   const fetchPickDataByFolderId = usePickStore(
-    (state) => state.fetchPickDataByFolderId
+    (state) => state.fetchPickDataByFolderId,
   );
   const pickRecord = usePickStore((state) => state.pickRecord);
   const isFetchedRef = useRef(false);
@@ -19,7 +19,7 @@ export function useFetchPickRecordByFolderId({
     async (folderId: number) => {
       await fetchPickDataByFolderId(folderId);
     },
-    [fetchPickDataByFolderId]
+    [fetchPickDataByFolderId],
   );
 
   useEffect(() => {
