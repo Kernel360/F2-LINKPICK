@@ -1,4 +1,4 @@
-name: Baguni Test Api-Module CI/CD
+name: Baguni Prod Api-Module CI/CD
 
 on:
   push:

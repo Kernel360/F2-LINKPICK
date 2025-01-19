@@ -1,22 +1,21 @@
-name: Baguni Test Batch-Module CI/CD
+name: Baguni Prod Ranking-Module CI/CD
 
 on:
   push:
     branches:
-      - 'develop' # 배포 대상 브랜치
+      - 'main' # 배포 대상 브랜치
     paths:
       - 'backend/baguni-common/**'
-      - 'backend/baguni-domain/**'
-      - 'backend/baguni-batch/**'
+      - 'backend/baguni-ranking/**'
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      docker-hub-username: 'minkyeu'
-      docker-hub-repo: 'baguni' # TODO: change to baguni
-      module-name: 'baguni-batch'
+      docker-hub-username: 'sangwon917'
+      docker-hub-repo: 'baguni'
+      module-name: 'baguni-ranking'
 
     steps:
       # 저장소 Checkout
@@ -45,7 +44,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: ${{ env.docker-hub-username }}
-          password: ${{ secrets.DOCKERHUB_REPO_BAGUNI_TOKEN }}
+          password: ${{ secrets.DOCKERHUB_REPO_BAGUNI_OTHER_TOKEN }}
       - # Docker hub 업로드
         name: Publish to docker hub
         run: docker push ${{ env.docker-hub-username }}/${{ env.docker-hub-repo }}:${{ env.module-name }}
@@ -59,7 +58,7 @@ jobs:
           password: ${{ secrets.SSH_TEST_SERVER_KYEU_PASSWORD }}
           script: |
             echo "login docker hub for private repository access ..."
-            echo ${{ secrets.DOCKERHUB_REPO_BAGUNI_TOKEN }} | docker login -u ${{ env.docker-hub-username }} --password-stdin
+            echo ${{ secrets.DOCKERHUB_REPO_BAGUNI_OTHER_TOKEN }} | docker login -u ${{ env.docker-hub-username }} --password-stdin
             
             echo "docker - pulling..."
             docker pull ${{ env.docker-hub-username }}/${{ env.docker-hub-repo }}:${{ env.module-name }}
@@ -77,7 +76,7 @@ jobs:
         with:
           webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
           status: ${{ job.status }}
-          title: 'TEST BATCH SERVER DEPLOY'
+          title: 'TEST RANKING SERVER DEPLOY'
           color: 0xff91a4
           url: 'https://github.com/sarisia/actions-status-discord'
           username: GitHub Actions
