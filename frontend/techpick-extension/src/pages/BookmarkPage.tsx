@@ -9,6 +9,7 @@ import { useEventLogger } from '@/hooks/useEventLogger';
 import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
 import { DeferredComponent } from '@/libs/@components/DeferredComponent';
 import { notifyError } from '@/libs/@toast/notifyError';
+import { notifySuccess } from '@/libs/@toast/notifySuccess';
 import { useTagStore } from '@/stores/tagStore';
 import type { CreatePickToUnclassifiedFolderResponseType } from '@/types/CreatePickToUnclassifiedFolderResponseType';
 import type { FolderType } from '@/types/FolderType';
@@ -65,6 +66,9 @@ export function BookmarkPage() {
         );
 
         trackSaveBookmark();
+        notifySuccess('미분류 폴더에 북마크가 추가되었습니다!', {
+          duration: 800,
+        });
         setFolderInfoList([...filteredFolderInfoList]);
         setTagList(fetchedTagList);
         setPickInfo(createdPickInfo);

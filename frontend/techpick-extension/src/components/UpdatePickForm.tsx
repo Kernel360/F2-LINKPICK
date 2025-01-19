@@ -88,7 +88,7 @@ export function UpdatePickForm({
         notifySuccess('수정되었습니다!');
         setTimeout(() => {
           window.close();
-        }, 900);
+        }, 600);
       })
       .catch(() => {
         notifyError('북마크가 실패했습니다!');
