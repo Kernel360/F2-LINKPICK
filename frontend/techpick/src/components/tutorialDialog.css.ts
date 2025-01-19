@@ -23,6 +23,8 @@ export const dialogContent = style([
         flexDirection: 'column',
         justifyContent: 'space-between',
         width: 'fit-content',
+        minHeight: 'fit-content',
+        height: 'auto',
         padding: '24px',
       },
     },
@@ -45,12 +47,23 @@ export const tabContentDescriptionStyle = style({
 
 export const pointTextStyle = style({ color: colorVars.primary });
 
+export const mobileTextUnderlineStyle = style({
+  '@media': {
+    [mobile]: {
+      textDecoration: 'underline',
+      textDecorationColor: colorVars.primary,
+      textUnderlineOffset: '4px',
+    },
+  },
+});
+
 export const tabRootStyle = style({
   position: 'relative',
-  width: '100%',
 
   '@media': {
-    [mobile]: {},
+    [mobile]: {
+      width: '100%',
+    },
   },
 });
 
@@ -74,11 +87,15 @@ export const tabTriggerLayoutStyle = style({
 });
 
 export const videoStyle = style({
+  width: '659px',
+  borderRadius: '4px',
   aspectRatio: '16 / 9',
-  width: '100%',
   objectFit: 'cover',
 
   '@media': {
+    [`${mobile},${tablet}`]: {
+      width: '100%',
+    },
     [desktop]: {},
   },
 });
@@ -87,6 +104,9 @@ export const tabListStyle = style({
   '@media': {
     [mobile]: {
       marginTop: '8px',
+    },
+    [tablet]: {
+      marginTop: '16px',
     },
     [desktop]: {
       position: 'absolute',

@@ -8,9 +8,9 @@ import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import { useRef, useState } from 'react';
-import { Gap } from './Gap';
 import {
   dialogContent,
+  mobileTextUnderlineStyle,
   outlineButtonStyle,
   pointTextStyle,
   solidButtonStyle,
@@ -22,7 +22,11 @@ import {
   videoStyle,
 } from './tutorialDialog.css';
 
-const tutorialStepList = ['tutorial-step-1', 'tutorial-step-2'] as const;
+const tutorialStepList = [
+  'tutorial-step-1',
+  'tutorial-step-2',
+  'tutorial-step-3',
+] as const;
 type TutorialStepType = (typeof tutorialStepList)[number];
 
 export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
@@ -70,7 +74,38 @@ export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
               className={tabContentStyle}
             >
               <p className={tabContentDescriptionStyle}>
-                📌 <span className={pointTextStyle}>추천 페이지</span>에서
+                <a
+                  href="https://chromewebstore.google.com/detail/%EB%B0%94%EA%B5%AC%EB%8B%88-%EC%9D%B5%EC%8A%A4%ED%85%90%EC%85%98/gfkkgllophliamkdclhekgfiohnbdddl"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span
+                    className={`${pointTextStyle} ${mobileTextUnderlineStyle}`}
+                  >
+                    해당 링크
+                  </span>
+                  를 누르시거나 <span className={mobileLinBreakStyle} />
+                </a>{' '}
+                <span className={pointTextStyle}>바구니 익스텐션</span> 설치해서
+                북마크하세요!
+              </p>
+
+              <video
+                src="/video/saveBookmark.mp4"
+                autoPlay
+                muted
+                playsInline
+                loop
+                className={videoStyle}
+              />
+            </Tabs.Content>
+
+            <Tabs.Content
+              value={tutorialStepList[1]}
+              className={tabContentStyle}
+            >
+              <p className={tabContentDescriptionStyle}>
+                <span className={pointTextStyle}>추천 페이지</span>에서
                 <span className={mobileLinBreakStyle} />
                 원하는 걸<span className={pointTextStyle}> 저장</span>할 수
                 있어요!
@@ -87,7 +122,7 @@ export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
             </Tabs.Content>
 
             <Tabs.Content
-              value={tutorialStepList[1]}
+              value={tutorialStepList[2]}
               className={tabContentStyle}
             >
               <p className={tabContentDescriptionStyle}>
@@ -108,7 +143,7 @@ export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
             </Tabs.Content>
 
             <Tabs.List className={tabListStyle}>
-              {tutorialStep === tutorialStepList[0] ? (
+              {tutorialStep === 'tutorial-step-1' && (
                 <Tabs.Trigger
                   className={solidButtonStyle}
                   value={tutorialStepList[1]}
@@ -116,11 +151,34 @@ export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
                 >
                   <button type="button">다음</button>
                 </Tabs.Trigger>
-              ) : (
+              )}
+
+              {tutorialStep === 'tutorial-step-2' && (
                 <div className={tabTriggerLayoutStyle}>
                   <Tabs.Trigger
                     className={outlineButtonStyle}
                     value={tutorialStepList[0]}
+                    ref={prevButtonRef}
+                    onMouseEnter={() => handleMouseEnter(prevButtonRef)}
+                    asChild
+                  >
+                    <button type="button">이전</button>
+                  </Tabs.Trigger>
+                  <Tabs.Trigger
+                    className={solidButtonStyle}
+                    value={tutorialStepList[2]}
+                    asChild
+                  >
+                    <button type="button">다음</button>
+                  </Tabs.Trigger>
+                </div>
+              )}
+
+              {tutorialStep === 'tutorial-step-3' && (
+                <div className={tabTriggerLayoutStyle}>
+                  <Tabs.Trigger
+                    className={outlineButtonStyle}
+                    value={tutorialStepList[1]}
                     ref={prevButtonRef}
                     onMouseEnter={() => handleMouseEnter(prevButtonRef)}
                     asChild
