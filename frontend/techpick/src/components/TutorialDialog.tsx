@@ -3,21 +3,23 @@
 import { IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY } from '@/constants/isTutorialSeenLocalStorageKey';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
+import { mobileLinBreakStyle } from '@/styles/mobileLinBreakStyle.css';
 import * as Dialog from '@radix-ui/react-dialog';
 import * as Tabs from '@radix-ui/react-tabs';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { Gap } from './Gap';
 import {
-  dialogCloseButtonStyle,
   dialogContent,
+  outlineButtonStyle,
   pointTextStyle,
+  solidButtonStyle,
   tabContentDescriptionStyle,
   tabContentStyle,
   tabListStyle,
-  tabTriggerButtonStyle,
+  tabRootStyle,
   tabTriggerLayoutStyle,
+  videoStyle,
 } from './tutorialDialog.css';
 
 const tutorialStepList = ['tutorial-step-1', 'tutorial-step-2'] as const;
@@ -57,53 +59,52 @@ export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
             <Dialog.Title>튜토리얼</Dialog.Title>
             <Dialog.Description>튜토리얼 설명입니다.</Dialog.Description>
           </VisuallyHidden.Root>
-
           <Tabs.Root
             value={tutorialStep}
             onValueChange={onValueChange}
             activationMode={'manual'}
-            className={tabContentStyle}
+            className={tabRootStyle}
           >
-            <Tabs.Content value={tutorialStepList[0]}>
+            <Tabs.Content
+              value={tutorialStepList[0]}
+              className={tabContentStyle}
+            >
               <p className={tabContentDescriptionStyle}>
                 📌 <span className={pointTextStyle}>추천 페이지</span>에서
+                <span className={mobileLinBreakStyle} />
                 원하는 걸<span className={pointTextStyle}> 저장</span>할 수
                 있어요!
               </p>
 
-              <Gap verticalSize="gap16" />
-
-              <Image
+              <img
                 src={'/video/recommendPickMove.gif'}
-                alt="GIF 설명"
-                unoptimized
-                width={659}
-                height={389}
-                priority={true}
+                alt=""
+                className={videoStyle}
               />
             </Tabs.Content>
 
-            <Tabs.Content value={tutorialStepList[1]}>
+            <Tabs.Content
+              value={tutorialStepList[1]}
+              className={tabContentStyle}
+            >
               <p className={tabContentDescriptionStyle}>
-                <span className={pointTextStyle}>저장한 북마크</span>를 쉽게
+                <span className={pointTextStyle}>저장한 북마크</span>를{' '}
+                <span className={mobileLinBreakStyle} />
+                쉽게
                 <span className={pointTextStyle}> 이동</span>할 수 있어요!
               </p>
 
-              <Gap verticalSize="gap16" />
-
-              <Image
+              <img
                 src={'/video/multiSelectPickMove.gif'}
-                alt="GIF 설명"
-                unoptimized
-                width={659}
-                height={389}
+                alt=""
+                className={videoStyle}
               />
             </Tabs.Content>
 
             <Tabs.List className={tabListStyle}>
               {tutorialStep === tutorialStepList[0] ? (
                 <Tabs.Trigger
-                  className={tabTriggerButtonStyle}
+                  className={solidButtonStyle}
                   value={tutorialStepList[1]}
                   asChild
                 >
@@ -112,7 +113,7 @@ export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
               ) : (
                 <div className={tabTriggerLayoutStyle}>
                   <Tabs.Trigger
-                    className={tabTriggerButtonStyle}
+                    className={outlineButtonStyle}
                     value={tutorialStepList[0]}
                     ref={prevButtonRef}
                     onMouseEnter={() => handleMouseEnter(prevButtonRef)}
@@ -120,12 +121,13 @@ export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
                   >
                     <button type="button">이전</button>
                   </Tabs.Trigger>
+
                   {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
                   <button
                     onClick={onCloseTutorial}
                     ref={closeButtonRef}
                     onMouseEnter={() => handleMouseEnter(closeButtonRef)}
-                    className={dialogCloseButtonStyle}
+                    className={solidButtonStyle}
                   >
                     종료
                   </button>
