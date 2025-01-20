@@ -171,34 +171,6 @@ public class PickApiController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/recommend")
-	@Operation(
-		summary = "추천 링크로 픽 생성",
-		description = "추천 링크로 픽을 생성합니다. 이미 픽으로 등록된 링크의 경우 기존 픽 정보를 응답으로 보냅니다."
-	)
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
-		@ApiResponse(responseCode = "403", description = "접근할 수 없는 폴더")
-	})
-	public ResponseEntity<PickApiResponse.CreateFromRecommend> savePickFromRecommend(
-		@LoginUserId Long userId,
-		@Valid @RequestBody PickApiRequest.Create request
-	) {
-		boolean existPick;
-		PickResult.Pick result;
-		if (pickService.existPickByUrl(userId, request.linkInfo().url())) {
-			existPick = true;
-			result = pickService.getPickUrl(userId, request.linkInfo().url());
-		} else {
-			existPick = false;
-			var command = pickApiMapper.toCreateCommand(userId, request);
-			result = pickService.saveNewPick(command);
-		}
-		var event = new PickCreateEvent(userId, result.id(), result.linkInfo().url());
-		rankingEventMessenger.send(event);
-		return ResponseEntity.ok(new PickApiResponse.CreateFromRecommend(existPick, result));
-	}
-
 	@MeasureTime
 	@PostMapping("/extension")
 	@Operation(

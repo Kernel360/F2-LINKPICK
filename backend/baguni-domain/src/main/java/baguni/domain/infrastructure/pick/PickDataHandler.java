@@ -105,12 +105,6 @@ public class PickDataHandler {
 								  })
 								  .orElseGet(() -> linkRepository.save(linkMapper.of(command.linkInfo())));
 
-		// 픽 존재 여부 검증
-		pickRepository.findByUserAndLink(user, link)
-					  .ifPresent((__) -> {
-						  throw ApiPickException.PICK_MUST_BE_UNIQUE_FOR_A_URL();
-					  });
-
 		Pick savedPick = pickRepository.save(pickMapper.toEntity(command, user, folder, link));
 		Folder parentFolder = savedPick.getParentFolder();
 		attachPickToParentFolder(savedPick, parentFolder);
