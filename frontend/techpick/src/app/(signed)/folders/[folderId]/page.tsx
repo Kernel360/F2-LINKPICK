@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { notFound, redirect, useParams, useRouter } from 'next/navigation';
+import { notFound, redirect, useParams, } from 'next/navigation';
 import { useEffect } from 'react';
 const EmptyPickRecordImage = dynamic(() =>
   import('@/components/EmptyPickRecordImage').then(

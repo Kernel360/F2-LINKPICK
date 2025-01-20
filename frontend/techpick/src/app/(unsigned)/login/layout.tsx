@@ -1,5 +1,6 @@
 'use server';
 
+import { ScreenLogger } from '@/components/ScreenLogger';
 import { ROUTES } from '@/constants/route';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -12,5 +13,5 @@ export default async function LoginPageLayout({ children }: PropsWithChildren) {
     redirect(ROUTES.HOME);
   }
 
-  return children;
+  return <ScreenLogger eventName="login_page_view">{children}</ScreenLogger>;
 }

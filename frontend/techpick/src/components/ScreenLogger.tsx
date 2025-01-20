@@ -1,3 +1,5 @@
+'use server';
+
 import { mixpanelServer } from '@/libs/mixpanel-server';
 import { getUserIdForServer } from '@/utils/getUserIdForServer';
 import { headers } from 'next/headers';

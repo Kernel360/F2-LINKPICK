@@ -1,5 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
-import { colorVars, desktop, mobile, tablet } from 'techpick-shared';
+import { colorVars, desktop } from 'techpick-shared';
 
 const contentShowDesktop = keyframes({
   from: {
