@@ -17,12 +17,9 @@ import { FolderOpenIcon } from 'lucide-react';
 import type { Metadata, ResolvingMetadata } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { LandingPageLinkButton } from './LandingPageLinkButton';
 import { SignUpLinkButton } from './SignUpLinkButton';
-import {
-  buttonSectionStyle,
-  homeNavigateButtonStyle,
-  loginButtonStyle,
-} from './page.css';
+import { buttonSectionStyle, homeNavigateButtonStyle } from './page.css';
 const EmptyPickRecordImage = dynamic(
   () =>
     import('@/components/EmptyPickRecordImage').then(
@@ -108,10 +105,7 @@ export default async function Page({ params }: { params: { uuid: string } }) {
               </Link>
             ) : (
               <>
-                <Link href={ROUTES.LOGIN}>
-                  {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-                  <button className={loginButtonStyle}>로그인</button>
-                </Link>
+                <LandingPageLinkButton />
                 <SignUpLinkButton />
               </>
             )}

@@ -22,8 +22,9 @@ export function SignUpLinkButton() {
         }
       }}
     >
-      {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-      <button className={signUpButtonStyle}>회원가입</button>
+      <button type="button" className={signUpButtonStyle}>
+        회원가입
+      </button>
     </Link>
   );
 }
