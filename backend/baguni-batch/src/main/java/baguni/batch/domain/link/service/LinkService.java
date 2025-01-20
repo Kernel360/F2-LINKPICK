@@ -27,18 +27,12 @@ public class LinkService {
 		return linkMapper.toLinkResult(link);
 	}
 
-	@Transactional(readOnly = true)
-	public LinkResult getLinkResult(Long id, String url, String title) {
-		Link link = linkDataHandler.getOptionalLinkById(id).orElseGet(() -> Link.createLinkByUrlAndTitle(url, title));
-		return linkMapper.toLinkResult(link);
-	}
-
 	/**
 	 * 	크롤링 시 해당 메서드 호출하여 링크 업데이트
 	 */
 	@Transactional
-	public LinkInfo updateLink(String url, String title) {
-		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrlAndTitle(url, title));
+	public LinkInfo updateLink(String url) {
+		Link link = linkDataHandler.getLink(url);
 		try {
 			var updatedLink = linkAnalyzer.updateOgTag(url, link);
 			return linkMapper.toLinkInfo(linkDataHandler.saveLink(updatedLink));

@@ -9,8 +9,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import baguni.common.config.RabbitmqConfig;
-import baguni.common.event.events.CrawlingEvent;
-import baguni.common.event.events.LinkEvent;
+import baguni.common.event.events.LinkCrawlingEvent;
 import baguni.domain.infrastructure.link.dto.LinkResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,28 +28,14 @@ public class CrawlingEventListener {
 	private final LinkService linkService;
 
 	@RabbitHandler
-	public void linkCrawlingEvent(CrawlingEvent event) {
-		LinkResult link = linkService.getLinkResult(event.getLinkId(), event.getUrl(), event.getTitle());
+	public void crawlingEvent(LinkCrawlingEvent event) {
+		LinkResult link = linkService.getLinkResultByUrl(event.getUrl());
 		long days = ChronoUnit.DAYS.between(link.updatedAt().toLocalDate(), LocalDate.now());
 
 		// imageUrl, description이 비어있는 경우, link update가 90일이 지난 경우에만 OG 태그 업데이트 시도
-		if (StringUtils.isEmpty(link.imageUrl()) || StringUtils.isEmpty(link.description()) || days >= 90) {
+		if (StringUtils.isEmpty(link.imageUrl()) || StringUtils.isEmpty(link.description()) || 90 <= days) {
 			try {
-				linkService.updateLink(link.url(), link.title());
-			} catch (Exception e) {
-				log.info("메세지 큐에서 꺼낸 Link OG 크롤링 실패 : ", e);
-			}
-		}
-	}
-
-	@RabbitListener
-	public void linkUrlEvent(LinkEvent event) {
-		LinkResult link = linkService.getLinkResultByUrl(event.getUrl());
-
-		// imageUrl, description이 비어있는 경우에만 OG 태그 업데이트 시도
-		if (StringUtils.isEmpty(link.imageUrl()) || StringUtils.isEmpty(link.description())) {
-			try {
-				linkService.updateLink(link.url(), link.title());
+				linkService.updateLink(link.url());
 			} catch (Exception e) {
 				log.info("메세지 큐에서 꺼낸 Link OG 크롤링 실패 : ", e);
 			}
