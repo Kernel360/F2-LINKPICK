@@ -7,6 +7,12 @@ import mixpanel from '@/libs/mixpanel-client';
  * @param eventName 해당 이벤트의 이름입니다. snake case로 명세해주세요. ex) shared_page_sign_up_button_click
  * @param logInfo 이벤트의 추가적인 정보를 담고 싶을 때 사용해주세요.
  * @returns trackEvent 액션에 추가해주세요.
+ *
+ * @example
+ * // do
+ * onClick={()=>{trackLoginButtonClick()}}
+ * // don't
+ * onClick={trackLoginButtonClick}
  */
 export function useEventLogger({
   eventName,
