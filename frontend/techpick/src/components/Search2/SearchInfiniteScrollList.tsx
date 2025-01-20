@@ -1,5 +1,5 @@
 import { useSearchPickStore } from '@/stores/searchPickStore';
-import React, { useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';

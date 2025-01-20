@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { featuredSection } from './FeaturedSection.css';
 
 export function FeaturedSection() {

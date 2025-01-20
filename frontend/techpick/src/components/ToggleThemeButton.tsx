@@ -2,7 +2,6 @@
 
 import { useThemeStore } from '@/stores/themeStore';
 import { Moon, Sun } from 'lucide-react';
-import React from 'react';
 
 export function ToggleThemeButton() {
   const { isDarkMode, toggleTheme } = useThemeStore();

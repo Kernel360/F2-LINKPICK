@@ -17,7 +17,6 @@ import { FolderOpenIcon } from 'lucide-react';
 import type { Metadata, ResolvingMetadata } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import React from 'react';
 import { SignUpLinkButton } from './SignUpLinkButton';
 import {
   buttonSectionStyle,

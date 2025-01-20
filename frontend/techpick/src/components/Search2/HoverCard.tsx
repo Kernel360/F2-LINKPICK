@@ -2,7 +2,6 @@ import { useSearchPickStore } from '@/stores/searchPickStore';
 import { checkImageUrlByUrl } from '@/utils/checkImageUrlByUrl';
 import { formatDateString } from '@/utils/formatDateString';
 import Image from 'next/image';
-import React from 'react';
 import * as styles from './hoverCard.css';
 
 export default function HoverCard() {
