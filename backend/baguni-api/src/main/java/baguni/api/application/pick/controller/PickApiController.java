@@ -171,31 +171,6 @@ public class PickApiController {
 		return ResponseEntity.ok(response);
 	}
 
-	/**
-	 *	중복을 허용하게 되면서 existPick 존재 의미가 사라졌습니다.
-	 *	추후, API
-	 */
-	@PostMapping("/recommend")
-	@Operation(
-		summary = "추천 링크로 픽 생성",
-		description = "추천 링크로 픽을 생성합니다. 픽 중복 저장이 가능합니다."
-	)
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
-		@ApiResponse(responseCode = "403", description = "접근할 수 없는 폴더")
-	})
-	public ResponseEntity<PickApiResponse.CreateFromRecommend> savePickFromRecommend(
-		@LoginUserId Long userId,
-		@Valid @RequestBody PickApiRequest.Create request
-	) {
-		boolean existPick = false; // 중복 허용
-		var command = pickApiMapper.toCreateCommand(userId, request);
-		var result = pickService.saveNewPick(command);
-		var event = new PickCreateEvent(userId, result.id(), result.linkInfo().url());
-		rankingEventMessenger.send(event);
-		return ResponseEntity.ok(new PickApiResponse.CreateFromRecommend(existPick, result));
-	}
-
 	@MeasureTime
 	@PostMapping("/extension")
 	@Operation(
