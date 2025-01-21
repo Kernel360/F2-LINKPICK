@@ -3,7 +3,7 @@ import { useSearchPickStore } from '@/stores/searchPickStore';
 import type { PickInfoType } from '@/types/PickInfoType';
 import { formatDateString } from '@/utils/formatDateString';
 import { useRouter } from 'next/navigation';
-import React, { type CSSProperties } from 'react';
+import type { CSSProperties } from 'react';
 import { CurrentPathIndicator } from '../FolderContentHeader/CurrentPathIndicator';
 import * as styles from './searchItemRenderer.css';
 

@@ -13,7 +13,9 @@ export function SignUpLink() {
   return (
     <Link
       href={ROUTES.LOGIN}
-      onClick={trackSignUpButtonClick}
+      onClick={() => {
+        trackSignUpButtonClick();
+      }}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           trackSignUpButtonClick();

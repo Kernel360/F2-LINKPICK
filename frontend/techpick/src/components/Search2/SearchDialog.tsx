@@ -4,7 +4,7 @@ import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
 import { eventEmitter } from '@/utils/eventEmitter';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FilterContainer from './FilterContainer';
 import HoverCard from './HoverCard';
 import { SearchInfiniteScrollList } from './SearchInfiniteScrollList';

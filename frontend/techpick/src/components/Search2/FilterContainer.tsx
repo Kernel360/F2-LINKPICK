@@ -3,7 +3,7 @@ import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import { createSearchSelectOptions } from '@/utils/createSearchSelectOptions';
 import { FolderIcon, Tags } from 'lucide-react';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FilterOptions from './FilterOptions';
 import * as styles from './searchDialog.css';
 

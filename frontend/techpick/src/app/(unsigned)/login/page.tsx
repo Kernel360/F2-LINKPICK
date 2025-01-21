@@ -1,5 +1,4 @@
 'use client';
-
 import { useEventLogger } from '@/hooks/useEventLogger';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -46,7 +45,9 @@ export default function LoginPage() {
             <Link
               className={loginLink}
               href={`${process.env.NEXT_PUBLIC_API}/login/google?redirect_url=${redirectUrl}`}
-              onClick={trackLoginButtonClick}
+              onClick={() => {
+                trackLoginButtonClick();
+              }}
             >
               <Image
                 style={{ filter: 'brightness(100)' }}
@@ -62,7 +63,9 @@ export default function LoginPage() {
             <Link
               className={loginLink}
               href={`${process.env.NEXT_PUBLIC_API}/login/kakao?redirect_url=${redirectUrl}`}
-              onClick={trackLoginButtonClick}
+              onClick={() => {
+                trackLoginButtonClick();
+              }}
             >
               <Image
                 style={{ filter: 'invert(100%)' }}

@@ -13,15 +13,18 @@ export function SignUpLinkButton() {
   return (
     <Link
       href={ROUTES.LOGIN}
-      onClick={trackSignUpButtonClick}
+      onClick={() => {
+        trackSignUpButtonClick();
+      }}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           trackSignUpButtonClick();
         }
       }}
     >
-      {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-      <button className={signUpButtonStyle}>회원가입</button>
+      <button type="button" className={signUpButtonStyle}>
+        회원가입
+      </button>
     </Link>
   );
 }

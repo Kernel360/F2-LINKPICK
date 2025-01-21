@@ -111,6 +111,8 @@ export const sectionStyle = style({
 });
 
 export const sectionContentStyle = style({
+  opacity: 0,
+
   '@media': {
     [desktop]: {
       display: 'flex',

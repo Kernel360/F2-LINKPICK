@@ -105,7 +105,7 @@ export function TutorialDialog({ isOpen, onClose }: TutorialDialogProps) {
               className={tabContentStyle}
             >
               <p className={tabContentDescriptionStyle}>
-                <span className={pointTextStyle}>추천 페이지</span>에서
+                <span className={pointTextStyle}>추천 페이지</span>에서{' '}
                 <span className={mobileLinBreakStyle} />
                 원하는 걸<span className={pointTextStyle}> 저장</span>할 수
                 있어요!
