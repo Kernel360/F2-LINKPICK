@@ -19,7 +19,7 @@ export function useFolderToFolderDndMonitor() {
   const {
     selectedFolderList,
     setSelectedFolderList,
-    setFocusFolderId,
+
     setIsDragging,
     setDraggingFolderInfo,
   } = useTreeStore();
@@ -39,15 +39,7 @@ export function useFolderToFolderDndMonitor() {
 
     setIsDragging(true);
     setDraggingFolderInfo(folderInfo);
-
-    if (!selectedFolderList.includes(folderId)) {
-      setFocusFolderId(folderId);
-      setSelectedFolderList([folderId]);
-
-      return;
-    }
-
-    setFocusFolderId(folderId);
+    setSelectedFolderList([folderId]);
   };
 
   const onDragOver = (event: DragOverEvent) => {

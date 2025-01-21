@@ -3,16 +3,11 @@
 import { ROUTES } from '@/constants/route';
 import { useDisclosure } from '@/hooks/useDisclosure';
 import useHandleRequestShareFolder from '@/hooks/useHandleRequestShareFolder';
-import { useFetchFolders } from '@/queries/useFetchFolders';
 import { useUpdateFolderName } from '@/queries/useUpdateFolderName';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
-import type { FolderRecordType } from '@/types/FolderRecordType';
-import { getSelectedFolderRange } from '@/utils/getSelectedFolderRange';
-import { isSameParentFolder } from '@/utils/isSameParentFolder';
-import { isSelectionActive } from '@/utils/isSelectionActive';
 import { FolderClosedIcon, FolderOpenIcon, FolderUp } from 'lucide-react';
-import { useState } from 'react';
-import type { MouseEvent } from 'react';
+import { useContext, useState } from 'react';
+import { ActiveNavigationItemIdContext } from './ActiveNavigationItemIdProvider';
 import { FolderContextMenu } from './FolderContextMenu';
 import { FolderDraggable } from './FolderDraggable';
 import { FolderInput } from './FolderInput';
@@ -21,18 +16,12 @@ import { MoveFolderToRecycleBinDialog } from './MoveFolderToRecycleBinDialog';
 import ShareFolderDialog from './ShareFolderDialog';
 
 export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
-  const {
-    selectedFolderList,
-    setSelectedFolderList,
-    focusFolderId,
-    hoverFolderId,
-    selectSingleFolder,
-  } = useTreeStore();
-  const { data: folderRecord = {} } = useFetchFolders();
+  const { setSelectedFolderList, hoverFolderId } = useTreeStore();
   const { mutate: updateFolderName } = useUpdateFolderName();
+  const activeNavigationItemId = useContext(ActiveNavigationItemIdContext);
 
   const [isUpdate, setIsUpdate] = useState(false);
-  const isSelected = selectedFolderList.includes(id);
+  const isSelected = id === activeNavigationItemId;
   const isHover = id === hoverFolderId;
   const {
     isOpen: isOpenRemoveDialog,
@@ -54,33 +43,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     folderIcon = FolderUp;
   }
 
-  const handleShiftSelect = (id: number, folderRecord: FolderRecordType) => {
-    if (
-      !focusFolderId ||
-      !isSameParentFolder({
-        folderId1: id,
-        folderId2: focusFolderId,
-        folderRecord,
-      })
-    ) {
-      return;
-    }
-
-    const newSelectedList = getSelectedFolderRange({
-      startFolderId: focusFolderId,
-      endFolderId: id,
-      folderRecord,
-    });
-    setSelectedFolderList(newSelectedList);
-  };
-
-  const handleClick = (id: number, event: MouseEvent) => {
-    if (event.shiftKey && isSelectionActive(selectedFolderList.length)) {
-      event.preventDefault();
-      handleShiftSelect(id, folderRecord);
-      return;
-    }
-
+  const handleClick = (id: number) => {
     setSelectedFolderList([id]);
   };
 
@@ -109,9 +72,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
           setIsUpdate(true);
         }}
         onClickShareFolder={handleOpenShareDialog}
-        onShow={() => {
-          selectSingleFolder(id);
-        }}
+        onShow={() => {}}
         onClickRemoveFolder={onOpenRemoveDialog}
       >
         <FolderDraggable id={id}>
@@ -121,7 +82,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
             isHovered={isHover}
             icon={folderIcon}
             name={name}
-            onClick={(event) => handleClick(id, event)}
+            onClick={() => handleClick(id)}
             folderId={id}
           />
         </FolderDraggable>

@@ -1,8 +1,8 @@
 'use client';
+
 import { useGetChildFolderListByParentFolderId } from '@/hooks/useGetChildFolderListByParentFolderId';
 import { useCreateFolder } from '@/queries/useCreateFolder';
 import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import type { UniqueIdentifier } from '@dnd-kit/core';
 import {
   SortableContext,
@@ -13,20 +13,9 @@ import { FolderInput } from './FolderInput';
 import { FolderListItem } from './FolderListItem';
 
 export function TreeNode({ id }: TreeNodeProps) {
-  const { selectedFolderList, isDragging, focusFolderId } = useTreeStore();
   const { mutate: createFolderMutate } = useCreateFolder();
   const { childFolderList: curTreeNodeChildList } =
     useGetChildFolderListByParentFolderId(Number(id));
-  const orderedChildFolderIdList = curTreeNodeChildList.map(
-    (childFolder) => childFolder.id,
-  );
-  const orderedChildFolderIdListWithoutSelectedIdList = isDragging
-    ? orderedChildFolderIdList.filter(
-        (childFolderId) =>
-          !selectedFolderList.includes(childFolderId) ||
-          childFolderId === focusFolderId,
-      )
-    : orderedChildFolderIdList;
   const { newFolderParentId } = useCreateFolderInputStore();
   const { closeCreateFolderInput } = useCreateFolderInputStore();
   const isParentForNewFolder = newFolderParentId === id;
@@ -55,8 +44,8 @@ export function TreeNode({ id }: TreeNodeProps) {
        */}
       <SortableContext
         id={`${id}`}
-        items={orderedChildFolderIdListWithoutSelectedIdList.map(
-          (childFolderId) => `folder-${childFolderId}`,
+        items={curTreeNodeChildList.map(
+          (childFolder) => `folder-${childFolder.id}`,
         )}
         strategy={verticalListSortingStrategy}
       >

@@ -6,30 +6,17 @@ import type { TreeAction, TreeState } from './folderStore.type';
 
 const initialState: TreeState = {
   selectedFolderList: [],
-  focusFolderId: null,
   rootFolderId: UNKNOWN_FOLDER_ID,
   hoverFolderId: null,
   isDragging: false,
-  draggingFolderInfo: null,
   isShareFolder: false,
+  draggingFolderInfo: null,
 };
 
 export const useTreeStore = create<TreeState & TreeAction>()(
   subscribeWithSelector(
     immer((set) => ({
       ...initialState,
-
-      selectSingleFolder: (folderId) => {
-        set((state) => {
-          state.focusFolderId = folderId;
-          state.selectedFolderList = [folderId];
-        });
-      },
-      setFocusFolderId: (newFolderId) => {
-        set((state) => {
-          state.focusFolderId = newFolderId;
-        });
-      },
 
       setSelectedFolderList: (newSelectedFolderData) => {
         set((state) => {
