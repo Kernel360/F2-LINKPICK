@@ -1,4 +1,4 @@
-import type { BasicFolderMap } from '@/types/BasicFolderMapType';
+import type { BasicFolderRecordType } from '@/types/BasicFolderRecordType';
 import type { GetBasicFolderListType } from '@/types/GetBasicFolderListType';
 import { HTTPError } from 'ky';
 import { apiClient } from '../apiClient';
@@ -36,5 +36,5 @@ const classifyByFolderType = (basicFolderList: GetBasicFolderListType) => {
 
     acc[folder.folderType] = folder;
     return acc;
-  }, {} as BasicFolderMap);
+  }, {} as BasicFolderRecordType);
 };
