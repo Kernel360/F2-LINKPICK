@@ -2,6 +2,8 @@ package baguni.domain.model.link;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import baguni.domain.exception.link.ApiLinkException;
 import baguni.domain.model.common.BaseEntity;
 import jakarta.persistence.Column;
@@ -48,7 +50,8 @@ public class Link extends BaseEntity {
 	@Column(name = "published_at")
 	private LocalDateTime publishedAt;
 
-	@Column(name = "is_rss")
+	@Column(name = "is_rss", nullable = false)
+	@ColumnDefault("false")
 	private Boolean isRss;
 
 	// Static Factory Method -------------
