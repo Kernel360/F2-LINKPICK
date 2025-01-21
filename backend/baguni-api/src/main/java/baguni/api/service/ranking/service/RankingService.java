@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import baguni.api.service.ranking.dto.RankingResult;
-import baguni.domain.infrastructure.ranking.RankingApi;
 
 @Service
 @RequiredArgsConstructor

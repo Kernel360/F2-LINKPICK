@@ -127,7 +127,7 @@ public class PickDataHandler {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
 		Folder unclassified = folderRepository.findUnclassifiedByUserId(user.getId());
 		Link link = linkRepository.findByUrl(command.url())
-								  .orElseGet(() -> linkRepository.save(Link.createLinkByUrlAndTitle(command.url(),
+								  .orElseGet(() -> linkRepository.save(Link.createLink(command.url(),
 									  command.title())));
 
 		Pick pick = pickMapper.toEntityByExtension(command.title(), new ArrayList<>(), user, unclassified,

@@ -16,7 +16,7 @@ import baguni.domain.exception.link.ApiLinkException;
 import baguni.api.service.link.service.LinkService;
 import baguni.domain.infrastructure.pick.dto.PickCommand;
 import baguni.api.service.pick.service.PickService;
-import baguni.domain.infrastructure.ranking.RankingApi;
+import baguni.api.service.ranking.service.RankingApi;
 import baguni.common.dto.UrlWithCount;
 
 @Slf4j

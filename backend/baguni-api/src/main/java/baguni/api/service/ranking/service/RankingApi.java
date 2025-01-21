@@ -1,4 +1,4 @@
-package baguni.domain.infrastructure.ranking;
+package baguni.api.service.ranking.service;
 
 import java.time.LocalDate;
 import java.util.List;
