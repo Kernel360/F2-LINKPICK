@@ -1,5 +1,5 @@
 import { keyframes, style } from '@vanilla-extract/css';
-import { colorVars, desktop } from 'techpick-shared';
+import { colorVars, desktop, mobile, tablet } from 'techpick-shared';
 
 const contentShowDesktop = keyframes({
   from: {
@@ -35,17 +35,18 @@ export const dialogOverlayStyle = style({
  * 또한 백그라운드도 직접 설정해야합니다.
  */
 export const dialogContentLayoutStyle = style({
-  position: 'fixed',
-  top: 'auto',
-  bottom: 0,
-  left: 0,
-  right: 0,
-  transform: 'none',
-  width: '100%',
-  borderRadius: '8px 8px 0 0',
-  animation: `${contentShowMobile} 300ms cubic-bezier(0.16, 1, 0.3, 1)`,
-
   '@media': {
+    [`${mobile},${tablet}`]: {
+      position: 'fixed',
+      top: 'auto',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      transform: 'none',
+      width: '100%',
+      borderRadius: '8px 8px 0 0',
+      animation: `${contentShowMobile} 300ms cubic-bezier(0.16, 1, 0.3, 1)`,
+    },
     [desktop]: {
       position: 'fixed',
       top: '50%',

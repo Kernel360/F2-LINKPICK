@@ -64,8 +64,8 @@ export default function RecommendPage() {
   }
 
   return (
-    <DisableDroppableZone id={'disable recommend pick drag and drop'}>
-      <FolderContentLayout>
+    <FolderContentLayout>
+      <DisableDroppableZone id={'disable recommend pick drag and drop'}>
         <TutorialDialog isOpen={isOpen} onClose={onClose} />
 
         <div className={recommendSectionLayoutStyle}>
@@ -126,7 +126,7 @@ export default function RecommendPage() {
             )}
           </div>
         </div>
-      </FolderContentLayout>
-    </DisableDroppableZone>
+      </DisableDroppableZone>
+    </FolderContentLayout>
   );
 }

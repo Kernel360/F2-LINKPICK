@@ -1,7 +1,6 @@
 package baguni.api.application.pick.controller;
 
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import baguni.common.annotation.MeasureTime;
-import baguni.common.event.events.CrawlingEvent;
+import baguni.common.event.events.LinkCrawlingEvent;
 import baguni.common.event.messenger.CrawlingEventMessenger;
 import baguni.common.event.messenger.RankingEventMessenger;
 import io.swagger.v3.oas.annotations.Operation;
@@ -171,34 +170,6 @@ public class PickApiController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping("/recommend")
-	@Operation(
-		summary = "추천 링크로 픽 생성",
-		description = "추천 링크로 픽을 생성합니다. 이미 픽으로 등록된 링크의 경우 기존 픽 정보를 응답으로 보냅니다."
-	)
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
-		@ApiResponse(responseCode = "403", description = "접근할 수 없는 폴더")
-	})
-	public ResponseEntity<PickApiResponse.CreateFromRecommend> savePickFromRecommend(
-		@LoginUserId Long userId,
-		@Valid @RequestBody PickApiRequest.Create request
-	) {
-		boolean existPick;
-		PickResult.Pick result;
-		if (pickService.existPickByUrl(userId, request.linkInfo().url())) {
-			existPick = true;
-			result = pickService.getPickUrl(userId, request.linkInfo().url());
-		} else {
-			existPick = false;
-			var command = pickApiMapper.toCreateCommand(userId, request);
-			result = pickService.saveNewPick(command);
-		}
-		var event = new PickCreateEvent(userId, result.id(), result.linkInfo().url());
-		rankingEventMessenger.send(event);
-		return ResponseEntity.ok(new PickApiResponse.CreateFromRecommend(existPick, result));
-	}
-
 	@MeasureTime
 	@PostMapping("/extension")
 	@Operation(
@@ -216,9 +187,9 @@ public class PickApiController {
 		var command = pickApiMapper.toExtensionCommand(userId, request.title(), request.url());
 		var result = pickService.savePickToUnclassified(command);
 		var rankingEvent = new PickCreateEvent(userId, result.id(), request.url());
-		var crawlingEvent = new CrawlingEvent(result.linkId(), request.url(), request.title());
+		var linkCrawlingEvent = new LinkCrawlingEvent(request.url());
 		rankingEventMessenger.send(rankingEvent);
-		crawlingEventMessenger.send(crawlingEvent);
+		crawlingEventMessenger.send(linkCrawlingEvent);
 		var response = pickApiMapper.toApiExtensionResponse(result);
 		return ResponseEntity.ok(response);
 	}
