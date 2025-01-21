@@ -3,8 +3,12 @@
 import { ROUTES } from '@/constants/route';
 import { useDisclosure } from '@/hooks/useDisclosure';
 import useHandleRequestShareFolder from '@/hooks/useHandleRequestShareFolder';
+import { useFetchFolders } from '@/queries/useFetchFolders';
+import { useUpdateFolderName } from '@/queries/useUpdateFolderName';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
-import type { FolderMapType } from '@/types/FolderMapType';
+import type { FolderRecordType } from '@/types/FolderRecordType';
+import { getSelectedFolderRange } from '@/utils/getSelectedFolderRange';
+import { isSameParentFolder } from '@/utils/isSameParentFolder';
 import { isSelectionActive } from '@/utils/isSelectionActive';
 import { FolderClosedIcon, FolderOpenIcon, FolderUp } from 'lucide-react';
 import { useState } from 'react';
@@ -15,21 +19,17 @@ import { FolderInput } from './FolderInput';
 import { FolderLinkItem } from './FolderLinkItem';
 import { MoveFolderToRecycleBinDialog } from './MoveFolderToRecycleBinDialog';
 import ShareFolderDialog from './ShareFolderDialog';
-import {
-  getSelectedFolderRange,
-  isSameParentFolder,
-} from './folderListItem.util';
 
 export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
   const {
-    treeDataMap,
     selectedFolderList,
     setSelectedFolderList,
     focusFolderId,
     hoverFolderId,
-    updateFolderName,
     selectSingleFolder,
   } = useTreeStore();
+  const { data: folderRecord = {} } = useFetchFolders();
+  const { mutate: updateFolderName } = useUpdateFolderName();
 
   const [isUpdate, setIsUpdate] = useState(false);
   const isSelected = selectedFolderList.includes(id);
@@ -54,15 +54,22 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
     folderIcon = FolderUp;
   }
 
-  const handleShiftSelect = (id: number, treeDataMap: FolderMapType) => {
-    if (!focusFolderId || !isSameParentFolder(id, focusFolderId, treeDataMap)) {
+  const handleShiftSelect = (id: number, folderRecord: FolderRecordType) => {
+    if (
+      !focusFolderId ||
+      !isSameParentFolder({
+        folderId1: id,
+        folderId2: focusFolderId,
+        folderRecord,
+      })
+    ) {
       return;
     }
 
     const newSelectedList = getSelectedFolderRange({
       startFolderId: focusFolderId,
       endFolderId: id,
-      treeDataMap,
+      folderRecord,
     });
     setSelectedFolderList(newSelectedList);
   };
@@ -70,7 +77,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
   const handleClick = (id: number, event: MouseEvent) => {
     if (event.shiftKey && isSelectionActive(selectedFolderList.length)) {
       event.preventDefault();
-      handleShiftSelect(id, treeDataMap);
+      handleShiftSelect(id, folderRecord);
       return;
     }
 
@@ -78,7 +85,7 @@ export const FolderListItem = ({ id, name }: FolderInfoItemProps) => {
   };
 
   const onUpdate = (newFolderName: string) => {
-    updateFolderName({ folderId: id, newFolderName });
+    updateFolderName({ id, name: newFolderName });
     setIsUpdate(false);
   };
 

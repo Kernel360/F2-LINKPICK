@@ -1,6 +1,5 @@
 'use client';
-
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { useGetFolderInfoByPathname } from '@/hooks/useGetFolderInfoByPathname';
 import { usePathname } from 'next/navigation';
 import { ChromeExtensionLinkButton } from '../ChromeExtensionLinkButton/ChromeExtensionLinkButton';
 import { Gap } from '../Gap';
@@ -15,8 +14,7 @@ import {
 
 export function FolderContentHeader() {
   const pathname = usePathname();
-  const { getFolderInfoByPathname } = useTreeStore();
-  const folderInfo = getFolderInfoByPathname(pathname);
+  const folderInfo = useGetFolderInfoByPathname(pathname);
 
   return (
     <div className={folderContentHeaderLayoutStyle}>

@@ -17,15 +17,16 @@ import { PickRecordHeader } from '@/components/PickRecord/PickRecordHeader';
 import { useClearSelectedPickIdsOnMount } from '@/hooks/useClearSelectedPickIdsOnMount';
 import { useFetchPickRecordByFolderId } from '@/hooks/useFetchPickRecordByFolderId';
 import { useResetPickFocusOnOutsideClick } from '@/hooks/useResetPickFocusOnOutsideClick';
+import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
 import { useFetchTagList } from '@/queries/useFetchTagList';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { getOrderedPickListByFolderId } from '@/utils/getOrderedPickListByFolderId';
 
 export default function UnclassifiedFolderPage() {
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
-  const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
+  const { data: basicFolderRecord } = useFetchBasicFolders();
   const { isLoading, data } = useFetchPickRecordByFolderId({
-    folderId: basicFolderMap?.UNCLASSIFIED.id,
+    folderId: basicFolderRecord?.UNCLASSIFIED.id,
     alwaysFetch: true,
   });
   useResetPickFocusOnOutsideClick();
@@ -34,16 +35,16 @@ export default function UnclassifiedFolderPage() {
 
   useEffect(
     function selectUnclassifiedFolderId() {
-      if (!basicFolderMap) {
+      if (!basicFolderRecord) {
         return;
       }
 
-      selectSingleFolder(basicFolderMap.UNCLASSIFIED.id);
+      selectSingleFolder(basicFolderRecord.UNCLASSIFIED.id);
     },
-    [basicFolderMap, selectSingleFolder],
+    [basicFolderRecord, selectSingleFolder],
   );
 
-  if (!basicFolderMap || (isLoading && !data)) {
+  if (!basicFolderRecord || (isLoading && !data)) {
     return <FolderLoadingPage />;
   }
 
@@ -58,7 +59,7 @@ export default function UnclassifiedFolderPage() {
           <EmptyPickRecordImage />
         ) : (
           <PickDraggableListLayout
-            folderId={basicFolderMap.UNCLASSIFIED.id}
+            folderId={basicFolderRecord.UNCLASSIFIED.id}
             viewType="record"
           >
             {pickList.map((pickInfo) => {

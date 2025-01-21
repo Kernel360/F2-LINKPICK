@@ -17,15 +17,16 @@ import { PickRecordHeader } from '@/components/PickRecord/PickRecordHeader';
 import { useClearSelectedPickIdsOnMount } from '@/hooks/useClearSelectedPickIdsOnMount';
 import { useFetchPickRecordByFolderId } from '@/hooks/useFetchPickRecordByFolderId';
 import { useResetPickFocusOnOutsideClick } from '@/hooks/useResetPickFocusOnOutsideClick';
+import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
 import { useFetchTagList } from '@/queries/useFetchTagList';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { getOrderedPickListByFolderId } from '@/utils/getOrderedPickListByFolderId';
 
 export default function RecycleBinFolderPage() {
   const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
-  const basicFolderMap = useTreeStore((state) => state.basicFolderMap);
+  const { data: basicFolderRecord } = useFetchBasicFolders();
   const { isLoading, data } = useFetchPickRecordByFolderId({
-    folderId: basicFolderMap?.RECYCLE_BIN.id,
+    folderId: basicFolderRecord?.RECYCLE_BIN.id,
     alwaysFetch: true,
   });
   useResetPickFocusOnOutsideClick();
@@ -34,16 +35,16 @@ export default function RecycleBinFolderPage() {
 
   useEffect(
     function selectRecycleBinFolderId() {
-      if (!basicFolderMap) {
+      if (!basicFolderRecord) {
         return;
       }
 
-      selectSingleFolder(basicFolderMap.RECYCLE_BIN.id);
+      selectSingleFolder(basicFolderRecord.RECYCLE_BIN.id);
     },
-    [basicFolderMap, selectSingleFolder],
+    [basicFolderRecord, selectSingleFolder],
   );
 
-  if (!basicFolderMap || (isLoading && !data)) {
+  if (!basicFolderRecord || (isLoading && !data)) {
     return <FolderLoadingPage />;
   }
 
@@ -61,7 +62,7 @@ export default function RecycleBinFolderPage() {
           />
         ) : (
           <PickDraggableListLayout
-            folderId={basicFolderMap.RECYCLE_BIN.id}
+            folderId={basicFolderRecord.RECYCLE_BIN.id}
             viewType="record"
           >
             {pickList.map((pickInfo) => {
