@@ -13,7 +13,6 @@ import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useResetPickFocusOnOutsideClick } from '@/hooks/useResetPickFocusOnOutsideClick';
 import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
 import { useFetchTagList } from '@/queries/useFetchTagList';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import type { GetSuggestionRankingPicksResponseType } from '@/types/GetSuggestionRankingPicksResponseType';
 import { useEffect, useState } from 'react';
 import { RecommendLoadingPage } from './RecommendLoadingPage';
@@ -30,7 +29,6 @@ import {
 } from './page.css';
 
 export default function RecommendPage() {
-  const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
   const { data: basicFolderRecord } = useFetchBasicFolders();
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
@@ -41,17 +39,6 @@ export default function RecommendPage() {
   const { storedValue: isTutorialSeen, isStoredValueLoad } = useLocalStorage(
     IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY,
     false,
-  );
-
-  useEffect(
-    function selectRootFolderId() {
-      if (!basicFolderRecord) {
-        return;
-      }
-
-      selectSingleFolder(basicFolderRecord.ROOT.id);
-    },
-    [basicFolderRecord, selectSingleFolder],
   );
 
   useEffect(function loadSuggestionRankingPicks() {

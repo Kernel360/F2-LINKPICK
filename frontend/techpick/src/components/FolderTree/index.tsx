@@ -4,6 +4,7 @@ import { folderTreeHeaderTitleLayout } from '@/components/FolderTree/folderTreeH
 import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
 import { useFetchFolders } from '@/queries/useFetchFolders';
 import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
+import { ActiveNavigationItemIdProvider } from './ActiveNavigationItemIdProvider';
 import { FolderTreeHeader } from './FolderTreeHeader';
 import { HorizontalResizableContainer } from './HorizontalResizableContainer';
 import { MyPageLinkItem } from './MyPagLinkItem';
@@ -21,23 +22,25 @@ export function FolderTree() {
 
   return (
     <HorizontalResizableContainer>
-      <div className={treeLayout}>
-        <SearchBar />
-        <FolderTreeHeader />
+      <ActiveNavigationItemIdProvider>
+        <div className={treeLayout}>
+          <SearchBar />
+          <FolderTreeHeader />
 
-        <div className={folderTreeHeaderTitleLayout}>
-          <h1>내 폴더</h1>
-          {isCreateFolderMode && rootFolderId && (
-            <ShowCreateFolderInputButton newFolderParentId={rootFolderId} />
-          )}
-        </div>
+          <div className={folderTreeHeaderTitleLayout}>
+            <h1>내 폴더</h1>
+            {isCreateFolderMode && rootFolderId && (
+              <ShowCreateFolderInputButton newFolderParentId={rootFolderId} />
+            )}
+          </div>
 
-        <div className={treeNodeLayoutStyle}>
-          {rootFolderId && <TreeNode id={rootFolderId} depth={0} />}
-          <div className={emptySpaceStyle} />
+          <div className={treeNodeLayoutStyle}>
+            {rootFolderId && <TreeNode id={rootFolderId} depth={0} />}
+            <div className={emptySpaceStyle} />
+          </div>
+          <MyPageLinkItem />
         </div>
-        <MyPageLinkItem />
-      </div>
+      </ActiveNavigationItemIdProvider>
     </HorizontalResizableContainer>
   );
 }

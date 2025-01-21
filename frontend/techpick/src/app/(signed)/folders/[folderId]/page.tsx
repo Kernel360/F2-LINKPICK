@@ -1,8 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { notFound, redirect, useParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { redirect, useParams } from 'next/navigation';
 const EmptyPickRecordImage = dynamic(() =>
   import('@/components/EmptyPickRecordImage').then(
     (mod) => mod.EmptyPickRecordImage,
@@ -21,12 +20,10 @@ import { useFetchPickRecordByFolderId } from '@/hooks/useFetchPickRecordByFolder
 import { useResetPickFocusOnOutsideClick } from '@/hooks/useResetPickFocusOnOutsideClick';
 import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
 import { useFetchTagList } from '@/queries/useFetchTagList';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { getOrderedPickListByFolderId } from '@/utils/getOrderedPickListByFolderId';
 
 export default function FolderDetailPage() {
   const { folderId: stringFolderId } = useParams<{ folderId: string }>();
-  const selectSingleFolder = useTreeStore((state) => state.selectSingleFolder);
   const folderId = Number(stringFolderId);
   const { data: basicFolderRecord } = useFetchBasicFolders();
   const { isLoading, data, isError } = useFetchPickRecordByFolderId({
@@ -36,25 +33,6 @@ export default function FolderDetailPage() {
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
   useFetchTagList();
-
-  useEffect(
-    function selectFolderId() {
-      if (!isFolderIdValid(folderId)) {
-        notFound();
-      }
-
-      selectSingleFolder(Number(folderId));
-    },
-    [folderId, selectSingleFolder],
-  );
-
-  const isFolderIdValid = (folderId: number) => {
-    if (Number.isNaN(folderId)) {
-      return false;
-    }
-
-    return true;
-  };
 
   if (!basicFolderRecord || (isLoading && !data)) {
     return <FolderLoadingPage />;

@@ -5,13 +5,10 @@ import { ImportBookmarkDialog } from '@/components/ImportBookmarkDialog';
 import MyPageContentContainer from '@/components/MyPage/MyPageContentContainer';
 import MyPageShareFolderContent from '@/components/MyPage/MyPageShareFolderContent';
 import { TutorialDialog } from '@/components/TutorialDialog';
-import * as Checkbox from '@radix-ui/react-checkbox';
-import { CheckIcon } from 'lucide-react';
-import { useEffect } from 'react';
-
 import { ROUTES } from '@/constants/route';
 import { useDisclosure } from '@/hooks/useDisclosure';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import * as Checkbox from '@radix-ui/react-checkbox';
+import { CheckIcon } from 'lucide-react';
 import {
   buttonSectionStyle,
   checkboxIndicatorStyle,
@@ -24,10 +21,6 @@ import {
 } from './page.css';
 
 export default function MyPage() {
-  const setFocusFolderId = useTreeStore((state) => state.setFocusFolderId);
-  const setSelectedFolderList = useTreeStore(
-    (state) => state.setSelectedFolderList,
-  );
   const { isOpen, onClose, onToggle } = useDisclosure();
 
   const handleLogout = async () => {
@@ -38,14 +31,6 @@ export default function MyPage() {
       /* empty */
     }
   };
-
-  useEffect(
-    function clearFocusFolderId() {
-      setFocusFolderId(null);
-      setSelectedFolderList([]);
-    },
-    [setFocusFolderId, setSelectedFolderList],
-  );
 
   return (
     <div className={myPageLayoutStyle}>

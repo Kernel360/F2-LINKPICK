@@ -5,6 +5,8 @@ import { ROUTES } from '@/constants/route';
 import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { ArchiveIcon, Trash2Icon } from 'lucide-react';
+import { useContext } from 'react';
+import { ActiveNavigationItemIdContext } from './ActiveNavigationItemIdProvider';
 import { FolderLinkItem } from './FolderLinkItem';
 import { PickToFolderDropZone } from './PickToFolderDropZone';
 import {
@@ -13,19 +15,22 @@ import {
 } from './folderTreeHeader.css';
 
 export function FolderTreeHeader() {
-  const { focusFolderId, hoverFolderId } = useTreeStore();
+  const { hoverFolderId } = useTreeStore();
   const { data: basicFolderRecord } = useFetchBasicFolders();
+  const activeNavigationItemId = useContext(ActiveNavigationItemIdContext);
 
   const isUnclassifiedSelected = !!(
-    basicFolderRecord && focusFolderId === basicFolderRecord.UNCLASSIFIED.id
+    basicFolderRecord &&
+    activeNavigationItemId === basicFolderRecord.UNCLASSIFIED.id
   );
 
   const isRecycleBinSelected = !!(
-    basicFolderRecord && focusFolderId === basicFolderRecord.RECYCLE_BIN.id
+    basicFolderRecord &&
+    activeNavigationItemId === basicFolderRecord.RECYCLE_BIN.id
   );
 
   const isRootSelected = !!(
-    basicFolderRecord && focusFolderId === basicFolderRecord.ROOT.id
+    basicFolderRecord && activeNavigationItemId === 'recommend'
   );
 
   const isUnclassifiedFolderHover =
@@ -42,7 +47,7 @@ export function FolderTreeHeader() {
       {basicFolderRecord && (
         <div>
           <div className={folderTreeHeaderTitleLayout}>
-            <h1>정리함</h1>
+            <h2>정리함</h2>
           </div>
 
           <FolderLinkItem
