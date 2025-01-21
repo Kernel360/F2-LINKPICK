@@ -11,21 +11,35 @@ import lombok.Getter;
  * Rss Feed(xml)에서 파싱한 Raw 데이터를 저장하는 dto
  */
 @Getter
-public class RssRawFeed {
+public class RssFeed {
 
 	@JacksonXmlProperty(localName = "channel")
 	private Channel channel;
+
+	@Override
+	public String toString() {
+		return "RssFeed{" +
+			"channel=" + channel +
+			'}';
+	}
 
 	@Getter
 	public static class Channel {
 
 		@JacksonXmlElementWrapper(useWrapping = false)
 		@JacksonXmlProperty(localName = "item")
-		private List<Item> item;
+		private List<Article> articles;
+
+		@Override
+		public String toString() {
+			return "Channel{" +
+				"items=" + articles +
+				'}';
+		}
 	}
 
 	@Getter
-	public static class Item {
+	public static class Article {
 
 		@JacksonXmlProperty(localName = "title")
 		private String title;
@@ -48,5 +62,18 @@ public class RssRawFeed {
 		@JacksonXmlElementWrapper(useWrapping = false)
 		@JacksonXmlProperty(localName = "category")
 		private List<String> category;
+
+		@Override
+		public String toString() {
+			return "Item{" +
+				"title='" + title + '\'' +
+				", link='" + link + '\'' +
+				", guid='" + guid + '\'' +
+				", pubDate='" + pubDate + '\'' +
+				", description='" + description + '\'' +
+				", creator='" + creator + '\'' +
+				", category=" + category +
+				'}';
+		}
 	}
 }
