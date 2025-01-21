@@ -1,8 +1,10 @@
 'use client';
 
 import { ROUTES } from '@/constants/route';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { useDeleteFolder } from '@/queries/useDeleteFolder';
+import { useFetchFolders } from '@/queries/useFetchFolders';
 import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
+import { checkIsSharedFolder } from '@/utils/checkIsSharedFolder';
 import * as Dialog from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
@@ -24,21 +26,17 @@ export function MoveFolderToRecycleBinDialog({
 }: MoveFolderToRecycleBinDialogProps) {
   const router = useRouter();
   const { folderId: urlFolderId } = useParams<{ folderId: string }>();
-  const moveFolderToRecycleBin = useTreeStore(
-    (state) => state.moveFolderToRecycleBin,
-  );
-  const { checkIsShareFolder, updateFolderAccessTokenByFolderId } =
-    useTreeStore();
+  const { data: folderRecord } = useFetchFolders();
+  const { mutate: deleteFolder } = useDeleteFolder();
   const deleteButtonRef = useRef<HTMLButtonElement>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
+  const isSharedFolder = checkIsSharedFolder({
+    folderId: deleteFolderId,
+    folderRecord,
+  });
 
   const moveRecycleBinAndRedirect = () => {
-    if (checkIsShareFolder(deleteFolderId)) {
-      updateFolderAccessTokenByFolderId(deleteFolderId, '');
-      moveFolderToRecycleBin({ deleteFolderId });
-    } else {
-      moveFolderToRecycleBin({ deleteFolderId });
-    }
+    deleteFolder([deleteFolderId]);
 
     if (Number(urlFolderId) === deleteFolderId) {
       router.push(ROUTES.FOLDERS_UNCLASSIFIED);
@@ -59,7 +57,7 @@ export function MoveFolderToRecycleBinDialog({
               폴더를 휴지통으로 이동하시겠습니다?
             </Dialog.Title>
 
-            {checkIsShareFolder(deleteFolderId) && (
+            {isSharedFolder && (
               <Dialog.Description
                 className={
                   moveRecycleBinDialogShareFolderWarningDescriptionStyle

@@ -1,7 +1,8 @@
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { useFetchFolders } from '@/queries/useFetchFolders';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import type { PickInfoType } from '@/types/PickInfoType';
 import { formatDateString } from '@/utils/formatDateString';
+import { getFolderInfoByFolderId } from '@/utils/getFolderInfoByFolderId';
 import { useRouter } from 'next/navigation';
 import type { CSSProperties } from 'react';
 import { CurrentPathIndicator } from '../FolderContentHeader/CurrentPathIndicator';
@@ -14,9 +15,12 @@ export default function SearchItemRenderer({
   onClose,
 }: ItemRendererProps) {
   const router = useRouter();
-  const { getFolderInfoByFolderId } = useTreeStore();
   const { setHoverPickIndex } = useSearchPickStore();
-  const folderInfo = getFolderInfoByFolderId(item.parentFolderId);
+  const { data: folderRecord } = useFetchFolders();
+  const folderInfo = getFolderInfoByFolderId({
+    folderId: item.parentFolderId,
+    folderRecord,
+  });
 
   const handleMouseEnter = () => {
     setHoverPickIndex(index);

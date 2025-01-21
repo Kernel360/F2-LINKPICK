@@ -1,5 +1,6 @@
 'use client';
-
+import { useGetChildFolderListByParentFolderId } from '@/hooks/useGetChildFolderListByParentFolderId';
+import { useCreateFolder } from '@/queries/useCreateFolder';
 import { useCreateFolderInputStore } from '@/stores/createFolderInputStore';
 import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import type { UniqueIdentifier } from '@dnd-kit/core';
@@ -12,14 +13,10 @@ import { FolderInput } from './FolderInput';
 import { FolderListItem } from './FolderListItem';
 
 export function TreeNode({ id }: TreeNodeProps) {
-  const {
-    getChildFolderListByParentFolderId,
-    createFolder: createFolderInStore,
-    selectedFolderList,
-    isDragging,
-    focusFolderId,
-  } = useTreeStore();
-  const curTreeNodeChildList = getChildFolderListByParentFolderId(Number(id));
+  const { selectedFolderList, isDragging, focusFolderId } = useTreeStore();
+  const { mutate: createFolderMutate } = useCreateFolder();
+  const { childFolderList: curTreeNodeChildList } =
+    useGetChildFolderListByParentFolderId(Number(id));
   const orderedChildFolderIdList = curTreeNodeChildList.map(
     (childFolder) => childFolder.id,
   );
@@ -36,13 +33,13 @@ export function TreeNode({ id }: TreeNodeProps) {
 
   const createFolder = useCallback(
     (folderName: string) => {
-      createFolderInStore({
+      createFolderMutate({
         parentFolderId: Number(id),
-        newFolderName: folderName,
+        name: folderName,
       });
       closeCreateFolderInput();
     },
-    [closeCreateFolderInput, createFolderInStore, id],
+    [closeCreateFolderInput, id, createFolderMutate],
   );
 
   return (

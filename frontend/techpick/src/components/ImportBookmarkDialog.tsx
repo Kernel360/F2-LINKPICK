@@ -1,7 +1,7 @@
 'use client';
 
 import { uploadBookmark } from '@/apis/bookmark/uploadBookmark';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { useFetchFolders } from '@/queries/useFetchFolders';
 import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
 import { notifyError, notifySuccess } from '@/utils/toast';
 import * as Dialog from '@radix-ui/react-dialog';
@@ -22,7 +22,7 @@ import {
 } from './importBookmarkDialog.css';
 
 export function ImportBookmarkDialog() {
-  const getFolders = useTreeStore((state) => state.getFolders);
+  const { refetch } = useFetchFolders();
   const [file, setFile] = useState<HTMLFile | null>(null);
   const onDrop = useCallback<NonNullable<DropzoneOptions['onDrop']>>(
     (acceptedFiles) => {
@@ -56,7 +56,7 @@ export function ImportBookmarkDialog() {
     isUploadingFile.current = true;
     try {
       const response = await uploadBookmark(formData);
-      getFolders();
+      refetch();
 
       if (0 < response.length) {
         notifySuccess(
