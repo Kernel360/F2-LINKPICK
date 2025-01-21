@@ -14,14 +14,10 @@ export function useGetFolderInfoByPathname(pathname: string) {
   }
 
   switch (pathname) {
-    case ROUTES.FOLDERS_UNCLASSIFIED:
-      return basicFolderRecord.UNCLASSIFIED;
-    case ROUTES.FOLDERS_RECYCLE_BIN:
-      return basicFolderRecord.RECYCLE_BIN;
     case ROUTES.RECOMMEND:
       return basicFolderRecord.ROOT;
     default: {
-      // '/folders/unclassified' or /folders/recycle-bin | /folders/folderId'
+      // ' /folders/folderId'
       //  => 'unclassified' | 'recycle-bin' |folderId
       const path = pathname.split('/').slice(2).join('');
       return getFolderInfoByFolderId({ folderId: Number(path), folderRecord });

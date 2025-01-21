@@ -49,13 +49,12 @@ export function FolderTreeHeader() {
             href={ROUTES.RECOMMEND}
             name="추천"
             icon={ArchiveIcon}
-            isSelected={isRootSelected}
             folderId={NON_EXIST_FOLDER_ID}
+            isSelected={isRootSelected}
           />
-
           <PickToFolderDropZone folderId={basicFolderRecord.UNCLASSIFIED.id}>
             <FolderLinkItem
-              href={ROUTES.FOLDERS_UNCLASSIFIED}
+              href={ROUTES.FOLDER_DETAIL(basicFolderRecord.UNCLASSIFIED.id)}
               name="미분류"
               icon={ArchiveIcon}
               isSelected={isUnclassifiedSelected}
@@ -65,11 +64,11 @@ export function FolderTreeHeader() {
           </PickToFolderDropZone>
           <PickToFolderDropZone folderId={basicFolderRecord.RECYCLE_BIN.id}>
             <FolderLinkItem
-              href={ROUTES.FOLDERS_RECYCLE_BIN}
+              href={ROUTES.FOLDER_DETAIL(basicFolderRecord.RECYCLE_BIN.id)}
               name="휴지통"
               icon={Trash2Icon}
-              isSelected={isRecycleBinSelected}
               isHovered={isRecycleBinFolderHover}
+              isSelected={isRecycleBinSelected}
               folderId={basicFolderRecord.RECYCLE_BIN.id}
             />
           </PickToFolderDropZone>

@@ -39,7 +39,7 @@ export function MoveFolderToRecycleBinDialog({
     deleteFolder([deleteFolderId]);
 
     if (Number(urlFolderId) === deleteFolderId) {
-      router.push(ROUTES.FOLDERS_UNCLASSIFIED);
+      router.push(ROUTES.RECOMMEND);
     }
   };
 
