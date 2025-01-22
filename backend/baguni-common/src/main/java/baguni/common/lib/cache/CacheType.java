@@ -9,7 +9,7 @@ public enum CacheType {
 	WEEKLY_LINK_RANK(CACHE_NAME.WEEKLY_LINK_RANK, 24 * 60 * 60, 10000), // 24시간
 	MONTHLY_PICK_RANK(CACHE_NAME.MONTHLY_PICK_RANK, 3 * 60 * 60, 10000), // 3시간
 	// ---------------------------------------------------
-	DAILY_RSS_BLOG_ARTICLE(CACHE_NAME.MONTHLY_PICK_RANK, 6 * 60 * 60, 10000); // 6시간
+	DAILY_RSS_BLOG_ARTICLE(CACHE_NAME.DAILY_RSS_BLOG_ARTICLE, 6 * 60 * 60, 10000); // 6시간
 
 	CacheType(String cacheName, int expireAfterWrite, int maximumSize) {
 		this.cacheName = cacheName;
