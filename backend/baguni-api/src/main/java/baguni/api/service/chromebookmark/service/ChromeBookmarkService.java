@@ -107,7 +107,7 @@ public class ChromeBookmarkService {
 		for (ChromeBookmark bookmark : chromeFolder.getChildBookmarkList()) {
 			if (!linkDataHandler.existsByUrl(bookmark.getUrl())) {
 				// 링크가 존재하지 않으면 url만 있는 링크를 저장하고 이후 og tag 업데이트를 위해 list에 기록
-				linkDataHandler.saveLink(Link.createLinkByUrl(bookmark.getUrl()));
+				linkDataHandler.saveLink(Link.createLink(bookmark.getUrl()));
 				ogTagUpdateUrls.add(bookmark.getUrl());
 			}
 			Link link = linkDataHandler.getLink(bookmark.getUrl());

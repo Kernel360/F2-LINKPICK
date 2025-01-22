@@ -1,43 +1,39 @@
-package baguni.api.config;
+package baguni.batch.config;
 
 import java.time.Duration;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.ClientHttpRequestFactories;
 import org.springframework.boot.web.client.ClientHttpRequestFactorySettings;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
-import baguni.api.service.ranking.service.RankingApi;
+import baguni.batch.domain.link.service.RssFeedApi;
 
-/**
- * 외부 서버와 통신하는 것을 Http Interface 방식으로 사용하기 위한 설정. <br>
- * - https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-http-interface
- * 타임 아웃 설정
- * - https://www.baeldung.com/spring-rest-timeout
- */
 @Configuration
-public class HttpApiConfiguration {
+public class RestClientConfig {
 
-	@Value("${server-url.ranking-server}")
-	private String rankingServerUrl;
+	private static final Duration CONNECTION_TIMEOUT = Duration.ofSeconds(5);
+	private static final Duration READ_TIMEOUT = Duration.ofSeconds(5);
 
 	@Bean
-	public RankingApi rankingApi(RestClient restClient) {
+	public RssFeedApi rssFeedApi(RestClient restClient) {
 		var adapter = RestClientAdapter.create(restClient);
 		var proxy = HttpServiceProxyFactory.builderFor(adapter).build();
-		return proxy.createClient(RankingApi.class);
+		return proxy.createClient(RssFeedApi.class);
 	}
 
 	@Bean
 	public RestClient restClient() {
 		return RestClient
 			.builder()
-			.baseUrl(rankingServerUrl)
+			.messageConverters(converter -> {
+				converter.add(new MappingJackson2XmlHttpMessageConverter());
+			})
 			.requestFactory(clientHttpRequestFactory())
 			.build();
 	}
@@ -45,8 +41,8 @@ public class HttpApiConfiguration {
 	@Bean
 	public ClientHttpRequestFactory clientHttpRequestFactory() {
 		ClientHttpRequestFactorySettings settings = ClientHttpRequestFactorySettings.DEFAULTS
-			.withConnectTimeout(Duration.ofSeconds(2))
-			.withReadTimeout(Duration.ofSeconds(2));
+			.withConnectTimeout(CONNECTION_TIMEOUT)
+			.withReadTimeout(READ_TIMEOUT);
 		return ClientHttpRequestFactories.get(settings);
 	}
 }

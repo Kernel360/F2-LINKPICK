@@ -7,6 +7,8 @@ spring:
     import: file:../.env[.properties]
   application:
     name: "test"
+  flyway:
+    enabled: false
 springdoc:
   swagger-ui:
     disable-swagger-default-url: true

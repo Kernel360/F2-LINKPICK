@@ -26,7 +26,7 @@ public class LinkService {
 
 	@Transactional
 	public LinkInfo saveLink(String url) {
-		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
+		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLink(url));
 		return linkMapper.of(linkDataHandler.saveLink(link));
 	}
 }

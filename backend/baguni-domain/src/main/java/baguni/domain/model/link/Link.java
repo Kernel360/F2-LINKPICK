@@ -1,8 +1,10 @@
 package baguni.domain.model.link;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
-import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.ColumnDefault;
 
 import baguni.domain.exception.link.ApiLinkException;
 import baguni.domain.model.common.BaseEntity;
@@ -47,35 +49,65 @@ public class Link extends BaseEntity {
 	@Column(name = "invalidated_at")
 	private LocalDateTime invalidatedAt;
 
-	public static Link createLinkByUrl(String url) {
-		return new Link(url, "", "", "", null);
+	@Column(name = "published_at")
+	private LocalDateTime publishedAt;
+
+	@Column(name = "is_rss", nullable = false)
+	@ColumnDefault("false")
+	private Boolean isRss;
+
+	// Static Factory Method -------------
+
+	public static Link createLink(String url) {
+		return Link
+			.builder()
+			.url(url)
+			.title("")
+			.description("")
+			.isRss(false)
+			.build();
 	}
 
-	/**
-	 * 익스텐션으로 픽 생성 시 항상 title을 받기 때문에 생성 메서드 추가
-	 */
-	public static Link createLinkByUrlAndTitle(String url, String title) {
-		return new Link(url, title, "", "", null);
+	public static Link createLink(String url, String title) {
+		return Link
+			.builder()
+			.url(url)
+			.title(title)
+			.description("")
+			.isRss(false)
+			.build();
 	}
 
-	// 업데이트 조건은 서비스 로직에서 명시
+	public static Link createRssLink(String url, String title, String pubDate) {
+
+		LocalDateTime published_at = null;
+		if (Objects.nonNull(pubDate)) {
+			published_at = LocalDateTime.parse(pubDate, DateTimeFormatter.RFC_1123_DATE_TIME);
+		}
+		return Link
+			.builder()
+			.url(url)
+			.title(title)
+			.description("")
+			.publishedAt(published_at)
+			.isRss(true)
+			.build();
+	}
+
 	public void updateMetadata(String title, String description, String imageUrl) {
 		this.title = title;
 		this.description = description;
 		this.imageUrl = imageUrl;
 	}
 
-	public Link markAsInvalid() {
-		this.invalidatedAt = LocalDateTime.now();
-		return this;
-	}
-
-	public boolean isValidLink() {
-		return (this.invalidatedAt == null);
-	}
+	// Private Builder -------------
 
 	@Builder
-	private Link(String url, String title, String description, String imageUrl, LocalDateTime invalidatedAt) {
+	private Link(
+		String url, String title, String description,
+		String imageUrl, LocalDateTime invalidatedAt,
+		Boolean isRss, LocalDateTime publishedAt
+	) {
 		if (2048 < url.length()) {
 			throw ApiLinkException.LINK_URL_TOO_LONG();
 		}
@@ -84,5 +116,7 @@ public class Link extends BaseEntity {
 		this.description = description;
 		this.imageUrl = imageUrl;
 		this.invalidatedAt = invalidatedAt;
+		this.isRss = isRss;
+		this.publishedAt = publishedAt;
 	}
 }

@@ -23,7 +23,7 @@ public class LinkService {
 
 	@Transactional(readOnly = true)
 	public LinkResult getLinkResultByUrl(String url) {
-		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLinkByUrl(url));
+		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLink(url));
 		return linkMapper.toLinkResult(link);
 	}
 
