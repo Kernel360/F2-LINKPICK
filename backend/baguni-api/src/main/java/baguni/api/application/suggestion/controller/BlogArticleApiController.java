@@ -30,7 +30,7 @@ public class BlogArticleApiController {
 	@MeasureTime
 	@GetMapping("/blog-articles")
 	@Operation(
-		summary = "최근 유명 블로그 게시글 획득",
+		summary = "최근 유명 블로그 게시글 획득 (15개)",
 		description = "최근 유명 블로그 게시글 리스트 15개를 획득합니다."
 	)
 	@ApiResponses(value = {

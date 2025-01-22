@@ -1,7 +1,9 @@
 package baguni.domain.infrastructure.link;
 
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,5 +39,12 @@ public class LinkDataHandler {
 	@Transactional(readOnly = true)
 	public boolean existsByUrl(String url) {
 		return linkRepository.existsByUrl(url);
+	}
+
+	@Transactional(readOnly = true)
+	public List<Link> getRssLinkList(int limit) {
+		return linkRepository.findAllRssBlogArticlesOrderByPublishedDate(
+			PageRequest.of(0, limit)
+		);
 	}
 }

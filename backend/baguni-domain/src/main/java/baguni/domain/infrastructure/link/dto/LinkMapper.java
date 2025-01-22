@@ -32,6 +32,6 @@ public interface LinkMapper {
 	@Named("toLinkInfoList")
 	LinkInfo toLinkInfo(Link link);
 
-	@IterableMapping(qualifiedByName = "toLinkInfoList")
-	List<LinkInfo> toLinkInfoList(List<Link> links);
+	@Named("toRssLinkInfoList")
+	RssLinkInfo toRssLinkInfo(Link link);
 }
