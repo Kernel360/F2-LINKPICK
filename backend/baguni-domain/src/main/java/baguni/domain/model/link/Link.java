@@ -46,9 +46,6 @@ public class Link extends BaseEntity {
 	@Column(name = "image_url", columnDefinition = "TEXT")
 	private String imageUrl;
 
-	@Column(name = "invalidated_at")
-	private LocalDateTime invalidatedAt;
-
 	@Column(name = "published_at")
 	private LocalDateTime publishedAt;
 
@@ -105,8 +102,7 @@ public class Link extends BaseEntity {
 	@Builder
 	private Link(
 		String url, String title, String description,
-		String imageUrl, LocalDateTime invalidatedAt,
-		Boolean isRss, LocalDateTime publishedAt
+		String imageUrl, Boolean isRss, LocalDateTime publishedAt
 	) {
 		if (2048 < url.length()) {
 			throw ApiLinkException.LINK_URL_TOO_LONG();
@@ -115,7 +111,6 @@ public class Link extends BaseEntity {
 		this.title = title;
 		this.description = description;
 		this.imageUrl = imageUrl;
-		this.invalidatedAt = invalidatedAt;
 		this.isRss = isRss;
 		this.publishedAt = publishedAt;
 	}
