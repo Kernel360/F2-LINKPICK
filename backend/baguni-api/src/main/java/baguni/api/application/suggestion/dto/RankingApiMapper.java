@@ -1,4 +1,4 @@
-package baguni.api.application.ranking.dto;
+package baguni.api.application.suggestion.dto;
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;

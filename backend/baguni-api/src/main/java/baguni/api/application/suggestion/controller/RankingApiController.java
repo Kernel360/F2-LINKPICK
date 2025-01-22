@@ -1,4 +1,4 @@
-package baguni.api.application.ranking.controller;
+package baguni.api.application.suggestion.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +16,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.api.application.ranking.dto.LinkInfoWithCount;
-import baguni.api.application.ranking.dto.RankingApiMapper;
-import baguni.api.application.ranking.dto.RankingResponse;
+import baguni.api.application.suggestion.dto.LinkInfoWithCount;
+import baguni.api.application.suggestion.dto.RankingApiMapper;
+import baguni.api.application.suggestion.dto.RankingResponse;
 import baguni.domain.exception.link.ApiLinkException;
 import baguni.api.service.link.service.LinkService;
 import baguni.api.service.ranking.service.RankingService;
@@ -57,7 +57,6 @@ public class RankingApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-
 	public ResponseEntity<RankingResponse> getSuggestionByViewCount(
 	) {
 		int LIMIT = 10;
