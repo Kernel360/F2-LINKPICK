@@ -39,7 +39,6 @@ public class RssFeedService {
 	public void saveBlogArticleLinks() {
 		rssBlogDataHandler.getAllBlogs().stream()
 						  .map(this::getArticles)
-						  .flatMap(Optional::stream)
 						  .flatMap(Collection::stream)
 						  .filter(this::unsavedLink)
 						  .forEach(this::saveLink);
@@ -47,14 +46,14 @@ public class RssFeedService {
 
 	// Internal Helper Methods ---------------------------------------------
 
-	private Optional<List<RssFeed.Article>> getArticles(RssBlog blog) {
+	private List<RssFeed.Article> getArticles(RssBlog blog) {
 		try {
-			return Optional.of(rssFeedApi.getFeed(URI.create(blog.getUrl()))
-										 .getChannel()
-										 .getArticles());
+			return rssFeedApi.getFeed(URI.create(blog.getUrl()))
+							 .getChannel()
+							 .getArticles();
 		} catch (Exception e) {
 			log.error("RSS 피드 획득에 실패했습니다. url:{} message:{}", blog.getUrl(), e.getMessage());
-			return Optional.empty();
+			return List.of();
 		}
 	}
 
