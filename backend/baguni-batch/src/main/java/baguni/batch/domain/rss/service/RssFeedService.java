@@ -3,9 +3,7 @@ package baguni.batch.domain.rss.service;
 import java.net.URI;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
-import org.hibernate.event.spi.EventManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +56,7 @@ public class RssFeedService {
 	}
 
 	private boolean unsavedLink(RssFeed.Article article) {
-		return (false == linkDataHandler.existsByUrl(article.getLink()));
+		return !linkDataHandler.existsByUrl(article.getLink());
 	}
 
 	private void saveLink(RssFeed.Article article) {
