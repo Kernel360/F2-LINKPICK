@@ -63,7 +63,13 @@ public class RssFeedService {
 	}
 
 	private void saveLink(RssFeed.Article article) {
-		var link = Link.createRssLink(article.getLink(), article.getTitle(), article.getPubDate());
+		Link link = null;
+		try {
+			link = Link.createRssLink(article.getLink(), article.getTitle(), article.getPubDate());
+		} catch (Exception e) { // pubDate 날짜 형식 파싱 실패
+			log.error("RSS PubDate 을 LocalDateTime으로 파싱하는데 실패했습니다. time: {}", article.getPubDate());
+			link = Link.createRssLink(article.getLink(), article.getTitle(), null);
+		}
 		linkDataHandler.saveLink(link);
 		crawlingEventMessenger.send(new LinkCrawlingEvent(article.getLink()));
 	}
