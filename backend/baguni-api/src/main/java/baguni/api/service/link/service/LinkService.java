@@ -2,9 +2,12 @@ package baguni.api.service.link.service;
 
 import java.util.List;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.common.annotation.MeasureTime;
+import baguni.common.lib.cache.CacheType;
 import baguni.domain.infrastructure.link.dto.RssLinkInfo;
 import baguni.domain.model.link.Link;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +36,9 @@ public class LinkService {
 		return linkMapper.of(linkDataHandler.saveLink(link));
 	}
 
+	@MeasureTime
 	@Transactional(readOnly = true)
+	@Cacheable(cacheNames = CacheType.CACHE_NAME.DAILY_RSS_BLOG_ARTICLE)
 	public List<RssLinkInfo> getRssLinkList(int limit) {
 		return linkDataHandler.getRssLinkList(limit)
 							  .stream()
