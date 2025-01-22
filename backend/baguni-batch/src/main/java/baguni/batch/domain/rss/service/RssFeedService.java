@@ -63,7 +63,7 @@ public class RssFeedService {
 	}
 
 	private void saveLink(RssFeed.Article article) {
-		var link = Link.createRssLink(article.getLink(), article.getTitle());
+		var link = Link.createRssLink(article.getLink(), article.getTitle(), article.getPubDate());
 		linkDataHandler.saveLink(link);
 		crawlingEventMessenger.send(new LinkCrawlingEvent(article.getLink()));
 	}
