@@ -6,39 +6,29 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * Rss Feed(xml)에서 파싱한 Raw 데이터를 저장하는 dto
  */
 @Getter
+@ToString
 public class RssFeed {
 
 	@JacksonXmlProperty(localName = "channel")
 	private Channel channel;
 
-	@Override
-	public String toString() {
-		return "RssFeed{" +
-			"channel=" + channel +
-			'}';
-	}
-
 	@Getter
+	@ToString
 	public static class Channel {
 
 		@JacksonXmlElementWrapper(useWrapping = false)
 		@JacksonXmlProperty(localName = "item")
 		private List<Article> articles;
-
-		@Override
-		public String toString() {
-			return "Channel{" +
-				"items=" + articles +
-				'}';
-		}
 	}
 
 	@Getter
+	@ToString
 	public static class Article {
 
 		@JacksonXmlProperty(localName = "title")
@@ -62,18 +52,5 @@ public class RssFeed {
 		@JacksonXmlElementWrapper(useWrapping = false)
 		@JacksonXmlProperty(localName = "category")
 		private List<String> category;
-
-		@Override
-		public String toString() {
-			return "Item{" +
-				"title='" + title + '\'' +
-				", link='" + link + '\'' +
-				", guid='" + guid + '\'' +
-				", pubDate='" + pubDate + '\'' +
-				", description='" + description + '\'' +
-				", creator='" + creator + '\'' +
-				", category=" + category +
-				'}';
-		}
 	}
 }
