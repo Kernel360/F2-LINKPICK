@@ -164,8 +164,7 @@ public class PickApiController {
 		var command = pickApiMapper.toCreateCommand(userId, request);
 		var result = pickService.saveNewPick(command);
 
-		var event = new BookmarkCreateEvent(result.linkInfo().url());
-		eventMessenger.send(event);
+		eventMessenger.send(new BookmarkCreateEvent(result.linkInfo().url()));
 
 		var response = pickApiMapper.toApiResponse(result);
 		return ResponseEntity.ok(response);
@@ -188,8 +187,7 @@ public class PickApiController {
 		var command = pickApiMapper.toExtensionCommand(userId, request.title(), request.url());
 		var result = pickService.savePickToUnclassified(command);
 
-		var rankingEvent = new BookmarkCreateEvent(request.url());
-		eventMessenger.send(rankingEvent);
+		eventMessenger.send(new BookmarkCreateEvent(request.url()));
 
 		var response = pickApiMapper.toApiExtensionResponse(result);
 		return ResponseEntity.ok(response);
