@@ -3,49 +3,65 @@ package baguni.batch.domain.link.service;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import baguni.common.lib.opengraph.Metadata;
 import baguni.common.lib.opengraph.OpenGraph;
 import baguni.common.lib.opengraph.OpenGraphException;
 import baguni.common.lib.opengraph.OpenGraphReader;
-import baguni.domain.model.link.Link;
-import lombok.RequiredArgsConstructor;
+import baguni.domain.exception.link.ApiLinkException;
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * 	@author sangwon
+ *    @author sangwon
  * 	링크 분석 클래스 (크롤링, 링크 유효성 검사)
  */
+@Slf4j
 @Component
-@RequiredArgsConstructor
 public class LinkAnalyzer {
 
 	private final OpenGraphReader openGraphReader;
+
+	public LinkAnalyzer(
+		@Qualifier("selenium") OpenGraphReader openGraphReader
+	) {
+		this.openGraphReader = openGraphReader;
+	}
 
 	/**
 	 *	Jsoup 또는 Selenium 이용하여 크롤링
 	 *	현재는 Selenium 사용하도록 되어 있음.
 	 *  Jsoup, Selenium 둘 다 사용하고 싶으면 @Qualifier 사용
- 	 */
-	public Link updateOgTag(String url, Link link) throws OpenGraphException {
-		return updateOgTagCommon(url, link, openGraphReader);
-	}
+	 */
+	public LinkAnalyzeResult analyze(String url) {
+		try {
+			var openGraph = new OpenGraph(url, openGraphReader);
 
-	private Link updateOgTagCommon(String url, Link link, OpenGraphReader openGraphReader) throws OpenGraphException {
-		var openGraph = new OpenGraph(url, openGraphReader);
-		link.updateMetadata(
-			openGraph.getTag(Metadata.OG_TITLE)
-					 .orElse(openGraph.getTag(Metadata.TITLE)
-									  .orElse("")),
-			openGraph.getTag(Metadata.OG_DESCRIPTION)
-					 .orElse(openGraph.getTag(Metadata.DESCRIPTION)
-									  .orElse("")),
-			correctImageUrl(url, openGraph.getTag(Metadata.OG_IMAGE)
-										  .orElse(openGraph.getTag(Metadata.IMAGE)
-														   .orElse(openGraph.getTag(Metadata.ICON)
-																			.orElse(""))))
-		);
-		return link;
+			var title = openGraph.getTag(Metadata.OG_TITLE)
+								 .orElse(openGraph.getTag(Metadata.TITLE)
+												  .orElse(""));
+
+			var description = openGraph.getTag(Metadata.OG_DESCRIPTION)
+									   .orElse(openGraph.getTag(Metadata.DESCRIPTION)
+														.orElse(""));
+
+			var imageUrl = correctImageUrl(url, openGraph.getTag(Metadata.OG_IMAGE)
+														 .orElse(openGraph.getTag(Metadata.IMAGE)
+																		  .orElse(openGraph.getTag(Metadata.ICON)
+																						   .orElse(""))));
+			return LinkAnalyzeResult
+				.builder()
+				.title(title)
+				.description(description)
+				.imageUrl(imageUrl)
+				.build();
+
+		} catch (OpenGraphException e) {
+			log.error(e.getMessage(), e);
+			throw ApiLinkException.LINK_ANALYZE_FAILURE();
+		}
 	}
 
 	/**

@@ -30,15 +30,14 @@ public class CrawlingEventListener {
 	@RabbitHandler
 	public void crawlingEvent(LinkCrawlingEvent event) {
 		LinkResult link = linkService.getLinkResultByUrl(event.getUrl());
-		long days = ChronoUnit.DAYS.between(link.updatedAt().toLocalDate(), LocalDate.now());
+		long lastUpdatedDays = ChronoUnit.DAYS.between(link.updatedAt().toLocalDate(), LocalDate.now());
 
-		// imageUrl, description이 비어있는 경우, link update가 90일이 지난 경우에만 OG 태그 업데이트 시도
-		if (StringUtils.isEmpty(link.imageUrl()) || StringUtils.isEmpty(link.description()) || 90 <= days) {
-			try {
-				linkService.updateLink(link.url());
-			} catch (Exception e) {
-				log.info("메세지 큐에서 꺼낸 Link OG 크롤링 실패 : ", e);
-			}
+		if (
+			StringUtils.isEmpty(link.imageUrl())
+				|| StringUtils.isEmpty(link.description())
+				|| (90 <= lastUpdatedDays)
+		) {
+			linkService.analyzeAndUpdateLink(link.url());
 		}
 	}
 }
