@@ -5,7 +5,6 @@ export interface TreeState {
   selectedFolderList: SelectedFolderListType;
   isDragging: boolean;
   draggingFolderInfo: FolderType | null | undefined;
-  isShareFolder: boolean;
 }
 
 export interface TreeAction {
@@ -13,7 +12,6 @@ export interface TreeAction {
     newSelectedFolderData: SelectedFolderListType,
   ) => void;
   setIsDragging: (isDragging: boolean) => void;
-
   setDraggingFolderInfo: (
     draggingFolderInfo: FolderType | null | undefined,
   ) => void;

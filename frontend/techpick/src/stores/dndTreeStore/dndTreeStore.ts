@@ -6,7 +6,7 @@ import type { TreeAction, TreeState } from './folderStore.type';
 const initialState: TreeState = {
   selectedFolderList: [],
   isDragging: false,
-  isShareFolder: false,
+
   draggingFolderInfo: null,
 };
 
