@@ -1,4 +1,4 @@
-import type { MoveFolderRequestType } from '@/types/MoveFolderRequestType';
+import type { UseMoveFoldersMutationParamType } from '@/types/UseMoveFoldersMutationParamType';
 import { moveFolder } from './moveFolder';
 
 /**
@@ -18,7 +18,7 @@ export const moveFoldersMutation = async ({
   parentFolderId,
   idList,
   orderIdx,
-}: useMoveFoldersMutationParams): Promise<void> => {
+}: UseMoveFoldersMutationParamType): Promise<void> => {
   await moveFolder({
     destinationFolderId,
     parentFolderId,
@@ -26,8 +26,3 @@ export const moveFoldersMutation = async ({
     orderIdx,
   });
 };
-
-interface useMoveFoldersMutationParams extends MoveFolderRequestType {
-  fromId: number;
-  toId: number;
-}

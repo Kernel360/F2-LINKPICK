@@ -1,6 +1,6 @@
 'use client';
 
-import { useGetChildFolderListByParentFolderId } from '@/hooks/useGetChildFolderListByParentFolderId';
+import { useFolderStore } from '@/stores/folderStore';
 import type { FolderIdType } from '@/types/FolderIdType';
 import { getFolderSortableContextId } from '@/utils/getFolderSortableContextId';
 import {
@@ -24,7 +24,8 @@ export function EditableFolderNavigationItemList({
   folderId,
   depth,
 }: EditableFolderNavigationItemListProps) {
-  const { childFolderList } = useGetChildFolderListByParentFolderId(folderId);
+  const { getChildFolderListByParentFolderId } = useFolderStore();
+  const childFolderList = getChildFolderListByParentFolderId(folderId);
   const childDepth = typeof depth === 'number' ? depth + 1 : 0;
 
   return (
