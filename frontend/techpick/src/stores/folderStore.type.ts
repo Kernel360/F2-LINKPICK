@@ -1,13 +1,13 @@
 import type { FolderType } from '@/types/FolderType';
 import type { SelectedFolderListType } from '@/types/SelectedFolderListType';
 
-export interface TreeState {
+export interface FolderState {
   selectedFolderList: SelectedFolderListType;
   isDragging: boolean;
   draggingFolderInfo: FolderType | null | undefined;
 }
 
-export interface TreeAction {
+export interface FolderAction {
   setSelectedFolderList: (
     newSelectedFolderData: SelectedFolderListType,
   ) => void;

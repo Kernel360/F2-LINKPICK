@@ -1,6 +1,6 @@
 'use client';
 
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { useFolderStore } from '@/stores/folderStore';
 import type { FolderIdType } from '@/types/FolderIdType';
 import { getFolderSortableContextId } from '@/utils/getFolderSortableContextId';
 import { useSortable } from '@dnd-kit/sortable';
@@ -12,7 +12,7 @@ export const FolderDraggable = ({
   folderId,
   children,
 }: PropsWithChildren<FolderDraggableProps>) => {
-  const { isDragging } = useTreeStore();
+  const { isDragging } = useFolderStore();
   const {
     attributes,
     listeners,

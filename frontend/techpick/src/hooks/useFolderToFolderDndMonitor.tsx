@@ -2,7 +2,7 @@
 
 import { useFetchFolders } from '@/queries/useFetchFolders';
 import { useMoveFolders } from '@/queries/useMoveFolders';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { useFolderStore } from '@/stores/folderStore';
 import { getFolderInfoByFolderId } from '@/utils/getFolderInfoByFolderId';
 import { isFolderDraggableObject } from '@/utils/isFolderDraggableObject';
 import { useDndMonitor } from '@dnd-kit/core';
@@ -19,10 +19,9 @@ export function useFolderToFolderDndMonitor() {
   const {
     selectedFolderList,
     setSelectedFolderList,
-
     setIsDragging,
     setDraggingFolderInfo,
-  } = useTreeStore();
+  } = useFolderStore();
   const { mutateAsync: moveFolders } = useMoveFolders();
   const { data: folderRecord } = useFetchFolders();
 

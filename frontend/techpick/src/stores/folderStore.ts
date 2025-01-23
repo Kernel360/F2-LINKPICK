@@ -1,16 +1,16 @@
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import type { TreeAction, TreeState } from './folderStore.type';
+import type { FolderAction, FolderState } from './folderStore.type';
 
-const initialState: TreeState = {
+const initialState: FolderState = {
   selectedFolderList: [],
   isDragging: false,
 
   draggingFolderInfo: null,
 };
 
-export const useTreeStore = create<TreeState & TreeAction>()(
+export const useFolderStore = create<FolderState & FolderAction>()(
   subscribeWithSelector(
     immer((set) => ({
       ...initialState,
