@@ -13,7 +13,15 @@ export function useMoveFolders() {
 
   return useMutation({
     mutationFn: moveFoldersMutation,
-    onMutate({ parentFolderId, idList, destinationFolderId, fromId, toId }) {
+    onMutate: async ({
+      parentFolderId,
+      idList,
+      destinationFolderId,
+      fromId,
+      toId,
+    }) => {
+      await queryClient.cancelQueries({ queryKey: folderKeys.root() });
+
       const prevFolders =
         queryClient.getQueryData<FolderRecordType>(folderKeys.root()) ?? {};
 
@@ -48,12 +56,13 @@ export function useMoveFolders() {
       queryClient.setQueryData(folderKeys.root(), nextFolders);
       return { prevFolders };
     },
-    onSuccess() {
-      queryClient.invalidateQueries({ queryKey: folderKeys.root() });
-    },
+    onSuccess() {},
     onError(_error, _variables, context) {
       const prevFolders = context?.prevFolders ?? {};
       queryClient.setQueryData(folderKeys.root(), prevFolders);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: folderKeys.root() });
     },
   });
 }
