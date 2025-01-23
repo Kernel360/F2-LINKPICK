@@ -47,7 +47,7 @@ export const reorderSortableIdList = ({
 };
 
 interface ReorderSortableIdListParams {
-  sortableIdList: ChildFolderListType | number[];
+  sortableIdList: ChildFolderListType;
   fromId: UniqueIdentifier;
   toId: UniqueIdentifier;
   selectedFolderList: SelectedFolderListType | SelectedPickIdListType;
