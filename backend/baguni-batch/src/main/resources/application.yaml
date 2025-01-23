@@ -14,8 +14,7 @@ spring:
 server:
   port: 8081
 slack-config:
-  #  webhook-url: "" # 로컬은 알림 없음
-  webhook-url: ${SLACK_DEV_WEBHOOK_URL} # just for test
+  webhook-url: "" # 로컬은 알림 없음
 ---
 spring:
   config:
