@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 import { borderRadius, colorVars, sizes, space } from 'techpick-shared';
 
-export const contextMenuContentLayout = style({
+export const contextMenuContentLayoutStyle = style({
   width: sizes.min,
   height: sizes.min,
   border: '1px solid',

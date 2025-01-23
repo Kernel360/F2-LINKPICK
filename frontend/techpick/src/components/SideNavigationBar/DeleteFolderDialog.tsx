@@ -4,28 +4,32 @@ import { ROUTES } from '@/constants/route';
 import { useDeleteFolder } from '@/queries/useDeleteFolder';
 import { useFetchFolders } from '@/queries/useFetchFolders';
 import { dialogOverlayStyle } from '@/styles/dialogStyle.css';
+import type { FolderIdType } from '@/types/FolderIdType';
 import { checkIsSharedFolder } from '@/utils/checkIsSharedFolder';
 import * as Dialog from '@radix-ui/react-dialog';
 import { XIcon } from 'lucide-react';
-import { useParams, useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useRouter } from 'next/navigation';
+import { useContext, useRef } from 'react';
+import { ActiveNavigationItemIdContext } from './ActiveNavigationItemIdProvider';
+import { DeleteFolderStatusContext } from './DeleteFolderStatusProvider';
 import {
-  moveRecycleBinCancelButtonStyle,
-  moveRecycleBinConfirmButtonStyle,
-  moveRecycleBinDialogCloseButton,
-  moveRecycleBinDialogDescriptionStyle,
-  moveRecycleBinDialogShareFolderWarningDescriptionStyle,
-  moveRecycleBinDialogTitleStyle,
-  moveRecycleDialogContent,
-} from './moveFolderToRecycleBinDialog.css';
+  deleteDialogContentStyle,
+  deleteFolderCancelButtonStyle,
+  deleteFolderConfirmButtonStyle,
+  deleteFolderDialogCloseButton,
+  deleteFolderDialogDescriptionStyle,
+  deleteFolderDialogShareFolderWarningDescriptionStyle,
+  deleteFolderDialogTitleStyle,
+} from './deleteFolderDialog.css';
 
-export function MoveFolderToRecycleBinDialog({
+export function DeleteFolderDialog({
   deleteFolderId,
-  isOpen,
-  onOpenChange,
-}: MoveFolderToRecycleBinDialogProps) {
+}: DeleteFolderDialogProps) {
   const router = useRouter();
-  const { folderId: urlFolderId } = useParams<{ folderId: string }>();
+  const activeNavigationItemId = useContext(ActiveNavigationItemIdContext);
+  const { isOpenDeleteFolderDialog, onCloseDeleteFolderDialog } = useContext(
+    DeleteFolderStatusContext,
+  );
   const { data: folderRecord } = useFetchFolders();
   const { mutate: deleteFolder } = useDeleteFolder();
   const deleteButtonRef = useRef<HTMLButtonElement>(null);
@@ -38,7 +42,7 @@ export function MoveFolderToRecycleBinDialog({
   const moveRecycleBinAndRedirect = () => {
     deleteFolder([deleteFolderId]);
 
-    if (Number(urlFolderId) === deleteFolderId) {
+    if (activeNavigationItemId === deleteFolderId) {
       router.push(ROUTES.RECOMMEND);
     }
   };
@@ -48,20 +52,21 @@ export function MoveFolderToRecycleBinDialog({
   };
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
+    <Dialog.Root
+      open={isOpenDeleteFolderDialog}
+      onOpenChange={onCloseDeleteFolderDialog}
+    >
       <Dialog.Portal>
         <Dialog.Overlay className={dialogOverlayStyle} />
-        <Dialog.Content className={moveRecycleDialogContent}>
+        <Dialog.Content className={deleteDialogContentStyle}>
           <div>
-            <Dialog.Title className={moveRecycleBinDialogTitleStyle}>
+            <Dialog.Title className={deleteFolderDialogTitleStyle}>
               폴더를 휴지통으로 이동하시겠습니다?
             </Dialog.Title>
 
             {isSharedFolder && (
               <Dialog.Description
-                className={
-                  moveRecycleBinDialogShareFolderWarningDescriptionStyle
-                }
+                className={deleteFolderDialogShareFolderWarningDescriptionStyle}
               >
                 현재 공개중인 폴더입니다.
                 <br />
@@ -69,9 +74,7 @@ export function MoveFolderToRecycleBinDialog({
               </Dialog.Description>
             )}
 
-            <Dialog.Description
-              className={moveRecycleBinDialogDescriptionStyle}
-            >
+            <Dialog.Description className={deleteFolderDialogDescriptionStyle}>
               북마크는 남지만 폴더는 사라집니다.
             </Dialog.Description>
           </div>
@@ -81,7 +84,7 @@ export function MoveFolderToRecycleBinDialog({
             <button
               ref={deleteButtonRef}
               onMouseEnter={() => handleMouseEnter(deleteButtonRef)}
-              className={moveRecycleBinDialogCloseButton}
+              className={deleteFolderDialogCloseButton}
             >
               <XIcon size={12} />
             </button>
@@ -91,7 +94,7 @@ export function MoveFolderToRecycleBinDialog({
             <Dialog.Close asChild>
               {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
               <button
-                className={moveRecycleBinConfirmButtonStyle}
+                className={deleteFolderConfirmButtonStyle}
                 onClick={moveRecycleBinAndRedirect}
                 ref={deleteButtonRef}
                 onMouseEnter={() => handleMouseEnter(deleteButtonRef)}
@@ -105,7 +108,7 @@ export function MoveFolderToRecycleBinDialog({
               <button
                 ref={cancelButtonRef}
                 onMouseEnter={() => handleMouseEnter(cancelButtonRef)}
-                className={moveRecycleBinCancelButtonStyle}
+                className={deleteFolderCancelButtonStyle}
               >
                 취소
               </button>
@@ -117,8 +120,6 @@ export function MoveFolderToRecycleBinDialog({
   );
 }
 
-interface MoveFolderToRecycleBinDialogProps {
-  deleteFolderId: number;
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
+interface DeleteFolderDialogProps {
+  deleteFolderId: FolderIdType;
 }

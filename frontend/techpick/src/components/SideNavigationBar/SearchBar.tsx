@@ -1,3 +1,5 @@
+'use client';
+
 import { useDisclosure } from '@/hooks/useDisclosure';
 import { SearchIcon } from 'lucide-react';
 import SearchDialog from '../Search2/SearchDialog';

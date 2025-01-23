@@ -1,15 +1,16 @@
 'use client';
 
-import { horizontalResizingContainerLayout } from '@/components/FolderTree/tree.css';
 import { Resizable } from 're-resizable';
 import type { PropsWithChildren } from 'react';
+import { horizontalResizingContainerLayoutStyle } from './horizontalResizableContainer.css';
+
 export function HorizontalResizableContainer({ children }: PropsWithChildren) {
   const minWidth = '200px';
   const MAX_WIDTH = '600px';
 
   return (
     <Resizable
-      className={horizontalResizingContainerLayout}
+      className={horizontalResizingContainerLayoutStyle}
       enable={{
         right: true,
         top: false,

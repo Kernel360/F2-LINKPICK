@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { ComponentProps, ElementType, PropsWithChildren } from 'react';
+import type { ComponentProps, ElementType } from 'react';
 import {
   activeStyle,
   iconStyle,
@@ -8,14 +8,13 @@ import {
 } from './navigationItem.css';
 
 export function NavigationItem({
-  children,
   href,
   text,
   isActive,
   icon: IconComponent,
   className,
   ...otherProps
-}: PropsWithChildren<NavigationItemPropsType>) {
+}: NavigationItemPropsType) {
   return (
     <Link
       href={href}

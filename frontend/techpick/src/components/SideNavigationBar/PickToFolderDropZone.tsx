@@ -1,5 +1,6 @@
 'use client';
 
+import { getFolderSortableContextId } from '@/utils/getFolderSortableContextId';
 import { useDroppable } from '@dnd-kit/core';
 import type { PropsWithChildren } from 'react';
 
@@ -8,7 +9,7 @@ export function PickToFolderDropZone({
   children,
 }: PropsWithChildren<PickToFolderDropZoneProps>) {
   const { setNodeRef } = useDroppable({
-    id: `folder-${folderId}`,
+    id: getFolderSortableContextId(folderId),
     data: {
       id: folderId,
       type: 'folder',

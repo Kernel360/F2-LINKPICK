@@ -7,7 +7,7 @@ import { sandOutlineButtonStyle } from '@/styles/sandButtonStyle.css';
 import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
 
-export const moveRecycleDialogContent = style([
+export const deleteDialogContentStyle = style([
   dialogContentLayoutStyle,
   dialogContentBackgroundColorStyle,
   {
@@ -20,25 +20,25 @@ export const moveRecycleDialogContent = style([
   },
 ]);
 
-export const moveRecycleBinDialogTitleStyle = style({
+export const deleteFolderDialogTitleStyle = style({
   display: 'block',
   fontSize: '16px',
   fontWeight: '500',
 });
 
-export const moveRecycleBinDialogDescriptionStyle = style({
+export const deleteFolderDialogDescriptionStyle = style({
   margin: '8px 0px',
   fontSize: '14px',
 });
 
-export const moveRecycleBinDialogShareFolderWarningDescriptionStyle = style({
+export const deleteFolderDialogShareFolderWarningDescriptionStyle = style({
   marginTop: '8px',
   fontSize: '14px',
   color: colorVars.orange11,
   whiteSpace: 'pre-wrap',
 });
 
-export const moveRecycleBinDialogCloseButton = style({
+export const deleteFolderDialogCloseButton = style({
   position: 'absolute',
   top: 0,
   right: 0,
@@ -46,7 +46,7 @@ export const moveRecycleBinDialogCloseButton = style({
   cursor: 'pointer',
 });
 
-export const moveRecycleBinConfirmButtonStyle = style([
+export const deleteFolderConfirmButtonStyle = style([
   redOutlineButtonStyle,
   {
     width: '100%',
@@ -54,7 +54,7 @@ export const moveRecycleBinConfirmButtonStyle = style([
   },
 ]);
 
-export const moveRecycleBinCancelButtonStyle = style([
+export const deleteFolderCancelButtonStyle = style([
   sandOutlineButtonStyle,
   {
     marginTop: '8px',

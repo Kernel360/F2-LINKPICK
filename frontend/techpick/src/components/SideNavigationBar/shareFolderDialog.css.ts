@@ -51,6 +51,13 @@ export const icon = style({
   fontSize: '0.875rem',
 });
 
+export const shareFolderDialogContentStyle = style({
+  display: 'flex',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+});
+
 /* --------------- Shared Folder Link --------------- */
 export const sharedFolderLink = style({
   backgroundColor: '#f9f9f9',
