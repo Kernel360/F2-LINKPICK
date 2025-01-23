@@ -46,7 +46,7 @@ export default function FolderDetailPage() {
 
   return (
     <FolderContentLayout>
-      <FolderContentHeader />
+      <FolderContentHeader folderId={folderId} />
       <PickContentLayout>
         <PickRecordHeader />
         {pickList.length === 0 ? (

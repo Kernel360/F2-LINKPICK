@@ -1,8 +1,8 @@
 'use client';
+import { ROUTES } from '@/constants/route';
 import { useFetchFolders } from '@/queries/useFetchFolders';
 import type { FolderType } from '@/types/FolderType';
 import { getAncestorFolderListFromLeaf } from '@/utils/getAncestorFolderListFromLeaf';
-import { getFolderLinkByType } from '@/utils/getFolderLinkByType';
 import Link from 'next/link';
 import {
   Breadcrumb,
@@ -34,22 +34,28 @@ export function CurrentPathIndicator({
       <Breadcrumb>
         <BreadcrumbList>
           {ancestorFolderList.map((folderInfo, index) => {
-            return (
-              <div key={folderInfo.id} className={breadcrumbItemLayout}>
-                {index !== 0 && <BreadcrumbSeparator />}
-                <BreadcrumbItem className={breadcrumbItemStyle}>
-                  {folderInfo.folderType === 'ROOT' ? (
-                    '내 폴더'
-                  ) : (
-                    <BreadcrumbLink className={breadcrumbLinkStyle} asChild>
-                      <Link href={getFolderLinkByType(folderInfo)}>
-                        {folderInfo.name}
-                      </Link>
-                    </BreadcrumbLink>
-                  )}
-                </BreadcrumbItem>
-              </div>
-            );
+            if (
+              folderInfo.folderType === 'GENERAL' ||
+              folderInfo.folderType === 'ROOT'
+            ) {
+              return (
+                <div key={folderInfo.id} className={breadcrumbItemLayout}>
+                  {index !== 0 && <BreadcrumbSeparator />}
+                  <BreadcrumbItem className={breadcrumbItemStyle}>
+                    {folderInfo.folderType === 'GENERAL' && (
+                      <BreadcrumbLink className={breadcrumbLinkStyle} asChild>
+                        <Link href={ROUTES.FOLDER_DETAIL(folderInfo.id)}>
+                          {folderInfo.name}
+                        </Link>
+                      </BreadcrumbLink>
+                    )}
+                    {folderInfo.folderType === 'ROOT' && '내 폴더'}
+                  </BreadcrumbItem>
+                </div>
+              );
+            }
+
+            return null;
           })}
         </BreadcrumbList>
       </Breadcrumb>
