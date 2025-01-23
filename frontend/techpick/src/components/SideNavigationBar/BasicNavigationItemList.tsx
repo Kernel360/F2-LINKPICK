@@ -2,7 +2,7 @@
 
 import { ROUTES } from '@/constants/route';
 import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
-import { ArchiveIcon, StarIcon } from 'lucide-react';
+import { ArchiveIcon, StarIcon, Trash2Icon } from 'lucide-react';
 import { useContext } from 'react';
 import { ActiveNavigationItemIdContext } from './ActiveNavigationItemIdProvider';
 import { NavigationItem } from './NavigationItem';
@@ -56,7 +56,7 @@ export function BasicNavigationItemList() {
             <NavigationItem
               href={ROUTES.FOLDER_DETAIL(basicFolderRecord.RECYCLE_BIN.id)}
               text="휴지통"
-              icon={ArchiveIcon}
+              icon={Trash2Icon}
               isActive={isRecycleBinActive}
             />
           </PickToFolderDropZone>
