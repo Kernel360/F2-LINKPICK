@@ -44,6 +44,7 @@ public class EventApiController {
 		@Valid @RequestBody EventApiRequest.BookmarkView request,
 		@LoginUserId Long userId
 	) {
+		linkService.getLinkInfo(request.url()); // 서버에 링크 엔티티가 존재해야 이벤트 전송 가능
 		eventMessenger.send(new LinkReadEvent(request.url()));
 		return ResponseEntity.noContent().build();
 	}
@@ -86,6 +87,7 @@ public class EventApiController {
 		@Valid @RequestBody EventApiRequest.SuggestionView request,
 		@LoginUserId Long userId
 	) {
+		linkService.getLinkInfo(request.url()); // 서버에 링크 엔티티가 존재해야 이벤트 전송 가능
 		eventMessenger.send(new LinkReadEvent(request.url()));
 		return ResponseEntity.noContent().build();
 	}
