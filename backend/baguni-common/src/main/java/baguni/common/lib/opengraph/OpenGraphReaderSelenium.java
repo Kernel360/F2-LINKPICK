@@ -91,6 +91,9 @@ public class OpenGraphReaderSelenium implements OpenGraphReader {
 					result.put(nameAttr, value);
 				}
 			}
+		} catch (org.openqa.selenium.TimeoutException e) {
+			log.error("Selenium TimeoutException 발생 : {}, url : {}", e.getMessage(), uri);
+			// result = new OpenGraphReaderJsoup(openGraphOption).read(uri); // 추후 Jsoup 사용 시 이 코드 활용
 		} catch (Exception e) {
 			throw new OpenGraphException("Error occurred when reading OG tags via Selenium, url : " + uri, e);
 		} finally {
