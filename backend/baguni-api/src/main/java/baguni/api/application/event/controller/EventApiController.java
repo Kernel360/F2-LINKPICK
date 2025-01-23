@@ -15,9 +15,7 @@ import lombok.RequiredArgsConstructor;
 import baguni.api.application.event.dto.EventApiRequest;
 import baguni.api.service.link.service.LinkService;
 import baguni.common.event.messenger.EventMessenger;
-import baguni.common.event.events.PickViewEvent;
-import baguni.common.event.events.SharedFolderLinkViewEvent;
-import baguni.common.event.events.SuggestionViewEvent;
+import baguni.common.event.events.LinkReadEvent;
 import baguni.security.annotation.LoginUserId;
 
 @RestController
@@ -46,7 +44,7 @@ public class EventApiController {
 		@Valid @RequestBody EventApiRequest.BookmarkView request,
 		@LoginUserId Long userId
 	) {
-		eventMessenger.send(new PickViewEvent(userId, request.pickId(), request.url()));
+		eventMessenger.send(new LinkReadEvent(request.url()));
 		return ResponseEntity.noContent().build();
 	}
 
@@ -66,8 +64,8 @@ public class EventApiController {
 	public ResponseEntity<Void> sharedFolderLinkView(
 		@Valid @RequestBody EventApiRequest.SharedBookmarkView request
 	) {
-		var linkInfo = linkService.getLinkInfo(request.url()); // 서버에 링크 엔티티가 존재해야 이벤트 전송 가능
-		eventMessenger.send(new SharedFolderLinkViewEvent(request.url(), request.folderAccessToken()));
+		linkService.getLinkInfo(request.url()); // 서버에 링크 엔티티가 존재해야 이벤트 전송 가능
+		eventMessenger.send(new LinkReadEvent(request.url()));
 		return ResponseEntity.noContent().build();
 	}
 
@@ -88,7 +86,7 @@ public class EventApiController {
 		@Valid @RequestBody EventApiRequest.SuggestionView request,
 		@LoginUserId Long userId
 	) {
-		eventMessenger.send(new SuggestionViewEvent(userId, request.url()));
+		eventMessenger.send(new LinkReadEvent(request.url()));
 		return ResponseEntity.noContent().build();
 	}
 }

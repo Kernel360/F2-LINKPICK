@@ -12,11 +12,17 @@ import lombok.Getter;
 @Getter
 public abstract class Event {
 
+	private final String topic;
+
 	/** 이벤트가 발생한 시각 */
 	private final LocalDateTime time = LocalDateTime.now();
 
 	/** 기본 포맷: yyyy-MM-dd HH:mm:ss */
 	public String getTimeFormatted() {
 		return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	}
+
+	public Event(String topic) {
+		this.topic = topic;
 	}
 }
