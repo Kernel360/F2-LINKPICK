@@ -1,5 +1,7 @@
 package baguni.common.event.events;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 import lombok.Getter;
 
 @Getter
@@ -17,6 +19,7 @@ public class ErrorLogEvent extends Event {
 	private final int httpStatusCode; // 응답 상태 코드 ex) 500
 	private final String httpStatusMessage; // 응답 상태 메세지 ex) INTERNAL SERVER ERROR
 
+	@JsonCreator
 	public ErrorLogEvent(
 		String exceptionClass, String exceptionMessage, String requestUri, String requestMethod,
 		String requestAddress, String profile, int httpStatusCode, String httpStatusMessage
