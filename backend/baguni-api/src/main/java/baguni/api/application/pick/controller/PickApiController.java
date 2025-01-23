@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import baguni.common.annotation.MeasureTime;
+import baguni.common.event.events.BookmarkCreateEvent;
 import baguni.common.event.messenger.EventMessenger;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -31,7 +32,6 @@ import baguni.api.application.pick.dto.PickSliceResponse;
 import baguni.domain.infrastructure.pick.dto.PickResult;
 import baguni.api.service.pick.service.PickSearchService;
 import baguni.api.service.pick.service.PickService;
-import baguni.common.event.events.PickCreateEvent;
 import baguni.security.annotation.LoginUserId;
 
 @Slf4j
@@ -164,7 +164,7 @@ public class PickApiController {
 		var command = pickApiMapper.toCreateCommand(userId, request);
 		var result = pickService.saveNewPick(command);
 
-		var event = new PickCreateEvent(result.linkInfo().url());
+		var event = new BookmarkCreateEvent(result.linkInfo().url());
 		eventMessenger.send(event);
 
 		var response = pickApiMapper.toApiResponse(result);
@@ -188,7 +188,7 @@ public class PickApiController {
 		var command = pickApiMapper.toExtensionCommand(userId, request.title(), request.url());
 		var result = pickService.savePickToUnclassified(command);
 
-		var rankingEvent = new PickCreateEvent(request.url());
+		var rankingEvent = new BookmarkCreateEvent(request.url());
 		eventMessenger.send(rankingEvent);
 
 		var response = pickApiMapper.toApiExtensionResponse(result);

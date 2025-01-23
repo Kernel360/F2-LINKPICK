@@ -6,11 +6,11 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import baguni.common.event.events.BookmarkCreateEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.common.config.RabbitmqConfig;
 import baguni.common.event.events.LinkReadEvent;
-import baguni.common.event.events.PickCreateEvent;
 import baguni.ranking.infra.pick.LinkPickedCount;
 import baguni.ranking.infra.pick.LinkPickedCountRepository;
 import baguni.ranking.infra.pick.LinkViewCount;
@@ -24,7 +24,7 @@ import baguni.ranking.infra.pick.LinkViewCountRepository;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@RabbitListener(queues = {RabbitmqConfig.QUEUE.PICK_RANKING})
+@RabbitListener(queues = {RabbitmqConfig.QUEUE.LINK_RANKING})
 public class RankingEventListener {
 
 	private final LinkViewCountRepository linkViewCountRepository;
@@ -34,8 +34,8 @@ public class RankingEventListener {
 	 * 사용자의 북마크 생성 이벤트 집계
 	 */
 	@RabbitHandler
-	public void pickCreateEvent(PickCreateEvent event) {
-		log.info("픽 생성 이벤트 수신 {}", event);
+	public void bookmarkCreateEvent(BookmarkCreateEvent event) {
+		log.info("북마크 생성 이벤트 수신 {}", event);
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
 		updateLinkPickedCount(date, url);
@@ -45,7 +45,7 @@ public class RankingEventListener {
 	 * 사용자의 북마크 조회 이벤트 집계
 	 */
 	@RabbitHandler
-	public void linkViewEvent(LinkReadEvent event) {
+	public void linkReadEvent(LinkReadEvent event) {
 		log.info("링크 조회 이벤트 수신 {}", event);
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
@@ -62,7 +62,6 @@ public class RankingEventListener {
 
 	/**
 	 * 헬퍼 함수
-	 * TODO: 다른 클래스나 서비스로 분리 리팩토링 진행
 	 */
 	private void updateLinkViewCount(LocalDate date, String url) {
 		var linkViewCount = linkViewCountRepository

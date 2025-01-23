@@ -22,8 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@RabbitListener(queues = {RabbitmqConfig.QUEUE.PICK_CRAWLING})
-public class CrawlingEventListener {
+@RabbitListener(queues = {RabbitmqConfig.QUEUE.LINK_UPDATE})
+public class LinkUpdateEventListener {
 
 	private final LinkService linkService;
 

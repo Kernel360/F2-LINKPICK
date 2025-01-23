@@ -1,9 +1,11 @@
 package baguni.common.config;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -13,17 +15,29 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @see
+ * <a href="https://docs.spring.io/spring-amqp/docs/1.5.1.RELEASE/reference/htmlsingle/#collection-declaration">
+ *     spring amqp setup
+ * </a>
+ */
 @Configuration
 public class RabbitmqConfig {
 
 	public static final class EXCHANGE {
-		public static final String EVENT = "exchange.event";
+		public static final String NAME = "exchange.domain";
 	}
 
 	public static final class QUEUE {
-		public static final String PICK_RANKING = "queue.pick-ranking";
-		public static final String PICK_CRAWLING = "queue.pick-crawling";
+		public static final String LINK_RANKING = "queue.link-ranking";
+		public static final String PICK_RANKING_KEY1 = "bookmark.create";
+		public static final String PICK_RANKING_KEY2 = "link.read";
+
+		public static final String LINK_UPDATE = "queue.link-analyze";
+		public static final String LINK_UPDATE_KEY = "link.*";
+
 		public static final String SLACK_NOTIFICATION = "queue.slack-notification";
+		public static final String SLACK_NOTIFICATION_KEY = "log.error";
 	}
 
 	@Value("${spring.application.name}")
@@ -41,52 +55,42 @@ public class RabbitmqConfig {
 	/**
 	 * 1. Exchange 구성 */
 	@Bean
-	DirectExchange directExchange() {
-		return new DirectExchange(EXCHANGE.EVENT);
-	}
-
-	/**
-	 * 2. 큐 구성 */
-	@Bean
-	Queue pickRanking() {
-		return new Queue(QUEUE.PICK_RANKING, false);
+	TopicExchange exchange() {
+		return new TopicExchange(EXCHANGE.NAME);
 	}
 
 	@Bean
-	Queue pickCrawling() {
-		return new Queue(QUEUE.PICK_CRAWLING, false);
+	public List<Queue> queues() {
+		return Arrays.asList(
+			new Queue(QUEUE.LINK_RANKING, false),
+			new Queue(QUEUE.LINK_UPDATE, false),
+			new Queue(QUEUE.SLACK_NOTIFICATION, false)
+		);
 	}
 
 	@Bean
-	Queue slackNotification() {
-		return new Queue(QUEUE.SLACK_NOTIFICATION, false);
-	}
-
-
-	/**
-	 * 3. 큐와 DirectExchange를 바인딩 */
-	@Bean
-	Binding rankingDirectBinding(DirectExchange directExchange, Queue pickRanking) {
-		return BindingBuilder
-			.bind(pickRanking)
-			.to(directExchange)
-			.with("ranking"); // directExchange 에 ranking 라우팅 키를 가진 메시지가 있으면 pickRanking 큐에 메시지 전달
-	}
-
-	@Bean
-	Binding crawlingDirectBinding(DirectExchange directExchange, Queue pickCrawling) {
-		return BindingBuilder
-			.bind(pickCrawling)
-			.to(directExchange)
-			.with("crawling");
-	}
-
-	@Bean
-	Binding slackNotificationBinding(DirectExchange directExchange, Queue slackNotification) {
-		return BindingBuilder
-			.bind(slackNotification)
-			.to(directExchange)
-			.with("slack");
+	List<Binding> bindings() {
+		return Arrays.asList(
+			// -------- ranking queue
+			new Binding(
+				QUEUE.LINK_RANKING, Binding.DestinationType.QUEUE,
+				EXCHANGE.NAME, QUEUE.PICK_RANKING_KEY1, null
+			),
+			new Binding(
+				QUEUE.LINK_RANKING, Binding.DestinationType.QUEUE,
+				EXCHANGE.NAME, QUEUE.PICK_RANKING_KEY2, null
+			),
+			// -------- link analyze queue
+			new Binding(
+				QUEUE.LINK_UPDATE, Binding.DestinationType.QUEUE,
+				EXCHANGE.NAME, QUEUE.LINK_UPDATE_KEY, null
+			),
+			// -------- slack notification queue
+			new Binding(
+				QUEUE.SLACK_NOTIFICATION, Binding.DestinationType.QUEUE,
+				EXCHANGE.NAME, QUEUE.SLACK_NOTIFICATION_KEY, null
+			)
+		);
 	}
 
 	/**
