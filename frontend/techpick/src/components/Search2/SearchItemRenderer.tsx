@@ -8,8 +8,6 @@ import type { CSSProperties } from 'react';
 import { CurrentPathIndicator } from '../FolderContentHeader/CurrentPathIndicator';
 import * as styles from './searchItemRenderer.css';
 
-// TODO: 미분류폴더와 휴지통 폴더를 어떻게 구분하지?
-// => 검색 데이터로 redirect 시키자!
 export default function SearchItemRenderer({
   item,
   index,
@@ -31,14 +29,7 @@ export default function SearchItemRenderer({
   const handleClick = () => {
     onClose();
 
-    let targetLocation = '';
-    switch (folderInfo?.folderType) {
-      case 'RECYCLE_BIN':
-        targetLocation = 'recycle-bin';
-        break;
-      case 'GENERAL':
-        targetLocation = folderInfo?.id.toString();
-    }
+    const targetLocation = item.parentFolderId;
     /**
      * @description
      */
