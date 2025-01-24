@@ -1,7 +1,9 @@
 'use client';
-
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
-import { usePathname } from 'next/navigation';
+import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
+import { useFetchFolders } from '@/queries/useFetchFolders';
+import type { FolderIdType } from '@/types/FolderIdType';
+import { getBasicFolderInfoByFolderId } from '@/utils/getBasicFolderInfoByFolderId';
+import { getFolderInfoByFolderId } from '@/utils/getFolderInfoByFolderId';
 import { ChromeExtensionLinkButton } from '../ChromeExtensionLinkButton/ChromeExtensionLinkButton';
 import { Gap } from '../Gap';
 import { CurrentFolderNameSection } from './CurrentFolderNameSection';
@@ -13,10 +15,14 @@ import {
   folderDescriptionStyle,
 } from './folderContentHeader.css';
 
-export function FolderContentHeader() {
-  const pathname = usePathname();
-  const { getFolderInfoByPathname } = useTreeStore();
-  const folderInfo = getFolderInfoByPathname(pathname);
+export function FolderContentHeader({ folderId }: FolderContentHeaderProps) {
+  const { data: basicFolderRecord } = useFetchBasicFolders();
+  const { data: folderRecord } = useFetchFolders();
+  const folderInfo =
+    getFolderInfoByFolderId({
+      folderId,
+      folderRecord,
+    }) ?? getBasicFolderInfoByFolderId({ folderId, basicFolderRecord });
 
   return (
     <div className={folderContentHeaderLayoutStyle}>
@@ -24,11 +30,9 @@ export function FolderContentHeader() {
         <div className={folderContentHeaderStyle}>
           <div className={folderDescriptionStyle}>
             <CurrentFolderNameSection folderInfo={folderInfo} />
-            {folderInfo?.folderType === 'GENERAL' && (
-              <Gap verticalSize="gap4">
-                <CurrentPathIndicator folderInfo={folderInfo} />
-              </Gap>
-            )}
+            <Gap verticalSize="gap4">
+              <CurrentPathIndicator folderInfo={folderInfo} />
+            </Gap>
           </div>
 
           <div className={createPickPopoverButtonLayoutStyle}>
@@ -40,4 +44,8 @@ export function FolderContentHeader() {
       </Gap>
     </div>
   );
+}
+
+interface FolderContentHeaderProps {
+  folderId: FolderIdType;
 }

@@ -3,41 +3,25 @@ import type { FolderDraggableObjectType } from '@/types/FolderDraggableObjectTyp
 export const isFolderDraggableObject = (
   data: unknown,
 ): data is FolderDraggableObjectType => {
-  if (!data || typeof data !== 'object') {
+  if (
+    !data ||
+    typeof data !== 'object' ||
+    !('id' in data) ||
+    !('type' in data && data.type === 'folder') ||
+    !('sortable' in data)
+  ) {
     return false;
   }
 
-  if ('id' in data === false) {
-    return false;
-  }
+  const { sortable } = data as { sortable: unknown };
 
-  if (!('type' in data && data.type === 'folder')) {
-    return false;
-  }
-
-  if ('sortable' in data === false) {
-    return false;
-  }
-
-  const { sortable } = data;
-
-  if (!sortable || typeof sortable !== 'object') {
-    return false;
-  }
-
-  if ('containerId' in sortable === false) {
-    return false;
-  }
-
-  if ('items' in sortable === false) {
-    return false;
-  }
-
-  if (!Array.isArray(sortable.items)) {
-    return false;
-  }
-
-  if ('index' in sortable === false) {
+  if (
+    !sortable ||
+    typeof sortable !== 'object' ||
+    !('containerId' in sortable) ||
+    !('items' in sortable && Array.isArray(sortable.items)) ||
+    !('index' in sortable)
+  ) {
     return false;
   }
 

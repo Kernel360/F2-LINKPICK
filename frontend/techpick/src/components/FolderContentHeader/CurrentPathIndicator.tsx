@@ -1,8 +1,8 @@
 'use client';
-
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { ROUTES } from '@/constants/route';
+import { useFetchFolders } from '@/queries/useFetchFolders';
 import type { FolderType } from '@/types/FolderType';
-import { getFolderLinkByType } from '@/utils/getFolderLinkByType';
+import { getAncestorFolderListFromLeaf } from '@/utils/getAncestorFolderListFromLeaf';
 import Link from 'next/link';
 import {
   Breadcrumb,
@@ -17,39 +17,45 @@ import {
   breadcrumbLinkStyle,
 } from './currentPathIndicator.css';
 
+/**
+ * CurrentPathIndicator는 휴지통과 미분류에서는 보이지 않습니다.
+ */
 export function CurrentPathIndicator({
   folderInfo,
 }: CurrentPathIndicatorProps) {
-  const getAncestorFolderListFromLeaf = useTreeStore(
-    (state) => state.getAncestorFolderListFromLeaf,
-  );
-  const ancestorFolderList = getAncestorFolderListFromLeaf(folderInfo);
+  const { data: folderRecord } = useFetchFolders();
+  const ancestorFolderList = getAncestorFolderListFromLeaf({
+    leaf: folderInfo,
+    folderRecord: folderRecord,
+  });
 
   return (
     <div>
       <Breadcrumb>
         <BreadcrumbList>
           {ancestorFolderList.map((folderInfo, index) => {
-            return (
-              <div key={folderInfo.id} className={breadcrumbItemLayout}>
-                {index !== 0 && <BreadcrumbSeparator />}
-                <BreadcrumbItem className={breadcrumbItemStyle}>
-                  {folderInfo.folderType === 'ROOT' ? (
-                    '내 폴더'
-                  ) : (
-                    <BreadcrumbLink className={breadcrumbLinkStyle} asChild>
-                      <Link href={getFolderLinkByType(folderInfo)}>
-                        {folderInfo.folderType === 'RECYCLE_BIN'
-                          ? '휴지통'
-                          : folderInfo.folderType === 'UNCLASSIFIED'
-                            ? '미분류'
-                            : folderInfo.name}
-                      </Link>
-                    </BreadcrumbLink>
-                  )}
-                </BreadcrumbItem>
-              </div>
-            );
+            if (
+              folderInfo.folderType === 'GENERAL' ||
+              folderInfo.folderType === 'ROOT'
+            ) {
+              return (
+                <div key={folderInfo.id} className={breadcrumbItemLayout}>
+                  {index !== 0 && <BreadcrumbSeparator />}
+                  <BreadcrumbItem className={breadcrumbItemStyle}>
+                    {folderInfo.folderType === 'GENERAL' && (
+                      <BreadcrumbLink className={breadcrumbLinkStyle} asChild>
+                        <Link href={ROUTES.FOLDER_DETAIL(folderInfo.id)}>
+                          {folderInfo.name}
+                        </Link>
+                      </BreadcrumbLink>
+                    )}
+                    {folderInfo.folderType === 'ROOT' && '내 폴더'}
+                  </BreadcrumbItem>
+                </div>
+              );
+            }
+
+            return null;
           })}
         </BreadcrumbList>
       </Breadcrumb>
@@ -58,5 +64,5 @@ export function CurrentPathIndicator({
 }
 
 interface CurrentPathIndicatorProps {
-  folderInfo: FolderType | null;
+  folderInfo: FolderType | null | undefined;
 }

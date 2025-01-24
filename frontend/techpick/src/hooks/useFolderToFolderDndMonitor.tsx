@@ -1,6 +1,9 @@
 'use client';
 
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { useFetchFolders } from '@/queries/useFetchFolders';
+import { useMoveFolders } from '@/queries/useMoveFolders';
+import { useFolderStore } from '@/stores/folderStore';
+import { getFolderInfoByFolderId } from '@/utils/getFolderInfoByFolderId';
 import { isFolderDraggableObject } from '@/utils/isFolderDraggableObject';
 import { useDndMonitor } from '@dnd-kit/core';
 import type {
@@ -14,14 +17,14 @@ import type {
  */
 export function useFolderToFolderDndMonitor() {
   const {
-    getFolderInfoByFolderId,
-    moveFolder,
     selectedFolderList,
     setSelectedFolderList,
-    setFocusFolderId,
     setIsDragging,
     setDraggingFolderInfo,
-  } = useTreeStore();
+  } = useFolderStore();
+  const { mutateAsync: moveFolders } = useMoveFolders();
+  const { data: folderRecord } = useFetchFolders();
+  const syncMoveFolderState = useFolderStore((state) => state.moveFolder);
 
   const onDragStart = (event: DragStartEvent) => {
     const { active } = event;
@@ -30,21 +33,13 @@ export function useFolderToFolderDndMonitor() {
     if (!isFolderDraggableObject(activeObject)) return;
 
     const folderId = Number(activeObject.id);
-    const folderInfo = getFolderInfoByFolderId(folderId);
+    const folderInfo = getFolderInfoByFolderId({ folderId, folderRecord });
 
     if (!folderInfo) return;
 
     setIsDragging(true);
     setDraggingFolderInfo(folderInfo);
-
-    if (!selectedFolderList.includes(folderId)) {
-      setFocusFolderId(folderId);
-      setSelectedFolderList([folderId]);
-
-      return;
-    }
-
-    setFocusFolderId(folderId);
+    setSelectedFolderList([folderId]);
   };
 
   const onDragOver = (event: DragOverEvent) => {
@@ -67,10 +62,22 @@ export function useFolderToFolderDndMonitor() {
       return;
     }
 
-    moveFolder({
-      from: active,
-      to: over,
-      selectedFolderList,
+    syncMoveFolderState({
+      fromId: Number(activeData.id),
+      toId: Number(overData.id),
+      destinationFolderId: Number(overData.sortable.containerId),
+      parentFolderId: Number(activeData.sortable.containerId),
+      orderIdx: overData.sortable.index,
+      idList: selectedFolderList,
+    });
+
+    moveFolders({
+      fromId: Number(activeData.id),
+      toId: Number(overData.id),
+      destinationFolderId: Number(overData.sortable.containerId),
+      parentFolderId: Number(activeData.sortable.containerId),
+      orderIdx: overData.sortable.index,
+      idList: selectedFolderList,
     });
   };
 
@@ -89,10 +96,22 @@ export function useFolderToFolderDndMonitor() {
       return;
     }
 
-    await moveFolder({
-      from: active,
-      to: over,
-      selectedFolderList,
+    syncMoveFolderState({
+      fromId: Number(activeData.id),
+      toId: Number(overData.id),
+      destinationFolderId: Number(overData.sortable.containerId),
+      parentFolderId: Number(activeData.sortable.containerId),
+      orderIdx: overData.sortable.index,
+      idList: selectedFolderList,
+    });
+
+    await moveFolders({
+      fromId: Number(activeData.id),
+      toId: Number(overData.id),
+      destinationFolderId: Number(overData.sortable.containerId),
+      parentFolderId: Number(activeData.sortable.containerId),
+      orderIdx: overData.sortable.index,
+      idList: selectedFolderList,
     });
 
     const selectedListLastFolderId =

@@ -3,8 +3,8 @@
 import { ROUTES } from '@/constants/route';
 import { useGetDndContextSensor } from '@/hooks/useGetDndContextSensor';
 import { pointerWithinWithClosestCenter } from '@/utils/pointerWithinWithClosestCenter';
-import { DndContext } from '@dnd-kit/core';
 import { pointerWithin } from '@dnd-kit/core';
+import { DndContext } from '@dnd-kit/core';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import type { PropsWithChildren } from 'react';
