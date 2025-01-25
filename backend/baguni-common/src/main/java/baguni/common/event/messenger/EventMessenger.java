@@ -18,7 +18,7 @@ public class EventMessenger {
 
 	public void send(Event event) {
 		try {
-			rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE.NAME, event.getTopic(), event);
+			rabbitTemplate.convertAndSend(RabbitmqConfig.EXCHANGE.NAME, event.getTopicString(), event);
 		} catch (AmqpException e) {
 			log.error(e.getMessage(), e);
 		}
