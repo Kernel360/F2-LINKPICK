@@ -35,7 +35,8 @@ public class ErrorLogEventBuilder {
 		eventMessenger.send(event);
 	}
 
-	public void sendSlackMessage(ApiException e, HttpStatus httpStatus) {
+	public void sendSlackMessage(ApiException e) {
+		var httpStatus = e.getApiErrorCode().getHttpStatus();
 		CachedHttpServletRequest request = requestHolder.getRequest();
 		ErrorLogEvent event = new ErrorLogEvent(e.getClass().getCanonicalName(), e.getApiErrorCode().getMessage(),
 			request.getRequestURI(), request.getMethod(), request.getRemoteAddr(),

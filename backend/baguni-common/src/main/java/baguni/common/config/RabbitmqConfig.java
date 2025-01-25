@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * @see
  * <a href="https://docs.spring.io/spring-amqp/docs/1.5.1.RELEASE/reference/htmlsingle/#collection-declaration">
@@ -21,6 +23,7 @@ import org.springframework.context.annotation.Configuration;
  * </a>
  */
 @Configuration
+@RequiredArgsConstructor
 public class RabbitmqConfig {
 
 	public static final class EXCHANGE {
@@ -32,6 +35,8 @@ public class RabbitmqConfig {
 		public static final String LINK_UPDATE = "queue.link-analyze";
 		public static final String SLACK_NOTIFICATION = "queue.slack-notification";
 	}
+
+	private final RabbitmqCustomErrorHandler rabbitmqCustomErrorHandler;
 
 	@Value("${spring.application.name}")
 	private String appName;
@@ -76,6 +81,7 @@ public class RabbitmqConfig {
 			BindingBuilder.bind(linkRanking()).to(exchange()).with("bookmark.create"),
 			BindingBuilder.bind(linkRanking()).to(exchange()).with("link.read"),
 			// link update
+			BindingBuilder.bind(linkUpdate()).to(exchange()).with("bookmark.create"),
 			BindingBuilder.bind(linkUpdate()).to(exchange()).with("link.*"),
 			// slack notify
 			BindingBuilder.bind(slackNotification()).to(exchange()).with("log.*")
@@ -142,11 +148,12 @@ public class RabbitmqConfig {
 		containerFactory.setConnectionFactory(cachingConnectionFactory);
 		containerFactory.setDefaultRequeueRejected(false); // 그냥 바로 폐기
 		containerFactory.setMessageConverter(messageConverter());
+		containerFactory.setErrorHandler(rabbitmqCustomErrorHandler);
 		return containerFactory;
 	}
 
 	/**
-	 * 6. 구성한 ConnectionFactory, MessageConverter를 통해 템플릿 구성
+	 * 구성한 ConnectionFactory, MessageConverter를 통해 템플릿 구성
 	 */
 	@Bean
 	RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
