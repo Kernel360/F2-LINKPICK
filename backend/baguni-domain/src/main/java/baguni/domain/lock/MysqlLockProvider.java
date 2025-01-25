@@ -35,6 +35,8 @@ public class MysqlLockProvider implements LockProvider {
 		String lockKey = userId + "";
 		Boolean result = jdbcTemplate.queryForObject(sql, Boolean.class, lockKey);
 		if (!Boolean.TRUE.equals(result)) {
+			String connectionId = "SELECT CONNECTION_ID()";
+			log.error("락 해제 실패, sessionId : {}", connectionId);
 			throw new LockException("락 해제 실패 : " + lockKey);
 		}
 	}
