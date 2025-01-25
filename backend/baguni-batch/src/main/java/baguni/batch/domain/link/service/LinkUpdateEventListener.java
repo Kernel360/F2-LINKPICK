@@ -9,7 +9,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import baguni.common.config.RabbitmqConfig;
-import baguni.common.event.events.LinkReadEvent;
+import baguni.common.event.events.UrlEvent;
 import baguni.domain.infrastructure.link.dto.LinkResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class LinkUpdateEventListener {
 	private final LinkService linkService;
 
 	@RabbitHandler
-	public void crawlingEvent(LinkReadEvent event) {
+	public void doLinkUpdate(UrlEvent event) {
 		LinkResult link = linkService.getLinkResultByUrl(event.getUrl());
 		long lastUpdatedDays = ChronoUnit.DAYS.between(link.updatedAt().toLocalDate(), LocalDate.now());
 
@@ -39,5 +39,13 @@ public class LinkUpdateEventListener {
 		) {
 			linkService.analyzeAndUpdateLink(link.url());
 		}
+	}
+
+	/**
+	 * 매핑되지 않은 이벤트
+	 */
+	@RabbitHandler(isDefault = true)
+	public void defaultMethod(Object object) {
+		log.error("일치하는 이벤트 타입이 없습니다! {}", object.toString());
 	}
 }
