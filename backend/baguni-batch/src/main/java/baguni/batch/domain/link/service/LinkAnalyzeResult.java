@@ -7,7 +7,7 @@ public record LinkAnalyzeResult(
 	String imageUrl,
 	String title,
 	String description,
-	String publishedAt,
-	String publisher // 링크 작성자
+	String publishedAt
+	// Link Analyzer 가 고도화 됨에 따라 정보가 추가될 예정 입니다.
 ) {
 }
