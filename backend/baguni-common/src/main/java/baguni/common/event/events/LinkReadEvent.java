@@ -4,15 +4,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 import lombok.Getter;
 
-@Getter
-public class LinkReadEvent extends Event {
+/**
+ * DB의 맄그 가 조회(Read) 됨을 의미하는 메시지.
+ */
+public class LinkReadEvent extends UrlEvent {
 
-	private static final String TOPIC = "link.read";
-	private final String url;
+	private static final Topic topic = new Topic("link.read");
 
 	@JsonCreator
 	public LinkReadEvent(String url) {
-		super(TOPIC);
-		this.url = url;
+		super(topic, url);
 	}
 }

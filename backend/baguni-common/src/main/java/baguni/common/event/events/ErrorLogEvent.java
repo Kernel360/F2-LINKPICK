@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class ErrorLogEvent extends Event {
 
-	private static final String TOPIC = "log.error";
+	private static final Topic topic = new Topic("log.error");
 
 	private final String exceptionClass; // Exception 종류
 	private final String exceptionMessage; // 예외 메세지
@@ -24,7 +24,7 @@ public class ErrorLogEvent extends Event {
 		String exceptionClass, String exceptionMessage, String requestUri, String requestMethod,
 		String requestAddress, String profile, int httpStatusCode, String httpStatusMessage
 	) {
-		super(TOPIC);
+		super(topic);
 		this.exceptionClass = exceptionClass;
 		this.exceptionMessage = exceptionMessage;
 		this.requestUri = requestUri;
