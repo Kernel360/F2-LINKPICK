@@ -3,6 +3,8 @@ package baguni.common.event.events;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
 import lombok.Getter;
 
 /**
@@ -12,6 +14,7 @@ import lombok.Getter;
 @Getter
 public abstract class Event {
 
+	@JsonUnwrapped
 	private final Topic topic;
 
 	/** 이벤트가 발생한 시각 */
