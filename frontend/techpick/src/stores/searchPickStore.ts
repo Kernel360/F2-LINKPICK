@@ -1,4 +1,4 @@
-import { getPickListByQueryParam } from '@/apis/pick/getPicks';
+import { getPickListByQueryParam } from '@/apis/pick/getPickListByQueryParam';
 import type { PickListType } from '@/types/PickListType';
 import { create } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';

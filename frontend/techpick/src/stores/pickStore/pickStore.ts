@@ -1,7 +1,7 @@
 import { createPick } from '@/apis/pick/createPick';
 import { deletePicks } from '@/apis/pick/deletePicks';
-import { getPicksByFolderId } from '@/apis/pick/getPicks';
-import { getPickListByQueryParam } from '@/apis/pick/getPicks';
+import { getPickListByQueryParam } from '@/apis/pick/getPickListByQueryParam';
+import { getPickRecordByFolderId } from '@/apis/pick/getPickRecordByFolderId';
 import { movePicks } from '@/apis/pick/movePicks';
 import { updatePick } from '@/apis/pick/updatePick';
 import type { PickInfoType } from '@/types/PickInfoType';
@@ -51,7 +51,7 @@ export const usePickStore = create<PickState & PickAction>()(
 
         try {
           const { pickInfoRecord, pickIdOrderedList } =
-            await getPicksByFolderId(folderId);
+            await getPickRecordByFolderId(folderId);
 
           set((state) => {
             state.pickRecord[folderId] = {
