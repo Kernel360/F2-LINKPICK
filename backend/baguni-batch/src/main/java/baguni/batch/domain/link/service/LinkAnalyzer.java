@@ -30,11 +30,6 @@ public class LinkAnalyzer {
 		this.openGraphReader = openGraphReader;
 	}
 
-	/**
-	 *	Jsoup 또는 Selenium 이용하여 크롤링
-	 *	현재는 Selenium 사용하도록 되어 있음.
-	 *  Jsoup, Selenium 둘 다 사용하고 싶으면 @Qualifier 사용
-	 */
 	public LinkAnalyzeResult analyze(String url) {
 		try {
 			var openGraph = new OpenGraph(url, openGraphReader);
