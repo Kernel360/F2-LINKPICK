@@ -2,12 +2,15 @@ package baguni.common.event.events;
 
 import org.apache.commons.lang3.StringUtils;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Topic {
 
-	private final String topicString;
+	private String topicString;
 
 	public Topic(String topic) {
 		if (StringUtils.isBlank(topic)) {

@@ -2,15 +2,19 @@ package baguni.common.event.events;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
+import lombok.Getter;
+
 /**
  * DB의 북마크(픽) 가 생성됨을 의미하는 메시지.
  */
-public class BookmarkCreateEvent extends UrlEvent {
+@Getter
+public class BookmarkCreateEvent extends Event {
 
-	private static final Topic topic = new Topic("bookmark.create");
+	private final String url;
 
 	@JsonCreator
 	public BookmarkCreateEvent(String url) {
-		super(topic, url);
+		super(new Topic("bookmark.create"));
+		this.url = url;
 	}
 }

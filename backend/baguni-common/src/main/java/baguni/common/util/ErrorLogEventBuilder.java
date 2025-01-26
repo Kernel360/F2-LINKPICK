@@ -22,28 +22,52 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ErrorLogEventBuilder {
 
-	private final RequestHolder requestHolder;
 	private final Environment environment; // Profile 정보 얻기 위한 클래스
 
-	public ErrorLogEvent buildWithException(Exception e, HttpStatus status) {
-		var request = requestHolder.getRequest();
+	public ErrorLogEvent buildWithException(Exception e) {
+		return new ErrorLogEvent(
+			e.getClass().getCanonicalName(),
+			e.getMessage(),
+			null, null, null,
+			Arrays.toString(environment.getActiveProfiles()),
+			0, null
+		);
+	}
 
+	public ErrorLogEvent buildWithException(
+		Exception e,
+		CachedHttpServletRequest request,
+		HttpStatus responseStatus
+	) {
 		return new ErrorLogEvent(
 			e.getClass().getCanonicalName(),
 			e.getMessage(),
 			request.getRequestURI(),
 			request.getMethod(),
 			request.getRemoteAddr(),
+			Arrays.toString(environment.getActiveProfiles()),
+			responseStatus.value(),
+			responseStatus.name()
+		);
+	}
+
+	public ErrorLogEvent buildWithApiException(ApiException e) {
+		var status = e.getApiErrorCode().getHttpStatus();
+		return new ErrorLogEvent(
+			e.getClass().getCanonicalName(),
+			e.getMessage(),
+			null, null, null,
 			Arrays.toString(environment.getActiveProfiles()),
 			status.value(),
 			status.name()
 		);
 	}
 
-	public ErrorLogEvent buildWithApiException(ApiException e) {
-		var request = requestHolder.getRequest();
+	public ErrorLogEvent buildWithApiException(
+		ApiException e,
+		CachedHttpServletRequest request
+	) {
 		var status = e.getApiErrorCode().getHttpStatus();
-
 		return new ErrorLogEvent(
 			e.getClass().getCanonicalName(),
 			e.getMessage(),
@@ -54,6 +78,5 @@ public class ErrorLogEventBuilder {
 			status.value(),
 			status.name()
 		);
-
 	}
 }

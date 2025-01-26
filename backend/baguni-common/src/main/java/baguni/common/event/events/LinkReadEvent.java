@@ -7,12 +7,14 @@ import lombok.Getter;
 /**
  * DB의 맄그 가 조회(Read) 됨을 의미하는 메시지.
  */
-public class LinkReadEvent extends UrlEvent {
+@Getter
+public class LinkReadEvent extends Event {
 
-	private static final Topic topic = new Topic("link.read");
+	private final String url;
 
 	@JsonCreator
 	public LinkReadEvent(String url) {
-		super(topic, url);
+		super(new Topic("link.read"));
+		this.url = url;
 	}
 }
