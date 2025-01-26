@@ -7,7 +7,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import baguni.common.exception.level.FatalErrorLevel;
+import baguni.common.event.messenger.EventMessenger;
 import baguni.common.util.ErrorLogEventBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +21,7 @@ public class ApiExceptionHandler {
 
 	private final RequestHolder requestHolder;
 	private final ErrorLogEventBuilder errorLogEventBuilder;
+	private final EventMessenger eventMessenger;
 
 	/**
 	 * ApiException 에서 잡지 못한 예외는
@@ -29,7 +30,10 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ApiErrorResponse handleGlobalException(Exception exception) {
 		ErrorLevel.MUST_NEVER_HAPPEN().handleError(exception, requestHolder.getRequest());
-		errorLogEventBuilder.sendSlackMessage(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+
+		var errLogMessage = errorLogEventBuilder.buildWithException(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+		eventMessenger.send(errLogMessage);
+
 		return ApiErrorResponse.UNKNOWN_SERVER_ERROR();
 	}
 
@@ -39,9 +43,10 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(ApiException.class)
 	public ApiErrorResponse handleApiException(ApiException exception) {
 		ApiErrorCode apiErrorCode = exception.getApiErrorCode();
-		ErrorLevel errorLevel = apiErrorCode.getErrorLevel();
-		if (errorLevel instanceof FatalErrorLevel) {
-			errorLogEventBuilder.sendSlackMessage(exception, apiErrorCode.getHttpStatus());
+
+		if (exception.isFatal()) {
+			var errLogMessage = errorLogEventBuilder.buildWithApiException(exception);
+			eventMessenger.send(errLogMessage);
 		}
 
 		exception.handleErrorByLevel(requestHolder.getRequest());
