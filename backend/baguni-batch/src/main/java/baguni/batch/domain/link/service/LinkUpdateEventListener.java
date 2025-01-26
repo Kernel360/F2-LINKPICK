@@ -68,7 +68,7 @@ public class LinkUpdateEventListener {
 	private void doLinkUpdate(LinkResult oldLink) {
 		var prevUpdatedDate = oldLink.updatedAt().toLocalDate();
 		var daysPassedSinceLastUpdate = ChronoUnit.DAYS.between(prevUpdatedDate, LocalDate.now());
-		log.info("링크를 최신화한지 {}일 경과하여 업데이트 미수행", daysPassedSinceLastUpdate);
+		log.info("링크를 최신화한지 {}일 경과", daysPassedSinceLastUpdate);
 
 		if (
 			StringUtils.isEmpty(oldLink.imageUrl())
