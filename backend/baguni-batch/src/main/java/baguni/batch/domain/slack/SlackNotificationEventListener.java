@@ -1,4 +1,4 @@
-package baguni.common.event.listener;
+package baguni.batch.domain.slack;
 
 import java.io.IOException;
 import java.util.Arrays;

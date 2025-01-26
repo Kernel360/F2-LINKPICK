@@ -11,8 +11,8 @@ import baguni.batch.domain.link.service.RssFeedApi;
 import baguni.batch.domain.rss.dto.RssFeed;
 import baguni.batch.infrastructure.rss.RssBlogDataHandler;
 import baguni.common.annotation.MeasureTime;
-import baguni.common.event.events.LinkCrawlingEvent;
-import baguni.common.event.messenger.CrawlingEventMessenger;
+import baguni.common.event.events.LinkCreateEvent;
+import baguni.common.event.messenger.EventMessenger;
 import baguni.domain.infrastructure.link.LinkDataHandler;
 import baguni.domain.model.link.Link;
 import baguni.domain.model.rss.RssBlog;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RssFeedService {
 
-	private final CrawlingEventMessenger crawlingEventMessenger;
+	private final EventMessenger eventMessenger;
 	private final RssBlogDataHandler rssBlogDataHandler;
 	private final LinkDataHandler linkDataHandler;
 	private final RssFeedApi rssFeedApi;
@@ -68,6 +68,6 @@ public class RssFeedService {
 			link = Link.createRssLink(article.getLink(), article.getTitle(), null);
 		}
 		linkDataHandler.saveLink(link);
-		crawlingEventMessenger.send(new LinkCrawlingEvent(article.getLink()));
+		eventMessenger.send(new LinkCreateEvent(article.getLink()));
 	}
 }

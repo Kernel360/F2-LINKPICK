@@ -1,5 +1,7 @@
 package baguni.common.exception.base;
 
+import baguni.common.exception.level.FatalErrorLevel;
+import baguni.common.exception.level.WarningErrorLevel;
 import baguni.common.util.CachedHttpServletRequest;
 
 public abstract class ApiException extends RuntimeException {
@@ -17,5 +19,13 @@ public abstract class ApiException extends RuntimeException {
 
 	public final void handleErrorByLevel(CachedHttpServletRequest request) {
 		errorCode.getErrorLevel().handleError(this, request);
+	}
+
+	public final boolean isFatal() {
+		return (this.errorCode.getErrorLevel() instanceof FatalErrorLevel);
+	}
+
+	public final boolean isWarning() {
+		return (this.errorCode.getErrorLevel() instanceof WarningErrorLevel);
 	}
 }
