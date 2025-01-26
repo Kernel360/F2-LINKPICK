@@ -12,7 +12,7 @@ export const getPickListByFolderId = async (folderId: FolderIdType) => {
     );
     const data = await response.json();
 
-    return data;
+    return data[0].pickList;
   } catch (httpError) {
     if (httpError instanceof HTTPError) {
       const error = await returnErrorFromHTTPError(httpError);
