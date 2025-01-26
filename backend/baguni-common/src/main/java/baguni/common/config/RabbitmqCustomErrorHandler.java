@@ -29,7 +29,7 @@ public class RabbitmqCustomErrorHandler extends ConditionalRejectingErrorHandler
 	private EventMessenger eventMessenger;
 
 	/**
-	 * Lazy Injection
+	 * Lazy Injection (후추 @Lazy를 지울 수 있도록 변경 필요)
 	 */
 	@Autowired
 	public void setEventMessenger(@Lazy EventMessenger eventMessenger) {
