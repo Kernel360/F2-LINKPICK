@@ -6,19 +6,15 @@ import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import baguni.common.event.events.BookmarkCreateEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.common.config.RabbitmqConfig;
-import baguni.common.event.events.PickViewEvent;
-import baguni.common.event.events.PickCreateEvent;
-import baguni.common.event.events.SharedFolderLinkViewEvent;
-import baguni.common.event.events.SuggestionViewEvent;
+import baguni.common.event.events.LinkReadEvent;
 import baguni.ranking.infra.pick.LinkPickedCount;
 import baguni.ranking.infra.pick.LinkPickedCountRepository;
 import baguni.ranking.infra.pick.LinkViewCount;
 import baguni.ranking.infra.pick.LinkViewCountRepository;
-import baguni.ranking.infra.sharedFolder.SharedFolderPickViewCount;
-import baguni.ranking.infra.sharedFolder.SharedFolderPickViewCountRepository;
 
 /**
  * @author minkyeu kim
@@ -28,23 +24,20 @@ import baguni.ranking.infra.sharedFolder.SharedFolderPickViewCountRepository;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@RabbitListener(queues = {RabbitmqConfig.QUEUE.PICK_RANKING})
+@RabbitListener(queues = {RabbitmqConfig.QUEUE.LINK_RANKING})
 public class RankingEventListener {
 
 	private final LinkViewCountRepository linkViewCountRepository;
 	private final LinkPickedCountRepository linkPickedCountRepository;
-	private final SharedFolderPickViewCountRepository sharedFolderPickViewCountRepository;
 
 	/**
 	 * 사용자의 북마크 생성 이벤트 집계
 	 */
 	@RabbitHandler
-	public void pickCreateEvent(PickCreateEvent event) {
-		log.info("픽 생성 이벤트 수신 {}", event);
+	public void bookmarkCreateEvent(BookmarkCreateEvent event) {
+		log.info("북마크 생성 이벤트 수신 {}", event);
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
-		var pickId = event.getPickId(); // unused
-		var userId = event.getUserId(); // unused
 		updateLinkPickedCount(date, url);
 	}
 
@@ -52,39 +45,10 @@ public class RankingEventListener {
 	 * 사용자의 북마크 조회 이벤트 집계
 	 */
 	@RabbitHandler
-	public void pickViewEvent(PickViewEvent event) {
-		log.info("픽 조회 이벤트 수신 {}", event);
+	public void linkReadEvent(LinkReadEvent event) {
+		log.info("링크 조회 이벤트 수신 {}", event);
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
-		var pickId = event.getPickId(); // unused
-		var userId = event.getUserId(); // unused
-		updateLinkViewCount(date, url);
-	}
-
-	/**
-	 * 공개 폴더 이벤트 집계
-	 *  1. 공유 폴더별 링크(url)에 대한 날별 집계 - 마이페이지에서 폴더 공유자가 확인
-	 *  2. 공유 폴더의 픽 조회도 전체 링크 조회에 포함시켜 집계.
-	 */
-	@RabbitHandler
-	public void sharedFolderViewEvent(SharedFolderLinkViewEvent event) {
-		log.info("공유 폴더 내 픽 조회 이벤트 수신 {}", event);
-		var date = event.getTime().toLocalDate();
-		var url = event.getUrl();
-		var folderAccessToken = event.getFolderAccessToken();
-		updateSharedFolderViewCount(date, url, folderAccessToken);
-		updateLinkViewCount(date, url);
-	}
-
-	/**
-	 *  추천 페이지 에서 추천된 링크 클릭 이벤트 집계
-	 */
-	@RabbitHandler
-	public void suggestionViewEvent(SuggestionViewEvent event) {
-		log.info("추천 페이지 내 픽 조회 이벤트 수신 {}", event);
-		var date = event.getTime().toLocalDate();
-		var url = event.getUrl();
-		var userId = event.getUserId(); // unused
 		updateLinkViewCount(date, url);
 	}
 
@@ -98,7 +62,6 @@ public class RankingEventListener {
 
 	/**
 	 * 헬퍼 함수
-	 * TODO: 다른 클래스나 서비스로 분리 리팩토링 진행
 	 */
 	private void updateLinkViewCount(LocalDate date, String url) {
 		var linkViewCount = linkViewCountRepository
@@ -114,13 +77,5 @@ public class RankingEventListener {
 			.orElseGet(() -> new LinkPickedCount(date, url));
 		linkPickedCount.incrementCount();
 		linkPickedCountRepository.save(linkPickedCount);
-	}
-
-	private void updateSharedFolderViewCount(LocalDate date, String url, String folderAccessToken) {
-		var sharedFolderLinkViewCount = sharedFolderPickViewCountRepository
-			.findSharedFolderPickViewCountByDateAndUrl(date, url)
-			.orElseGet(() -> new SharedFolderPickViewCount(date, url, folderAccessToken));
-		sharedFolderLinkViewCount.incrementCount();
-		sharedFolderPickViewCountRepository.save(sharedFolderLinkViewCount);
 	}
 }

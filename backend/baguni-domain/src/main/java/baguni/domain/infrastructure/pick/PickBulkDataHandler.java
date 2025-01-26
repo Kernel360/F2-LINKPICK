@@ -33,7 +33,6 @@ public class PickBulkDataHandler {
 									 .title(linkInfo.title())
 									 .description(linkInfo.description())
 									 .imageUrl(linkInfo.imageUrl())
-									 .invalidatedAt(linkInfo.invalidatedAt())
 									 .build();
 								 return linkRepository.save(link);
 							 });

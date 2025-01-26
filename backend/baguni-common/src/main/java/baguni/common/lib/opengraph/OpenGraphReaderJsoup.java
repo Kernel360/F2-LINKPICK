@@ -13,6 +13,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
 /**
  * @author minkyeu kim
@@ -21,6 +22,7 @@ import org.jsoup.select.Elements;
  * 필요한 부분만 파싱 하는 방식으로 개선이 필요합니다.
  * TODO: 추후 HttpClient 말고 RestClient로 리팩토링
  */
+@Component("jsoup")
 public class OpenGraphReaderJsoup implements OpenGraphReader {
 
 	private final OpenGraphOption openGraphOption;

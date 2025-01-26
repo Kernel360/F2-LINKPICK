@@ -1,1 +1,1 @@
-export interface ChildFolderListType extends Array<number> {}
+export type ChildFolderListType = number[];

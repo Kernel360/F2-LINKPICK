@@ -113,8 +113,8 @@ public class PickQuery {
 				pick.link.url,
 				pick.link.title,
 				pick.link.description,
-				pick.link.imageUrl,
-				pick.link.invalidatedAt),
+				pick.link.imageUrl
+			),
 			pick.parentFolder.id,
 			pick.tagIdOrderedList,
 			pick.createdAt,

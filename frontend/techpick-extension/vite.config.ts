@@ -1,11 +1,11 @@
-import { defineConfig, loadEnv } from 'vite';
-import react from '@vitejs/plugin-react';
-import { resolve } from 'path';
-import { PluginOption } from 'vite';
+import fs from 'node:fs';
+import { resolve } from 'node:path';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import fs from 'fs';
+import react from '@vitejs/plugin-react';
+import { defineConfig, loadEnv } from 'vite';
+import type { PluginOption } from 'vite';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 function updateManifestPlugin(mode: string): PluginOption {
   const env = loadEnv(mode, process.cwd());
@@ -15,7 +15,7 @@ function updateManifestPlugin(mode: string): PluginOption {
     generateBundle() {
       const manifestPath = resolve(
         __dirname,
-        'src/chrome-extension/manifest.json'
+        'src/chrome-extension/manifest.json',
       );
       const outManifestPath = resolve(__dirname, 'dist/manifest.json');
 

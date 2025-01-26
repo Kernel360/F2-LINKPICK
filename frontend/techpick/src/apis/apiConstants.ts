@@ -42,6 +42,7 @@ export const API_URLS = {
   GET_PICK_BY_URL: (url: string) =>
     `${API_ENDPOINTS.PICKS}/link-v2?link=${url}`,
   SHARE_FOLDER: API_ENDPOINTS.SHARED,
+  GET_SHARE_FOLDER: API_ENDPOINTS.SHARED,
   GET_SHARED_FOLER_BY_UUID: (uuid: string) => `${API_ENDPOINTS.SHARED}/${uuid}`,
   DELETE_SHARED_FOLER_BY_FOLDER_ID: (sourceFolderId: number) =>
     `${API_ENDPOINTS.SHARED}/${sourceFolderId}`,

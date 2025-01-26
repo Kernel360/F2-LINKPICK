@@ -12,7 +12,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
-import baguni.domain.infrastructure.ranking.RankingApi;
+import baguni.api.service.ranking.service.RankingApi;
 
 /**
  * 외부 서버와 통신하는 것을 Http Interface 방식으로 사용하기 위한 설정. <br>

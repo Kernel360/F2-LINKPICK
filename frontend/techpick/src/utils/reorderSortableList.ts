@@ -4,12 +4,21 @@ import type { SelectedPickIdListType } from '@/types/SelectedPickIdListType';
 import type { UniqueIdentifier } from '@dnd-kit/core';
 import { hasIndex } from './hasIndex';
 
+/**
+ * 배열을 재배치해주는 함수입니다.
+ *
+ * @param sortableIdList 정렬의 대상의 되는 리스트입니다.
+ * @param fromId 이동하는 목록의 기준점입니다.
+ * @param toId 이동할 곳입니다. [1,2,3,4,5] 에서 2를 4로 옮긴다면 4가 해당 값입니다.
+ * @param selectedFolderList 이동 목록입니다.
+ *
+ */
 export const reorderSortableIdList = ({
   sortableIdList,
   fromId,
   toId,
   selectedFolderList,
-}: ReorderSortableIdListPayload) => {
+}: ReorderSortableIdListParams) => {
   const curIndex = sortableIdList.findIndex((item) => item === fromId);
   const targetIndex = sortableIdList.findIndex((item) => item === toId);
 
@@ -37,8 +46,8 @@ export const reorderSortableIdList = ({
   return newSortableIdList;
 };
 
-interface ReorderSortableIdListPayload {
-  sortableIdList: ChildFolderListType | number[];
+interface ReorderSortableIdListParams {
+  sortableIdList: ChildFolderListType;
   fromId: UniqueIdentifier;
   toId: UniqueIdentifier;
   selectedFolderList: SelectedFolderListType | SelectedPickIdListType;

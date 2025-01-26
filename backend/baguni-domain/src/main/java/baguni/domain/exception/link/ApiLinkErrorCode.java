@@ -24,6 +24,9 @@ public enum ApiLinkErrorCode implements ApiErrorCode {
 
 	LINK_URL_TOO_LONG
 		("LI-004", HttpStatus.URI_TOO_LONG, "저장 가능한 URL 길이 초과 [< 2048]", ErrorLevel.CAN_HAPPEN()),
+
+	LINK_ANALYZE_FAILURE
+		("LI-005", HttpStatus.URI_TOO_LONG, "링크 분석에 실패했습니다", ErrorLevel.CAN_HAPPEN()),
 	;
 
 	// ------------------------------------------------------------

@@ -1,7 +1,6 @@
 'use client';
 
 import { createPick } from '@/apis/pick/createPick';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { useDraggingRecommendPickStore } from '@/stores/draggingRecommendPickStore';
 import { usePickStore } from '@/stores/pickStore/pickStore';
 import { isPickToFolderDroppableObject } from '@/utils/isPickToFolderDroppableObject';
@@ -19,7 +18,6 @@ import { useEventLogger } from './useEventLogger';
  * @description 추천 목록에서 folder로 dnd를 할 때의 이벤트를 감지하고 동작하는 hook입니다.
  */
 export function useRecommendPickToFolderDndMonitor() {
-  const { setHoverFolderId } = useTreeStore();
   const { insertPickInfo } = usePickStore();
   const { setIsDragging, setDraggingPickInfo } =
     useDraggingRecommendPickStore();
@@ -51,14 +49,9 @@ export function useRecommendPickToFolderDndMonitor() {
       !isPickToFolderDroppableObject(overObject)
     )
       return;
-
-    const currentHoverFolderId = Number(overObject.id);
-    setHoverFolderId(currentHoverFolderId);
   };
 
   const onDragEnd = async (event: DragEndEvent) => {
-    setHoverFolderId(null);
-
     const { active, over } = event;
     if (!over) return; // 드래그 중 놓은 위치가 없을 때 종료
 

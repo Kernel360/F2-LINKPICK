@@ -1,5 +1,5 @@
+import { useFetchFolderList } from '@/queries/useFetchFolderList';
 import { useFetchTagList } from '@/queries/useFetchTagList';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import { createSearchSelectOptions } from '@/utils/createSearchSelectOptions';
 import { FolderIcon, Tags } from 'lucide-react';
@@ -10,8 +10,7 @@ import * as styles from './searchDialog.css';
 export default function FilterContainer({
   setIsSelectMenuOpen,
 }: FilterContainerProps) {
-  const { getFolderList } = useTreeStore();
-  const folderList = getFolderList();
+  const { data: folderList = [] } = useFetchFolderList();
   const { setSearchFolder, setSearchTag } = useSearchPickStore();
   const { data: tagList = [] } = useFetchTagList();
   const [isFolderFilterOpen, setIsFolderFilterOpen] = useState(false);

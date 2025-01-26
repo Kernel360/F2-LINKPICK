@@ -1,7 +1,5 @@
 package baguni.domain.infrastructure.link.dto;
 
-import java.time.LocalDateTime;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
@@ -10,8 +8,7 @@ public record LinkInfo(
 	) @NotNull String url,
 	@Schema(example = "[Java] Record 사용하시나요?") String title,
 	@Schema(example = "IntelliJ : 레코드 써봐") String description,
-	@Schema(example = "https://velog.velcdn.com/images/hyeok_1212/post/5ea148fb-1490-4b03-811e-222b4d26b65e/image.png") String imageUrl,
-	@Schema(example = "2024-10-19T10:46:30.035Z") LocalDateTime invalidatedAt
+	@Schema(example = "https://velog.velcdn.com/images/hyeok_1212/post/5ea148fb-1490-4b03-811e-222b4d26b65e/image.png") String imageUrl
 ) {
 }
 

@@ -16,16 +16,8 @@ public class ApiLinkException extends ApiException {
 		return new ApiLinkException(ApiLinkErrorCode.LINK_NOT_FOUND);
 	}
 
-	public static ApiLinkException LINK_HAS_PICKS() {
-		return new ApiLinkException(ApiLinkErrorCode.LINK_HAS_PICKS);
-	}
-
-	public static ApiLinkException LINK_ALREADY_EXISTS() {
-		return new ApiLinkException(ApiLinkErrorCode.LINK_ALREADY_EXIST);
-	}
-
-	public static ApiLinkException LINK_OG_TAG_UPDATE_FAILURE() {
-		return new ApiLinkException(ApiLinkErrorCode.LINK_OG_TAG_UPDATE_FAILURE);
+	public static ApiLinkException LINK_ANALYZE_FAILURE() {
+		return new ApiLinkException(ApiLinkErrorCode.LINK_ANALYZE_FAILURE);
 	}
 
 	public static ApiLinkException LINK_URL_TOO_LONG() {

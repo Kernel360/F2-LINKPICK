@@ -8,7 +8,6 @@ public record LinkResult(
 	String title,
 	String description,
 	String imageUrl,
-	LocalDateTime updatedAt,
-	LocalDateTime invalidatedAt
+	LocalDateTime updatedAt
 ) {
 }

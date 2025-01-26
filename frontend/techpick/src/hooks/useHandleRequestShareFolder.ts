@@ -1,19 +1,22 @@
-import { deleteMyShareFolder } from '@/apis/folder/deleteShareFolder';
-import { shareFolder } from '@/apis/folder/shareFolder';
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+'use client';
+import { useCancelFolderShare } from '@/queries/useCancelFolderShare';
+import { useFetchFolders } from '@/queries/useFetchFolders';
+import { useShareFolder } from '@/queries/useShareFolder';
+import { checkIsSharedFolder } from '@/utils/checkIsSharedFolder';
 import { notifySuccess } from '@/utils/toast';
 import { useState } from 'react';
 import { useDisclosure } from './useDisclosure';
 
 export default function useHandleRequestShareFolder(folderId: number) {
-  const { checkIsShareFolder, updateFolderAccessTokenByFolderId } =
-    useTreeStore();
   const {
     isOpen: isOpenShareDialog,
     onOpen: onOpenShareDialog,
     onClose: onCloseShareDialog,
   } = useDisclosure();
-  const isShareFolder = checkIsShareFolder(folderId);
+  const { data: folderRecord } = useFetchFolders();
+  const isShareFolder = checkIsSharedFolder({ folderId, folderRecord });
+  const { mutateAsync: shareFolder } = useShareFolder();
+  const { mutateAsync: cancelFolerShare } = useCancelFolderShare();
   const [uuid, setUuid] = useState<string>('');
 
   /**
@@ -23,11 +26,6 @@ export default function useHandleRequestShareFolder(folderId: number) {
     const response = await shareFolder(folderId);
     onOpenShareDialog();
     setUuid(response.folderAccessToken);
-    /**
-     * @question 상태를 일치시키기 위해 사용했는데 전체적으로 리팩토링이 필요할 거 같습니다..
-     * 리뷰 부탁드립니다.
-     */
-    updateFolderAccessTokenByFolderId(folderId, response.folderAccessToken);
 
     return () => {
       setUuid('');
@@ -38,13 +36,8 @@ export default function useHandleRequestShareFolder(folderId: number) {
    * @description delete 폴더 공유 요청
    * */
   async function deleteShareFolder() {
-    await deleteMyShareFolder(folderId);
+    await cancelFolerShare(folderId);
     notifySuccess('폴더가 비공개되었습니다.');
-    /**
-     * @question 상태를 일치시키기 위해 사용했는데 전체적으로 리팩토링이 필요할 거 같습니다..
-     * 리뷰 부탁드립니다.
-     */
-    updateFolderAccessTokenByFolderId(folderId, null);
   }
   return {
     uuid,

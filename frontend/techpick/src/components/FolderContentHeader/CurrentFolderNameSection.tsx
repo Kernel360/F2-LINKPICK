@@ -29,5 +29,5 @@ export function CurrentFolderNameSection({
 }
 
 interface CurrentFolderNameSectionProps {
-  folderInfo: FolderType | null;
+  folderInfo: FolderType | null | undefined;
 }

@@ -1,3 +1,5 @@
+'use client';
+
 import { useLayoutEffect, useState } from 'react';
 
 type ImageStatus = 'loading' | 'loaded' | 'error';

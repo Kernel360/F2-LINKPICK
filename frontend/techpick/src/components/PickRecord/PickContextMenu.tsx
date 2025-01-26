@@ -1,6 +1,6 @@
 'use client';
 
-import { useTreeStore } from '@/stores/dndTreeStore/dndTreeStore';
+import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
 import { usePickStore } from '@/stores/pickStore/pickStore';
 import type { PickInfoType } from '@/types/PickInfoType';
 import { getPortalContainer } from '@/utils/portal';
@@ -24,11 +24,9 @@ const PickContextMenu = memo(
     children,
   }: PropsWithChildren<PickContextMenuProps>) {
     const portalContainer = getPortalContainer();
-    const { basicFolderMap } = useTreeStore();
+    const { data: basicFolderRecord } = useFetchBasicFolders();
 
-    const recycleBinFolderId = basicFolderMap
-      ? basicFolderMap.RECYCLE_BIN.id
-      : -1;
+    const recycleBinFolderId = basicFolderRecord?.RECYCLE_BIN.id;
     const isRecycleBinFolder = recycleBinFolderId === pickInfo.parentFolderId;
     const {
       selectedPickIdList,
@@ -74,10 +72,12 @@ const PickContextMenu = memo(
             ) : (
               <ContextMenu.Item
                 onSelect={() => {
-                  moveSelectedPicksToRecycleBinFolder({
-                    picksParentFolderId: pickInfo.parentFolderId,
-                    recycleBinFolderId,
-                  });
+                  if (recycleBinFolderId) {
+                    moveSelectedPicksToRecycleBinFolder({
+                      picksParentFolderId: pickInfo.parentFolderId,
+                      recycleBinFolderId,
+                    });
+                  }
                 }}
                 className={contextMenuItemStyle}
               >
