@@ -33,14 +33,9 @@ export function BookmarkPage() {
     function onLoad() {
       const fetchInitialData = async () => {
         const { title, url, favIconUrl } = await getCurrentTabInfo();
+        const imageUrl = favIconUrl ?? '';
 
-        if (
-          !title ||
-          !url ||
-          !favIconUrl ||
-          url.trim() === '' ||
-          !url.startsWith('http')
-        ) {
+        if (!title || !url || url.trim() === '' || !url.startsWith('http')) {
           notifyError('해당 url은 저장할 수 없습니다.');
           return;
         }
@@ -69,10 +64,11 @@ export function BookmarkPage() {
         notifySuccess('미분류 폴더에 북마크가 추가되었습니다!', {
           duration: 800,
         });
+
         setFolderInfoList([...filteredFolderInfoList]);
         setTagList(fetchedTagList);
         setPickInfo(createdPickInfo);
-        setImageUrl(favIconUrl);
+        setImageUrl(imageUrl);
         setIsLoading(false);
       };
 
