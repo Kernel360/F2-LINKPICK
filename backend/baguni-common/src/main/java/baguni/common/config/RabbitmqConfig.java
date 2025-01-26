@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * @see
  * <a href="https://docs.spring.io/spring-amqp/docs/1.5.1.RELEASE/reference/htmlsingle/#collection-declaration">
@@ -23,7 +21,6 @@ import lombok.RequiredArgsConstructor;
  * </a>
  */
 @Configuration
-@RequiredArgsConstructor
 public class RabbitmqConfig {
 
 	public static final class EXCHANGE {
@@ -35,8 +32,6 @@ public class RabbitmqConfig {
 		public static final String LINK_UPDATE = "queue.link-analyze";
 		public static final String SLACK_NOTIFICATION = "queue.slack-notification";
 	}
-
-	private final RabbitmqCustomErrorHandler rabbitmqCustomErrorHandler;
 
 	@Value("${spring.application.name}")
 	private String appName;
@@ -142,7 +137,8 @@ public class RabbitmqConfig {
 	 */
 	@Bean
 	public SimpleRabbitListenerContainerFactory rabbitListenerContainerFactory(
-		CachingConnectionFactory cachingConnectionFactory
+		CachingConnectionFactory cachingConnectionFactory,
+		RabbitmqCustomErrorHandler rabbitmqCustomErrorHandler
 	) {
 		var containerFactory = new SimpleRabbitListenerContainerFactory();
 		containerFactory.setConnectionFactory(cachingConnectionFactory);
