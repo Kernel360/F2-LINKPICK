@@ -9,7 +9,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 import baguni.common.config.RabbitmqConfig;
-import baguni.common.event.events.UrlEvent;
+import baguni.common.event.events.BookmarkCreateEvent;
+import baguni.common.event.events.LinkCreateEvent;
+import baguni.common.event.events.LinkReadEvent;
 import baguni.domain.infrastructure.link.dto.LinkResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,18 +29,30 @@ public class LinkUpdateEventListener {
 
 	private final LinkService linkService;
 
-	@RabbitHandler
-	public void doLinkUpdate(UrlEvent event) {
-		LinkResult link = linkService.getLinkResultByUrl(event.getUrl());
-		long lastUpdatedDays = ChronoUnit.DAYS.between(link.updatedAt().toLocalDate(), LocalDate.now());
+	/**
+	 * TODO: Url 필드를 가진 부모 클래스를 상속 받는 방식으로 타입 개선
+	 * ex. public void consumeMessage( UrlEvent ev ) { ... };
+	 */
 
-		if (
-			StringUtils.isEmpty(link.imageUrl())
-				|| StringUtils.isEmpty(link.description())
-				|| (90 <= lastUpdatedDays)
-		) {
-			linkService.analyzeAndUpdateLink(link.url());
-		}
+	@RabbitHandler
+	public void consumeMessage(LinkCreateEvent ev) {
+		log.info("메시지 dequeue : topic {}, url {}", ev.getTopicString(), ev);
+		LinkResult link = linkService.getLinkResultByUrl(ev.getUrl());
+		doLinkUpdate(link);
+	}
+
+	@RabbitHandler
+	public void consumeMessage(LinkReadEvent ev) {
+		log.info("메시지 dequeue : topic {}, url {}", ev.getTopicString(), ev);
+		LinkResult link = linkService.getLinkResultByUrl(ev.getUrl());
+		doLinkUpdate(link);
+	}
+
+	@RabbitHandler
+	public void consumeMessage(BookmarkCreateEvent ev) {
+		log.info("메시지 dequeue : topic {}, url {}", ev.getTopicString(), ev);
+		LinkResult link = linkService.getLinkResultByUrl(ev.getUrl());
+		doLinkUpdate(link);
 	}
 
 	/**
@@ -47,5 +61,21 @@ public class LinkUpdateEventListener {
 	@RabbitHandler(isDefault = true)
 	public void defaultMethod(Object object) {
 		log.error("일치하는 이벤트 타입이 없습니다! {}", object.toString());
+	}
+
+	// Internal helper method ----------------------------
+
+	private void doLinkUpdate(LinkResult oldLink) {
+		var prevUpdatedDate = oldLink.updatedAt().toLocalDate();
+		var daysPassedSinceLastUpdate = ChronoUnit.DAYS.between(prevUpdatedDate, LocalDate.now());
+		log.info("링크를 최신화한지 {}일 경과하여 업데이트 미수행", daysPassedSinceLastUpdate);
+
+		if (
+			StringUtils.isEmpty(oldLink.imageUrl())
+				|| StringUtils.isEmpty(oldLink.description())
+				|| (90 <= daysPassedSinceLastUpdate)
+		) {
+			linkService.analyzeAndUpdateLink(oldLink.url());
+		}
 	}
 }

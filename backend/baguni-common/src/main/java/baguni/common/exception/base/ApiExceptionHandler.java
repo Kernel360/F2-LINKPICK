@@ -31,7 +31,11 @@ public class ApiExceptionHandler {
 	public ApiErrorResponse handleGlobalException(Exception exception) {
 		ErrorLevel.MUST_NEVER_HAPPEN().handleError(exception, requestHolder.getRequest());
 
-		var errLogMessage = errorLogEventBuilder.buildWithException(exception, HttpStatus.INTERNAL_SERVER_ERROR);
+		var errLogMessage = errorLogEventBuilder.buildWithException(
+			exception,
+			requestHolder.getRequest(),
+			HttpStatus.INTERNAL_SERVER_ERROR
+		);
 		eventMessenger.send(errLogMessage);
 
 		return ApiErrorResponse.UNKNOWN_SERVER_ERROR();
@@ -45,7 +49,10 @@ public class ApiExceptionHandler {
 		ApiErrorCode apiErrorCode = exception.getApiErrorCode();
 
 		if (exception.isFatal()) {
-			var errLogMessage = errorLogEventBuilder.buildWithApiException(exception);
+			var errLogMessage = errorLogEventBuilder.buildWithApiException(
+				exception,
+				requestHolder.getRequest()
+			);
 			eventMessenger.send(errLogMessage);
 		}
 
