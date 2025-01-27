@@ -1,5 +1,8 @@
 package baguni.api.application.link.controller;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import baguni.common.annotation.MeasureTime;
+import baguni.common.lib.opengraph.OpenGraph;
+import baguni.common.lib.opengraph.OpenGraphException;
+import baguni.common.lib.opengraph.OpenGraphOption;
+import baguni.common.lib.opengraph.OpenGraphReaderJsoup;
 import baguni.domain.infrastructure.link.dto.LinkInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -36,9 +43,10 @@ public class LinkApiController {
 
 	public ResponseEntity<LinkApiResponse> getLinkData(
 		@Parameter(description = "og 태그 데이터 가져올 url") @RequestParam String url
-	) {
+	) throws URISyntaxException, OpenGraphException {
 		// Selenium 사용하도록 변경
 		LinkInfo linkInfo = linkService.getLinkInfo(url);
+		new OpenGraph(url, new OpenGraphReaderJsoup(new OpenGraphOption(10)));
 		var response = linkApiMapper.toLinkResponse(linkInfo);
 		return ResponseEntity.ok(response);
 	}
