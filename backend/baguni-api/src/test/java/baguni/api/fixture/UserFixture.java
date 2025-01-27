@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import baguni.domain.model.user.SocialProvider;
+import baguni.domain.model.util.IDToken;
 import lombok.Builder;
 import lombok.Getter;
 import baguni.domain.model.user.Role;
@@ -32,18 +33,19 @@ public class UserFixture {
 
 	private String socialProviderId;
 
-	private LocalDateTime deletedAt;
-
 	private List<Long> tagOrderList;
 
 	private LocalDateTime createdAt;
 
 	private LocalDateTime updatedAt;
 
+	private IDToken idToken;
+
 	public User get() {
 		if (tagOrderList == null) {
 			tagOrderList = new ArrayList<>();
 		}
+		idToken = IDToken.makeNew();
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.convertValue(this, User.class);
 	}

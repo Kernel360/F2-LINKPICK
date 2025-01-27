@@ -1,4 +1,4 @@
-package baguni.api.domain.folder.service;
+package baguni.api.service.folder.service;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -17,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import baguni.api.service.folder.service.FolderService;
+import baguni.domain.model.util.IDToken;
 import jakarta.persistence.OptimisticLockException;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
@@ -33,6 +34,7 @@ import baguni.domain.infrastructure.user.UserRepository;
 @Slf4j
 @SpringBootTest(classes = BaguniApiApplication.class)
 @ActiveProfiles("local")
+@DisplayName("폴더 서비스 - 통합 테스트")
 class FolderServiceTest {
 
 	@Autowired
@@ -63,6 +65,7 @@ class FolderServiceTest {
 				.socialProvider(SocialProvider.KAKAO)
 				.socialProviderId("1")
 				.tagOrderList(new ArrayList<>())
+				.idToken(IDToken.makeNew())
 				.build()
 		);
 

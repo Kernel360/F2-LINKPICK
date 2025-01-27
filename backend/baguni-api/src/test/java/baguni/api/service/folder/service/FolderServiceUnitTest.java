@@ -1,4 +1,4 @@
-package baguni.api.domain.folder.service;
+package baguni.api.service.folder.service;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,12 +23,12 @@ import baguni.api.fixture.FolderFixture;
 import baguni.api.fixture.UserFixture;
 import baguni.domain.infrastructure.folder.FolderDataHandler;
 import baguni.domain.infrastructure.pick.PickDataHandler;
+import baguni.domain.infrastructure.sharedFolder.SharedFolderDataHandler;
 import baguni.domain.model.folder.Folder;
 import baguni.domain.model.folder.FolderType;
 import baguni.domain.model.user.User;
-import baguni.api.service.folder.service.FolderService;
 
-@DisplayName("폴더 서비스 단위 테스트")
+@DisplayName("폴더 서비스 - 단위 테스트")
 @ExtendWith(MockitoExtension.class)
 class FolderServiceUnitTest {
 
@@ -40,6 +40,9 @@ class FolderServiceUnitTest {
 
 	@Mock
 	private PickDataHandler pickDataHandler;
+
+	@Mock
+	private SharedFolderDataHandler sharedFolderDataHandler;
 
 	@InjectMocks
 	private FolderService folderService;
@@ -602,6 +605,7 @@ class FolderServiceUnitTest {
 		assertEquals(ApiFolderErrorCode.FOLDER_ACCESS_DENIED, exception.getApiErrorCode());
 
 		then(folderDataHandler).should(times(1)).getFolderList(any());
+		then(sharedFolderDataHandler).should(atLeast(1)).deleteBySourceFolderId(anyLong());
 		then(folderDataHandler).should(never()).getFolderListByUserId(any());
 		then(pickDataHandler).should(never()).movePickListToRecycleBin(anyLong(), any());
 		then(folderDataHandler).should(never()).deleteFolderList(any());
@@ -668,6 +672,7 @@ class FolderServiceUnitTest {
 		assertEquals(ApiFolderErrorCode.BASIC_FOLDER_CANNOT_CHANGED, exception.getApiErrorCode());
 
 		then(folderDataHandler).should(times(1)).getFolderList(any());
+		then(sharedFolderDataHandler).should(atLeast(1)).deleteBySourceFolderId(anyLong());
 		then(folderDataHandler).should(never()).getFolderListByUserId(any());
 		then(pickDataHandler).should(never()).movePickListToRecycleBin(anyLong(), any());
 		then(folderDataHandler).should(never()).deleteFolderList(any());
@@ -701,6 +706,7 @@ class FolderServiceUnitTest {
 		assertEquals(ApiFolderErrorCode.BASIC_FOLDER_CANNOT_CHANGED, exception.getApiErrorCode());
 
 		then(folderDataHandler).should(times(1)).getFolderList(any());
+		then(sharedFolderDataHandler).should(atLeast(1)).deleteBySourceFolderId(anyLong());
 		then(folderDataHandler).should(never()).getFolderListByUserId(any());
 		then(pickDataHandler).should(never()).movePickListToRecycleBin(anyLong(), any());
 		then(folderDataHandler).should(never()).deleteFolderList(any());
@@ -766,11 +772,86 @@ class FolderServiceUnitTest {
 		//then
 		ArgumentCaptor<List<Long>> pickIdListCaptor = ArgumentCaptor.forClass(List.class);
 		then(pickDataHandler).should(times(1)).movePickListToRecycleBin(anyLong(), pickIdListCaptor.capture());
+		then(sharedFolderDataHandler).should(atLeast(1)).deleteBySourceFolderId(anyLong());
 		then(folderDataHandler).should(times(1)).getFolderList(any());
 		then(folderDataHandler).should(times(1)).getFolderListByUserId(any());
 		then(folderDataHandler).should(times(1)).deleteFolderList(any());
 
 		List<Long> targetPickIdList = pickIdListCaptor.getValue();
 		assertThat(targetPickIdList).containsExactlyInAnyOrder(1L, 2L, 5L, 6L);
+	}
+
+	@Test
+	@DisplayName("루트 폴더 리스트 조회")
+	void root_folder_test() {
+		// given
+		Long userId = 1L;
+		User user = UserFixture
+			.builder().id(userId).build().get();
+		Folder rootFolder = FolderFixture
+			.builder()
+			.id(1L)
+			.user(user)
+			.folderType(FolderType.ROOT)
+			.childFolderIdOrderedList(new ArrayList<>())
+			.childPickIdOrderedList(new ArrayList<>())
+			.build()
+			.get();
+
+		given(folderDataHandler.getRootFolder(any())).willReturn(rootFolder);
+
+		// when
+		folderService.getAllRootFolderList(userId);
+
+		// then
+		then(folderMapper).should(times(1)).toResult(rootFolder);
+	}
+
+	@Test
+	@DisplayName("기본 폴더 리스트 조회")
+	void basic_folder_test() {
+		// given
+		Long userId = 1L;
+		User user = UserFixture
+			.builder().id(userId).build().get();
+		Folder root = FolderFixture
+			.builder()
+			.id(1L)
+			.user(user)
+			.folderType(FolderType.ROOT)
+			.childFolderIdOrderedList(new ArrayList<>())
+			.childPickIdOrderedList(new ArrayList<>())
+			.build()
+			.get();
+		Folder unclassified = FolderFixture
+			.builder()
+			.id(2L)
+			.user(user)
+			.folderType(FolderType.GENERAL)
+			.childFolderIdOrderedList(new ArrayList<>())
+			.childPickIdOrderedList(new ArrayList<>())
+			.build()
+			.get();
+		Folder recycleBin = FolderFixture
+			.builder()
+			.id(3L)
+			.user(user)
+			.folderType(FolderType.RECYCLE_BIN)
+			.childFolderIdOrderedList(new ArrayList<>())
+			.childPickIdOrderedList(new ArrayList<>())
+			.build()
+			.get();
+
+		given(folderDataHandler.getRootFolder(any())).willReturn(root);
+		given(folderDataHandler.getUnclassifiedFolder(any())).willReturn(unclassified);
+		given(folderDataHandler.getRecycleBin(any())).willReturn(recycleBin);
+
+		// when
+		folderService.getBasicFolderList(userId);
+
+		// then
+		then(folderMapper).should(times(1)).toResult(root);
+		then(folderMapper).should(times(1)).toResult(unclassified);
+		then(folderMapper).should(times(1)).toResult(recycleBin);
 	}
 }

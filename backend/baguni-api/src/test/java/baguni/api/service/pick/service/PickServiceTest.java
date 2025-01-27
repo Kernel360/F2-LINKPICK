@@ -1,9 +1,12 @@
-package baguni.api.domain.pick.service;
+package baguni.api.service.pick.service;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -14,13 +17,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
 import baguni.api.service.pick.service.PickService;
+import baguni.api.service.ranking.dto.RankingResult;
+import baguni.api.service.ranking.service.RankingService;
+import baguni.common.dto.UrlWithCount;
+import baguni.domain.exception.folder.ApiFolderException;
+import baguni.domain.exception.tag.ApiTagException;
 import baguni.domain.model.user.SocialProvider;
+import baguni.domain.model.util.IDToken;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
 import baguni.api.application.pick.dto.PickApiMapper;
@@ -46,6 +57,7 @@ import baguni.domain.infrastructure.user.UserRepository;
 @Slf4j
 @SpringBootTest(classes = BaguniApiApplication.class)
 @ActiveProfiles("local")
+@DisplayName("픽 서비스 - 통합 테스트")
 class PickServiceTest {
 
 	@Autowired
@@ -56,18 +68,20 @@ class PickServiceTest {
 	TagService tagService;
 	@Autowired
 	PickApiMapper pickApiMapper;
+	@Autowired UserRepository userRepository;
+	@Autowired FolderRepository folderRepository;
+	@Autowired TagRepository tagRepository;
 
-	User user;
+	@MockBean
+	private RankingService rankingService;
+
+	User user, user2;
 	Folder root, recycleBin, unclassified, general;
-	Tag tag1, tag2, tag3;
+	Tag tag1, tag2, tag3, tag4;
 
 	@BeforeEach
 		// TODO: change to Adaptor
-	void setUp(
-		@Autowired UserRepository userRepository,
-		@Autowired FolderRepository folderRepository,
-		@Autowired TagRepository tagRepository
-	) {
+	void setUp() {
 		// save test user
 		user = userRepository.save(
 			User
@@ -79,6 +93,7 @@ class PickServiceTest {
 				.socialProvider(SocialProvider.KAKAO)
 				.socialProviderId("1")
 				.tagOrderList(new ArrayList<>())
+				.idToken(IDToken.makeNew())
 				.build()
 		);
 
@@ -100,7 +115,6 @@ class PickServiceTest {
 	@AfterEach
 		// TODO: change to Adaptor (repository 말고!)
 	void cleanUp(
-		@Autowired UserRepository userRepository,
 		@Autowired FolderRepository folderRepository,
 		@Autowired TagRepository tagRepository,
 		@Autowired PickRepository pickRepository,
@@ -110,7 +124,6 @@ class PickServiceTest {
 		// NOTE: 제거 순서 역시 FK 제약 조건을 신경써야 한다.
 		pickTagRepository.deleteAll();
 		pickRepository.deleteAll();
-		userRepository.deleteAll(); // TODO: soft delete 이라 DB를 직접 비워야 한다.
 		folderRepository.deleteAll();
 		tagRepository.deleteAll();
 		linkRepository.deleteAll();
@@ -125,7 +138,7 @@ class PickServiceTest {
 			""")
 		void pick_save_and_read_test() {
 			// given
-			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl");
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command = new PickCommand.Create(
 				user.getId(), "PICK", tagOrder, unclassified.getId(), linkInfo
@@ -144,11 +157,11 @@ class PickServiceTest {
 		@DisplayName("폴더 리스트 id가 넘어오면, 각 폴더 내부에 있는 픽 리스트들을 조회한다.")
 		void folder_list_in_pick_list_test() {
 			// given
-			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
-			LinkInfo linkInfo2 = new LinkInfo("linkUrl2", "linkTitle", "linkDescription", "imageUrl", null);
-			LinkInfo linkInfo3 = new LinkInfo("linkUrl3", "linkTitle", "linkDescription", "imageUrl", null);
-			LinkInfo linkInfo4 = new LinkInfo("linkUrl4", "linkTitle", "linkDescription", "imageUrl", null);
-			LinkInfo linkInfo5 = new LinkInfo("linkUrl5", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl");
+			LinkInfo linkInfo2 = new LinkInfo("linkUrl2", "linkTitle", "linkDescription", "imageUrl");
+			LinkInfo linkInfo3 = new LinkInfo("linkUrl3", "linkTitle", "linkDescription", "imageUrl");
+			LinkInfo linkInfo4 = new LinkInfo("linkUrl4", "linkTitle", "linkDescription", "imageUrl");
+			LinkInfo linkInfo5 = new LinkInfo("linkUrl5", "linkTitle", "linkDescription", "imageUrl");
 
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
@@ -184,16 +197,32 @@ class PickServiceTest {
 			assertThat(folderPickList.get(1).pickList().size()).isEqualTo(1); // general
 			assertThat(folderPickList.get(2).pickList().size()).isEqualTo(1); // recycleBin
 		}
-	}
 
-	@Nested
-	@DisplayName("픽 생성")
-	class savePick {
 		@Test
-		@DisplayName("이미 픽한 링크에 대해 중복으로 픽한 경우, 실패해야 한다.")
-		void create_duplicate_pick_test() {
+		@DisplayName("픽 리스트에 조회수가 포함되어 반환된다.")
+		void folder_list_in_folder_list_test() {
 			// given
-			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl");
+			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
+				recycleBin.getId(), linkInfo1);
+			pickService.saveNewPick(command1);
+			List<Long> folderIdList = List.of(unclassified.getId(), general.getId(), recycleBin.getId());
+			PickCommand.ReadList readListCommand = pickApiMapper.toReadListCommand(user.getId(), folderIdList);
+
+			List<UrlWithCount> urlWithCountList = List.of(new UrlWithCount("linkUrl1", 100L));
+
+			// when
+			when(rankingService.getUrlRanking(10)).thenThrow(new RuntimeException("Ranking server is down"));
+			List<PickResult.FolderPickWithViewCountList> folderPickList = pickService.getFolderListChildPickList(
+				readListCommand);
+		}
+
+		@Test
+		@DisplayName("픽이 존재하는지 확인한다.")
+		void pick_exist_test() {
+			// given
+			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl");
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command = new PickCommand.Create(
 				user.getId(), "PICK", tagOrder, unclassified.getId(), linkInfo
@@ -201,21 +230,47 @@ class PickServiceTest {
 
 			// when
 			pickService.saveNewPick(command);
+			boolean existPickTrue = pickService.existPickByUrl(user.getId(), linkInfo.url());
+			boolean existPickFalse = pickService.existPickByUrl(user.getId(), "");
 
 			// then
-			assertThatThrownBy(() -> pickService.saveNewPick(command))
-				.isInstanceOf(ApiPickException.class)
-				.hasMessageStartingWith(ApiPickException.PICK_MUST_BE_UNIQUE_FOR_A_URL().getMessage());
+			assertThat(existPickTrue).isTrue();
+			assertThat(existPickFalse).isFalse();
 		}
+
+		@Test
+		@DisplayName("조회 시, 본인 픽이 아닌 경우 예외 발생")
+		void pick_owner_test() {
+			// given
+			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl");
+			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
+			createUser2AndTag4();
+			PickCommand.Create command = new PickCommand.Create(
+				user.getId(), "PICK", tagOrder, unclassified.getId(), linkInfo
+			);
+			PickResult.Pick pick = pickService.saveNewPick(command);
+
+			PickCommand.Read read = new PickCommand.Read(user2.getId(), pick.id());
+
+			// when, then
+			assertThatThrownBy(() -> pickService.getPick(read))
+				.isInstanceOf(ApiPickException.class)
+				.hasMessageStartingWith(ApiPickException.PICK_UNAUTHORIZED_USER_ACCESS().getMessage());
+		}
+	}
+
+	@Nested
+	@DisplayName("픽 생성")
+	class savePick {
 
 		@Test
 		@DisplayName("루트에 픽을 저장하는 경우, 실패해야 한다. - 루트는 폴더만 위치할 수 있다.")
 		void create_root_pick_test() {
 			// given
-			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl");
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command = new PickCommand.Create(
-				user.getId(), "PICK", tagOrder, null, linkInfo
+				user.getId(), "PICK", tagOrder, root.getId(), linkInfo
 			);
 
 			// when, then
@@ -225,49 +280,36 @@ class PickServiceTest {
 		}
 
 		@Test
-		@DirtiesContext
-		@DisplayName("""
-			    동시적으로 Pick 생성 요청이 들어올 경우, 하나만 생성되고 나머지는 실패해야 한다.
-			""")
-		void create_multiple_pick_concurrent_test() throws InterruptedException {
+		@DisplayName("픽 생성 시, 본인의 태그만 넣을 수 있어야 한다. 아니면 예외 발생")
+		void create_pick_owner_tag_test() {
 			// given
-			int threadCount = 10;
-			ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-			CountDownLatch countDownLatch = new CountDownLatch(threadCount);
+			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl");
+			createUser2AndTag4();
+			List<Long> tagOrder = List.of(tag4.getId());
+			PickCommand.Create command = new PickCommand.Create(
+				user.getId(), "PICK", tagOrder, unclassified.getId(), linkInfo
+			);
 
-			AtomicInteger successCount = new AtomicInteger();
-			AtomicInteger failCount = new AtomicInteger();
+			// when, then
+			assertThatThrownBy(() -> pickService.saveNewPick(command))
+				.isInstanceOf(ApiTagException.class)
+				.hasMessageStartingWith(ApiTagException.UNAUTHORIZED_TAG_ACCESS().getMessage());
+		}
 
-			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl", null);
-			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
+		@Test
+		@DisplayName("미분류 폴더에 픽이 생성 후 존재하는지 확인")
+		void findPickUrl_test() {
+			// given
+			LinkInfo linkInfo = new LinkInfo("findPickUrl", "linkTitle", "linkDescription", "imageUrl");
+			PickCommand.Unclassified command = new PickCommand.Unclassified(user.getId(), linkInfo.title(),
+				linkInfo.url());
 
 			// when
-			for (int i = 0; i < threadCount; i++) {
-				executorService.submit(() -> {
-					try {
-						PickCommand.Create command = new PickCommand.Create(
-							user.getId(), "PICK", tagOrder, unclassified.getId(), linkInfo
-						);
-						pickService.saveNewPick(command);
-						successCount.incrementAndGet(); // 성공 카운트
-					} catch (Exception e) {
-						log.info("PickService Exception : {}", e.getMessage());
-						failCount.incrementAndGet(); // 실패 카운트
-					} finally {
-						countDownLatch.countDown();
-					}
-				});
-			}
-
-			countDownLatch.await(); // 모든 스레드가 완료될 때까지 대기
-			executorService.shutdown();
+			pickService.savePickToUnclassified(command);
 
 			// then
-			log.info("success : {} ", successCount.get());
-			log.info("fail : {} ", failCount.get());
-
-			assertThat(successCount.get()).isEqualTo(1);
-			assertThat(failCount.get()).isEqualTo(threadCount - 1);
+			assertThat(pickService.findPickUrl(user.getId(), linkInfo.url())).isNotEqualTo(Optional.empty());
+			assertThat(pickService.findPickUrl(user.getId(), "")).isEqualTo(Optional.empty());
 		}
 	}
 
@@ -281,7 +323,7 @@ class PickServiceTest {
 			""")
 		void update_data_with_null_test() {
 			// given
-			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl");
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command = new PickCommand.Create(
 				user.getId(), "PICK", tagOrder, unclassified.getId(), linkInfo
@@ -301,6 +343,52 @@ class PickServiceTest {
 			assertThat(updatePick.tagIdOrderedList()).isNotEqualTo(savePick.tagIdOrderedList())
 													 .isEqualTo(newTagOrder); // changed
 		}
+
+		@Test
+		@DisplayName("본인 폴더에 있지 않은 픽 수정")
+		void not_user_folder_pick_test() {
+			// given
+			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl");
+			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
+			PickCommand.Create command = new PickCommand.Create(
+				user.getId(), "PICK", tagOrder, unclassified.getId(), linkInfo
+			);
+			PickResult.Pick savePick = pickService.saveNewPick(command);
+
+			String newTitle = "NEW_PICK";
+			List<Long> newTagOrder = List.of(tag3.getId(), tag2.getId(), tag1.getId());
+			PickCommand.Update updateCommand = new PickCommand.Update(
+				100L, savePick.id(), newTitle, unclassified.getId(), newTagOrder
+			);
+
+			// when, then
+			assertThatThrownBy(() -> pickService.updatePick(updateCommand))
+				.isInstanceOf(ApiFolderException.class)
+				.hasMessageStartingWith(ApiFolderException.FOLDER_ACCESS_DENIED().getMessage());
+		}
+
+		@Test
+		@DisplayName("부모 폴더가 루트 폴더가 아닌 곳으로 수정")
+		void parent_folder_is_not_root_pick_test() {
+			// given
+			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl");
+			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
+			PickCommand.Create command = new PickCommand.Create(
+				user.getId(), "PICK", tagOrder, unclassified.getId(), linkInfo
+			);
+			PickResult.Pick savePick = pickService.saveNewPick(command);
+
+			String newTitle = "NEW_PICK";
+			List<Long> newTagOrder = List.of(tag3.getId(), tag2.getId(), tag1.getId());
+			PickCommand.Update updateCommand = new PickCommand.Update(
+				user.getId(), savePick.id(), newTitle, root.getId(), newTagOrder
+			);
+
+			// when, then
+			assertThatThrownBy(() -> pickService.updatePick(updateCommand))
+				.isInstanceOf(ApiPickException.class)
+				.hasMessageStartingWith(ApiPickException.PICK_UNAUTHORIZED_ROOT_ACCESS().getMessage());
+		}
 	}
 
 	@Nested
@@ -314,11 +402,11 @@ class PickServiceTest {
 			""")
 		void move_pick_to_same_folder_test() {
 			// given
-			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
-			LinkInfo linkInfo2 = new LinkInfo("linkUrl2", "linkTitle", "linkDescription", "imageUrl", null);
-			LinkInfo linkInfo3 = new LinkInfo("linkUrl3", "linkTitle", "linkDescription", "imageUrl", null);
-			LinkInfo linkInfo4 = new LinkInfo("linkUrl4", "linkTitle", "linkDescription", "imageUrl", null);
-			LinkInfo linkInfo5 = new LinkInfo("linkUrl5", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl");
+			LinkInfo linkInfo2 = new LinkInfo("linkUrl2", "linkTitle", "linkDescription", "imageUrl");
+			LinkInfo linkInfo3 = new LinkInfo("linkUrl3", "linkTitle", "linkDescription", "imageUrl");
+			LinkInfo linkInfo4 = new LinkInfo("linkUrl4", "linkTitle", "linkDescription", "imageUrl");
+			LinkInfo linkInfo5 = new LinkInfo("linkUrl5", "linkTitle", "linkDescription", "imageUrl");
 
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
@@ -366,9 +454,9 @@ class PickServiceTest {
 			""")
 		void move_pick_to_other_folder_test() {
 			// given
-			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
-			LinkInfo linkInfo2 = new LinkInfo("linkUrl2", "linkTitle", "linkDescription", "imageUrl", null);
-			LinkInfo linkInfo3 = new LinkInfo("linkUrl3", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl");
+			LinkInfo linkInfo2 = new LinkInfo("linkUrl2", "linkTitle", "linkDescription", "imageUrl");
+			LinkInfo linkInfo3 = new LinkInfo("linkUrl3", "linkTitle", "linkDescription", "imageUrl");
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo1);
@@ -411,7 +499,7 @@ class PickServiceTest {
 		@DisplayName("루트로 픽을 이동하는 경우, 실패해야 한다. - 루트는 폴더만 위치할 수 있다.")
 		void move_root_pick_test() {
 			// given
-			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl");
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo1);
@@ -419,7 +507,7 @@ class PickServiceTest {
 
 			List<Long> movePickIdList = List.of(1L, 2L);
 
-			PickCommand.Move command = new PickCommand.Move(user.getId(), movePickIdList, null, 0);
+			PickCommand.Move command = new PickCommand.Move(user.getId(), movePickIdList, root.getId(), 0);
 
 			// when, then
 			assertThatThrownBy(() -> pickService.movePick(command))
@@ -433,7 +521,7 @@ class PickServiceTest {
 			""")
 		void move_pick_invalid_order_value_test() {
 			// given
-			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl");
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo1);
@@ -458,7 +546,7 @@ class PickServiceTest {
 			""")
 		void remove_and_read_pick_test() {
 			// given
-			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl");
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				recycleBin.getId(), linkInfo1);
@@ -481,7 +569,7 @@ class PickServiceTest {
 			""")
 		void remove_not_existing_pick_exception_test() {
 			// given
-			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl");
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				recycleBin.getId(), linkInfo1);
@@ -504,7 +592,7 @@ class PickServiceTest {
 			""")
 		void remove_not_in_recycle_bin_folder_exception_test() {
 			// given
-			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl");
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo1);
@@ -526,7 +614,7 @@ class PickServiceTest {
 			// given
 			TagCommand.Delete delete = new TagCommand.Delete(user.getId(), tag1.getId());
 
-			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl", null);
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl");
 			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
 			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
 				unclassified.getId(), linkInfo1);
@@ -542,5 +630,24 @@ class PickServiceTest {
 			assertThat(pickResult.tagIdOrderedList().size()).isEqualTo(pickTagList.size());
 			assertThat(pickResult.tagIdOrderedList()).isEqualTo(List.of(tag2.getId(), tag3.getId()));
 		}
+	}
+
+	public void createUser2AndTag4() {
+		user2 = userRepository.save(
+			User
+				.builder()
+				.email("test@test.com")
+				.nickname("test")
+				.password("test")
+				.role(Role.ROLE_USER)
+				.socialProvider(SocialProvider.KAKAO)
+				.socialProviderId("1")
+				.tagOrderList(new ArrayList<>())
+				.idToken(IDToken.makeNew())
+				.build()
+		);
+
+		tag4 = tagRepository.save(Tag
+			.builder().user(user2).name("tag4").colorNumber(1).build());
 	}
 }
