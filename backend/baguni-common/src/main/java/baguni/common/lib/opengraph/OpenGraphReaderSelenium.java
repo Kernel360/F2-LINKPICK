@@ -19,7 +19,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+@Component("selenium")
 public class OpenGraphReaderSelenium implements OpenGraphReader {
 
 	private final OpenGraphOption openGraphOption;
@@ -51,7 +51,7 @@ public class OpenGraphReaderSelenium implements OpenGraphReader {
 			driver.get(uri.toString());
 
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-			wait.until(webDriver -> ((JavascriptExecutor) driver)
+			wait.until(webDriver -> ((JavascriptExecutor)driver)
 				.executeScript("return document.readyState").equals("complete")); // 초기 로딩 완료될 때까지 대기
 			Thread.sleep(300);
 
@@ -93,7 +93,6 @@ public class OpenGraphReaderSelenium implements OpenGraphReader {
 			}
 		} catch (org.openqa.selenium.TimeoutException e) {
 			log.error("Selenium TimeoutException 발생 : {}, url : {}", e.getMessage(), uri);
-			// result = new OpenGraphReaderJsoup(openGraphOption).read(uri); // 추후 Jsoup 사용 시 이 코드 활용
 		} catch (Exception e) {
 			throw new OpenGraphException("Error occurred when reading OG tags via Selenium, url : " + uri, e);
 		} finally {
@@ -112,7 +111,9 @@ public class OpenGraphReaderSelenium implements OpenGraphReader {
 		options.addArguments("--start-maximized");
 		options.addArguments("--disable-popup-blocking"); // 팝업 안뜨게
 		options.addArguments("--remote-allow-origins=*"); // 모든 출처에서의 연결을 허용, 자동화된 테스트나 CORS 제한을 우회할 때 유용
-		options.addArguments("--disable-dev-shm-usage"); // Chrome이 /dev/shm 대신 /tmp 디렉토리를 사용, /tmp는 일반적인 파일 시스템으로, 크기 제한이 없어 메모리 부족 문제를 방지
+		options.addArguments(
+			"--disable-dev-shm-usage"); // Chrome이 /dev/shm 대신 /tmp 디렉토리를 사용, /tmp는 일반적인 파일 시스템으로, 크기 제한이 없어 메모리 부족
+		// 문제를 방지
 
 		// WebDriver 생성
 		return new ChromeDriver(options);

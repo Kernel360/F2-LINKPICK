@@ -5,17 +5,15 @@ import {
 } from './ThumbnailImage.css';
 
 export function ThumbnailImage({ image }: ThumbnailImageProps) {
-  if (!image) {
+  console.log('ThumbnailImage', image === '');
+  const imageUrl = image === '' ? '/defaultImage.png' : image;
+
+  if (!imageUrl) {
     return <div className={imagePlaceholderStyle} />;
   }
 
   return (
-    <img
-      src={image}
-      // biome-ignore lint/a11y/noRedundantAlt: <explanation>
-      alt="Bookmark page open graph image"
-      className={`${imageStyle} ${fadeInStyle}`}
-    />
+    <img src={imageUrl} alt="" className={`${imageStyle} ${fadeInStyle}`} />
   );
 }
 
