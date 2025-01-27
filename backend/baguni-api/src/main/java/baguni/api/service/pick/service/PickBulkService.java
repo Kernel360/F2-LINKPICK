@@ -28,7 +28,7 @@ public class PickBulkService {
 		List<PickCommand.Create> pickList = new ArrayList<>();
 		Folder parentFolder = folderDataHandler.getFolder(parentFolderId);
 
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 100; i++) {
 			LinkInfo linkInfo = new LinkInfo("test" + i, "링크 제목", "링크 설명", "");
 			PickCommand.Create command = new PickCommand.Create(userId, "테스트 제목", new ArrayList<>(),
 				parentFolderId, linkInfo);

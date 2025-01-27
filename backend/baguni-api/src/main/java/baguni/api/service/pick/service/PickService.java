@@ -58,12 +58,6 @@ public class PickService {
 	}
 
 	@Transactional(readOnly = true)
-	public PickResult.Pick getPickUrl(Long userId, String url) {
-		Pick pick = pickDataHandler.getPickUrl(userId, url);
-		return pickMapper.toPickResult(pick);
-	}
-
-	@Transactional(readOnly = true)
 	public Optional<PickResult.Pick> findPickUrl(Long userId, String url) {
 		return pickDataHandler.findPickUrl(userId, url).map(pickMapper::toPickResult);
 	}
