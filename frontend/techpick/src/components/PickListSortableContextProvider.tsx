@@ -1,5 +1,6 @@
 'use client';
 
+import { useFetchPickListByFolderId } from '@/queries/useFetchPickListByFolderId';
 import { usePickStore } from '@/stores/pickStore/pickStore';
 import type { PickViewDraggableItemListLayoutComponentProps } from '@/types/PickViewDraggableItemListLayoutComponentProps';
 import {
@@ -13,20 +14,17 @@ export function PickListSortableContextProvider({
   children,
   viewType,
 }: PickViewDraggableItemListLayoutComponentProps) {
-  const {
-    getOrderedPickIdListByFolderId,
-    selectedPickIdList,
-    isDragging,
-    focusPickId,
-  } = usePickStore();
-  const orderedPickIdList = getOrderedPickIdListByFolderId(folderId);
-  const orderedPickIdListWithoutSelectedIdList = isDragging
-    ? orderedPickIdList.filter(
-        (orderedPickId) =>
-          !selectedPickIdList.includes(orderedPickId) ||
-          orderedPickId === focusPickId,
+  const selectedPickIdList = usePickStore((state) => state.selectedPickIdList);
+  const isDragging = usePickStore((state) => state.isDragging);
+  const focusPickId = usePickStore((state) => state.focusPickId);
+  const { data: pickList = [] } = useFetchPickListByFolderId(folderId);
+  const pickListWithoutSelectedIdList = isDragging
+    ? pickList.filter(
+        (pickInfo) =>
+          !selectedPickIdList.includes(pickInfo.id) ||
+          pickInfo.id === focusPickId,
       )
-    : orderedPickIdList;
+    : pickList;
 
   /**
    * @description card일때와 vertical일 때(listItem, record) 렌더링이 다릅니다.
@@ -37,7 +35,7 @@ export function PickListSortableContextProvider({
   return (
     <SortableContext
       id={`${folderId}`}
-      items={orderedPickIdListWithoutSelectedIdList}
+      items={pickListWithoutSelectedIdList.map((pickInfo) => pickInfo.id)}
       strategy={strategy}
     >
       {children}

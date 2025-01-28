@@ -13,11 +13,9 @@ import { dragCountStyle, stackedOverlayStyle } from './dragOverlay.css';
 
 export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   const { isDragging: isFolderDragging, draggingFolderInfo } = useFolderStore();
-  const {
-    isDragging: isPickDragging,
-    draggingPickInfo,
-    selectedPickIdList,
-  } = usePickStore();
+  const isPickDragging = usePickStore((state) => state.isDragging);
+  const draggingPickInfo = usePickStore((state) => state.draggingPickInfo);
+  const selectedPickIdList = usePickStore((state) => state.selectedPickIdList);
   const { isDragging: isRecommendPickDragging, draggingRecommendPickInfo } =
     useDraggingRecommendPickStore();
 
