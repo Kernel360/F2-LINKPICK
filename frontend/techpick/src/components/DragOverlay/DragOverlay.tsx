@@ -3,7 +3,7 @@
 import { useGetDragOverStyle } from '@/hooks/useGetDragOverStyle';
 import { useDraggingRecommendPickStore } from '@/stores/draggingRecommendPickStore';
 import { useFolderStore } from '@/stores/folderStore';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { usePickStore } from '@/stores/pickStore';
 import { DragOverlay as DragOverlayPrimitive } from '@dnd-kit/core';
 import { FolderItemOverlay } from './FolderItemOverlay';
 import { PickCarouselCardOverlay } from './PickCarouselCardOverlay';

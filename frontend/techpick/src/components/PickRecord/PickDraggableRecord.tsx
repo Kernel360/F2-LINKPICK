@@ -2,7 +2,7 @@
 
 import useSearchElementId from '@/hooks/useSearchElementId';
 import { useFetchPickListByFolderId } from '@/queries/useFetchPickListByFolderId';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { usePickStore } from '@/stores/pickStore';
 import { useUpdatePickStore } from '@/stores/updatePickStore';
 import type { PickViewDraggableItemComponentProps } from '@/types/PickViewDraggableItemComponentProps';
 import { getSelectedPickRange } from '@/utils/getSelectedPickRange';

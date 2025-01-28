@@ -3,7 +3,7 @@
 import { useDeletePicks } from '@/queries/useDeletePicks';
 import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
 import { useMovePicksToDifferentFolder } from '@/queries/useMovePicksToDifferentFolder';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { usePickStore } from '@/stores/pickStore';
 import type { PickInfoType } from '@/types/PickInfoType';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { isEqual } from 'es-toolkit';

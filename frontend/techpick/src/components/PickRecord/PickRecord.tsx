@@ -5,7 +5,7 @@ import { useImageLoader } from '@/hooks/useImageLoader';
 import { useOpenUrlInNewTab } from '@/hooks/useOpenUrlInNewTab';
 import { useFetchTagList } from '@/queries/useFetchTagList';
 import { useUpdatePickInfo } from '@/queries/useUpdatePickInfo';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { usePickStore } from '@/stores/pickStore';
 import { useUpdatePickStore } from '@/stores/updatePickStore';
 import type { PickViewItemComponentProps } from '@/types/PickViewItemComponentProps';
 import { formatDateString } from '@/utils/formatDateString';

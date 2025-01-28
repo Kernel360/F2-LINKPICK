@@ -1,6 +1,6 @@
 'use client';
 import { useMovePicksToEqualFolder } from '@/queries/useMovePicksToEqualFolder';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { usePickStore } from '@/stores/pickStore';
 import { isPickDraggableObject } from '@/utils/isPickDraggableObjectType';
 import { useDndMonitor } from '@dnd-kit/core';
 import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core';

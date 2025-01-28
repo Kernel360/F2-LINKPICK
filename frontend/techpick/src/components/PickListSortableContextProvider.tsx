@@ -1,7 +1,7 @@
 'use client';
 
 import { useFetchPickListByFolderId } from '@/queries/useFetchPickListByFolderId';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { usePickStore } from '@/stores/pickStore';
 import type { PickViewDraggableItemListLayoutComponentProps } from '@/types/PickViewDraggableItemListLayoutComponentProps';
 import {
   SortableContext,

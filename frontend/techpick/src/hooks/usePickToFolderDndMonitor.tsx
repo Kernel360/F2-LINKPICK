@@ -1,6 +1,6 @@
 'use client';
 import { useMovePicksToDifferentFolder } from '@/queries/useMovePicksToDifferentFolder';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { usePickStore } from '@/stores/pickStore';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import { isPickDraggableObject } from '@/utils/isPickDraggableObjectType';
 import { isPickToFolderDroppableObject } from '@/utils/isPickToFolderDroppableObject';
