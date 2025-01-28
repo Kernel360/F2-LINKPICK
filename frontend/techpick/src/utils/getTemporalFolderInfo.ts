@@ -1,7 +1,7 @@
 import type { CreateFolderRequestType } from '@/types/CreateFolderRequestType';
 import type { FolderType } from '@/types/FolderType';
 
-export const geteTemporalFolderInfo = ({
+export const getTemporalFolderInfo = ({
   id,
   name,
   parentFolderId,

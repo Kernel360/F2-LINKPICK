@@ -5,24 +5,20 @@ import Image from 'next/image';
 import * as styles from './hoverCard.css';
 
 export default function HoverCard() {
-  const { searchResultList, hoverPickIndex } = useSearchPickStore();
+  const { hoverPickInfo } = useSearchPickStore();
 
   return (
     <div className={styles.hoverCardContainer}>
       <div className={styles.hoverCardBorderLine}>
-        <h1 className={styles.hoverCardTitle}>
-          {searchResultList[hoverPickIndex]?.title}
-        </h1>
+        <h1 className={styles.hoverCardTitle}>{hoverPickInfo?.title}</h1>
         <div className={styles.hoverCardImageContainer}>
           <a
-            href={searchResultList[hoverPickIndex]?.linkInfo.url as string}
+            href={hoverPickInfo?.linkInfo.url as string}
             target="_blank"
             rel="noreferrer"
           >
             <Image
-              src={checkImageUrlByUrl(
-                searchResultList[hoverPickIndex]?.linkInfo.imageUrl,
-              )}
+              src={checkImageUrlByUrl(hoverPickInfo?.linkInfo.imageUrl)}
               alt="link-image"
               height={200}
               width={200}
@@ -33,15 +29,13 @@ export default function HoverCard() {
         <div className={styles.hoverDataCardContainer}>
           <span className={styles.hoverCardDate}>생성 일시</span>
           <span className={styles.hoverCardDate}>
-            {searchResultList[hoverPickIndex] &&
-              formatDateString(searchResultList[hoverPickIndex].createdAt)}
+            {hoverPickInfo && formatDateString(hoverPickInfo.createdAt)}
           </span>
         </div>
         <div className={styles.hoverDataCardContainer}>
           <span className={styles.hoverCardDate}>최종 편집일</span>
           <span className={styles.hoverCardDate}>
-            {searchResultList[hoverPickIndex] &&
-              formatDateString(searchResultList[hoverPickIndex].updatedAt)}
+            {hoverPickInfo && formatDateString(hoverPickInfo.updatedAt)}
           </span>
         </div>
       </div>

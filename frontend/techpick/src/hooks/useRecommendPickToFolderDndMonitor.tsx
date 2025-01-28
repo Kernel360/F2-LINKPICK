@@ -1,8 +1,6 @@
 'use client';
-
-import { createPick } from '@/apis/pick/createPick';
+import { useCreatePick } from '@/queries/useCreatePick';
 import { useDraggingRecommendPickStore } from '@/stores/draggingRecommendPickStore';
-import { usePickStore } from '@/stores/pickStore/pickStore';
 import { isPickToFolderDroppableObject } from '@/utils/isPickToFolderDroppableObject';
 import { isRecommendPickDraggableObject } from '@/utils/isRecommendPickDraggableObject';
 import { notifySuccess } from '@/utils/toast';
@@ -18,7 +16,7 @@ import { useEventLogger } from './useEventLogger';
  * @description 추천 목록에서 folder로 dnd를 할 때의 이벤트를 감지하고 동작하는 hook입니다.
  */
 export function useRecommendPickToFolderDndMonitor() {
-  const { insertPickInfo } = usePickStore();
+  const { mutate: createPick } = useCreatePick();
   const { setIsDragging, setDraggingPickInfo } =
     useDraggingRecommendPickStore();
   const { trackEvent: trackRecommendBookmarkSave } = useEventLogger({
@@ -66,19 +64,20 @@ export function useRecommendPickToFolderDndMonitor() {
 
     const { url, title, imageUrl, description } = activeObject;
 
-    try {
-      const createdPickInfo = await createPick({
+    createPick(
+      {
         title,
         parentFolderId: overObject.id,
         tagIdOrderedList: [],
         linkInfo: { url, description, imageUrl, title },
-      });
-      insertPickInfo(createdPickInfo, overObject.id);
-      notifySuccess('성공적으로 북마크가 추가되었습니다!');
-      trackRecommendBookmarkSave({ title: title });
-    } catch {
-      /** empty */
-    }
+      },
+      {
+        onSuccess: () => {
+          notifySuccess('성공적으로 북마크가 추가되었습니다!');
+          trackRecommendBookmarkSave({ title: title });
+        },
+      },
+    );
   };
 
   useDndMonitor({

@@ -1,6 +1,6 @@
-import type { FetchRequestType } from './FetchRequestType';
-import type { PickRecordValueType } from './PickRecordValueType';
+import type { FolderIdType } from './FolderIdType';
+import type { PickListType } from './PickListType';
 
 export interface PickRecordType {
-  [folderId: string]: FetchRequestType<PickRecordValueType> | undefined;
+  [folderId: FolderIdType]: PickListType | undefined;
 }

@@ -3,7 +3,7 @@
 import { createFolder } from '@/apis/folder/createFolder';
 import type { FolderRecordType } from '@/types/FolderRecordType';
 import { addChildToParentFolder } from '@/utils/addChildToParentFolder';
-import { geteTemporalFolderInfo } from '@/utils/createTemporalFolderInfo';
+import { getTemporalFolderInfo } from '@/utils/getTemporalFolderInfo';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { produce } from 'immer';
 import { folderKeys } from './folderKeys';
@@ -19,7 +19,7 @@ export function useCreateFolder() {
       const temporalUniqueId = -Date.now();
 
       const nextFolders = produce(prevFolders, (draft) => {
-        const temporalFolderInfo = geteTemporalFolderInfo({
+        const temporalFolderInfo = getTemporalFolderInfo({
           id: temporalUniqueId,
           name,
           parentFolderId,

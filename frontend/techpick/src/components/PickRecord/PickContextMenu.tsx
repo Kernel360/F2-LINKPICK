@@ -1,14 +1,14 @@
 'use client';
 
+import { useDeletePicks } from '@/queries/useDeletePicks';
 import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { useMovePicksToDifferentFolder } from '@/queries/useMovePicksToDifferentFolder';
+import { usePickStore } from '@/stores/pickStore';
 import type { PickInfoType } from '@/types/PickInfoType';
-import { getPortalContainer } from '@/utils/portal';
 import * as ContextMenu from '@radix-ui/react-context-menu';
 import { isEqual } from 'es-toolkit';
 import { CircleX as CircleXIcon, Trash2 as TrashIcon } from 'lucide-react';
-import { memo } from 'react';
-import type { PropsWithChildren } from 'react';
+import { type PropsWithChildren, memo } from 'react';
 import {
   contextMenuContentLayout,
   contextMenuItemStyle,
@@ -23,17 +23,18 @@ const PickContextMenu = memo(
     pickInfo,
     children,
   }: PropsWithChildren<PickContextMenuProps>) {
-    const portalContainer = getPortalContainer();
     const { data: basicFolderRecord } = useFetchBasicFolders();
-
     const recycleBinFolderId = basicFolderRecord?.RECYCLE_BIN.id;
     const isRecycleBinFolder = recycleBinFolderId === pickInfo.parentFolderId;
-    const {
-      selectedPickIdList,
-      setSelectedPickIdList,
-      moveSelectedPicksToRecycleBinFolder,
-      deleteSelectedPicks,
-    } = usePickStore();
+    const selectedPickIdList = usePickStore(
+      (state) => state.selectedPickIdList,
+    );
+    const setSelectedPickIdList = usePickStore(
+      (state) => state.setSelectedPickIdList,
+    );
+    const { mutate: movePicksToDifferentFolder } =
+      useMovePicksToDifferentFolder();
+    const { mutate: deletePicks } = useDeletePicks();
 
     const checkIsSelected = () => {
       if (!selectedPickIdList.includes(pickInfo.id)) {
@@ -52,7 +53,7 @@ const PickContextMenu = memo(
         <ContextMenu.Trigger data-pick-draggable={true}>
           {children}
         </ContextMenu.Trigger>
-        <ContextMenu.Portal container={portalContainer}>
+        <ContextMenu.Portal>
           <ContextMenu.Content
             className={contextMenuContentLayout}
             data-pick-draggable={true}
@@ -60,9 +61,12 @@ const PickContextMenu = memo(
             {isRecycleBinFolder ? (
               <ContextMenu.Item
                 onSelect={() => {
-                  deleteSelectedPicks({
-                    recycleBinFolderId,
-                  });
+                  if (recycleBinFolderId) {
+                    deletePicks({
+                      recycleBinFolderId,
+                      deletePickIdList: selectedPickIdList,
+                    });
+                  }
                 }}
                 className={contextMenuItemStyle}
               >
@@ -73,9 +77,13 @@ const PickContextMenu = memo(
               <ContextMenu.Item
                 onSelect={() => {
                   if (recycleBinFolderId) {
-                    moveSelectedPicksToRecycleBinFolder({
-                      picksParentFolderId: pickInfo.parentFolderId,
-                      recycleBinFolderId,
+                    movePicksToDifferentFolder({
+                      fromPickId: pickInfo.parentFolderId,
+                      sourceFolderId: pickInfo.parentFolderId,
+                      movePicksInfo: {
+                        destinationFolderId: recycleBinFolderId,
+                        idList: selectedPickIdList,
+                      },
                     });
                   }
                 }}

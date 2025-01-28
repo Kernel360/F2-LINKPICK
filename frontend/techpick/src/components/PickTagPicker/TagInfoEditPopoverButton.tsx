@@ -3,8 +3,8 @@
 import { useDisclosure } from '@/hooks/useDisclosure';
 import { useUpdateTag } from '@/queries/useUpdateTag';
 import type { TagType } from '@/types/TagType';
+import { isEmptyString } from '@/utils/isEmptyString';
 import { isShallowEqualValue } from '@/utils/isShallowEqualValue';
-import { isEmptyString } from '@/utils/string';
 import * as Popover from '@radix-ui/react-popover';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
 import DOMPurify from 'dompurify';

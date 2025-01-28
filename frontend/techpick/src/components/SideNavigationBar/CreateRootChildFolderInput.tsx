@@ -1,6 +1,6 @@
 import { useCreateFolder } from '@/queries/useCreateFolder';
 import type { FolderIdType } from '@/types/FolderIdType';
-import { isEmptyString } from '@/utils/string';
+import { isEmptyString } from '@/utils/isEmptyString';
 import { FolderPlus } from 'lucide-react';
 import { type KeyboardEvent, useCallback, useEffect, useRef } from 'react';
 import {

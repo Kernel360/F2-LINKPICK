@@ -4,7 +4,8 @@ import { postUserPickViewEventLog } from '@/apis/eventLog/postUserPickViewEventL
 import { useImageLoader } from '@/hooks/useImageLoader';
 import { useOpenUrlInNewTab } from '@/hooks/useOpenUrlInNewTab';
 import { useFetchTagList } from '@/queries/useFetchTagList';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { useUpdatePickInfo } from '@/queries/useUpdatePickInfo';
+import { usePickStore } from '@/stores/pickStore';
 import { useUpdatePickStore } from '@/stores/updatePickStore';
 import type { PickViewItemComponentProps } from '@/types/PickViewItemComponentProps';
 import { formatDateString } from '@/utils/formatDateString';
@@ -32,7 +33,7 @@ import {
 export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
   const pick = pickInfo;
   const link = pickInfo.linkInfo;
-  const { updatePickInfo } = usePickStore();
+  const { mutate: updatePickInfo } = useUpdatePickInfo();
   const { openUrlInNewTab } = useOpenUrlInNewTab(link.url);
   const {
     currentUpdateTitlePickId,
@@ -41,7 +42,7 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
   } = useUpdatePickStore();
   const [isHovered, setIsHovered] = useState(false);
   const isUpdateTitle = currentUpdateTitlePickId === pickInfo.id;
-  const { isDragging } = usePickStore();
+  const isDragging = usePickStore((state) => state.isDragging);
   const { imageStatus } = useImageLoader(link.imageUrl);
   const { data: tagList = [] } = useFetchTagList();
 
@@ -107,9 +108,12 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
           <PickRecordTitleInput
             initialValue={pick.title}
             onSubmit={(newTitle) => {
-              updatePickInfo(pick.parentFolderId, {
-                ...pickInfo,
-                title: newTitle,
+              updatePickInfo({
+                pickParentFolderId: pick.parentFolderId,
+                updatePickInfo: {
+                  ...pickInfo,
+                  title: newTitle,
+                },
               });
               setCurrentUpdateTitlePickIdToNull();
             }}

@@ -1,14 +1,15 @@
 'use client';
 
 import useSearchElementId from '@/hooks/useSearchElementId';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { useFetchPickListByFolderId } from '@/queries/useFetchPickListByFolderId';
+import { usePickStore } from '@/stores/pickStore';
 import { useUpdatePickStore } from '@/stores/updatePickStore';
 import type { PickViewDraggableItemComponentProps } from '@/types/PickViewDraggableItemComponentProps';
+import { getSelectedPickRange } from '@/utils/getSelectedPickRange';
 import { isSelectionActive } from '@/utils/isSelectionActive';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import type { CSSProperties, MouseEvent } from 'react';
-import { getSelectedPickRange } from '../PickListViewer/pickDnDCard.util';
 import { PickContextMenu } from './PickContextMenu';
 import { PickRecord } from './PickRecord';
 import {
@@ -20,14 +21,16 @@ import {
 export function PickDraggableRecord({
   pickInfo,
 }: PickViewDraggableItemComponentProps) {
-  const {
-    selectedPickIdList,
-    selectSinglePick,
-    getOrderedPickIdListByFolderId,
-    focusPickId,
-    setSelectedPickIdList,
-    isDragging,
-  } = usePickStore();
+  const { data: pickList = [] } = useFetchPickListByFolderId(
+    pickInfo.parentFolderId,
+  );
+  const selectedPickIdList = usePickStore((state) => state.selectedPickIdList);
+  const selectSinglePick = usePickStore((state) => state.selectSinglePick);
+  const focusPickId = usePickStore((state) => state.focusPickId);
+  const setSelectedPickIdList = usePickStore(
+    (state) => state.setSelectedPickIdList,
+  );
+  const isDragging = usePickStore((state) => state.isDragging);
   const {
     setCurrentUpdateTitlePickIdToNull,
     currentUpdateTitlePickId,
@@ -48,7 +51,8 @@ export function PickDraggableRecord({
     data: {
       id: pickId,
       type: 'pick',
-      parentFolderId: parentFolderId,
+      parentFolderId,
+      pickInfo,
     },
     disabled:
       currentUpdateTitlePickId === pickInfo.id ||
@@ -64,13 +68,13 @@ export function PickDraggableRecord({
     opacity: 1,
   };
 
-  const handleShiftSelect = (parentFolderId: number, pickId: number) => {
+  const handleShiftSelect = (pickId: number) => {
     if (!focusPickId) {
       return;
     }
 
     // 새로운 선택된 배열 만들기.
-    const orderedPickIdList = getOrderedPickIdListByFolderId(parentFolderId);
+    const orderedPickIdList = pickList.map((pickInfo) => pickInfo.id);
 
     const newSelectedPickIdList = getSelectedPickRange({
       orderedPickIdList,
@@ -87,7 +91,7 @@ export function PickDraggableRecord({
   ) => {
     if (event.shiftKey && isSelectionActive(selectedPickIdList.length)) {
       event.preventDefault();
-      handleShiftSelect(parentFolderId, pickId);
+      handleShiftSelect(pickId);
       return;
     }
 
@@ -110,6 +114,7 @@ export function PickDraggableRecord({
       {...listeners}
       style={{ width: 'fit-content', ...style }}
       data-pick-draggable={true} // 해당 data는 focus를 바꾸는 동작과 연관이 있습니다.
+      suppressHydrationWarning
     >
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <div
