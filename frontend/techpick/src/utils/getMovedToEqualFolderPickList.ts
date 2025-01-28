@@ -1,6 +1,5 @@
 import type { MovePicksRequestType } from '@/types/MovePicksRequestType';
 import type { PickListType } from '@/types/PickListType';
-import { produce } from 'immer';
 import { hasIndex } from './hasIndex';
 
 export const getMovedToEqualFolderPickList = ({
@@ -9,37 +8,38 @@ export const getMovedToEqualFolderPickList = ({
   prevPickList,
   toPickId,
 }: GetMovedToEqualFolderPickListParamType) => {
-  return produce(prevPickList, (pickList) => {
-    const curIndex = pickList.findIndex(
-      (pickInfo) => pickInfo.id === fromPickId,
-    );
-    const targetIndex = pickList.findIndex(
-      (pickInfo) => pickInfo.id === toPickId,
-    );
+  const curIndex = prevPickList.findIndex(
+    (pickInfo) => pickInfo.id === fromPickId,
+  );
+  const targetIndex = prevPickList.findIndex(
+    (pickInfo) => pickInfo.id === toPickId,
+  );
 
-    const nextIndex =
-      curIndex < targetIndex
-        ? Math.min(targetIndex + 1, prevPickList.length)
-        : targetIndex;
+  if (!hasIndex(curIndex) || !hasIndex(targetIndex)) {
+    return prevPickList;
+  }
 
-    if (!hasIndex(curIndex) || !hasIndex(nextIndex)) {
-      return prevPickList;
+  const nextIndex =
+    curIndex < targetIndex
+      ? Math.min(targetIndex + 1, prevPickList.length)
+      : targetIndex;
+
+  const movedPickSet = new Set(movePicksInfo.idList);
+  const beforeNextPickList: PickListType = [];
+  const movedPickList: PickListType = [];
+  const afterNextPickList: PickListType = [];
+
+  prevPickList.forEach((pickInfo, index) => {
+    if (movedPickSet.has(pickInfo.id)) {
+      movedPickList.push(pickInfo);
+    } else if (index < nextIndex) {
+      beforeNextPickList.push(pickInfo);
+    } else {
+      afterNextPickList.push(pickInfo);
     }
-
-    const beforeNextPickList = prevPickList
-      .slice(0, nextIndex)
-      .filter((pickInfo) => !movePicksInfo.idList.includes(pickInfo.id));
-
-    const movedPickList = prevPickList.filter((pickInfo) =>
-      movePicksInfo.idList.includes(pickInfo.id),
-    );
-
-    const afterNextPickList = prevPickList
-      .slice(nextIndex)
-      .filter((pickInfo) => !movePicksInfo.idList.includes(pickInfo.id));
-
-    return [...beforeNextPickList, ...movedPickList, ...afterNextPickList];
   });
+
+  return [...beforeNextPickList, ...movedPickList, ...afterNextPickList];
 };
 
 interface GetMovedToEqualFolderPickListParamType {
