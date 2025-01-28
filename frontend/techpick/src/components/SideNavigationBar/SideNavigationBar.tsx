@@ -1,7 +1,6 @@
 'use client';
 
 import { useDisclosure } from '@/hooks/useDisclosure';
-import { useSyncFolderRecord } from '@/hooks/useSyncFolderRecord';
 import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
 import { PlusIcon } from 'lucide-react';
 import { ActiveNavigationItemIdProvider } from './ActiveNavigationItemIdProvider';
@@ -28,7 +27,6 @@ export function SideNavigationBar() {
     onOpen: onShowCreateRootChildFolderInput,
     onClose,
   } = useDisclosure();
-  useSyncFolderRecord();
 
   return (
     <HorizontalResizableContainer>

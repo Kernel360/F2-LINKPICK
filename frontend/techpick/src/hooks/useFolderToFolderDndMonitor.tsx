@@ -22,9 +22,8 @@ export function useFolderToFolderDndMonitor() {
     setIsDragging,
     setDraggingFolderInfo,
   } = useFolderStore();
-  const { mutateAsync: moveFolders } = useMoveFolders();
+  const { mutate: moveFolders } = useMoveFolders();
   const { data: folderRecord } = useFetchFolders();
-  const syncMoveFolderState = useFolderStore((state) => state.moveFolder);
 
   const onDragStart = (event: DragStartEvent) => {
     const { active } = event;
@@ -62,15 +61,6 @@ export function useFolderToFolderDndMonitor() {
       return;
     }
 
-    syncMoveFolderState({
-      fromId: Number(activeData.id),
-      toId: Number(overData.id),
-      destinationFolderId: Number(overData.sortable.containerId),
-      parentFolderId: Number(activeData.sortable.containerId),
-      orderIdx: overData.sortable.index,
-      idList: selectedFolderList,
-    });
-
     moveFolders({
       fromId: Number(activeData.id),
       toId: Number(overData.id),
@@ -96,31 +86,30 @@ export function useFolderToFolderDndMonitor() {
       return;
     }
 
-    syncMoveFolderState({
-      fromId: Number(activeData.id),
-      toId: Number(overData.id),
-      destinationFolderId: Number(overData.sortable.containerId),
-      parentFolderId: Number(activeData.sortable.containerId),
-      orderIdx: overData.sortable.index,
-      idList: selectedFolderList,
-    });
-
-    await moveFolders({
-      fromId: Number(activeData.id),
-      toId: Number(overData.id),
-      destinationFolderId: Number(overData.sortable.containerId),
-      parentFolderId: Number(activeData.sortable.containerId),
-      orderIdx: overData.sortable.index,
-      idList: selectedFolderList,
-    });
-
-    const selectedListLastFolderId =
-      selectedFolderList[selectedFolderList.length - 1];
-    const id = `#folderId-${selectedListLastFolderId}`;
-    const targetElement = document.querySelector(id);
-    if (targetElement) {
-      targetElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-    }
+    moveFolders(
+      {
+        fromId: Number(activeData.id),
+        toId: Number(overData.id),
+        destinationFolderId: Number(overData.sortable.containerId),
+        parentFolderId: Number(activeData.sortable.containerId),
+        orderIdx: overData.sortable.index,
+        idList: selectedFolderList,
+      },
+      {
+        onSuccess: () => {
+          const selectedListLastFolderId =
+            selectedFolderList[selectedFolderList.length - 1];
+          const id = `#folderId-${selectedListLastFolderId}`;
+          const targetElement = document.querySelector(id);
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              block: 'nearest',
+              behavior: 'smooth',
+            });
+          }
+        },
+      },
+    );
   };
 
   useDndMonitor({

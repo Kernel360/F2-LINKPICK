@@ -1,7 +1,8 @@
 'use client';
-
-import { useFolderStore } from '@/stores/folderStore';
+import { useFolderDndRenderTrigger } from '@/hooks/useFolderDndRenderTrigger';
+import { useFetchFolders } from '@/queries/useFetchFolders';
 import type { FolderIdType } from '@/types/FolderIdType';
+import { getChildFolderListByParentFolderId } from '@/utils/getChildFolderListByParentFolderId';
 import { getFolderSortableContextId } from '@/utils/getFolderSortableContextId';
 import {
   SortableContext,
@@ -24,9 +25,13 @@ export function EditableFolderNavigationItemList({
   folderId,
   depth,
 }: EditableFolderNavigationItemListProps) {
-  const { getChildFolderListByParentFolderId } = useFolderStore();
-  const childFolderList = getChildFolderListByParentFolderId(folderId);
+  const { data: folderRecord } = useFetchFolders();
+  const childFolderList = getChildFolderListByParentFolderId({
+    folderRecord,
+    folderId,
+  });
   const childDepth = typeof depth === 'number' ? depth + 1 : 0;
+  useFolderDndRenderTrigger();
 
   return (
     <UpdateFolderStatusProvider>
