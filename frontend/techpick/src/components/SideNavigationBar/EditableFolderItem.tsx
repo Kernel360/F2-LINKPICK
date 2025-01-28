@@ -6,7 +6,13 @@ import { DeleteFolderDialog } from './DeleteFolderDialog';
 import { EditFolderContextMenu } from './EditFolderContextMenu';
 import { FolderDraggable } from './FolderDraggable';
 import { FolderNavigationItem } from './FolderNavigationItem';
-import { ShareFolderDialog } from './ShareFolderDialog';
+const ShareFolderDialog = dynamic(
+  () => import('./ShareFolderDialog').then((mod) => mod.ShareFolderDialog),
+  {
+    ssr: false,
+  },
+);
+import dynamic from 'next/dynamic';
 import { UpdateFolderNameInput } from './UpdateFolderNameInput';
 import { UpdateFolderStatusContext } from './UpdateFolderStatusProvider';
 
