@@ -34,9 +34,8 @@ public class HttpApiConfiguration {
 	}
 
 	@Bean
-	public RestClient restClient() {
-		return RestClient
-			.builder()
+	public RestClient restClient(RestClient.Builder restClientBuilder) {
+		return restClientBuilder
 			.baseUrl(rankingServerUrl)
 			.requestFactory(clientHttpRequestFactory())
 			.build();

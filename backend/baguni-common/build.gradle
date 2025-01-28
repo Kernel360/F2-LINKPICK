@@ -27,6 +27,11 @@ dependencies {
     // spring caffeine cache
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'com.github.ben-manes.caffeine:caffeine'
+
+    // spring tracing (request trace id & span id)
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    // ---- bridges the Micrometer Observation API to OpenTelemetry.
+    implementation 'io.micrometer:micrometer-tracing-bridge-otel'
 }
 
 

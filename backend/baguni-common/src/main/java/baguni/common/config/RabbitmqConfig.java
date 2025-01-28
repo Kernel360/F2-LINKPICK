@@ -145,6 +145,7 @@ public class RabbitmqConfig {
 		containerFactory.setDefaultRequeueRejected(false); // 그냥 바로 폐기
 		containerFactory.setMessageConverter(messageConverter());
 		containerFactory.setErrorHandler(rabbitmqCustomErrorHandler);
+		containerFactory.setObservationEnabled(true);
 		return containerFactory;
 	}
 

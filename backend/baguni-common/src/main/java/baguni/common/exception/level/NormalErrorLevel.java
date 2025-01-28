@@ -8,12 +8,12 @@ import baguni.common.util.CachedHttpServletRequest;
 public class NormalErrorLevel extends ErrorLevel {
 
 	@Override
-	public void handleError(ApiException exception, CachedHttpServletRequest request) {
-		log.info(exception.getMessage(), exception, request.toString());
+	public void handleError(Exception exception, CachedHttpServletRequest request) {
+		log.error("{}{}", exception.getMessage(), request); // stack trace 미출력
 	}
 
 	@Override
-	public void handleError(ApiException exception) {
-		log.info(exception.getMessage(), exception);
+	public void handleError(Exception exception) {
+		log.error(exception.getMessage(), exception);
 	}
 }
