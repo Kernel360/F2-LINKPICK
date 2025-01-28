@@ -29,9 +29,6 @@ public interface LinkMapper {
 
 	LinkResult toLinkResult(Link link);
 
-	@Named("toLinkInfoList")
-	LinkInfo toLinkInfo(Link link);
-
 	@Named("toRssLinkInfoList")
 	RssLinkInfo toRssLinkInfo(Link link);
 }

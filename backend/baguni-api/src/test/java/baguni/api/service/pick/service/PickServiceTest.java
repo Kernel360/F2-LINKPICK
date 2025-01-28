@@ -24,6 +24,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
+import baguni.api.application.suggestion.dto.RankingResponse;
 import baguni.api.service.pick.service.PickService;
 import baguni.api.service.ranking.dto.RankingResult;
 import baguni.api.service.ranking.service.RankingService;
@@ -210,12 +211,30 @@ class PickServiceTest {
 			List<Long> folderIdList = List.of(unclassified.getId(), general.getId(), recycleBin.getId());
 			PickCommand.ReadList readListCommand = pickApiMapper.toReadListCommand(user.getId(), folderIdList);
 
-			List<UrlWithCount> urlWithCountList = List.of(new UrlWithCount("linkUrl1", 100L));
-
 			// when
 			when(rankingService.getUrlRanking(10)).thenThrow(new RuntimeException("Ranking server is down"));
-			List<PickResult.FolderPickWithViewCountList> folderPickList = pickService.getFolderListChildPickList(
-				readListCommand);
+			pickService.getFolderListChildPickList(readListCommand);
+		}
+
+		@Test
+		@DisplayName("조회수 null이 아닌 경우 테스트")
+		void url_count_test() {
+			// given
+			LinkInfo linkInfo1 = new LinkInfo("http://example.com", "linkTitle", "linkDescription", "imageUrl");
+			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
+				recycleBin.getId(), linkInfo1);
+			pickService.saveNewPick(command1);
+			List<Long> folderIdList = List.of(unclassified.getId(), general.getId(), recycleBin.getId());
+			PickCommand.ReadList readListCommand = pickApiMapper.toReadListCommand(user.getId(), folderIdList);
+
+			UrlWithCount urlWithCount = new UrlWithCount("http://example.com", 100L);
+			UrlWithCount pickCount = new UrlWithCount("http://example.com", 10L);
+
+			// when
+			when(rankingService.getUrlRanking(anyInt()))
+				.thenReturn(new RankingResult(List.of(urlWithCount), List.of(urlWithCount), List.of(pickCount)));
+			pickService.getFolderListChildPickList(readListCommand);
 		}
 
 		@Test
@@ -262,6 +281,22 @@ class PickServiceTest {
 	@Nested
 	@DisplayName("픽 생성")
 	class savePick {
+
+		@Test
+		@DisplayName("부모 폴더 아이디가 null인 경우 픽을 저장하는 경우, 실패해야 한다. - 루트는 폴더만 위치할 수 있다.")
+		void create_root_pick_exception_test() {
+			// given
+			LinkInfo linkInfo = new LinkInfo("linkUrl", "linkTitle", "linkDescription", "imageUrl");
+			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
+			PickCommand.Create command = new PickCommand.Create(
+				user.getId(), "PICK", tagOrder, null, linkInfo
+			);
+
+			// when, then
+			assertThatThrownBy(() -> pickService.saveNewPick(command))
+				.isInstanceOf(ApiFolderException.class)
+				.hasMessageStartingWith(ApiFolderException.INVALID_PARENT_FOLDER().getMessage());
+		}
 
 		@Test
 		@DisplayName("루트에 픽을 저장하는 경우, 실패해야 한다. - 루트는 폴더만 위치할 수 있다.")
@@ -438,6 +473,10 @@ class PickServiceTest {
 			List<PickResult.Pick> movedPickList = pickService.getFolderChildPickList(user.getId(),
 				unclassified.getId());
 
+			assertThatThrownBy(() -> pickService.getFolderChildPickList(user.getId(), null))
+				.isInstanceOf(ApiFolderException.class)
+				.hasMessageStartingWith(ApiFolderException.INVALID_PARENT_FOLDER().getMessage());;
+
 			// then
 			// 결과값 : [1, 2, 3, 4, 5] -> [2, 3, 1, 4, 5]
 			assertThat(originalPickIdList).isNotEqualTo(movedPickList);
@@ -513,6 +552,26 @@ class PickServiceTest {
 			assertThatThrownBy(() -> pickService.movePick(command))
 				.isInstanceOf(ApiPickException.class)
 				.hasMessageStartingWith(ApiPickException.PICK_UNAUTHORIZED_ROOT_ACCESS().getMessage());
+		}
+
+		@Test
+		@DisplayName("부모 폴더 id가 null인 폴더로 픽을 이동하는 경우, 실패해야 한다.")
+		void move_null_parentId_pick_test() {
+			// given
+			LinkInfo linkInfo1 = new LinkInfo("linkUrl1", "linkTitle", "linkDescription", "imageUrl");
+			List<Long> tagOrder = List.of(tag1.getId(), tag2.getId(), tag3.getId());
+			PickCommand.Create command1 = new PickCommand.Create(user.getId(), "PICK", tagOrder,
+				unclassified.getId(), linkInfo1);
+			pickService.saveNewPick(command1);
+
+			List<Long> movePickIdList = List.of(1L, 2L);
+
+			PickCommand.Move command = new PickCommand.Move(user.getId(), movePickIdList, null, 0);
+
+			// when, then
+			assertThatThrownBy(() -> pickService.movePick(command))
+				.isInstanceOf(ApiFolderException.class)
+				.hasMessageStartingWith(ApiFolderException.INVALID_PARENT_FOLDER().getMessage());
 		}
 
 		@Test
