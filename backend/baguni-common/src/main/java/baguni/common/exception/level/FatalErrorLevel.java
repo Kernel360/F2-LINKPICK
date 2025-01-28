@@ -8,12 +8,12 @@ import baguni.common.util.CachedHttpServletRequest;
 public class FatalErrorLevel extends ErrorLevel {
 
 	@Override
-	public void handleError(ApiException exception, CachedHttpServletRequest request) {
-		log.error(exception.getMessage(), exception, request);
+	public void handleError(Exception exception, CachedHttpServletRequest request) {
+		log.error("{}{}", exception.getMessage(), request, exception); // stack trace 출력
 	}
 
 	@Override
-	public void handleError(ApiException exception) {
+	public void handleError(Exception exception) {
 		log.error(exception.getMessage(), exception);
 	}
 }

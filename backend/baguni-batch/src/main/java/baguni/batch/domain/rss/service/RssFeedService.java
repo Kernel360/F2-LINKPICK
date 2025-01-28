@@ -50,7 +50,7 @@ public class RssFeedService {
 							 .getChannel()
 							 .getArticles();
 		} catch (Exception e) {
-			log.error("RSS 피드 획득에 실패했습니다. url:{} message:{}", blog.getUrl(), e.getMessage());
+			log.error("RSS 피드 획득에 실패했습니다. url:{} message:{}", blog.getUrl(), e.getMessage(), e);
 			return List.of();
 		}
 	}
@@ -64,7 +64,7 @@ public class RssFeedService {
 		try {
 			link = Link.createRssLink(article.getLink(), article.getTitle(), article.getPubDate());
 		} catch (Exception e) { // pubDate 날짜 형식 파싱 실패
-			log.error("RSS PubDate 을 LocalDateTime으로 파싱하는데 실패했습니다. time: {}", article.getPubDate());
+			log.error("RSS PubDate 을 LocalDateTime으로 파싱하는데 실패했습니다. time: {}", article.getPubDate(), e);
 			link = Link.createRssLink(article.getLink(), article.getTitle(), null);
 		}
 		linkDataHandler.saveLink(link);

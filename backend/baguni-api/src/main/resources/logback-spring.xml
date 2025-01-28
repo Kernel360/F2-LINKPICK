@@ -13,13 +13,15 @@
     <!-- ````````````````````````````````````````````````` -->
     <!--                PROPERTY SETTING                   -->
     <!-- ````````````````````````````````````````````````` -->
-    <property name="CONSOLE_LOG_PATTERN"
-              value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){green} %clr([level=%-5level traceId=%X{traceId} spanId=%X{spanId}]) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
 
+    <property name="CONSOLE_LOG_PATTERN"
+              value="${CONSOLE_LOG_PATTERN:-%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){green} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"/>
     <property name="CONSOLE_LOG_CHARSET" value="${CONSOLE_LOG_CHARSET:-default}"/>
 
     <property name="LOG_PATH" value="logs"/> <!-- 로그 경로 (Logback 은 환경 번수 적용 불가) -->
     <property name="DATE_DIR" value="%d{yyyy-MM-dd}"/>
+
+    <springProperty name="APPLICATION_NAME" source="spring.application.name"/>
 
     <!-- ````````````````````````````````````````````````` -->
     <!--                APPENDER SETTING                   -->
@@ -38,12 +40,22 @@
             </timeBasedFileNamingAndTriggeringPolicy>
             <fileNamePattern>${LOG_PATH}/${DATE_DIR}/application.%i.log</fileNamePattern>
         </rollingPolicy>
-        <encoder>
-            <pattern>
-                [%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread]
-                [level=%-5level traceId=%X{traceId} spanId=%X{spanId}]
-                %logger{35}[%line] - %msg%n
-            </pattern>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <timestampPattern>yyyy-MM-dd'T'HH:mm:ss.SSS</timestampPattern>
+            <!-- https://github.com/logfellow/logstash-logback-encoder?tab=readme-ov-file#standard-fields -->
+            <fieldNames>
+                <timestamp>timestamp</timestamp>
+                <level>level</level>
+                <thread>thread</thread>
+                <logger>logger</logger>
+                <message>message</message>
+                <stackTrace>stackTrace</stackTrace>
+                <levelValue>[ignore]</levelValue>
+                <version>[ignore]</version>
+            </fieldNames>
+            <includeMdcKeyName>traceId</includeMdcKeyName>
+            <includeMdcKeyName>spanId</includeMdcKeyName>
+            <customFields>{"appname":"${APPLICATION_NAME}"}</customFields>
         </encoder>
     </appender>
 
@@ -51,49 +63,57 @@
     <!--                 Logger Setting                    -->
     <!-- ````````````````````````````````````````````````` -->
     <springProfile name="local">
-        <logger name="root" level="info" additivity="false">
+        <logger name="p6spy" level="info" additivity="false">
             <appender-ref ref="CONSOLE"/>
         </logger>
+        <logger name="org.hibernate" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger name="org.hibernate.SQL" level="debug" additivity="false"/> <!-- exclude from console -->
+        <logger name="org.hibernate.orm.jdbc.bind" level="trace" additivity="false"/> <!-- exclude from console -->
         <logger name="org.flywaydb" level="info" additivity="false">
             <appender-ref ref="CONSOLE"/>
         </logger>
         <logger name="baguni" level="info" additivity="false">
-            <appender-ref ref="CONSOLE"/>
-        </logger>
-        <logger name="p6spy" level="info" additivity="false">
             <appender-ref ref="CONSOLE"/>
         </logger>
     </springProfile>
 
     <springProfile name="dev">
-        <logger name="root" level="info" additivity="false">
+        <logger name="p6spy" level="info" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger name="org.hibernate" level="debug" additivity="false">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
+        </logger>
+        <logger name="org.hibernate.SQL" level="debug" additivity="false">
+            <appender-ref ref="FILE"/>  <!-- save sql to file without p6spy -->
+        </logger>
+        <logger name="org.hibernate.orm.jdbc.bind" level="trace" additivity="false">
+            <appender-ref ref="FILE"/>  <!-- save sql to file without p6spy -->
         </logger>
         <logger name="org.flywaydb" level="info" additivity="false">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </logger>
         <logger name="baguni" level="info" additivity="false">
-            <appender-ref ref="CONSOLE"/>
-            <appender-ref ref="FILE"/>
-        </logger>
-        <logger name="p6spy" level="info" additivity="false">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </logger>
     </springProfile>
 
     <springProfile name="prod">
+        <!--  p6spy는 운영 서버에서 사용 X  -->
+        <logger name="org.hibernate" level="debug" additivity="false">
+            <appender-ref ref="FILE"/>
+        </logger>
         <logger name="org.flywaydb" level="info" additivity="false">
-            <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </logger>
         <logger name="baguni" level="info" additivity="false">
-            <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </logger>
-        <!--  SQL 로깅 X  -->
     </springProfile>
 
 </configuration>
