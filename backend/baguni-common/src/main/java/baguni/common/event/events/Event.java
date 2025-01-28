@@ -3,6 +3,8 @@ package baguni.common.event.events;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+
 import lombok.Getter;
 
 /**
@@ -12,11 +14,22 @@ import lombok.Getter;
 @Getter
 public abstract class Event {
 
+	@JsonUnwrapped
+	private final Topic topic;
+
 	/** 이벤트가 발생한 시각 */
 	private final LocalDateTime time = LocalDateTime.now();
 
 	/** 기본 포맷: yyyy-MM-dd HH:mm:ss */
 	public String getTimeFormatted() {
 		return time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+	}
+
+	public String getTopicString() {
+		return topic.getTopicString();
+	}
+
+	public Event(Topic topic) {
+		this.topic = topic;
 	}
 }

@@ -37,7 +37,6 @@ public class LinkApiController {
 	public ResponseEntity<LinkApiResponse> getLinkData(
 		@Parameter(description = "og 태그 데이터 가져올 url") @RequestParam String url
 	) {
-		// Selenium 사용하도록 변경
 		LinkInfo linkInfo = linkService.getLinkInfo(url);
 		var response = linkApiMapper.toLinkResponse(linkInfo);
 		return ResponseEntity.ok(response);

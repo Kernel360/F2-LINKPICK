@@ -58,12 +58,6 @@ public class PickService {
 	}
 
 	@Transactional(readOnly = true)
-	public PickResult.Pick getPickUrl(Long userId, String url) {
-		Pick pick = pickDataHandler.getPickUrl(userId, url);
-		return pickMapper.toPickResult(pick);
-	}
-
-	@Transactional(readOnly = true)
 	public Optional<PickResult.Pick> findPickUrl(Long userId, String url) {
 		return pickDataHandler.findPickUrl(userId, url).map(pickMapper::toPickResult);
 	}
@@ -199,20 +193,24 @@ public class PickService {
 		}
 	}
 
-	private void assertUserIsFolderOwner(Long userId, Long folderId) {
-		// folderId가 null인 경우 변경이 없는 것이니 검증하지 않음
-		if (folderId == null) {
-			return;
+	private void assertUserIsFolderOwner(Long userId, Long parentFolderId) {
+		if (Objects.isNull(parentFolderId)) {
+			throw ApiFolderException.INVALID_PARENT_FOLDER();
 		}
-		Folder parentFolder = folderDataHandler.getFolder(folderId);
+
+		Folder parentFolder = folderDataHandler.getFolder(parentFolderId);
 		if (ObjectUtils.notEqual(userId, parentFolder.getUser().getId())) {
 			throw ApiFolderException.FOLDER_ACCESS_DENIED();
 		}
 	}
 
 	private void assertParentFolderIsNotRoot(Long parentFolderId) {
+		if (Objects.isNull(parentFolderId)) {
+			throw ApiFolderException.INVALID_PARENT_FOLDER();
+		}
+
 		Folder parentFolder = folderDataHandler.getFolder(parentFolderId);
-		if (Objects.isNull(parentFolder.getId()) || parentFolder.getFolderType() == FolderType.ROOT) {
+		if (parentFolder.getFolderType() == FolderType.ROOT) {
 			throw ApiPickException.PICK_UNAUTHORIZED_ROOT_ACCESS();
 		}
 	}

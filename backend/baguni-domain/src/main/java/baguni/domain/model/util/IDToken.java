@@ -2,14 +2,21 @@ package baguni.domain.model.util;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import lombok.Getter;
+
 /**
  * VO for ID Token
  */
+@Getter
 public class IDToken {
 
 	private final UUID uuid;
 
-	public static IDToken fromString(String raw) throws IdTokenConversionException {
+	@JsonCreator
+	public static IDToken fromString(@JsonProperty("uuid") String raw) throws IdTokenConversionException {
 		try {
 			var uuid = UUID.fromString(raw);
 			return new IDToken(uuid);

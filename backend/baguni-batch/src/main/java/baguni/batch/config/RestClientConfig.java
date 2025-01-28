@@ -28,9 +28,8 @@ public class RestClientConfig {
 	}
 
 	@Bean
-	public RestClient restClient() {
-		return RestClient
-			.builder()
+	public RestClient restClient(RestClient.Builder restClientBuilder) {
+		return restClientBuilder
 			.messageConverters(converter -> {
 				converter.add(new MappingJackson2XmlHttpMessageConverter());
 			})

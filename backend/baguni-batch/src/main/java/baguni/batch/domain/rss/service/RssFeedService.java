@@ -11,8 +11,8 @@ import baguni.batch.domain.link.service.RssFeedApi;
 import baguni.batch.domain.rss.dto.RssFeed;
 import baguni.batch.infrastructure.rss.RssBlogDataHandler;
 import baguni.common.annotation.MeasureTime;
-import baguni.common.event.events.LinkCrawlingEvent;
-import baguni.common.event.messenger.CrawlingEventMessenger;
+import baguni.common.event.events.LinkCreateEvent;
+import baguni.common.event.messenger.EventMessenger;
 import baguni.domain.infrastructure.link.LinkDataHandler;
 import baguni.domain.model.link.Link;
 import baguni.domain.model.rss.RssBlog;
@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class RssFeedService {
 
-	private final CrawlingEventMessenger crawlingEventMessenger;
+	private final EventMessenger eventMessenger;
 	private final RssBlogDataHandler rssBlogDataHandler;
 	private final LinkDataHandler linkDataHandler;
 	private final RssFeedApi rssFeedApi;
@@ -50,7 +50,7 @@ public class RssFeedService {
 							 .getChannel()
 							 .getArticles();
 		} catch (Exception e) {
-			log.error("RSS 피드 획득에 실패했습니다. url:{} message:{}", blog.getUrl(), e.getMessage());
+			log.error("RSS 피드 획득에 실패했습니다. url:{} message:{}", blog.getUrl(), e.getMessage(), e);
 			return List.of();
 		}
 	}
@@ -64,10 +64,10 @@ public class RssFeedService {
 		try {
 			link = Link.createRssLink(article.getLink(), article.getTitle(), article.getPubDate());
 		} catch (Exception e) { // pubDate 날짜 형식 파싱 실패
-			log.error("RSS PubDate 을 LocalDateTime으로 파싱하는데 실패했습니다. time: {}", article.getPubDate());
+			log.error("RSS PubDate 을 LocalDateTime으로 파싱하는데 실패했습니다. time: {}", article.getPubDate(), e);
 			link = Link.createRssLink(article.getLink(), article.getTitle(), null);
 		}
 		linkDataHandler.saveLink(link);
-		crawlingEventMessenger.send(new LinkCrawlingEvent(article.getLink()));
+		eventMessenger.send(new LinkCreateEvent(article.getLink()));
 	}
 }

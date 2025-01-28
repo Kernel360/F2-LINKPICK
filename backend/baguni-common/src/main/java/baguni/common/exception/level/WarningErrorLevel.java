@@ -1,19 +1,18 @@
 package baguni.common.exception.level;
 
 import lombok.extern.slf4j.Slf4j;
-import baguni.common.exception.base.ApiException;
 import baguni.common.util.CachedHttpServletRequest;
 
 @Slf4j
 public class WarningErrorLevel extends ErrorLevel {
 
 	@Override
-	public void handleError(ApiException exception, CachedHttpServletRequest request) {
-		log.warn(exception.getMessage(), exception, request);
+	public void handleError(Exception exception, CachedHttpServletRequest request) {
+		log.error("{}{}", exception.getMessage(), request); // stack trace 미출력
 	}
 
 	@Override
-	public void handleError(ApiException exception) {
+	public void handleError(Exception exception) {
 		log.warn(exception.getMessage(), exception);
 	}
 }

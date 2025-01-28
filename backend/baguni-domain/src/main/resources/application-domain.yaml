@@ -12,9 +12,8 @@ spring:
     open-in-view: false
     properties:
       hibernate:
-        format_sql: false
         show_sql: false
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: false
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DOCKER_MYSQL_USERNAME}
@@ -23,7 +22,18 @@ spring:
     user: ${DOCKER_MYSQL_USERNAME}
     password: ${DOCKER_MYSQL_PASSWORD}
     schemas: ${DOCKER_MYSQL_DATABASE}
-
+logging:
+  level:
+    # basic log level for all messages
+    org.hibernate: info
+    # SQL statements and parameters
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+    # Statistics and slow queries
+    org.hibernate.stat: debug
+    org.hibernate.SQL_SLOW: info
+    # 2nd Level Cache
+    org.hibernate.cache: debug
 ---
 # -----------------------------
 #       LOCAL SETTINGS
@@ -41,7 +51,10 @@ spring:
     url: ${DOCKER_LOCAL_MYSQL_URL}
     baseline-on-migrate: true
     enabled: true
-
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
 ---
 # -----------------------------
 #     DEVELOPMENT SETTINGS
@@ -59,7 +72,10 @@ spring:
     url: ${DOCKER_DEV_MYSQL_URL}
     baseline-on-migrate: true
     enabled: true
-
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
 ---
 # -----------------------------
 #     PRODUCTION SETTINGS

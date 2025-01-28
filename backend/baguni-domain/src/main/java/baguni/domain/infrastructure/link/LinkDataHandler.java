@@ -26,11 +26,6 @@ public class LinkDataHandler {
 		return linkRepository.findByUrl(url);
 	}
 
-	@Transactional(readOnly = true)
-	public Optional<Link> getOptionalLinkById(Long id) {
-		return linkRepository.findById(id);
-	}
-
 	@Transactional
 	public Link saveLink(Link link) {
 		return linkRepository.save(link);
