@@ -1,24 +1,28 @@
 'use client';
-
-import { useMyShareFolder } from '@/hooks/useMyShareFolder';
+import { useFetchShareFolderList } from '@/queries/useFetchShareFolderList';
 import { MyPageShareFolderField } from './MyPageShareFolderField';
 import { MyPageShareFolderHeader } from './MyPageShareFolderHeader';
 import { myPageShareFolderFieldListLayoutStyle } from './myPageShareFolderContent.css';
 
 export default function MyPageShareFolderContent() {
-  const { myShareFolders, handleDeleteMyShareFolder } = useMyShareFolder();
+  const { data: shareFolderList } = useFetchShareFolderList();
 
-  if (!myShareFolders.length) return <div>공유된 폴더가 없습니다.</div>;
+  if (!shareFolderList) {
+    return null;
+  }
+
+  if (!shareFolderList.length) {
+    return <div>공유된 폴더가 없습니다.</div>;
+  }
 
   return (
     <div>
       <MyPageShareFolderHeader />
       <div className={myPageShareFolderFieldListLayoutStyle}>
-        {myShareFolders.map((folderInfo) => (
+        {shareFolderList.map((folderInfo) => (
           <MyPageShareFolderField
             key={folderInfo.sourceFolderId}
             folderInfo={folderInfo}
-            handleDeleteMyShareFolder={handleDeleteMyShareFolder}
           />
         ))}
       </div>
