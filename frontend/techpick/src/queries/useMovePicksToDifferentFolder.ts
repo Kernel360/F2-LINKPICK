@@ -76,6 +76,9 @@ export function useMovePicksToDifferentFolder() {
     queryClient.invalidateQueries({
       queryKey: pickKeys.folderId(movePicksInfo.destinationFolderId),
     });
+    queryClient.invalidateQueries({
+      queryKey: pickKeys.search(),
+    });
   };
 
   return { mutate };

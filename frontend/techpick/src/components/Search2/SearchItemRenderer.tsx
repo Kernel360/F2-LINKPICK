@@ -10,12 +10,11 @@ import * as styles from './searchItemRenderer.css';
 
 export default function SearchItemRenderer({
   item,
-  index,
   style,
   onClose,
 }: ItemRendererProps) {
   const router = useRouter();
-  const { setHoverPickIndex } = useSearchPickStore();
+  const { setHoverPickInfo } = useSearchPickStore();
   const { data: folderRecord } = useFetchFolders();
   const folderInfo = getFolderInfoByFolderId({
     folderId: item.parentFolderId,
@@ -23,7 +22,7 @@ export default function SearchItemRenderer({
   });
 
   const handleMouseEnter = () => {
-    setHoverPickIndex(index);
+    setHoverPickInfo(item);
   };
 
   const handleClick = () => {

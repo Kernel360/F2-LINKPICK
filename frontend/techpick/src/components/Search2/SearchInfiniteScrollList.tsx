@@ -1,5 +1,5 @@
+import { useFetchSearchPickList } from '@/queries/useFetchSearchPickList';
 import { useSearchPickStore } from '@/stores/searchPickStore';
-import { useCallback, useEffect } from 'react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
@@ -9,31 +9,30 @@ import * as styles from './searchInfiniteScrollList.css';
 export function SearchInfiniteScrollList({
   onClose,
 }: SearchInfiniteScrollListProps) {
-  const {
-    searchResultList,
-    hasNext,
-    isLoading,
-    searchPicksByQueryParam,
-    loadMoreSearchPicks,
-    lastCursor,
-    searchQuery,
-    searchTag,
-    searchFolder,
-  } = useSearchPickStore();
+  const { searchQuery, searchTag, searchFolder } = useSearchPickStore();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    if (!searchResultList.length) searchPicksByQueryParam();
-  }, [searchQuery, searchTag, searchFolder, searchResultList]);
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useFetchSearchPickList({
+      searchTokenList: searchQuery,
+      folderIdList: searchFolder,
+      tagIdList: searchTag,
+    });
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  const loadMoreItems = useCallback(async () => {
-    await loadMoreSearchPicks();
-  }, [hasNext, isLoading, lastCursor]);
+  const searchResultList = data?.pages.flatMap((page) => page.content) ?? [];
+
+  const loadMoreItems = () => {
+    if (!isFetchingNextPage) {
+      fetchNextPage();
+    }
+  };
 
   const isItemLoaded = (index: number) => {
-    return !hasNext || index < searchResultList.length;
+    return !hasNextPage || index < searchResultList.length;
   };
+
+  const itemCount = hasNextPage
+    ? searchResultList.length + 1
+    : searchResultList.length;
 
   return (
     <div className={styles.searchListContainer}>
@@ -41,9 +40,7 @@ export function SearchInfiniteScrollList({
         {({ height, width }) => (
           <InfiniteLoader
             isItemLoaded={isItemLoaded}
-            itemCount={
-              hasNext ? searchResultList.length + 1 : searchResultList.length
-            }
+            itemCount={itemCount}
             loadMoreItems={loadMoreItems}
             threshold={5}
           >
