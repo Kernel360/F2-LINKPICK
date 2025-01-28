@@ -1,65 +1,64 @@
 'use client';
 
 import { movePicks } from '@/apis/pick/movePicks';
+import type { MutateOptionType } from '@/types/MutateOptionType';
 import type { PickListType } from '@/types/PickListType';
 import type { UseMovePicksMutationFnParamType } from '@/types/UseMovePicksMutationFnParamType';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { pickKeys } from './pickKeys';
 
 export function useMovePicksToDifferentFolder() {
   const queryClient = useQueryClient();
 
-  return useMutation({
-    mutationFn: ({ movePicksInfo }: UseMovePicksMutationFnParamType) =>
-      movePicks(movePicksInfo),
-    onMutate: async ({ sourceFolderId, movePicksInfo }) => {
-      const { idList, destinationFolderId } = movePicksInfo;
-      await Promise.all([
-        queryClient.cancelQueries({
-          queryKey: pickKeys.folderId(sourceFolderId),
-        }),
-        queryClient.cancelQueries({
-          queryKey: pickKeys.folderId(destinationFolderId),
-        }),
-      ]);
+  const mutate = async (
+    movePickParam: Omit<UseMovePicksMutationFnParamType, 'toPickId'>,
+    afterMutate: MutateOptionType = { onSuccess: () => {}, onError: () => {} },
+  ) => {
+    const { movePicksInfo, sourceFolderId } = movePickParam;
+    const { onSuccess = () => {}, onError = () => {} } = afterMutate;
+    const { destinationFolderId } = movePicksInfo;
 
-      const prevSourcePickList =
-        queryClient.getQueryData<PickListType>(
-          pickKeys.folderId(sourceFolderId),
-        ) ?? [];
-
-      const movedPickList = prevSourcePickList.filter((pickInfo) =>
-        idList.includes(pickInfo.id),
-      );
-      const nextSourcePickList = prevSourcePickList.filter(
-        (pickInfo) => !idList.includes(pickInfo.id),
-      );
-
-      queryClient.setQueryData(
+    const prevSourcePickList =
+      queryClient.getQueryData<PickListType>(
         pickKeys.folderId(sourceFolderId),
-        nextSourcePickList,
-      );
+      ) ?? [];
 
-      const prevDestinationPickList =
-        queryClient.getQueryData<PickListType>(
-          pickKeys.folderId(destinationFolderId),
-        ) ?? [];
+    const movedPickSet = new Set(movePicksInfo.idList);
+    const movedPickList: PickListType = [];
+    const nextSourcePickList: PickListType = [];
 
-      const nextDestinationPickList = [
-        ...movedPickList,
-        ...prevDestinationPickList,
-      ];
+    for (const pickInfo of prevSourcePickList) {
+      if (movedPickSet.has(pickInfo.id)) {
+        movedPickList.push(pickInfo);
+      } else {
+        nextSourcePickList.push(pickInfo);
+      }
+    }
 
-      queryClient.setQueryData(
+    queryClient.setQueryData(
+      pickKeys.folderId(sourceFolderId),
+      nextSourcePickList,
+    );
+
+    const prevDestinationPickList =
+      queryClient.getQueryData<PickListType>(
         pickKeys.folderId(destinationFolderId),
-        nextDestinationPickList,
-      );
+      ) ?? [];
 
-      return { prevSourcePickList, prevDestinationPickList };
-    },
-    onError(_error, { sourceFolderId, movePicksInfo }, context) {
-      const prevSourcePickList = context?.prevSourcePickList ?? [];
-      const prevDestinationPickList = context?.prevDestinationPickList ?? [];
+    const nextDestinationPickList = [
+      ...movedPickList,
+      ...prevDestinationPickList,
+    ];
+
+    queryClient.setQueryData(
+      pickKeys.folderId(destinationFolderId),
+      nextDestinationPickList,
+    );
+
+    try {
+      await movePicks(movePicksInfo);
+      onSuccess();
+    } catch {
       queryClient.setQueryData(
         pickKeys.folderId(sourceFolderId),
         prevSourcePickList,
@@ -68,14 +67,16 @@ export function useMovePicksToDifferentFolder() {
         pickKeys.folderId(movePicksInfo.destinationFolderId),
         prevDestinationPickList,
       );
-    },
-    onSettled: (_data, _error, { sourceFolderId, movePicksInfo }) => {
-      queryClient.invalidateQueries({
-        queryKey: pickKeys.folderId(sourceFolderId),
-      });
-      queryClient.invalidateQueries({
-        queryKey: pickKeys.folderId(movePicksInfo.destinationFolderId),
-      });
-    },
-  });
+      onError();
+    }
+
+    queryClient.invalidateQueries({
+      queryKey: pickKeys.folderId(sourceFolderId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: pickKeys.folderId(movePicksInfo.destinationFolderId),
+    });
+  };
+
+  return { mutate };
 }
