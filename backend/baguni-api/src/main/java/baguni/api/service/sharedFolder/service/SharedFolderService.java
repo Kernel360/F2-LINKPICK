@@ -64,7 +64,6 @@ public class SharedFolderService {
 	 */
 	@Transactional(readOnly = true)
 	@MeasureTime
-
 	public SharedFolderResult.SharedFolderInfo getSharedFolderInfo(UUID uuid) {
 		var sourceFolder = sharedFolderDataHandler.getByUUID(uuid).getFolder();
 		var pickList = pickDataHandler.getPickListPreservingOrder(sourceFolder.getChildPickIdOrderedList());

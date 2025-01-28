@@ -97,13 +97,7 @@ public class PickDataHandler {
 		Folder folder = folderRepository.findById(command.parentFolderId())
 										.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 		Link link = linkRepository.findByUrl(command.linkInfo().url())
-								  .map(existLink -> {
-									  existLink.updateMetadata(command.linkInfo().title(),
-										  command.linkInfo().description(),
-										  command.linkInfo().imageUrl());
-									  return existLink;
-								  })
-								  .orElseGet(() -> linkRepository.save(linkMapper.of(command.linkInfo())));
+								  .orElseGet(() -> linkRepository.save(Link.createLink(command.linkInfo().url())));
 
 		Pick savedPick = pickRepository.save(pickMapper.toEntity(command, user, folder, link));
 		Folder parentFolder = savedPick.getParentFolder();

@@ -1,4 +1,4 @@
-package baguni.api.domain.pick.service;
+package baguni.api.service.pick.service;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import baguni.api.service.pick.service.PickSearchService;
 import baguni.api.service.pick.service.PickService;
 import baguni.domain.model.user.SocialProvider;
+import baguni.domain.model.util.IDToken;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
 import baguni.domain.exception.folder.ApiFolderException;
@@ -41,6 +42,7 @@ import baguni.domain.infrastructure.user.UserRepository;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(classes = BaguniApiApplication.class)
 @ActiveProfiles("local")
+@DisplayName("픽 검색 서비스 - 통합 테스트")
 class PickSearchTest {
 
 	@Autowired
@@ -114,22 +116,23 @@ class PickSearchTest {
 	@MethodSource("provideSearchTestCases")
 	Stream<TestCase> provideSearchTestCases() {
 		return Stream.of(
-			new TestCase(List.of(unclassified1.getId(), recycleBin1.getId()), List.of("리액트", "서버", "스프링"),
-				List.of(tag1.getId(), tag2.getId()), 10, "모든 조건 검색"),
-			new TestCase(null, List.of("리액트", "서버", "스프링"), List.of(tag1.getId(), tag2.getId()), 10, "폴더 null"),
-			new TestCase(List.of(unclassified1.getId(), recycleBin1.getId()), null, List.of(tag1.getId(),
-				tag2.getId()),
+			new TestCase(new ArrayList<>(List.of(unclassified1.getId(), recycleBin1.getId())), new ArrayList<>(List.of("리액트", "서버", "스프링")),
+				new ArrayList<>(List.of(tag1.getId(), tag2.getId())), 10, "모든 조건 검색"),
+			new TestCase(null, new ArrayList<>(List.of("리액트", "서버", "스프링")), new ArrayList<>(List.of(tag1.getId(), tag2.getId())), 10, "폴더 null"),
+			new TestCase(new ArrayList<>(List.of(unclassified1.getId(), recycleBin1.getId())), null, new ArrayList<>(List.of(tag1.getId(),
+				tag2.getId())),
 				20, "제목 검색 null"),
-			new TestCase(List.of(unclassified1.getId(), recycleBin1.getId()), List.of("리액트", "서버", "스프링"), null, 10,
+			new TestCase(new ArrayList<>(List.of(unclassified1.getId(), recycleBin1.getId())), new ArrayList<>(List.of("리액트", "서버", "스프링")), null, 10,
 				"태그 null"),
-			new TestCase(null, null, List.of(tag1.getId(), tag2.getId()), 20, "폴더, 검색 null"),
+			new TestCase(null, null, new ArrayList<>(List.of(tag1.getId(), tag2.getId())), 20, "폴더, 검색 null"),
 			new TestCase(null, null, null, 30, "전체 null : 전체 검색"),
-			new TestCase(List.of(general1.getId()), List.of("s"), null, 10, "폴더 : 일반, 제목 : s"),
-			new TestCase(List.of(general1.getId()), List.of("T"), null, 5, "폴더 : 일반, 제목 : T"),
-			new TestCase(List.of(general1.getId()), null, List.of(tag3.getId()), 10, "폴더 : 일반, 태그 : 3"),
-			new TestCase(List.of(recycleBin1.getId()), null, List.of(tag3.getId()), 0, "폴더 : 휴지통, 태그 : 3")
+			new TestCase(new ArrayList<>(List.of(general1.getId())), new ArrayList<>(List.of("s")), null, 10, "폴더 : 일반, 제목 : s"),
+			new TestCase(new ArrayList<>(List.of(general1.getId())), new ArrayList<>(List.of("T")), null, 5, "폴더 : 일반, 제목 : T"),
+			new TestCase(new ArrayList<>(List.of(general1.getId())), null, new ArrayList<>(List.of(tag3.getId())), 10, "폴더 : 일반, 태그 : 3"),
+			new TestCase(new ArrayList<>(List.of(recycleBin1.getId())), null, new ArrayList<>(List.of(tag3.getId())), 0, "폴더 : 휴지통, 태그 : 3")
 		);
 	}
+
 
 	@Nested
 	@DisplayName("제목 검색 테스트")
@@ -138,17 +141,17 @@ class PickSearchTest {
 
 		static Stream<TestCase> provideTestCases() {
 			return Stream.of(
-				new TestCase(null, List.of("리액트"), null, 10, "리액트"),
-				new TestCase(null, List.of("스프링"), null, 20, "스프링"),
-				new TestCase(null, List.of("Spring"), null, 5, "Spring"),
-				new TestCase(null, List.of("S", "g"), null, 5, "S g"),
-				new TestCase(null, List.of("S"), null, 10, "S"),
-				new TestCase(null, List.of("g"), null, 5, "g"),
-				new TestCase(null, List.of("스", "링"), null, 20, "스 링"),
-				new TestCase(null, List.of("프링"), null, 20, "프링"),
-				new TestCase(null, List.of("서버"), null, 10, "서버"),
-				new TestCase(null, List.of("트"), null, 10, "트"),
-				new TestCase(null, List.of("a".repeat(500)), null, 0, "긴 검색어") // 매우 긴 검색어
+				new TestCase(null, new ArrayList<>(List.of("리액트")), null, 10, "리액트"),
+				new TestCase(null, new ArrayList<>(List.of("스프링")), null, 20, "스프링"),
+				new TestCase(null, new ArrayList<>(List.of("Spring")), null, 5, "Spring"),
+				new TestCase(null, new ArrayList<>(List.of("S", "g")), null, 5, "S g"),
+				new TestCase(null, new ArrayList<>(List.of("S")), null, 10, "S"),
+				new TestCase(null, new ArrayList<>(List.of("g")), null, 5, "g"),
+				new TestCase(null, new ArrayList<>(List.of("스", "링")), null, 20, "스 링"),
+				new TestCase(null, new ArrayList<>(List.of("프링")), null, 20, "프링"),
+				new TestCase(null, new ArrayList<>(List.of("서버")), null, 10, "서버"),
+				new TestCase(null, new ArrayList<>(List.of("트")), null, 10, "트"),
+				new TestCase(null, new ArrayList<>(List.of("a".repeat(500))), null, 0, "긴 검색어") // 매우 긴 검색어
 			);
 		}
 
@@ -195,7 +198,7 @@ class PickSearchTest {
 		@DisplayName("루트 폴더 - 검색 불가")
 		void rootFolderSearchTest() {
 			// given
-			List<Long> folderIdList = List.of(root1.getId());
+			List<Long> folderIdList = new ArrayList<>(List.of(root1.getId()));
 			List<String> searchTokenList = null;
 			List<Long> tagIdList = null;
 
@@ -239,9 +242,9 @@ class PickSearchTest {
 		@MethodSource("provideFolderSearchTestCases")
 		Stream<TestCase> provideFolderSearchTestCases() {
 			return Stream.of(
-				new TestCase(List.of(unclassified1.getId()), null, null, 20, "미분류 폴더"),
-				new TestCase(List.of(general1.getId()), null, null, 10, "일반 폴더 - React.js"),
-				new TestCase(List.of(recycleBin1.getId()), null, null, 0, "휴지통 폴더")
+				new TestCase(new ArrayList<>(List.of(unclassified1.getId())), null, null, 20, "미분류 폴더"),
+				new TestCase(new ArrayList<>(List.of(general1.getId())), null, null, 10, "일반 폴더 - React.js"),
+				new TestCase(new ArrayList<>(List.of(recycleBin1.getId())), null, null, 0, "휴지통 폴더")
 			);
 		}
 	}
@@ -282,13 +285,13 @@ class PickSearchTest {
 		@MethodSource("provideTagSearchTestCases")
 		Stream<TestCase> provideTagSearchTestCases() {
 			return Stream.of(
-				new TestCase(null, null, List.of(tag1.getId()), 30, "태그 1"),
-				new TestCase(null, null, List.of(tag2.getId()), 20, "태그 2"),
-				new TestCase(null, null, List.of(tag3.getId()), 20, "태그 3"),
-				new TestCase(null, null, List.of(tag1.getId(), tag2.getId()), 20, "태그 1, 2"),
-				new TestCase(null, null, List.of(tag1.getId(), tag3.getId()), 20, "태그 1, 3"),
-				new TestCase(null, null, List.of(tag2.getId(), tag3.getId()), 10, "태그 2, 3"),
-				new TestCase(null, null, List.of(tag1.getId(), tag2.getId(), tag3.getId()), 10, "태그 1, 2, 3")
+				new TestCase(null, null, new ArrayList<>(List.of(tag1.getId())), 30, "태그 1"),
+				new TestCase(null, null, new ArrayList<>(List.of(tag2.getId())), 20, "태그 2"),
+				new TestCase(null, null, new ArrayList<>(List.of(tag3.getId())), 20, "태그 3"),
+				new TestCase(null, null, new ArrayList<>(List.of(tag1.getId(), tag2.getId())), 20, "태그 1, 2"),
+				new TestCase(null, null, new ArrayList<>(List.of(tag1.getId(), tag3.getId())), 20, "태그 1, 3"),
+				new TestCase(null, null, new ArrayList<>(List.of(tag2.getId(), tag3.getId())), 10, "태그 2, 3"),
+				new TestCase(null, null, new ArrayList<>(List.of(tag1.getId(), tag2.getId(), tag3.getId())), 10, "태그 1, 2, 3")
 			);
 		}
 	}
@@ -301,7 +304,7 @@ class PickSearchTest {
 		@DisplayName("존재하지 않는 폴더")
 		void exceptionTest1() {
 			// given
-			List<Long> folderIdList = List.of(999L);
+			List<Long> folderIdList = new ArrayList<>(List.of(999L));
 			List<String> searchTokenList = null;
 			List<Long> tagIdList = null;
 
@@ -320,7 +323,7 @@ class PickSearchTest {
 		void exceptionTest2() {
 			// given
 			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("검색결과가없음");
+			List<String> searchTokenList = new ArrayList<>(List.of("검색결과가없음"));
 			List<Long> tagIdList = null;
 
 			PickCommand.SearchPagination search = new PickCommand.SearchPagination(user1.getId(), folderIdList,
@@ -340,8 +343,8 @@ class PickSearchTest {
 		void exceptionTest3() {
 			// given
 			List<Long> folderIdList = null;
-			List<String> searchTokenList = List.of("검색결과가없음");
-			List<Long> tagIdList = List.of(999L);
+			List<String> searchTokenList = new ArrayList<>(List.of("검색결과가없음"));
+			List<Long> tagIdList = new ArrayList<>(List.of(999L));
 
 			PickCommand.SearchPagination search = new PickCommand.SearchPagination(user1.getId(), folderIdList,
 				searchTokenList, tagIdList,
@@ -357,7 +360,7 @@ class PickSearchTest {
 		@DisplayName("다른 유저의 폴더 리스트 검색")
 		void exceptionTest4() {
 			// given
-			List<Long> folderIdList = List.of(unclassified2.getId());
+			List<Long> folderIdList = new ArrayList<>(List.of(unclassified2.getId()));
 			List<String> searchTokenList = null;
 			List<Long> tagIdList = null;
 
@@ -377,7 +380,7 @@ class PickSearchTest {
 			// given
 			List<Long> folderIdList = null;
 			List<String> searchTokenList = null;
-			List<Long> tagIdList = List.of(tag4.getId());
+			List<Long> tagIdList = new ArrayList<>(List.of(tag4.getId()));
 
 			PickCommand.SearchPagination search = new PickCommand.SearchPagination(user1.getId(), folderIdList,
 				searchTokenList, tagIdList,
@@ -416,28 +419,28 @@ class PickSearchTest {
 	// Test Data Setting Method
 	private void saveUser1TestPick() {
 		for (int i = 0; i < 10; i++) {
-			LinkInfo linkInfo = new LinkInfo("리액트" + i, "링크 제목", "링크 설명", "링크 이미지 url", null);
+			LinkInfo linkInfo = new LinkInfo("리액트" + i, "링크 제목", "링크 설명", "링크 이미지 url");
 			PickCommand.Create command = new PickCommand.Create(user1.getId(), "리액트" + i + "서버" + i + "스프링",
 				List.of(tag1.getId(), tag2.getId()), unclassified1.getId(), linkInfo);
 			pickService.saveNewPick(command);
 		}
 
 		for (int i = 0; i < 10; i++) {
-			LinkInfo linkInfo = new LinkInfo("스프링" + i, "링크 제목", "링크 설명", "링크 이미지 url", null);
+			LinkInfo linkInfo = new LinkInfo("스프링" + i, "링크 제목", "링크 설명", "링크 이미지 url");
 			PickCommand.Create command = new PickCommand.Create(user1.getId(), "스프링" + i,
 				List.of(tag1.getId(), tag2.getId(), tag3.getId()), unclassified1.getId(), linkInfo);
 			pickService.saveNewPick(command);
 		}
 
 		for (int i = 0; i < 5; i++) {
-			LinkInfo linkInfo = new LinkInfo("Spring" + i, "링크 제목", "링크 설명", "링크 이미지 url", null);
+			LinkInfo linkInfo = new LinkInfo("Spring" + i, "링크 제목", "링크 설명", "링크 이미지 url");
 			PickCommand.Create command = new PickCommand.Create(user1.getId(), "Spring" + i,
 				List.of(tag1.getId(), tag3.getId()), general1.getId(), linkInfo);
 			pickService.saveNewPick(command);
 		}
 
 		for (int i = 0; i < 5; i++) {
-			LinkInfo linkInfo = new LinkInfo("Test" + i, "링크 제목", "링크 설명", "링크 이미지 url", null);
+			LinkInfo linkInfo = new LinkInfo("Test" + i, "링크 제목", "링크 설명", "링크 이미지 url");
 			PickCommand.Create command = new PickCommand.Create(user1.getId(), "Test" + i,
 				List.of(tag1.getId(), tag3.getId()), general1.getId(), linkInfo);
 			pickService.saveNewPick(command);
@@ -446,14 +449,14 @@ class PickSearchTest {
 
 	private void saveUser2TestPick() {
 		for (int i = 0; i < 5; i++) {
-			LinkInfo linkInfo = new LinkInfo("user2" + i, "링크 제목", "링크 설명", "링크 이미지 url", null);
+			LinkInfo linkInfo = new LinkInfo("user2" + i, "링크 제목", "링크 설명", "링크 이미지 url");
 			PickCommand.Create command = new PickCommand.Create(user2.getId(), "Backend",
 				List.of(tag4.getId(), tag5.getId()), unclassified2.getId(), linkInfo);
 			pickService.saveNewPick(command);
 		}
 
 		for (int i = 0; i < 5; i++) {
-			LinkInfo linkInfo = new LinkInfo("user2s" + i, "링크 제목", "링크 설명", "링크 이미지 url", null);
+			LinkInfo linkInfo = new LinkInfo("user2s" + i, "링크 제목", "링크 설명", "링크 이미지 url");
 			PickCommand.Create command = new PickCommand.Create(user2.getId(), "Frontend",
 				List.of(tag6.getId()), unclassified2.getId(), linkInfo);
 			pickService.saveNewPick(command);
@@ -502,6 +505,7 @@ class PickSearchTest {
 				.socialProvider(SocialProvider.KAKAO)
 				.socialProviderId("1")
 				.tagOrderList(new ArrayList<>())
+				.idToken(IDToken.makeNew())
 				.build()
 		);
 
@@ -516,6 +520,7 @@ class PickSearchTest {
 				.socialProvider(SocialProvider.KAKAO)
 				.socialProviderId("2")
 				.tagOrderList(new ArrayList<>())
+				.idToken(IDToken.makeNew())
 				.build()
 		);
 	}

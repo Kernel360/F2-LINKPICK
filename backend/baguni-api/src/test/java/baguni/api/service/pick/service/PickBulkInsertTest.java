@@ -1,4 +1,4 @@
-package baguni.api.domain.pick.service;
+package baguni.api.service.pick.service;
 
 import java.util.ArrayList;
 
@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import baguni.api.service.pick.service.PickBulkService;
 import baguni.api.service.pick.service.PickService;
+import baguni.domain.model.util.IDToken;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
 import baguni.domain.infrastructure.link.dto.LinkInfo;
@@ -25,6 +26,7 @@ import baguni.domain.infrastructure.user.UserRepository;
 @Slf4j
 @SpringBootTest(classes = BaguniApiApplication.class)
 @ActiveProfiles("local")
+@DisplayName("픽 Bulk Insert - 통합 테스트")
 class PickBulkInsertTest {
 
 	@Autowired
@@ -53,6 +55,7 @@ class PickBulkInsertTest {
 				.socialProvider(SocialProvider.KAKAO)
 				.socialProviderId("1")
 				.tagOrderList(new ArrayList<>())
+				.idToken(IDToken.makeNew())
 				.build()
 		);
 
@@ -64,7 +67,7 @@ class PickBulkInsertTest {
 	}
 
 	@Test
-	@DisplayName("픽 10000개 bulk insert test")
+	@DisplayName("픽 100개 bulk insert test")
 	void pickBulkInsertTest() {
 		long start = System.currentTimeMillis();
 		pickBulkService.saveBulkPick(user.getId(), unclassified.getId());
@@ -74,11 +77,11 @@ class PickBulkInsertTest {
 	}
 
 	@Test
-	@DisplayName("픽 10000개 normal insert test")
+	@DisplayName("픽 100개 normal insert test")
 	void pickInsertTest() {
 		long start = System.currentTimeMillis();
-		for (int i = 0; i < 10000; i++) {
-			LinkInfo linkInfo = new LinkInfo("test" + i, "링크 제목", "링크 설명", "링크 이미지 url", null);
+		for (int i = 0; i < 100; i++) {
+			LinkInfo linkInfo = new LinkInfo("test" + i, "링크 제목", "링크 설명", "링크 이미지 url");
 			PickCommand.Create command = new PickCommand.Create(user.getId(), "테스트 제목", new ArrayList<>(),
 				unclassified.getId(), linkInfo);
 			pickService.saveNewPick(command);

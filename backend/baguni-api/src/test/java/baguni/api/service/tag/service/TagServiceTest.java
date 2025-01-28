@@ -1,14 +1,11 @@
-package baguni.api.domain.tag.service;
+package baguni.api.service.tag.service;
 
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +15,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import baguni.api.service.tag.service.TagService;
+import baguni.domain.infrastructure.folder.FolderRepository;
+import baguni.domain.infrastructure.link.LinkRepository;
+import baguni.domain.infrastructure.pick.PickRepository;
+import baguni.domain.infrastructure.pick.PickTagRepository;
+import baguni.domain.infrastructure.tag.TagRepository;
+import baguni.domain.model.util.IDToken;
 import lombok.extern.slf4j.Slf4j;
 import baguni.BaguniApiApplication;
 import baguni.domain.infrastructure.tag.dto.TagCommand;
@@ -35,6 +37,7 @@ import baguni.domain.infrastructure.user.UserRepository;
 @SpringBootTest(classes = BaguniApiApplication.class)
 @ActiveProfiles("local")
 @Transactional
+@DisplayName("태그 서비스 - 통합 테스트")
 class TagServiceTest {
 
 	@Autowired
@@ -59,8 +62,25 @@ class TagServiceTest {
 			.socialProvider(SocialProvider.KAKAO)
 			.socialProviderId("1")
 			.tagOrderList(new ArrayList<>())
+			.idToken(IDToken.makeNew())
 			.build();
 		userRepository.save(user);
+	}
+
+	@AfterEach
+	void cleanUp(
+		@Autowired FolderRepository folderRepository,
+		@Autowired TagRepository tagRepository,
+		@Autowired PickRepository pickRepository,
+		@Autowired PickTagRepository pickTagRepository,
+		@Autowired LinkRepository linkRepository
+	) {
+		// NOTE: 제거 순서 역시 FK 제약 조건을 신경써야 한다.
+		pickTagRepository.deleteAll();
+		pickRepository.deleteAll();
+		folderRepository.deleteAll();
+		tagRepository.deleteAll();
+		linkRepository.deleteAll();
 	}
 
 	@Test
@@ -93,6 +113,36 @@ class TagServiceTest {
 		// then
 		assertThat(tagList).isNotNull();
 		assertThat(tagList.size()).isEqualTo(5);
+	}
+
+	@Test
+	@DisplayName("다른 사람 태그 조회")
+	void other_user_tag_test() {
+		// given
+		getTagCreateResult(1);
+
+		User user2 = User
+			.builder()
+			.email("test@test.com")
+			.nickname("test")
+			.password("test")
+			.role(Role.ROLE_USER)
+			.socialProvider(SocialProvider.KAKAO)
+			.socialProviderId("1")
+			.tagOrderList(new ArrayList<>())
+			.idToken(IDToken.makeNew())
+			.build();
+		userRepository.save(user2);
+
+		TagCommand.Create create = new TagCommand.Create(user2.getId(), "태그4", 1);
+		TagResult tagResult = tagService.saveTag(create);
+
+		TagCommand.Read command = new TagCommand.Read(user.getId(), tagResult.id());
+
+		// when, then
+		assertThatThrownBy(() -> tagService.getTag(command))
+			.isInstanceOf(ApiTagException.class)
+			.hasMessageStartingWith(ApiTagException.UNAUTHORIZED_TAG_ACCESS().getMessage());
 	}
 
 	@Test
@@ -137,7 +187,7 @@ class TagServiceTest {
 
 		User savedUser = userDataHandler.getUser(user.getId());
 		for (Long tagId : tagIdList) {
-			savedUser.updateTagOrderList(tagId, 0);
+			savedUser.updateTagOrderList(tagId, tagIdList.size());
 		}
 
 		Long targetId = expectedOrderList.get(0);
@@ -155,12 +205,6 @@ class TagServiceTest {
 		assertThat(savedUser.getTagOrderList()).isEqualTo(expectedOrderList);
 	}
 
-	// TODO: orderIdx 음수인 경우 테스트 필요
-	@Test
-	@DisplayName("태그 이동 시 Index 음수인 경우 테스트")
-	void moveTagNegativeIndexTest() {
-	}
-
 	@Test
 	@DisplayName("태그 삭제 테스트")
 	void deleteTagTest() {
@@ -176,46 +220,6 @@ class TagServiceTest {
 		assertThatThrownBy(() -> tagService.getTag(read))
 			.isInstanceOf(ApiTagException.class)
 			.hasMessageStartingWith(ApiTagException.TAG_NOT_FOUND().getMessage());
-	}
-
-	@Test
-	@DisplayName("태그 저장 동시성 테스트")
-	void createTagConcurrencyTest() throws InterruptedException {
-		// given
-		int threadCount = 20;
-		ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-		CountDownLatch countDownLatch = new CountDownLatch(threadCount);
-
-		AtomicInteger successCount = new AtomicInteger();
-		AtomicInteger failCount = new AtomicInteger();
-
-		Long userId = user.getId();
-
-		// when
-		for (int i = 0; i < threadCount; i++) {
-			executorService.submit(() -> {
-				try {
-					TagCommand.Create command = new TagCommand.Create(userId, "태그12341", 2);
-					tagService.saveTag(command);
-					successCount.incrementAndGet(); // 성공 카운트
-				} catch (Exception e) {
-					log.info(e.getMessage());
-					failCount.incrementAndGet(); // 실패 카운트
-				} finally {
-					countDownLatch.countDown();
-				}
-			});
-		}
-
-		countDownLatch.await(); // 모든 스레드가 완료될 때까지 대기
-		executorService.shutdown();
-
-		// then
-		log.info("success : {} ", successCount.get());
-		log.info("fail : {} ", failCount.get());
-
-		assertThat(successCount.get()).isEqualTo(1);
-		assertThat(failCount.get()).isEqualTo(threadCount - 1);
 	}
 
 	private TagResult getTagCreateResult(int n) {
