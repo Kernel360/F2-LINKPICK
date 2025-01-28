@@ -53,6 +53,7 @@ export const FolderDraggable = ({
       {...attributes}
       {...listeners}
       id={folderElementId}
+      suppressHydrationWarning={true}
     >
       {children}
     </div>
