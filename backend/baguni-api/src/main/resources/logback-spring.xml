@@ -106,12 +106,15 @@
     <springProfile name="prod">
         <!--  p6spy는 운영 서버에서 사용 X  -->
         <logger name="org.hibernate" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </logger>
         <logger name="org.flywaydb" level="info" additivity="false">
+            <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </logger>
         <logger name="baguni" level="info" additivity="false">
+            <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </logger>
     </springProfile>
