@@ -1,6 +1,5 @@
 'use client';
-
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { useUpdatePickInfo } from '@/queries/useUpdatePickInfo';
 import type { PickInfoType } from '@/types/PickInfoType';
 import type { TagType } from '@/types/TagType';
 import { X } from 'lucide-react';
@@ -13,7 +12,8 @@ export function DeselectTagButton({
   onClick = () => {},
 }: DeselectTagButtonProps) {
   const tagIdOrderedList = selectedTagList.map((tag) => tag.id);
-  const { updatePickInfo } = usePickStore();
+
+  const { mutate: updatePickInfo } = useUpdatePickInfo();
 
   return (
     <button
@@ -26,11 +26,14 @@ export function DeselectTagButton({
           return;
         }
 
-        updatePickInfo(pickInfo.parentFolderId, {
-          id: pickInfo.id,
-          tagIdOrderedList: tagIdOrderedList.filter(
-            (tagId) => tagId !== tag.id,
-          ),
+        updatePickInfo({
+          pickParentFolderId: pickInfo.parentFolderId,
+          updatePickInfo: {
+            id: pickInfo.id,
+            tagIdOrderedList: tagIdOrderedList.filter(
+              (tagId) => tagId !== tag.id,
+            ),
+          },
         });
       }}
     >
