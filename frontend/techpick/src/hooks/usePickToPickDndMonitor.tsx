@@ -1,4 +1,5 @@
 'use client';
+import { useMovePicksToEqualFolder } from '@/queries/useMovePicksToEqualFolder';
 import { usePickStore } from '@/stores/pickStore/pickStore';
 import { isPickDraggableObject } from '@/utils/isPickDraggableObjectType';
 import { useDndMonitor } from '@dnd-kit/core';
@@ -9,16 +10,14 @@ import { useGetActiveNavigationItemId } from './useGetActiveNavigationItemId';
  * @description pick에서 pick으로 dnd를 할 때의 이벤트를 감지하고 동작하는 hook입니다.
  */
 export function usePickToPickDndMonitor() {
-  const {
-    movePicksToEqualFolder,
-    selectedPickIdList,
-    selectSinglePick,
-    setIsDragging,
-    setFocusedPickId,
-    getPickInfoByFolderIdAndPickId,
-    setDraggingPickInfo,
-  } = usePickStore();
-
+  const selectedPickIdList = usePickStore((state) => state.selectedPickIdList);
+  const selectSinglePick = usePickStore((state) => state.selectSinglePick);
+  const setIsDragging = usePickStore((state) => state.setIsDragging);
+  const setFocusedPickId = usePickStore((state) => state.setFocusedPickId);
+  const setDraggingPickInfo = usePickStore(
+    (state) => state.setDraggingPickInfo,
+  );
+  const { mutate: movePicksToEqualFolder } = useMovePicksToEqualFolder();
   const { activeNavigationItemId } = useGetActiveNavigationItemId();
   const folderId = Number.isNaN(activeNavigationItemId)
     ? null
@@ -32,8 +31,7 @@ export function usePickToPickDndMonitor() {
     if (!isPickDraggableObject(activeObject)) return;
 
     const pickId = Number(activeObject.id);
-    const parentFolderId = activeObject.parentFolderId;
-    const pickInfo = getPickInfoByFolderIdAndPickId(parentFolderId, pickId);
+    const pickInfo = activeObject.pickInfo;
     setFocusedPickId(pickId);
     setIsDragging(true);
     setDraggingPickInfo(pickInfo);
@@ -44,11 +42,11 @@ export function usePickToPickDndMonitor() {
     }
   };
 
-  const onDragEnd = (event: DragEndEvent) => {
+  const onDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
     setIsDragging(false);
     setDraggingPickInfo(null);
 
-    const { active, over } = event;
     if (!over) return; // 드래그 중 놓은 위치가 없을 때 종료
     if (!folderId) return;
 
@@ -61,7 +59,19 @@ export function usePickToPickDndMonitor() {
     )
       return;
 
-    movePicksToEqualFolder({ folderId: folderId, from: active, to: over });
+    movePicksToEqualFolder(
+      {
+        fromPickId: Number(activeObject.id),
+        sourceFolderId: activeObject.parentFolderId,
+        toPickId: Number(overObject.id),
+        movePicksInfo: {
+          idList: selectedPickIdList,
+          destinationFolderId: activeObject.parentFolderId,
+          orderIdx: overObject.sortable.index,
+        },
+      },
+      {},
+    );
   };
 
   useDndMonitor({
