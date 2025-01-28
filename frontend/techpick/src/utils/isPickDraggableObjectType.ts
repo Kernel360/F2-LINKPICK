@@ -10,7 +10,8 @@ export const isPickDraggableObject = (
     !('type' in data) ||
     data.type !== 'pick' ||
     !('parentFolderId' in data) ||
-    !('sortable' in data)
+    !('sortable' in data) ||
+    !('pickInfo' in data)
   ) {
     return false;
   }
