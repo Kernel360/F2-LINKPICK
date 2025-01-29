@@ -69,6 +69,9 @@
         <logger name="org.hibernate" level="debug" additivity="false">
             <appender-ref ref="CONSOLE"/>
         </logger>
+        <logger name="com.zaxxer.hikari.pool.HikariPool" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
         <logger name="org.hibernate.SQL" level="debug" additivity="false"/> <!-- exclude from console -->
         <logger name="org.hibernate.orm.jdbc.bind" level="trace" additivity="false"/> <!-- exclude from console -->
         <logger name="org.flywaydb" level="info" additivity="false">
@@ -82,6 +85,10 @@
     <springProfile name="dev">
         <logger name="p6spy" level="info" additivity="false">
             <appender-ref ref="CONSOLE"/>
+        </logger>
+        <logger name="com.zaxxer.hikari.pool.HikariPool" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
         </logger>
         <logger name="org.hibernate" level="debug" additivity="false">
             <appender-ref ref="CONSOLE"/>
@@ -106,6 +113,10 @@
     <springProfile name="prod">
         <!--  p6spy는 운영 서버에서 사용 X  -->
         <logger name="org.hibernate" level="debug" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+        </logger>
+        <logger name="com.zaxxer.hikari.pool.HikariPool" level="debug" additivity="false">
             <appender-ref ref="CONSOLE"/>
             <appender-ref ref="FILE"/>
         </logger>
