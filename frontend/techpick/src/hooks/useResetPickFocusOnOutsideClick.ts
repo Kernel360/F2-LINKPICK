@@ -1,6 +1,6 @@
 'use client';
 
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { usePickStore } from '@/stores/pickStore';
 import { useCallback, useEffect } from 'react';
 
 export function useResetPickFocusOnOutsideClick() {

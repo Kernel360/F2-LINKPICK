@@ -3,7 +3,7 @@
 import { useGetDragOverStyle } from '@/hooks/useGetDragOverStyle';
 import { useDraggingRecommendPickStore } from '@/stores/draggingRecommendPickStore';
 import { useFolderStore } from '@/stores/folderStore';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { usePickStore } from '@/stores/pickStore';
 import { DragOverlay as DragOverlayPrimitive } from '@dnd-kit/core';
 import { FolderItemOverlay } from './FolderItemOverlay';
 import { PickCarouselCardOverlay } from './PickCarouselCardOverlay';
@@ -13,11 +13,9 @@ import { dragCountStyle, stackedOverlayStyle } from './dragOverlay.css';
 
 export function DargOverlay({ elementClickPosition }: DargOverlayProps) {
   const { isDragging: isFolderDragging, draggingFolderInfo } = useFolderStore();
-  const {
-    isDragging: isPickDragging,
-    draggingPickInfo,
-    selectedPickIdList,
-  } = usePickStore();
+  const isPickDragging = usePickStore((state) => state.isDragging);
+  const draggingPickInfo = usePickStore((state) => state.draggingPickInfo);
+  const selectedPickIdList = usePickStore((state) => state.selectedPickIdList);
   const { isDragging: isRecommendPickDragging, draggingRecommendPickInfo } =
     useDraggingRecommendPickStore();
 

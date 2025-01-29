@@ -1,3 +1,4 @@
+import { useFetchSearchPickList } from '@/queries/useFetchSearchPickList';
 import { useSearchPickStore } from '@/stores/searchPickStore';
 import { debounce } from 'es-toolkit';
 import { Loader, SearchIcon } from 'lucide-react';
@@ -6,7 +7,13 @@ import { useCallback, useEffect, useState } from 'react';
 import * as styles from './searchDialog.css';
 
 export default function SearchInput() {
-  const { isLoading, setSearchQuery } = useSearchPickStore();
+  const { searchQuery, searchTag, searchFolder, setSearchQuery } =
+    useSearchPickStore();
+  const { isLoading } = useFetchSearchPickList({
+    searchTokenList: searchQuery,
+    folderIdList: searchFolder,
+    tagIdList: searchTag,
+  });
   const [searchQueryInput, setSearchQueryInput] = useState<string>('');
 
   const setDebounceSearchQuery = useCallback(

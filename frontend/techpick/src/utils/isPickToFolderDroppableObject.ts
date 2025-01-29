@@ -3,17 +3,11 @@ import type { PickToFolderDroppableObjectType } from '@/types/PickToFolderDroppa
 export const isPickToFolderDroppableObject = (
   data: unknown,
 ): data is PickToFolderDroppableObjectType => {
-  if (!data || typeof data !== 'object') {
+  if (typeof data !== 'object' || data === null) {
     return false;
   }
 
-  if ('id' in data === false) {
-    return false;
-  }
+  const { id, type } = data as Record<string, unknown>;
 
-  if (!('type' in data && data.type === 'folder')) {
-    return false;
-  }
-
-  return true;
+  return typeof id !== 'undefined' && type === 'folder';
 };

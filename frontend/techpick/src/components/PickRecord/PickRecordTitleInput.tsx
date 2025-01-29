@@ -1,6 +1,6 @@
 'uer client';
 
-import { isEmptyString } from '@/utils/string';
+import { isEmptyString } from '@/utils/isEmptyString';
 import { useCallback, useEffect, useRef } from 'react';
 import type { KeyboardEvent } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';

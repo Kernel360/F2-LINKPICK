@@ -4,7 +4,7 @@ import { useFetchFolders } from '@/queries/useFetchFolders';
 import { useUpdateFolderName } from '@/queries/useUpdateFolderName';
 import type { FolderIdType } from '@/types/FolderIdType';
 import { getFolderInfoByFolderId } from '@/utils/getFolderInfoByFolderId';
-import { isEmptyString } from '@/utils/string';
+import { isEmptyString } from '@/utils/isEmptyString';
 import { FolderPlus } from 'lucide-react';
 import { useCallback, useContext, useEffect, useRef } from 'react';
 import type { KeyboardEvent } from 'react';

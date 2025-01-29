@@ -19,26 +19,20 @@ export default function SearchDialog({
   isOpen,
   onOpenChange,
 }: SearchDialogProps) {
-  const { preFetchSearchPicks, reset } = useSearchPickStore();
+  const { reset } = useSearchPickStore();
   const [isSelectMenuOpen, setIsSelectMenuOpen] = useState(false);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(function prefetching() {
-    preFetchSearchPicks();
-  }, []);
 
   /**
    * @description 이벤트를 구독하고, emit으로 발생시킨 이벤트를 받으면 상태를 변경합니다.
    */
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     eventEmitter.on(OPEN_SEARCH_DIALOG_EVENT, onOpenChange);
 
     return () => {
       eventEmitter.off(OPEN_SEARCH_DIALOG_EVENT, onOpenChange);
     };
-  }, [isOpen]);
+  }, [onOpenChange]);
 
   const handleOnClose = async () => {
     onOpenChange();

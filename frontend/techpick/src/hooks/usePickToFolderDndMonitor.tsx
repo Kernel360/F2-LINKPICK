@@ -1,6 +1,6 @@
 'use client';
-import { usePickStore } from '@/stores/pickStore/pickStore';
-import { useSearchPickStore } from '@/stores/searchPickStore';
+import { useMovePicksToDifferentFolder } from '@/queries/useMovePicksToDifferentFolder';
+import { usePickStore } from '@/stores/pickStore';
 import { isPickDraggableObject } from '@/utils/isPickDraggableObjectType';
 import { isPickToFolderDroppableObject } from '@/utils/isPickToFolderDroppableObject';
 import { notifySuccess } from '@/utils/toast';
@@ -11,8 +11,9 @@ import type { DragEndEvent, DragOverEvent } from '@dnd-kit/core';
  * @description pick에서 folder로 dnd를 할 때의 이벤트를 감지하고 동작하는 hook입니다.
  */
 export function usePickToFolderDndMonitor() {
-  const { movePicksToDifferentFolder } = usePickStore();
-  const { preFetchSearchPicks } = useSearchPickStore();
+  const { mutate: movePicksToDifferentFolder } =
+    useMovePicksToDifferentFolder();
+  const selectedPickIdList = usePickStore((state) => state.selectedPickIdList);
 
   const onDragOver = (event: DragOverEvent) => {
     const { active, over } = event;
@@ -48,14 +49,25 @@ export function usePickToFolderDndMonitor() {
       return;
     }
 
-    await movePicksToDifferentFolder({ from: activeObject, to: overObject });
-    notifySuccess('다른 폴더로 북마크를 이동했습니다!');
-    await preFetchSearchPicks();
+    movePicksToDifferentFolder(
+      {
+        fromPickId: Number(activeObject.id),
+        sourceFolderId: activeObject.parentFolderId,
+        movePicksInfo: {
+          idList: selectedPickIdList,
+          destinationFolderId: overObject.id,
+        },
+      },
+      {
+        onSuccess: () => {
+          notifySuccess('다른 폴더로 북마크를 이동했습니다!');
+        },
+      },
+    );
   };
 
   useDndMonitor({
     onDragOver,
-
     onDragEnd,
   });
 }

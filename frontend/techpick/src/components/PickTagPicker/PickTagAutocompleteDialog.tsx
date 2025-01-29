@@ -2,7 +2,7 @@
 
 import { useCreateTag } from '@/queries/useCreateTag';
 import { useFetchTagList } from '@/queries/useFetchTagList';
-import { usePickStore } from '@/stores/pickStore/pickStore';
+import { useUpdatePickInfo } from '@/queries/useUpdatePickInfo';
 import { useThemeStore } from '@/stores/themeStore';
 import { useUpdatePickStore } from '@/stores/updatePickStore';
 import type { PickInfoType } from '@/types/PickInfoType';
@@ -54,7 +54,7 @@ export function PickTagAutocompleteDialog({
   const tagIdOrderedList = selectedTagList.map((tag) => tag.id);
   const { data: tagList = [], isLoading } = useFetchTagList();
   const { mutateAsync: createTag } = useCreateTag();
-  const updatePickInfo = usePickStore((state) => state.updatePickInfo);
+  const { mutate: updatePickInfo } = useUpdatePickInfo();
   const isDarkMode = useThemeStore((state) => state.isDarkMode);
   const setCurrentUpdateTagPickIdToNull = useUpdatePickStore(
     (state) => state.setCurrentUpdateTagPickIdToNull,
@@ -90,9 +90,12 @@ export function PickTagAutocompleteDialog({
 
     focusTagInput();
     clearTagInputValue();
-    updatePickInfo(pickInfo.parentFolderId, {
-      id: pickInfo.id,
-      tagIdOrderedList: newTagIdOrderedList,
+    updatePickInfo({
+      pickParentFolderId: pickInfo.parentFolderId,
+      updatePickInfo: {
+        id: pickInfo.id,
+        tagIdOrderedList: newTagIdOrderedList,
+      },
     });
   };
 
@@ -127,9 +130,12 @@ export function PickTagAutocompleteDialog({
       const newTagIdOrderedList = [...tagIdOrderedList];
       newTagIdOrderedList.pop();
 
-      updatePickInfo(pickInfo.parentFolderId, {
-        id: pickInfo.id,
-        tagIdOrderedList: newTagIdOrderedList,
+      updatePickInfo({
+        pickParentFolderId: pickInfo.parentFolderId,
+        updatePickInfo: {
+          id: pickInfo.id,
+          tagIdOrderedList: newTagIdOrderedList,
+        },
       });
     }
   };
