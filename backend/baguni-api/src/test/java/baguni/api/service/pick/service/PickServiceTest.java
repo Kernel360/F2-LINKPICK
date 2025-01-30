@@ -5,27 +5,18 @@ import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 
-import baguni.api.application.suggestion.dto.RankingResponse;
-import baguni.api.service.pick.service.PickService;
 import baguni.api.service.ranking.dto.RankingResult;
 import baguni.api.service.ranking.service.RankingService;
 import baguni.common.dto.UrlWithCount;
@@ -336,7 +327,7 @@ class PickServiceTest {
 		void findPickUrl_test() {
 			// given
 			LinkInfo linkInfo = new LinkInfo("findPickUrl", "linkTitle", "linkDescription", "imageUrl");
-			PickCommand.Unclassified command = new PickCommand.Unclassified(user.getId(), linkInfo.title(),
+			PickCommand.Extension command = new PickCommand.Extension(user.getId(), linkInfo.title(),
 				linkInfo.url());
 
 			// when
