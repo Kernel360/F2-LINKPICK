@@ -14,8 +14,6 @@ import baguni.domain.infrastructure.tag.dto.TagResult;
 )
 public interface TagApiMapper {
 
-	TagCommand.Read toReadCommand(Long userId, TagApiRequest.Read request);
-
 	TagCommand.Create toCreateCommand(Long userId, TagApiRequest.Create request);
 
 	TagCommand.Update toUpdateCommand(Long userId, TagApiRequest.Update request);
@@ -27,6 +25,4 @@ public interface TagApiMapper {
 	TagApiResponse.Read toReadResponse(TagResult result);
 
 	TagApiResponse.Create toCreateResponse(TagResult result);
-
-	TagApiResponse.Update toUpdateResponse(TagResult result);
 }
