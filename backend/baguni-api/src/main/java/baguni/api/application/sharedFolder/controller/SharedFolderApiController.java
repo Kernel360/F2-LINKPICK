@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import baguni.api.application.sharedFolder.dto.SharedFolderApiMapper;
@@ -26,6 +27,7 @@ import baguni.security.annotation.LoginUserId;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/shared")
+@Tag(name = "SharedFolder API", description = "공유 폴더 API")
 public class SharedFolderApiController {
 
 	private final SharedFolderService sharedFolderService;
@@ -61,7 +63,7 @@ public class SharedFolderApiController {
 	@DeleteMapping("/{sourceFolderId}")
 	@Operation(summary = "폴더 공유 취소", description = "공유된 폴더를 비공개로 변경 합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "폴더 비공개화 성공"),
+		@ApiResponse(responseCode = "204", description = "폴더 비공개화 성공"),
 		@ApiResponse(responseCode = "403", description = "자신의 공유 폴더만 삭제 할 수 있습니다.")
 	})
 	public ResponseEntity<Void> deleteSharedFolder(
