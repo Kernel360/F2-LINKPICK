@@ -109,7 +109,7 @@ public class PickApiController {
 	}
 
 	@PostMapping
-	@Operation(summary = "픽 생성", description = "픽을 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계 됩니다.")
+	@Operation(summary = "웹 페이지에서 픽 생성", description = "웹 페이지에서 픽을 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계 됩니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
 		@ApiResponse(responseCode = "401", description = "잘못된 태그 접근"),
@@ -128,6 +128,9 @@ public class PickApiController {
 		return ResponseEntity.ok(response);
 	}
 
+	/**
+	 *	익스텐션에서 사용하지 않게 되면 제거
+	 */
 	@MeasureTime
 	@PostMapping("/extension")
 	@Operation(
