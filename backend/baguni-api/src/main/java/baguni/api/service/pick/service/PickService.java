@@ -155,6 +155,12 @@ public class PickService {
 		pickDataHandler.deletePickList(command);
 	}
 
+	@LoginUserIdDistributedLock
+	@Transactional
+	public void deletePickFromRecycleBin(Long userId) {
+		pickDataHandler.deletePickFromRecycleBin(userId);
+	}
+
 	/**
 	 * Internal Helper Functions
 	 **/

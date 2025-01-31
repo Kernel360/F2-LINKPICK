@@ -20,9 +20,9 @@ public interface PickTagRepository extends JpaRepository<PickTag, Long> {
 
 	void deleteByPick(Pick pick);
 
-	void deleteByTagId(Long tagId);
+	void deleteByPickId(Long pickId);
 
-	void deleteByPickAndTagId(Pick pick, Long tagId);
+	void deleteByTagId(Long tagId);
 
 	@Modifying
 	@Query("DELETE FROM PickTag pt WHERE pt.pick.id IN :pickIdList")

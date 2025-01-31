@@ -240,6 +240,18 @@ public class PickDataHandler {
 	}
 
 	@Transactional
+	public void deletePickFromRecycleBin(Long userId) {
+		Folder recycleBin = folderRepository.findRecycleBinByUserId(userId);
+		List<Long> pickIdList = recycleBin.getChildPickIdOrderedList();
+
+		pickIdList.forEach(pickId -> {
+			pickTagRepository.deleteByPickId(pickId);
+			pickRepository.deleteById(pickId);
+		});
+		pickIdList.clear();
+	}
+
+	@Transactional
 	public void attachTagToPickTag(Pick pick, Long tagId) {
 		Tag tag = tagRepository.findById(tagId)
 							   .orElseThrow(ApiTagException::TAG_NOT_FOUND);
