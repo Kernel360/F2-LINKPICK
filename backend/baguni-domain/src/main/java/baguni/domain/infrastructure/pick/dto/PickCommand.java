@@ -20,6 +20,9 @@ public class PickCommand {
 						 LinkInfo linkInfo) {
 	}
 
+	public record CreateFromExtension(Long userId, String title, List<Long> tagIdOrderedList, Long parentFolderId, String url, String linkTitle) {
+	}
+
 	public record Extension(Long userId, String title, String url) {
 	}
 

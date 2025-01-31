@@ -91,6 +91,13 @@ public class PickDataHandler {
 		return pickRepository.existsByUserIdAndLink(userId, link);
 	}
 
+	/**
+	 * 이 메서드는 사이트에서 픽 추가할 때만 사용하는 메서드
+	 * 현재 사용하고 있지 않은 상태
+	 * 아예 사용안하면 제거해도 괜찮을듯
+	 *
+	 * 사이트에서 픽 추가 못하도록 막았던 이유 : Url 검증이 까다로워서 (익스텐션에서만 하기로 변경)
+	 */
 	@Transactional
 	public Pick savePick(PickCommand.Create command) throws ApiPickException {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -108,13 +115,38 @@ public class PickDataHandler {
 												 .map(tag -> PickTag.of(savedPick, tag))
 												 .toList();
 		pickTagRepository.saveAll(pickTagList);
-
 		return savedPick;
 	}
 
 	/**
 	 * @author sangwon
-	 * 픽 생성 시 Link 데이터 수정하지 않음.
+	 * 익스텐션에서 픽 생성하는 메서드
+	 * 태그, 부모 폴더까지 설정
+	 */
+	@Transactional
+	public Pick savePickFromExtension(PickCommand.CreateFromExtension command) throws ApiPickException {
+		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
+		Folder folder = folderRepository.findById(command.parentFolderId())
+										.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+		Link link = linkRepository.findByUrl(command.url())
+								  .orElseGet(() -> linkRepository.save(Link.createLink(command.url(),
+									  command.linkTitle())));
+
+		Pick savedPick = pickRepository.save(pickMapper.toEntity(command, user, folder, link));
+		Folder parentFolder = savedPick.getParentFolder();
+		attachPickToParentFolder(savedPick, parentFolder);
+
+		List<PickTag> pickTagList = tagRepository.findAllById(command.tagIdOrderedList())
+												 .stream()
+												 .map(tag -> PickTag.of(savedPick, tag))
+												 .toList();
+		pickTagRepository.saveAll(pickTagList);
+		return savedPick;
+	}
+
+	/**
+	 * @author sangwon
+	 * 익스텐션에서 사용하지 않는 경우, 제거 예정
 	 */
 	@Transactional
 	public Pick savePickToUnclassified(PickCommand.Extension command) {
@@ -124,7 +156,7 @@ public class PickDataHandler {
 								  .orElseGet(() -> linkRepository.save(Link.createLink(command.url(),
 									  command.title())));
 
-		Pick pick = pickMapper.toEntityByExtension(command.title(), new ArrayList<>(), user, unclassified,
+		Pick pick = pickMapper.toEntity(command.title(), new ArrayList<>(), user, unclassified,
 			link);
 
 		Pick savedPick = pickRepository.save(pick);

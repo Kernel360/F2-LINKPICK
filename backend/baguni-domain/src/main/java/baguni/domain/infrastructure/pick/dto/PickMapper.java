@@ -41,7 +41,13 @@ public interface PickMapper {
 	@Mapping(source = "user", target = "user")
 	Pick toEntity(PickCommand.Create command, User user, Folder parentFolder, Link link);
 
+	@Mapping(source = "command.title", target = "title")
+	@Mapping(source = "command.tagIdOrderedList", target = "tagIdOrderedList")
+	@Mapping(source = "parentFolder", target = "parentFolder")
+	@Mapping(source = "user", target = "user")
+	Pick toEntity(PickCommand.CreateFromExtension command, User user, Folder parentFolder, Link link);
+
 	@Mapping(source = "parentFolder", target = "parentFolder")
 	@Mapping(source = "link", target = "link")
-	Pick toEntityByExtension(String title, List<Long> tagIdOrderedList, User user, Folder parentFolder, Link link);
+	Pick toEntity(String title, List<Long> tagIdOrderedList, User user, Folder parentFolder, Link link);
 }
