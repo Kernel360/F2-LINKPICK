@@ -20,8 +20,6 @@ import baguni.domain.infrastructure.pick.dto.PickResult;
 )
 public interface PickApiMapper {
 
-	PickCommand.Read toReadCommand(Long userId, PickApiRequest.Read request);
-
 	PickCommand.ReadList toReadListCommand(Long userId, List<Long> folderIdList);
 
 	PickCommand.SearchPagination toSearchPaginationCommand(Long userId, List<Long> folderIdList,
@@ -29,7 +27,7 @@ public interface PickApiMapper {
 
 	PickCommand.Create toCreateCommand(Long userId, PickApiRequest.Create request);
 
-	PickCommand.Unclassified toExtensionCommand(Long userId, String title, String url);
+	PickCommand.Extension toExtensionCommand(Long userId, String title, String url);
 
 	PickCommand.Update toUpdateCommand(Long userId, PickApiRequest.UpdateFromExtension request);
 

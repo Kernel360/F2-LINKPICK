@@ -103,51 +103,9 @@ public class PickApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 여부 조회 성공"),
 	})
-	public ResponseEntity<PickApiResponse.Exist> getPickUrl(@LoginUserId Long userId,
+	public ResponseEntity<PickApiResponse.Exist> existPick(@LoginUserId Long userId,
 		@RequestParam String link) {
 		return ResponseEntity.ok(pickApiMapper.toApiExistResponse(pickService.existPickByUrl(userId, link)));
-	}
-
-	/**
-	 * @author minkyeu kim
-	 * 프론트엔드에서 4XX를 픽 없음으로 판단하는 로직이 불편하기 때문에
-	 * Boolean으로 픽이 있다 없다를 판단하도록 변경합니다.
-	 * 익스텐션은 구글 심사 때문에 기존 getLinkDataXXX를 이용하고, 추후 getLinkDataV2 로 교체할 예정
-	 */
-	@MeasureTime
-	@GetMapping("/link-v2")
-	@Operation(summary = "링크 픽 여부 조회 + 픽 정보 조회", description = "해당 링크를 픽한 적이 있는지 확인합니다. + 픽에 대한 정보도 반환합니다.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "픽 여부 조회 성공"),
-	})
-
-	public ResponseEntity<PickApiResponse.PickExists> doesUserHasPickWithGivenUrl(
-		@LoginUserId Long userId, @RequestParam String link
-	) {
-		var response = pickService.findPickUrl(userId, link)
-								  .map(pickApiMapper::toApiResponse)
-								  .map(pick -> new PickApiResponse.PickExists(true, pick))
-								  .orElseGet(() -> new PickApiResponse.PickExists(false, null));
-		return ResponseEntity.ok(response);
-	}
-
-	@Deprecated
-	@GetMapping("/{id}")
-	@Operation(
-		summary = "[Deprecated] 픽 상세 조회",
-		description = """
-				현재 사용되지 않는 api 입니다.
-				추후 코드 제거 예정입니다.
-			"""
-	)
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "픽 상세 조회 성공")
-	})
-	public ResponseEntity<PickApiResponse.Pick> getPick(@LoginUserId Long userId,
-		@PathVariable Long id) {
-		return ResponseEntity.ok(
-			pickApiMapper.toApiResponse(
-				pickService.getPick(pickApiMapper.toReadCommand(userId, new PickApiRequest.Read(id)))));
 	}
 
 	@PostMapping

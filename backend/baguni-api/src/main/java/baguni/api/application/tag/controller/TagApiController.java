@@ -37,7 +37,7 @@ public class TagApiController {
 	private final TagApiMapper tagApiMapper;
 
 	@GetMapping
-	@Operation(summary = "태그 조회", description = "사용자가 등록한 전체 태그를 조회합니다.")
+	@Operation(summary = "사용자 태그 조회", description = "사용자가 등록한 전체 태그를 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})

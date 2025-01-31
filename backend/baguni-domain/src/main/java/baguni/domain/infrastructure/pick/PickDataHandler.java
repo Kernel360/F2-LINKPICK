@@ -117,7 +117,7 @@ public class PickDataHandler {
 	 * 픽 생성 시 Link 데이터 수정하지 않음.
 	 */
 	@Transactional
-	public Pick savePickToUnclassified(PickCommand.Unclassified command) {
+	public Pick savePickToUnclassified(PickCommand.Extension command) {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
 		Folder unclassified = folderRepository.findUnclassifiedByUserId(user.getId());
 		Link link = linkRepository.findByUrl(command.url())
