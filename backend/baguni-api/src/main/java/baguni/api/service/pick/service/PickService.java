@@ -95,6 +95,18 @@ public class PickService {
 
 	@LoginUserIdDistributedLock
 	@Transactional
+	public PickResult.Extension savePickFromExtension(PickCommand.CreateFromExtension command) {
+		assertParentFolderIsNotRoot(command.parentFolderId());
+		assertUserIsFolderOwner(command.userId(), command.parentFolderId());
+		assertUserIsTagOwner(command.userId(), command.tagIdOrderedList());
+		return pickMapper.toExtensionResult(pickDataHandler.savePickFromExtension(command));
+	}
+
+	/**
+	 * 익스텐션에서 사용하지 않게 되는 경우, 제거 예정
+	 */
+	@LoginUserIdDistributedLock
+	@Transactional
 	public PickResult.Extension savePickToUnclassified(PickCommand.Extension command) {
 		return pickMapper.toExtensionResult(pickDataHandler.savePickToUnclassified(command));
 	}
@@ -141,6 +153,12 @@ public class PickService {
 		}
 
 		pickDataHandler.deletePickList(command);
+	}
+
+	@LoginUserIdDistributedLock
+	@Transactional
+	public void deletePickFromRecycleBin(Long userId) {
+		pickDataHandler.deletePickFromRecycleBin(userId);
 	}
 
 	/**

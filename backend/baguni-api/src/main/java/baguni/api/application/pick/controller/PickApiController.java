@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -109,7 +108,7 @@ public class PickApiController {
 	}
 
 	@PostMapping
-	@Operation(summary = "픽 생성", description = "픽을 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계 됩니다.")
+	@Operation(summary = "웹 사이트에서 픽 생성", description = "웹 사이트에서 픽을 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계 됩니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 생성 성공"),
 		@ApiResponse(responseCode = "401", description = "잘못된 태그 접근"),
@@ -128,6 +127,9 @@ public class PickApiController {
 		return ResponseEntity.ok(response);
 	}
 
+	/**
+	 *	익스텐션에서 사용하지 않게 되면 제거
+	 */
 	@MeasureTime
 	@PostMapping("/extension")
 	@Operation(
@@ -168,7 +170,7 @@ public class PickApiController {
 	}
 
 	@PatchMapping
-	@Operation(summary = "웹사이트에서 픽 내용만 수정 (폴더 이동 X)", description = "픽 내용 수정 및 폴더 이동까지 지원합니다.")
+	@Operation(summary = "웹 사이트에서 픽 내용만 수정 (폴더 이동 X)", description = "픽 내용 수정 및 폴더 이동까지 지원합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 내용 수정 성공")
 	})
@@ -210,6 +212,18 @@ public class PickApiController {
 	) {
 		var command = pickApiMapper.toDeleteCommand(userId, request);
 		pickService.deletePick(command);
+		return ResponseEntity.noContent().build();
+	}
+
+	@DeleteMapping("/recycle-bin")
+	@Operation(summary = "휴지통 비우기", description = "휴지통에 있는 픽 리스트들을 모두 삭제합니다.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "204", description = "픽 삭제 성공"),
+		@ApiResponse(responseCode = "406", description = "휴지통이 아닌 폴더에서 픽 삭제 불가"),
+		@ApiResponse(responseCode = "500", description = "미확인 서버 에러 혹은 존재하지 않는 픽 삭제")
+	})
+	public ResponseEntity<Void> deleteAllPickFromRecycleBin(@LoginUserId Long userId) {
+		pickService.deletePickFromRecycleBin(userId);
 		return ResponseEntity.noContent().build();
 	}
 }
