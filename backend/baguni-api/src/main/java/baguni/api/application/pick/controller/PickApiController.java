@@ -87,8 +87,7 @@ public class PickApiController {
 		);
 
 		Slice<PickResult.Pick> pickResultList = pickSearchService.searchPickPagination(command);
-
-		return ResponseEntity.ok(new PickSliceResponse<>(pickApiMapper.toSliceApiResponse(pickResultList)));
+		return ResponseEntity.ok(pickApiMapper.toSliceApiResponse(pickResultList));
 	}
 
 	@GetMapping("/link")
