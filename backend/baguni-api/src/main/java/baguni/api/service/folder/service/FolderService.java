@@ -62,6 +62,23 @@ public class FolderService {
 						   .toList();
 	}
 
+	@Transactional(readOnly = true)
+	public List<FolderResult> getMobileFolderList(Long userId) {
+		List<FolderResult> folderList = new ArrayList<>(
+			List.of(
+				folderMapper.toResult(folderDataHandler.getUnclassifiedFolder(userId)),
+				folderMapper.toResult(folderDataHandler.getRecycleBin(userId))
+			)
+		);
+
+		Folder rootFolder = folderDataHandler.getRootFolder(userId);
+		rootFolder.getChildFolderIdOrderedList().stream()
+				  .map(folderDataHandler::getFolder)
+				  .map(folderMapper::toResult)
+				  .forEach(folderList::add);
+		return folderList;
+	}
+
 	/**
 	 * 생성하려는 폴더가 미분류폴더, 휴지통이 아닌지 검증합니다.
 	 * */
