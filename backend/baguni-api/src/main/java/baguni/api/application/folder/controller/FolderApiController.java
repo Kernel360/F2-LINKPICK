@@ -30,7 +30,7 @@ import baguni.security.annotation.LoginUserId;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/folders")
-@Tag(name = "Folder API", description = "폴더 API")
+@Tag(name = "폴더 API", description = "폴더 관련 API")
 public class FolderApiController {
 
 	private final FolderService folderService;

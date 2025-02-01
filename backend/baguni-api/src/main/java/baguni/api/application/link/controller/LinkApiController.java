@@ -21,7 +21,7 @@ import baguni.api.service.link.service.LinkService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/links")
-@Tag(name = "Link API", description = "링크 API")
+@Tag(name = "링크 API", description = "링크 관련 API")
 public class LinkApiController {
 
 	private final LinkService linkService;

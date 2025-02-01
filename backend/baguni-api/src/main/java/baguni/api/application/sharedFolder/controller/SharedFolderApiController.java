@@ -27,7 +27,7 @@ import baguni.security.annotation.LoginUserId;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/shared")
-@Tag(name = "SharedFolder API", description = "공유 폴더 API")
+@Tag(name = "공유 폴더 API", description = "공유 폴더 관련 API")
 public class SharedFolderApiController {
 
 	private final SharedFolderService sharedFolderService;

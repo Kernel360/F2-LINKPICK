@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/extension/v1")
+@RequestMapping("/api/v1/extension")
 @Tag(name = "익스텐션 API", description = "익스텐션 API는 메이저 버전을 명시합니다.")
 public class ExtensionApiControllerV1 {
 
