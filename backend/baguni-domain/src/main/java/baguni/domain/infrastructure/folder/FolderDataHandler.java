@@ -20,6 +20,7 @@ import baguni.domain.exception.user.ApiUserException;
 public class FolderDataHandler {
 
 	private final FolderRepository folderRepository;
+	private final FolderQuery folderQuery;
 	private final UserRepository userRepository;
 
 	@Transactional
@@ -64,17 +65,17 @@ public class FolderDataHandler {
 
 	@Transactional(readOnly = true)
 	public Folder getRootFolder(Long userId) {
-		return folderRepository.findRootByUserId(userId);
+		return folderQuery.findRoot(userId);
 	}
 
 	@Transactional(readOnly = true)
 	public Folder getRecycleBin(Long userId) {
-		return folderRepository.findRecycleBinByUserId(userId);
+		return folderQuery.findRecycleBin(userId);
 	}
 
 	@Transactional(readOnly = true)
 	public Folder getUnclassifiedFolder(Long userId) {
-		return folderRepository.findUnclassifiedByUserId(userId);
+		return folderQuery.findUnclassified(userId);
 	}
 
 	@Transactional

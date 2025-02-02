@@ -8,9 +8,11 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.domain.infrastructure.pick.PickQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.domain.annotation.LoginUserIdDistributedLock;
@@ -38,6 +40,7 @@ public class PickService {
 
 	private final TagDataHandler tagDataHandler;
 	private final PickDataHandler pickDataHandler;
+	private final PickQuery pickQuery;
 	private final PickMapper pickMapper;
 	private final FolderDataHandler folderDataHandler;
 	private final RankingService rankingService;
@@ -82,6 +85,13 @@ public class PickService {
 					  .peek(folderId -> assertUserIsFolderOwner(command.userId(), folderId))  // 폴더 접근 유효성 검사
 					  .map(this::getFolderChildPickResultList)
 					  .toList();
+	}
+
+	@Transactional(readOnly = true)
+	public Slice<PickResult.Pick> getFolderListChildPickPagination(PickCommand.ReadPagination command) {
+		assertUserIsFolderOwner(command.userId(), command.folderId());
+		return pickQuery.getFolderChildPickPagination(command.userId(),
+			command.folderId(), command.cursor(), command.size());
 	}
 
 	@LoginUserIdDistributedLock

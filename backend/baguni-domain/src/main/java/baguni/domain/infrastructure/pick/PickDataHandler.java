@@ -9,10 +9,10 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.domain.infrastructure.folder.FolderQuery;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.domain.exception.folder.ApiFolderException;
-import baguni.domain.infrastructure.link.dto.LinkMapper;
 import baguni.domain.infrastructure.pick.dto.PickCommand;
 import baguni.domain.infrastructure.pick.dto.PickMapper;
 import baguni.domain.exception.pick.ApiPickException;
@@ -39,10 +39,9 @@ public class PickDataHandler {
 	private final PickTagRepository pickTagRepository;
 	private final UserRepository userRepository;
 	private final FolderRepository folderRepository;
+	private final FolderQuery folderQuery;
 	private final LinkRepository linkRepository;
-	private final LinkMapper linkMapper;
 	private final TagRepository tagRepository;
-	private final PickQuery pickQuery;
 
 	@Transactional(readOnly = true)
 	public Pick getPick(Long pickId) {
@@ -151,7 +150,7 @@ public class PickDataHandler {
 	@Transactional
 	public Pick savePickToUnclassified(PickCommand.Extension command) {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
-		Folder unclassified = folderRepository.findUnclassifiedByUserId(user.getId());
+		Folder unclassified = folderQuery.findUnclassified(user.getId());
 		Link link = linkRepository.findByUrl(command.url())
 								  .orElseGet(() -> linkRepository.save(Link.createLink(command.url(),
 									  command.title())));
@@ -217,7 +216,7 @@ public class PickDataHandler {
 
 	@Transactional
 	public void movePickListToRecycleBin(Long userId, List<Long> pickIdList) {
-		Folder recycleBin = folderRepository.findRecycleBinByUserId(userId);
+		Folder recycleBin = folderQuery.findRecycleBin(userId);
 
 		// 픽들의 부모를 휴지통으로 변경
 		List<Pick> pickList = pickRepository.findAllById(pickIdList);
@@ -241,7 +240,7 @@ public class PickDataHandler {
 
 	@Transactional
 	public void deletePickFromRecycleBin(Long userId) {
-		Folder recycleBin = folderRepository.findRecycleBinByUserId(userId);
+		Folder recycleBin = folderQuery.findRecycleBin(userId);
 		List<Long> pickIdList = recycleBin.getChildPickIdOrderedList();
 
 		pickIdList.forEach(pickId -> {

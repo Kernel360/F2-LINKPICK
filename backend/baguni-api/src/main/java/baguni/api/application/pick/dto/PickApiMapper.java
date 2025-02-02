@@ -22,6 +22,8 @@ public interface PickApiMapper {
 
 	PickCommand.ReadList toReadListCommand(Long userId, List<Long> folderIdList);
 
+	PickCommand.ReadPagination toReadPaginationCommand(Long userId, Long folderId, Long cursor, Integer size);
+
 	PickCommand.SearchPagination toSearchPaginationCommand(Long userId, List<Long> folderIdList,
 		List<String> searchTokenList, List<Long> tagIdList, Long cursor, Integer size);
 
@@ -65,10 +67,13 @@ public interface PickApiMapper {
 					   .toList();
 	}
 
-	default Slice<PickApiResponse.Pick> toSliceApiResponse(Slice<PickResult.Pick> source) {
+	default PickSliceResponse<PickApiResponse.Pick> toSliceApiResponse(Slice<PickResult.Pick> source) {
 		List<PickApiResponse.Pick> convertedContent = source.getContent().stream()
 															.map(this::toApiResponse)
 															.toList();
-		return new SliceImpl<>(convertedContent, source.getPageable(), source.hasNext());
+		SliceImpl<PickApiResponse.Pick> pickSlice = new SliceImpl<>(convertedContent, source.getPageable(),
+			source.hasNext());
+
+		return new PickSliceResponse<>(pickSlice);
 	}
 }
