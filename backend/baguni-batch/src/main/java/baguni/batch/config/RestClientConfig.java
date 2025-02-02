@@ -6,6 +6,7 @@ import org.springframework.boot.web.client.ClientHttpRequestFactories;
 import org.springframework.boot.web.client.ClientHttpRequestFactorySettings;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.web.client.RestClient;
@@ -33,6 +34,8 @@ public class RestClientConfig {
 			.messageConverters(converter -> {
 				converter.add(new MappingJackson2XmlHttpMessageConverter());
 			})
+			.defaultHeader(HttpHeaders.USER_AGENT,
+				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36")
 			.requestFactory(clientHttpRequestFactory())
 			.build();
 	}
