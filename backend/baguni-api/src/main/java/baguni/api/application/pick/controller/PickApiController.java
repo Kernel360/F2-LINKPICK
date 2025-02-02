@@ -78,7 +78,13 @@ public class PickApiController {
 			"") List<String> searchTokenList,
 		@Parameter(description = "검색 태그 ID 목록", example = "1, 2, 3") @RequestParam(required = false,
 			defaultValue = "") List<Long> tagIdList,
-		@Parameter(description = "픽 시작 id 조회", example = "0") @RequestParam(required = false, defaultValue = "0") Long cursor,
+		@Parameter(description = """
+				다음에 조회할 커서(cursor) 값입니다.
+				처음 페이지를 조회할 때는 0을 넣어주세요.
+				이후에는 응답으로 받은 lastCursor 값을 그대로 사용하시면 됩니다.
+				예시: lastCursor = 1 → 다음 요청에 cursor=1을 넣으면, 1은 제외하고 2부터 조회합니다.
+			""",
+			example = "0") @RequestParam(required = false, defaultValue = "0") Long cursor,
 		@Parameter(description = "한 페이지에 가져올 픽 개수", example = "20") @RequestParam(required = false, defaultValue = "20"
 		) int size
 	) {
