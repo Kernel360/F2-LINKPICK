@@ -30,7 +30,7 @@ import baguni.security.annotation.LoginUserId;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/tags")
-@Tag(name = "Tag API", description = "태그 API")
+@Tag(name = "태그 API", description = "태그 관련 API")
 public class TagApiController {
 
 	private final TagService tagService;

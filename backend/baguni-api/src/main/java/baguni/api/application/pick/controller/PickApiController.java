@@ -37,7 +37,7 @@ import baguni.security.annotation.LoginUserId;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/picks")
-@Tag(name = "Pick API", description = "픽 API")
+@Tag(name = "픽 API", description = "북마크 관련 API")
 public class PickApiController {
 
 	private final PickService pickService;

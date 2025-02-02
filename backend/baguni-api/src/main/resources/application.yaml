@@ -7,6 +7,16 @@ spring:
     name: baguni.${PROFILE_MODE}.server.api
 springdoc:
   swagger-ui:
+#    path: /swagger-custom.html # swagger-ui 접근 경로, 외부에서 쉽게 접근하지 못하게 하려면 변경
+    groups-order: DESC # 각 API의 그룹 표시 순서 (springdoc.swagger-ui.urls에 정의된 부분만 정렬)
+
+    # alpha: 알파벳 순 정렬
+    # method: OpenAPI specification file에 선언한 태그 순서대로 정렬
+    tags-sorter: alpha # 태그 정렬 순서
+
+    # method: delete - get - patch - post - put 순으로 정렬
+    # alpha: 알파벳 순으로 정렬
+    operations-sorter: method # 컨트롤러 정렬 순서
     disable-swagger-default-url: true
   api-docs:
     path: /api-docs
