@@ -1,4 +1,4 @@
 export type RecommendPickCategoryType =
-  | 'dailyViewRanking'
+  | 'dailyArticle'
   | 'weeklyViewRanking'
   | 'monthlyPickRanking';
