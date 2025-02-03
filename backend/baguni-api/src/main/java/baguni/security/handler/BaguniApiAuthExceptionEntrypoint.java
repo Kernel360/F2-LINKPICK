@@ -44,7 +44,7 @@ public class BaguniApiAuthExceptionEntrypoint implements AuthenticationEntryPoin
 		HttpServletResponse response,
 		AuthenticationException exception
 	) throws IOException {
-		log.error(exception.getMessage(), exception);
+
 		var errorResponse = ApiErrorResponse.of(ApiAuthErrorCode.AUTH_INVALID_AUTHENTICATION);
 		var errorStatus = errorResponse.getStatusCode().value();
 		var body = errorResponse.getBody();
