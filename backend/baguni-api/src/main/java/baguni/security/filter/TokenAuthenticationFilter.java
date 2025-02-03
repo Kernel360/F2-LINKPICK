@@ -35,7 +35,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 					  .map(AccessToken::toAuthenticationToken)
 					  .ifPresent(securityContext::setAuthentication);
 		} catch (Exception e) {
-			log.error(e.getMessage(), e);
+			log.error("TokenAuthenticationFilter : {}", e.getMessage(), e);
 		} finally {
 			filterChain.doFilter(request, response);
 		}
