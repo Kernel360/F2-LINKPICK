@@ -1,6 +1,4 @@
 'use client';
-
-import { getSuggestionRankingPicks } from '@/apis/getSuggestionRankingPicks';
 import { DisableDroppableZone } from '@/components/DisableDroppableZone';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { Gap } from '@/components/Gap';
@@ -11,11 +9,9 @@ import { useClearSelectedPickIdsOnMount } from '@/hooks/useClearSelectedPickIdsO
 import { useDisclosure } from '@/hooks/useDisclosure';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { useResetPickFocusOnOutsideClick } from '@/hooks/useResetPickFocusOnOutsideClick';
-import { useFetchBasicFolders } from '@/queries/useFetchBasicFolders';
-import { useFetchTagList } from '@/queries/useFetchTagList';
-import type { GetSuggestionRankingPicksResponseType } from '@/types/GetSuggestionRankingPicksResponseType';
-import { useEffect, useState } from 'react';
-import { RecommendLoadingPage } from './RecommendLoadingPage';
+import { useFetchSuggestionArticleList } from '@/queries/useFetchSuggestionArticleList';
+import { useFetchSuggestionRankingPicksWithSuspense } from '@/queries/useFetchSuggestionRankingPicksWithSuspense';
+import { useEffect } from 'react';
 import {
   pointTextStyle,
   recommendContentSectionStyle,
@@ -29,26 +25,17 @@ import {
 } from './page.css';
 
 export default function RecommendPage() {
-  const { data: basicFolderRecord } = useFetchBasicFolders();
   useResetPickFocusOnOutsideClick();
   useClearSelectedPickIdsOnMount();
-  const [suggestionRankingPicks, setSuggestionRankingPicks] =
-    useState<GetSuggestionRankingPicksResponseType>();
-  useFetchTagList();
   const { isOpen, onClose, onOpen } = useDisclosure();
   const { storedValue: isTutorialSeen, isStoredValueLoad } = useLocalStorage(
     IS_TUTORIAL_SEEN_LOCAL_STORAGE_KEY,
     false,
   );
 
-  useEffect(function loadSuggestionRankingPicks() {
-    const fetchSuggestionRankingPicks = async () => {
-      const data = await getSuggestionRankingPicks();
-      setSuggestionRankingPicks(data);
-    };
-
-    fetchSuggestionRankingPicks();
-  }, []);
+  const { data: suggestionArticleList } = useFetchSuggestionArticleList();
+  const { data: suggestionRankingPicks } =
+    useFetchSuggestionRankingPicksWithSuspense();
 
   useEffect(
     function openTutorialForFirstTimeUser() {
@@ -58,10 +45,6 @@ export default function RecommendPage() {
     },
     [isStoredValueLoad, isTutorialSeen, onOpen],
   );
-
-  if (!basicFolderRecord || !suggestionRankingPicks) {
-    return <RecommendLoadingPage />;
-  }
 
   return (
     <FolderContentLayout>
@@ -77,18 +60,18 @@ export default function RecommendPage() {
           </div>
 
           <div className={recommendContentSectionStyle}>
-            {suggestionRankingPicks.dailyViewRanking.length !== 0 && (
+            {suggestionArticleList && (
               <div className={recommendedPickCarouselSectionStyle}>
                 <div className={recommendedPickCarouselStyle}>
                   <h2 className={recommendSectionDescription}>
-                    오늘 가장 <span className={pointTextStyle}>핫한</span>{' '}
-                    북마크 🔥
+                    <span className={pointTextStyle}>따끈따끈한 </span> 기술
+                    블로그 🔥
                   </h2>
                 </div>
                 <Gap verticalSize="gap12" />
                 <RecommendedPickCarousel
-                  recommendPickList={suggestionRankingPicks.dailyViewRanking}
-                  recommendPickCategoryType="dailyViewRanking"
+                  recommendPickList={suggestionArticleList}
+                  recommendPickCategoryType="dailyArticle"
                 />
               </div>
             )}

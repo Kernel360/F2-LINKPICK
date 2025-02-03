@@ -85,6 +85,29 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/extension/picks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * [익스텐션 v1] 픽 생성
+         * @description 	익스텐션에서 픽 생성합니다.
+         *     	익스텐션 메이저 버전을 명시합니다. (ex. /v1, /v2, /v3)
+         *     	또한, 픽 생성 이벤트가 랭킹 서버에 집계됩니다.
+         *
+         */
+        post: operations["savePickFromExtension"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/tags": {
         parameters: {
             query?: never;
@@ -93,7 +116,7 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 태그 조회
+         * 사용자 태그 조회
          * @description 사용자가 등록한 전체 태그를 조회합니다.
          */
         get: operations["getAllUserTag"];
@@ -155,8 +178,8 @@ export interface paths {
         get: operations["getFolderChildPickList"];
         put?: never;
         /**
-         * 픽 생성
-         * @description 픽을 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계 됩니다.
+         * 웹 사이트에서 픽 생성
+         * @description 웹 사이트에서 픽을 생성합니다. 또한, 픽 생성 이벤트가 랭킹 서버에 집계 됩니다.
          */
         post: operations["savePick"];
         /**
@@ -167,30 +190,10 @@ export interface paths {
         options?: never;
         head?: never;
         /**
-         * 웹사이트에서 픽 내용만 수정 (폴더 이동 X)
+         * 웹 사이트에서 픽 내용만 수정 (폴더 이동 X)
          * @description 픽 내용 수정 및 폴더 이동까지 지원합니다.
          */
         patch: operations["updatePick"];
-        trace?: never;
-    };
-    "/api/picks/recommend": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 추천 링크로 픽 생성
-         * @description 추천 링크로 픽을 생성합니다. 이미 픽으로 등록된 링크의 경우 기존 픽 정보를 응답으로 보냅니다.
-         */
-        post: operations["savePickFromRecommend"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
         trace?: never;
     };
     "/api/picks/extension": {
@@ -309,26 +312,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/chrome/import": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * 크롬 북마크 업로드
-         * @description 내보내기한 크롬 북마크(.html)을 업로드 하여 일괄 추가합니다. 이미 등록된 url(중복 url)을 응답으로 보냅니다.
-         */
-        post: operations["importBookmark"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/tags/location": {
         parameters: {
             query?: never;
@@ -437,6 +420,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/suggestion/blog-articles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 최근 유명 블로그 게시글 획득 (15개)
+         * @description 최근 유명 블로그 게시글 리스트 15개를 획득합니다.
+         */
+        get: operations["getRecentBlogArticles"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/shared/{uuid}": {
         parameters: {
             query?: never;
@@ -449,29 +452,6 @@ export interface paths {
          * @description UUID를 통해 공유된 폴더에 접근할 수 있습니다.
          */
         get: operations["getSharedFolderWithFullInfo"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/picks/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * [Deprecated] 픽 상세 조회
-         * @deprecated
-         * @description 	현재 사용되지 않는 api 입니다.
-         *     	추후 코드 제거 예정입니다.
-         *
-         */
-        get: operations["getPick"];
         put?: never;
         post?: never;
         delete?: never;
@@ -514,7 +494,7 @@ export interface paths {
          *     	true : 존재, false : 존재하지 않음.
          *
          */
-        get: operations["getPickUrl"];
+        get: operations["existPick"];
         put?: never;
         post?: never;
         delete?: never;
@@ -523,7 +503,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/picks/link-v2": {
+    "/api/mobile/picks": {
         parameters: {
             query?: never;
             header?: never;
@@ -531,10 +511,35 @@ export interface paths {
             cookie?: never;
         };
         /**
-         * 링크 픽 여부 조회 + 픽 정보 조회
-         * @description 해당 링크를 픽한 적이 있는지 확인합니다. + 픽에 대한 정보도 반환합니다.
+         * 폴더 내 픽 페이지네이션 리스트 조회
+         * @description 	해당 폴더의 픽 리스트를 조회합니다.
+         *     	커서 기반 페이지네이션 처리된 리스트가 반환됩니다.
+         *
          */
-        get: operations["doesUserHasPickWithGivenUrl"];
+        get: operations["getFolderChildPickPagination"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/mobile/folders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 미분류, 휴지통 폴더와 루트 하위 폴더 조회
+         * @description 	폴더 depth가 1인 경우만 조회합니다.
+         *     	사용자의 미분류, 휴지통 폴더와 루트 하위 전체 폴더를 조회합니다.
+         *     	루트 폴더는 조회하지 않습니다.
+         *
+         */
+        get: operations["getMobileFolderList"];
         put?: never;
         post?: never;
         delete?: never;
@@ -583,18 +588,15 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/chrome/{folderId}/export": {
+    "/actuator": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /**
-         * 특정 폴더 다운로드
-         * @description 사용자의 특정 폴더를 크롬 브라우저 북마크에 import 가능한 형태로 다운로드 받습니다.
-         */
-        get: operations["exportFolder"];
+        /** Actuator root web endpoint */
+        get: operations["links"];
         put?: never;
         post?: never;
         delete?: never;
@@ -603,18 +605,32 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/chrome/export": {
+    "/actuator/health": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        /**
-         * 전체 폴더 다운로드
-         * @description 사용자의 특정 폴더를 크롬 브라우저 북마크에 import 가능한 형태로 다운로드 받습니다.
-         */
-        get: operations["exportUserFolder"];
+        /** Actuator web endpoint 'health' */
+        get: operations["health"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/actuator/health/**": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Actuator web endpoint 'health-path' */
+        get: operations["health-path"];
         put?: never;
         post?: never;
         delete?: never;
@@ -643,10 +659,64 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/picks/recycle-bin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * 휴지통 비우기
+         * @description 휴지통에 있는 픽 리스트들을 모두 삭제합니다.
+         */
+        delete: operations["deleteAllPickFromRecycleBin"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        "baguni.api.application.extension.dto.ExtensionApiRequest$Create": {
+            /** @example GitHub Actions를 이용한 코드 리뷰 문화 개선기 */
+            title: string;
+            /** @example [
+             *       4,
+             *       5,
+             *       2,
+             *       1,
+             *       3
+             *     ] */
+            tagIdOrderedList?: number[];
+            /**
+             * Format: int64
+             * @example 1
+             */
+            parentFolderId: number;
+            /** @example https://d2.naver.com/helloworld/8149881 */
+            url: string;
+            /** @example GitHub Actions를 이용한 코드 리뷰 문화 개선기 */
+            linkTitle: string;
+        };
+        "baguni.api.application.extension.dto.ExtensionApiResponse$Pick": {
+            /** Format: int64 */
+            id?: number;
+            title?: string;
+            /** Format: int64 */
+            parentFolderId?: number;
+            tagIdOrderedList?: number[];
+            url?: string;
+            /** Format: date-time */
+            createdAt?: string;
+            /** Format: date-time */
+            updatedAt?: string;
+        };
         "baguni.api.application.tag.dto.TagApiRequest$Create": {
             /** @example SpringBoot */
             name: string;
@@ -697,30 +767,8 @@ export interface components {
             description?: string;
             /** @example https://velog.velcdn.com/images/hyeok_1212/post/5ea148fb-1490-4b03-811e-222b4d26b65e/image.png */
             imageUrl?: string;
-            /**
-             * Format: date-time
-             * @example 2024-10-19T10:46:30.035Z
-             */
-            invalidatedAt?: string;
         };
         "baguni.api.application.pick.dto.PickApiResponse$Pick": {
-            /** Format: int64 */
-            id?: number;
-            title?: string;
-            linkInfo?: components["schemas"]["baguni.domain.infrastructure.link.dto.LinkInfo"];
-            /** Format: int64 */
-            parentFolderId?: number;
-            tagIdOrderedList?: number[];
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
-        };
-        "baguni.api.application.pick.dto.PickApiResponse$CreateFromRecommend": {
-            exist?: boolean;
-            pick?: components["schemas"]["baguni.domain.infrastructure.pick.dto.PickResult$Pick"];
-        };
-        "baguni.domain.infrastructure.pick.dto.PickResult$Pick": {
             /** Format: int64 */
             id?: number;
             title?: string;
@@ -931,7 +979,7 @@ export interface components {
             colorNumber?: number;
         };
         /** @description 지난 30일동안 링크가 픽된 횟수 Top 10 */
-        "baguni.api.application.ranking.dto.LinkInfoWithCount": {
+        "baguni.api.application.suggestion.dto.LinkInfoWithCount": {
             url: string;
             title?: string;
             description?: string;
@@ -939,13 +987,25 @@ export interface components {
             /** Format: int64 */
             count?: number;
         };
-        "baguni.api.application.ranking.dto.RankingResponse": {
+        "baguni.api.application.suggestion.dto.RankingResponse": {
             /** @description 오늘 하루 동안 인기 있는 링크 Top 10 */
-            dailyViewRanking?: components["schemas"]["baguni.api.application.ranking.dto.LinkInfoWithCount"][];
+            dailyViewRanking?: components["schemas"]["baguni.api.application.suggestion.dto.LinkInfoWithCount"][];
             /** @description 지난 7일동안 링크 조회 수 Top 10 */
-            weeklyViewRanking?: components["schemas"]["baguni.api.application.ranking.dto.LinkInfoWithCount"][];
+            weeklyViewRanking?: components["schemas"]["baguni.api.application.suggestion.dto.LinkInfoWithCount"][];
             /** @description 지난 30일동안 링크가 픽된 횟수 Top 10 */
-            monthlyPickRanking?: components["schemas"]["baguni.api.application.ranking.dto.LinkInfoWithCount"][];
+            monthlyPickRanking?: components["schemas"]["baguni.api.application.suggestion.dto.LinkInfoWithCount"][];
+        };
+        "baguni.domain.infrastructure.link.dto.RssLinkInfo": {
+            /** @example https://velog.io/@hyeok_1212/Java-Record-%EC%82%AC%EC%9A%A9%ED%95%98%EC%8B%9C%EB%82%98%EC%9A%94 */
+            url: string;
+            /** @example [Java] Record 사용하시나요? */
+            title?: string;
+            /** @example IntelliJ : 레코드 써봐 */
+            description?: string;
+            /** @example https://velog.velcdn.com/images/hyeok_1212/post/5ea148fb-1490-4b03-811e-222b4d26b65e/image.png */
+            imageUrl?: string;
+            /** Format: date-time */
+            publishedAt?: string;
         };
         "baguni.api.application.sharedFolder.dto.SharedFolderApiResponse$ReadFolderPartial": {
             /**
@@ -1081,15 +1141,15 @@ export interface components {
         "baguni.api.application.pick.dto.PickApiResponse$Exist": {
             exist: boolean;
         };
-        "baguni.api.application.pick.dto.PickApiResponse$PickExists": {
-            exist: boolean;
-            pick?: components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
-        };
         "baguni.api.application.link.dto.LinkApiResponse": {
             url?: string;
             title?: string;
             description?: string;
             imageUrl?: string;
+        };
+        "org.springframework.boot.actuate.endpoint.web.Link": {
+            href?: string;
+            templated?: boolean;
         };
         "baguni.api.application.tag.dto.TagApiRequest$Delete": {
             /**
@@ -1124,6 +1184,57 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    savePickFromExtension: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["baguni.api.application.extension.dto.ExtensionApiRequest$Create"];
+            };
+        };
+        responses: {
+            /** @description 픽 생성 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.extension.dto.ExtensionApiResponse$Pick"];
+                };
+            };
+            /** @description 유저 또는 폴더가 존재하지 않습니다. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.extension.dto.ExtensionApiResponse$Pick"];
+                };
+            };
+            /** @description 잘못된 접근 (폴더, 태그) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.extension.dto.ExtensionApiResponse$Pick"];
+                };
+            };
+            /** @description 허용되지 않는 폴더 */
+            406: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.extension.dto.ExtensionApiResponse$Pick"];
+                };
+            };
+        };
+    };
     getAllUserTag: {
         parameters: {
             query?: never;
@@ -1421,39 +1532,6 @@ export interface operations {
             };
         };
     };
-    savePickFromRecommend: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["baguni.api.application.pick.dto.PickApiRequest$Create"];
-            };
-        };
-        responses: {
-            /** @description 픽 생성 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$CreateFromRecommend"];
-                };
-            };
-            /** @description 접근할 수 없는 폴더 */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$CreateFromRecommend"];
-                };
-            };
-        };
-    };
     savePickAsUnclassified: {
         parameters: {
             query?: never;
@@ -1702,42 +1780,6 @@ export interface operations {
             };
         };
     };
-    importBookmark: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "multipart/form-data": {
-                    /** Format: binary */
-                    file: string;
-                };
-            };
-        };
-        responses: {
-            /** @description 다운로드 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string[];
-                };
-            };
-            /** @description 파일 형식 및 파싱 오류 */
-            500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string[];
-                };
-            };
-        };
-    };
     moveTag: {
         parameters: {
             query?: never;
@@ -1892,7 +1934,27 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["baguni.api.application.ranking.dto.RankingResponse"];
+                    "*/*": components["schemas"]["baguni.api.application.suggestion.dto.RankingResponse"];
+                };
+            };
+        };
+    };
+    getRecentBlogArticles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.domain.infrastructure.link.dto.RssLinkInfo"][];
                 };
             };
         };
@@ -1926,28 +1988,6 @@ export interface operations {
             };
         };
     };
-    getPick: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 픽 상세 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"];
-                };
-            };
-        };
-    };
     searchPickPagination: {
         parameters: {
             query?: {
@@ -1967,7 +2007,11 @@ export interface operations {
                  */
                 tagIdList?: number[];
                 /**
-                 * @description 픽 시작 id 조회
+                 * @description 	다음에 조회할 커서(cursor) 값입니다.
+                 *     	처음 페이지를 조회할 때는 0을 넣어주세요.
+                 *     	이후에는 응답으로 받은 lastCursor 값을 그대로 사용하시면 됩니다.
+                 *     	예시: lastCursor = 1 → 다음 요청에 cursor=1을 넣으면, 1은 제외하고 2부터 조회합니다.
+                 *
                  * @example 0
                  */
                 cursor?: number;
@@ -1994,7 +2038,7 @@ export interface operations {
             };
         };
     };
-    getPickUrl: {
+    existPick: {
         parameters: {
             query: {
                 link: string;
@@ -2016,10 +2060,28 @@ export interface operations {
             };
         };
     };
-    doesUserHasPickWithGivenUrl: {
+    getFolderChildPickPagination: {
         parameters: {
             query: {
-                link: string;
+                /**
+                 * @description 조회할 폴더 ID
+                 * @example 1
+                 */
+                folderId: number;
+                /**
+                 * @description 	다음에 조회할 커서(cursor) 값입니다.
+                 *     	처음 페이지를 조회할 때는 0을 넣어주세요.
+                 *     	이후에는 응답으로 받은 lastCursor 값을 그대로 사용하시면 됩니다.
+                 *     	예시: lastCursor = 1 → 다음 요청에 cursor=1을 넣으면, 1은 제외하고 2부터 조회합니다.
+                 *
+                 * @example 0
+                 */
+                cursor?: number;
+                /**
+                 * @description 한 페이지에 가져올 픽 개수
+                 * @example 20
+                 */
+                size?: number;
             };
             header?: never;
             path?: never;
@@ -2027,13 +2089,42 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description 픽 여부 조회 성공 */
+            /** @description 픽 리스트 조회 성공 */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$PickExists"];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickSliceResponseBaguni.api.application.pick.dto.PickApiResponse$Pick"];
+                };
+            };
+        };
+    };
+    getMobileFolderList: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.folder.dto.FolderApiResponse"][];
+                };
+            };
+            /** @description 본인 폴더만 조회할 수 있습니다. */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.folder.dto.FolderApiResponse"][];
                 };
             };
         };
@@ -2090,38 +2181,7 @@ export interface operations {
             };
         };
     };
-    exportFolder: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                folderId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 다운로드 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-            /** @description 본인 폴더만 다운로드할 수 있습니다. */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": string;
-                };
-            };
-        };
-    };
-    exportUserFolder: {
+    links: {
         parameters: {
             query?: never;
             header?: never;
@@ -2130,13 +2190,71 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description 다운로드 성공 */
+            /** @description OK */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": string;
+                    "application/vnd.spring-boot.actuator.v3+json": {
+                        [key: string]: {
+                            [key: string]: components["schemas"]["org.springframework.boot.actuate.endpoint.web.Link"];
+                        };
+                    };
+                    "application/json": {
+                        [key: string]: {
+                            [key: string]: components["schemas"]["org.springframework.boot.actuate.endpoint.web.Link"];
+                        };
+                    };
+                    "application/vnd.spring-boot.actuator.v2+json": {
+                        [key: string]: {
+                            [key: string]: components["schemas"]["org.springframework.boot.actuate.endpoint.web.Link"];
+                        };
+                    };
+                };
+            };
+        };
+    };
+    health: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.spring-boot.actuator.v3+json": Record<string, never>;
+                    "application/json": Record<string, never>;
+                    "application/vnd.spring-boot.actuator.v2+json": Record<string, never>;
+                };
+            };
+        };
+    };
+    "health-path": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/vnd.spring-boot.actuator.v3+json": Record<string, never>;
+                    "application/json": Record<string, never>;
+                    "application/vnd.spring-boot.actuator.v2+json": Record<string, never>;
                 };
             };
         };
@@ -2153,7 +2271,7 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description 폴더 비공개화 성공 */
-            200: {
+            204: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -2161,6 +2279,38 @@ export interface operations {
             };
             /** @description 자신의 공유 폴더만 삭제 할 수 있습니다. */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    deleteAllPickFromRecycleBin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 픽 삭제 성공 */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description 휴지통이 아닌 폴더에서 픽 삭제 불가 */
+            406: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description 미확인 서버 에러 혹은 존재하지 않는 픽 삭제 */
+            500: {
                 headers: {
                     [name: string]: unknown;
                 };

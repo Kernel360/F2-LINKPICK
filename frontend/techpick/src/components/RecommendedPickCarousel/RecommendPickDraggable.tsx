@@ -30,6 +30,7 @@ export function RecommendPickDraggable({
       {...listeners}
       style={style}
       className={isDragging ? draggableStyle : ''}
+      suppressHydrationWarning
     >
       {children}
     </div>

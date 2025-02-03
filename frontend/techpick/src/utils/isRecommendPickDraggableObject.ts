@@ -11,10 +11,6 @@ export const isRecommendPickDraggableObject = (
     return false;
   }
 
-  if (!('count' in data)) {
-    return false;
-  }
-
   if (!('description' in data)) {
     return false;
   }
