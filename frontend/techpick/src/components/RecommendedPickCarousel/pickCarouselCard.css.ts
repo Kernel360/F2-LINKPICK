@@ -44,7 +44,7 @@ export const pickTitleStyle = style({
   width: '100%',
   height: '40px',
   marginBottom: '12px',
-  padding: '2px',
+  padding: '4px 8px 2px',
   overflow: 'hidden',
   fontSize: '12px',
   fontWeight: '500',
