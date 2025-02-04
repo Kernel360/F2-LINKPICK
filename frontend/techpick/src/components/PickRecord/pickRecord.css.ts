@@ -61,4 +61,14 @@ export const externalLinkIconStyle = style({
   color: colorVars.white,
 });
 
-export const imageStyle = style({ objectFit: 'cover' });
+export const backgroundImageStyle = style({
+  objectFit: 'cover',
+  opacity: '0.3',
+});
+
+export const imageStyle = style({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  objectFit: 'scale-down',
+});

@@ -21,6 +21,7 @@ import { PickTagColumnLayout } from './PickTagColumnLayout';
 import { PickTitleColumnLayout } from './PickTitleColumnLayout';
 import { Separator } from './Separator';
 import {
+  backgroundImageStyle,
   dateTextStyle,
   externalLinkIconStyle,
   imageStyle,
@@ -71,13 +72,22 @@ export function PickRecord({ pickInfo }: PickViewItemComponentProps) {
           {imageStatus === 'loading' && <div />}
 
           {imageStatus === 'loaded' && (
-            <img
-              src={link.imageUrl}
-              alt=""
-              width="96px"
-              height="47.25px"
-              className={imageStyle}
-            />
+            <>
+              <img
+                src={link.imageUrl}
+                alt=""
+                width="96px"
+                height="47.25px"
+                className={backgroundImageStyle}
+              />
+              <img
+                src={link.imageUrl}
+                alt=""
+                width="96px"
+                height="47.25px"
+                className={imageStyle}
+              />
+            </>
           )}
 
           {imageStatus === 'error' && (

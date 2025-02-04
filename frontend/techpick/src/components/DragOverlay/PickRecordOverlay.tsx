@@ -13,6 +13,7 @@ import { PickTagColumnLayout } from '../PickRecord/PickTagColumnLayout';
 import { PickTitleColumnLayout } from '../PickRecord/PickTitleColumnLayout';
 import { Separator } from '../PickRecord/Separator';
 import {
+  backgroundImageStyle,
   dateTextStyle,
   externalLinkIconStyle,
   imageStyle,
@@ -39,13 +40,22 @@ export function PickRecordOverlay({ pickInfo }: PickViewItemComponentProps) {
       <PickImageColumnLayout>
         <div className={pickImageStyle}>
           {imageStatus === 'loaded' ? (
-            <img
-              src={link.imageUrl}
-              alt=""
-              width="96px"
-              height="47.25px"
-              className={imageStyle}
-            />
+            <>
+              <img
+                src={link.imageUrl}
+                alt=""
+                width="96px"
+                height="47.25px"
+                className={backgroundImageStyle}
+              />
+              <img
+                src={link.imageUrl}
+                alt=""
+                width="96px"
+                height="47.25px"
+                className={imageStyle}
+              />
+            </>
           ) : (
             <Image src="/image/default_image.svg" alt="" fill sizes="96px" />
           )}
