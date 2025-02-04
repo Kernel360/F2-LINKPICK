@@ -4,6 +4,7 @@ import { getTagList } from '@/apis/getTagList';
 import { SkeltonPickForm } from '@/components/SkeltonPickForm';
 import { UpdatePickForm } from '@/components/UpdatePickForm';
 import { CHANGE_ICON_PORT_NAME } from '@/constants/changeIconPortName';
+import { useGetFolderIdFromLocalhost } from '@/hooks/useGetFolderIdFromLocalhost';
 import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
 import { DeferredComponent } from '@/libs/@components/DeferredComponent';
 import { notifyError } from '@/libs/@toast/notifyError';
@@ -20,6 +21,7 @@ export function BookmarkPage() {
   const [pickInfo, setPickInfo] = useState<TabInfoType>();
   const isFetched = useRef(false);
   const setTagList = useTagStore((state) => state.setTagList);
+  const { localhostFolderId } = useGetFolderIdFromLocalhost();
 
   useEffect(
     function onLoad() {
@@ -77,6 +79,7 @@ export function BookmarkPage() {
         imageUrl={pickInfo.favIconUrl}
         url={pickInfo.url}
         folderInfoList={folderInfoList}
+        localhostFolderId={localhostFolderId}
       />
     </div>
   );

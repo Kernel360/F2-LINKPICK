@@ -6,6 +6,7 @@ import { notifyError } from '@/libs/@toast/notifyError';
 import { notifySuccess } from '@/libs/@toast/notifySuccess';
 import { useTagStore } from '@/stores/tagStore';
 import type { FolderType } from '@/types/FolderType';
+import { setFolderIdToLocalhost } from '@/utils/setFolderIdToLocalhost';
 import { PlusIcon } from '@radix-ui/react-icons';
 import DOMPurify from 'dompurify';
 import { useEffect, useRef, useState } from 'react';
@@ -30,6 +31,7 @@ export function UpdatePickForm({
   imageUrl,
   url,
   folderInfoList,
+  localhostFolderId,
 }: UpdatePickFormProps) {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagPickerRef = useRef<HTMLDivElement>(null);
@@ -52,8 +54,9 @@ export function UpdatePickForm({
 
   // TODO: 가장 최근에 저장한 폴더를 가져와야한다.
   const currentSelectedFolderInfo = folderInfoList.find(
-    (folder) => folder.id === folderInfoList[0].id,
+    (folder) => folder.id === localhostFolderId,
   );
+
   const [selectedFolderId, setSelectedFolderId] = useState(
     `${currentSelectedFolderInfo?.id ?? folderInfoList[0].id}`,
   );
@@ -78,14 +81,19 @@ export function UpdatePickForm({
       trackUpdateTag({ tagList: selectedTagNameList });
     }
 
+    trackSaveBookmark();
+
+    const parsedSelectedFolderId = Number(selectedFolderId);
+
     createPick({
       url,
       linkTitle: initialTitle,
       title: DOMPurify.sanitize(userModifiedTitle.trim()),
       tagIdOrderedList: selectedTagList.map((tag) => tag.id),
-      parentFolderId: Number(selectedFolderId),
+      parentFolderId: parsedSelectedFolderId,
     })
       .then(() => {
+        setFolderIdToLocalhost(parsedSelectedFolderId);
         notifySuccess('추가되었습니다!');
         setTimeout(() => {
           window.close();
@@ -139,7 +147,6 @@ export function UpdatePickForm({
         className={submitButtonStyle}
         onClick={() => {
           onSubmit();
-          trackSaveBookmark();
         }}
         ref={submitButtonRef}
       >
@@ -156,4 +163,5 @@ interface UpdatePickFormProps {
   imageUrl?: string;
   url: string;
   folderInfoList: FolderType[];
+  localhostFolderId: number | undefined | null;
 }
