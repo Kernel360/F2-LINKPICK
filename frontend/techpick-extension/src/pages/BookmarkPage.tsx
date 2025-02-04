@@ -1,18 +1,16 @@
-import { createPickToUnclassifiedFolder } from '@/apis/createPickToUnclassifiedFolder';
 import { getBasicFolderList } from '@/apis/getBasicFolders';
 import { getRootFolderChildFolders } from '@/apis/getRootFolderChildFolders';
 import { getTagList } from '@/apis/getTagList';
+import { CreatePickForm } from '@/components/CreatePickForm';
 import { SkeltonPickForm } from '@/components/SkeltonPickForm';
-import { UpdatePickForm } from '@/components/UpdatePickForm';
 import { CHANGE_ICON_PORT_NAME } from '@/constants/changeIconPortName';
-import { useEventLogger } from '@/hooks/useEventLogger';
+import { useGetFolderIdFromLocalhost } from '@/hooks/useGetFolderIdFromLocalhost';
 import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
 import { DeferredComponent } from '@/libs/@components/DeferredComponent';
 import { notifyError } from '@/libs/@toast/notifyError';
-import { notifySuccess } from '@/libs/@toast/notifySuccess';
 import { useTagStore } from '@/stores/tagStore';
-import type { CreatePickToUnclassifiedFolderResponseType } from '@/types/CreatePickToUnclassifiedFolderResponseType';
 import type { FolderType } from '@/types/FolderType';
+import type { TabInfoType } from '@/types/TabInfoType';
 import { filterSelectableFolder } from '@/utils/filterSelectableFolderList';
 import { useEffect, useRef, useState } from 'react';
 import { bookmarkPageLayout } from './BookmarkPage.css';
@@ -20,20 +18,15 @@ import { bookmarkPageLayout } from './BookmarkPage.css';
 export function BookmarkPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [folderInfoList, setFolderInfoList] = useState<FolderType[]>([]);
-  const [pickInfo, setPickInfo] =
-    useState<CreatePickToUnclassifiedFolderResponseType>();
-  const [imageUrl, setImageUrl] = useState('');
+  const [pickInfo, setPickInfo] = useState<TabInfoType>();
   const isFetched = useRef(false);
   const setTagList = useTagStore((state) => state.setTagList);
-  const { trackEvent: trackSaveBookmark } = useEventLogger({
-    eventName: 'extension_save_bookmark',
-  });
+  const { localhostFolderId } = useGetFolderIdFromLocalhost();
 
   useEffect(
     function onLoad() {
       const fetchInitialData = async () => {
         const { title, url, favIconUrl } = await getCurrentTabInfo();
-        const imageUrl = favIconUrl ?? '';
 
         if (!title || !url || url.trim() === '' || !url.startsWith('http')) {
           notifyError('해당 url은 저장할 수 없습니다.');
@@ -43,32 +36,21 @@ export function BookmarkPage() {
         const slicedTitle = title.slice(0, 255);
         chrome.runtime.connect({ name: CHANGE_ICON_PORT_NAME });
 
-        const [
-          fetchedTagList,
-          basicFolderList,
-          rootFolderChildFolderList,
-          createdPickInfo,
-        ] = await Promise.all([
-          getTagList(),
-          getBasicFolderList(),
-          getRootFolderChildFolders(),
-          createPickToUnclassifiedFolder({ title: slicedTitle, url }),
-        ]);
+        const [fetchedTagList, basicFolderList, rootFolderChildFolderList] =
+          await Promise.all([
+            getTagList(),
+            getBasicFolderList(),
+            getRootFolderChildFolders(),
+          ]);
 
         const filteredFolderInfoList = filterSelectableFolder(
           basicFolderList,
           rootFolderChildFolderList,
         );
 
-        trackSaveBookmark();
-        notifySuccess('미분류 폴더에 북마크가 추가되었습니다!', {
-          duration: 800,
-        });
-
         setFolderInfoList([...filteredFolderInfoList]);
         setTagList(fetchedTagList);
-        setPickInfo(createdPickInfo);
-        setImageUrl(imageUrl);
+        setPickInfo({ title: slicedTitle, url, favIconUrl });
         setIsLoading(false);
       };
 
@@ -77,7 +59,7 @@ export function BookmarkPage() {
         fetchInitialData();
       }
     },
-    [setTagList, trackSaveBookmark],
+    [setTagList],
   );
 
   if (isLoading || !pickInfo) {
@@ -92,12 +74,12 @@ export function BookmarkPage() {
 
   return (
     <div className={bookmarkPageLayout}>
-      <UpdatePickForm
-        id={pickInfo.id}
+      <CreatePickForm
         title={pickInfo.title}
-        imageUrl={imageUrl}
-        folderId={pickInfo.parentFolderId}
+        imageUrl={pickInfo.favIconUrl}
+        url={pickInfo.url}
         folderInfoList={folderInfoList}
+        localhostFolderId={localhostFolderId}
       />
     </div>
   );

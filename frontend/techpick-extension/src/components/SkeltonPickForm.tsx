@@ -1,11 +1,6 @@
 import { PUBLIC_DOMAIN } from '@/constants/publicDomain';
 import { PlusIcon } from '@radix-ui/react-icons';
 import {
-  skeleton,
-  skeletonImageStyle,
-  skeletonTagInputStyle,
-} from './SkeltonPickForm.css';
-import {
   footerStyle,
   footerTextStyle,
   formFieldLayout,
@@ -14,7 +9,12 @@ import {
   plusIconStyle,
   submitButtonStyle,
   titleInputStyle,
-} from './UpdatePickForm.css';
+} from './CreatePickForm.css';
+import {
+  skeleton,
+  skeletonImageStyle,
+  skeletonTagInputStyle,
+} from './SkeltonPickForm.css';
 
 export function SkeltonPickForm() {
   return (

@@ -1,4 +1,4 @@
-import { updatePickFromExtension } from '@/apis/updatePickFromExtension';
+import { createPick } from '@/apis/createPick';
 import { PUBLIC_DOMAIN } from '@/constants/publicDomain';
 import { useChangeFocusUsingArrowKey } from '@/hooks/useChangeFocusUsingArrowKey';
 import { useEventLogger } from '@/hooks/useEventLogger';
@@ -6,12 +6,10 @@ import { notifyError } from '@/libs/@toast/notifyError';
 import { notifySuccess } from '@/libs/@toast/notifySuccess';
 import { useTagStore } from '@/stores/tagStore';
 import type { FolderType } from '@/types/FolderType';
+import { setFolderIdToLocalhost } from '@/utils/setFolderIdToLocalhost';
 import { PlusIcon } from '@radix-ui/react-icons';
 import DOMPurify from 'dompurify';
 import { useEffect, useRef, useState } from 'react';
-import { FolderSelect } from './FolderSelect';
-import { TagPicker } from './TagPicker';
-import { ThumbnailImage } from './ThumbnailImage';
 import {
   footerLinkStyle,
   footerLinkTextStyle,
@@ -23,22 +21,25 @@ import {
   plusIconStyle,
   submitButtonStyle,
   titleInputStyle,
-} from './UpdatePickForm.css';
+} from './CreatePickForm.css';
+import { FolderSelect } from './FolderSelect';
+import { TagPicker } from './TagPicker';
+import { ThumbnailImage } from './ThumbnailImage';
 
-export function UpdatePickForm({
-  id,
-  title,
+export function CreatePickForm({
+  title: initialTitle,
   imageUrl,
-  folderId,
+  url,
   folderInfoList,
-}: UpdatePickFormProps) {
+  localhostFolderId,
+}: CreatePickFormProps) {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagPickerRef = useRef<HTMLDivElement>(null);
   const folderSelectRef = useRef<HTMLButtonElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const { selectedTagList } = useTagStore();
-  const { trackEvent: trackUpdateBookmark } = useEventLogger({
-    eventName: 'extension_update_bookmark',
+  const { trackEvent: trackSaveBookmark } = useEventLogger({
+    eventName: 'extension_save_bookmark',
   });
   const { trackEvent: trackUpdateTag } = useEventLogger({
     eventName: 'extension_update_tag',
@@ -51,9 +52,11 @@ export function UpdatePickForm({
     submitButtonRef,
   ]);
 
+  // TODO: 가장 최근에 저장한 폴더를 가져와야한다.
   const currentSelectedFolderInfo = folderInfoList.find(
-    (folder) => folder.id === folderId,
+    (folder) => folder.id === localhostFolderId,
   );
+
   const [selectedFolderId, setSelectedFolderId] = useState(
     `${currentSelectedFolderInfo?.id ?? folderInfoList[0].id}`,
   );
@@ -78,14 +81,20 @@ export function UpdatePickForm({
       trackUpdateTag({ tagList: selectedTagNameList });
     }
 
-    updatePickFromExtension({
-      id,
+    trackSaveBookmark();
+
+    const parsedSelectedFolderId = Number(selectedFolderId);
+
+    createPick({
+      url,
+      linkTitle: initialTitle,
       title: DOMPurify.sanitize(userModifiedTitle.trim()),
       tagIdOrderedList: selectedTagList.map((tag) => tag.id),
-      parentFolderId: Number(selectedFolderId),
+      parentFolderId: parsedSelectedFolderId,
     })
       .then(() => {
-        notifySuccess('수정되었습니다!');
+        setFolderIdToLocalhost(parsedSelectedFolderId);
+        notifySuccess('추가되었습니다!');
         setTimeout(() => {
           window.close();
         }, 600);
@@ -102,7 +111,7 @@ export function UpdatePickForm({
           <ThumbnailImage image={imageUrl} />
           <input
             type="text"
-            defaultValue={title}
+            defaultValue={initialTitle}
             ref={titleInputRef}
             className={titleInputStyle}
           />
@@ -138,7 +147,6 @@ export function UpdatePickForm({
         className={submitButtonStyle}
         onClick={() => {
           onSubmit();
-          trackUpdateBookmark();
         }}
         ref={submitButtonRef}
       >
@@ -150,10 +158,10 @@ export function UpdatePickForm({
   );
 }
 
-interface UpdatePickFormProps {
-  id: number;
+interface CreatePickFormProps {
   title: string;
-  imageUrl: string;
-  folderId: number;
+  imageUrl?: string;
+  url: string;
   folderInfoList: FolderType[];
+  localhostFolderId: number | undefined | null;
 }

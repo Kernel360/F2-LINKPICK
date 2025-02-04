@@ -5,7 +5,6 @@ import {
 } from './ThumbnailImage.css';
 
 export function ThumbnailImage({ image }: ThumbnailImageProps) {
-  console.log('ThumbnailImage', image === '');
   const imageUrl = image === '' ? '/defaultImage.png' : image;
 
   if (!imageUrl) {
