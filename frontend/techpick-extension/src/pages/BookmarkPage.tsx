@@ -31,7 +31,7 @@ export function BookmarkPage() {
           return;
         }
 
-        //  const slicedTitle = title.slice(0, 255);
+        const slicedTitle = title.slice(0, 255);
         chrome.runtime.connect({ name: CHANGE_ICON_PORT_NAME });
 
         const [fetchedTagList, basicFolderList, rootFolderChildFolderList] =
@@ -48,7 +48,7 @@ export function BookmarkPage() {
 
         setFolderInfoList([...filteredFolderInfoList]);
         setTagList(fetchedTagList);
-        setPickInfo({ title, url, favIconUrl });
+        setPickInfo({ title: slicedTitle, url, favIconUrl });
         setIsLoading(false);
       };
 
