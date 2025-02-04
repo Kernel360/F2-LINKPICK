@@ -99,6 +99,13 @@ export function PickDraggableRecord({
     selectSinglePick(pickId);
   };
 
+  const handleMouseDown = (event: MouseEvent<HTMLDivElement>) => {
+    if (event.shiftKey) {
+      // 텍스트 선택 방지
+      event.preventDefault();
+    }
+  };
+
   /**
    * @description multi-select에 포함이 됐으나 dragging target이 아닐때.
    */
@@ -119,8 +126,9 @@ export function PickDraggableRecord({
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <div
         className={`${isSelected ? selectedDragItemStyle : ''} ${isActiveDragging ? isActiveDraggingItemStyle : ''}`}
-        onClick={(event) => handleClick(pickId, event)}
         id={pickElementId}
+        onClick={(event) => handleClick(pickId, event)}
+        onMouseDown={handleMouseDown}
       >
         <PickContextMenu pickInfo={pickInfo}>
           <PickRecord pickInfo={pickInfo} />
