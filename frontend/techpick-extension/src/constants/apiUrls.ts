@@ -15,4 +15,9 @@ export const API_URLS = {
   getExtensionPickUrl: function () {
     return `${this.getPicksUrl()}/extension`;
   },
+  getExtensionUrl: () => 'extension',
+  getVersion1Url: () => 'v1',
+  getCreatePickUrl: function () {
+    return `${this.getVersion1Url()}/${this.getExtensionUrl()}/${this.getPicksUrl()}`;
+  },
 };

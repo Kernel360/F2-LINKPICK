@@ -1,4 +1,4 @@
-import { updatePickFromExtension } from '@/apis/updatePickFromExtension';
+import { createPick } from '@/apis/createPick';
 import { PUBLIC_DOMAIN } from '@/constants/publicDomain';
 import { useChangeFocusUsingArrowKey } from '@/hooks/useChangeFocusUsingArrowKey';
 import { useEventLogger } from '@/hooks/useEventLogger';
@@ -26,10 +26,9 @@ import {
 } from './UpdatePickForm.css';
 
 export function UpdatePickForm({
-  id,
-  title,
+  title: initialTitle,
   imageUrl,
-  folderId,
+  url,
   folderInfoList,
 }: UpdatePickFormProps) {
   const titleInputRef = useRef<HTMLInputElement>(null);
@@ -37,8 +36,8 @@ export function UpdatePickForm({
   const folderSelectRef = useRef<HTMLButtonElement>(null);
   const submitButtonRef = useRef<HTMLButtonElement>(null);
   const { selectedTagList } = useTagStore();
-  const { trackEvent: trackUpdateBookmark } = useEventLogger({
-    eventName: 'extension_update_bookmark',
+  const { trackEvent: trackSaveBookmark } = useEventLogger({
+    eventName: 'extension_save_bookmark',
   });
   const { trackEvent: trackUpdateTag } = useEventLogger({
     eventName: 'extension_update_tag',
@@ -51,8 +50,9 @@ export function UpdatePickForm({
     submitButtonRef,
   ]);
 
+  // TODO: 가장 최근에 저장한 폴더를 가져와야한다.
   const currentSelectedFolderInfo = folderInfoList.find(
-    (folder) => folder.id === folderId,
+    (folder) => folder.id === folderInfoList[0].id,
   );
   const [selectedFolderId, setSelectedFolderId] = useState(
     `${currentSelectedFolderInfo?.id ?? folderInfoList[0].id}`,
@@ -78,14 +78,15 @@ export function UpdatePickForm({
       trackUpdateTag({ tagList: selectedTagNameList });
     }
 
-    updatePickFromExtension({
-      id,
+    createPick({
+      url,
+      linkTitle: initialTitle,
       title: DOMPurify.sanitize(userModifiedTitle.trim()),
       tagIdOrderedList: selectedTagList.map((tag) => tag.id),
       parentFolderId: Number(selectedFolderId),
     })
       .then(() => {
-        notifySuccess('수정되었습니다!');
+        notifySuccess('추가되었습니다!');
         setTimeout(() => {
           window.close();
         }, 600);
@@ -102,7 +103,7 @@ export function UpdatePickForm({
           <ThumbnailImage image={imageUrl} />
           <input
             type="text"
-            defaultValue={title}
+            defaultValue={initialTitle}
             ref={titleInputRef}
             className={titleInputStyle}
           />
@@ -138,7 +139,7 @@ export function UpdatePickForm({
         className={submitButtonStyle}
         onClick={() => {
           onSubmit();
-          trackUpdateBookmark();
+          trackSaveBookmark();
         }}
         ref={submitButtonRef}
       >
@@ -151,9 +152,8 @@ export function UpdatePickForm({
 }
 
 interface UpdatePickFormProps {
-  id: number;
   title: string;
-  imageUrl: string;
-  folderId: number;
+  imageUrl?: string;
+  url: string;
   folderInfoList: FolderType[];
 }
