@@ -1,8 +1,8 @@
 import { getBasicFolderList } from '@/apis/getBasicFolders';
 import { getRootFolderChildFolders } from '@/apis/getRootFolderChildFolders';
 import { getTagList } from '@/apis/getTagList';
+import { CreatePickForm } from '@/components/CreatePickForm';
 import { SkeltonPickForm } from '@/components/SkeltonPickForm';
-import { UpdatePickForm } from '@/components/UpdatePickForm';
 import { CHANGE_ICON_PORT_NAME } from '@/constants/changeIconPortName';
 import { useGetFolderIdFromLocalhost } from '@/hooks/useGetFolderIdFromLocalhost';
 import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
@@ -74,7 +74,7 @@ export function BookmarkPage() {
 
   return (
     <div className={bookmarkPageLayout}>
-      <UpdatePickForm
+      <CreatePickForm
         title={pickInfo.title}
         imageUrl={pickInfo.favIconUrl}
         url={pickInfo.url}

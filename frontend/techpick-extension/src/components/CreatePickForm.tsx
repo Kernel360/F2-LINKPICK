@@ -10,9 +10,6 @@ import { setFolderIdToLocalhost } from '@/utils/setFolderIdToLocalhost';
 import { PlusIcon } from '@radix-ui/react-icons';
 import DOMPurify from 'dompurify';
 import { useEffect, useRef, useState } from 'react';
-import { FolderSelect } from './FolderSelect';
-import { TagPicker } from './TagPicker';
-import { ThumbnailImage } from './ThumbnailImage';
 import {
   footerLinkStyle,
   footerLinkTextStyle,
@@ -24,15 +21,18 @@ import {
   plusIconStyle,
   submitButtonStyle,
   titleInputStyle,
-} from './UpdatePickForm.css';
+} from './CreatePickForm.css';
+import { FolderSelect } from './FolderSelect';
+import { TagPicker } from './TagPicker';
+import { ThumbnailImage } from './ThumbnailImage';
 
-export function UpdatePickForm({
+export function CreatePickForm({
   title: initialTitle,
   imageUrl,
   url,
   folderInfoList,
   localhostFolderId,
-}: UpdatePickFormProps) {
+}: CreatePickFormProps) {
   const titleInputRef = useRef<HTMLInputElement>(null);
   const tagPickerRef = useRef<HTMLDivElement>(null);
   const folderSelectRef = useRef<HTMLButtonElement>(null);
@@ -158,7 +158,7 @@ export function UpdatePickForm({
   );
 }
 
-interface UpdatePickFormProps {
+interface CreatePickFormProps {
   title: string;
   imageUrl?: string;
   url: string;
