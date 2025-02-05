@@ -71,7 +71,7 @@ public class PickDataHandler {
 
 	@Transactional(readOnly = true)
 	public List<Pick> getPickListPreservingOrder(List<Long> pickIdList) {
-		List<Pick> pickList = pickRepository.findAllById(pickIdList);
+		List<Pick> pickList = pickRepository.findAllById_JoinLink(pickIdList);
 		// 조회리스트에 존재하지 않는 픽이 있으면 예외 발생
 		if (pickList.size() != pickIdList.size()) {
 			throw ApiPickException.PICK_NOT_FOUND();
