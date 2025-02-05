@@ -19,7 +19,7 @@ import baguni.batch.domain.link.service.RssFeedApi;
 public class RestClientConfig {
 
 	private static final Duration CONNECTION_TIMEOUT = Duration.ofSeconds(5);
-	private static final Duration READ_TIMEOUT = Duration.ofSeconds(5);
+	private static final Duration READ_TIMEOUT = Duration.ofSeconds(10);
 
 	@Bean
 	public RssFeedApi rssFeedApi(RestClient restClient) {
