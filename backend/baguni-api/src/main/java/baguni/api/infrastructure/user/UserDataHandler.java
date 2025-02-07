@@ -14,6 +14,7 @@ import baguni.domain.infrastructure.tag.TagRepository;
 import baguni.domain.model.user.SocialProvider;
 import baguni.domain.model.util.IDToken;
 import baguni.security.model.OAuth2UserInfo;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import baguni.domain.exception.user.ApiUserException;
 import baguni.domain.model.user.User;
@@ -30,11 +31,13 @@ public class UserDataHandler {
 	private final PickTagRepository pickTagRepository;
 	private final TagRepository tagRepository;
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public User getUser(Long userId) {
 		return userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Optional<User> findSocialUser(SocialProvider socialProvider, String socialProviderId) {
 		return userRepository.findBySocialProviderAndSocialProviderId(
@@ -42,11 +45,13 @@ public class UserDataHandler {
 		);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public User getUser(IDToken token) {
 		return userRepository.findByIdToken(token).orElseThrow(ApiUserException::USER_NOT_FOUND);
 	}
 
+	@WithSpan
 	@Transactional
 	public User createSocialUser(OAuth2UserInfo oAuthInfo) {
 		return userRepository.save(
@@ -58,6 +63,7 @@ public class UserDataHandler {
 	 * @author sangwon
 	 * 회원 탈퇴 기능
 	 */
+	@WithSpan
 	@Transactional
 	public void deleteUser(Long userId) {
 		List<Long> pickIdList = pickRepository.findIdAllByUserId(userId);
