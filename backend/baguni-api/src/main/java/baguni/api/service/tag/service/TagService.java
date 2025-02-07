@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import baguni.domain.annotation.LoginUserIdDistributedLock;
 import baguni.domain.infrastructure.tag.dto.TagCommand;
@@ -21,6 +22,7 @@ public class TagService {
 	private final TagDataHandler tagDataHandler;
 	private final TagMapper tagMapper;
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public TagResult getTag(TagCommand.Read command) throws ApiTagException {
 		Tag tag = tagDataHandler.getTag(command.id());
@@ -28,19 +30,22 @@ public class TagService {
 		return tagMapper.toResult(tag);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<TagResult> getUserTagList(Long userId) {
 		return tagDataHandler.getTagList(userId).stream()
 							 .map(tagMapper::toResult).toList();
 	}
 
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public TagResult saveTag(TagCommand.Create command) {
 		assertTagNameIsUnique(command.userId(), command.name());
 		return tagMapper.toResult(tagDataHandler.saveTag(command.userId(), command));
 	}
 
+	@WithSpan
 	@Transactional
 	public TagResult updateTag(TagCommand.Update command) {
 		Tag tag = tagDataHandler.getTag(command.id());
@@ -49,16 +54,18 @@ public class TagService {
 		return tagMapper.toResult(tagDataHandler.updateTag(command));
 	}
 
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public void moveUserTag(TagCommand.Move command) {
 		Tag tag = tagDataHandler.getTag(command.id());
 		assertUserIsTagOwner(command.userId(), tag);
 		tagDataHandler.moveTag(command.userId(), command);
 	}
 
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public void deleteTag(TagCommand.Delete command) {
 		Tag tag = tagDataHandler.getTag(command.id());
 		assertUserIsTagOwner(command.userId(), tag);

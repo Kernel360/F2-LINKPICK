@@ -12,6 +12,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import baguni.domain.annotation.LoginUserIdDistributedLock;
 import baguni.domain.infrastructure.folder.dto.FolderCommand;
@@ -34,6 +35,7 @@ public class FolderService {
 	private final PickDataHandler pickDataHandler;
 
 	// TODO: 현재는 1depth만 반환하고 있지만, 추후 ~3depth까지 반환할 예정
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<FolderResult> getAllRootFolderList(Long userId) {
 		Folder rootFolder = folderDataHandler.getRootFolder(userId);
@@ -49,6 +51,7 @@ public class FolderService {
 		return folderList;
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<FolderResult> getBasicFolderList(Long userId) {
 		var basicFolders = List.of(
@@ -62,6 +65,7 @@ public class FolderService {
 						   .toList();
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<FolderResult> getMobileFolderList(Long userId) {
 		List<FolderResult> folderList = new ArrayList<>(
@@ -82,8 +86,9 @@ public class FolderService {
 	/**
 	 * 생성하려는 폴더가 미분류폴더, 휴지통이 아닌지 검증합니다.
 	 * */
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public FolderResult saveFolder(FolderCommand.Create command) {
 		Folder parentFolder = folderDataHandler.getFolder(command.parentFolderId());
 		assertUserIsFolderOwner(command.userId(), parentFolder);
@@ -92,6 +97,7 @@ public class FolderService {
 		return folderMapper.toResult(folderDataHandler.saveFolder(command));
 	}
 
+	@WithSpan
 	@Transactional
 	public FolderResult updateFolder(FolderCommand.Update command) {
 
@@ -107,8 +113,9 @@ public class FolderService {
 	 * 현재 폴더들의 부모가 같은지 검증합니다.
 	 * 이동하려는 폴더가 미분류폴더, 휴지통이 아닌지 검증합니다.
 	 * */
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public void moveFolder(FolderCommand.Move command) {
 		Folder destinationFolder = folderDataHandler.getFolder(command.destinationFolderId());
 		assertUserIsFolderOwner(command.userId(), destinationFolder);
@@ -128,8 +135,9 @@ public class FolderService {
 		}
 	}
 
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public void deleteFolder(FolderCommand.Delete command) {
 		// 먼저 공유 부터 해제
 		command.idList().forEach(sharedFolderDataHandler::deleteBySourceFolderId);

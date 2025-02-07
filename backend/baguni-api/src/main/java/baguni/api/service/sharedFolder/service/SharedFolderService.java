@@ -13,6 +13,7 @@ import baguni.domain.model.folder.Folder;
 import baguni.domain.model.folder.FolderType;
 import baguni.domain.model.pick.Pick;
 import baguni.domain.model.sharedFolder.SharedFolder;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.domain.exception.folder.ApiFolderException;
@@ -40,6 +41,7 @@ public class SharedFolderService {
 
 	private final LinkMapper linkMapper;
 
+	@WithSpan
 	@Transactional
 	public SharedFolderResult.Create createSharedFolder(Long userId, Long sourceFolderId) {
 		var folder = folderDataHandler.getFolder(sourceFolderId);
@@ -62,8 +64,8 @@ public class SharedFolderService {
 	 *     pick.tagIdxList = [0, 2, 1] 이면
 	 *     pick에 설정된 태그는 [ "foo", "hi", "bar" ] 이다.
 	 */
+	@WithSpan
 	@Transactional(readOnly = true)
-	@MeasureTime
 	public SharedFolderResult.SharedFolderInfo getSharedFolderInfo(UUID uuid) {
 		var sourceFolder = sharedFolderDataHandler.getByUUID(uuid).getFolder();
 		var pickList = pickDataHandler.getPickListPreservingOrder(sourceFolder.getChildPickIdOrderedList());
@@ -79,17 +81,20 @@ public class SharedFolderService {
 			.build();
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Optional<String> findFolderAccessTokenByFolderId(Long folderId) {
 		return sharedFolderDataHandler.findUUIDBySourceFolderId(folderId).map(UUID::toString);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<SharedFolderResult.Read> getSharedFolderListByUserId(Long userId) {
 		return sharedFolderDataHandler.getByUserId(userId).stream()
 									  .map(sharedFolderMapper::toReadResult).toList();
 	}
 
+	@WithSpan
 	@Transactional
 	public void deleteSharedFolder(Long userId, Long sourceFolderId) {
 		SharedFolder sharedFolder = sharedFolderDataHandler.getByFolderId(sourceFolderId);

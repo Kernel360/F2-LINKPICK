@@ -8,9 +8,9 @@ import java.util.Map;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.common.annotation.MeasureTime;
 import baguni.common.dto.UrlWithCount;
 import baguni.common.lib.cache.CacheType;
 import baguni.ranking.infra.pick.LinkPickedCountRepository;
@@ -44,7 +44,7 @@ public class PickRankingService {
 	 * 		 		1시간마다 캐싱하도록 처리
 	 * 		 	    CacheType Enum 참고
 	 */
-	@MeasureTime
+	@WithSpan
 	@Cacheable(cacheNames = CacheType.CACHE_NAME.DAILY_LINK_RANK)
 	public List<UrlWithCount> getDailyLinksOrderByViewCount(LocalDate today, int limit) {
 		// today : 12/19 (Between = GT / LT)
@@ -64,7 +64,7 @@ public class PickRankingService {
 	 * 	 		24시간마다 캐싱하도록 처리
 	 * 	 	    CacheType Enum 참고
 	 */
-	@MeasureTime
+	@WithSpan
 	@Cacheable(cacheNames = CacheType.CACHE_NAME.WEEKLY_LINK_RANK)
 	public List<UrlWithCount> getWeeklyLinksOrderByViewCount(LocalDate startDate, LocalDate endDate, int limit) {
 		var pickViewCountList = linkViewCountRepository.findByDateBetween(
@@ -87,7 +87,7 @@ public class PickRankingService {
 	 * 	    https://techblog.uplus.co.kr/%EB%A1%9C%EC%BB%AC-%EC%BA%90%EC%8B%9C-%EC%84%A0%ED%83%9D%ED%95%98%EA%B8%B0
 	 * 	    -e394202d5c87
 	 */
-	@MeasureTime
+	@WithSpan
 	@Cacheable(cacheNames = CacheType.CACHE_NAME.MONTHLY_PICK_RANK)
 	public List<UrlWithCount> getLinksOrderByPickedCount(LocalDate startDate, LocalDate endDate, int limit) {
 		var pickCreateCountList = linkPickedCountRepository.findByDateBetween(

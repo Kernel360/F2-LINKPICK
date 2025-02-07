@@ -10,6 +10,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import baguni.domain.exception.folder.ApiFolderException;
 import baguni.domain.infrastructure.pick.dto.PickCommand;
@@ -30,6 +31,7 @@ public class PickSearchService {
 	private final FolderDataHandler folderDataHandler;
 	private final TagDataHandler tagDataHandler;
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Slice<PickResult.Pick> searchPickPagination(PickCommand.SearchPagination command) {
 

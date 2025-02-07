@@ -7,6 +7,7 @@ import baguni.domain.model.link.Link;
 import baguni.domain.infrastructure.link.LinkDataHandler;
 import baguni.domain.infrastructure.link.dto.LinkMapper;
 import baguni.domain.infrastructure.link.dto.LinkResult;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,12 +20,14 @@ public class LinkService {
 	private final LinkAnalyzer linkAnalyzer;
 	private final LinkMapper linkMapper;
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public LinkResult getLinkResultByUrl(String url) {
 		Link link = linkDataHandler.getLink(url);
 		return linkMapper.toLinkResult(link);
 	}
 
+	@WithSpan
 	@Transactional
 	public void analyzeAndUpdateLink(String url) {
 		Link link = linkDataHandler.getLink(url);
