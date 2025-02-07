@@ -81,7 +81,6 @@ export const filterSelect = style({
 
 export const searchResultContainer = style({
   maxHeight: '300px',
-  overflowY: 'auto',
   marginTop: '16px',
 });
 
