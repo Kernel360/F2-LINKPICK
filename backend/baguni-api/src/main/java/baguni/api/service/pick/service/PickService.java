@@ -86,7 +86,7 @@ public class PickService {
 	// 폴더 리스트가 넘어오면, 각 폴더 내부에 있는 픽 리스트 조회
 	@WithSpan
 	@Transactional(readOnly = true)
-	public List<PickResult.FolderPickWithViewCountList> getFolderListChildPickList(PickCommand.ReadList command) {
+	public List<PickResult.FolderPickList> getFolderListChildPickList(PickCommand.ReadList command) {
 		return command.folderIdList().stream()
 					  .peek(folderId -> assertUserIsFolderOwner(command.userId(), folderId))  // 폴더 접근 유효성 검사
 					  .map(this::getFolderChildPickResultList)
@@ -188,24 +188,13 @@ public class PickService {
 	/**
 	 * Internal Helper Functions
 	 **/
-	private PickResult.FolderPickWithViewCountList getFolderChildPickResultList(Long folderId) {
+	private PickResult.FolderPickList getFolderChildPickResultList(Long folderId) {
 		Folder folder = folderDataHandler.getFolder(folderId);
 		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(folder.getChildPickIdOrderedList());
 
-		// 여기서 폴더 내 픽이 주간 인기 픽인지 체크하고, 맞을 경우 조회수를 함께 반환한다.
-		// 내가 저장해둔 픽의 인기도를 볼 수 있는 기능이다.
-		var viewCountPerLink = getViewRankingFromRankingServer();
-
-		List<PickResult.PickWithViewCount> pickResultList
+		List<PickResult.Pick> pickResultList
 			= pickList.stream()
 					  .map(pickMapper::toPickResult)
-					  .map(pickResult -> {
-						  var urlWithCount = viewCountPerLink.get(pickResult.linkInfo().url());
-						  if (Objects.isNull(urlWithCount)) {
-							  return pickMapper.toPickResultWithViewCount(pickResult, false, null);
-						  }
-						  return pickMapper.toPickResultWithViewCount(pickResult, true, urlWithCount.count());
-					  })
 					  .toList();
 		return pickMapper.toPickResultList(folderId, pickResultList);
 	}

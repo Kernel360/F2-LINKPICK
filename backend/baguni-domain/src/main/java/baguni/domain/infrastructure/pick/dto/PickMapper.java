@@ -28,12 +28,9 @@ public interface PickMapper {
 	@Mapping(source = "pick.parentFolder.id", target = "parentFolderId")
 	PickResult.Extension toExtensionResult(Pick pick);
 
-	PickResult.PickWithViewCount toPickResultWithViewCount(PickResult.Pick pickResult, Boolean isHot,
-		Long weeklyViewCount);
-
 	@Mapping(source = "folderId", target = "folderId")
 	@Mapping(source = "pick", target = "pickList")
-	PickResult.FolderPickWithViewCountList toPickResultList(Long folderId, List<PickResult.PickWithViewCount> pick);
+	PickResult.FolderPickList toPickResultList(Long folderId, List<PickResult.Pick> pick);
 
 	@Mapping(source = "command.title", target = "title")
 	@Mapping(source = "command.tagIdOrderedList", target = "tagIdOrderedList")
