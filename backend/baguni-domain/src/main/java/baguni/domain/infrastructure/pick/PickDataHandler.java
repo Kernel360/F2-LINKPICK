@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import baguni.domain.infrastructure.folder.FolderQuery;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.domain.exception.folder.ApiFolderException;
@@ -43,22 +44,26 @@ public class PickDataHandler {
 	private final LinkRepository linkRepository;
 	private final TagRepository tagRepository;
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Pick getPick(Long pickId) {
 		return pickRepository.findById(pickId).orElseThrow(ApiPickException::PICK_NOT_FOUND);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Pick getPickUrl(Long userId, String url) {
 		return pickRepository.findByUserIdAndLinkUrl(userId, url)
 							 .orElseThrow(ApiPickException::PICK_NOT_FOUND);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Optional<Pick> findPickUrl(Long userId, String url) {
 		return pickRepository.findByUserIdAndLinkUrl(userId, url);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<Pick> getPickList(List<Long> pickIdList) {
 		List<Pick> pickList = pickRepository.findAllById_JoinLink(pickIdList);
@@ -69,6 +74,7 @@ public class PickDataHandler {
 		return pickList;
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<Pick> getPickListPreservingOrder(List<Long> pickIdList) {
 		List<Pick> pickList = pickRepository.findAllById_JoinLink(pickIdList);
@@ -80,11 +86,13 @@ public class PickDataHandler {
 		return pickList;
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<PickTag> getPickTagList(Long pickId) {
 		return pickTagRepository.findAllByPickId(pickId);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public boolean existsByUserIdAndLink(Long userId, Link link) {
 		return pickRepository.existsByUserIdAndLink(userId, link);
@@ -97,6 +105,7 @@ public class PickDataHandler {
 	 *
 	 * 사이트에서 픽 추가 못하도록 막았던 이유 : Url 검증이 까다로워서 (익스텐션에서만 하기로 변경)
 	 */
+	@WithSpan
 	@Transactional
 	public Pick savePick(PickCommand.Create command) throws ApiPickException {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -122,6 +131,7 @@ public class PickDataHandler {
 	 * 익스텐션에서 픽 생성하는 메서드
 	 * 태그, 부모 폴더까지 설정
 	 */
+	@WithSpan
 	@Transactional
 	public Pick savePickFromExtension(PickCommand.CreateFromExtension command) throws ApiPickException {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -147,6 +157,7 @@ public class PickDataHandler {
 	 * @author sangwon
 	 * 익스텐션에서 사용하지 않는 경우, 제거 예정
 	 */
+	@WithSpan
 	@Transactional
 	public Pick savePickToUnclassified(PickCommand.Extension command) {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -168,6 +179,7 @@ public class PickDataHandler {
 	 * 부모 폴더 픽 리스트에서 pick 제거 후
 	 * 이동하는 폴더 픽 리스트에 pick 추가
 	 */
+	@WithSpan
 	@Transactional
 	public Pick updatePick(PickCommand.Update command) {
 		Pick pick = pickRepository.findById(command.id()).orElseThrow(ApiPickException::PICK_NOT_FOUND);
@@ -191,6 +203,7 @@ public class PickDataHandler {
 		return pick;
 	}
 
+	@WithSpan
 	@Transactional
 	public void movePickToCurrentFolder(PickCommand.Move command) {
 		List<Long> pickIdList = command.idList();
@@ -199,6 +212,7 @@ public class PickDataHandler {
 		movePickListToDestinationFolder(pickIdList, folder, command.orderIdx());
 	}
 
+	@WithSpan
 	@Transactional
 	public void movePickToOtherFolder(PickCommand.Move command) {
 		List<Long> pickIdList = command.idList();
@@ -214,6 +228,7 @@ public class PickDataHandler {
 		movePickListToDestinationFolder(pickIdList, destinationFolder, command.orderIdx());
 	}
 
+	@WithSpan
 	@Transactional
 	public void movePickListToRecycleBin(Long userId, List<Long> pickIdList) {
 		Folder recycleBin = folderQuery.findRecycleBin(userId);
@@ -226,6 +241,7 @@ public class PickDataHandler {
 		});
 	}
 
+	@WithSpan
 	@Transactional
 	public void deletePickList(PickCommand.Delete command) {
 		List<Long> pickIdList = command.idList();
@@ -238,6 +254,7 @@ public class PickDataHandler {
 		});
 	}
 
+	@WithSpan
 	@Transactional
 	public void deletePickFromRecycleBin(Long userId) {
 		Folder recycleBin = folderQuery.findRecycleBin(userId);
@@ -250,6 +267,7 @@ public class PickDataHandler {
 		pickIdList.clear();
 	}
 
+	@WithSpan
 	@Transactional
 	public void attachTagToPickTag(Pick pick, Long tagId) {
 		Tag tag = tagRepository.findById(tagId)
@@ -258,6 +276,7 @@ public class PickDataHandler {
 		pickTagRepository.save(pickTag);
 	}
 
+	@WithSpan
 	@Transactional
 	public void detachTagFromPickTag(Pick pick, Long tagId) {
 		pickTagRepository.findByPickAndTagId(pick, tagId)
