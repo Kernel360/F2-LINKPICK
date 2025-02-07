@@ -1,10 +1,9 @@
-# By default, Spring Boot samples only 10% of requests to prevent overwhelming the trace backend.
-# This property switches it to 100% so that every request is sent to the trace backend.
-# Reference: https://docs.spring.io/spring-boot/reference/actuator/tracing.html
-management:
-  tracing:
-    sampling:
-      probability: 1
+# versions 2.0+ of the Java agent and OpenTelemetry Spring Boot starter
+# use http/protobuf as the default protocol, not grpc.
+otel:
+  exporter:
+    otlp:
+      endpoint: http://mornitor-alloy:4318
 ---
 spring:
   config:
