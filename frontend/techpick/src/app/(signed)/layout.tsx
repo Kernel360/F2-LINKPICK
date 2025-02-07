@@ -9,12 +9,19 @@ import { SideNavigationBar } from '@/components/SideNavigationBar/SideNavigation
 import { getQueryClient } from '@/libs/@react-query/getQueryClient';
 import { folderKeys } from '@/queries/folderKeys';
 import { tagKeys } from '@/queries/tagKeys';
+import { isMobileDevice } from '@/utils/isMobileDevice';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import type { PropsWithChildren } from 'react';
 import { pageContainerLayout } from './layout.css';
 
 export default async function SignedLayout({ children }: PropsWithChildren) {
   const queryClient = getQueryClient();
+
+  if (await isMobileDevice()) {
+    return (
+      <ScreenLogger eventName="page_view_signed_user">{children}</ScreenLogger>
+    );
+  }
 
   await Promise.all([
     queryClient.prefetchQuery({
