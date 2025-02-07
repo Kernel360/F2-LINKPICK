@@ -17,7 +17,7 @@ export async function ScreenLogger({
   children,
 }: PropsWithChildren<ScreenLoggerProps>) {
   const headersList = headers();
-  const { device, os } = userAgent({ headers: headersList });
+  const { device, os, isBot } = userAgent({ headers: headersList });
   const $user_id = await getUserIdForServer();
   const $device_id = `${device.vendor || 'unknown'}-${device.type || undefined}-${device.model || 'unknown'}`;
   const deviceType = device.type || 'unknown';
@@ -31,7 +31,9 @@ export async function ScreenLogger({
     $os,
   };
 
-  mixpanelServer.track(eventName, properties);
+  if (!isBot) {
+    mixpanelServer.track(eventName, properties);
+  }
 
   return <>{children}</>;
 }
