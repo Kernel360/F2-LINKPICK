@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import baguni.domain.infrastructure.pick.PickQuery;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.domain.annotation.LoginUserIdDistributedLock;
@@ -46,6 +47,7 @@ public class PickService {
 	private final RankingService rankingService;
 	private final LinkDataHandler linkDataHandler;
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public boolean existPickByUrl(Long userId, String url) {
 		return linkDataHandler.getOptionalLink(url)
@@ -53,6 +55,7 @@ public class PickService {
 							  .orElse(false);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public PickResult.Pick getPick(PickCommand.Read command) {
 		assertUserIsPickOwner(command.userId(), command.id());
@@ -60,6 +63,7 @@ public class PickService {
 		return pickMapper.toPickResult(pick);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Optional<PickResult.Pick> findPickUrl(Long userId, String url) {
 		return pickDataHandler.findPickUrl(userId, url).map(pickMapper::toPickResult);
@@ -67,6 +71,7 @@ public class PickService {
 
 	// 폴더 내에 있는 픽 리스트 조회
 	// 구현은 해두었지만, 추후 사용되지 않을 때 삭제 예정
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<PickResult.Pick> getFolderChildPickList(Long userId, Long folderId) {
 		assertUserIsFolderOwner(userId, folderId);
@@ -79,6 +84,7 @@ public class PickService {
 	}
 
 	// 폴더 리스트가 넘어오면, 각 폴더 내부에 있는 픽 리스트 조회
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<PickResult.FolderPickWithViewCountList> getFolderListChildPickList(PickCommand.ReadList command) {
 		return command.folderIdList().stream()
@@ -87,6 +93,7 @@ public class PickService {
 					  .toList();
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Slice<PickResult.Pick> getFolderListChildPickPagination(PickCommand.ReadPagination command) {
 		assertUserIsFolderOwner(command.userId(), command.folderId());
@@ -94,8 +101,9 @@ public class PickService {
 			command.folderId(), command.cursor(), command.size());
 	}
 
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public PickResult.Pick saveNewPick(PickCommand.Create command) {
 		assertParentFolderIsNotRoot(command.parentFolderId());
 		assertUserIsFolderOwner(command.userId(), command.parentFolderId());
@@ -103,8 +111,9 @@ public class PickService {
 		return pickMapper.toPickResult(pickDataHandler.savePick(command));
 	}
 
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public PickResult.Extension savePickFromExtension(PickCommand.CreateFromExtension command) {
 		assertParentFolderIsNotRoot(command.parentFolderId());
 		assertUserIsFolderOwner(command.userId(), command.parentFolderId());
@@ -115,14 +124,16 @@ public class PickService {
 	/**
 	 * 익스텐션에서 사용하지 않게 되는 경우, 제거 예정
 	 */
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public PickResult.Extension savePickToUnclassified(PickCommand.Extension command) {
 		return pickMapper.toExtensionResult(pickDataHandler.savePickToUnclassified(command));
 	}
 
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public PickResult.Pick updatePick(PickCommand.Update command) {
 		if (Objects.nonNull(command.parentFolderId())) {
 			assertUserIsFolderOwner(command.userId(), command.parentFolderId());
@@ -135,8 +146,9 @@ public class PickService {
 		return pickMapper.toPickResult(pick);
 	}
 
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public void movePick(PickCommand.Move command) {
 		assertParentFolderIsNotRoot(command.destinationFolderId());
 		List<Pick> pickList = pickDataHandler.getPickListPreservingOrder(command.idList());
@@ -151,8 +163,9 @@ public class PickService {
 		pickDataHandler.movePickToCurrentFolder(command);
 	}
 
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public void deletePick(PickCommand.Delete command) {
 		List<Pick> pickList = pickDataHandler.getPickList(command.idList());
 		for (Pick pick : pickList) {
@@ -165,8 +178,9 @@ public class PickService {
 		pickDataHandler.deletePickList(command);
 	}
 
-	@LoginUserIdDistributedLock
+	@WithSpan
 	@Transactional
+	@LoginUserIdDistributedLock
 	public void deletePickFromRecycleBin(Long userId) {
 		pickDataHandler.deletePickFromRecycleBin(userId);
 	}
