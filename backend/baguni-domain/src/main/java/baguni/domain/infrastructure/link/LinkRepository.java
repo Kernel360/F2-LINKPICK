@@ -13,6 +13,9 @@ public interface LinkRepository extends JpaRepository<Link, Long> {
 
 	Optional<Link> findByUrl(String url);
 
+	@Query("select l from Link l where l.url in (:urlList)")
+	List<Link> findByUrl(List<String> urlList);
+
 	boolean existsByUrl(String url);
 
 	@Query("""
