@@ -40,32 +40,13 @@ public interface PickApiMapper {
 
 	PickCommand.Delete toDeleteCommand(Long userId, PickApiRequest.Delete request);
 
-	PickApiResponse.PickWithViewCount toApiResponseWithPickViewCount(PickResult.PickWithViewCount pickResult);
-
 	PickApiResponse.Pick toApiResponse(PickResult.Pick pickResult);
 
 	PickApiResponse.Extension toApiExtensionResponse(PickResult.Extension pickResult);
 
 	PickApiResponse.Exist toApiExistResponse(Boolean exist);
 
-	@Named("mapPickList")
-	default List<PickApiResponse.Pick> mapPickList(List<PickResult.Pick> pickList) {
-		return pickList.stream()
-					   .map(this::toApiResponse)
-					   .toList();
-	}
-
-	@Mapping(target = "pickList", source = "pickList", qualifiedByName = "mapPickListWithViewCount")
-	PickApiResponse.FolderPickListWithViewCount toApiFolderPickListWithViewCount(
-		PickResult.FolderPickWithViewCountList folderPickList);
-
-	@Named("mapPickListWithViewCount")
-	default List<PickApiResponse.PickWithViewCount> mapPickListWithViewCount(
-		List<PickResult.PickWithViewCount> pickList) {
-		return pickList.stream()
-					   .map(this::toApiResponseWithPickViewCount)
-					   .toList();
-	}
+	PickApiResponse.FolderPickList toApiFolderPickList(PickResult.FolderPickList folderPickLists);
 
 	default PickSliceResponse<PickApiResponse.Pick> toSliceApiResponse(Slice<PickResult.Pick> source) {
 		List<PickApiResponse.Pick> convertedContent = source.getContent().stream()
