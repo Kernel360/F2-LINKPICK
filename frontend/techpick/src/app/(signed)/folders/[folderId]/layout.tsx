@@ -1,4 +1,5 @@
 import { getAllPickListByFolderId } from '@/apis/pick/getAllPickListByFolderId';
+import { getPickListByFolderId } from '@/apis/pick/getPickListByFolderId';
 import { ROUTES } from '@/constants/route';
 import { getQueryClient } from '@/libs/@react-query/getQueryClient';
 import { pickKeys } from '@/queries/pickKeys';
@@ -20,14 +21,25 @@ export default async function FolderDetailLayout({
 
   const queryClient = getQueryClient();
 
-  await queryClient.prefetchQuery({
-    queryKey: pickKeys.folderId(folderId),
-    queryFn: () => getAllPickListByFolderId(folderId),
+  queryClient.prefetchInfiniteQuery({
+    queryKey: pickKeys.folderInfinite(folderId),
+    queryFn: ({ pageParam = 0 }) => {
+      return getPickListByFolderId(folderId, pageParam);
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage: { hasNext: boolean; lastCursor: number }) => {
+      return lastPage.hasNext ? lastPage.lastCursor : undefined;
+    },
   });
 
   if (await isMobileDevice()) {
     return <MobileFolderDetailPage />;
   }
+
+  await queryClient.prefetchQuery({
+    queryKey: pickKeys.folderId(folderId),
+    queryFn: () => getAllPickListByFolderId(folderId),
+  });
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
