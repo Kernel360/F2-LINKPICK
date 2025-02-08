@@ -14,6 +14,6 @@ import baguni.domain.infrastructure.user.dto.UserInfo;
 )
 public interface UserApiMapper {
 
-	@Mapping(expression = "java(userInfo.idToken().toString())", target = "idToken")
+	@Mapping(expression = "java(userInfo.idToken().value())", target = "idToken")
 	UserInfoApiResponse toApiResponse(UserInfo userInfo);
 }

@@ -61,7 +61,7 @@ public class AccessToken {
 			.setIssuer(props.getIssuer())
 			.setIssuedAt(now)
 			.setExpiration(expiration)
-			.claim("id", idToken.toString())
+			.claim("id", idToken.value())
 			.claim("role", userRole)
 			.signWith(SIG_AL, props.getSecret())
 			.compact();
