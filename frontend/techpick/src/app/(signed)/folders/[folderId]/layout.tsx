@@ -1,4 +1,4 @@
-import { getPickListByFolderId } from '@/apis/pick/getPickListByFolderId';
+import { getAllPickListByFolderId } from '@/apis/pick/getAllPickListByFolderId';
 import { ROUTES } from '@/constants/route';
 import { getQueryClient } from '@/libs/@react-query/getQueryClient';
 import { pickKeys } from '@/queries/pickKeys';
@@ -22,7 +22,7 @@ export default async function FolderDetailLayout({
 
   await queryClient.prefetchQuery({
     queryKey: pickKeys.folderId(folderId),
-    queryFn: () => getPickListByFolderId(folderId),
+    queryFn: () => getAllPickListByFolderId(folderId),
   });
 
   if (await isMobileDevice()) {

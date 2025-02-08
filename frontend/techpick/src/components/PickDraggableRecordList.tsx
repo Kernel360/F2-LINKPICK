@@ -1,6 +1,6 @@
 'use client';
 import { usePickDndRenderTrigger } from '@/hooks/usePickDndRenderTrigger';
-import { useFetchPickListByFolderId } from '@/queries/useFetchPickListByFolderId';
+import { useFetchAllPickListByFolderId } from '@/queries/useFetchAllPickListByFolderId';
 import type { FolderIdType } from '@/types/FolderIdType';
 import dynamic from 'next/dynamic';
 import { PickDraggableListLayout } from './PickDraggableListLayout';
@@ -15,7 +15,7 @@ const EmptyPickRecordImage = dynamic(() =>
 export function PickDraggableRecordList({
   folderId,
 }: PickDraggableRecordListProps) {
-  const { data: pickList } = useFetchPickListByFolderId(folderId);
+  const { data: pickList } = useFetchAllPickListByFolderId(folderId);
   usePickDndRenderTrigger();
 
   if (!pickList) {

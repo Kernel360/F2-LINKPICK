@@ -5,10 +5,10 @@ import { apiClient } from '../apiClient';
 import { API_URLS } from '../apiConstants';
 import { returnErrorFromHTTPError } from '../error';
 
-export const getPickListByFolderId = async (folderId: FolderIdType) => {
+export const getAllPickListByFolderId = async (folderId: FolderIdType) => {
   try {
     const response = await apiClient.get<GetPicksResponseType>(
-      API_URLS.GET_PICKS_BY_FOLDER_ID(folderId),
+      API_URLS.GET_ALL_PICKS_BY_FOLDER_ID(folderId),
     );
     const data = await response.json();
 
