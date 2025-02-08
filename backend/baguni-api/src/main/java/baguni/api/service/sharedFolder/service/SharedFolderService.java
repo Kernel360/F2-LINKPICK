@@ -25,7 +25,6 @@ import baguni.domain.infrastructure.folder.FolderDataHandler;
 import baguni.domain.infrastructure.pick.PickDataHandler;
 import baguni.domain.infrastructure.sharedFolder.SharedFolderDataHandler;
 import baguni.domain.infrastructure.tag.TagDataHandler;
-import baguni.common.annotation.MeasureTime;
 
 @Slf4j
 @Service

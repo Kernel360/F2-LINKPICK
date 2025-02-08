@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import baguni.common.annotation.MeasureTime;
 import baguni.common.event.events.BookmarkCreateEvent;
 import baguni.common.event.messenger.EventMessenger;
 import io.swagger.v3.oas.annotations.Operation;
@@ -162,7 +161,6 @@ public class PickApiController {
 	/**
 	 *	익스텐션에서 사용하지 않게 되면 제거
 	 */
-	@MeasureTime
 	@PostMapping("/extension")
 	@Operation(
 		summary = "[익스텐션 전용] 미분류 폴더로 픽 생성",
