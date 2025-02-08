@@ -6,7 +6,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import baguni.common.annotation.MeasureTime;
 import baguni.common.lib.cache.CacheType;
 import baguni.domain.infrastructure.link.dto.RssLinkInfo;
 import baguni.domain.model.link.Link;
@@ -33,6 +32,12 @@ public class LinkService {
 	}
 
 	@WithSpan
+	@Transactional(readOnly = true)
+	public List<LinkInfo> getLinkInfoList(List<String> urlList) {
+		return linkDataHandler.getLinkList(urlList).stream().map(linkMapper::of).toList();
+	}
+
+	@WithSpan
 	@Transactional
 	public LinkInfo saveLink(String url) {
 		Link link = linkDataHandler.getOptionalLink(url).orElseGet(() -> Link.createLink(url));
@@ -40,7 +45,6 @@ public class LinkService {
 	}
 
 	@WithSpan
-	@MeasureTime
 	@Transactional(readOnly = true)
 	@Cacheable(cacheNames = CacheType.CACHE_NAME.DAILY_RSS_BLOG_ARTICLE)
 	public List<RssLinkInfo> getRssLinkList(int limit) {

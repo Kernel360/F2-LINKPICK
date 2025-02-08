@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import baguni.common.annotation.MeasureTime;
 import baguni.domain.infrastructure.link.dto.LinkInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -27,7 +26,6 @@ public class LinkApiController {
 	private final LinkService linkService;
 	private final LinkApiMapper linkApiMapper;
 
-	@MeasureTime
 	@GetMapping
 	@Operation(summary = "링크 정보 조회", description = "해당 링크의 데이터를 DB에서 가져옵니다. 해당 메서드에서 더 이상 스크래핑하지 않습니다.")
 	@ApiResponses(value = {

@@ -25,6 +25,12 @@ public class LinkDataHandler {
 
 	@WithSpan
 	@Transactional(readOnly = true)
+	public List<Link> getLinkList(List<String> urlList) {
+		return linkRepository.findByUrlIn(urlList);
+	}
+
+	@WithSpan
+	@Transactional(readOnly = true)
 	public Optional<Link> getOptionalLink(String url) {
 		return linkRepository.findByUrl(url);
 	}
