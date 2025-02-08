@@ -17,6 +17,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import baguni.security.filter.TestUserAuthenticationFilter;
 import baguni.security.handler.BaguniOAuth2FlowFailureHandler;
 import baguni.security.handler.BaguniApiAuthExceptionEntrypoint;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class SecurityConfig {
 	private final CustomOAuth2Service customOAuth2Service;
 	private final OAuth2SuccessHandler oAuth2SuccessHandler;
 	private final TokenAuthenticationFilter tokenAuthenticationFilter;
+	private final TestUserAuthenticationFilter testUserAuthenticationFilter;
 	private final BaguniLogoutHandler logoutHandler;
 	private final BaguniOAuth2FlowFailureHandler loginFailureHandler;
 	private final BaguniAuthorizationRequestRepository requestRepository;
@@ -59,12 +61,17 @@ public class SecurityConfig {
 					  .logoutSuccessHandler(logoutHandler);
 			})
 			.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-			// TokenAuthenticationFilter 를 UsernamePasswordAuthenticationFilter 앞에 추가
+			/**
+			 * 필터 적용 순서
+			 * 1. testUserAuthenticationFilter --> 2. tokenAuthenticationFilter --> 3. UsernamePasswordFilter
+			 */
+			.addFilterBefore(testUserAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 			.authorizeHttpRequests(
 				authRequest -> authRequest
 					.requestMatchers(HttpMethod.GET, "/api/shared/{uuid}").permitAll()
 					.requestMatchers(HttpMethod.POST, "/api/events/shared/**").permitAll() // 이벤트는 shared의 경우 검증 X
+					.requestMatchers("/api/development/**").permitAll() // 개발 환경 전용 API
 					.requestMatchers("/api-docs/**").permitAll()
 					.requestMatchers("/swagger-ui/**").permitAll()
 					.requestMatchers("/api/login/**").permitAll()

@@ -3,6 +3,7 @@ package baguni.api.infrastructure.user;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +12,7 @@ import baguni.domain.infrastructure.pick.PickRepository;
 import baguni.domain.infrastructure.pick.PickTagRepository;
 import baguni.domain.infrastructure.sharedFolder.SharedFolderRepository;
 import baguni.domain.infrastructure.tag.TagRepository;
+import baguni.domain.model.user.Role;
 import baguni.domain.model.user.SocialProvider;
 import baguni.domain.model.util.IDToken;
 import baguni.security.model.OAuth2UserInfo;
@@ -48,7 +50,8 @@ public class UserDataHandler {
 	@WithSpan
 	@Transactional(readOnly = true)
 	public User getUser(IDToken token) {
-		return userRepository.findByIdToken(token).orElseThrow(ApiUserException::USER_NOT_FOUND);
+		return userRepository.findByIdToken(token)
+							 .orElseThrow(() -> ApiUserException.USER_NOT_FOUND(token.value()));
 	}
 
 	@WithSpan
@@ -56,6 +59,14 @@ public class UserDataHandler {
 	public User createSocialUser(OAuth2UserInfo oAuthInfo) {
 		return userRepository.save(
 			User.SocialUser(oAuthInfo.getProvider(), oAuthInfo.getProviderId(), oAuthInfo.getEmail())
+		);
+	}
+
+	@Transactional
+	public User createTestUser() {
+		var userName = "test" + userRepository.countByRole(Role.ROLE_TEST);
+		return userRepository.save(
+			User.TestUser(userName, userName + "@baguni.com")
 		);
 	}
 

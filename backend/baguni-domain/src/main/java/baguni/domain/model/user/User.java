@@ -126,4 +126,14 @@ public class User extends BaseEntity {
 			.role(Role.ROLE_USER)
 			.build();
 	}
+
+	public static User TestUser(String name, String email) {
+		return User
+			.builder()
+			.nickname(name)
+			.email(email)
+			.idToken(IDToken.makeNew())
+			.role(Role.ROLE_TEST)
+			.build();
+	}
 }
