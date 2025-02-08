@@ -2,6 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
 
 export const mobilePickRecordStyle = style({
+  marginBottom: '8px',
   border: '1px solid',
   borderColor: colorVars.gold5,
   borderRadius: '8px',
