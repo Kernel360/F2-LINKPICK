@@ -6,7 +6,7 @@ import { useOpenUrlInNewTab } from '@/hooks/useOpenUrlInNewTab';
 import { useFetchTagList } from '@/queries/useFetchTagList';
 import type { PickInfoType } from '@/types/PickInfoType';
 import { getFilteredSelectedTagList } from '@/utils/getFilteredSelectedTagList';
-import { SelectedTagItem } from '../SelectedTagItem/SelectedTagItem';
+import { SelectedTagItem } from './SelectedTagItem/SelectedTagItem';
 import {
   backgroundImageStyle,
   contentStyle,
