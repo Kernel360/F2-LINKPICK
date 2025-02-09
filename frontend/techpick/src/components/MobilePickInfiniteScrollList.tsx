@@ -34,7 +34,7 @@ export function MobilePickInfiniteScrollList({
         <div className={emptyPickListLayoutStyle}>
           <SquirrelIcon size={'50vw'} />
           <div>
-            <p>북마크 대신 귀여운 다람쥐만 있네요! </p>
+            <p>북마크 대신 귀여운 다람쥐가 있네요! </p>
           </div>
         </div>
       </div>
