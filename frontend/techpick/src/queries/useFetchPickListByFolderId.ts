@@ -4,7 +4,7 @@ import type { FolderIdType } from '@/types/FolderIdType';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { pickKeys } from './pickKeys';
 
-export function useFetchPickListByFolderId(folderId: FolderIdType, size = 20) {
+export function useFetchPickListByFolderId(folderId: FolderIdType, size = 10) {
   return useInfiniteQuery({
     queryKey: pickKeys.folderInfinite(folderId),
     queryFn: ({ pageParam = 0 }) => {
