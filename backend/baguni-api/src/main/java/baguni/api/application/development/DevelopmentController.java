@@ -39,7 +39,7 @@ public class DevelopmentController {
 	private final UserService userService;
 	private final UserApiMapper userApiMapper;
 
-	@PostMapping
+	@PostMapping("/users")
 	@Operation(summary = "테스트 회원 가입", description = "테스트용 회원을 생성합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "204", description = "테스트 계정 생성 성공")
@@ -50,7 +50,7 @@ public class DevelopmentController {
 		return ResponseEntity.ok(response);
 	}
 
-	@DeleteMapping
+	@DeleteMapping("/users")
 	@Operation(summary = "회원 탈퇴", description = "회원 탈퇴를 하면 모든 폴더, 픽, 태그가 삭제됩니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "204", description = "회원 탈퇴 성공")
