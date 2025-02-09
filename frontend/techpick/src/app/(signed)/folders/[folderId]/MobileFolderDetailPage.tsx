@@ -1,3 +1,14 @@
+'use client';
+import { MobilePickInfiniteScrollList } from '@/components/MobilePickInfiniteScrollList';
+import { useParams } from 'next/navigation';
+
 export function MobileFolderDetailPage() {
-  return <div>mobile folder page</div>;
+  const { folderId: stringFolderId } = useParams<{ folderId: string }>();
+  const folderId = Number(stringFolderId);
+
+  return (
+    <div>
+      <MobilePickInfiniteScrollList folderId={folderId} />
+    </div>
+  );
 }
