@@ -19,7 +19,7 @@ import baguni.security.config.SecurityProperties;
 
 @Configuration
 @OpenAPIDefinition(
-	security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "techPickLogin")}
+	security = {@SecurityRequirement(name = "accessToken"), @SecurityRequirement(name = "Test User ID-Token")}
 )
 public class SwaggerConfig {
 
@@ -35,7 +35,7 @@ public class SwaggerConfig {
 			.info(apiInfo())
 			.components(new Components()
 				.addSecuritySchemes("accessToken", accessTokenScheme())
-				.addSecuritySchemes("techPickLogin", techPickLoginScheme())
+				.addSecuritySchemes("Test User ID-Token", testUserLoginScheme())
 			)
 			.servers(List.of(getServer()))
 			.paths(getAuthPaths())
@@ -60,11 +60,11 @@ public class SwaggerConfig {
 			.in(SecurityScheme.In.COOKIE);
 	}
 
-	private SecurityScheme techPickLoginScheme() {
+	private SecurityScheme testUserLoginScheme() {
 		return new SecurityScheme()
-			.type(SecurityScheme.Type.APIKEY)
-			.name("techPickLogin")
-			.in(SecurityScheme.In.COOKIE);
+			.type(SecurityScheme.Type.HTTP)
+			.scheme("bearer")
+			.bearerFormat("UUID id token");
 	}
 
 	private Server getServer() {

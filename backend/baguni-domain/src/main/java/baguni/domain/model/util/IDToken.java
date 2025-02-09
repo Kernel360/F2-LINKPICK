@@ -21,7 +21,7 @@ public class IDToken {
 			var uuid = UUID.fromString(raw);
 			return new IDToken(uuid);
 		} catch (Exception e) {
-			throw new IdTokenConversionException("ID 토큰의 값이 UUID 가 아닙니다!");
+			throw new IdTokenConversionException(raw + ": ID 토큰의 값이 UUID 가 아닙니다!");
 		}
 	}
 
@@ -29,8 +29,7 @@ public class IDToken {
 		return new IDToken(UUID.randomUUID());
 	}
 
-	@Override
-	public String toString() {
+	public String value() {
 		return this.uuid.toString();
 	}
 

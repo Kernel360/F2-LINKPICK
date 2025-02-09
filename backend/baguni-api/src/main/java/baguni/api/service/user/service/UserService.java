@@ -33,6 +33,17 @@ public class UserService {
 		}
 	}
 
+	@Transactional
+	public UserInfo createTestUser() {
+		var user = userDataHandler.createTestUser();
+		try {
+			folderDataHandler.createMandatoryFolder(user);
+			return UserInfo.from(user);
+		} catch (Exception e) {
+			throw ApiAuthException.AUTHENTICATION_SERVER_FAILURE();
+		}
+	}
+
 	@WithSpan
 	@Transactional(readOnly = true)
 	public boolean isSocialUserExists(OAuth2UserInfo oAuthInfo) {
