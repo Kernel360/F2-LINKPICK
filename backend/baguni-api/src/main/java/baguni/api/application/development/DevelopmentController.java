@@ -24,13 +24,13 @@ import lombok.RequiredArgsConstructor;
  * 개발 전용 API를 제공하는 Controller입니다.
  */
 @RestController
-@Profile("!prod")
 @RequiredArgsConstructor
+@Profile({"local", "dev"})
 @RequestMapping("/api/development")
 @Tag(
 	name = "개발/테스트 전용 API",
 	description = """
-		1. 인증 없이 사용 가능합니다. 
+		1. 인증 없이 사용 가능합니다.
 		2. 운영 환경에선 해당 API가 비활성화됩니다.
 		""")
 public class DevelopmentController {
