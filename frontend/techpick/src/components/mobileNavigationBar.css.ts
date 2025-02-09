@@ -9,6 +9,19 @@ export const mobileNavigationBarStyle = style({
   height: '44px',
 });
 
+export const titleSectionStyle = style({
+  display: 'flex',
+  gap: '8px',
+});
+
+export const titleStyle = style({
+  flex: '1 0',
+  maxWidth: '60vw',
+  textOverflow: 'ellipsis',
+  overflow: 'hidden',
+  whiteSpace: 'nowrap',
+});
+
 export const actionsStyle = style({
   display: 'flex',
   gap: '12px',

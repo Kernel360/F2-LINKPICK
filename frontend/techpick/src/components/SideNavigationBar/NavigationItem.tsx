@@ -29,7 +29,7 @@ export function NavigationItem({
 
 interface NavigationItemPropsType extends ComponentProps<'a'> {
   href: string;
+  isActive: boolean;
   text?: string;
   icon?: ElementType;
-  isActive: boolean;
 }

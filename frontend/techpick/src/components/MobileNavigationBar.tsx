@@ -4,19 +4,31 @@ import { ROUTES } from '@/constants/route';
 import { useDisclosure } from '@/hooks/useDisclosure';
 import { useGetActiveNavigationItemId } from '@/hooks/useGetActiveNavigationItemId';
 import { useFetchFoldersWithBasicFolders } from '@/queries/useFetchFoldersWithBasicFolders';
-import { CircleUserRoundIcon, SearchIcon } from 'lucide-react';
+import { CircleUserRoundIcon, MenuIcon, SearchIcon } from 'lucide-react';
 import Link from 'next/link';
+import { FolderNavigationDrawer } from './FolderNavigationDrawer';
 import { SearchDrawer } from './Search2/SearchDrawer';
 import {
   actionsStyle,
   buttonStyle,
   mobileNavigationBarStyle,
+  titleSectionStyle,
+  titleStyle,
 } from './mobileNavigationBar.css';
 
 export function MobileNavigationBar() {
   const { activeNavigationItemId } = useGetActiveNavigationItemId();
-  const { isOpen, setIsOpen, onOpen } = useDisclosure();
   const { data: folderList = [] } = useFetchFoldersWithBasicFolders();
+  const {
+    isOpen: isFolderNavigationDrawerOpen,
+    setIsOpen: setIsFolderNavigationDrawerOpen,
+    onOpen: onFolderNavigationDrawer,
+  } = useDisclosure();
+  const {
+    isOpen: isSearchDrawerOpen,
+    setIsOpen: setIsSearchDrawerOpen,
+    onOpen: onOpenSearchDrawer,
+  } = useDisclosure();
 
   let currentPageTitle = '';
 
@@ -42,11 +54,24 @@ export function MobileNavigationBar() {
 
   return (
     <header className={mobileNavigationBarStyle}>
-      <h1>{currentPageTitle}</h1>
+      <div className={titleSectionStyle}>
+        <div className={buttonStyle}>
+          <MenuIcon size={26} onClick={onFolderNavigationDrawer} />
+          <FolderNavigationDrawer
+            isOpen={isFolderNavigationDrawerOpen}
+            onOpenChange={setIsFolderNavigationDrawerOpen}
+          />
+        </div>
+        <h1 className={titleStyle}>{currentPageTitle}</h1>
+      </div>
+
       <div className={actionsStyle}>
         <div className={buttonStyle}>
-          <SearchIcon size={26} onClick={onOpen} />
-          <SearchDrawer isOpen={isOpen} onOpenChange={setIsOpen} />
+          <SearchIcon size={26} onClick={onOpenSearchDrawer} />
+          <SearchDrawer
+            isOpen={isSearchDrawerOpen}
+            onOpenChange={setIsSearchDrawerOpen}
+          />
         </div>
         <Link href={ROUTES.MY_PAGE} className={buttonStyle}>
           <CircleUserRoundIcon size={26} />
