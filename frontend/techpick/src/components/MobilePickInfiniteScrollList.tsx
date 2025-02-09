@@ -49,7 +49,7 @@ export function MobilePickInfiniteScrollList({
             isItemLoaded={isItemLoaded}
             itemCount={itemCount}
             loadMoreItems={loadMoreItems}
-            threshold={5}
+            threshold={10}
           >
             {({ onItemsRendered, ref }) => (
               <List
