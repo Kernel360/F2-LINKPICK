@@ -3,6 +3,7 @@ import { getFolders } from '@/apis/folder/getFolders';
 import { getTagList } from '@/apis/tag/getTagList';
 import { FeedbackToolbar } from '@/components/FeedbackToolbar';
 import { FolderAndPickDndContextProvider } from '@/components/FolderAndPickDndContextProvider';
+import { MobileNavigationBar } from '@/components/MobileNavigationBar';
 import { ScreenLogger } from '@/components/ScreenLogger';
 import ShortcutKey from '@/components/ShortcutKey';
 import { SideNavigationBar } from '@/components/SideNavigationBar/SideNavigationBar';
@@ -12,16 +13,20 @@ import { tagKeys } from '@/queries/tagKeys';
 import { isMobileDevice } from '@/utils/isMobileDevice';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import type { PropsWithChildren } from 'react';
-import { pageContainerLayout } from './layout.css';
+import { mobilePageContainerStyle, pageContainerLayout } from './layout.css';
 
 export default async function SignedLayout({ children }: PropsWithChildren) {
-  const queryClient = getQueryClient();
-
   if (await isMobileDevice()) {
     return (
-      <ScreenLogger eventName="page_view_signed_user">{children}</ScreenLogger>
+      <ScreenLogger eventName="page_view_signed_user">
+        <div className={mobilePageContainerStyle}>
+          <MobileNavigationBar />
+          {children}
+        </div>
+      </ScreenLogger>
     );
   }
+  const queryClient = getQueryClient();
 
   await Promise.all([
     queryClient.prefetchQuery({

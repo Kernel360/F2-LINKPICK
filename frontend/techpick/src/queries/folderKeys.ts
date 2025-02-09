@@ -4,4 +4,5 @@ export const folderKeys = {
   root: () => [...folderKeys.all, 'root'] as const,
   rootList: () => [...folderKeys.root(), 'list'] as const,
   share: () => [...folderKeys.all, 'share'] as const,
+  rootAndBasic: () => [...folderKeys.root(), 'basic'],
 };
