@@ -1,14 +1,24 @@
 import { useFetchPickListByFolderId } from '@/queries/useFetchPickListByFolderId';
 import type { FolderIdType } from '@/types/FolderIdType';
+import dynamic from 'next/dynamic';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
 import { MobilePickRecord } from './MobilePickRecord';
+import {
+  emptyPickListLayoutStyle,
+  mobilePickInfiniteScrollListStyle,
+} from './mobilePickInfiniteScrollList.css';
+const EmptyPickRecordImage = dynamic(() =>
+  import('@/components/EmptyPickRecordImage').then(
+    (mod) => mod.EmptyPickRecordImage,
+  ),
+);
 
 export function MobilePickInfiniteScrollList({
   folderId,
 }: MobilePickInfiniteScrollList) {
-  const { data, fetchNextPage, isFetchingNextPage, hasNextPage } =
+  const { data, fetchNextPage, isFetchingNextPage, hasNextPage, isLoading } =
     useFetchPickListByFolderId(folderId);
   const pickList = data?.pages.flatMap((page) => page.content) ?? [];
   const itemCount = hasNextPage ? pickList.length + 1 : pickList.length;
@@ -23,8 +33,18 @@ export function MobilePickInfiniteScrollList({
     return !hasNextPage || index < pickList.length;
   };
 
+  if (!isLoading && pickList.length === 0) {
+    return (
+      <div className={mobilePickInfiniteScrollListStyle}>
+        <div className={emptyPickListLayoutStyle}>
+          <EmptyPickRecordImage description="" />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ height: 'calc(100vh - 64px)' }}>
+    <div className={mobilePickInfiniteScrollListStyle}>
       <AutoSizer>
         {({ height, width }) => (
           <InfiniteLoader
