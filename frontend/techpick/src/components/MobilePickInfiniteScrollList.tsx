@@ -1,6 +1,6 @@
 import { useFetchPickListByFolderId } from '@/queries/useFetchPickListByFolderId';
 import type { FolderIdType } from '@/types/FolderIdType';
-import dynamic from 'next/dynamic';
+import { SquirrelIcon } from 'lucide-react';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import { FixedSizeList as List } from 'react-window';
 import InfiniteLoader from 'react-window-infinite-loader';
@@ -9,11 +9,6 @@ import {
   emptyPickListLayoutStyle,
   mobilePickInfiniteScrollListStyle,
 } from './mobilePickInfiniteScrollList.css';
-const EmptyPickRecordImage = dynamic(() =>
-  import('@/components/EmptyPickRecordImage').then(
-    (mod) => mod.EmptyPickRecordImage,
-  ),
-);
 
 export function MobilePickInfiniteScrollList({
   folderId,
@@ -37,7 +32,10 @@ export function MobilePickInfiniteScrollList({
     return (
       <div className={mobilePickInfiniteScrollListStyle}>
         <div className={emptyPickListLayoutStyle}>
-          <EmptyPickRecordImage description="" />
+          <SquirrelIcon size={'50vw'} />
+          <div>
+            <p>북마크 대신 귀여운 다람쥐만 있네요! </p>
+          </div>
         </div>
       </div>
     );
