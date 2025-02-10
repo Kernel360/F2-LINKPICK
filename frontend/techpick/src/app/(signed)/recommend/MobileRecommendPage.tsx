@@ -14,7 +14,7 @@ import {
 } from './mobileRecommendPage.css';
 
 export function MobileRecommendPage() {
-  const [emblaRef] = useEmblaCarousel({ loop: true });
+  const [emblaRef] = useEmblaCarousel();
   const { data: articleList = [], refetch } = useFetchSuggestionArticleList();
 
   return (
