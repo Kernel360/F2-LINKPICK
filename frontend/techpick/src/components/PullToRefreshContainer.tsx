@@ -102,15 +102,15 @@ export function PullToRefreshContainer({
     <div>
       <div
         onTouchStart={(e) => {
-          e.preventDefault();
+          e.stopPropagation();
           handleTouchStart(e);
         }}
         onTouchMove={(e) => {
-          e.preventDefault();
+          e.stopPropagation();
           handleTouchMove(e);
         }}
         onTouchEnd={(e) => {
-          e.preventDefault();
+          e.stopPropagation();
           handleTouchEnd();
         }}
       >
