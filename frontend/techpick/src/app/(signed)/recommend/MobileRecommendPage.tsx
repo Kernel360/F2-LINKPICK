@@ -1,11 +1,15 @@
 'use client';
 
+import { PullToRefreshContainer } from '@/components/PullToRefreshContainer';
+
 export function MobileRecommendPage() {
   return (
-    <div>
-      <div style={{ background: 'silver', height: '100vh' }}>
-        recommend dasdasdas
+    <PullToRefreshContainer onRefresh={async () => {}}>
+      <div>
+        <div style={{ background: 'silver', height: '100vh' }}>
+          recommend dasdasdas
+        </div>
       </div>
-    </div>
+    </PullToRefreshContainer>
   );
 }
