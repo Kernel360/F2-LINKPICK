@@ -1,15 +1,19 @@
 'use client';
+
 import { MobilePickInfiniteScrollList } from '@/components/MobilePickInfiniteScrollList';
 import { useParams } from 'next/navigation';
+import { useMemo } from 'react';
 import { mobileFolderDetailPageStyle } from './mobileFolderDetailPage.css';
 
 export function MobileFolderDetailPage() {
   const { folderId: stringFolderId } = useParams<{ folderId: string }>();
-  const folderId = Number(stringFolderId);
+  const folderId = useMemo(() => Number(stringFolderId), [stringFolderId]);
 
   return (
-    <div className={mobileFolderDetailPageStyle}>
-      <MobilePickInfiniteScrollList folderId={folderId} />
+    <div>
+      <div className={mobileFolderDetailPageStyle}>
+        <MobilePickInfiniteScrollList folderId={folderId} />
+      </div>
     </div>
   );
 }
