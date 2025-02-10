@@ -19,10 +19,8 @@ export default async function SignedLayout({ children }: PropsWithChildren) {
   if (await isMobileDevice()) {
     return (
       <ScreenLogger eventName="page_view_signed_user">
-        <div className={mobilePageContainerStyle}>
-          <MobileNavigationBar />
-          {children}
-        </div>
+        <MobileNavigationBar />
+        <div className={mobilePageContainerStyle}>{children}</div>
       </ScreenLogger>
     );
   }

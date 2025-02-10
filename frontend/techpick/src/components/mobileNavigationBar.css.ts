@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
-import { colorVars, zIndex } from 'techpick-shared';
+import { colorVars } from 'techpick-shared';
 
 export const mobileNavigationBarStyle = style({
   position: 'sticky',
@@ -8,8 +8,8 @@ export const mobileNavigationBarStyle = style({
   justifyContent: 'space-between',
   alignItems: 'center',
   height: '44px',
+  padding: '12px',
   backgroundColor: colorVars.gold3,
-  zIndex: zIndex.level11,
 });
 
 export const titleSectionStyle = style({
