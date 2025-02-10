@@ -11,6 +11,6 @@ export const mobilePageContainerStyle = style({
   width: '100%',
   height: '100vh',
   padding: '0 12px',
-  backgroundColor: colorVars.gold2,
+  backgroundColor: colorVars.gold3,
   overflowY: 'auto',
 });
