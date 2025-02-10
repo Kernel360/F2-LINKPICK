@@ -1,6 +1,5 @@
 import { ROUTES } from '@/constants/route';
 import { useGetActiveNavigationItemId } from '@/hooks/useGetActiveNavigationItemId';
-import { useFetchFoldersWithBasicFolders } from '@/queries/useFetchFoldersWithBasicFolders';
 import {
   contentScrollableSectionStyle,
   drawerContentInnerStyle,
@@ -8,15 +7,9 @@ import {
   drawerOverlayStyle,
 } from '@/styles/drawerStyle.css';
 import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import {
-  ArchiveIcon,
-  FolderClosedIcon,
-  FolderOpenIcon,
-  FolderUpIcon,
-  StarIcon,
-  Trash2Icon,
-} from 'lucide-react';
+import { StarIcon } from 'lucide-react';
 import { Drawer } from 'vaul';
+import { FolderNavigationItemList } from './FolderNavigationItemList';
 import { NavigationItem } from './SideNavigationBar/NavigationItem';
 import { contentStyle } from './folderNavigationDrawer.css';
 
@@ -24,7 +17,6 @@ export function FolderNavigationDrawer({
   isOpen,
   onOpenChange,
 }: FolderNavigationDrawerProps) {
-  const { data: folderList = [] } = useFetchFoldersWithBasicFolders();
   const { activeNavigationItemId } = useGetActiveNavigationItemId();
 
   return (
@@ -52,34 +44,11 @@ export function FolderNavigationDrawer({
                 }}
               />
 
-              {folderList.map((folderInfo) => {
-                const isActive = folderInfo.id === activeNavigationItemId;
-                const isShared = !!folderInfo?.folderAccessToken;
-                let folderIcon = FolderClosedIcon;
-
-                if (folderInfo.folderType === 'UNCLASSIFIED') {
-                  folderIcon = ArchiveIcon;
-                } else if (folderInfo.folderType === 'RECYCLE_BIN') {
-                  folderIcon = Trash2Icon;
-                } else if (isActive) {
-                  folderIcon = FolderOpenIcon;
-                } else if (isShared) {
-                  folderIcon = FolderUpIcon;
-                }
-
-                return (
-                  <NavigationItem
-                    icon={folderIcon}
-                    key={folderInfo.id}
-                    href={ROUTES.FOLDER_DETAIL(folderInfo.id)}
-                    text={folderInfo.name}
-                    isActive={isActive}
-                    onClick={() => {
-                      onOpenChange(false);
-                    }}
-                  />
-                );
-              })}
+              <FolderNavigationItemList
+                navigationItemClick={() => {
+                  onOpenChange(false);
+                }}
+              />
             </div>
           </div>
         </Drawer.Content>
