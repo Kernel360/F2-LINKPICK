@@ -57,7 +57,7 @@ export function MobilePickInfiniteScrollList({
         await refetch();
       }}
     >
-      <div style={{ position: 'relative' }}>
+      <div>
         <div className={mobilePickInfiniteScrollListStyle}>
           <AutoSizer>
             {({ height, width }) => (
