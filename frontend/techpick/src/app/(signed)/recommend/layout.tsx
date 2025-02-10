@@ -11,18 +11,22 @@ import { RecommendLoadingPage } from './RecommendLoadingPage';
 export default async function RecommendLayout({ children }: PropsWithChildren) {
   const queryClient = getQueryClient();
 
+  queryClient.prefetchQuery({
+    queryKey: suggestionKeys.article(),
+    queryFn: getSuggestionBlogArticleList,
+  });
+
   if (await isMobileDevice()) {
-    return <MobileRecommendPage />;
+    return (
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <MobileRecommendPage />
+      </HydrationBoundary>
+    );
   }
 
   queryClient.prefetchQuery({
     queryKey: suggestionKeys.ranking(),
     queryFn: getSuggestionRankingPicks,
-  });
-
-  queryClient.prefetchQuery({
-    queryKey: suggestionKeys.article(),
-    queryFn: getSuggestionBlogArticleList,
   });
 
   return (

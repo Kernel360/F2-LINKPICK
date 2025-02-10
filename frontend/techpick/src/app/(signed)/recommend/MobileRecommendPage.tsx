@@ -1,14 +1,16 @@
 'use client';
 
 import { FolderNavigationItemList } from '@/components/FolderNavigationItemList';
+import { MobilePickCard } from '@/components/MobilePickCard';
 import { PullToRefreshContainer } from '@/components/PullToRefreshContainer';
-import { PickCarouselCard } from '@/components/RecommendedPickCarousel/PickCarouselCard';
 import { useFetchSuggestionArticleList } from '@/queries/useFetchSuggestionArticleList';
 import useEmblaCarousel from 'embla-carousel-react';
 import {
   carouselContainer,
   carouselSlide,
   carouselViewPort,
+  folderNavigationItemListLayoutStyle,
+  suggestionDescriptionTitle,
 } from './mobileRecommendPage.css';
 
 export function MobileRecommendPage() {
@@ -21,20 +23,22 @@ export function MobileRecommendPage() {
         await refetch();
       }}
     >
-      <h2>이런 글은 어떠세요?</h2>
+      <h2 className={suggestionDescriptionTitle}>이런 글은 어떠세요?</h2>
       <div className={carouselViewPort} ref={emblaRef}>
         <div className={carouselContainer}>
           {articleList.map((article) => {
             return (
               <div key={article.url} className={carouselSlide}>
-                <PickCarouselCard recommendPick={article} />
+                <MobilePickCard recommendPick={article} />
               </div>
             );
           })}
         </div>
       </div>
 
-      <FolderNavigationItemList />
+      <div className={folderNavigationItemListLayoutStyle}>
+        <FolderNavigationItemList />
+      </div>
     </PullToRefreshContainer>
   );
 }
