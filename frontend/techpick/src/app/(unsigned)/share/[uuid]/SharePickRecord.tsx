@@ -1,26 +1,11 @@
 'use client';
 
 import { postSharedPickViewEventLog } from '@/apis/eventLog/postSharedPickViewEventLog';
-import { useImageLoader } from '@/hooks/useImageLoader';
-import { useOpenUrlInNewTab } from '@/hooks/useOpenUrlInNewTab';
-import type { components } from '@/schema';
-import type { TagType } from '@/types/TagType';
-import { formatDateString } from '@/utils/formatDateString';
-import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
-import Image from 'next/image';
-import { useState } from 'react';
-import {
-  tagDialogTriggerLayout,
-  tagPickerLayout,
-  tagPickerPlaceholderStyle,
-} from '../PickTagPicker/pickTagPicker.css';
-import { SelectedTagItem } from '../SelectedTagItem/SelectedTagItem';
-import { SelectedTagListLayout } from '../SelectedTagListLayout/SelectedTagListLayout';
-import { PickDateColumnLayout } from './PickDateColumnLayout';
-import { PickImageColumnLayout } from './PickImageColumnLayout';
-import { PickTagColumnLayout } from './PickTagColumnLayout';
-import { PickTitleColumnLayout } from './PickTitleColumnLayout';
-import { Separator } from './Separator';
+import { PickDateColumnLayout } from '@/components/PickRecord/PickDateColumnLayout';
+import { PickImageColumnLayout } from '@/components/PickRecord/PickImageColumnLayout';
+import { PickTagColumnLayout } from '@/components/PickRecord/PickTagColumnLayout';
+import { PickTitleColumnLayout } from '@/components/PickRecord/PickTitleColumnLayout';
+import { Separator } from '@/components/PickRecord/Separator';
 import {
   dateTextStyle,
   externalLinkIconStyle,
@@ -29,7 +14,22 @@ import {
   pickImageStyle,
   pickRecordLayoutStyle,
   pickTitleSectionStyle,
-} from './pickRecord.css';
+} from '@/components/PickRecord/pickRecord.css';
+import {
+  tagDialogTriggerLayout,
+  tagPickerLayout,
+  tagPickerPlaceholderStyle,
+} from '@/components/PickTagPicker/pickTagPicker.css';
+import { SelectedTagItem } from '@/components/SelectedTagItem/SelectedTagItem';
+import { SelectedTagListLayout } from '@/components/SelectedTagListLayout/SelectedTagListLayout';
+import { useImageLoader } from '@/hooks/useImageLoader';
+import { useOpenUrlInNewTab } from '@/hooks/useOpenUrlInNewTab';
+import type { components } from '@/schema';
+import type { TagType } from '@/types/TagType';
+import { formatDateString } from '@/utils/formatDateString';
+import { ExternalLink as ExternalLinkIcon } from 'lucide-react';
+import Image from 'next/image';
+import { useState } from 'react';
 
 export function SharePickRecord({
   pickInfo,
