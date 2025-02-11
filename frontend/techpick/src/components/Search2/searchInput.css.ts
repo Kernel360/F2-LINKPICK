@@ -27,5 +27,5 @@ export const iconButtonContainerStyle = style({
 export const searchInputStyle = style({
   flexGrow: 1,
   padding: '8px',
-  fontSize: '14px',
+  fontSize: '16px',
 });

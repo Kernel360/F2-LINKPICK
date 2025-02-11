@@ -42,13 +42,13 @@ export function MobileNavigationBar() {
       break;
     }
     case null: {
-      currentPageTitle = '알 수 없는 페이지';
+      currentPageTitle = '';
       break;
     }
     default: {
       currentPageTitle =
         folderList.filter((folder) => folder.id === activeNavigationItemId)[0]
-          ?.name ?? '알 수 없는 페이지';
+          ?.name ?? '';
     }
   }
 

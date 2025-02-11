@@ -1,3 +1,4 @@
+import { useSearchPickStore } from '@/stores/searchPickStore';
 import {
   contentScrollableSectionStyle,
   drawerContentInnerStyle,
@@ -11,8 +12,19 @@ import { MobileSearchInfiniteScrollList } from './MobileSearchInfiniteScrollList
 import { contentStyle } from './searchDrawer.css';
 
 export function SearchDrawer({ isOpen, onOpenChange }: SearchDrawerProps) {
+  const { reset } = useSearchPickStore();
+
   return (
-    <Drawer.Root open={isOpen} onOpenChange={onOpenChange}>
+    <Drawer.Root
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) {
+          reset();
+        }
+
+        onOpenChange(open);
+      }}
+    >
       <Drawer.Portal>
         <Drawer.Overlay className={drawerOverlayStyle} />
         <Drawer.Content className={contentStyle}>
