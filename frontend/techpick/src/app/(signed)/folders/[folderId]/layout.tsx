@@ -33,7 +33,11 @@ export default async function FolderDetailLayout({
   });
 
   if (await isMobileDevice()) {
-    return <MobileFolderDetailPage />;
+    return (
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <MobileFolderDetailPage />
+      </HydrationBoundary>
+    );
   }
 
   await queryClient.prefetchQuery({

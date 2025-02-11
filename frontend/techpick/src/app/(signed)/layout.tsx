@@ -16,15 +16,23 @@ import type { PropsWithChildren } from 'react';
 import { mobilePageContainerStyle, pageContainerLayout } from './layout.css';
 
 export default async function SignedLayout({ children }: PropsWithChildren) {
+  const queryClient = getQueryClient();
+
+  queryClient.prefetchQuery({
+    queryKey: tagKeys.all,
+    queryFn: getTagList,
+  });
+
   if (await isMobileDevice()) {
     return (
       <ScreenLogger eventName="page_view_signed_user">
-        <MobileNavigationBar />
-        <div className={mobilePageContainerStyle}>{children}</div>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <MobileNavigationBar />
+          <div className={mobilePageContainerStyle}>{children}</div>
+        </HydrationBoundary>
       </ScreenLogger>
     );
   }
-  const queryClient = getQueryClient();
 
   await Promise.all([
     queryClient.prefetchQuery({
@@ -34,10 +42,6 @@ export default async function SignedLayout({ children }: PropsWithChildren) {
     queryClient.prefetchQuery({
       queryKey: folderKeys.root(),
       queryFn: getFolders,
-    }),
-    queryClient.prefetchQuery({
-      queryKey: tagKeys.all,
-      queryFn: getTagList,
     }),
   ]);
 
