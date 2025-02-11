@@ -4,7 +4,6 @@ import { immer } from 'zustand/middleware/immer';
 import type { PickAction, PickState } from './pickStore.type';
 
 const initialState: PickState = {
-  pickRecord: {},
   focusPickId: null,
   selectedPickIdList: [],
   isDragging: false,
@@ -13,11 +12,8 @@ const initialState: PickState = {
 
 export const usePickStore = create<PickState & PickAction>()(
   subscribeWithSelector(
-    immer((set, get) => ({
+    immer((set) => ({
       ...initialState,
-      getPickListByFolderId: (folderId) => {
-        return get().pickRecord[folderId];
-      },
       setSelectedPickIdList: (newSelectedPickIdList) => {
         set((state) => {
           state.selectedPickIdList = newSelectedPickIdList;
@@ -42,11 +38,6 @@ export const usePickStore = create<PickState & PickAction>()(
       setDraggingPickInfo: (draggingPickInfo) => {
         set((state) => {
           state.draggingPickInfo = draggingPickInfo;
-        });
-      },
-      setPickListByFolderId: (folderId, newPickList) => {
-        set((state) => {
-          state.pickRecord[folderId] = newPickList;
         });
       },
     })),

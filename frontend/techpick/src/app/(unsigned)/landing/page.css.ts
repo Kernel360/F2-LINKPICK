@@ -8,6 +8,7 @@ import {
   desktop,
   fontSize,
   fontWeights,
+  mobile,
   tablet,
 } from 'techpick-shared';
 
@@ -22,11 +23,19 @@ export const headerStyle = style({
   display: 'flex',
   justifyContent: 'center',
   width: '100%',
-  height: '64px',
   borderBottom: '1px solid',
   borderColor: colorVars.sand6,
   backgroundColor: colorVars.gold1,
   zIndex: 1,
+
+  '@media': {
+    [`${mobile}, ${tablet}`]: {
+      height: '44px',
+    },
+    [`${desktop}`]: {
+      height: '64px',
+    },
+  },
 });
 
 export const navStyle = style({
@@ -40,16 +49,34 @@ export const navStyle = style({
 
 export const navUlStyle = style({
   display: 'flex',
-  gap: '12px',
+
+  '@media': {
+    [mobile]: {
+      gap: '8px',
+    },
+    [`${tablet}, ${desktop}`]: {
+      gap: '12px',
+    },
+  },
 });
 
 export const landingPageButtonStyle = style({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  width: '80px',
-  height: '32px',
-  padding: '0 8px',
+
+  '@media': {
+    [mobile]: {
+      width: '72px',
+      height: '32px',
+      fontSize: '14px',
+    },
+    [`${tablet}, ${desktop}`]: {
+      width: '80px',
+      height: '32px',
+      padding: '0 8px',
+    },
+  },
 });
 
 export const loginLinkStyle = style([

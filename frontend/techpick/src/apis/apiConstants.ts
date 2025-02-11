@@ -1,3 +1,4 @@
+import type { FolderIdType } from '@/types/FolderIdType';
 import type { SearchQueryParamType } from '@/types/SearchQueryParamType';
 
 const API_ENDPOINTS = {
@@ -15,6 +16,8 @@ const API_ENDPOINTS = {
   CHROME: 'chrome',
   IMPORT: 'import',
   BLOG_ARTICLE: 'blog-articles',
+  PAGINATION: 'pagination',
+  MOBILE: 'mobile',
 };
 
 export const API_URLS = {
@@ -24,9 +27,12 @@ export const API_URLS = {
   UPDATE_FOLDER: API_ENDPOINTS.FOLDERS,
   MOVE_FOLDER: `${API_ENDPOINTS.FOLDERS}/${API_ENDPOINTS.LOCATION}`,
   GET_BASIC_FOLDERS: `${API_ENDPOINTS.FOLDERS}/${API_ENDPOINTS.BASIC}`,
-  GET_PICKS_BY_FOLDER_ID: (folderId: number) =>
+  GET_FOLDERS_WITH_BASIC_FOLDERS: `${API_ENDPOINTS.MOBILE}/${API_ENDPOINTS.FOLDERS}`,
+  GET_ALL_PICKS_BY_FOLDER_ID: (folderId: number) =>
     `${API_ENDPOINTS.PICKS}?folderIdList=${folderId}`,
   DELETE_PICKS: API_ENDPOINTS.PICKS,
+  GET_PICKS_BY_FOLDER_ID: (folderId: FolderIdType, cursor: number, size = 20) =>
+    `${API_ENDPOINTS.PICKS}/${API_ENDPOINTS.PAGINATION}?folderId=${folderId}&cursor=${cursor}&size=${size}`,
   SEARCH_PICKS_BY_QUERY_PARAM: (
     queryParam: SearchQueryParamType,
     cursor?: number | string,

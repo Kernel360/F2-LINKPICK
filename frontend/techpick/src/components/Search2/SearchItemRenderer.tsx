@@ -65,7 +65,7 @@ export default function SearchItemRenderer({
   );
 }
 
-interface ItemRendererProps {
+export interface ItemRendererProps {
   item: PickInfoType;
   index: number;
   style: CSSProperties;

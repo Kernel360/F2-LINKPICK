@@ -33,5 +33,4 @@ export const SelectedTagListLayoutStyle = style({
   flexWrap: 'wrap',
   padding: '4px',
   width: '288px',
-  overflowY: 'scroll',
 });

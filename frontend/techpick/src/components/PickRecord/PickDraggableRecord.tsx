@@ -1,7 +1,7 @@
 'use client';
 
 import useSearchElementId from '@/hooks/useSearchElementId';
-import { useFetchPickListByFolderId } from '@/queries/useFetchPickListByFolderId';
+import { useFetchAllPickListByFolderId } from '@/queries/useFetchAllPickListByFolderId';
 import { usePickStore } from '@/stores/pickStore';
 import { useUpdatePickStore } from '@/stores/updatePickStore';
 import type { PickViewDraggableItemComponentProps } from '@/types/PickViewDraggableItemComponentProps';
@@ -21,7 +21,7 @@ import {
 export function PickDraggableRecord({
   pickInfo,
 }: PickViewDraggableItemComponentProps) {
-  const { data: pickList = [] } = useFetchPickListByFolderId(
+  const { data: pickList = [] } = useFetchAllPickListByFolderId(
     pickInfo.parentFolderId,
   );
   const selectedPickIdList = usePickStore((state) => state.selectedPickIdList);

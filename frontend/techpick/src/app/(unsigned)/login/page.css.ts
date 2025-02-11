@@ -43,9 +43,8 @@ export const pickBrandContainer = style({
   display: 'flex',
   alignItems: 'center',
   width: '220px',
-  height: '100%',
+  height: '104px',
   color: subColor,
-  fontSize: '40px',
   fontWeight: 'bold',
   gap: '12px',
 });
@@ -54,6 +53,12 @@ export const pickIconContainer = style({
   width: '36px',
   height: '36px',
   position: 'relative',
+});
+
+export const loginTextStyle = style({
+  flexShrink: 0,
+  flexGrow: 1,
+  fontSize: '40px',
 });
 
 export const loginLink = style({
@@ -67,7 +72,7 @@ export const loginLink = style({
   alignItems: 'center',
 });
 
-export const googleLoginContainer = style({
+export const loginContainer = style({
   color: subColor,
   border: `1px solid ${subColor}`,
   boxShadow: `2px 2px 0px 0px ${subColor}`,
@@ -81,24 +86,13 @@ export const googleLoginContainer = style({
   },
 });
 
-export const kakaoLoginContainer = style({
-  color: subColor,
-  border: `1px solid ${subColor}`,
-  boxShadow: `2px 2px 0px 0px ${subColor}`,
-  width: '220px',
-  marginBottom: '12px',
-  transition: 'all 0.3s ease',
-  ':hover': {
-    backgroundColor: colorVars.primary,
-    border: `1px solid ${colorVars.primary}`,
-  },
-});
-
 export const loginContainerLayoutStyle = style({
   padding: '36px 0',
 });
 
 export const failedDescriptionTextStyle = style({
+  position: 'absolute',
+  bottom: '12px',
   height: '28px',
   fontSize: '12px',
   color: colorVars.tomato11,

@@ -24,6 +24,6 @@ export function SelectedTagItem({ tag, children }: SelectedTagItemProps) {
 }
 
 interface SelectedTagItemProps {
-  tag: TagType;
+  tag: Omit<TagType, 'id'>;
   children?: React.ReactNode;
 }

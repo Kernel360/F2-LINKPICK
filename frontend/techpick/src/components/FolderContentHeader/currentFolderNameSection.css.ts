@@ -5,9 +5,9 @@ export const currentFolderNameSectionStyle = style({
   display: 'inline-flex',
   alignItems: 'center',
   gap: 8,
-  flex: '0 0 100%',
+  flex: '1 0',
   maxWidth: '100%',
-  minWidth: 0, // 추가
+  minWidth: 0,
 });
 
 export const folderOpenIconStyle = style({
@@ -15,6 +15,8 @@ export const folderOpenIconStyle = style({
 });
 
 export const folderNameStyle = style({
+  flexShrink: 1,
+  flexGrow: 0,
   display: 'inline-block',
   fontWeight: fontWeights.medium,
   height: '28px',
