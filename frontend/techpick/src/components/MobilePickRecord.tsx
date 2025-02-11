@@ -43,8 +43,13 @@ export function MobilePickRecord({ pickInfo }: MobilePickRecordProps) {
       <div className={contentStyle}>
         <div className={mainContentStyle}>
           <div className={imageSectionStyle}>
-            {imageStatus === 'loading' && <div />}
-            {imageStatus === 'loaded' && (
+            {imageStatus === 'error' ? (
+              <img
+                src={'/image/default_image.svg'}
+                alt=""
+                className={imageStyle}
+              />
+            ) : (
               <>
                 <img
                   src={link.imageUrl}
@@ -54,14 +59,8 @@ export function MobilePickRecord({ pickInfo }: MobilePickRecordProps) {
                 <img src={link.imageUrl} alt="" className={imageStyle} />
               </>
             )}
-            {imageStatus === 'error' && (
-              <img
-                src={'/image/default_image.svg'}
-                alt=""
-                className={imageStyle}
-              />
-            )}
           </div>
+
           <div className={titleStyle}>{pickInfo.title}</div>
         </div>
         <div>
