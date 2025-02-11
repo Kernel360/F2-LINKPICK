@@ -1,16 +1,16 @@
 import { getShareFolderById } from '@/apis/folder/getShareFolderById';
 import { currentFolderNameSectionStyle } from '@/components/FolderContentHeader/currentFolderNameSection.css';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
+import { MobileEmptyPickRecordImage } from '@/components/MobileEmptyPickRecordImage';
 import { PickContentLayout } from '@/components/PickContentLayout';
 import { PickRecordHeader } from '@/components/PickRecord/PickRecordHeader';
 import { ScreenLogger } from '@/components/ScreenLogger';
-
-import { MobileEmptyPickRecordImage } from '@/components/MobileEmptyPickRecordImage';
 import { ROUTES } from '@/constants/route';
 import { isLoginUser } from '@/utils/isLoginUser';
-import { FolderOpenIcon, Link } from 'lucide-react';
+import { FolderOpenIcon } from 'lucide-react';
 import type { Metadata, ResolvingMetadata } from 'next';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { LandingPageLinkButton } from './LandingPageLinkButton';
 import { MobileSharedPickRecord } from './MobileSharedPickRecord';
 import { SharePickRecord } from './SharePickRecord';
@@ -23,6 +23,7 @@ import {
   folderOpenIconStyle,
   homeNavigateButtonStyle,
   mobileAndTabletVisibleStyle,
+  mobilePickRecordListStyle,
 } from './page.css';
 const EmptyPickRecordImage = dynamic(
   () =>
@@ -140,16 +141,18 @@ export default async function Page({ params }: { params: { uuid: string } }) {
           {pickList.length === 0 ? (
             <MobileEmptyPickRecordImage />
           ) : (
-            pickList.map((pick) => {
-              return (
-                <MobileSharedPickRecord
-                  key={pick.title}
-                  pickInfo={pick}
-                  tagList={sharedFolder.tagList}
-                  folderAccessToken={uuid}
-                />
-              );
-            })
+            <div className={mobilePickRecordListStyle}>
+              {pickList.map((pick) => {
+                return (
+                  <MobileSharedPickRecord
+                    key={pick.title}
+                    pickInfo={pick}
+                    tagList={sharedFolder.tagList}
+                    folderAccessToken={uuid}
+                  />
+                );
+              })}
+            </div>
           )}
         </div>
       </FolderContentLayout>

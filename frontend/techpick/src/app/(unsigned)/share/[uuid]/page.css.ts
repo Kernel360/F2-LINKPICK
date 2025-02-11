@@ -108,3 +108,7 @@ export const mobileAndTabletVisibleStyle = style({
     },
   },
 });
+
+export const mobilePickRecordListStyle = style({
+  padding: '0 12px',
+});
