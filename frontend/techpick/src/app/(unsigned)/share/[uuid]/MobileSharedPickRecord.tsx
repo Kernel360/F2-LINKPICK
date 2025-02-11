@@ -43,8 +43,13 @@ export function MobileSharedPickRecord({
       <div className={contentStyle}>
         <div className={mainContentStyle}>
           <div className={imageSectionStyle}>
-            {imageStatus === 'loading' && <div />}
-            {imageStatus === 'loaded' && (
+            {imageStatus === 'error' ? (
+              <img
+                src={'/image/default_image.svg'}
+                alt=""
+                className={imageStyle}
+              />
+            ) : (
               <>
                 <img
                   src={link.imageUrl}
@@ -53,13 +58,6 @@ export function MobileSharedPickRecord({
                 />
                 <img src={link.imageUrl} alt="" className={imageStyle} />
               </>
-            )}
-            {imageStatus === 'error' && (
-              <img
-                src={'/image/default_image.svg'}
-                alt=""
-                className={imageStyle}
-              />
             )}
           </div>
           <div className={titleStyle}>{pickInfo.title}</div>
