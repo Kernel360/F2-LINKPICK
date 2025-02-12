@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 export const mobileEmptyPickRecordImageStyle = style({
-  height: 'calc(100vh - 64px)',
+  height: 'calc(100vh - 52px)',
 });
 
 export const emptyPickListLayoutStyle = style({
@@ -12,5 +12,5 @@ export const emptyPickListLayoutStyle = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  width: '80vw',
+  width: '70vw',
 });
