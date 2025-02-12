@@ -7,6 +7,7 @@ import { ToastProvider } from '@/providers/ToastProvider';
 import { UserIdentifyProvider } from '@/providers/UserIdentifyProvider';
 import { getUserIdForServer } from '@/utils/getUserIdForServer';
 import type { Metadata } from 'next';
+import { preventOverscrollBehaviorY } from './layout.css';
 
 const notoSansKR = Noto_Sans_KR({ weight: 'variable', subsets: ['latin'] });
 export const metadata: Metadata = {
@@ -39,7 +40,7 @@ export default async function RootLayout({
    * 해당 포탈로 생기는 영역에 테마를 주입하기 위해서입니다.
    */
   return (
-    <html lang="ko">
+    <html lang="ko" className={preventOverscrollBehaviorY}>
       <UserIdentifyProvider userId={userId}>
         <ThemeProvider classname={`${notoSansKR.className}`}>
           <ToastProvider>
