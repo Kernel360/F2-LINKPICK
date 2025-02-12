@@ -17,5 +17,5 @@ export const mobilePageContainerStyle = style({
 });
 
 export const mobilePreventOverscroll = style({
-  overscrollBehaviorY: 'contain',
+  overscrollBehaviorY: 'none',
 });
