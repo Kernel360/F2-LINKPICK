@@ -1,7 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
 export const mobileEmptyPickRecordImageStyle = style({
-  height: 'calc(100vh - 52px)',
+  height: 'calc(100dvh - 52px)',
 });
 
 export const emptyPickListLayoutStyle = style({

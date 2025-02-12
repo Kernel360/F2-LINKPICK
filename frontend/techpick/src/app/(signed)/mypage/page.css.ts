@@ -4,7 +4,7 @@ import { colorVars } from 'techpick-shared';
 
 export const myPageLayoutStyle = style({
   width: '100%',
-  height: '100vh',
+  height: '100dvh',
   padding: '12px',
   backgroundColor: colorVars.gold2,
 });

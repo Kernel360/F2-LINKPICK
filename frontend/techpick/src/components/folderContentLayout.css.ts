@@ -3,7 +3,7 @@ import { colorVars } from 'techpick-shared';
 
 export const folderContentLayoutStyle = style({
   width: '100%',
-  height: '100vh',
+  height: '100dvh',
   flexShrink: 1,
   minWidth: 0,
   position: 'relative',

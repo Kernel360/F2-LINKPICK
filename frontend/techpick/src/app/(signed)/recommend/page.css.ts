@@ -45,7 +45,7 @@ export const recommendPageDescriptionStyle = style({
 });
 
 export const recommendContentSectionStyle = style({
-  height: 'calc(100vh - 92px)',
+  height: 'calc(100dvh - 92px)',
   paddingTop: '12px',
   display: 'flex',
   flexDirection: 'column',
