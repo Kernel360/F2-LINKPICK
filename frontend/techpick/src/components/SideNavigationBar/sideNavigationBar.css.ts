@@ -27,6 +27,10 @@ export const sideNavigationTitleLayoutStyle = style({
 export const editableFolderNavigationItemListStyle = style({
   overflowY: 'scroll',
   height: 'calc(100vh - 330px)',
+
+  '::-webkit-scrollbar': {
+    display: 'none',
+  },
 });
 
 export const emptySpaceStyle = style({

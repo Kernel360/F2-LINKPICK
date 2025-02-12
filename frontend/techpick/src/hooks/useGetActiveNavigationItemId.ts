@@ -17,7 +17,7 @@ export function useGetActiveNavigationItemId() {
       activeNavigationItemId = 'recommend';
       break;
     }
-    case ROUTES.LANDING: {
+    case ROUTES.MY_PAGE: {
       activeNavigationItemId = 'mypage';
       break;
     }

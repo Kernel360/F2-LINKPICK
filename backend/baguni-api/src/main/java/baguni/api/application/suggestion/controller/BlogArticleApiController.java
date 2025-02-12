@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import baguni.api.service.link.service.LinkService;
-import baguni.common.annotation.MeasureTime;
-import baguni.domain.infrastructure.link.dto.LinkInfo;
 import baguni.domain.infrastructure.link.dto.RssLinkInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,7 +25,6 @@ public class BlogArticleApiController {
 
 	private final LinkService linkService;
 
-	@MeasureTime
 	@GetMapping("/blog-articles")
 	@Operation(
 		summary = "최근 유명 블로그 게시글 획득 (15개)",

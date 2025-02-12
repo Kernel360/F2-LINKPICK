@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import baguni.common.annotation.MeasureTime;
 import baguni.common.event.events.BookmarkCreateEvent;
 import baguni.common.event.messenger.EventMessenger;
 import io.swagger.v3.oas.annotations.Operation;
@@ -50,7 +49,7 @@ public class PickApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "픽 리스트 조회 성공")
 	})
-	public ResponseEntity<List<PickApiResponse.FolderPickListWithViewCount>> getFolderChildPickList(
+	public ResponseEntity<List<PickApiResponse.FolderPickList>> getFolderChildPickList(
 		@LoginUserId Long userId,
 		@Parameter(description = "조회할 폴더 ID 목록", example = "1, 2, 3")
 		@RequestParam(required = false, defaultValue = "")
@@ -61,7 +60,7 @@ public class PickApiController {
 		);
 		return ResponseEntity.ok(
 			folderPickList.stream()
-						  .map(pickApiMapper::toApiFolderPickListWithViewCount)
+						  .map(pickApiMapper::toApiFolderPickList)
 						  .toList());
 	}
 
@@ -84,7 +83,8 @@ public class PickApiController {
 				예시: lastCursor = 1 → 다음 요청에 cursor=1을 넣으면, 1은 제외하고 2부터 조회합니다.
 			""",
 			example = "0") @RequestParam(required = false, defaultValue = "0") Long cursor,
-		@Parameter(description = "한 페이지에 가져올 픽 개수", example = "20") @RequestParam(required = false, defaultValue = "20") int size
+		@Parameter(description = "한 페이지에 가져올 픽 개수", example = "20") @RequestParam(required = false, defaultValue = "20"
+		) int size
 	) {
 		var command = pickApiMapper.toReadPaginationCommand(userId, folderId, cursor, size);
 		var pickList = pickService.getFolderListChildPickPagination(command);
@@ -161,7 +161,6 @@ public class PickApiController {
 	/**
 	 *	익스텐션에서 사용하지 않게 되면 제거
 	 */
-	@MeasureTime
 	@PostMapping("/extension")
 	@Operation(
 		summary = "[익스텐션 전용] 미분류 폴더로 픽 생성",

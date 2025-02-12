@@ -53,6 +53,7 @@ export function SearchInfiniteScrollList({
                 onItemsRendered={onItemsRendered}
                 ref={ref}
                 itemData={searchResultList}
+                className={styles.searchResultListStyle}
               >
                 {({ index, style }) => (
                   <SearchItemRenderer

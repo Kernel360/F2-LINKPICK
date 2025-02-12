@@ -1,7 +1,7 @@
 import { generatePickRecordData } from '@/utils/generatePickRecordData';
-import { getPickListByFolderId } from './getPickListByFolderId';
+import { getAllPickListByFolderId } from './getAllPickListByFolderId';
 
 export const getPickRecordByFolderId = async (folderId: number) => {
-  const data = await getPickListByFolderId(folderId);
+  const data = await getAllPickListByFolderId(folderId);
   return generatePickRecordData(data);
 };

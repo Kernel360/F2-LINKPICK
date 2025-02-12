@@ -19,11 +19,18 @@ configurations {
         extendsFrom annotationProcessor
     }
 }
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'java-library'
+
+    dependencyManagement {
+        imports { //  import an existing Maven bom to utilise its dependency management,
+            mavenBom("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:2.12.0")
+        }
+    }
 
     repositories {
         mavenCentral()
@@ -36,6 +43,9 @@ subprojects {
         implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.17.2'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+        // opentelemetry spring boot starter
+        implementation "io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter"
+
         // lombok annotation
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
@@ -44,10 +54,8 @@ subprojects {
 
         // logback logger
         implementation 'ch.qos.logback:logback-classic:1.4.12'
+        implementation 'ch.qos.logback.contrib:logback-json-classic:0.1.5' // remove later. no need to log file
         implementation 'org.slf4j:slf4j-api:2.0.3'
-
-        // logback - json 형태로 로그 출력
-        implementation 'net.logstash.logback:logstash-logback-encoder:8.0'
 
         // test environment
         testImplementation 'org.springframework.boot:spring-boot-starter-test'

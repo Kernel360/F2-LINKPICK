@@ -5,10 +5,6 @@ globalStyle('*', {
   backgroundColor: 'transparent',
 });
 
-globalStyle('*::-webkit-scrollbar', {
-  display: 'none',
-});
-
 globalStyle(
   `
   html, body, div, span, applet, object, iframe,

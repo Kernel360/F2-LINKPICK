@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Service;
 
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import baguni.api.service.ranking.dto.RankingResult;
 
@@ -13,6 +14,7 @@ public class RankingService {
 
 	private final RankingApi rankingApi;
 
+	@WithSpan
 	public RankingResult getUrlRanking(int limit) {
 		var currentDay = LocalDate.now();
 		var before1Day = currentDay.minusDays(1);

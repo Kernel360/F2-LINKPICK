@@ -4,7 +4,11 @@ import { debounce } from 'es-toolkit';
 import { Loader, SearchIcon } from 'lucide-react';
 import type React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import * as styles from './searchDialog.css';
+import {
+  iconButtonContainerStyle,
+  searchBarStyle,
+  searchInputStyle,
+} from './searchInput.css';
 
 export default function SearchInput() {
   const { searchQuery, searchTag, searchFolder, setSearchQuery } =
@@ -48,8 +52,8 @@ export default function SearchInput() {
   }, [setDebounceSearchQuery]);
 
   return (
-    <>
-      <div className={styles.iconButtonContainer}>
+    <div className={searchBarStyle}>
+      <div className={iconButtonContainerStyle}>
         {isLoading ? (
           <Loader size={20} />
         ) : (
@@ -62,8 +66,8 @@ export default function SearchInput() {
         onChange={handleSearchDebounce}
         onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
         placeholder="검색어를 입력하세요"
-        className={styles.searchInput}
+        className={searchInputStyle}
       />
-    </>
+    </div>
   );
 }

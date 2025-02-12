@@ -480,6 +480,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/picks/pagination": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * 폴더 내 픽 페이지네이션 리스트 조회
+         * @description 	해당 폴더의 픽 리스트를 조회합니다.
+         *     	커서 기반 페이지네이션 처리된 리스트가 반환됩니다.
+         *
+         */
+        get: operations["getFolderChildPickPagination"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/picks/link": {
         parameters: {
             query?: never;
@@ -495,28 +517,6 @@ export interface paths {
          *
          */
         get: operations["existPick"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/mobile/picks": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * 폴더 내 픽 페이지네이션 리스트 조회
-         * @description 	해당 폴더의 픽 리스트를 조회합니다.
-         *     	커서 기반 페이지네이션 처리된 리스트가 반환됩니다.
-         *
-         */
-        get: operations["getFolderChildPickPagination"];
         put?: never;
         post?: never;
         delete?: never;
@@ -580,57 +580,6 @@ export interface paths {
          * @description 사용자의 루트, 미분류, 휴지통 폴더를 조회합니다.
          */
         get: operations["getBasicFolderList"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/actuator": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Actuator root web endpoint */
-        get: operations["links"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/actuator/health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Actuator web endpoint 'health' */
-        get: operations["health"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/actuator/health/**": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Actuator web endpoint 'health-path' */
-        get: operations["health-path"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1109,26 +1058,10 @@ export interface components {
             /** Format: int32 */
             colorNumber: number;
         };
-        "baguni.api.application.pick.dto.PickApiResponse$FolderPickListWithViewCount": {
+        "baguni.api.application.pick.dto.PickApiResponse$FolderPickList": {
             /** Format: int64 */
             folderId?: number;
-            pickList?: components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$PickWithViewCount"][];
-        };
-        "baguni.api.application.pick.dto.PickApiResponse$PickWithViewCount": {
-            /** Format: int64 */
-            id?: number;
-            title?: string;
-            linkInfo?: components["schemas"]["baguni.domain.infrastructure.link.dto.LinkInfo"];
-            /** Format: int64 */
-            parentFolderId?: number;
-            tagIdOrderedList?: number[];
-            /** Format: date-time */
-            createdAt?: string;
-            /** Format: date-time */
-            updatedAt?: string;
-            isHot: boolean;
-            /** Format: int64 */
-            weeklyViewCount?: number;
+            pickList?: components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"][];
         };
         "baguni.api.application.pick.dto.PickSliceResponseBaguni.api.application.pick.dto.PickApiResponse$Pick": {
             content?: components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Pick"][];
@@ -1146,10 +1079,6 @@ export interface components {
             title?: string;
             description?: string;
             imageUrl?: string;
-        };
-        "org.springframework.boot.actuate.endpoint.web.Link": {
-            href?: string;
-            templated?: boolean;
         };
         "baguni.api.application.tag.dto.TagApiRequest$Delete": {
             /**
@@ -1425,7 +1354,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$FolderPickListWithViewCount"][];
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$FolderPickList"][];
                 };
             };
         };
@@ -2038,28 +1967,6 @@ export interface operations {
             };
         };
     };
-    existPick: {
-        parameters: {
-            query: {
-                link: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description 픽 여부 조회 성공 */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Exist"];
-                };
-            };
-        };
-    };
     getFolderChildPickPagination: {
         parameters: {
             query: {
@@ -2096,6 +2003,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["baguni.api.application.pick.dto.PickSliceResponseBaguni.api.application.pick.dto.PickApiResponse$Pick"];
+                };
+            };
+        };
+    };
+    existPick: {
+        parameters: {
+            query: {
+                link: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description 픽 여부 조회 성공 */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["baguni.api.application.pick.dto.PickApiResponse$Exist"];
                 };
             };
         };
@@ -2177,84 +2106,6 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["baguni.api.application.folder.dto.FolderApiResponse"][];
-                };
-            };
-        };
-    };
-    links: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.spring-boot.actuator.v3+json": {
-                        [key: string]: {
-                            [key: string]: components["schemas"]["org.springframework.boot.actuate.endpoint.web.Link"];
-                        };
-                    };
-                    "application/json": {
-                        [key: string]: {
-                            [key: string]: components["schemas"]["org.springframework.boot.actuate.endpoint.web.Link"];
-                        };
-                    };
-                    "application/vnd.spring-boot.actuator.v2+json": {
-                        [key: string]: {
-                            [key: string]: components["schemas"]["org.springframework.boot.actuate.endpoint.web.Link"];
-                        };
-                    };
-                };
-            };
-        };
-    };
-    health: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.spring-boot.actuator.v3+json": Record<string, never>;
-                    "application/json": Record<string, never>;
-                    "application/vnd.spring-boot.actuator.v2+json": Record<string, never>;
-                };
-            };
-        };
-    };
-    "health-path": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/vnd.spring-boot.actuator.v3+json": Record<string, never>;
-                    "application/json": Record<string, never>;
-                    "application/vnd.spring-boot.actuator.v2+json": Record<string, never>;
                 };
             };
         };

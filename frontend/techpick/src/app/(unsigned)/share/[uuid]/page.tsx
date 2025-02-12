@@ -1,15 +1,9 @@
 import { getShareFolderById } from '@/apis/folder/getShareFolderById';
-import {
-  currentFolderNameSectionStyle,
-  folderNameStyle,
-  folderOpenIconStyle,
-} from '@/components/FolderContentHeader/currentFolderNameSection.css';
-import { folderContentHeaderStyle } from '@/components/FolderContentHeader/folderContentHeader.css';
+import { currentFolderNameSectionStyle } from '@/components/FolderContentHeader/currentFolderNameSection.css';
 import { FolderContentLayout } from '@/components/FolderContentLayout';
-import { Gap } from '@/components/Gap';
+import { MobileEmptyPickRecordImage } from '@/components/MobileEmptyPickRecordImage';
 import { PickContentLayout } from '@/components/PickContentLayout';
 import { PickRecordHeader } from '@/components/PickRecord/PickRecordHeader';
-import { SharePickRecord } from '@/components/PickRecord/SharePickRecord';
 import { ScreenLogger } from '@/components/ScreenLogger';
 import { ROUTES } from '@/constants/route';
 import { isLoginUser } from '@/utils/isLoginUser';
@@ -18,8 +12,19 @@ import type { Metadata, ResolvingMetadata } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { LandingPageLinkButton } from './LandingPageLinkButton';
+import { MobileSharedPickRecord } from './MobileSharedPickRecord';
+import { SharePickRecord } from './SharePickRecord';
 import { SignUpLinkButton } from './SignUpLinkButton';
-import { buttonSectionStyle, homeNavigateButtonStyle } from './page.css';
+import {
+  buttonSectionStyle,
+  desktopVisibleStyle,
+  folderContentHeaderStyle,
+  folderNameStyle,
+  folderOpenIconStyle,
+  homeNavigateButtonStyle,
+  mobileAndTabletVisibleStyle,
+  mobilePickRecordListStyle,
+} from './page.css';
 const EmptyPickRecordImage = dynamic(
   () =>
     import('@/components/EmptyPickRecordImage').then(
@@ -90,12 +95,10 @@ export default async function Page({ params }: { params: { uuid: string } }) {
     >
       <FolderContentLayout>
         <div className={folderContentHeaderStyle}>
-          <Gap verticalSize="gap32" horizontalSize="gap32">
-            <div className={currentFolderNameSectionStyle}>
-              <FolderOpenIcon size={28} className={folderOpenIconStyle} />
-              <h1 className={folderNameStyle}>{sharedFolder.folderName}</h1>
-            </div>
-          </Gap>
+          <div className={currentFolderNameSectionStyle}>
+            <FolderOpenIcon size={28} className={folderOpenIconStyle} />
+            <h1 className={folderNameStyle}>{sharedFolder.folderName}</h1>
+          </div>
 
           <div className={buttonSectionStyle}>
             {isLoggedIn ? (
@@ -111,26 +114,47 @@ export default async function Page({ params }: { params: { uuid: string } }) {
             )}
           </div>
         </div>
-        <PickContentLayout>
-          <PickRecordHeader />
+        <div className={desktopVisibleStyle}>
+          <PickContentLayout>
+            <PickRecordHeader />
+            {pickList.length === 0 ? (
+              <EmptyPickRecordImage
+                title="공유된 북마크가 없습니다."
+                description="폴더 내 공유된 북마크가 존재하지 않습니다."
+              />
+            ) : (
+              pickList.map((pick) => {
+                return (
+                  <SharePickRecord
+                    key={pick.title}
+                    pickInfo={pick}
+                    tagList={sharedFolder.tagList}
+                    folderAccessToken={uuid}
+                  />
+                );
+              })
+            )}
+          </PickContentLayout>
+        </div>
+
+        <div className={mobileAndTabletVisibleStyle}>
           {pickList.length === 0 ? (
-            <EmptyPickRecordImage
-              title="공유된 북마크가 없습니다."
-              description="폴더 내 공유된 북마크가 존재하지 않습니다."
-            />
+            <MobileEmptyPickRecordImage />
           ) : (
-            pickList.map((pick) => {
-              return (
-                <SharePickRecord
-                  key={pick.title}
-                  pickInfo={pick}
-                  tagList={sharedFolder.tagList}
-                  folderAccessToken={uuid}
-                />
-              );
-            })
+            <div className={mobilePickRecordListStyle}>
+              {pickList.map((pick) => {
+                return (
+                  <MobileSharedPickRecord
+                    key={pick.title}
+                    pickInfo={pick}
+                    tagList={sharedFolder.tagList}
+                    folderAccessToken={uuid}
+                  />
+                );
+              })}
+            </div>
           )}
-        </PickContentLayout>
+        </div>
       </FolderContentLayout>
     </ScreenLogger>
   );

@@ -5,8 +5,20 @@ import baguni.common.exception.base.ApiException;
 
 public class ApiUserException extends ApiException {
 
+	private String message;
+
 	private ApiUserException(ApiErrorCode errorCode) {
 		super(errorCode);
+	}
+
+	private ApiUserException(ApiErrorCode errorCode, String message) {
+		super(errorCode);
+		this.message = message;
+	}
+
+	@Override
+	public String getMessage() {
+		return String.format("%s : %s", message, super.getMessage());
 	}
 
 	/**
@@ -16,7 +28,7 @@ public class ApiUserException extends ApiException {
 		return new ApiUserException(ApiUserErrorCode.USER_NOT_FOUND);
 	}
 
-	public static ApiUserException USER_CREATE_FAILURE() {
-		return new ApiUserException(ApiUserErrorCode.USER_CREATE_FAILURE);
+	public static ApiUserException USER_NOT_FOUND(String message) {
+		return new ApiUserException(ApiUserErrorCode.USER_NOT_FOUND, message);
 	}
 }

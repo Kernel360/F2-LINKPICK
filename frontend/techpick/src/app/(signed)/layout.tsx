@@ -3,18 +3,36 @@ import { getFolders } from '@/apis/folder/getFolders';
 import { getTagList } from '@/apis/tag/getTagList';
 import { FeedbackToolbar } from '@/components/FeedbackToolbar';
 import { FolderAndPickDndContextProvider } from '@/components/FolderAndPickDndContextProvider';
+import { MobileNavigationBar } from '@/components/MobileNavigationBar';
 import { ScreenLogger } from '@/components/ScreenLogger';
 import ShortcutKey from '@/components/ShortcutKey';
 import { SideNavigationBar } from '@/components/SideNavigationBar/SideNavigationBar';
 import { getQueryClient } from '@/libs/@react-query/getQueryClient';
 import { folderKeys } from '@/queries/folderKeys';
 import { tagKeys } from '@/queries/tagKeys';
+import { isMobileDevice } from '@/utils/isMobileDevice';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import type { PropsWithChildren } from 'react';
-import { pageContainerLayout } from './layout.css';
+import { mobilePageContainerStyle, pageContainerLayout } from './layout.css';
 
 export default async function SignedLayout({ children }: PropsWithChildren) {
   const queryClient = getQueryClient();
+
+  queryClient.prefetchQuery({
+    queryKey: tagKeys.all,
+    queryFn: getTagList,
+  });
+
+  if (await isMobileDevice()) {
+    return (
+      <ScreenLogger eventName="page_view_signed_user">
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <MobileNavigationBar />
+          <div className={mobilePageContainerStyle}>{children}</div>
+        </HydrationBoundary>
+      </ScreenLogger>
+    );
+  }
 
   await Promise.all([
     queryClient.prefetchQuery({
@@ -24,10 +42,6 @@ export default async function SignedLayout({ children }: PropsWithChildren) {
     queryClient.prefetchQuery({
       queryKey: folderKeys.root(),
       queryFn: getFolders,
-    }),
-    queryClient.prefetchQuery({
-      queryKey: tagKeys.all,
-      queryFn: getTagList,
     }),
   ]);
 

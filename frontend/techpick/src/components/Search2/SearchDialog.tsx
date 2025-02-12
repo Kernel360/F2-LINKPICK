@@ -9,11 +9,7 @@ import FilterContainer from './FilterContainer';
 import HoverCard from './HoverCard';
 import { SearchInfiniteScrollList } from './SearchInfiniteScrollList';
 import SearchInput from './SearchInput';
-import {
-  dialogContent,
-  searchBar,
-  searchListContainer,
-} from './searchDialog.css';
+import { dialogContent, searchListContainer } from './searchDialog.css';
 
 export default function SearchDialog({
   isOpen,
@@ -57,9 +53,7 @@ export default function SearchDialog({
               Pick Search Dialog
             </DialogPrimitive.Description>
           </VisuallyHidden>
-          <div className={searchBar}>
-            <SearchInput />
-          </div>
+          <SearchInput />
           <FilterContainer setIsSelectMenuOpen={setIsSelectMenuOpen} />
           <div className={searchListContainer}>
             <SearchInfiniteScrollList onClose={handleOnClose} />

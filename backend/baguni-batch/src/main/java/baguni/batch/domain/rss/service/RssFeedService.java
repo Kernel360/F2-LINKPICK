@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import baguni.batch.domain.link.service.RssFeedApi;
 import baguni.batch.domain.rss.dto.RssFeed;
 import baguni.batch.infrastructure.rss.RssBlogDataHandler;
-import baguni.common.annotation.MeasureTime;
 import baguni.common.event.events.LinkCreateEvent;
 import baguni.common.event.messenger.EventMessenger;
 import baguni.domain.infrastructure.link.LinkDataHandler;
 import baguni.domain.model.link.Link;
 import baguni.domain.model.rss.RssBlog;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,7 +32,7 @@ public class RssFeedService {
 	/**
 	 * 따로 Retry 로직을 하지 않는 이유는, 매일 3시에 전체 피드 글을 어차피 다시 받기 때문.
 	 */
-	@MeasureTime
+	@WithSpan
 	@Scheduled(cron = "0 0 3 * * *")
 	public void saveBlogArticleLinks() {
 		rssBlogDataHandler.getAllBlogs().stream()

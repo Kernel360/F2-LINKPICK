@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import baguni.domain.model.folder.Folder;
 import baguni.domain.model.user.User;
 import baguni.domain.infrastructure.user.UserRepository;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import baguni.domain.infrastructure.folder.dto.FolderCommand;
 import baguni.domain.exception.folder.ApiFolderException;
@@ -23,6 +24,7 @@ public class FolderDataHandler {
 	private final FolderQuery folderQuery;
 	private final UserRepository userRepository;
 
+	@WithSpan
 	@Transactional
 	public void createMandatoryFolder(User user) {
 		folderRepository.save(Folder.createEmptyUnclassifiedFolder(user));
@@ -30,12 +32,14 @@ public class FolderDataHandler {
 		folderRepository.save(Folder.createEmptyRootFolder(user));
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Folder getFolder(Long folderId) {
 		return folderRepository.findById(folderId).orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
 	}
 
 	// idList에 포함된 모든 ID에 해당하는 폴더 리스트 조회, 순서를 보장하지 않음
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<Folder> getFolderList(List<Long> folderIdList) {
 		List<Folder> folderList = folderRepository.findAllById(folderIdList);
@@ -47,6 +51,7 @@ public class FolderDataHandler {
 	}
 
 	// idList에 포함된 모든 ID에 해당하는 폴더 리스트 조회, 순서는 idList의 순서를 따름
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<Folder> getFolderListPreservingOrder(List<Long> folderIdList) {
 		List<Folder> folderList = folderRepository.findAllById(folderIdList);
@@ -58,26 +63,31 @@ public class FolderDataHandler {
 		return folderList;
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<Folder> getFolderListByUserId(Long userId) {
 		return folderRepository.findByUserId(userId);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Folder getRootFolder(Long userId) {
 		return folderQuery.findRoot(userId);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Folder getRecycleBin(Long userId) {
 		return folderQuery.findRecycleBin(userId);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Folder getUnclassifiedFolder(Long userId) {
 		return folderQuery.findUnclassified(userId);
 	}
 
+	@WithSpan
 	@Transactional
 	public Folder saveFolder(FolderCommand.Create command) {
 		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -89,6 +99,7 @@ public class FolderDataHandler {
 		return folder;
 	}
 
+	@WithSpan
 	@Transactional
 	public Folder updateFolder(FolderCommand.Update command) {
 		Folder folder = folderRepository.findById(command.id())
@@ -98,6 +109,7 @@ public class FolderDataHandler {
 		return folder;
 	}
 
+	@WithSpan
 	@Transactional
 	public List<Long> moveFolderWithinParent(FolderCommand.Move command) {
 		Folder parentFolder = folderRepository.findById(command.parentFolderId())
@@ -107,6 +119,7 @@ public class FolderDataHandler {
 		return parentFolder.getChildFolderIdOrderedList();
 	}
 
+	@WithSpan
 	@Transactional
 	public List<Long> moveFolderToDifferentParent(FolderCommand.Move command) {
 		Folder folder = folderRepository.findById(command.idList().get(0))
@@ -127,6 +140,7 @@ public class FolderDataHandler {
 		return newParent.getChildFolderIdOrderedList();
 	}
 
+	@WithSpan
 	@Transactional
 	public void deleteFolderList(FolderCommand.Delete command) {
 

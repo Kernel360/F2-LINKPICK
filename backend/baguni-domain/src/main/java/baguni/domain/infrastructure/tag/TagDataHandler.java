@@ -11,6 +11,7 @@ import baguni.domain.infrastructure.pick.PickTagRepository;
 import baguni.domain.model.tag.Tag;
 import baguni.domain.model.user.User;
 import baguni.domain.infrastructure.user.UserRepository;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.domain.infrastructure.tag.dto.TagCommand;
@@ -29,11 +30,13 @@ public class TagDataHandler {
 	private final UserRepository userRepository;
 	private final TagMapper tagMapper;
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public Tag getTag(Long tagId) {
 		return tagRepository.findById(tagId).orElseThrow(ApiTagException::TAG_NOT_FOUND);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<Tag> getTagList(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -44,6 +47,7 @@ public class TagDataHandler {
 		return tagList;
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<Tag> getTagList(List<Long> tagOrderList) {
 		List<Tag> tagList = tagRepository.findAllById(tagOrderList);
@@ -54,6 +58,7 @@ public class TagDataHandler {
 		return tagList;
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public List<Tag> getTagListPreservingOrder(List<Long> tagOrderList) {
 		List<Tag> tagList = tagRepository.findAllById(tagOrderList);
@@ -65,6 +70,7 @@ public class TagDataHandler {
 		return tagList;
 	}
 
+	@WithSpan
 	@Transactional
 	public Tag saveTag(Long userId, TagCommand.Create command) {
 		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -73,6 +79,7 @@ public class TagDataHandler {
 		return tag;
 	}
 
+	@WithSpan
 	@Transactional
 	public Tag updateTag(TagCommand.Update command) {
 		log.info("TagDataHandler: tag id={}", command.id()); // for debug
@@ -82,12 +89,14 @@ public class TagDataHandler {
 		return tag;
 	}
 
+	@WithSpan
 	@Transactional
 	public void moveTag(Long userId, TagCommand.Move command) {
 		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
 		user.updateTagOrderList(command.id(), command.orderIdx());
 	}
 
+	@WithSpan
 	@Transactional
 	public void deleteTag(Long userId, TagCommand.Delete command) {
 		User user = userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
@@ -103,6 +112,7 @@ public class TagDataHandler {
 		tagRepository.deleteById(tagId);
 	}
 
+	@WithSpan
 	@Transactional(readOnly = true)
 	public boolean checkDuplicateTagName(Long userId, String name) {
 		return tagRepository.existsByUserIdAndName(userId, name);

@@ -1,6 +1,7 @@
 'use client';
 
 import { postLogout } from '@/apis/postLogout';
+import { FolderContentLayout } from '@/components/FolderContentLayout';
 import { ImportBookmarkDialog } from '@/components/ImportBookmarkDialog';
 import MyPageContentContainer from '@/components/MyPage/MyPageContentContainer';
 import MyPageShareFolderContent from '@/components/MyPage/MyPageShareFolderContent';
@@ -33,41 +34,43 @@ export default function MyPage() {
   };
 
   return (
-    <div className={myPageLayoutStyle}>
-      <div className={myPageContentContainerLayoutStyle}>
-        <MyPageContentContainer title="내 계정">
-          <div className={buttonSectionStyle}>
-            <ImportBookmarkDialog />
-            {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-            <button className={logoutButtonStyle} onClick={handleLogout}>
-              로그아웃
-            </button>
+    <FolderContentLayout>
+      <div className={myPageLayoutStyle}>
+        <div className={myPageContentContainerLayoutStyle}>
+          <MyPageContentContainer title="내 계정">
+            <div className={buttonSectionStyle}>
+              <ImportBookmarkDialog />
+              {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
+              <button className={logoutButtonStyle} onClick={handleLogout}>
+                로그아웃
+              </button>
+            </div>
+          </MyPageContentContainer>
+          <div className={tutorialReplayCheckboxLayoutStyle}>
+            <Checkbox.Root
+              id="tutorial-replay-checkbox"
+              checked={isOpen}
+              onCheckedChange={onToggle}
+              className={checkboxRootStyle}
+            >
+              <Checkbox.Indicator className={checkboxIndicatorStyle}>
+                <CheckIcon />
+              </Checkbox.Indicator>
+            </Checkbox.Root>
+            <label
+              htmlFor="tutorial-replay-checkbox"
+              className={tutorialReplayCheckboxLabelStyle}
+            >
+              튜토리얼 다시 보기
+            </label>
           </div>
-        </MyPageContentContainer>
-        <div className={tutorialReplayCheckboxLayoutStyle}>
-          <Checkbox.Root
-            id="tutorial-replay-checkbox"
-            checked={isOpen}
-            onCheckedChange={onToggle}
-            className={checkboxRootStyle}
-          >
-            <Checkbox.Indicator className={checkboxIndicatorStyle}>
-              <CheckIcon />
-            </Checkbox.Indicator>
-          </Checkbox.Root>
-          <label
-            htmlFor="tutorial-replay-checkbox"
-            className={tutorialReplayCheckboxLabelStyle}
-          >
-            튜토리얼 다시 보기
-          </label>
+          {isOpen && <TutorialDialog isOpen={isOpen} onClose={onClose} />}
         </div>
-        {isOpen && <TutorialDialog isOpen={isOpen} onClose={onClose} />}
-      </div>
 
-      <MyPageContentContainer title="공개된 폴더">
-        <MyPageShareFolderContent />
-      </MyPageContentContainer>
-    </div>
+        <MyPageContentContainer title="공개된 폴더">
+          <MyPageShareFolderContent />
+        </MyPageContentContainer>
+      </div>
+    </FolderContentLayout>
   );
 }

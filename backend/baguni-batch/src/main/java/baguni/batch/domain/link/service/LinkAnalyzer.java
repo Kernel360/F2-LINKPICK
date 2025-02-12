@@ -5,13 +5,13 @@ import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import baguni.common.lib.opengraph.Metadata;
 import baguni.common.lib.opengraph.OpenGraph;
 import baguni.common.lib.opengraph.OpenGraphException;
 import baguni.common.lib.opengraph.OpenGraphReader;
 import baguni.domain.exception.link.ApiLinkException;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -30,6 +30,7 @@ public class LinkAnalyzer {
 		this.openGraphReader = openGraphReader;
 	}
 
+	@WithSpan
 	public LinkAnalyzeResult analyze(String url) {
 		try {
 			var openGraph = new OpenGraph(url, openGraphReader);

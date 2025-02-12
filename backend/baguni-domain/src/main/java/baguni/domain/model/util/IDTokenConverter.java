@@ -8,7 +8,7 @@ public class IDTokenConverter implements AttributeConverter<IDToken, String> {
 
 	@Override
 	public String convertToDatabaseColumn(IDToken attribute) {
-		return attribute != null ? attribute.toString() : null;
+		return attribute != null ? attribute.value() : null;
 	}
 
 	@Override
