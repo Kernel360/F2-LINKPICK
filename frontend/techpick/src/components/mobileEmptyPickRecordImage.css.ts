@@ -12,5 +12,5 @@ export const emptyPickListLayoutStyle = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  width: '80vw',
+  width: '70vw',
 });

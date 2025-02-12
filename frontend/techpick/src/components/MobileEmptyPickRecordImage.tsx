@@ -8,7 +8,7 @@ export function MobileEmptyPickRecordImage() {
   return (
     <div className={mobileEmptyPickRecordImageStyle}>
       <div className={emptyPickListLayoutStyle}>
-        <SquirrelIcon size={'50vw'} />
+        <SquirrelIcon size={'40vw'} />
         <div>
           <p>북마크 대신 귀여운 다람쥐가 있네요! </p>
         </div>
