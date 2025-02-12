@@ -1,13 +1,15 @@
 import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
 
+export const mobileNavigationHeight = '44px';
+
 export const mobileNavigationBarStyle = style({
   position: 'sticky',
   top: 0,
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  height: '44px',
+  height: mobileNavigationHeight,
   padding: '12px',
   backgroundColor: colorVars.gold3,
 });

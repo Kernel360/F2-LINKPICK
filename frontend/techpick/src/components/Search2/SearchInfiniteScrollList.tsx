@@ -13,7 +13,7 @@ export function SearchInfiniteScrollList({
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useFetchSearchPickList({
-      searchTokenList: searchQuery,
+      searchTokenList: encodeURIComponent(searchQuery),
       folderIdList: searchFolder,
       tagIdList: searchTag,
     });

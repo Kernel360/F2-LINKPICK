@@ -16,7 +16,7 @@ export function MobileSearchInfiniteScrollList() {
   const { searchQuery, searchTag, searchFolder } = useSearchPickStore();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useFetchSearchPickList({
-      searchTokenList: searchQuery,
+      searchTokenList: encodeURIComponent(searchQuery),
       folderIdList: searchFolder,
       tagIdList: searchTag,
     });

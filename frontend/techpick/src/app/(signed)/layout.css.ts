@@ -1,3 +1,4 @@
+import { mobileNavigationHeight } from '@/components/mobileNavigationBar.css';
 import { style } from '@vanilla-extract/css';
 import { colorVars } from 'techpick-shared';
 
@@ -9,8 +10,12 @@ export const pageContainerLayout = style({
 
 export const mobilePageContainerStyle = style({
   width: '100%',
-  height: '100vh',
+  height: `calc(100vh - ${mobileNavigationHeight})`,
   padding: '0 12px',
   backgroundColor: colorVars.gold3,
   overflowY: 'auto',
+});
+
+export const mobilePreventOverscroll = style({
+  overscrollBehaviorY: 'contain',
 });
