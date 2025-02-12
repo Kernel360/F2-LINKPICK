@@ -13,11 +13,7 @@ import { tagKeys } from '@/queries/tagKeys';
 import { isMobileDevice } from '@/utils/isMobileDevice';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
 import type { PropsWithChildren } from 'react';
-import {
-  mobilePageContainerStyle,
-  mobilePreventOverscroll,
-  pageContainerLayout,
-} from './layout.css';
+import { mobilePageContainerStyle, pageContainerLayout } from './layout.css';
 
 export default async function SignedLayout({ children }: PropsWithChildren) {
   const queryClient = getQueryClient();
@@ -31,7 +27,7 @@ export default async function SignedLayout({ children }: PropsWithChildren) {
     return (
       <ScreenLogger eventName="page_view_signed_user">
         <HydrationBoundary state={dehydrate(queryClient)}>
-          <div className={mobilePreventOverscroll}>
+          <div>
             <MobileNavigationBar />
             <div className={mobilePageContainerStyle}>{children}</div>
           </div>

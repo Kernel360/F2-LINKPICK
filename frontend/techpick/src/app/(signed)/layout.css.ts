@@ -15,7 +15,3 @@ export const mobilePageContainerStyle = style({
   backgroundColor: colorVars.gold3,
   overflowY: 'auto',
 });
-
-export const mobilePreventOverscroll = style({
-  overscrollBehaviorY: 'contain',
-});
