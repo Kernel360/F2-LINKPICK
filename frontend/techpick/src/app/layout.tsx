@@ -33,8 +33,13 @@ export default async function RootLayout({
 }>) {
   const userId = await getUserIdForServer();
 
+  /**
+   * body 태그는 ThemeProvider에 존재합니다.
+   * 해당 이유는 radix의 portal이 default로 document.body에 적용되고,
+   * 해당 포탈로 생기는 영역에 테마를 주입하기 위해서입니다.
+   */
   return (
-    <html lang="en">
+    <html lang="ko">
       <UserIdentifyProvider userId={userId}>
         <ThemeProvider classname={`${notoSansKR.className}`}>
           <ToastProvider>
