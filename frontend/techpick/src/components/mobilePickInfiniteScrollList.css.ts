@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
 
 export const mobilePickInfiniteScrollListStyle = style({
-  height: 'calc(100vh - 52px)',
+  height: 'calc(100dvh - 52px)',
 });

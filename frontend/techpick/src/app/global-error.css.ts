@@ -6,7 +6,7 @@ export const errorBody = style({
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  height: '100vh',
+  height: '100dvh',
   backgroundColor: colorVars.gold2,
 });
 

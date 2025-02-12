@@ -6,7 +6,7 @@ export const subColor = '#f1f1f1';
 
 export const screenContainer = style({
   width: '100%',
-  height: '100vh',
+  height: '100dvh',
   position: 'relative',
   display: 'flex',
   alignItems: 'center',

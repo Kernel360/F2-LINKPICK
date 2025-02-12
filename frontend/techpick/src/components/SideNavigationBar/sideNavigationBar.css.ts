@@ -3,7 +3,7 @@ import { typography } from 'techpick-shared';
 import { colorVars } from 'techpick-shared';
 
 export const sideNavigationBarLayoutStyle = style({
-  height: '100vh',
+  height: '100dvh',
   padding: '4px',
   paddingTop: '16px',
   backgroundColor: colorVars.gold3,
@@ -26,7 +26,7 @@ export const sideNavigationTitleLayoutStyle = style({
 
 export const editableFolderNavigationItemListStyle = style({
   overflowY: 'scroll',
-  height: 'calc(100vh - 330px)',
+  height: 'calc(100dvh - 330px)',
 
   '::-webkit-scrollbar': {
     display: 'none',
