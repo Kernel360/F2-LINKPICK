@@ -1,6 +1,6 @@
 'use client';
 
-import { useEventLogger } from '@/hooks/useEventLogger';
+import { useEventLogger } from '@/libs/@eventlog/useEventLogger';
 import Image from 'next/image';
 import Link from 'next/link';
 import {

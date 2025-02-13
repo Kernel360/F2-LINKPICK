@@ -1,4 +1,5 @@
 'use client';
+import { useEventLogger } from '@/libs/@eventlog/useEventLogger';
 import { useCreatePick } from '@/queries/useCreatePick';
 import { useDraggingRecommendPickStore } from '@/stores/draggingRecommendPickStore';
 import { isPickToFolderDroppableObject } from '@/utils/isPickToFolderDroppableObject';
@@ -10,7 +11,6 @@ import type {
   DragOverEvent,
   DragStartEvent,
 } from '@dnd-kit/core';
-import { useEventLogger } from './useEventLogger';
 
 /**
  * @description 추천 목록에서 folder로 dnd를 할 때의 이벤트를 감지하고 동작하는 hook입니다.

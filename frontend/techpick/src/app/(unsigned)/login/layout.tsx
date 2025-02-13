@@ -1,7 +1,7 @@
 'use server';
 
-import { ScreenLogger } from '@/components/ScreenLogger';
 import { ROUTES } from '@/constants/route';
+import { ScreenLogger } from '@/libs/@eventlog/ScreenLogger';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { PropsWithChildren } from 'react';

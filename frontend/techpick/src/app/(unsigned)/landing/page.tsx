@@ -1,5 +1,5 @@
-import { ScreenLogger } from '@/components/ScreenLogger';
 import { ROUTES } from '@/constants/route';
+import { ScreenLogger } from '@/libs/@eventlog/ScreenLogger';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
