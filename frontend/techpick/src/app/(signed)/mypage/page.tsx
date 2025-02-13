@@ -8,6 +8,7 @@ import MyPageShareFolderContent from '@/components/MyPage/MyPageShareFolderConte
 import { TutorialDialog } from '@/components/TutorialDialog';
 import { ROUTES } from '@/constants/route';
 import { useDisclosure } from '@/hooks/useDisclosure';
+import { useUserSessionReset } from '@/libs/@eventlog/useUserSessionReset';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import { CheckIcon } from 'lucide-react';
 import {
@@ -23,10 +24,12 @@ import {
 
 export default function MyPage() {
   const { isOpen, onClose, onToggle } = useDisclosure();
+  const { userSessionReset } = useUserSessionReset();
 
   const handleLogout = async () => {
     try {
       await postLogout();
+      userSessionReset();
       window.location.replace(ROUTES.LOGIN);
     } catch {
       /* empty */

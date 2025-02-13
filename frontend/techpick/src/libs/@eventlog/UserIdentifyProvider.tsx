@@ -1,9 +1,13 @@
 'use client';
 
-import mixpanel from '@/libs/mixpanel-client';
 import { useEffect } from 'react';
 import type { PropsWithChildren } from 'react';
+import mixpanel from './mixpanel-client';
 
+/**
+ *
+ * 유저를 식별합니다.
+ */
 export function UserIdentifyProvider({
   userId,
   children,
@@ -18,5 +22,5 @@ export function UserIdentifyProvider({
 }
 
 interface UserIdentifyProviderProps {
-  userId: string;
+  userId: string | undefined;
 }

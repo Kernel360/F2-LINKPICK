@@ -1,7 +1,7 @@
 'use client';
 
 import { ROUTES } from '@/constants/route';
-import { useEventLogger } from '@/hooks/useEventLogger';
+import { useEventLogger } from '@/libs/@eventlog/useEventLogger';
 import Link from 'next/link';
 import { signUpButtonStyle } from './page.css';
 

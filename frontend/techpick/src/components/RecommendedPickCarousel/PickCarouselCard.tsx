@@ -1,9 +1,9 @@
 'use client';
 
 import { postRecommendPickViewEventLog } from '@/apis/eventLog/postRecommendPickViewEventLog';
-import { useEventLogger } from '@/hooks/useEventLogger';
 import { useImageLoader } from '@/hooks/useImageLoader';
 import { useOpenUrlInNewTab } from '@/hooks/useOpenUrlInNewTab';
+import { useEventLogger } from '@/libs/@eventlog/useEventLogger';
 import type { RecommendPickType } from '@/types/RecommendPickType';
 import Image from 'next/image';
 import {
