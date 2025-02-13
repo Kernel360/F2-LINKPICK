@@ -1,13 +1,10 @@
-'use server';
+'use client';
 
-import { getUserIdForServer } from '@/utils/getUserIdForServer';
-import { headers } from 'next/headers';
-import { userAgent } from 'next/server';
-import type { PropsWithChildren } from 'react';
-import { mixpanelServer } from './mixpanel-server';
+import { type PropsWithChildren, useEffect } from 'react';
+import mixpanel from './mixpanel-client';
 
 /**
- * @description 특정 페이지에 방문했는지 확인하는 서버 컴포넌트입니다.
+ * @description 특정 페이지에 방문했는지 확인하는 컴포넌트입니다.
  * @param eventName 해당 이벤트의 이름입니다. snake case로 명세해주세요. ex) shared_page_view
  * @param logInfo 이벤트의 추가적인 정보를 담고 싶을 때 사용해주세요.
  */
@@ -16,24 +13,9 @@ export async function ScreenLogger({
   logInfo = {},
   children,
 }: PropsWithChildren<ScreenLoggerProps>) {
-  const headersList = headers();
-  const { device, os, isBot } = userAgent({ headers: headersList });
-  const $user_id = await getUserIdForServer();
-  const $device_id = `${device.vendor || 'unknown'}-${device.type || undefined}-${device.model || 'unknown'}`;
-  const deviceType = device.type || 'unknown';
-  const $os = os.name ?? 'unknown';
-
-  const properties: Record<string, unknown> = {
-    ...logInfo,
-    $user_id,
-    $device_id,
-    deviceType,
-    $os,
-  };
-
-  if (!isBot) {
-    mixpanelServer.track(eventName, properties);
-  }
+  useEffect(() => {
+    mixpanel.track(eventName, logInfo);
+  }, [eventName, logInfo]);
 
   return <>{children}</>;
 }
