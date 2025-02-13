@@ -33,8 +33,8 @@
 ![태그 검색](https://github.com/user-attachments/assets/358b343f-8f40-484d-9714-af83dfc15b1e)
 
 
-## 아키텍처
-![architecture](https://github.com/user-attachments/assets/93fd8100-5a30-4ff8-a0f6-02bad789630f)
+## 서비스 구성도
+![image](https://github.com/user-attachments/assets/811bfc17-bd1b-4683-adf0-bc60ddcb32a3)
 
 ## 기술 스택
 <div style="display:flex; flex-direction:column; align-items:flex-start;">
