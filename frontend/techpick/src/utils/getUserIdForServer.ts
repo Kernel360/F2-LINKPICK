@@ -12,7 +12,7 @@ export const getUserIdForServer = async () => {
   const access_token = cookieStore.get('access_token');
   const userId = access_token
     ? jwtDecode<AccessTokenInfoType>(access_token.value).id
-    : 'anonymous';
+    : undefined;
 
   return userId;
 };
