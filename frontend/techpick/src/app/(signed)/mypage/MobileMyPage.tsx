@@ -2,6 +2,7 @@
 
 import { postLogout } from '@/apis/postLogout';
 import { ROUTES } from '@/constants/route';
+import { useUserSessionReset } from '@/libs/@eventlog/useUserSessionReset';
 import { greenOutlineButtonStyle } from '@/styles/greenButtonStyle.css';
 import { orangeOutlineButtonStyle } from '@/styles/orangeButtonStyle.css';
 import { redOutlineButtonStyle } from '@/styles/redButtonStyle.css';
@@ -9,9 +10,12 @@ import { CircleAlertIcon, FileQuestionIcon } from 'lucide-react';
 import { mobilePageButtonStyle } from './mobileMyPage.css';
 
 export function MobileMyPage() {
+  const { userSessionReset } = useUserSessionReset();
+
   const handleLogout = async () => {
     try {
       await postLogout();
+      userSessionReset();
       window.location.replace(ROUTES.LOGIN);
     } catch {
       /* empty */
