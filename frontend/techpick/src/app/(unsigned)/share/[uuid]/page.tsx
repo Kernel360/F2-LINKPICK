@@ -8,7 +8,7 @@ import { ROUTES } from '@/constants/route';
 import { ScreenLogger } from '@/libs/@eventlog/ScreenLogger';
 import { isLoginUser } from '@/utils/isLoginUser';
 import { FolderOpenIcon } from 'lucide-react';
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { LandingPageLinkButton } from './LandingPageLinkButton';
@@ -35,49 +35,18 @@ const EmptyPickRecordImage = dynamic(
   },
 );
 
-// TODO:
-// 해당 코드는 api를 쓰는 방식이 아닌,
-// https://nextjs.org/docs/14/app/api-reference/file-conventions/metadata/opengraph-image#generate-images-using-code-js-ts-tsx
-// 에서 나오는 방식으로 변경해야합니다.
-export async function generateMetadata(
-  {
-    params,
-  }: {
-    params: { uuid: string };
-  },
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: { params: { uuid: string } }): Promise<Metadata> {
   const { uuid } = params;
   const sharedFolder = await getShareFolderById(uuid);
-  const { pickList } = sharedFolder;
+  const { folderName, pickList } = sharedFolder;
 
-  const imageUrls = pickList
-    .map((pick) => pick.linkInfo.imageUrl)
-    .filter((url) => url && url !== '')
-    .slice(0, 16); // 최대 16개까지 허용
-
-  let ogImageUrl: string;
-
-  if (imageUrls.length === 0) {
-    ogImageUrl = '/image/og_image.png';
-  } else {
-    const apiUrl = new URL(
-      `${process.env.NEXT_PUBLIC_IMAGE_URL}/api/generate-og-image`,
-    );
-    apiUrl.searchParams.set('imageUrls', JSON.stringify(imageUrls));
-    ogImageUrl = apiUrl.toString();
-  }
-
-  const previousImages = (await parent).openGraph?.images || [];
   return {
-    title: `${sharedFolder.folderName} 폴더 공유 페이지`,
-    description: `${pickList.length}개의 북마크가 공유되었습니다.`,
-    openGraph: {
-      images: [ogImageUrl, ...previousImages],
-    },
+    title: `${folderName} 공유 폴더`,
+    description: `${pickList.length}개의 북마크를 확인해보세요!`,
   };
 }
-
 export default async function Page({ params }: { params: { uuid: string } }) {
   const { uuid } = params;
   const sharedFolder = await getShareFolderById(uuid);
