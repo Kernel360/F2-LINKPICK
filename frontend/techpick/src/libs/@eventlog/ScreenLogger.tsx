@@ -8,7 +8,7 @@ import mixpanel from './mixpanel-client';
  * @param eventName 해당 이벤트의 이름입니다. snake case로 명세해주세요. ex) shared_page_view
  * @param logInfo 이벤트의 추가적인 정보를 담고 싶을 때 사용해주세요.
  */
-export async function ScreenLogger({
+export function ScreenLogger({
   eventName,
   logInfo = {},
   children,
