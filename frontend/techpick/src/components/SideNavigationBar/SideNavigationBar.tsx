@@ -28,9 +28,6 @@ export function SideNavigationBar() {
     onClose,
   } = useDisclosure();
 
-  console.log('rootFolderId', rootFolderId);
-  console.log('isCreateRootChildFolder', isCreateRootChildFolder);
-
   return (
     <HorizontalResizableContainer>
       <ActiveNavigationItemIdProvider>
