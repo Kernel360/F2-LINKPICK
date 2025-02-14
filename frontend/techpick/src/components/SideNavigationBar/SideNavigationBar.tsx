@@ -28,6 +28,9 @@ export function SideNavigationBar() {
     onClose,
   } = useDisclosure();
 
+  console.log('rootFolderId', rootFolderId);
+  console.log('isCreateRootChildFolder', isCreateRootChildFolder);
+
   return (
     <HorizontalResizableContainer>
       <ActiveNavigationItemIdProvider>
@@ -52,10 +55,9 @@ export function SideNavigationBar() {
             )}
           </div>
           <div className={editableFolderNavigationItemListStyle}>
-            {rootFolderId && (
+            {rootFolderId && isCreateRootChildFolder && (
               <CreateRootChildFolderInput
                 rootFolderId={rootFolderId}
-                isShow={isCreateRootChildFolder}
                 onClose={onClose}
               />
             )}

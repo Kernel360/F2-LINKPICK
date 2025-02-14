@@ -11,7 +11,6 @@ import {
 
 export function CreateRootChildFolderInput({
   rootFolderId,
-  isShow,
   onClose,
 }: CreateRootChildFolderInputProps) {
   const { mutateAsync: createFolder } = useCreateFolder();
@@ -54,9 +53,11 @@ export function CreateRootChildFolderInput({
     [onSubmit],
   );
 
-  if (!isShow) {
-    return null;
-  }
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   return (
     <div ref={containerRef} className={updateFolderNameInputLayoutStyle}>
@@ -76,6 +77,5 @@ export function CreateRootChildFolderInput({
 
 interface CreateRootChildFolderInputProps {
   rootFolderId: FolderIdType;
-  isShow: boolean;
   onClose: () => void;
 }
