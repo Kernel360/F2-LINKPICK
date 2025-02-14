@@ -52,10 +52,9 @@ export function SideNavigationBar() {
             )}
           </div>
           <div className={editableFolderNavigationItemListStyle}>
-            {rootFolderId && (
+            {rootFolderId && isCreateRootChildFolder && (
               <CreateRootChildFolderInput
                 rootFolderId={rootFolderId}
-                isShow={isCreateRootChildFolder}
                 onClose={onClose}
               />
             )}
