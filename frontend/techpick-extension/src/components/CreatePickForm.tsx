@@ -1,4 +1,5 @@
 import { createPick } from '@/apis/createPick';
+import { CHANGE_ICON_PORT_NAME } from '@/constants/changeIconPortName';
 import { PUBLIC_DOMAIN } from '@/constants/publicDomain';
 import { useChangeFocusUsingArrowKey } from '@/hooks/useChangeFocusUsingArrowKey';
 import { useEventLogger } from '@/hooks/useEventLogger';
@@ -93,6 +94,7 @@ export function CreatePickForm({
       parentFolderId: parsedSelectedFolderId,
     })
       .then(() => {
+        chrome.runtime.connect({ name: CHANGE_ICON_PORT_NAME });
         setFolderIdToLocalhost(parsedSelectedFolderId);
         notifySuccess('추가되었습니다!');
         setTimeout(() => {

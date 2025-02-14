@@ -3,7 +3,6 @@ import { getRootFolderChildFolders } from '@/apis/getRootFolderChildFolders';
 import { getTagList } from '@/apis/getTagList';
 import { CreatePickForm } from '@/components/CreatePickForm';
 import { SkeltonPickForm } from '@/components/SkeltonPickForm';
-import { CHANGE_ICON_PORT_NAME } from '@/constants/changeIconPortName';
 import { useGetFolderIdFromLocalhost } from '@/hooks/useGetFolderIdFromLocalhost';
 import { getCurrentTabInfo } from '@/libs/@chrome/getCurrentTabInfo';
 import { DeferredComponent } from '@/libs/@components/DeferredComponent';
@@ -34,7 +33,6 @@ export function BookmarkPage() {
         }
 
         const slicedTitle = title.slice(0, 255);
-        chrome.runtime.connect({ name: CHANGE_ICON_PORT_NAME });
 
         const [fetchedTagList, basicFolderList, rootFolderChildFolderList] =
           await Promise.all([
