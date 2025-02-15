@@ -18,8 +18,13 @@ export const createPickPopoverButtonLayoutStyle = style({
 export const folderContentHeaderStyle = style({
   display: 'flex',
   justifyContent: 'space-between',
+  padding: '8px 12px',
 });
 
 export const folderDescriptionStyle = style({
   minWidth: '0',
+});
+
+export const currentPathIndicatorLayoutStyle = style({
+  padding: '2px 0',
 });

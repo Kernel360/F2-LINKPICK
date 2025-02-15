@@ -1,12 +1,14 @@
 'use client';
 
+import { ROUTES } from '@/constants/route';
 import type { FolderType } from '@/types/FolderType';
 import { FolderOpenIcon } from 'lucide-react';
+import Link from 'next/link';
 import {
   currentFolderNameSectionStyle,
   folderNameStyle,
   folderOpenIconStyle,
-  folderSharedInfoTextStyle,
+  folderSharedInfoLinkStyle,
 } from './currentFolderNameSection.css';
 
 export function CurrentFolderNameSection({
@@ -20,9 +22,13 @@ export function CurrentFolderNameSection({
       </h1>
 
       {folderInfo?.folderAccessToken ? (
-        <div className={folderSharedInfoTextStyle}>
-          <div>(공유 중)</div>
-        </div>
+        <Link
+          href={ROUTES.SHARE(folderInfo.folderAccessToken)}
+          className={folderSharedInfoLinkStyle}
+          target="_blank"
+        >
+          (공유 중)
+        </Link>
       ) : null}
     </div>
   );

@@ -6,4 +6,5 @@ export const ROUTES = {
   LOGIN: '/login',
   MY_PAGE: '/mypage',
   LANDING: '/landing',
+  SHARE: (uuid: string) => `/share/${uuid}`,
 };
