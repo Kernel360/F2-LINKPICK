@@ -1,8 +1,7 @@
+import { getShareFolderById } from '@/apis/folder/getShareFolderById';
 import { ImageResponse } from '@vercel/og';
 /* eslint-disable jsx-a11y/alt-text */
 import type { NextRequest } from 'next/server';
-
-export const runtime = 'edge';
 
 const styles = {
   1: { width: '1200px', height: '630px' },
@@ -12,36 +11,63 @@ const styles = {
   16: { width: '300px', height: '157.5px' },
 };
 
+async function isValidImageUrl(url: string): Promise<boolean> {
+  try {
+    const res = await fetch(url, { method: 'HEAD' });
+    return (
+      res.ok && res.headers.get('Content-Type')?.startsWith('image/') === true
+    );
+  } catch {
+    return false;
+  }
+}
+
 const getImageStyle = (index: number) => {
   return styles[index as keyof typeof styles] || styles[16];
 };
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const imageUrls: string[] = JSON.parse(searchParams.get('imageUrls') || '[]');
+  const uuid = searchParams.get('uuid');
+
+  if (!uuid) {
+    return <img src="/image/og_image.png" alt="" />;
+  }
 
   const width = 1200;
   const height = 630;
 
-  // 이미지 개수를 1, 2, 4, 8, 16 중 가장 가까운 수로 조정
-  const adjustedCount = [1, 2, 4, 8, 16].reduce((prev, curr) =>
-    Math.abs(curr - imageUrls.length) < Math.abs(prev - imageUrls.length)
-      ? curr
-      : prev,
-  );
+  let images: string[] = [];
+  let imageCount = 0;
 
-  const images = await Promise.all(
-    imageUrls.slice(0, adjustedCount).map(async (url: string) => {
-      try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('Failed to fetch image');
-        return url;
-      } catch {
-        return '/image/og_image.png';
-      }
-    }),
-  );
-  const imageCount = images.length;
+  try {
+    const sharedFolder = await getShareFolderById(uuid);
+    const { pickList } = sharedFolder;
+
+    const imageUrls = pickList
+      .map((pick) => pick.linkInfo.imageUrl)
+      .filter((url) => url && url !== '')
+      .slice(0, 16); // 최대 16개까지 허용
+
+    const ogImageUrl = imageUrls.filter((image) => image !== undefined);
+
+    const validImageUrls = await Promise.all(
+      ogImageUrl.map(async (url) =>
+        (await isValidImageUrl(url)) ? url : null,
+      ),
+    );
+    const filteredImageUrls = validImageUrls.filter((url) => url !== null);
+    const adjustedCount = [1, 2, 4, 8, 16].reduce((prev, curr) =>
+      Math.abs(curr - filteredImageUrls.length) <
+      Math.abs(prev - filteredImageUrls.length)
+        ? curr
+        : prev,
+    );
+    images = filteredImageUrls.slice(0, adjustedCount);
+    imageCount = images.length;
+  } catch {
+    return <img src="/image/og_image.png" alt="" />;
+  }
 
   return new ImageResponse(
     <div

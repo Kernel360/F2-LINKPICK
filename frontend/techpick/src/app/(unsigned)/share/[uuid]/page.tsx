@@ -37,16 +37,27 @@ const EmptyPickRecordImage = dynamic(
 
 export async function generateMetadata({
   params,
-}: { params: { uuid: string } }): Promise<Metadata> {
+}: {
+  params: { uuid: string };
+}): Promise<Metadata> {
   const { uuid } = params;
   const sharedFolder = await getShareFolderById(uuid);
-  const { folderName, pickList } = sharedFolder;
+  const { pickList } = sharedFolder;
+
+  const ogImageUrl = new URL(
+    `${process.env.NEXT_PUBLIC_IMAGE_URL}/api/generate-og-image`,
+  );
+  ogImageUrl.searchParams.set('uuid', uuid);
 
   return {
-    title: `${folderName} 공유 폴더`,
-    description: `${pickList.length}개의 북마크를 확인해보세요!`,
+    title: `${sharedFolder.folderName} 폴더 공유 페이지`,
+    description: `${pickList.length}개의 북마크가 공유되었습니다.`,
+    openGraph: {
+      images: [ogImageUrl.toString()],
+    },
   };
 }
+
 export default async function Page({ params }: { params: { uuid: string } }) {
   const { uuid } = params;
   const sharedFolder = await getShareFolderById(uuid);
