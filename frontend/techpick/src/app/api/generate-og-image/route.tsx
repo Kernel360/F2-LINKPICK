@@ -57,12 +57,28 @@ export async function GET(req: NextRequest) {
       ),
     );
     const filteredImageUrls = validImageUrls.filter((url) => url !== null);
-    const adjustedCount = [1, 2, 4, 8, 16].reduce((prev, curr) =>
-      Math.abs(curr - filteredImageUrls.length) <
-      Math.abs(prev - filteredImageUrls.length)
-        ? curr
-        : prev,
-    );
+
+    if (filteredImageUrls.length === 0) {
+      return <img src="/image/og_image.png" alt="" />;
+    }
+
+    let adjustedCount = 1;
+
+    switch (true) {
+      case filteredImageUrls.length >= 16:
+        adjustedCount = 16;
+        break;
+      case filteredImageUrls.length >= 8:
+        adjustedCount = 8;
+        break;
+      case filteredImageUrls.length >= 4:
+        adjustedCount = 4;
+        break;
+      case filteredImageUrls.length >= 2:
+        adjustedCount = 2;
+        break;
+    }
+
     images = filteredImageUrls.slice(0, adjustedCount);
     imageCount = images.length;
   } catch {
