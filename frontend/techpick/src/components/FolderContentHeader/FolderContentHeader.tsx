@@ -5,11 +5,11 @@ import type { FolderIdType } from '@/types/FolderIdType';
 import { getBasicFolderInfoByFolderId } from '@/utils/getBasicFolderInfoByFolderId';
 import { getFolderInfoByFolderId } from '@/utils/getFolderInfoByFolderId';
 import { ChromeExtensionLinkButton } from '../ChromeExtensionLinkButton/ChromeExtensionLinkButton';
-import { Gap } from '../Gap';
 import { CurrentFolderNameSection } from './CurrentFolderNameSection';
 import { CurrentPathIndicator } from './CurrentPathIndicator';
 import {
   createPickPopoverButtonLayoutStyle,
+  currentPathIndicatorLayoutStyle,
   folderContentHeaderLayoutStyle,
   folderContentHeaderStyle,
   folderDescriptionStyle,
@@ -26,22 +26,19 @@ export function FolderContentHeader({ folderId }: FolderContentHeaderProps) {
 
   return (
     <div className={folderContentHeaderLayoutStyle}>
-      <Gap verticalSize="gap16" horizontalSize="gap24">
-        <div className={folderContentHeaderStyle}>
-          <div className={folderDescriptionStyle}>
-            <CurrentFolderNameSection folderInfo={folderInfo} />
-            <Gap verticalSize="gap4">
-              <CurrentPathIndicator folderInfo={folderInfo} />
-            </Gap>
-          </div>
-
-          <div className={createPickPopoverButtonLayoutStyle}>
-            {folderInfo?.folderType !== 'RECYCLE_BIN' && (
-              <ChromeExtensionLinkButton />
-            )}
+      <div className={folderContentHeaderStyle}>
+        <div className={folderDescriptionStyle}>
+          <CurrentFolderNameSection folderInfo={folderInfo} />
+          <div className={currentPathIndicatorLayoutStyle}>
+            <CurrentPathIndicator folderInfo={folderInfo} />
           </div>
         </div>
-      </Gap>
+        <div className={createPickPopoverButtonLayoutStyle}>
+          {folderInfo?.folderType !== 'RECYCLE_BIN' && (
+            <ChromeExtensionLinkButton />
+          )}
+        </div>
+      </div>
     </div>
   );
 }

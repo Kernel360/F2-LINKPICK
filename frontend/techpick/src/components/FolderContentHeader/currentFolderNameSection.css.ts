@@ -1,5 +1,6 @@
+import { orangeGhostButtonStyle } from '@/styles/orangeButtonStyle.css';
 import { style } from '@vanilla-extract/css';
-import { colorVars, fontWeights } from 'techpick-shared';
+import { fontWeights } from 'techpick-shared';
 
 export const currentFolderNameSectionStyle = style({
   display: 'inline-flex',
@@ -27,10 +28,13 @@ export const folderNameStyle = style({
   overflow: 'hidden',
 });
 
-export const folderSharedInfoTextStyle = style({
-  flexShrink: '0',
-  width: '80px',
-  fontSize: '12px',
-  fontWeight: '600',
-  color: colorVars.primary,
-});
+export const folderSharedInfoLinkStyle = style([
+  {
+    display: 'flex',
+    justifyContent: 'center',
+    flexShrink: '0',
+    width: '60px',
+    fontSize: '12px',
+  },
+  orangeGhostButtonStyle,
+]);
