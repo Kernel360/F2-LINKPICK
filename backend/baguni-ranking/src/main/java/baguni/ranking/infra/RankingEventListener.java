@@ -35,7 +35,7 @@ public class RankingEventListener {
 	 */
 	@RabbitHandler
 	public void bookmarkCreateEvent(BookmarkCreateEvent event) {
-		log.info("북마크 생성 이벤트 수신 {}", event);
+		log.info("메시지 소비: topic {}, url {}", event.getTopicString(), event.getUrl());
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
 		updateLinkPickedCount(date, url);
@@ -46,7 +46,7 @@ public class RankingEventListener {
 	 */
 	@RabbitHandler
 	public void linkReadEvent(LinkReadEvent event) {
-		log.info("링크 조회 이벤트 수신 {}", event);
+		log.info("메시지 소비: topic {}, url {}", event.getTopicString(), event.getUrl());
 		var date = event.getTime().toLocalDate();
 		var url = event.getUrl();
 		updateLinkViewCount(date, url);

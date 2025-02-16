@@ -36,21 +36,21 @@ public class LinkUpdateEventListener {
 
 	@RabbitHandler
 	public void consumeMessage(LinkCreateEvent ev) {
-		log.info("메시지 dequeue : topic {}, url {}", ev.getTopicString(), ev);
+		log.info("메시지 소비: topic {}, url {}", ev.getTopicString(), ev.getUrl());
 		LinkResult link = linkService.getLinkResultByUrl(ev.getUrl());
 		doLinkUpdate(link);
 	}
 
 	@RabbitHandler
 	public void consumeMessage(LinkReadEvent ev) {
-		log.info("메시지 dequeue : topic {}, url {}", ev.getTopicString(), ev);
+		log.info("메시지 소비: topic {}, url {}", ev.getTopicString(), ev.getUrl());
 		LinkResult link = linkService.getLinkResultByUrl(ev.getUrl());
 		doLinkUpdate(link);
 	}
 
 	@RabbitHandler
 	public void consumeMessage(BookmarkCreateEvent ev) {
-		log.info("메시지 dequeue : topic {}, url {}", ev.getTopicString(), ev);
+		log.info("메시지 소비: topic {}, url {}", ev.getTopicString(), ev.getUrl());
 		LinkResult link = linkService.getLinkResultByUrl(ev.getUrl());
 		doLinkUpdate(link);
 	}
