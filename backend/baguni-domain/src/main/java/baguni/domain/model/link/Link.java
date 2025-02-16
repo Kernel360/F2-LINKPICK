@@ -2,6 +2,7 @@ package baguni.domain.model.link;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
 import org.hibernate.annotations.ColumnDefault;
@@ -76,17 +77,20 @@ public class Link extends BaseEntity {
 	}
 
 	public static Link createRssLink(String url, String title, String pubDate) {
-
-		LocalDateTime published_at = null;
+		LocalDateTime publishedAt = null;
 		if (Objects.nonNull(pubDate)) {
-			published_at = LocalDateTime.parse(pubDate, DateTimeFormatter.RFC_1123_DATE_TIME);
+			try {
+				publishedAt = LocalDateTime.parse(pubDate, DateTimeFormatter.RFC_1123_DATE_TIME);
+			} catch (DateTimeParseException e) {
+				publishedAt = LocalDateTime.parse(pubDate, DateTimeFormatter.ISO_DATE_TIME);
+			}
 		}
 		return Link
 			.builder()
 			.url(url)
 			.title(title)
 			.description("")
-			.publishedAt(published_at)
+			.publishedAt(publishedAt)
 			.isRss(true)
 			.build();
 	}
