@@ -20,6 +20,7 @@ public class RestClientConfig {
 
 	private static final Duration CONNECTION_TIMEOUT = Duration.ofSeconds(5);
 	private static final Duration READ_TIMEOUT = Duration.ofSeconds(10);
+	private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36";
 
 	@Bean
 	public RssFeedApi rssFeedApi(RestClient restClient) {
@@ -34,8 +35,7 @@ public class RestClientConfig {
 			.messageConverters(converter -> {
 				converter.add(new MappingJackson2XmlHttpMessageConverter());
 			})
-			.defaultHeader(HttpHeaders.USER_AGENT,
-				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36")
+			.defaultHeader(HttpHeaders.USER_AGENT, USER_AGENT)
 			.requestFactory(clientHttpRequestFactory())
 			.build();
 	}
