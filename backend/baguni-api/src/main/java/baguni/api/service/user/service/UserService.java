@@ -7,7 +7,8 @@ import baguni.domain.infrastructure.folder.FolderDataHandler;
 import baguni.api.infrastructure.user.UserDataHandler;
 import baguni.domain.infrastructure.user.dto.UserInfo;
 import baguni.domain.model.util.IDToken;
-import baguni.security.exception.ApiAuthException;
+import baguni.security.exception.SecurityException;
+import baguni.security.exception.AuthErrorCode;
 import baguni.security.model.OAuth2UserInfo;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,7 @@ public class UserService {
 			folderDataHandler.createMandatoryFolder(user);
 			return UserInfo.from(user);
 		} catch (Exception e) {
-			throw ApiAuthException.AUTHENTICATION_SERVER_FAILURE();
+			throw new SecurityException(AuthErrorCode.AUTH_SERVER_FAILURE);
 		}
 	}
 
@@ -40,7 +41,7 @@ public class UserService {
 			folderDataHandler.createMandatoryFolder(user);
 			return UserInfo.from(user);
 		} catch (Exception e) {
-			throw ApiAuthException.AUTHENTICATION_SERVER_FAILURE();
+			throw new SecurityException(AuthErrorCode.AUTH_SERVER_FAILURE);
 		}
 	}
 

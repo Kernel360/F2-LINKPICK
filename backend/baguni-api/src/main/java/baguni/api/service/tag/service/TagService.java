@@ -5,13 +5,14 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.common.exception.base.ServiceException;
+import baguni.domain.exception.tag.TagErrorCode;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import baguni.domain.annotation.LoginUserIdDistributedLock;
 import baguni.domain.infrastructure.tag.dto.TagCommand;
 import baguni.domain.infrastructure.tag.dto.TagMapper;
 import baguni.domain.infrastructure.tag.dto.TagResult;
-import baguni.domain.exception.tag.ApiTagException;
 import baguni.domain.infrastructure.tag.TagDataHandler;
 import baguni.domain.model.tag.Tag;
 
@@ -24,7 +25,7 @@ public class TagService {
 
 	@WithSpan
 	@Transactional(readOnly = true)
-	public TagResult getTag(TagCommand.Read command) throws ApiTagException {
+	public TagResult getTag(TagCommand.Read command) {
 		Tag tag = tagDataHandler.getTag(command.id());
 		assertUserIsTagOwner(command.userId(), tag);
 		return tagMapper.toResult(tag);
@@ -74,13 +75,13 @@ public class TagService {
 
 	private void assertUserIsTagOwner(Long userId, Tag tag) {
 		if (!userId.equals(tag.getUser().getId())) {
-			throw ApiTagException.UNAUTHORIZED_TAG_ACCESS();
+			throw new ServiceException(TagErrorCode.UNAUTHORIZED_TAG_ACCESS);
 		}
 	}
 
 	private void assertTagNameIsUnique(Long userId, String name) {
 		if (tagDataHandler.checkDuplicateTagName(userId, name)) {
-			throw ApiTagException.TAG_ALREADY_EXIST();
+			throw new ServiceException(TagErrorCode.TAG_ALREADY_EXIST);
 		}
 	}
 }

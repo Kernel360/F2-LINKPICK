@@ -10,7 +10,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import baguni.domain.model.user.Role;
 import baguni.domain.model.util.IDToken;
 import baguni.security.config.JwtProperties;
-import baguni.security.exception.ApiAuthException;
+import baguni.security.exception.SecurityException;
+import baguni.security.exception.AuthErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jws;
@@ -41,7 +42,7 @@ public class AccessToken {
 			var raw = getClaims().get("id", String.class);
 			return IDToken.fromString(raw);
 		} catch (Exception e) {
-			throw ApiAuthException.INVALID_USER_ID_TOKEN();
+			throw new SecurityException(AuthErrorCode.AUTH_INVALID_ID_TOKEN);
 		}
 	}
 
@@ -71,13 +72,13 @@ public class AccessToken {
 		return new AccessToken(props, tokenRaw);
 	}
 
-	private AccessToken(JwtProperties props, String tokenRaw) throws ApiAuthException {
+	private AccessToken(JwtProperties props, String tokenRaw) throws SecurityException {
 		try {
 			this.raw = Jwts.parser()
 						   .setSigningKey(props.getSecret())
 						   .parseClaimsJws(tokenRaw);
 		} catch (Exception e) {
-			throw ApiAuthException.INVALID_AUTHENTICATION();
+			throw new SecurityException(AuthErrorCode.AUTH_INVALID_AUTHENTICATION);
 		}
 	}
 }
