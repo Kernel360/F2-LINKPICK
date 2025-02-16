@@ -17,19 +17,19 @@ import baguni.common.util.RequestHolder;
 @Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class ApiExceptionHandler {
+public class GlobalServiceExceptionHandler {
 
 	private final RequestHolder requestHolder;
 	private final ErrorLogEventBuilder errorLogEventBuilder;
 	private final EventMessenger eventMessenger;
 
 	/**
-	 * ApiException 에서 잡지 못한 예외는
-	 * 5xx 코드 오류 입니다.
+	 * ServiceException 으로 분류 되지 않는 예외는
+	 * 모두 5xx 코드 오류 입니다.
 	 */
 	@ExceptionHandler(Exception.class)
 	public ApiErrorResponse handleGlobalException(Exception exception) {
-		ErrorLevel.MUST_NEVER_HAPPEN().handleError(exception, requestHolder.getRequest());
+		ErrorLevel.MUST_NEVER_HAPPEN().logByLevel(exception, requestHolder.getRequest());
 
 		var errLogMessage = errorLogEventBuilder.buildWithException(
 			exception,
@@ -38,26 +38,30 @@ public class ApiExceptionHandler {
 		);
 		eventMessenger.send(errLogMessage);
 
-		return ApiErrorResponse.UNKNOWN_SERVER_ERROR();
+		return new ApiErrorResponse(
+			"UNKNOWN",
+			"미확인 서버 에러",
+			HttpStatus.INTERNAL_SERVER_ERROR
+		);
 	}
 
 	/**
-	 * ApiException 을 공통 Response 형태로 변환 합니다.
+	 * ServiceException 을 공통 Response 형태로 변환 합니다.
 	 */
-	@ExceptionHandler(ApiException.class)
-	public ApiErrorResponse handleApiException(ApiException exception) {
-		ApiErrorCode apiErrorCode = exception.getApiErrorCode();
+	@ExceptionHandler(ServiceException.class)
+	public ApiErrorResponse handleApiException(ServiceException exception) {
+		ErrorCode errorCode = exception.getErrorCode();
 
 		if (exception.isFatal()) {
-			var errLogMessage = errorLogEventBuilder.buildWithApiException(
+			var errLogMessage = errorLogEventBuilder.buildWithServiceException(
 				exception,
 				requestHolder.getRequest()
 			);
 			eventMessenger.send(errLogMessage);
 		}
 
-		exception.handleErrorByLevel(requestHolder.getRequest());
-		return ApiErrorResponse.of(apiErrorCode);
+		errorCode.getErrorLevel().logByLevel(exception, requestHolder.getRequest());
+		return ApiErrorResponse.fromErrorCode(errorCode);
 	}
 
 	/**
@@ -65,8 +69,12 @@ public class ApiExceptionHandler {
 	 */
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ApiErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
-		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception, requestHolder.getRequest());
-		return ApiErrorResponse.VALIDATION_ERROR(exception.getBindingResult().getFieldError().getDefaultMessage());
+		ErrorLevel.SHOULD_NOT_HAPPEN().logByLevel(exception, requestHolder.getRequest());
+		return new ApiErrorResponse(
+			"VALIDATION ERROR",
+			exception.getBindingResult().getFieldError().getDefaultMessage(),
+			HttpStatus.BAD_REQUEST
+		);
 	}
 
 	/**
@@ -75,8 +83,11 @@ public class ApiExceptionHandler {
 	 */
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ApiErrorResponse handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
-		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception, requestHolder.getRequest());
-		return ApiErrorResponse.INVALID_JSON_ERROR();
+		ErrorLevel.SHOULD_NOT_HAPPEN().logByLevel(exception, requestHolder.getRequest());
+
+		return new ApiErrorResponse(
+			"INVALID JSON ERROR", "올바르지 않은 Json 형식입니다.", HttpStatus.BAD_REQUEST
+		);
 	}
 
 	/**
@@ -85,7 +96,10 @@ public class ApiExceptionHandler {
 	@ExceptionHandler(MissingServletRequestParameterException.class)
 	public ApiErrorResponse handleMissingServletRequestParameterException(
 		MissingServletRequestParameterException exception) {
-		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception, requestHolder.getRequest());
-		return ApiErrorResponse.INVALID_REQUEST_PARAMETER();
+		ErrorLevel.SHOULD_NOT_HAPPEN().logByLevel(exception, requestHolder.getRequest());
+		return new ApiErrorResponse(
+			"INVALID REQUEST PARAMETER",
+			"올바르지 않은 Request Parameter 형식입니다.",
+			HttpStatus.BAD_REQUEST);
 	}
 }

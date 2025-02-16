@@ -12,18 +12,20 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.common.exception.base.ServiceException;
+import baguni.domain.exception.folder.FolderErrorCode;
+import baguni.domain.exception.pick.PickErrorCode;
+import baguni.domain.exception.sharedFolder.SharedFolderErrorCode;
+import baguni.domain.exception.tag.TagErrorCode;
 import baguni.domain.infrastructure.pick.PickQuery;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.domain.annotation.LoginUserIdDistributedLock;
-import baguni.domain.exception.folder.ApiFolderException;
 import baguni.domain.infrastructure.pick.dto.PickCommand;
 import baguni.domain.infrastructure.pick.dto.PickMapper;
 import baguni.domain.infrastructure.pick.dto.PickResult;
-import baguni.domain.exception.pick.ApiPickException;
 import baguni.api.service.ranking.service.RankingService;
-import baguni.domain.exception.tag.ApiTagException;
 import baguni.domain.infrastructure.folder.FolderDataHandler;
 import baguni.domain.infrastructure.link.LinkDataHandler;
 import baguni.domain.infrastructure.pick.PickDataHandler;
@@ -171,7 +173,7 @@ public class PickService {
 		for (Pick pick : pickList) {
 			assertUserIsPickOwner(command.userId(), pick.getId());
 			if (pick.getParentFolder().getFolderType() != FolderType.RECYCLE_BIN) {
-				throw ApiPickException.PICK_DELETE_NOT_ALLOWED();
+				throw new ServiceException(PickErrorCode.PICK_DELETE_NOT_ALLOWED);
 			}
 		}
 
@@ -220,36 +222,36 @@ public class PickService {
 	private void assertUserIsPickOwner(Long userId, Long pickId) {
 		var pick = pickDataHandler.getPick(pickId);
 		if (ObjectUtils.notEqual(userId, pick.getUser().getId())) {
-			throw ApiPickException.PICK_UNAUTHORIZED_USER_ACCESS();
+			throw new ServiceException(PickErrorCode.PICK_UNAUTHORIZED_USER_ACCESS);
 		}
 	}
 
 	private void assertUserIsFolderOwner(Long userId, Long parentFolderId) {
 		if (Objects.isNull(parentFolderId)) {
-			throw ApiFolderException.INVALID_PARENT_FOLDER();
+			throw new ServiceException(FolderErrorCode.INVALID_PARENT_FOLDER);
 		}
 
 		Folder parentFolder = folderDataHandler.getFolder(parentFolderId);
 		if (ObjectUtils.notEqual(userId, parentFolder.getUser().getId())) {
-			throw ApiFolderException.FOLDER_ACCESS_DENIED();
+			throw new ServiceException(FolderErrorCode.FOLDER_ACCESS_DENIED);
 		}
 	}
 
 	private void assertParentFolderIsNotRoot(Long parentFolderId) {
 		if (Objects.isNull(parentFolderId)) {
-			throw ApiFolderException.INVALID_PARENT_FOLDER();
+			throw new ServiceException(FolderErrorCode.INVALID_PARENT_FOLDER);
 		}
 
 		Folder parentFolder = folderDataHandler.getFolder(parentFolderId);
 		if (parentFolder.getFolderType() == FolderType.ROOT) {
-			throw ApiPickException.PICK_UNAUTHORIZED_ROOT_ACCESS();
+			throw new ServiceException(PickErrorCode.PICK_UNAUTHORIZED_ROOT_ACCESS);
 		}
 	}
 
 	private void assertUserIsTagOwner(Long userId, List<Long> tagIdList) {
 		for (Tag tag : tagDataHandler.getTagList(tagIdList)) {
 			if (ObjectUtils.notEqual(userId, tag.getUser().getId())) {
-				throw ApiTagException.UNAUTHORIZED_TAG_ACCESS();
+				throw new ServiceException(TagErrorCode.UNAUTHORIZED_TAG_ACCESS);
 			}
 		}
 	}
