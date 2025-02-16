@@ -23,6 +23,9 @@ dependencies {
     // for batch retry logic
     implementation 'org.springframework.retry:spring-retry'
 
+    // rome (rss, atom)
+    implementation 'com.rometools:rome:2.1.0'
+
     // Slack API
     implementation 'com.slack.api:slack-api-client:1.45.1'
 }
