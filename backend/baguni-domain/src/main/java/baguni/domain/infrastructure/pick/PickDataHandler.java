@@ -9,16 +9,17 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.common.exception.base.ServiceException;
+import baguni.domain.exception.folder.FolderErrorCode;
+import baguni.domain.exception.pick.PickErrorCode;
+import baguni.domain.exception.tag.TagErrorCode;
+import baguni.domain.exception.user.UserErrorCode;
 import baguni.domain.infrastructure.folder.FolderQuery;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.domain.exception.folder.ApiFolderException;
 import baguni.domain.infrastructure.pick.dto.PickCommand;
 import baguni.domain.infrastructure.pick.dto.PickMapper;
-import baguni.domain.exception.pick.ApiPickException;
-import baguni.domain.exception.tag.ApiTagException;
-import baguni.domain.exception.user.ApiUserException;
 import baguni.domain.model.folder.Folder;
 import baguni.domain.infrastructure.folder.FolderRepository;
 import baguni.domain.model.link.Link;
@@ -47,14 +48,15 @@ public class PickDataHandler {
 	@WithSpan
 	@Transactional(readOnly = true)
 	public Pick getPick(Long pickId) {
-		return pickRepository.findById(pickId).orElseThrow(ApiPickException::PICK_NOT_FOUND);
+		return pickRepository.findById(pickId)
+							 .orElseThrow(() -> new ServiceException(PickErrorCode.PICK_NOT_FOUND));
 	}
 
 	@WithSpan
 	@Transactional(readOnly = true)
 	public Pick getPickUrl(Long userId, String url) {
 		return pickRepository.findByUserIdAndLinkUrl(userId, url)
-							 .orElseThrow(ApiPickException::PICK_NOT_FOUND);
+							 .orElseThrow(() -> new ServiceException(PickErrorCode.PICK_NOT_FOUND));
 	}
 
 	@WithSpan
@@ -69,7 +71,7 @@ public class PickDataHandler {
 		List<Pick> pickList = pickRepository.findAllById_JoinLink(pickIdList);
 		// 조회 리스트에 존재하지 않는 픽이 있으면 예외 발생
 		if (pickList.size() != pickIdList.size()) {
-			throw ApiPickException.PICK_NOT_FOUND();
+			throw new ServiceException(PickErrorCode.PICK_NOT_FOUND);
 		}
 		return pickList;
 	}
@@ -80,7 +82,7 @@ public class PickDataHandler {
 		List<Pick> pickList = pickRepository.findAllById_JoinLink(pickIdList);
 		// 조회리스트에 존재하지 않는 픽이 있으면 예외 발생
 		if (pickList.size() != pickIdList.size()) {
-			throw ApiPickException.PICK_NOT_FOUND();
+			throw new ServiceException(PickErrorCode.PICK_NOT_FOUND);
 		}
 		pickList.sort(Comparator.comparing(pick -> pickIdList.indexOf(pick.getId())));
 		return pickList;
@@ -107,10 +109,11 @@ public class PickDataHandler {
 	 */
 	@WithSpan
 	@Transactional
-	public Pick savePick(PickCommand.Create command) throws ApiPickException {
-		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
+	public Pick savePick(PickCommand.Create command) {
+		User user = userRepository.findById(command.userId())
+								  .orElseThrow(() -> new ServiceException(UserErrorCode.USER_NOT_FOUND));
 		Folder folder = folderRepository.findById(command.parentFolderId())
-										.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+										.orElseThrow(() -> new ServiceException(FolderErrorCode.FOLDER_NOT_FOUND));
 		Link link = linkRepository.findByUrl(command.linkInfo().url())
 								  .orElseGet(() -> linkRepository.save(Link.createLink(command.linkInfo().url())));
 
@@ -133,10 +136,11 @@ public class PickDataHandler {
 	 */
 	@WithSpan
 	@Transactional
-	public Pick savePickFromExtension(PickCommand.CreateFromExtension command) throws ApiPickException {
-		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
+	public Pick savePickFromExtension(PickCommand.CreateFromExtension command) {
+		User user = userRepository.findById(command.userId())
+								  .orElseThrow(() -> new ServiceException(UserErrorCode.USER_NOT_FOUND));
 		Folder folder = folderRepository.findById(command.parentFolderId())
-										.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+										.orElseThrow(() -> new ServiceException(FolderErrorCode.FOLDER_NOT_FOUND));
 		Link link = linkRepository.findByUrl(command.url())
 								  .orElseGet(() -> linkRepository.save(Link.createLink(command.url(),
 									  command.linkTitle())));
@@ -160,17 +164,16 @@ public class PickDataHandler {
 	@WithSpan
 	@Transactional
 	public Pick savePickToUnclassified(PickCommand.Extension command) {
-		User user = userRepository.findById(command.userId()).orElseThrow(ApiUserException::USER_NOT_FOUND);
+		User user = userRepository
+			.findById(command.userId())
+			.orElseThrow(() -> new ServiceException(UserErrorCode.USER_NOT_FOUND));
 		Folder unclassified = folderQuery.findUnclassified(user.getId());
-		Link link = linkRepository.findByUrl(command.url())
-								  .orElseGet(() -> linkRepository.save(Link.createLink(command.url(),
-									  command.title())));
+		Link link = linkRepository
+			.findByUrl(command.url())
+			.orElseGet(() -> linkRepository.save(Link.createLink(command.url(), command.title())));
 
-		Pick pick = pickMapper.toEntity(command.title(), new ArrayList<>(), user, unclassified,
-			link);
-
+		Pick pick = pickMapper.toEntity(command.title(), new ArrayList<>(), user, unclassified, link);
 		Pick savedPick = pickRepository.save(pick);
-
 		attachPickToParentFolder(savedPick, unclassified);
 		return savedPick;
 	}
@@ -182,7 +185,8 @@ public class PickDataHandler {
 	@WithSpan
 	@Transactional
 	public Pick updatePick(PickCommand.Update command) {
-		Pick pick = pickRepository.findById(command.id()).orElseThrow(ApiPickException::PICK_NOT_FOUND);
+		Pick pick = pickRepository.findById(command.id())
+								  .orElseThrow(() -> new ServiceException(PickErrorCode.PICK_NOT_FOUND));
 		pick.updateTitle(command.title());
 
 		Folder parentFolder = pick.getParentFolder();
@@ -191,7 +195,8 @@ public class PickDataHandler {
 			isDifferentFolder(parentFolder, command)
 		) {
 			Folder destinationFolder = folderRepository.findById(command.parentFolderId())
-													   .orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+													   .orElseThrow(() -> new ServiceException(
+														   FolderErrorCode.FOLDER_NOT_FOUND));
 			detachPickFromParentFolder(pick, parentFolder);
 			attachPickToParentFolder(pick, destinationFolder);
 			updatePickParentFolder(pick, destinationFolder);
@@ -208,7 +213,7 @@ public class PickDataHandler {
 	public void movePickToCurrentFolder(PickCommand.Move command) {
 		List<Long> pickIdList = command.idList();
 		Folder folder = folderRepository.findById(command.destinationFolderId())
-										.orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+										.orElseThrow(() -> new ServiceException(FolderErrorCode.FOLDER_NOT_FOUND));
 		movePickListToDestinationFolder(pickIdList, folder, command.orderIdx());
 	}
 
@@ -217,7 +222,8 @@ public class PickDataHandler {
 	public void movePickToOtherFolder(PickCommand.Move command) {
 		List<Long> pickIdList = command.idList();
 		Folder destinationFolder = folderRepository.findById(command.destinationFolderId())
-												   .orElseThrow(ApiFolderException::FOLDER_NOT_FOUND);
+												   .orElseThrow(
+													   () -> new ServiceException(FolderErrorCode.FOLDER_NOT_FOUND));
 
 		List<Pick> pickList = pickRepository.findAllById(pickIdList);
 		pickList.forEach(pick -> {
@@ -271,7 +277,7 @@ public class PickDataHandler {
 	@Transactional
 	public void attachTagToPickTag(Pick pick, Long tagId) {
 		Tag tag = tagRepository.findById(tagId)
-							   .orElseThrow(ApiTagException::TAG_NOT_FOUND);
+							   .orElseThrow(() -> new ServiceException(TagErrorCode.TAG_NOT_FOUND));
 		PickTag pickTag = PickTag.of(pick, tag);
 		pickTagRepository.save(pickTag);
 	}

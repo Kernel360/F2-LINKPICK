@@ -28,7 +28,7 @@ public class BaguniOAuth2FlowFailureHandler implements AuthenticationFailureHand
 		AuthenticationException exception
 	) throws IOException {
 		final String loginErrorPagePath = "/login/failed";
-		ErrorLevel.SHOULD_NOT_HAPPEN().handleError(exception);
+		ErrorLevel.SHOULD_NOT_HAPPEN().logByLevel(exception);
 		response.sendRedirect(properties.getDefaultRedirectUrl() + loginErrorPagePath);
 	}
 }

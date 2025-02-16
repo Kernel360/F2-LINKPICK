@@ -7,12 +7,12 @@ import baguni.common.util.CachedHttpServletRequest;
 public class WarningErrorLevel extends ErrorLevel {
 
 	@Override
-	public void handleError(Exception exception, CachedHttpServletRequest request) {
+	public void logByLevel(Exception exception, CachedHttpServletRequest request) {
 		log.error("{}{}", exception.getMessage(), request); // stack trace 미출력
 	}
 
 	@Override
-	public void handleError(Exception exception) {
+	public void logByLevel(Exception exception) {
 		log.warn(exception.getMessage(), exception);
 	}
 }

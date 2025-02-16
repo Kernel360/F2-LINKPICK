@@ -7,7 +7,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import baguni.domain.exception.link.ApiLinkException;
+import baguni.common.exception.base.ServiceException;
+import baguni.domain.exception.link.LinkErrorCode;
 import baguni.domain.model.link.Link;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,8 @@ public class LinkDataHandler {
 	@WithSpan
 	@Transactional(readOnly = true)
 	public Link getLink(String url) {
-		return linkRepository.findByUrl(url).orElseThrow(ApiLinkException::LINK_NOT_FOUND);
+		return linkRepository.findByUrl(url)
+							 .orElseThrow(() -> new ServiceException(LinkErrorCode.LINK_NOT_FOUND));
 	}
 
 	@WithSpan

@@ -10,7 +10,6 @@ import baguni.domain.infrastructure.user.dto.UserInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import baguni.domain.infrastructure.link.dto.LinkInfo;
-import baguni.domain.exception.link.ApiLinkException;
 import baguni.api.service.link.service.LinkService;
 import baguni.domain.infrastructure.pick.dto.PickCommand;
 import baguni.api.service.pick.service.PickService;
@@ -42,7 +41,7 @@ public class ManualInitStrategy implements ContentInitStrategy {
 			LinkInfo linkInfo = null;
 			try {
 				linkInfo = linkService.getLinkInfo(url);
-			} catch (ApiLinkException exception) {
+			} catch (Exception e) {
 				linkInfo = linkService.saveLink(url); // url 외에 다른 필드는 모두 빈 문자열인 Link 생성
 			}
 			var command = new PickCommand.Create(

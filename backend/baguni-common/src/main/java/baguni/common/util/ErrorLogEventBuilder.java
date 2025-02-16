@@ -7,14 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import baguni.common.event.events.ErrorLogEvent;
-import baguni.common.exception.base.ApiException;
+import baguni.common.exception.base.ServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  *    @author sangwon
  * 	ExceptionHandler에서 슬랙 알림 이벤트를 발행하기 위한 클래스
- * 	Exception, ApiException 오버로딩을 통해 에러 메세지 형식을 맞춤.
+ * 	Exception, GlobalServiceException 오버로딩을 통해 에러 메세지 형식을 맞춤.
  * 	요청, 응답에 대한 데이터를 메세지 큐에 전달
  */
 @Slf4j
@@ -51,8 +51,8 @@ public class ErrorLogEventBuilder {
 		);
 	}
 
-	public ErrorLogEvent buildWithApiException(ApiException e) {
-		var status = e.getApiErrorCode().getHttpStatus();
+	public ErrorLogEvent buildWithServiceException(ServiceException e) {
+		var status = e.getErrorCode().getHttpStatus();
 		return new ErrorLogEvent(
 			e.getClass().getCanonicalName(),
 			e.getMessage(),
@@ -63,11 +63,11 @@ public class ErrorLogEventBuilder {
 		);
 	}
 
-	public ErrorLogEvent buildWithApiException(
-		ApiException e,
+	public ErrorLogEvent buildWithServiceException(
+		ServiceException e,
 		CachedHttpServletRequest request
 	) {
-		var status = e.getApiErrorCode().getHttpStatus();
+		var status = e.getErrorCode().getHttpStatus();
 		return new ErrorLogEvent(
 			e.getClass().getCanonicalName(),
 			e.getMessage(),

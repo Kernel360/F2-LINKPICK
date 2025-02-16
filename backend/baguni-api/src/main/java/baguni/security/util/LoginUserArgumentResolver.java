@@ -13,7 +13,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import baguni.api.service.user.service.UserService;
 import baguni.domain.model.util.IDToken;
 import baguni.security.annotation.LoginUserId;
-import baguni.security.exception.ApiAuthException;
+import baguni.security.exception.SecurityException;
+import baguni.security.exception.AuthErrorCode;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -42,12 +43,12 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 	) {
 		var authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (Objects.isNull(authentication) || !authentication.isAuthenticated()) {
-			throw ApiAuthException.INVALID_AUTHENTICATION();
+			throw new SecurityException(AuthErrorCode.AUTH_INVALID_AUTHENTICATION);
 		}
 
 		var principal = authentication.getPrincipal();
 		if (false == (principal instanceof IDToken)) {
-			throw ApiAuthException.INVALID_AUTHENTICATION();
+			throw new SecurityException(AuthErrorCode.AUTH_INVALID_AUTHENTICATION);
 		}
 
 		return userService.getUserInfoByToken((IDToken)principal).id();
