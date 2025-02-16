@@ -7,11 +7,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import baguni.batch.domain.link.dto.LinkAnalyzeResult;
+import baguni.common.exception.base.ServiceException;
+
 import baguni.common.lib.opengraph.Metadata;
 import baguni.common.lib.opengraph.OpenGraph;
 import baguni.common.lib.opengraph.OpenGraphException;
 import baguni.common.lib.opengraph.OpenGraphReader;
-import baguni.domain.exception.link.ApiLinkException;
+import baguni.domain.exception.link.LinkErrorCode;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.extern.slf4j.Slf4j;
 
@@ -58,7 +60,7 @@ public class LinkAnalyzer {
 
 		} catch (OpenGraphException e) {
 			log.error(e.getMessage(), e);
-			throw ApiLinkException.LINK_ANALYZE_FAILURE();
+			throw new ServiceException(LinkErrorCode.LINK_ANALYZE_FAILURE);
 		}
 	}
 

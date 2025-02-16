@@ -7,7 +7,8 @@ import java.util.Objects;
 
 import org.hibernate.annotations.ColumnDefault;
 
-import baguni.domain.exception.link.ApiLinkException;
+import baguni.common.exception.base.ServiceException;
+import baguni.domain.exception.link.LinkErrorCode;
 import baguni.domain.model.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -109,7 +110,7 @@ public class Link extends BaseEntity {
 		String imageUrl, Boolean isRss, LocalDateTime publishedAt
 	) {
 		if (2048 < url.length()) {
-			throw ApiLinkException.LINK_URL_TOO_LONG();
+			throw new ServiceException(LinkErrorCode.LINK_URL_TOO_LONG);
 		}
 		this.url = url;
 		this.title = title;

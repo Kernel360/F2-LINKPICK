@@ -9,6 +9,9 @@ import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.common.exception.base.ServiceException;
+import baguni.domain.exception.folder.FolderErrorCode;
+import baguni.domain.exception.sharedFolder.SharedFolderErrorCode;
 import baguni.domain.model.folder.Folder;
 import baguni.domain.model.folder.FolderType;
 import baguni.domain.model.pick.Pick;
@@ -16,11 +19,9 @@ import baguni.domain.model.sharedFolder.SharedFolder;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import baguni.domain.exception.folder.ApiFolderException;
 import baguni.domain.infrastructure.link.dto.LinkMapper;
 import baguni.domain.infrastructure.sharedFolder.dto.SharedFolderMapper;
 import baguni.domain.infrastructure.sharedFolder.dto.SharedFolderResult;
-import baguni.domain.exception.sharedFolder.ApiSharedFolderException;
 import baguni.domain.infrastructure.folder.FolderDataHandler;
 import baguni.domain.infrastructure.pick.PickDataHandler;
 import baguni.domain.infrastructure.sharedFolder.SharedFolderDataHandler;
@@ -103,25 +104,25 @@ public class SharedFolderService {
 
 	private void assertFolderIsNotShared(Folder folder) {
 		if (sharedFolderDataHandler.isSharedFolder(folder.getId())) {
-			throw ApiSharedFolderException.FOLDER_ALREADY_SHARED();
+			throw new ServiceException(SharedFolderErrorCode.FOLDER_ALREADY_SHARED);
 		}
 	}
 
 	private void assertUserIsFolderOwner(Long userId, Folder folder) {
 		if (!folder.getUser().getId().equals(userId)) {
-			throw ApiFolderException.FOLDER_ACCESS_DENIED();
+			throw new ServiceException(FolderErrorCode.FOLDER_ACCESS_DENIED);
 		}
 	}
 
 	private void assertUserIsSharedFolderOwner(Long userId, SharedFolder sharedFolder) {
 		if (!sharedFolder.getUser().getId().equals(userId)) {
-			throw ApiSharedFolderException.SHARED_FOLDER_UNAUTHORIZED();
+			throw new ServiceException(SharedFolderErrorCode.SHARED_FOLDER_UNAUTHORIZED);
 		}
 	}
 
 	private void assertFolderIsGeneralType(Folder folder) {
 		if (!folder.getFolderType().equals(FolderType.GENERAL)) {
-			throw ApiSharedFolderException.FOLDER_CANNOT_BE_SHARED();
+			throw new ServiceException(SharedFolderErrorCode.FOLDER_CANT_BE_SHARED);
 		}
 	}
 

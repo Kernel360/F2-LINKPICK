@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import baguni.common.exception.base.ApiErrorResponse;
-import baguni.security.exception.ApiAuthErrorCode;
+import baguni.security.exception.AuthErrorCode;
 import baguni.security.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,7 +45,7 @@ public class BaguniApiAuthExceptionEntrypoint implements AuthenticationEntryPoin
 		AuthenticationException exception
 	) throws IOException {
 
-		var errorResponse = ApiErrorResponse.of(ApiAuthErrorCode.AUTH_INVALID_AUTHENTICATION);
+		var errorResponse = ApiErrorResponse.fromErrorCode(AuthErrorCode.AUTH_INVALID_AUTHENTICATION);
 		var errorStatus = errorResponse.getStatusCode().value();
 		var body = errorResponse.getBody();
 

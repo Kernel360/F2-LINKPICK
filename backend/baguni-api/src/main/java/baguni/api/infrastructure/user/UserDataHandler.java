@@ -3,10 +3,11 @@ package baguni.api.infrastructure.user;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.common.exception.base.ServiceException;
+import baguni.domain.exception.user.UserErrorCode;
 import baguni.domain.infrastructure.folder.FolderRepository;
 import baguni.domain.infrastructure.pick.PickRepository;
 import baguni.domain.infrastructure.pick.PickTagRepository;
@@ -18,7 +19,6 @@ import baguni.domain.model.util.IDToken;
 import baguni.security.model.OAuth2UserInfo;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
-import baguni.domain.exception.user.ApiUserException;
 import baguni.domain.model.user.User;
 import baguni.domain.infrastructure.user.UserRepository;
 
@@ -36,7 +36,8 @@ public class UserDataHandler {
 	@WithSpan
 	@Transactional(readOnly = true)
 	public User getUser(Long userId) {
-		return userRepository.findById(userId).orElseThrow(ApiUserException::USER_NOT_FOUND);
+		return userRepository.findById(userId)
+							 .orElseThrow(() -> new ServiceException(UserErrorCode.USER_NOT_FOUND));
 	}
 
 	@WithSpan
@@ -51,7 +52,7 @@ public class UserDataHandler {
 	@Transactional(readOnly = true)
 	public User getUser(IDToken token) {
 		return userRepository.findByIdToken(token)
-							 .orElseThrow(() -> ApiUserException.USER_NOT_FOUND(token.value()));
+							 .orElseThrow(() -> new ServiceException(UserErrorCode.USER_NOT_FOUND, token.value()));
 	}
 
 	@WithSpan

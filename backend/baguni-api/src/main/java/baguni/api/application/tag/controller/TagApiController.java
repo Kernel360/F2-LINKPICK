@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import baguni.common.exception.base.ServiceException;
+import baguni.domain.exception.tag.TagErrorCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 import baguni.api.application.tag.dto.TagApiMapper;
 import baguni.api.application.tag.dto.TagApiRequest;
 import baguni.api.application.tag.dto.TagApiResponse;
-import baguni.domain.exception.tag.ApiTagException;
 import baguni.api.service.tag.service.TagService;
 import baguni.security.annotation.LoginUserId;
 
@@ -58,7 +59,7 @@ public class TagApiController {
 	public ResponseEntity<TagApiResponse.Create> createTag(@LoginUserId Long userId,
 		@Valid @RequestBody TagApiRequest.Create request) {
 		if (!Objects.isNull(request.name()) && 200 < request.name().length()) {
-			throw ApiTagException.TAG_NAME_TOO_LONG();
+			throw new ServiceException(TagErrorCode.TAG_NAME_TOO_LONG);
 		}
 
 		return ResponseEntity.ok(
@@ -75,7 +76,7 @@ public class TagApiController {
 	public ResponseEntity<Void> updateTag(@LoginUserId Long userId,
 		@Valid @RequestBody TagApiRequest.Update request) {
 		if (!Objects.isNull(request.name()) && 200 < request.name().length()) {
-			throw ApiTagException.TAG_NAME_TOO_LONG();
+			throw new ServiceException(TagErrorCode.TAG_NAME_TOO_LONG);
 		}
 
 		tagService.updateTag(tagApiMapper.toUpdateCommand(userId, request));

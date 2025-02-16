@@ -1,7 +1,6 @@
 package baguni.common.exception.level;
 
 import lombok.extern.slf4j.Slf4j;
-import baguni.common.exception.base.ApiException;
 import baguni.common.util.CachedHttpServletRequest;
 
 @Slf4j
@@ -31,8 +30,7 @@ public abstract class ErrorLevel {
 		return new FatalErrorLevel();
 	}
 
-	/* Must be implemented per error level */
-	public abstract void handleError(Exception exception, CachedHttpServletRequest request);
+	public abstract void logByLevel(Exception exception, CachedHttpServletRequest request);
 
-	public abstract void handleError(Exception exception);
+	public abstract void logByLevel(Exception exception);
 }

@@ -12,13 +12,14 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.common.exception.base.ServiceException;
+import baguni.domain.exception.folder.FolderErrorCode;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
 import baguni.domain.annotation.LoginUserIdDistributedLock;
 import baguni.domain.infrastructure.folder.dto.FolderCommand;
 import baguni.domain.infrastructure.folder.dto.FolderMapper;
 import baguni.domain.infrastructure.folder.dto.FolderResult;
-import baguni.domain.exception.folder.ApiFolderException;
 import baguni.domain.infrastructure.folder.FolderDataHandler;
 import baguni.domain.infrastructure.pick.PickDataHandler;
 import baguni.domain.infrastructure.sharedFolder.SharedFolderDataHandler;
@@ -173,13 +174,13 @@ public class FolderService {
 
 	private void assertUserIsFolderOwner(Long userId, Folder folder) {
 		if (!folder.getUser().getId().equals(userId)) {
-			throw ApiFolderException.FOLDER_ACCESS_DENIED();
+			throw new ServiceException(FolderErrorCode.FOLDER_ACCESS_DENIED);
 		}
 	}
 
 	private void assertFolderIsGeneralFolder(Folder folder) {
 		if (FolderType.GENERAL != folder.getFolderType()) {
-			throw ApiFolderException.BASIC_FOLDER_CANNOT_CHANGED();
+			throw new ServiceException(FolderErrorCode.BASIC_FOLDER_CANNOT_CHANGED);
 		}
 	}
 
@@ -191,7 +192,7 @@ public class FolderService {
 		for (Folder folder : folderList) {
 			Folder parentFolder = folder.getParentFolder();
 			if (ObjectUtils.notEqual(parentFolder.getId(), parentFolderId)) {
-				throw ApiFolderException.INVALID_PARENT_FOLDER();
+				throw new ServiceException(FolderErrorCode.INVALID_PARENT_FOLDER);
 			}
 		}
 	}
@@ -201,10 +202,10 @@ public class FolderService {
 	 * */
 	private void assertDestinationIsRootFolder(Folder destinationFolder) {
 		if (Objects.equals(destinationFolder.getFolderType(), FolderType.UNCLASSIFIED)) {
-			throw ApiFolderException.INVALID_TARGET();
+			throw new ServiceException(FolderErrorCode.INVALID_TARGET);
 		}
 		if (Objects.equals(destinationFolder.getFolderType(), FolderType.RECYCLE_BIN)) {
-			throw ApiFolderException.INVALID_TARGET();
+			throw new ServiceException(FolderErrorCode.INVALID_TARGET);
 		}
 	}
 }

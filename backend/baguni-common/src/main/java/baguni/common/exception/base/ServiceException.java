@@ -1,24 +1,24 @@
 package baguni.common.exception.base;
 
 import baguni.common.exception.level.FatalErrorLevel;
+import baguni.common.exception.level.NormalErrorLevel;
 import baguni.common.exception.level.WarningErrorLevel;
 import baguni.common.util.CachedHttpServletRequest;
+import lombok.Getter;
 
-public abstract class ApiException extends RuntimeException {
+@Getter
+public class ServiceException extends RuntimeException {
 
-	private final ApiErrorCode errorCode;
+	private final ErrorCode errorCode;
 
-	protected ApiException(ApiErrorCode errorCode) {
+	public ServiceException(ErrorCode errorCode) {
 		super(errorCode.toString());
 		this.errorCode = errorCode;
 	}
 
-	public final ApiErrorCode getApiErrorCode() {
-		return errorCode;
-	}
-
-	public final void handleErrorByLevel(CachedHttpServletRequest request) {
-		errorCode.getErrorLevel().handleError(this, request);
+	public ServiceException(ErrorCode errorCode, String additionalHint) {
+		super(errorCode.toString() + ": " + additionalHint);
+		this.errorCode = errorCode;
 	}
 
 	public final boolean isFatal() {
@@ -27,5 +27,9 @@ public abstract class ApiException extends RuntimeException {
 
 	public final boolean isWarning() {
 		return (this.errorCode.getErrorLevel() instanceof WarningErrorLevel);
+	}
+
+	public final boolean isNormal() {
+		return (this.errorCode.getErrorLevel() instanceof NormalErrorLevel);
 	}
 }

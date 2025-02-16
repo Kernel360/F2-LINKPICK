@@ -8,13 +8,14 @@ import org.springframework.stereotype.Component;
 
 import baguni.api.infrastructure.user.UserDataHandler;
 import baguni.security.config.JwtProperties;
+import baguni.security.exception.AuthErrorCode;
 import baguni.security.util.AccessToken;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import baguni.security.config.SecurityProperties;
-import baguni.security.exception.ApiAuthException;
+import baguni.security.exception.SecurityException;
 import baguni.security.model.OAuth2UserInfo;
 import baguni.security.util.CookieUtil;
 
@@ -36,7 +37,8 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 	) throws IOException, ServletException {
 		var auth = (OAuth2UserInfo)authentication.getPrincipal();
 		var user = userDataHandler.findSocialUser(auth.getProvider(), auth.getProviderId())
-								  .orElseThrow(ApiAuthException::INVALID_AUTHENTICATION);
+								  .orElseThrow(
+									  () -> new SecurityException(AuthErrorCode.AUTH_INVALID_AUTHENTICATION));
 		var accessToken = AccessToken.makeNew(jwtProps, user.getIdToken(), user.getRole());
 
 		assignNewAccessToken(response, accessToken);
