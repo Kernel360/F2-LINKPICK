@@ -3,7 +3,9 @@ package baguni.common.exception.base;
 import org.springframework.http.HttpStatus;
 
 import baguni.common.exception.level.ErrorLevel;
+import lombok.Getter;
 
+@Getter
 public abstract class ErrorCode {
 
 	/**
@@ -27,22 +29,6 @@ public abstract class ErrorCode {
 		this.httpStatus = httpStatus;
 		this.explanation = explanation;
 		this.errorLevel = errorLevel;
-	}
-
-	public String getCode() {
-		return this.code;
-	}
-
-	public String getExplanation() {
-		return this.explanation;
-	}
-
-	public HttpStatus getHttpStatus() {
-		return this.httpStatus;
-	}
-
-	public ErrorLevel getErrorLevel() {
-		return this.errorLevel;
 	}
 
 	@Override

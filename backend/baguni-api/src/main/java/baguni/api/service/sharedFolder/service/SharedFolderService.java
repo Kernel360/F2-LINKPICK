@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import baguni.common.exception.base.ServiceException;
+import baguni.domain.exception.folder.FolderErrorCode;
 import baguni.domain.exception.sharedFolder.SharedFolderErrorCode;
 import baguni.domain.model.folder.Folder;
 import baguni.domain.model.folder.FolderType;
@@ -109,7 +110,7 @@ public class SharedFolderService {
 
 	private void assertUserIsFolderOwner(Long userId, Folder folder) {
 		if (!folder.getUser().getId().equals(userId)) {
-			throw new ServiceException(SharedFolderErrorCode.FOLDER_ALREADY_SHARED);
+			throw new ServiceException(FolderErrorCode.FOLDER_ACCESS_DENIED);
 		}
 	}
 

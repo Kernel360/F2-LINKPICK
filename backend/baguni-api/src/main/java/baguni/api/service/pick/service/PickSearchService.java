@@ -69,7 +69,7 @@ public class PickSearchService {
 	private void assertUserIsFolderOwner(Long userId, Long folderId) {
 		Folder parentFolder = folderDataHandler.getFolder(folderId); // 존재하지 않으면, FOLDER_NOT_FOUND
 		if (ObjectUtils.notEqual(userId, parentFolder.getUser().getId())) {
-			throw new ServiceException(SharedFolderErrorCode.SHARED_FOLDER_UNAUTHORIZED);
+			throw new ServiceException(FolderErrorCode.FOLDER_ACCESS_DENIED);
 		}
 	}
 
