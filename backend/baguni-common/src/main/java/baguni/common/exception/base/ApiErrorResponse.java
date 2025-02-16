@@ -7,7 +7,7 @@ public class ApiErrorResponse extends ResponseEntity<ApiErrorBody> {
 
 	private ApiErrorResponse(ErrorCode errorCode) {
 		super(
-			new ApiErrorBody(errorCode.getCode(), errorCode.getClientMessage()),
+			new ApiErrorBody(errorCode.getCode(), errorCode.getExplanation()),
 			errorCode.getHttpStatus()
 		);
 	}

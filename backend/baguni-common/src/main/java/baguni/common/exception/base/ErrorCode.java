@@ -7,24 +7,25 @@ import baguni.common.exception.level.ErrorLevel;
 public abstract class ErrorCode {
 
 	/**
-	 * 도메인 코드 + 에러 번호
-	 * ex. 폴더 = F
+	 * 도메인 + 에러 번호 형식의 코드
+	 * Ex. 첫번째 폴더 에러 코드 = FO-001
+	 *     네번째 유저 에러 코드 = U-004
 	 */
 	private final String code;
 
 	/**
-	 * TODO: 주석을 추가해서, exception의 message와 다르다는 점을 공지할 것.
+	 * 해당 에러 코드의 의미 (= 설명)
 	 */
-	private final String clientMessage;
+	private final String explanation;
 
 	private final HttpStatus httpStatus;
 
 	private final ErrorLevel errorLevel;
 
-	protected ErrorCode(String code, HttpStatus httpStatus, String clientMessage, ErrorLevel errorLevel) {
+	protected ErrorCode(String code, HttpStatus httpStatus, String explanation, ErrorLevel errorLevel) {
 		this.code = code;
 		this.httpStatus = httpStatus;
-		this.clientMessage = clientMessage;
+		this.explanation = explanation;
 		this.errorLevel = errorLevel;
 	}
 
@@ -32,8 +33,8 @@ public abstract class ErrorCode {
 		return this.code;
 	}
 
-	public String getClientMessage() {
-		return this.clientMessage;
+	public String getExplanation() {
+		return this.explanation;
 	}
 
 	public HttpStatus getHttpStatus() {
@@ -46,6 +47,6 @@ public abstract class ErrorCode {
 
 	@Override
 	public String toString() {
-		return String.format("[ 에러 코드 %s : %s ]", this.code, this.clientMessage);
+		return String.format("[ 에러 코드 %s : %s ]", this.code, this.explanation);
 	}
 }
