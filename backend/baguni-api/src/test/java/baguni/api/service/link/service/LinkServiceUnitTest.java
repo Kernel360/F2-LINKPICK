@@ -82,6 +82,6 @@ class LinkServiceUnitTest {
 
 		// then
 		then(linkDataHandler).should(times(1)).getRssLinkList(10);
-		then(linkMapper).should(times(1)).toRssLinkInfo(link);
+		then(linkMapper).should(times(1)).toBlogLinkInfo(link);
 	}
 }

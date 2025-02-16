@@ -1,8 +1,4 @@
-package baguni.batch.domain.rss;
-
-import java.net.URI;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+package baguni.batch.domain.feed;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,8 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import baguni.BaguniBatchApplication;
-import baguni.batch.domain.link.service.RssFeedApi;
-import baguni.batch.domain.rss.service.RssFeedService;
+import baguni.batch.domain.feed.util.FeedApi;
+import baguni.batch.domain.feed.service.FeedService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -21,10 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 public class RssRetrieveTest {
 
 	@Autowired
-	RssFeedService rssFeedService;
+	FeedService feedService;
 
 	@Autowired
-	RssFeedApi rssFeedApi;
+	FeedApi feedApi;
 
 	/**
 	 * DB에 블로그 목록이 반드시 존재해야 한다.
@@ -32,6 +28,6 @@ public class RssRetrieveTest {
 	@Test
 	@DisplayName("전체 블로그 feed를 잘 획득하는지 테스트")
 	public void test() {
-		rssFeedService.saveBlogArticleLinks();
+		feedService.saveBlogArticleLinks();
 	}
 }

@@ -1,28 +1,24 @@
 package baguni.api.service.link.service;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 import baguni.BaguniApiApplication;
 import baguni.domain.infrastructure.folder.FolderRepository;
 import baguni.domain.infrastructure.link.LinkDataHandler;
 import baguni.domain.infrastructure.link.LinkRepository;
+import baguni.domain.infrastructure.link.dto.BlogLinkInfo;
 import baguni.domain.infrastructure.link.dto.LinkInfo;
 import baguni.domain.infrastructure.link.dto.LinkMapper;
-import baguni.domain.infrastructure.link.dto.LinkResult;
-import baguni.domain.infrastructure.link.dto.RssLinkInfo;
 import baguni.domain.infrastructure.pick.PickRepository;
 import baguni.domain.infrastructure.pick.PickTagRepository;
 import baguni.domain.infrastructure.tag.TagRepository;
@@ -92,7 +88,7 @@ class LinkServiceTest {
 		linkDataHandler.saveLink(link3);
 
 		// when
-		List<RssLinkInfo> rssLinkList = linkService.getRssLinkList(10);
+		List<BlogLinkInfo> rssLinkList = linkService.getRssLinkList(10);
 
 		// then
 		assertThat(rssLinkList.size()).isEqualTo(3);
@@ -115,6 +111,6 @@ class LinkServiceTest {
 			.builder().url("url1").title("title1").imageUrl("imageUrl").publishedAt(LocalDateTime.now()).description("test").build();
 		linkMapper.toLinkResult(link);
 		linkMapper.toLinkResult(null);
-		linkMapper.toRssLinkInfo(null);
+		linkMapper.toBlogLinkInfo(null);
 	}
 }

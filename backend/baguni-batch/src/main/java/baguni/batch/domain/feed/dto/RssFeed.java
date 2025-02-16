@@ -1,4 +1,4 @@
-package baguni.batch.domain.rss.dto;
+package baguni.batch.domain.feed.dto;
 
 import java.util.List;
 
