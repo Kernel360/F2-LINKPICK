@@ -1,4 +1,4 @@
-package baguni.batch.domain.link.service;
+package baguni.batch.domain.link.dto;
 
 import lombok.Builder;
 

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import baguni.common.lib.cache.CacheType;
-import baguni.domain.infrastructure.link.dto.RssLinkInfo;
+import baguni.domain.infrastructure.link.dto.BlogLinkInfo;
 import baguni.domain.model.link.Link;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import lombok.RequiredArgsConstructor;
@@ -47,10 +47,10 @@ public class LinkService {
 	@WithSpan
 	@Transactional(readOnly = true)
 	@Cacheable(cacheNames = CacheType.CACHE_NAME.DAILY_RSS_BLOG_ARTICLE)
-	public List<RssLinkInfo> getRssLinkList(int limit) {
+	public List<BlogLinkInfo> getRssLinkList(int limit) {
 		return linkDataHandler.getRssLinkList(limit)
 							  .stream()
-							  .map(linkMapper::toRssLinkInfo)
+							  .map(linkMapper::toBlogLinkInfo)
 							  .toList();
 	}
 }

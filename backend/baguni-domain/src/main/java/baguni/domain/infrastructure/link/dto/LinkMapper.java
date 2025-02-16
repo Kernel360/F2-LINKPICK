@@ -1,9 +1,6 @@
 package baguni.domain.infrastructure.link.dto;
 
-import java.util.List;
-
 import org.mapstruct.InjectionStrategy;
-import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -29,6 +26,6 @@ public interface LinkMapper {
 
 	LinkResult toLinkResult(Link link);
 
-	@Named("toRssLinkInfoList")
-	RssLinkInfo toRssLinkInfo(Link link);
+	@Named("toBlogLinkInfoList")
+	BlogLinkInfo toBlogLinkInfo(Link link);
 }

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import baguni.api.service.link.service.LinkService;
-import baguni.domain.infrastructure.link.dto.RssLinkInfo;
+import baguni.domain.infrastructure.link.dto.BlogLinkInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -33,7 +33,7 @@ public class BlogArticleApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "조회 성공")
 	})
-	public ResponseEntity<List<RssLinkInfo>> getRecentBlogArticles() {
+	public ResponseEntity<List<BlogLinkInfo>> getRecentBlogArticles() {
 		var result = linkService.getRssLinkList(15);
 		return ResponseEntity.ok(result);
 	}

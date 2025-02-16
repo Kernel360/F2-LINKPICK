@@ -12,11 +12,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import baguni.domain.model.common.BaseEntity;
 
-@Table(name = "rss_blog")
+@Table(name = "blog")
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RssBlog extends BaseEntity {
+public class Blog extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,12 +32,12 @@ public class RssBlog extends BaseEntity {
 
 	// TODO: 엔티티 사용자가 정적 팩토리 메소드로 필요한 함수를 구현 하세요
 	@Builder
-	private RssBlog(String blogName, String url) {
+	private Blog(String blogName, String url) {
 		this.blogName = blogName;
 		this.url = url;
 	}
 
-	public static RssBlog create(String blogName, String url) {
-		return new RssBlog(blogName, url);
+	public static Blog create(String blogName, String url) {
+		return new Blog(blogName, url);
 	}
 }

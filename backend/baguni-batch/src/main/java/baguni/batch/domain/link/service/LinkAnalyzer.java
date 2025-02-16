@@ -6,6 +6,7 @@ import java.net.URL;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import baguni.batch.domain.link.dto.LinkAnalyzeResult;
 import baguni.common.lib.opengraph.Metadata;
 import baguni.common.lib.opengraph.OpenGraph;
 import baguni.common.lib.opengraph.OpenGraphException;

@@ -3,6 +3,7 @@ package baguni.batch.domain.link.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import baguni.batch.domain.link.dto.LinkAnalyzeResult;
 import baguni.domain.model.link.Link;
 import baguni.domain.infrastructure.link.LinkDataHandler;
 import baguni.domain.infrastructure.link.dto.LinkMapper;
