@@ -35,8 +35,9 @@ public class LinkAnalyzer {
 		try {
 			var openGraph = new OpenGraph(url, openGraphReader);
 
-			var title = openGraph.getTag(Metadata.OG_TITLE)
-								 .orElse(openGraph.getTag(Metadata.TITLE)
+			// 한컴 테크 블로그의 Meta Title이 "한컴테크"로 고정되어 있어서 <title> 우선적으로 적용
+			var title = openGraph.getTag(Metadata.TITLE)
+								 .orElse(openGraph.getTag(Metadata.OG_TITLE)
 												  .orElse(""));
 
 			var description = openGraph.getTag(Metadata.OG_DESCRIPTION)
