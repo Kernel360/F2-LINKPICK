@@ -4,7 +4,6 @@ import java.net.URI;
 
 import org.springframework.web.service.annotation.GetExchange;
 
-import baguni.batch.domain.rss.dto.RssFeed;
 
 /**
  * @author minkyeu kim
@@ -13,5 +12,5 @@ import baguni.batch.domain.rss.dto.RssFeed;
 public interface RssFeedApi {
 
 	@GetExchange
-	RssFeed getFeed(URI uri);
+	String getFeed(URI uri);
 }
